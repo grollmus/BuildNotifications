@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28714.193
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{C5549F81-8427-49EE-B6E9-6B72DE6DC978}"
 EndProject
@@ -11,9 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2DBE0D14
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.Tests", "BuildNotifications.Tests\BuildNotifications.Tests.csproj", "{159DA6C4-A2E7-4879-B013-583EB5C5A518}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildNotifications.Core.Tests", "BuildNotifications.Core.Tests\BuildNotifications.Core.Tests.csproj", "{A6A0CAED-0C8C-43C6-A7D5-99EA9B6B6283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.Core.Tests", "BuildNotifications.Core.Tests\BuildNotifications.Core.Tests.csproj", "{A6A0CAED-0C8C-43C6-A7D5-99EA9B6B6283}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildNotifications.Core", "BuildNotifications.Core\BuildNotifications.Core.csproj", "{024427AF-06DC-49DA-AB83-72BF131A5C3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.Core", "BuildNotifications.Core\BuildNotifications.Core.csproj", "{024427AF-06DC-49DA-AB83-72BF131A5C3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildNotifications", "BuildNotifications\BuildNotifications.csproj", "{492AA2C0-9317-443A-856E-818829B05147}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{024427AF-06DC-49DA-AB83-72BF131A5C3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{024427AF-06DC-49DA-AB83-72BF131A5C3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{024427AF-06DC-49DA-AB83-72BF131A5C3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492AA2C0-9317-443A-856E-818829B05147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492AA2C0-9317-443A-856E-818829B05147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492AA2C0-9317-443A-856E-818829B05147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492AA2C0-9317-443A-856E-818829B05147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
