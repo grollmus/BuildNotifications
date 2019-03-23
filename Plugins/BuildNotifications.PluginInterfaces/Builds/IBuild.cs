@@ -27,12 +27,12 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// User that requested this build.
         /// </summary>
-        IUser RequestedBy { get; }
+        IUser? RequestedBy { get; }
 
         /// <summary>
         /// User this been has been requested for.
         /// </summary>
-        IUser RequestedFor { get; }
+        IUser? RequestedFor { get; }
 
         /// <summary>
         /// Status of this build.
