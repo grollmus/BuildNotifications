@@ -2,18 +2,18 @@
 
 namespace BuildNotifications.Core.Plugin.Options
 {
-    internal class FlagOption : IFlagOption
+    internal class NumberOption : INumberOption
     {
-        public FlagOption(string name, string? description, bool defaultValue, bool required)
+        /// <inheritdoc />
+        public NumberOption(string name, string? description, int? minValue, int? maxValue, int defaultValue, bool required)
         {
             Name = name;
             Description = description;
+            MinValue = minValue;
+            MaxValue = maxValue;
             DefaultValue = defaultValue;
             Required = required;
         }
-
-        /// <inheritdoc />
-        public bool DefaultValue { get; set; }
 
         /// <inheritdoc />
         public string? Description { get; set; }
@@ -23,5 +23,14 @@ namespace BuildNotifications.Core.Plugin.Options
 
         /// <inheritdoc />
         public bool Required { get; set; }
+
+        /// <inheritdoc />
+        public int DefaultValue { get; set; }
+
+        /// <inheritdoc />
+        public int? MinValue { get; set; }
+
+        /// <inheritdoc />
+        public int? MaxValue { get; set; }
     }
 }

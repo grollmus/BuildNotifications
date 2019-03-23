@@ -11,7 +11,7 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Value of the item.
         /// </summary>
-        object Value { get; set; }
+        object? Value { get; set; }
 
         /// <summary>
         /// Name of the item.
@@ -21,6 +21,6 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// A detailed description of the item.
         /// </summary>
-        string Description { get; set; }
+        string? Description { get; set; }
     }
 }

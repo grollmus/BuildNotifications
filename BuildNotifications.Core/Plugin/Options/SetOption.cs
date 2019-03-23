@@ -2,18 +2,16 @@
 
 namespace BuildNotifications.Core.Plugin.Options
 {
-    internal class FlagOption : IFlagOption
+    internal class SetOption : ISetOption
     {
-        public FlagOption(string name, string? description, bool defaultValue, bool required)
+        public SetOption(string name, string? description, ISetItem[] values, ISetItem? defaultValue, in bool required)
         {
             Name = name;
             Description = description;
+            Values = values;
             DefaultValue = defaultValue;
             Required = required;
         }
-
-        /// <inheritdoc />
-        public bool DefaultValue { get; set; }
 
         /// <inheritdoc />
         public string? Description { get; set; }
@@ -23,5 +21,11 @@ namespace BuildNotifications.Core.Plugin.Options
 
         /// <inheritdoc />
         public bool Required { get; set; }
+
+        /// <inheritdoc />
+        public ISetItem[] Values { get; set; }
+
+        /// <inheritdoc />
+        public ISetItem? DefaultValue { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// A detailed description of the option.
         /// </summary>
-        string Description { get; set; }
+        string? Description { get; set; }
 
         /// <summary>
         /// Name of the option.

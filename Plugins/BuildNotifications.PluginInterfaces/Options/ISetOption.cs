@@ -16,6 +16,6 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Default value of the option.
         /// </summary>
-        ISetItem DefaultValue { get; set; }
+        ISetItem? DefaultValue { get; set; }
     }
 }
