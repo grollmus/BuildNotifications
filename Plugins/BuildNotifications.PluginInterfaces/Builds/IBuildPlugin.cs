@@ -34,6 +34,6 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// A set of key-value-pairs that can be used to
         /// construct a provider for the same connection.
         /// </returns>
-        IReadOnlyDictionary<string, string> Serialize(IBuildProvider provider);
+        IReadOnlyDictionary<string, string?> Serialize(IBuildProvider provider);
     }
 }
