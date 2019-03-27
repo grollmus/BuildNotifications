@@ -20,7 +20,7 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
         /// The constructed provider. Return <c>null</c> when you are
         /// unable to construct a provider from <paramref name="data" />
         /// </returns>
-        IBranchProvider? ConstructProvider(IReadOnlyDictionary<string, string> data);
+        IBranchProvider? ConstructProvider(IReadOnlyDictionary<string, string?> data);
 
         /// <summary>
         /// The schema that is used when registering new connections to this source.
