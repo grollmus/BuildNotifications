@@ -13,6 +13,7 @@ namespace BuildNotifications.Core.Config
 
             BuildConnectionName = string.Empty;
             SourceControlConnectionName = string.Empty;
+            DefaultCompareBranch = string.Empty;
 
             ShowPullRequests = true;
             HideCompletedPullRequests = true;
@@ -34,6 +35,9 @@ namespace BuildNotifications.Core.Config
 
         /// <inheritdoc />
         public IList<string> BuildDefinitionWhitelist { get; set; }
+
+        /// <inheritdoc />
+        public string DefaultCompareBranch { get; set; }
 
         /// <inheritdoc />
         public bool HideCompletedPullRequests { get; set; }
