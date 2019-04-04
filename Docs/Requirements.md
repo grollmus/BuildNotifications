@@ -18,7 +18,7 @@ Dataprovider: BuildProvider, PullRequestProvider, BranchProvider?
 # Grouping
 - By branch (are there scenarios without branches?)
 - By definition (are there scenarios without definitions? => Small projects probably won't have different builds)
-- None?
+- None (Plain list of builds in queue)
 - Custom?
 - Only builds, only PRs, both?
 
