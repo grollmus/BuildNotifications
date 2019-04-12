@@ -16,6 +16,12 @@ namespace BuildNotifications.PluginInterfaces.Builds
         IUser User { get; }
 
         /// <summary>
+        /// Fetches all available builds.
+        /// </summary>
+        /// <returns>List of all builds.</returns>
+        IAsyncEnumerable<IBuild> FetchAllBuilds();
+
+        /// <summary>
         /// Fetches all builds for a given build definition.
         /// </summary>
         /// <param name="definition">Definition to fetch builds for.</param>

@@ -35,7 +35,7 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private async Task FetchBuilds()
+        private async Task FetchBuildsSinceLastUpdate()
         {
             var providers = _projectList.Select(p => p.BuildProvider).Distinct();
 
@@ -71,6 +71,25 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        private async Task InitBuilds()
+        {
+            var providers = _projectList.Select(p => p.BuildProvider).Distinct();
+
+            foreach (var buildProvider in providers)
+            {
+                var providerId = buildProvider.GetHashCode();
+
+                var builds = buildProvider.FetchAllBuilds();
+                await foreach (var build in builds)
+                {
+                    var key = new CacheKey(providerId, build.GetHashCode());
+                    _buildCache.AddOrReplace(key, build);
+                }
+            }
+
+            _lastUpdate = DateTime.Now;
+        }
+
         /// <inheritdoc />
         public void AddProject(IProject project)
         {
@@ -85,7 +104,14 @@ namespace BuildNotifications.Core.Pipeline
 
             await Task.WhenAll(branchTask, definitionTask);
 
-            await FetchBuilds();
+            if (_lastUpdate == DateTime.MinValue)
+            {
+                await InitBuilds();
+            }
+            else
+            {
+                await FetchBuildsSinceLastUpdate();
+            }
         }
 
         private readonly IBuildCombiner _combiner;
