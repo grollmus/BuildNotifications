@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds
 {
@@ -6,7 +7,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
     /// Contains information about a build definition.
     /// </summary>
     [PublicAPI]
-    public interface IBuildDefinition
+    public interface IBuildDefinition : IEquatable<IBuildDefinition>
     {
         /// <summary>
         /// Unique id of this definition.

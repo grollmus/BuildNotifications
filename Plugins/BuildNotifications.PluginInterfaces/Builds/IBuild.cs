@@ -7,7 +7,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
     /// Contains information about a single build.
     /// </summary>
     [PublicAPI]
-    public interface IBuild
+    public interface IBuild : IEquatable<IBuild>
     {
         /// <summary>
         /// Unique id of this build.
@@ -27,7 +27,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// User that requested this build.
         /// </summary>
-        IUser? RequestedBy { get; }
+        IUser RequestedBy { get; }
 
         /// <summary>
         /// User this been has been requested for.

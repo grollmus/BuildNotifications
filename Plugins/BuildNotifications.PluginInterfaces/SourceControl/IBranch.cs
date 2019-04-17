@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.SourceControl
 {
@@ -6,7 +7,7 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
     /// Contains information about a branch.
     /// </summary>
     [PublicAPI]
-    public interface IBranch
+    public interface IBranch : IEquatable<IBranch>
     {
         /// <summary>
         /// Name that can be used when displaying this branch.
