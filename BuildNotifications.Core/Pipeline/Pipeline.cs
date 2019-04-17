@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Pipeline.Cache;
+using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -10,12 +11,14 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Pipeline : IPipeline
     {
-        public Pipeline(IBuildCombiner combiner)
+        public Pipeline(ITreeBuilder treeBuilder)
         {
-            _combiner = combiner;
+            _treeBuilder = treeBuilder;
             _buildCache = new PipelineCache<IBuild>();
             _branchCache = new PipelineCache<IBranch>();
             _definitionCache = new PipelineCache<IBuildDefinition>();
+
+            _pipelineNotifier = new PipelineNotifier();
         }
 
         private async Task FetchBranches()
@@ -100,24 +103,30 @@ namespace BuildNotifications.Core.Pipeline
         public async Task Update()
         {
             var branchTask = FetchBranches();
-            var definitionTask = FetchDefinitions();
+            var definitionsTask = FetchDefinitions();
+            await Task.WhenAll(branchTask, definitionsTask);
 
-            await Task.WhenAll(branchTask, definitionTask);
+            var buildsTask = _lastUpdate == DateTime.MinValue
+                ? InitBuilds()
+                : FetchBuildsSinceLastUpdate();
 
-            if (_lastUpdate == DateTime.MinValue)
-            {
-                await InitBuilds();
-            }
-            else
-            {
-                await FetchBuildsSinceLastUpdate();
-            }
+            await buildsTask;
+
+            var builds = _buildCache.ContentCopy();
+            var branches = _branchCache.ContentCopy();
+            var definitions = _definitionCache.ContentCopy();
+            var tree = _treeBuilder.Build(builds, branches, definitions);
+
+            _pipelineNotifier.Notify(tree);
         }
 
-        private readonly IBuildCombiner _combiner;
+        public IPipelineNotifier Notifier => _pipelineNotifier;
+
+        private readonly ITreeBuilder _treeBuilder;
         private readonly IPipelineCache<IBuild> _buildCache;
         private readonly IPipelineCache<IBranch> _branchCache;
         private readonly IPipelineCache<IBuildDefinition> _definitionCache;
+        private readonly PipelineNotifier _pipelineNotifier;
 
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
 

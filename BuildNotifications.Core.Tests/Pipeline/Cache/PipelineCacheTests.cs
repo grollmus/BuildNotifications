@@ -24,7 +24,21 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         }
 
         [Fact]
-        public void AddShouldReturnFalseWhenItemWasAlreadyAdded()
+        public void AddShouldReturnAddWhenNewItemWasAdded()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            var key = new CacheKey(1, 2);
+
+            // Act
+            var actual = sut.AddOrReplace(key, "hello world");
+
+            // Assert
+            Assert.Equal(CacheAction.Add, actual);
+        }
+
+        [Fact]
+        public void AddShouldReturnNoneWhenItemWasAlreadyAddedAndNotModified()
         {
             // Arrange
             var sut = new PipelineCache<string>();
@@ -35,21 +49,22 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
             var actual = sut.AddOrReplace(key, "hello world");
 
             // Assert
-            Assert.False(actual);
+            Assert.Equal(CacheAction.None, actual);
         }
 
         [Fact]
-        public void AddShouldReturnTrueWhenNewItemWasAdded()
+        public void AddShouldReturnUpdateWhenItemWasAlreadyAddedAndModified()
         {
             // Arrange
             var sut = new PipelineCache<string>();
             var key = new CacheKey(1, 2);
+            sut.AddOrReplace(key, "hello world");
 
             // Act
-            var actual = sut.AddOrReplace(key, "hello world");
+            var actual = sut.AddOrReplace(key, "hello world 123");
 
             // Assert
-            Assert.True(actual);
+            Assert.Equal(CacheAction.Update, actual);
         }
     }
 }

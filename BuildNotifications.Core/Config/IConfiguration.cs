@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.Core.Config
 {
@@ -44,6 +45,11 @@ namespace BuildNotifications.Core.Config
         /// For which succeeded builds to receive notifications for
         /// </summary>
         BuildNotificationMode SucceededBuildNotifyConfig { get; }
+
+        /// <summary>
+        /// Defines how builds should be grouped.
+        /// </summary>
+        IBuildTreeGroupDefinition GroupDefinition { get; }
 
         /// <summary>
         /// Seconds between each update cycle.

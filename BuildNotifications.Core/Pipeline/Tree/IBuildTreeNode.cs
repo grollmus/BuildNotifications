@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
-    internal interface IBuildTreeNode
+    public interface IBuildTreeNode
     {
         IEnumerable<IBuildTreeNode> Children { get; }
     }

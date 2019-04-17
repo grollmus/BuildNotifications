@@ -1,7 +1,8 @@
 ﻿namespace BuildNotifications.Core.Pipeline.Tree
 {
-    internal enum GroupDefinition
+    public enum GroupDefinition
     {
+        None,
         Branch,
         BuildDefinition,
         Source,

@@ -13,8 +13,8 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="key">Key to add item for.</param>
         /// <param name="item">Item to add.</param>
-        /// <returns><c>true</c> if the item was added; <c>false</c> if it was replaced.</returns>
-        bool AddOrReplace(CacheKey key, T item);
+        /// <returns>Action that was performed by this operation.</returns>
+        CacheAction AddOrReplace(CacheKey key, T item);
 
         /// <summary>
         /// Determine if an item with a given key exists in the cache.

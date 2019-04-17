@@ -8,6 +8,11 @@ namespace BuildNotifications.Core.Pipeline
     internal interface IPipeline
     {
         /// <summary>
+        /// Object that raises events when pipeline fetches new data or updates existing data.
+        /// </summary>
+        IPipelineNotifier Notifier { get; }
+
+        /// <summary>
         /// Add a project as a source for fetching data when pipeline is updated.
         /// </summary>
         /// <param name="project">Project to add.</param>

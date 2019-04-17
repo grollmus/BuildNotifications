@@ -6,16 +6,22 @@ namespace BuildNotifications.Core.Pipeline.Cache
     internal class PipelineCache<T> : IPipelineCache<T>
     {
         /// <inheritdoc />
-        public bool AddOrReplace(CacheKey key, T item)
+        public CacheAction AddOrReplace(CacheKey key, T item)
         {
-            var updated = false;
+            var action = CacheAction.Add;
             _items.AddOrUpdate(key, cacheKey => item, (cacheKey, oldItem) =>
             {
-                updated = true;
+                if (Equals(oldItem, item))
+                {
+                    action = CacheAction.None;
+                    return oldItem;
+                }
+
+                action = CacheAction.Update;
                 return item;
             });
 
-            return !updated;
+            return action;
         }
 
         /// <inheritdoc />

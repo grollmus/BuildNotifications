@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.Core.Config
 {
@@ -16,6 +17,11 @@ namespace BuildNotifications.Core.Config
             CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
             SucceededBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
             FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe;
+
+            GroupDefinition = new BuildTreeGroupDefinition(
+                Pipeline.Tree.GroupDefinition.Source,
+                Pipeline.Tree.GroupDefinition.Branch,
+                Pipeline.Tree.GroupDefinition.BuildDefinition);
 
             Culture = CultureInfo.GetCultureInfo("en-US");
         }
@@ -43,6 +49,9 @@ namespace BuildNotifications.Core.Config
 
         /// <inheritdoc />
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
+
+        /// <inheritdoc />
+        public IBuildTreeGroupDefinition GroupDefinition { get; }
 
         /// <inheritdoc />
         public int UpdateInterval { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
@@ -14,8 +15,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         public async Task BranchProviderShouldNotBeCalledMultipleTimesWhenDefinedInMultipleProjects()
         {
             // Arrange
-            var combiner = Substitute.For<IBuildCombiner>();
-            var sut = new Core.Pipeline.Pipeline(combiner);
+            var builder = Substitute.For<ITreeBuilder>();
+            var sut = new Core.Pipeline.Pipeline(builder);
 
             var branchProvider = Substitute.For<IBranchProvider>();
 
@@ -36,8 +37,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         public async Task BuildProviderShouldNotBeCalledMultipleTimesWhenDefinedInMultipleProjects()
         {
             // Arrange
-            var combiner = Substitute.For<IBuildCombiner>();
-            var sut = new Core.Pipeline.Pipeline(combiner);
+            var builder = Substitute.For<ITreeBuilder>();
+            var sut = new Core.Pipeline.Pipeline(builder);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project1 = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
@@ -57,8 +58,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         public async Task UpdateShouldFetchAllBuildDefinitions()
         {
             // Arrange
-            var combiner = Substitute.For<IBuildCombiner>();
-            var sut = new Core.Pipeline.Pipeline(combiner);
+            var builder = Substitute.For<ITreeBuilder>();
+            var sut = new Core.Pipeline.Pipeline(builder);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
@@ -75,8 +76,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         public async Task UpdateShouldFetchAllBuildsOnlyWhenCalledTheFirstTime()
         {
             // Arrange
-            var combiner = Substitute.For<IBuildCombiner>();
-            var sut = new Core.Pipeline.Pipeline(combiner);
+            var builder = Substitute.For<ITreeBuilder>();
+            var sut = new Core.Pipeline.Pipeline(builder);
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
