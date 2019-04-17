@@ -9,13 +9,13 @@ namespace BuildNotifications.PluginInterfaces.Options
     public interface ISetOption : IOption
     {
         /// <summary>
-        /// Set of valid values for this option.
-        /// </summary>
-        ISetItem[] Values { get; set; }
-
-        /// <summary>
         /// Default value of the option.
         /// </summary>
         ISetItem? DefaultValue { get; set; }
+
+        /// <summary>
+        /// Set of valid values for this option.
+        /// </summary>
+        ISetItem[] Values { get; set; }
     }
 }

@@ -65,7 +65,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             // Assert
             Assert.Equal(value, option.Required);
         }
-        
+
         [Fact]
         public void GroupShouldContainCorrectTitle()
         {
@@ -178,7 +178,6 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             Assert.IsType<ArgumentException>(ex);
         }
 
-
         [Fact]
         public void SchemaShouldNotBeNull()
         {
@@ -198,7 +197,6 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             // Arrange
             var sut = new OptionSchemaFactory();
             const string expected = "expected";
-
 
             // Act
             var option = sut.SetItem("name", expected, null);
@@ -234,7 +232,6 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             // Assert
             Assert.Equal(expected, option.Value);
         }
-
 
         [Fact]
         public void SetShouldHaveCorrectDescription()
@@ -278,7 +275,6 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             // Assert
             Assert.Equal(value, option.Required);
         }
-
 
         [Fact]
         public void TextShouldHaveCorrectDefaultValue()

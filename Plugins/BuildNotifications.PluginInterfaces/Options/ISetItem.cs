@@ -9,9 +9,9 @@ namespace BuildNotifications.PluginInterfaces.Options
     public interface ISetItem
     {
         /// <summary>
-        /// Value of the item.
+        /// A detailed description of the item.
         /// </summary>
-        object? Value { get; set; }
+        string? Description { get; set; }
 
         /// <summary>
         /// Name of the item.
@@ -19,8 +19,8 @@ namespace BuildNotifications.PluginInterfaces.Options
         string Name { get; set; }
 
         /// <summary>
-        /// A detailed description of the item.
+        /// Value of the item.
         /// </summary>
-        string? Description { get; set; }
+        object? Value { get; set; }
     }
 }
