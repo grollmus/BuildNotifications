@@ -24,7 +24,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// List of all saved connections.
         /// </summary>
-        IList<IConnectionData> Connections { get; }
+        IList<ConnectionData> Connections { get; }
 
         /// <summary>
         /// Culture to use for displaying data.

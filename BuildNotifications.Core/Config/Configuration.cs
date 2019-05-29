@@ -9,7 +9,7 @@ namespace BuildNotifications.Core.Config
         public Configuration()
         {
             Projects = new List<IProjectConfiguration>();
-            Connections = new List<IConnectionData>();
+            Connections = new List<ConnectionData>();
 
             BuildsToLoadCount = 200;
             BuildsToShow = 5;
@@ -36,7 +36,7 @@ namespace BuildNotifications.Core.Config
         public BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
 
         /// <inheritdoc />
-        public IList<IConnectionData> Connections { get; set; }
+        public IList<ConnectionData> Connections { get; set; }
 
         /// <inheritdoc />
         public CultureInfo Culture { get; set; }

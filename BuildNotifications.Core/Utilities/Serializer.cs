@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Utilities
         /// <inheritdoc />
         public T Deserialize<T>(string serialized)
         {
-            return JsonConvert.DeserializeObject<T>(serialized);
+            return JsonConvert.DeserializeObject<T>(serialized, _settings);
         }
 
         private readonly JsonSerializerSettings _settings;

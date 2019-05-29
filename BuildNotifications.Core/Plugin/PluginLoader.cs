@@ -11,26 +11,80 @@ using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Plugin
 {
+    internal class PluginAssemblyLoadContext : AssemblyLoadContext
+    {
+        public PluginAssemblyLoadContext(string folder)
+        {
+            _folder = folder;
+        }
+
+        /// <inheritdoc />
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            try
+            {
+                var defaultAssembly = Default.LoadFromAssemblyName(assemblyName);
+                if (defaultAssembly != null)
+                {
+                    return defaultAssembly;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            var fileName = assemblyName.Name + ".dll";
+            var path = Path.Combine(_folder, fileName);
+            if (File.Exists(path))
+            {
+                return LoadFromAssemblyPath(path);
+            }
+
+            return null;
+        }
+
+        private readonly string _folder;
+    }
+
     internal class PluginLoader : IPluginLoader
     {
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
-            var files = Directory.EnumerateDirectories(folder).SelectMany(dir => Directory.EnumerateFiles(dir, "*.dll"));
+            var fullPath = Path.GetFullPath(folder);
+            var pluginFolders = Directory.GetDirectories(fullPath);
 
-            foreach (var dll in files)
+            foreach (var pluginFolder in pluginFolders)
             {
-                Assembly assembly;
-                try
-                {
-                    assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(dll);
-                }
-                catch (Exception ex)
-                {
-                    LogTo.WarnException($"Exception while trying to load {dll}", ex);
-                    continue;
-                }
+                var assemblyLoadContext = new PluginAssemblyLoadContext(pluginFolder);
 
-                yield return assembly;
+                var files = Directory.EnumerateFiles(pluginFolder, "*.dll");
+
+                foreach (var dll in files)
+                {
+                    if (!Path.GetFileName(dll).Contains("plugin", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    Assembly assembly;
+                    try
+                    {
+                        assembly = assemblyLoadContext.LoadFromAssemblyPath(dll);
+
+                        foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
+                        {
+                            assemblyLoadContext.LoadFromAssemblyName(referencedAssembly);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogTo.WarnException($"Exception while trying to load {dll}", ex);
+                        continue;
+                    }
+
+                    yield return assembly;
+                }
             }
         }
 
@@ -45,7 +99,7 @@ namespace BuildNotifications.Core.Plugin
                     T value;
                     try
                     {
-                        value = Activator.CreateInstance<T>();
+                        value = (T) Activator.CreateInstance(type);
                     }
                     catch (Exception ex)
                     {
@@ -62,7 +116,9 @@ namespace BuildNotifications.Core.Plugin
         /// <inheritdoc />
         public IPluginRepository LoadPlugins(IEnumerable<string> folders)
         {
-            var assemblies = folders.SelectMany(LoadPluginAssemblies);
+            var folderList = folders.ToList();
+
+            var assemblies = folderList.SelectMany(LoadPluginAssemblies);
             var exportedTypes = assemblies.SelectMany(a => a.GetExportedTypes())
                 .Where(t => !t.IsAbstract)
                 .ToList();
