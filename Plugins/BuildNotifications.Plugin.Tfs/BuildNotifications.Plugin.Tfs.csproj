@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <NullableContextOptions>enable</NullableContextOptions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anotar.NLog.Fody" Version="5.0.0" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.143.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+  </ItemGroup>
+
+</Project>
