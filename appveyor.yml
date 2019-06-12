@@ -1,5 +1,5 @@
 version: 1.0.{build}
-image: Visual Studio 2019 Preview
+image: Visual Studio 2019
 configuration: Release
 init:
 - ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH)-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
