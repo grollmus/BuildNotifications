@@ -19,7 +19,7 @@ namespace BuildNotifications.Core.Plugin
         }
 
         /// <inheritdoc />
-        protected override Assembly Load(AssemblyName assemblyName)
+        protected override Assembly? Load(AssemblyName assemblyName)
         {
             try
             {
