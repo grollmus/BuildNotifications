@@ -6,12 +6,13 @@
         {
             public const string AccountAuthentication = "account";
             public const string AuthenticationType = "authentication";
+            public const string Collection = "collection";
             public const string Password = "password";
+            public const string ProjectId = "projectId";
+            public const string RepositoryId = "repositoryId";
             public const string Url = "url";
             public const string UserName = "username";
             public const string WindowsAuthentication = "windows";
-            public const string ProjectId = "projectId";
-            public const string RepositoryId = "repositoryId";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Options
 {
@@ -8,6 +9,11 @@ namespace BuildNotifications.PluginInterfaces.Options
     [PublicAPI]
     public interface IOptionGroup
     {
+        /// <summary>
+        /// Options in this group.
+        /// </summary>
+        IEnumerable<IOption> Options { get; }
+
         /// <summary>
         /// Title of the group.
         /// </summary>

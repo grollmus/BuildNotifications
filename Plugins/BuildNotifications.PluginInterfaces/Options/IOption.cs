@@ -14,6 +14,11 @@ namespace BuildNotifications.PluginInterfaces.Options
         string? Description { get; set; }
 
         /// <summary>
+        /// Id of this option.
+        /// </summary>
+        string Id { get; set; }
+
+        /// <summary>
         /// Name of the option.
         /// </summary>
         string Name { get; set; }

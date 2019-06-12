@@ -40,7 +40,13 @@ namespace BuildNotifications.Plugin.Tfs
 
         IOptionSchema IBuildPlugin.GetSchema(IPluginHost host)
         {
-            throw new NotImplementedException();
+            var schema = host.SchemaFactory.Schema();
+
+            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.Url, "Url", "Url of the TeamFoundation Server you want to connect to"));
+            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.Collection, "Collection", "Name of the collection you want to connect to"));
+            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.ProjectId, "Project", "Name of the project"));
+
+            return schema;
         }
 
         IReadOnlyDictionary<string, string?> IBuildPlugin.Serialize(IBuildProvider provider)

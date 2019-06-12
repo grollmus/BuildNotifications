@@ -12,6 +12,9 @@ namespace BuildNotifications.Core.Plugin.Options
         }
 
         /// <inheritdoc />
+        public IEnumerable<IOption> Options => _options;
+
+        /// <inheritdoc />
         public string Title { get; set; }
 
         /// <inheritdoc />

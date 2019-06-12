@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Options
 {
@@ -8,6 +9,16 @@ namespace BuildNotifications.PluginInterfaces.Options
     [PublicAPI]
     public interface IOptionSchema
     {
+        /// <summary>
+        /// Options in this schema that are not part of a group.
+        /// </summary>
+        IEnumerable<IOption> GlobalOptions { get; }
+
+        /// <summary>
+        /// Groups in this schema.
+        /// </summary>
+        IEnumerable<IOptionGroup> Groups { get; }
+
         /// <summary>
         /// Adds a group to this schema.
         /// </summary>

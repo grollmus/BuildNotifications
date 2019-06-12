@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.Core.Plugin.Host;
 using BuildNotifications.Core.Utilities;
 using NLog;
 using NLog.Config;
@@ -18,21 +19,26 @@ namespace DummyFrontEnd
         {
             SetupLogging();
 
+            var host = new PluginHost();
+
             var pluginLoader = new PluginLoader();
             var pluginRepo = pluginLoader.LoadPlugins(new[] {"../../../plugins"});
 
-            var serializer = new Serializer();
-            var configSerializer = new ConfigurationSerializer(serializer);
-            var config = configSerializer.Load("../../../config.json");
+            var plugin = pluginRepo.Build.First();
+            var schema = plugin.GetSchema(host);
+            
+            //var serializer = new Serializer();
+            //var configSerializer = new ConfigurationSerializer(serializer);
+            //var config = configSerializer.Load("../../../config.json");
 
-            var projectFactory = new ProjectFactory(pluginRepo, config);
-            var project = projectFactory.Construct(config.Projects.First());
+            //var projectFactory = new ProjectFactory(pluginRepo, config);
+            //var project = projectFactory.Construct(config.Projects.First());
 
-            var buildDefinitions = await ToListAsync(project.BuildProvider.FetchExistingBuildDefinitions());
-            var branches = await ToListAsync(project.BranchProvider.FetchExistingBranches());
-            var builds = await ToListAsync(project.BuildProvider.FetchAllBuilds());
-            var buildsToday = await ToListAsync(project.BuildProvider.FetchBuildsSince(DateTime.Today));
-            var buildsForDefinition = await ToListAsync(project.BuildProvider.FetchBuildsForDefinition(buildDefinitions.First()));
+            //var buildDefinitions = await ToListAsync(project.BuildProvider.FetchExistingBuildDefinitions());
+            //var branches = await ToListAsync(project.BranchProvider.FetchExistingBranches());
+            //var builds = await ToListAsync(project.BuildProvider.FetchAllBuilds());
+            //var buildsToday = await ToListAsync(project.BuildProvider.FetchBuildsSince(DateTime.Today));
+            //var buildsForDefinition = await ToListAsync(project.BuildProvider.FetchBuildsForDefinition(buildDefinitions.First()));
         }
 
         private static void SetupLogging()

@@ -22,5 +22,10 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// Minimal allowed value for this option or <c>null</c> if no minimum exists.
         /// </summary>
         int? MinValue { get; set; }
+
+        /// <summary>
+        /// The current value of this option.
+        /// </summary>
+        int Value { get; set; }
     }
 }
