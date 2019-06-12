@@ -11,6 +11,7 @@
             public const string UserName = "username";
             public const string WindowsAuthentication = "windows";
             public const string ProjectId = "projectId";
+            public const string RepositoryId = "repositoryId";
         }
     }
 }

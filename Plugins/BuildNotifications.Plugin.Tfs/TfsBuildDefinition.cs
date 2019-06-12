@@ -5,13 +5,16 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsBuildDefinition : IBuildDefinition
     {
-        public TfsBuildDefinition(BuildDefinitionReference definition)
+        public TfsBuildDefinition(DefinitionReference definition)
         {
-            Id = definition.Id.ToString();
             Name = definition.Name;
+            NativeId = definition.Id;
+            Id = NativeId.ToString();
 
             _url = definition.Url;
         }
+
+        internal int NativeId { get; }
 
         /// <inheritdoc />
         public bool Equals(IBuildDefinition definition)

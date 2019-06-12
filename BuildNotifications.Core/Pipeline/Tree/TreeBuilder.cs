@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             switch (group)
             {
                 case Tree.GroupDefinition.Branch:
-                    return new BranchGroupNode(build.Branch);
+                    return new BranchGroupNode(build.BranchName);
                 case Tree.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
                 case Tree.GroupDefinition.Source:

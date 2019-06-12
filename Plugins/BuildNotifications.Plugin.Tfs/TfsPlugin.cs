@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Anotar.NLog;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Host;
 using BuildNotifications.PluginInterfaces.Options;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.Identity;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -12,6 +15,9 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public TfsPlugin()
         {
+            TypeDescriptor.AddAttributes(typeof(IdentityDescriptor), new TypeConverterAttribute(typeof(IdentityDescriptorConverter).FullName));
+            TypeDescriptor.AddAttributes(typeof(SubjectDescriptor), new TypeConverterAttribute(typeof(SubjectDescriptorConverter).FullName));
+
             _connectionPool = new TfsConnectionPool();
         }
 
@@ -50,7 +56,13 @@ namespace BuildNotifications.Plugin.Tfs
                 return null;
             }
 
-            return new TfsSourceControlProvider(connection);
+            if (!data.TryGetValue(TfsConstants.Connection.RepositoryId, out var repositoryId) || string.IsNullOrEmpty(repositoryId))
+            {
+                LogTo.Error("RepositoryId not given in connection data");
+                return null;
+            }
+
+            return new TfsSourceControlProvider(connection, repositoryId);
         }
 
         IOptionSchema ISourceControlPlugin.GetSchema(IPluginHost host)

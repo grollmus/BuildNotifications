@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
@@ -28,6 +29,10 @@ namespace DummyFrontEnd
             var project = projectFactory.Construct(config.Projects.First());
 
             var buildDefinitions = await ToListAsync(project.BuildProvider.FetchExistingBuildDefinitions());
+            var branches = await ToListAsync(project.BranchProvider.FetchExistingBranches());
+            var builds = await ToListAsync(project.BuildProvider.FetchAllBuilds());
+            var buildsToday = await ToListAsync(project.BuildProvider.FetchBuildsSince(DateTime.Today));
+            var buildsForDefinition = await ToListAsync(project.BuildProvider.FetchBuildsForDefinition(buildDefinitions.First()));
         }
 
         private static void SetupLogging()
