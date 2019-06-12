@@ -29,6 +29,6 @@ namespace BuildNotifications.Plugin.Tfs
         /// <inheritdoc />
         public string Name { get; }
 
-        private string _id;
+        private readonly string _id;
     }
 }
