@@ -8,4 +8,22 @@
     <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Page Remove="Resources.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
+  </ItemGroup>
+
 </Project>

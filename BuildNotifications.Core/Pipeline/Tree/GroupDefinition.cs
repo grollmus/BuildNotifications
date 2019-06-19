@@ -2,7 +2,6 @@
 {
     public enum GroupDefinition
     {
-        None,
         Branch,
         BuildDefinition,
         Source,
