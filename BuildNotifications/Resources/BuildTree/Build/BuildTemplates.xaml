@@ -3,6 +3,10 @@
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
 
     <DataTemplate x:Key="BuildNodeTemplate" DataType="{x:Type viewModelTree:BuildNodeViewModel}">
-        <Rectangle Width="30" Height="5" Fill="{DynamicResource Green}" Margin="4"/>
+        <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}" Fill="{DynamicResource Green}" Margin="4">
+            <Rectangle.RenderTransform>
+                <SkewTransform AngleX="-30"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
     </DataTemplate>
 </ResourceDictionary>

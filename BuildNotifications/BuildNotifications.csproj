@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Utils\**" />
+    <Page Remove="Utils\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml" />
     <None Remove="Resources\BuildTree\BuildTemplates.xaml" />
     <None Remove="Resources\BuildTree\BuildTreeResources.xaml" />
@@ -25,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\BuildTree\Animation\" />
     <Folder Include="Resources\BuildTree\BuildDefinition\" />
     <Folder Include="Resources\BuildTree\Status\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>

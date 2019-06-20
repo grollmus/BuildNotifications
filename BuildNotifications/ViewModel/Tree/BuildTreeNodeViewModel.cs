@@ -1,18 +1,29 @@
-﻿using System.Collections.ObjectModel;
+﻿using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
 {
-    public abstract class BuildTreeNodeViewModel : BaseViewModel
+    public abstract class BuildTreeNodeViewModel : BaseViewModel, IRemoveTracking
     {
-        public ObservableCollection<BuildTreeNodeViewModel> Children { get; }
+        private bool _isRemoving;
+        public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
         public int CurrentTreeLevelDepth { get; set; }
 
         public int MaxTreeDepth { get; set; }
 
+        public bool IsRemoving
+        {
+            get => _isRemoving;
+            set
+            {
+                _isRemoving = value;
+                OnPropertyChanged();
+            }
+        }
+
         protected BuildTreeNodeViewModel()
         {
-            Children = new ObservableCollection<BuildTreeNodeViewModel>();
+            Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>();
         }
     }
 }
