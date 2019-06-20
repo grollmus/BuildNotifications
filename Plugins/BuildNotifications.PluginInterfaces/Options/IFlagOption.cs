@@ -12,5 +12,10 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// Default value of the option.
         /// </summary>
         bool DefaultValue { get; set; }
+
+        /// <summary>
+        /// The current value of this option.
+        /// </summary>
+        bool Value { get; set; }
     }
 }

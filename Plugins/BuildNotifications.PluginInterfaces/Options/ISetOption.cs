@@ -14,6 +14,11 @@ namespace BuildNotifications.PluginInterfaces.Options
         ISetItem? DefaultValue { get; set; }
 
         /// <summary>
+        /// The currently selected value of this option.
+        /// </summary>
+        ISetItem? SelectedValue { get; set; }
+
+        /// <summary>
         /// Set of valid values for this option.
         /// </summary>
         ISetItem[] Values { get; set; }

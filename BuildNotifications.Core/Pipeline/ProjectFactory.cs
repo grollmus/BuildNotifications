@@ -21,13 +21,15 @@ namespace BuildNotifications.Core.Pipeline
             var connectionData = FindConnection(connectionName);
             if (connectionData == null)
             {
+                LogTo.Error($"No connection with name '{connectionName}' found");
                 return null;
             }
 
-            var pluginType = connectionData.PluginType;
+            var pluginType = connectionData.SourceControlPluginType ?? string.Empty;
             var sourceControlPlugin = _pluginRepository.FindSourceControlPlugin(pluginType);
             if (sourceControlPlugin == null)
             {
+                LogTo.Error($"No source control plugin '{pluginType}' found");
                 return null;
             }
 
@@ -51,13 +53,15 @@ namespace BuildNotifications.Core.Pipeline
             var connectionData = FindConnection(connectionName);
             if (connectionData == null)
             {
+                LogTo.Error($"No connection with name '{connectionName}' found");
                 return null;
             }
 
-            var pluginType = connectionData.PluginType;
+            var pluginType = connectionData.BuildPluginType ?? string.Empty;
             var buildPlugin = _pluginRepository.FindBuildPlugin(pluginType);
             if (buildPlugin == null)
             {
+                LogTo.Error($"No build plugin '{pluginType}' found");
                 return null;
             }
 
@@ -76,7 +80,7 @@ namespace BuildNotifications.Core.Pipeline
             return buildProvider;
         }
 
-        private IConnectionData? FindConnection(string connectionName)
+        private ConnectionData? FindConnection(string connectionName)
         {
             return _configuration.Connections.FirstOrDefault(c => c.Name == connectionName);
         }

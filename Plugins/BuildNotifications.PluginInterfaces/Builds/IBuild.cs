@@ -1,5 +1,4 @@
 ﻿using System;
-using BuildNotifications.PluginInterfaces.SourceControl;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds
@@ -11,9 +10,9 @@ namespace BuildNotifications.PluginInterfaces.Builds
     public interface IBuild : IEquatable<IBuild>
     {
         /// <summary>
-        /// Branch the build was for.
+        /// Name of the branch the build was for.
         /// </summary>
-        IBranch Branch { get; }
+        string BranchName { get; }
 
         /// <summary>
         /// Build definition used for this build.

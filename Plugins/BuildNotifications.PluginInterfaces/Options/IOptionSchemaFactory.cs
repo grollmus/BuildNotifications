@@ -12,12 +12,13 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Constructs a new FlagOption.
         /// </summary>
+        /// <param name="id">Id of the option. This will be used when (de)serializing a schema to configurations.</param>
         /// <param name="name">Name of the option</param>
         /// <param name="description">Detailed description of the option.</param>
         /// <param name="defaultValue">Default value for the option.</param>
         /// <param name="required">Flag indicating whether the option is required.</param>
         /// <returns>The created option.</returns>
-        IFlagOption Flag(string name, string? description, bool defaultValue = false, bool required = false);
+        IFlagOption Flag(string id, string name, string? description, bool defaultValue = false, bool required = false);
 
         /// <summary>
         /// Constructs a new OptionGroup with a list of options.
@@ -30,6 +31,7 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Constructs a new NumberOption.
         /// </summary>
+        /// <param name="id">Id of the option. This will be used when (de)serializing a schema to configurations.</param>
         /// <param name="name">Name of the option</param>
         /// <param name="description">Detailed description of the option.</param>
         /// <param name="minValue">Minimum allowed value.</param>
@@ -37,7 +39,7 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <param name="defaultValue">Default value for the option.</param>
         /// <param name="required">Flag indicating whether the option is required.</param>
         /// <returns></returns>
-        INumberOption Number(string name, string? description, int? minValue = null, int? maxValue = null, int defaultValue = 0, bool required = false);
+        INumberOption Number(string id, string name, string? description, int? minValue = null, int? maxValue = null, int defaultValue = 0, bool required = false);
 
         /// <summary>
         /// Constructs a new schema.
@@ -48,13 +50,14 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Constructs a new SetOption.
         /// </summary>
+        /// <param name="id">Id of the option. This will be used when (de)serializing a schema to configurations.</param>
         /// <param name="name">Name of the option</param>
         /// <param name="description">Detailed description of the option.</param>
         /// <param name="items">Items that should be contained in the set.</param>
         /// <param name="defaultValue">Default value for the option.</param>
         /// <param name="required">Flag indicating whether the option is required.</param>
         /// <returns></returns>
-        ISetOption Set(string name, string? description, IEnumerable<ISetItem> items, ISetItem? defaultValue = null, bool required = false);
+        ISetOption Set(string id, string name, string? description, IEnumerable<ISetItem> items, ISetItem? defaultValue = null, bool required = false);
 
         /// <summary>
         /// Constructs a SetItem that can be used in a SetOption.
@@ -68,11 +71,12 @@ namespace BuildNotifications.PluginInterfaces.Options
         /// <summary>
         /// Constructs a new TextOption.
         /// </summary>
+        /// <param name="id">Id of the option. This will be used when (de)serializing a schema to configurations.</param>
         /// <param name="name">Name of the option</param>
         /// <param name="description">Detailed description of the option.</param>
         /// <param name="defaultValue">Default value for the option.</param>
         /// <param name="required">Flag indicating whether the option is required.</param>
         /// <returns>The created option.</returns>
-        ITextOption Text(string name, string? description, string? defaultValue = null, bool required = false);
+        ITextOption Text(string id, string name, string? description, string? defaultValue = null, bool required = false);
     }
 }

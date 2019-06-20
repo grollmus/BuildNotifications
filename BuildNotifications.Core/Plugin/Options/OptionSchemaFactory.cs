@@ -8,9 +8,9 @@ namespace BuildNotifications.Core.Plugin.Options
     internal class OptionSchemaFactory : IOptionSchemaFactory
     {
         /// <inheritdoc />
-        public IFlagOption Flag(string name, string? description, bool defaultValue = false, bool required = false)
+        public IFlagOption Flag(string id, string name, string? description, bool defaultValue = false, bool required = false)
         {
-            return new FlagOption(name, description, defaultValue, required);
+            return new FlagOption(id, name, description, defaultValue, required);
         }
 
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace BuildNotifications.Core.Plugin.Options
         }
 
         /// <inheritdoc />
-        public INumberOption Number(string name, string? description, int? minValue = null, int? maxValue = null,
+        public INumberOption Number(string id, string name, string? description, int? minValue = null, int? maxValue = null,
             int defaultValue = 0, bool required = false)
         {
             if (minValue.HasValue && maxValue.HasValue && minValue >= maxValue)
@@ -35,7 +35,7 @@ namespace BuildNotifications.Core.Plugin.Options
                 throw new ArgumentException($"{nameof(minValue)} must be smaller than {nameof(maxValue)}");
             }
 
-            return new NumberOption(name, description, minValue, maxValue, defaultValue, required);
+            return new NumberOption(id, name, description, minValue, maxValue, defaultValue, required);
         }
 
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Plugin.Options
         }
 
         /// <inheritdoc />
-        public ISetOption Set(string name, string? description, IEnumerable<ISetItem> items, ISetItem? defaultValue = null,
+        public ISetOption Set(string id, string name, string? description, IEnumerable<ISetItem> items, ISetItem? defaultValue = null,
             bool required = false)
         {
             var itemList = items.ToArray();
@@ -54,7 +54,7 @@ namespace BuildNotifications.Core.Plugin.Options
                 throw new ArgumentException($"{nameof(defaultValue)} is not contained in {nameof(items)}");
             }
 
-            return new SetOption(name, description, itemList, defaultValue, required);
+            return new SetOption(id, name, description, itemList, defaultValue, required);
         }
 
         /// <inheritdoc />
@@ -64,9 +64,9 @@ namespace BuildNotifications.Core.Plugin.Options
         }
 
         /// <inheritdoc />
-        public ITextOption Text(string name, string? description, string? defaultValue = null, bool required = false)
+        public ITextOption Text(string id, string name, string? description, string? defaultValue = null, bool required = false)
         {
-            return new TextOption(name, description, defaultValue, required);
+            return new TextOption(id, name, description, defaultValue, required);
         }
     }
 }

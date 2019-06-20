@@ -1,15 +1,13 @@
-﻿using BuildNotifications.PluginInterfaces.SourceControl;
-
-namespace BuildNotifications.Core.Pipeline.Tree
+﻿namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class BranchGroupNode : TreeNode, IBranchGroupNode
     {
-        public BranchGroupNode(IBranch branch)
+        public BranchGroupNode(string branchName)
         {
-            Branch = branch;
+            BranchName = branchName;
         }
 
         /// <inheritdoc />
-        public IBranch Branch { get; }
+        public string BranchName { get; }
     }
 }

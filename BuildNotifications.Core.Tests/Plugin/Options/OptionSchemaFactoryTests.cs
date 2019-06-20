@@ -17,7 +17,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var option = sut.Flag("name", "description", value);
+            var option = sut.Flag("id", "name", "description", value);
 
             // Assert
             Assert.Equal(value, option.DefaultValue);
@@ -31,7 +31,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Flag("name", expected);
+            var option = sut.Flag("id", "name", expected);
 
             // Assert
             Assert.Equal(expected, option.Description);
@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Flag(expected, null);
+            var option = sut.Flag("id", expected, null);
 
             // Assert
             Assert.Equal(expected, option.Name);
@@ -60,7 +60,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var option = sut.Flag("name", "description", false, value);
+            var option = sut.Flag("id", "name", "description", false, value);
 
             // Assert
             Assert.Equal(value, option.Required);
@@ -88,7 +88,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const int expected = 123;
 
             // Act
-            var option = sut.Number("name", "description", null, null, expected);
+            var option = sut.Number("id", "name", "description", null, null, expected);
 
             // Assert
             Assert.Equal(expected, option.DefaultValue);
@@ -102,7 +102,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Number("name", expected);
+            var option = sut.Number("id", "name", expected);
 
             // Assert
             Assert.Equal(expected, option.Description);
@@ -116,7 +116,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const int expected = 123;
 
             // Act
-            var option = sut.Number("name", "description", null, expected);
+            var option = sut.Number("id", "name", "description", null, expected);
 
             // Assert
             Assert.Equal(expected, option.MaxValue);
@@ -130,7 +130,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const int expected = 123;
 
             // Act
-            var option = sut.Number("name", "description", expected);
+            var option = sut.Number("id", "name", "description", expected);
 
             // Assert
             Assert.Equal(expected, option.MinValue);
@@ -144,7 +144,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Number(expected, null);
+            var option = sut.Number("id", expected, null);
 
             // Assert
             Assert.Equal(expected, option.Name);
@@ -159,7 +159,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var option = sut.Number("name", "description", null, null, 0, value);
+            var option = sut.Number("id", "name", "description", null, null, 0, value);
 
             // Assert
             Assert.Equal(value, option.Required);
@@ -172,7 +172,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var ex = Record.Exception(() => sut.Number("name", "desc", 2, 1));
+            var ex = Record.Exception(() => sut.Number("id", "name", "desc", 2, 1));
 
             // Assert
             Assert.IsType<ArgumentException>(ex);
@@ -241,7 +241,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Set("name", expected, Enumerable.Empty<ISetItem>());
+            var option = sut.Set("id", "name", expected, Enumerable.Empty<ISetItem>());
 
             // Assert
             Assert.Equal(expected, option.Description);
@@ -255,7 +255,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Set(expected, null, Enumerable.Empty<ISetItem>());
+            var option = sut.Set("id", expected, null, Enumerable.Empty<ISetItem>());
 
             // Assert
             Assert.Equal(expected, option.Name);
@@ -270,7 +270,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var option = sut.Set("name", "description", Enumerable.Empty<ISetItem>(), null, value);
+            var option = sut.Set("id", "name", "description", Enumerable.Empty<ISetItem>(), null, value);
 
             // Assert
             Assert.Equal(value, option.Required);
@@ -284,7 +284,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Text("name", "description", expected);
+            var option = sut.Text("id", "name", "description", expected);
 
             // Assert
             Assert.Equal(expected, option.DefaultValue);
@@ -298,7 +298,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Text("name", expected);
+            var option = sut.Text("id", "name", expected);
 
             // Assert
             Assert.Equal(expected, option.Description);
@@ -312,7 +312,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             const string expected = "expected";
 
             // Act
-            var option = sut.Text(expected, null);
+            var option = sut.Text("id", expected, null);
 
             // Assert
             Assert.Equal(expected, option.Name);
@@ -327,7 +327,7 @@ namespace BuildNotifications.Core.Tests.Plugin.Options
             var sut = new OptionSchemaFactory();
 
             // Act
-            var option = sut.Text("name", "description", null, value);
+            var option = sut.Text("id", "name", "description", null, value);
 
             // Assert
             Assert.Equal(value, option.Required);
