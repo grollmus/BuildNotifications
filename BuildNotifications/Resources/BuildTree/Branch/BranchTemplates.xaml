@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
+
+    <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">
+        <TextBlock Text="{Binding BranchName}" Foreground="{DynamicResource Foreground2}" FontSize="{DynamicResource BlockFont}" DockPanel.Dock="Top"/>
+    </DataTemplate>
+</ResourceDictionary>

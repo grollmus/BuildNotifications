@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
 {
@@ -6,12 +6,8 @@ namespace BuildNotifications
     {
         public MainWindow()
         {
+            DataContext = new MainViewModel();
             InitializeComponent();
-        }
-
-        private void ButtonExit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
         }
     }
 }

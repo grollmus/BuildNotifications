@@ -1,0 +1,57 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BuildNotifications.Resources.BuildTree"
+                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
+
+
+    <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <DockPanel>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" DockPanel.Dock="Top"/>
+
+            <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate       >
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <DockPanel>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" DockPanel.Dock="Top"/>
+
+            <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate       >
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <DockPanel>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" DockPanel.Dock="Left"/>
+
+            <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}" DockPanel.Dock="Right">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate       >
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <DockPanel>
+            <ContentPresenter Content="{Binding}" ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" DockPanel.Dock="Top"/>
+        </DockPanel>
+    </DataTemplate>
+
+
+
+</ResourceDictionary>

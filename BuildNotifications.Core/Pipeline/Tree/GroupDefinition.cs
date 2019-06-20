@@ -5,6 +5,7 @@
         Branch,
         BuildDefinition,
         Source,
-        Status
+        Status,
+        None
     }
 }

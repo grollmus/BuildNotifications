@@ -9,10 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml" />
+    <None Remove="Resources\BuildTree\BuildTemplates.xaml" />
+    <None Remove="Resources\BuildTree\BuildTreeResources.xaml" />
+    <None Remove="Resources\BuildTree\LevelTemplates.xaml" />
+    <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
+    <None Remove="Resources\Global\DarkTheme.xaml" />
+    <None Remove="Resources\Global\LightTheme.xaml" />
+    <None Remove="Resources\Global\Sizes.xaml" />
+    <None Remove="Views\Tree\BuildTreeView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Resources.xaml" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\BuildTree\BuildDefinition\" />
+    <Folder Include="Resources\BuildTree\Status\" />
     <Folder Include="Utils\" />
   </ItemGroup>
 

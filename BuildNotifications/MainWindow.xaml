@@ -3,15 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
+        xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
+        xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="9*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
-        <Label Content="Hello .NET Core!" HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontSize="40" />
-        <Button Content="Exit" Grid.Row="1" FontSize="20" Click="ButtonExit_Click" />
-    </Grid>
+        Title="MainWindow" Height="450" Width="800" d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModelTree:BuildTreeViewModel}">
+                <viewsTree:BuildTreeView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <ContentPresenter Content="{Binding BuildTree}"/>
 </Window>

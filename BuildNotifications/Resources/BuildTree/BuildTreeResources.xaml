@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BuildNotifications.Resources.BuildTree">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Branch/BranchTemplates.xaml"/>
+        <ResourceDictionary Source="Build/BuildTemplates.xaml"/>
+        <ResourceDictionary Source="Source/SourceTemplates.xaml"/>
+        <ResourceDictionary Source="LevelTemplates.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>
