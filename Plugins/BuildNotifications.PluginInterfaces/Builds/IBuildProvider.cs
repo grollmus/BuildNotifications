@@ -29,11 +29,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition);
 
         /// <summary>
-        /// Fetches all builds since a given date and time.
+        /// Fetches all builds that started since a given date and time.
         /// </summary>
         /// <param name="date">Date and time since when to fetch builds.</param>
         /// <returns>List of all builds since <paramref name="date" />.</returns>
-        IAsyncEnumerable<IBuild> FetchBuildsSince(DateTime date);
+        IAsyncEnumerable<IBuild> FetchBuildsStartedSince(DateTime date);
 
         /// <summary>
         /// Fetches all existing build definitions.

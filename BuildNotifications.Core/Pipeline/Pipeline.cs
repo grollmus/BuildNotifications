@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Pipeline.Cache;
@@ -38,7 +37,7 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private async Task FetchBuildsSinceLastUpdate()
+        private async Task FetchBuilds()
         {
             var providers = _projectList.Select(p => p.BuildProvider).Distinct();
 
@@ -46,15 +45,13 @@ namespace BuildNotifications.Core.Pipeline
             {
                 var providerId = buildProvider.GetHashCode();
 
-                var builds = buildProvider.FetchBuildsSince(_lastUpdate);
+                var builds = buildProvider.FetchAllBuilds();
                 await foreach (var build in builds)
                 {
                     var key = new CacheKey(providerId, build.GetHashCode());
                     _buildCache.AddOrReplace(key, build);
                 }
             }
-
-            _lastUpdate = DateTime.Now;
         }
 
         private async Task FetchDefinitions()
@@ -74,25 +71,6 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private async Task InitBuilds()
-        {
-            var providers = _projectList.Select(p => p.BuildProvider).Distinct();
-
-            foreach (var buildProvider in providers)
-            {
-                var providerId = buildProvider.GetHashCode();
-
-                var builds = buildProvider.FetchAllBuilds();
-                await foreach (var build in builds)
-                {
-                    var key = new CacheKey(providerId, build.GetHashCode());
-                    _buildCache.AddOrReplace(key, build);
-                }
-            }
-
-            _lastUpdate = DateTime.Now;
-        }
-
         /// <inheritdoc />
         public void AddProject(IProject project)
         {
@@ -104,13 +82,9 @@ namespace BuildNotifications.Core.Pipeline
         {
             var branchTask = FetchBranches();
             var definitionsTask = FetchDefinitions();
-            await Task.WhenAll(branchTask, definitionsTask);
+            var buildTask = FetchBuilds();
 
-            var buildsTask = _lastUpdate == DateTime.MinValue
-                ? InitBuilds()
-                : FetchBuildsSinceLastUpdate();
-
-            await buildsTask;
+            await Task.WhenAll(branchTask, definitionsTask, buildTask);
 
             var builds = _buildCache.ContentCopy();
             var branches = _branchCache.ContentCopy();
@@ -129,7 +103,5 @@ namespace BuildNotifications.Core.Pipeline
         private readonly PipelineNotifier _pipelineNotifier;
 
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
-
-        private DateTime _lastUpdate = DateTime.MinValue;
     }
 }
