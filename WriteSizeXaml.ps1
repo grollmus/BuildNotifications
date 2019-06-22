@@ -1,0 +1,41 @@
+param (
+    [string]$targetPath = ".\BuildNotifications\Resources\Global\Sizes.xaml",
+    [Parameter(Mandatory=$true)][double]$blockSize
+ )
+
+$sb = [System.Text.StringBuilder]::new()
+[void]$sb.AppendLine("<ResourceDictionary xmlns=`"http://schemas.microsoft.com/winfx/2006/xaml/presentation`"")
+[void]$sb.AppendLine("                    xmlns:x=`"http://schemas.microsoft.com/winfx/2006/xaml`"")
+[void]$sb.AppendLine("                    xmlns:system=`"clr-namespace:System;assembly=System.Runtime`">")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <!--AUTO GENERATED FILE-->")
+[void]$sb.AppendLine("    <!--Use `" .\WriteSizeXaml.ps1 -blockSize 5`" in Package Manager Console to generate this file-->")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockQuarter`">$($blockSize/4)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockHalf`">$($blockSize/2)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"Block`">$($blockSize)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockOneAndHalf`">$($blockSize*1.5)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockDouble`">$($blockSize*2)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockTriple`">$($blockSize*3)</system:Double>")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <system:Double x:Key=`"NegativeBlockHalf`">$($blockSize/-2)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"NegativeBlock`">$($blockSize*-1)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"NegativeBlockOneAndHalf`">$($blockSize*-1.5)</system:Double>")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockFont`">$($blockSize + 5)</system:Double>")
+[void]$sb.AppendLine("    <system:Double x:Key=`"BlockTripleFont`">$(($blockSize + 5)*2)</system:Double>")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource BlockQuarter}`" Right=`"{StaticResource BlockQuarter}`" Top=`"{StaticResource BlockQuarter}`" Bottom=`"{StaticResource BlockQuarter}`" x:Key=`"BlockQuarterThickness`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource BlockHalf}`" Right=`"{StaticResource BlockHalf}`" Top=`"{StaticResource BlockHalf}`" Bottom=`"{StaticResource BlockHalf}`" x:Key=`"BlockHalfThickness`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource Block}`" Right=`"{StaticResource Block}`" Top=`"{StaticResource Block}`" Bottom=`"{StaticResource Block}`" x:Key=`"BlockThickness`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource BlockDouble}`" Right=`"{StaticResource BlockDouble}`" Top=`"{StaticResource BlockDouble}`" Bottom=`"{StaticResource BlockDouble}`" x:Key=`"BlockDoubleThickness`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource BlockOneAndHalf}`" Right=`"{StaticResource BlockOneAndHalf}`" Top=`"{StaticResource BlockOneAndHalf}`" Bottom=`"{StaticResource BlockOneAndHalf}`" x:Key=`"BlockOneAndHalfThickness`"/>")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("    <Thickness Left=`"{StaticResource NegativeBlockHalf}`" Right=`"{StaticResource NegativeBlockHalf}`" Top=`"{StaticResource NegativeBlockHalf}`" Bottom=`"{StaticResource NegativeBlockHalf}`" x:Key=`"NegativeBlockHalfThickness`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"$($blockSize*-0.5 - 0.5)`" Right=`"$($blockSize*-0.5 - 0.5)`" Top=`"$($blockSize*-0.5 - 0.5)`" Bottom=`"$($blockSize*-0.5 - 0.5)`" x:Key=`"NegativeBlockHalfThicknessAndABit`"/>")
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine("</ResourceDictionary>")
+
+Set-Content $targetPath $sb.ToString()
+
+return 'Created' + $targetPath
