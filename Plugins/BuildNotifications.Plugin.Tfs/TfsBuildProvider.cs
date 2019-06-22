@@ -81,7 +81,7 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchBuildsSince(DateTime date)
+        public async IAsyncEnumerable<IBuild> FetchBuildsStartedSince(DateTime date)
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();

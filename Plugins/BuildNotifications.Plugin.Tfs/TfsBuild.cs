@@ -25,6 +25,12 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_id, Id);
+        }
+
+        /// <inheritdoc />
         public bool Equals(IBuild other)
         {
             return _id == (other as TfsBuild)?._id;

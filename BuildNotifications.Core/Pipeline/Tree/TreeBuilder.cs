@@ -43,8 +43,8 @@ namespace BuildNotifications.Core.Pipeline.Tree
                     return new BranchGroupNode(build.BranchName);
                 case Tree.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
-                case Tree.GroupDefinition.Source:
-                    throw new NotImplementedException();
+                //case Tree.GroupDefinition.Source:
+                //    throw new NotImplementedException();
 
                 default:
                     return new BuildNode(build);
