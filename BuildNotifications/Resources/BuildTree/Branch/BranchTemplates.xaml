@@ -3,11 +3,12 @@
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
 
     <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical" Margin="{DynamicResource BlockDoubleThickness}">
             <TextBlock Text="{Binding BranchName}" Foreground="{DynamicResource Foreground2}" FontSize="{DynamicResource BlockFont}" DockPanel.Dock="Top"/>
-            <Button Content="Add Build" Command="{Binding AddOneBuildCommand}"/>
-            <Button Content="Remove Build" Command="{Binding RemoveOneChildCommand}"/>
-            <Button Content="Add and remove" Command="{Binding AddAndRemoveCommand}"/>
+            <Button Content="Add Build" Command="{Binding AddOneBuildCommand}" Height="50"/>
+            <Button Content="Remove Build" Command="{Binding RemoveOneChildCommand}" Height="50"/>
+            <Button Content="Add and remove" Command="{Binding AddAndRemoveCommand}" Height="50"/>
+            <Button Content="Highlight" Command="{Binding HighlightCommand}" Height="50"/>
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

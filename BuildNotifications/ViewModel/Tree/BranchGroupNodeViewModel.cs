@@ -17,6 +17,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public ICommand AddAndRemoveCommand { get; set; }
 
+        public ICommand HighlightCommand { get; set; }
+
         public BranchGroupNodeViewModel(IBranchGroupNode node)
         {
             _node = node;
@@ -27,6 +29,19 @@ namespace BuildNotifications.ViewModel.Tree
                 AddOneBuild(o);
                 RemoveOneChild(o);
             });
+            HighlightCommand = new DelegateCommand(Highlight);
+        }
+
+        private void Highlight(object obj)
+        {
+            bool? targetValue = null;
+            foreach (var build in Children.OfType<BuildNodeViewModel>())
+            {
+                if (targetValue == null)
+                    targetValue = !build.IsHighlighted;
+
+                build.IsHighlighted = targetValue.Value;
+            }
         }
 
         private void AddOneBuild(object parameter)
@@ -39,15 +54,21 @@ namespace BuildNotifications.ViewModel.Tree
             var newBuild = new BuildNodeViewModel(null)
             {
                 MaxTreeDepth = otherBuild.MaxTreeDepth,
-                CurrentTreeLevelDepth = otherBuild.CurrentTreeLevelDepth
+                CurrentTreeLevelDepth = otherBuild.CurrentTreeLevelDepth,
+                IsLargeSize = true
             };
+
+            foreach (var build in Children.OfType<BuildNodeViewModel>().Where(x => x.IsLargeSize))
+            {
+                build.IsLargeSize = false;
+            }
 
             Children.Add(newBuild);
         }
 
         private void RemoveOneChild(object parameter)
         {
-            var someBuild = Children.FirstOrDefault();
+            var someBuild = Children.FirstOrDefault(x => !x.IsRemoving);
             if (someBuild != null)
                 Children.Remove(someBuild);
         }

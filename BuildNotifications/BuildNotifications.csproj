@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\BuildTree\Animation\" />
     <Folder Include="Resources\BuildTree\BuildDefinition\" />
     <Folder Include="Resources\BuildTree\Status\" />
   </ItemGroup>
@@ -41,6 +40,11 @@
     <None Include="Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
+    <PackageReference Include="TweenSharp" Version="0.1.0" />
   </ItemGroup>
 
   <ItemGroup>

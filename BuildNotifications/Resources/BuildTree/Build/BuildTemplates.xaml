@@ -1,12 +1,70 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
+                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+                    xmlns:resourcesBuildTreeBuild="clr-namespace:BuildNotifications.Resources.BuildTree.Build"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
 
     <DataTemplate x:Key="BuildNodeTemplate" DataType="{x:Type viewModelTree:BuildNodeViewModel}">
-        <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}" Fill="{DynamicResource Green}" Margin="4">
-            <Rectangle.RenderTransform>
-                <SkewTransform AngleX="-30"/>
-            </Rectangle.RenderTransform>
-        </Rectangle>
+        <Grid Cursor="Hand" 
+              Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
+              Height="{DynamicResource Block}" Margin="{DynamicResource BlockHalfThickness}">
+
+            <Rectangle Fill="{DynamicResource Background3}" Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}" Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True" >
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                        <resourcesBuildTreeBuild:Highlight DoHighlight="True" />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
+                        <resourcesBuildTreeBuild:Highlight DoHighlight="False" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </Rectangle>
+
+            <Rectangle Fill="{DynamicResource Green}" x:Name="FillRectangle">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <resourcesBuildTreeBuild:BuildFadeIn />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Rectangle>
+
+            <Rectangle Stroke="{DynamicResource Green}" StrokeThickness="1" x:Name="StrokeRectangle"/>
+
+            <Grid.RenderTransform>
+                <SkewTransform AngleX="-30" />
+            </Grid.RenderTransform>
+
+            <i:Interaction.Triggers>
+                <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
+                    <resourcesBuildTreeBuild:BuildGrow />
+                </ei:DataTrigger>
+                <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="false">
+                    <resourcesBuildTreeBuild:BuildShrink />
+                </ei:DataTrigger>
+                <i:EventTrigger EventName="MouseEnter">
+                    <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+
+        </Grid>
+
+
+        <DataTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Fill" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
+                <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="StrokeRectangle" />
+            </Trigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 </ResourceDictionary>

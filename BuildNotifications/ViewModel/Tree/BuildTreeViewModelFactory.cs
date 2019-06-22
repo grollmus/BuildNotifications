@@ -60,6 +60,10 @@ namespace BuildNotifications.ViewModel.Tree
                     nodeVm.Children.Add(childVm);
                 }
 
+                var lastBuild = nodeVm.Children.OfType<BuildNodeViewModel>().LastOrDefault();
+                if (lastBuild != null)
+                    lastBuild.IsLargeSize = true;
+
                 yield return nodeVm;
             }
         }
@@ -78,7 +82,7 @@ namespace BuildNotifications.ViewModel.Tree
                     return new StatusGroupNodeViewModel(node);
                 case GroupDefinition.None:
                 default:
-                    return new BuildNodeViewModel(node as IBuildNode);
+                    return new BuildNodeViewModel(node as IBuildNode) { IsLargeSize = false };
             }
         }
     }

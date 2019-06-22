@@ -15,7 +15,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public TimeSpan RemoveDelay { get; set; }
 
-        public RemoveTrackingObservableCollection() : this(TimeSpan.FromSeconds(0.2), Enumerable.Empty<T>())
+        public RemoveTrackingObservableCollection() : this(TimeSpan.FromSeconds(0.15), Enumerable.Empty<T>())
         {
         }
 
