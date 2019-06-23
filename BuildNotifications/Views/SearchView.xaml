@@ -4,11 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-             mc:Ignorable="d" Width="{DynamicResource BlockFourteenTimes}">
-    <Grid>
-        <TextBox />
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+             mc:Ignorable="d">
+
+    <Grid Width="{DynamicResource BlockDouble}">
+        <TextBox/>
+
         <icons:IconBatch Type="Search" Foreground="{DynamicResource Background3}" IsHitTestVisible="False"
-                         Width="{DynamicResource Block}" Height="{DynamicResource Block}"
-                         HorizontalAlignment="Left" Margin="{DynamicResource BlockQuarterXOnlyMargin}"/>
+                         Width="{DynamicResource Block}" Height="{DynamicResource Block}" Background="{DynamicResource Background1}"
+                         HorizontalAlignment="Right" Margin="{DynamicResource BlockQuarterXOnlyMargin}"/>
+
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="GotKeyboardFocus">
+                <animation:WidthChange TargetWidth="{DynamicResource BlockFourteenTimes}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="LostKeyboardFocus">
+                <animation:WidthChange TargetWidth="{DynamicResource BlockDouble}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
     </Grid>
 </UserControl>

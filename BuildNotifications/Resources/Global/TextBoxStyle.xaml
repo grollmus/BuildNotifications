@@ -8,6 +8,7 @@
 
         <Setter Property="Background" Value="{DynamicResource Background1}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground1}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
         
     </Style>
 

@@ -30,13 +30,13 @@
 
                         <Grid x:Name="LayoutRoot">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="{DynamicResource BlockTripleRowLength}" />
+                                <RowDefinition Height="{DynamicResource BlockDoubleRowLength}" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <Grid x:Name="PART_HeaderBar">
+                            <Grid x:Name="PART_HeaderBar" Background="{DynamicResource Background1}">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                    <ColumnDefinition Width="0" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
@@ -44,13 +44,11 @@
 
                                 <icons:IconBatch Grid.Column="0"
                                                  Type="BuildNotification" 
-                                                 Margin="{DynamicResource BlockLeftAndRight}"
-                                                 Width="{DynamicResource BlockDouble}"
-                                                 Height="{DynamicResource BlockDouble}"
-                                                 Foreground="{DynamicResource Foreground2}" />
+                                                 Width="{DynamicResource BlockOneAndHalf}"
+                                                 Height="{DynamicResource BlockOneAndHalf}"
+                                                 Foreground="{DynamicResource Background3}" />
 
-                                <DockPanel Grid.Column="1" LastChildFill="False"
-                                      Panel.ZIndex="0" Background="{DynamicResource Background1}">
+                                <DockPanel Grid.Column="1" LastChildFill="False" Panel.ZIndex="0">
 
                                     <TextBlock Text="{TemplateBinding Title}"
                                                Margin="{DynamicResource BlockLeftAndRight}"
@@ -60,7 +58,7 @@
                                                TextAlignment="Left"
                                                VerticalAlignment="Center"
                                                Width="Auto"
-                                               Foreground="{DynamicResource Foreground1}"
+                                               Foreground="{DynamicResource Foreground2}"
                                                IsEnabled="{TemplateBinding IsActive}" />
 
                                     <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left"/>

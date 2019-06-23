@@ -5,10 +5,10 @@
 
     <DataTemplate x:Key="SourceGroupNodeTemplate" DataType="{x:Type viewModelTree:SourceGroupNodeViewModel}">
         <DockPanel>
-            <icons:IconBatch Foreground="{DynamicResource Green}" Type="Connection" 
+            <icons:IconBatch Foreground="{DynamicResource Foreground1}" Type="Connection" 
                              Width="{DynamicResource Block}" Height="{DynamicResource Block}"
                              DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}"/>
-            <TextBlock Text="GitHub" FontSize="{DynamicResource BlockFont}" Foreground="{DynamicResource Foreground1}"
+            <TextBlock Text="GitHub" FontSize="{DynamicResource BlockFont}" Foreground="{DynamicResource Foreground2}"
                    HorizontalAlignment="Left" UseLayoutRounding="True" FontWeight="Regular" TextTrimming="CharacterEllipsis"/>
         </DockPanel>
     </DataTemplate>

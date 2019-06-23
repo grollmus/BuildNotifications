@@ -9,7 +9,7 @@
                              Width="{DynamicResource Block}" Height="{DynamicResource Block}" />
             <Grid>
                 <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}"
-                           Foreground="{DynamicResource Foreground1}" UseLayoutRounding="True" />
+                           Foreground="{DynamicResource Foreground2}" UseLayoutRounding="True" />
 
                 <StackPanel Orientation="Horizontal" x:Name="ButtonStackPanel" Opacity="0.01">
                     <Button Content="Add Build" Command="{Binding AddOneBuildCommand}" Height="16" Width="16" />
