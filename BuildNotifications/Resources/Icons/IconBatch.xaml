@@ -48,6 +48,98 @@
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
+
+        <DrawingImage x:Key="BuildNotificationsDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                    <DrawingGroup.Transform>
+                        <TranslateTransform X="14.699999809265137" Y="12" />
+                    </DrawingGroup.Transform>
+                    <DrawingGroup Opacity="1" Transform="6.32814025878906,0,0,6.24899291992188,75.95,75">
+                        <DrawingGroup Opacity="1">
+                            <DrawingGroup Opacity="1">
+                                <DrawingGroup Opacity="1">
+                                    <GeometryDrawing
+                                        Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                        Geometry="F1 M150,150z M0,0z M-4.2,8.15L-5.2,12.6 3.65,10.85 5.7,5.15 -4.2,8.15 M-12.8,10.7L-12.1,13.9 -9.45,13.4 -8.95,9.5 -12.8,10.7 M-12.7,0.7L-13,5.3 -10.05,3.95 -9.55,-1.25 -12.7,0.7 M-14.3,6.65L-14.7,10.95 -11.45,9.6 -11.1,5.3 -14.3,6.65 M-6.25,3.25L-7.05,8.15 -3.2,6.95 -2,1.4 -6.25,3.25 M-1.15,1.05L-2.55,6.7 8.65,3.1 11.7,-4.65 -1.15,1.05 M-4.9,8.3L-8.45,9.4 -8.95,13.3 -5.8,12.7 -4.9,8.3 M-7.65,8.35L-6.95,3.55 -10.3,5.05 -10.7,9.35 -7.65,8.35 M-4.95,-4.05L-8.95,-1.65 -9.55,3.65 -5.95,1.95 -4.95,-4.05 M5.2,-3.35L7.9,-12 -4.15,-4.55 -5.25,1.65 5.2,-3.35z" />
+                                </DrawingGroup>
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="CloseDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Geometry="F1 M32,32z M0,0z M11.5,20.5L15.95,16 11.5,11.5 M20.5,11.5L15.95,16 20.5,20.5">
+                            <GeometryDrawing.Pen>
+                                <Pen
+                                    Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                    Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter"
+                                    MiterLimit="58" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="MaximizeDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Geometry="F1 M32,32z M0,0z M11.5,11.5L20.5,11.5 20.5,20.5 11.5,20.5 11.5,11.5z">
+                            <GeometryDrawing.Pen>
+                                <Pen
+                                    Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                    Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter"
+                                    MiterLimit="58" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="MinimizeDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Geometry="F1 M32,32z M0,0z M11.5,16L20.5,16">
+                            <GeometryDrawing.Pen>
+                                <Pen
+                                    Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                    Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter"
+                                    MiterLimit="58" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="RestoreDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Geometry="F1 M32,32z M0,0z M11.5,13.45L13.4,13.45 13.4,11.5 20.5,11.5 20.5,18.55 18.55,18.55 18.55,20.5 11.5,20.5 11.5,13.45z M13.4,13.45L18.55,13.45 18.55,18.55">
+                            <GeometryDrawing.Pen>
+                                <Pen
+                                    Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                    Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter"
+                                    MiterLimit="58" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
     </UserControl.Resources>
     <Viewbox>
         <Image x:Name="DisplayImage">
@@ -55,21 +147,51 @@
                 <Style>
                     <Style.Triggers>
                         <DataTrigger
-                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
-                        Value="Connection">
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Connection">
                             <Setter Property="Image.Source" Value="{StaticResource ConnectionIconDrawingImage}" />
                         </DataTrigger>
 
                         <DataTrigger
-                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
-                        Value="Branch">
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Branch">
                             <Setter Property="Image.Source" Value="{StaticResource BranchIconDrawingImage}" />
                         </DataTrigger>
 
                         <DataTrigger
-                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
-                        Value="Definition">
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Definition">
                             <Setter Property="Image.Source" Value="{StaticResource DefinitionIconDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="BuildNotification">
+                            <Setter Property="Image.Source" Value="{StaticResource BuildNotificationsDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Close">
+                            <Setter Property="Image.Source" Value="{StaticResource CloseDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Maximize">
+                            <Setter Property="Image.Source" Value="{StaticResource MaximizeDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Minimize">
+                            <Setter Property="Image.Source" Value="{StaticResource MinimizeDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Restore">
+                            <Setter Property="Image.Source" Value="{StaticResource RestoreDrawingImage}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

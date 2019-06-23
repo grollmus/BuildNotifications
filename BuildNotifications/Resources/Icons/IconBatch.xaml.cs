@@ -37,6 +37,11 @@ namespace BuildNotifications.Resources.Icons
     {
         Connection,
         Branch,
-        Definition
+        Definition,
+        BuildNotification,
+        Close,
+        Maximize,
+        Minimize,
+        Restore,
     }
 }

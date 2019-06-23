@@ -17,6 +17,11 @@
     <system:Double x:Key="BlockThirty">360</system:Double>
     <system:Double x:Key="BlockTwentyEight">336</system:Double>
 
+    <GridLength x:Key="BlockHalfRowLength">6</GridLength>
+    <GridLength x:Key="BlockRowLength">12</GridLength>
+    <GridLength x:Key="BlockDoubleRowLength">24</GridLength>
+    <GridLength x:Key="BlockTripleRowLength">36</GridLength>
+
     <system:Double x:Key="NegativeBlockThreeQuarters">-9</system:Double>
     <system:Double x:Key="NegativeBlockHalf">-6</system:Double>
     <system:Double x:Key="NegativeBlock">-12</system:Double>
