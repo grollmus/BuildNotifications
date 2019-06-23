@@ -24,7 +24,7 @@
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
                        HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
 
-            <ItemsControl ItemsSource="{Binding Children}"
+            <ItemsControl ItemsSource="{Binding Children}" Margin="{DynamicResource BlockHalfThickness}"
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

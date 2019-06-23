@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="BuildNotifications.Resources.Icons.IconBatch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BuildNotifications.Resources.Icons"
+             mc:Ignorable="d" Width="{DynamicResource Block}" Height="{DynamicResource Block}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DrawingImage x:Key="BranchIconDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing
+                                Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                Geometry="F1 M150,150z M0,0z M141.95,83.05Q133.9,75 123.2,75 114.15,75 106.1,81.4L52.5,33.75 53.6,26.8Q53.6,16 45.55,8.05 37.5,0 26.8,0 15.55,0 8.05,8.05 0,16 0,26.8 0,36.95 5.85,43.9 12.35,51.4 21.4,53.05L21.4,97.5Q12.35,99.05 5.85,106.55 0,113.5 0,123.75 0,134.45 8.05,142.5 15.55,150 26.8,150 37.5,150 45.55,142.5 53.6,134.45 53.6,123.2 53.6,113.5 47.1,106.55 41.25,99.05 32.1,97.5L32.1,53.05Q41.25,51.4,47.1,43.9L99.15,90Q96.4,95.3 96.4,101.8 96.4,113.05 104.45,121 111.95,128.5 123.2,128.5 133.9,128.5 141.95,121 150,113.05 150,101.8 150,91 141.95,83.05 M123.2,85.7Q129.6,85.7 134.45,90.55 139.3,95.3 139.3,101.8 139.3,108.75 134.45,113.05 129.6,117.8 123.2,117.8 116.25,117.8 111.95,113.05 107.1,108.75 107.1,101.8 107.1,95.3 111.95,90.55 116.25,85.7 123.2,85.7z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="ConnectionIconDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing
+                                Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                Geometry="F1 M150,150z M0,0z M117.85,32.15L98.55,32.15 98.55,0 85.7,0 85.7,32.15 64.3,32.15 64.3,0 51.45,0 51.45,32.15 32.15,32.15 32.15,75Q32.15,91.6 42.85,103.4 53.6,115.2 69.65,117.3L69.65,150 80.35,150 80.35,117.3Q96.4,115.2 107.15,103.4 117.85,91.05 117.85,75L117.85,32.15z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="DefinitionIconDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing
+                                Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                Geometry="F1 M150,150z M0,0z M150,48.25Q150,39.65,145.2,27.85L115.2,57.85 92.15,34.85 122.15,5.35Q111.45,0 101.8,0 82,0 67.5,14.5 53.6,28.4 53.6,48.25 53.6,58.95 57.85,69.1L4.3,122.7Q0,127.5 0,134.5 0,140.9 4.3,145.75 8.6,150 16.1,150 23.05,150 27.35,145.75L80.9,92.15Q91.1,96.45 101.8,96.45 121.6,96.45 135.55,82.5 150,68.05 150,48.25z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </UserControl.Resources>
+    <Viewbox>
+        <Image x:Name="DisplayImage">
+            <Image.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger
+                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Value="Connection">
+                            <Setter Property="Image.Source" Value="{StaticResource ConnectionIconDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Value="Branch">
+                            <Setter Property="Image.Source" Value="{StaticResource BranchIconDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Value="Definition">
+                            <Setter Property="Image.Source" Value="{StaticResource DefinitionIconDrawingImage}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+    </Viewbox>
+</UserControl>
