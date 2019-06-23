@@ -72,7 +72,7 @@
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <animation:AnimatedDockPanel AnimationDuration="0.4" HorizontalAlignment="Left"
                                      Width="{DynamicResource BlockTwentyEight}">
-            <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Center" HorizontalAlignment="Left"
+            <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
                 <ContentPresenter Content="{Binding}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
