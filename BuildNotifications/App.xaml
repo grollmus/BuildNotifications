@@ -9,12 +9,11 @@
                 <ResourceDictionary Source="Resources/Global/Sizes.xaml"/>
                 <ResourceDictionary Source="Resources/Global/DarkTheme.xaml"/>
                 <ResourceDictionary Source="Resources/Global/WindowStyle.xaml"/>
-                <ResourceDictionary Source="Resources/Global/IconButtonStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Global/TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 
             <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}">
-                <Setter Property="FontFamily" Value="Verdana" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

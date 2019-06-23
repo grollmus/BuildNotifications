@@ -25,6 +25,44 @@ namespace BuildNotifications.Resources.Window
         private double _heightBeforeMaximize;
         private double _widthBeforeMaximize;
         private WindowState _previousState;
+        private ContentPresenter _rightToTitleContentPresenter;
+        private ContentPresenter _leftToButtonsContentPresenter;
+
+        public static readonly DependencyProperty RightToTitleContentProperty = DependencyProperty.Register(
+            "RightToTitleContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object), PropertyChangedCallback));
+
+        public static readonly DependencyProperty LeftToButtonsContentProperty = DependencyProperty.Register(
+            "LeftToButtonsContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object)));
+
+        public object LeftToButtonsContent
+        {
+            get => GetValue(LeftToButtonsContentProperty);
+            set => SetValue(LeftToButtonsContentProperty, value);
+        }
+
+        public object RightToTitleContent
+        {
+            get => GetValue(RightToTitleContentProperty);
+            set => SetValue(RightToTitleContentProperty, value);
+        }
+
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is CustomWindow customWindow))
+                return;
+
+            switch (e.Property.Name)
+            {
+                case nameof(RightToTitleContent):
+                    if (customWindow._rightToTitleContentPresenter != null)
+                        customWindow._rightToTitleContentPresenter.Content = e.NewValue;
+                    break;
+                case nameof(LeftToButtonsContent):
+                    if (customWindow._leftToButtonsContentPresenter != null)
+                        customWindow._leftToButtonsContentPresenter.Content = e.NewValue;
+                    break;
+            }
+        }
 
         static CustomWindow()
         {
@@ -60,6 +98,14 @@ namespace BuildNotifications.Resources.Window
             _restoreButton = GetRequiredTemplateChild<Button>("RestoreButton");
             _closeButton = GetRequiredTemplateChild<Button>("CloseButton");
             _headerBar = GetRequiredTemplateChild<Grid>("PART_HeaderBar");
+
+            _rightToTitleContentPresenter = GetRequiredTemplateChild<ContentPresenter>("PART_RightToTitleContentPresenter");
+            if (_rightToTitleContentPresenter != null)
+                _rightToTitleContentPresenter.Content = RightToTitleContent;
+
+            _leftToButtonsContentPresenter = GetRequiredTemplateChild<ContentPresenter>("PART_LeftToButtonsContentPresenter");
+            if (_leftToButtonsContentPresenter != null)
+                _leftToButtonsContentPresenter.Content = LeftToButtonsContent;
 
             if (_layoutRoot != null && WindowState == WindowState.Maximized)
                 _layoutRoot.Margin = GetDefaultMarginForDpi();
@@ -144,10 +190,10 @@ namespace BuildNotifications.Resources.Window
 
         private void SetMaximizeButtonsVisibility(Visibility maximizeButtonVisibility, Visibility reverseMaximizeButtonVisiility)
         {
-            if (_maximizeButton != null) 
+            if (_maximizeButton != null)
                 _maximizeButton.Visibility = maximizeButtonVisibility;
 
-            if (_restoreButton != null) 
+            if (_restoreButton != null)
                 _restoreButton.Visibility = reverseMaximizeButtonVisiility;
         }
 
@@ -157,7 +203,7 @@ namespace BuildNotifications.Resources.Window
             var screen = PointToScreen(position);
 
             const int num = 36;
-            if (position.Y >= num) 
+            if (position.Y >= num)
                 return;
 
             var handle = (new WindowInteropHelper(this)).Handle;

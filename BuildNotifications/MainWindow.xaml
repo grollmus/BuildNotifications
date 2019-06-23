@@ -1,29 +1,45 @@
 ﻿<window:CustomWindow x:Class="BuildNotifications.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
-        xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
-        xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
-        xmlns:views="clr-namespace:BuildNotifications.Views"
-        xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
-        mc:Ignorable="d"
-        Title="BuildNotifications" Height="450" Width="800" d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
+                     xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
+                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+                     xmlns:views="clr-namespace:BuildNotifications.Views"
+                     xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
+                     mc:Ignorable="d"
+                     Title="BuildNotifications" Height="450" Width="800"
+                     d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
+                     LeftToButtonsContent="{Binding SearchViewModel}">
 
     <window:CustomWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml"/>
+                <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml" />
+                <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModelTree:BuildTreeViewModel}">
-                <viewsTree:BuildTreeView/>
+                <viewsTree:BuildTreeView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
+                <views:SearchView />
             </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
-<Grid>
-    <ContentPresenter Content="{Binding BuildTree}"/>
-    <views:BusyIndicator IsBusy="{Binding Path=IsBusy}"/>
-</Grid>
+    <Grid>
+        <ContentPresenter Content="{Binding BuildTree}" />
+        <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
+    </Grid>
+
+    <window:CustomWindow.RightToTitleContent>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{StaticResource HiddenIconButton}" Tag="Settings"
+                    Height="{DynamicResource BlockDouble}" Width="{DynamicResource BlockDouble}"
+                    MinHeight="{DynamicResource BlockDouble}" MinWidth="{DynamicResource BlockDouble}"
+                    Foreground="{DynamicResource Background3}" />
+        </StackPanel>
+    </window:CustomWindow.RightToTitleContent>
 </window:CustomWindow>

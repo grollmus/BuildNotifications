@@ -24,12 +24,14 @@
     <None Remove="Resources\BuildTree\LevelTemplates.xaml" />
     <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
     <None Remove="Resources\Global\DarkTheme.xaml" />
-    <None Remove="Resources\Global\IconButtonStyle.xaml" />
+    <None Remove="Resources\Global\IconButtonStyles.xaml" />
     <None Remove="Resources\Global\LightTheme.xaml" />
     <None Remove="Resources\Global\Sizes.xaml" />
+    <None Remove="Resources\Global\TextBoxStyle.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
     <None Remove="Resources\Icons\IconBatch.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
+    <None Remove="Views\SearchView.xaml" />
     <None Remove="Views\Tree\BuildTreeView.xaml" />
   </ItemGroup>
 

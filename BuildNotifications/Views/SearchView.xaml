@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="BuildNotifications.Views.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             mc:Ignorable="d" Width="{DynamicResource BlockFourteenTimes}">
+    <Grid>
+        <TextBox />
+        <icons:IconBatch Type="Search" Foreground="{DynamicResource Background3}" IsHitTestVisible="False"
+                         Width="{DynamicResource Block}" Height="{DynamicResource Block}"
+                         HorizontalAlignment="Left" Margin="{DynamicResource BlockQuarterXOnlyMargin}"/>
+    </Grid>
+</UserControl>

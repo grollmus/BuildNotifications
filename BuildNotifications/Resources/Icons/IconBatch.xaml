@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:BuildNotifications.Resources.Icons"
-             mc:Ignorable="d" Width="{DynamicResource Block}" Height="{DynamicResource Block}"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <DrawingImage x:Key="BranchIconDrawingImage">
@@ -140,9 +140,37 @@
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
+
+        <DrawingImage x:Key="SettingsDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V128 H128 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing
+                                Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                Geometry="F1 M128,128z M0,0z M105.6,42.5L117,26.55 101.9,11.45 85.9,22.85 82.25,21.05 78.15,19.65 74.95,0 53.45,0 50.25,19.65 42.45,22.85 26.45,11.45 11.4,26.55 22.85,42.5 21,46.2 19.65,50.3 0,53.5 0,75 19.65,78.2 22.85,85.95 11.4,101.95 26.45,117.05 42.45,105.6 46.15,107.45 50.25,108.8 53.45,128 74.95,128 78.15,108.8 85.9,105.6 101.9,117.05 117,101.95 105.6,85.95 107.4,82.3 108.8,78.2 128,75 128,53.5 108.8,50.3 105.6,42.5 M78.6,78.6Q72.65,84.6 64.45,84.6 55.75,84.6 49.8,78.6 43.85,72.7 43.85,64 43.85,55.8 49.8,49.8 55.75,43.9 64.45,43.9 72.65,43.9 78.6,49.8 84.5,55.8 84.5,64 84.5,72.7 78.6,78.6z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <DrawingImage x:Key="SearchDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V128 H128 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing
+                                Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                Geometry="F1 M128,128z M0,0z M113.15,85.25Q128,70.35 128,49.7 128,29.85 113.15,14.85 98.85,0 78.3,0 57.65,0 42.75,14.85 28.45,29.15 28.45,49.7 28.45,65.35 36.35,77.45L0,113.7 14.3,128 50.55,91.65Q64,99.5 78.3,99.5 98.85,99.5 113.15,85.25 M113.85,49.7Q113.85,64.65 103.15,75.35 92.45,85.25 78.3,85.25 63.3,85.25 53.45,75.35 42.75,64.65 42.75,49.7 42.75,35.5 53.45,24.85 63.3,14.15 78.3,14.15 92.45,14.15 103.15,24.85 113.85,35.5 113.85,49.7z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
     </UserControl.Resources>
-    <Viewbox>
-        <Image x:Name="DisplayImage">
+    <Viewbox StretchDirection="Both">
+        <Image>
             <Image.Style>
                 <Style>
                     <Style.Triggers>
@@ -192,6 +220,18 @@
                             Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                             Value="Restore">
                             <Setter Property="Image.Source" Value="{StaticResource RestoreDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Settings">
+                            <Setter Property="Image.Source" Value="{StaticResource SettingsDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Search">
+                            <Setter Property="Image.Source" Value="{StaticResource SearchDrawingImage}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

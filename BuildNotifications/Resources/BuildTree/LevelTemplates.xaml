@@ -14,11 +14,6 @@
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
                 <ContentPresenter Content="{Binding}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}">
-                    <ContentPresenter.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontFamily" Value="Verdana" />
-                        </Style>
-                    </ContentPresenter.Resources>
                 </ContentPresenter>
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"

@@ -32,16 +32,4 @@ namespace BuildNotifications.Resources.Icons
             InitializeComponent();
         }
     }
-
-    public enum IconType
-    {
-        Connection,
-        Branch,
-        Definition,
-        BuildNotification,
-        Close,
-        Maximize,
-        Minimize,
-        Restore,
-    }
 }

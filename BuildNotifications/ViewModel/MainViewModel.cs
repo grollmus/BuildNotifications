@@ -20,8 +20,11 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public SearchViewModel SearchViewModel { get; set; }
+
         public MainViewModel()
         {
+            SearchViewModel = new SearchViewModel();
             Initialize();
         }
 

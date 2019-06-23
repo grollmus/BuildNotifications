@@ -23,7 +23,7 @@
                 <ControlTemplate TargetType="{x:Type window:CustomWindow}">
 
                     <ControlTemplate.Resources>
-                        <ResourceDictionary Source="IconButtonStyle.xaml"/>
+                        <ResourceDictionary Source="../Icons/IconButtonStyles.xaml" />
                     </ControlTemplate.Resources>
 
                     <Grid Background="{DynamicResource Background1}" x:Name="WindowRoot">
@@ -34,7 +34,6 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <!--TitleBar-->
                             <Grid x:Name="PART_HeaderBar">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
@@ -43,14 +42,14 @@
                                 </Grid.ColumnDefinitions>
 
 
-                                <icons:IconBatch Grid.Column="0" 
-                                                 Type="BuildNotification" MinWidth="{DynamicResource BlockDouble}"
-
-                                                 MinHeight="{DynamicResource BlockDouble}"
+                                <icons:IconBatch Grid.Column="0"
+                                                 Type="BuildNotification" 
+                                                 Margin="{DynamicResource BlockLeftAndRight}"
+                                                 Width="{DynamicResource BlockDouble}"
+                                                 Height="{DynamicResource BlockDouble}"
                                                  Foreground="{DynamicResource Foreground2}" />
 
-                                <Grid Grid.Column="1"
-                                      Grid.ColumnSpan="2"
+                                <DockPanel Grid.Column="1" LastChildFill="False"
                                       Panel.ZIndex="0" Background="{DynamicResource Background1}">
 
                                     <TextBlock Text="{TemplateBinding Title}"
@@ -63,7 +62,10 @@
                                                Width="Auto"
                                                Foreground="{DynamicResource Foreground1}"
                                                IsEnabled="{TemplateBinding IsActive}" />
-                                </Grid>
+
+                                    <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left"/>
+                                    <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter" DockPanel.Dock="Right"/>
+                                </DockPanel>
 
                                 <Grid x:Name="WindowControlsGrid" Grid.Column="2">
                                     <Grid.ColumnDefinitions>
@@ -72,18 +74,18 @@
                                         <ColumnDefinition Width="36" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}" 
-                                            Tag="Minimize" Foreground="{DynamicResource Foreground2}"/>
-                                    <Button x:Name="MaximizeButton" Style="{StaticResource IconButton}" 
+                                    <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}"
+                                            Tag="Minimize" Foreground="{DynamicResource Foreground2}" />
+                                    <Button x:Name="MaximizeButton" Style="{StaticResource IconButton}"
                                             Tag="Maximize" Foreground="{DynamicResource Foreground2}"
                                             Grid.Column="1" />
 
-                                    <Button x:Name="RestoreButton" Style="{StaticResource IconButton}" 
+                                    <Button x:Name="RestoreButton" Style="{StaticResource IconButton}"
                                             Tag="Restore" Foreground="{DynamicResource Foreground2}"
                                             Visibility="Collapsed"
                                             Grid.Column="1" />
 
-                                    <Button x:Name="CloseButton" Style="{StaticResource IconButton}" 
+                                    <Button x:Name="CloseButton" Style="{StaticResource IconButton}"
                                             Tag="Close" Foreground="{DynamicResource Foreground2}"
                                             Grid.Column="2" />
                                 </Grid>

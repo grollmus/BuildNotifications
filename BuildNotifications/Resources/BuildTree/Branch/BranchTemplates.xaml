@@ -5,8 +5,11 @@
 
     <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">
         <DockPanel HorizontalAlignment="Left">
-            <icons:IconBatch Foreground="{DynamicResource Red}" Margin="{DynamicResource BlockQuarterRight}" Type="Branch" DockPanel.Dock="Left"/>
-            <TextBlock Text="{Binding BranchName}" FontSize="{DynamicResource BlockFont}" Foreground="{DynamicResource Foreground1}" UseLayoutRounding="True"/>
+            <icons:IconBatch Foreground="{DynamicResource Green}"
+                             Width="{DynamicResource Block}" Height="{DynamicResource Block}"
+                             Margin="{DynamicResource BlockQuarterRight}" Type="Branch" DockPanel.Dock="Left" />
+            <TextBlock Text="{Binding BranchName}" FontSize="{DynamicResource BlockFont}"
+                       Foreground="{DynamicResource Foreground1}" UseLayoutRounding="True" />
         </DockPanel>
     </DataTemplate>
 </ResourceDictionary>
