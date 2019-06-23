@@ -8,6 +8,10 @@
                 <ResourceDictionary Source="Resources/Global/Sizes.xaml"/>
                 <ResourceDictionary Source="Resources/Global/DarkTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Window}"> 
+                <Setter Property="FontFamily" Value="Verdana" />
+            </Style> 
         </ResourceDictionary>
     </Application.Resources>
 </Application>

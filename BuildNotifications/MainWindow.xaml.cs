@@ -1,4 +1,5 @@
-﻿using BuildNotifications.ViewModel;
+﻿using System.Windows;
+using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
 {
@@ -8,6 +9,8 @@ namespace BuildNotifications
         {
             DataContext = new MainViewModel();
             InitializeComponent();
+
+            Style = (Style) FindResource(typeof(Window));
         }
     }
 }

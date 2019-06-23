@@ -3,62 +3,69 @@
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:resourcesBuildTreeBuild="clr-namespace:BuildNotifications.Resources.BuildTree.Build"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions">
 
     <DataTemplate x:Key="BuildNodeTemplate" DataType="{x:Type viewModelTree:BuildNodeViewModel}">
-        <Grid Cursor="Hand" 
-              Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
-              Height="{DynamicResource Block}" Margin="{DynamicResource BlockHalfThickness}">
+        <Grid>
+            <Grid Cursor="Hand"
+                  Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
+                  Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}">
 
-            <Rectangle Fill="{DynamicResource Background3}" Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}" Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True" >
-                <i:Interaction.Triggers>
-                    <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
-                        <resourcesBuildTreeBuild:Highlight DoHighlight="True" />
-                    </ei:DataTrigger>
-                    <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
-                        <resourcesBuildTreeBuild:Highlight DoHighlight="False" />
-                    </ei:DataTrigger>
-                </i:Interaction.Triggers>
-            </Rectangle>
+                <Rectangle Fill="{DynamicResource Background3}"
+                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
+                           Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True">
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" />
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" />
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
 
-            <Rectangle Fill="{DynamicResource Green}" x:Name="FillRectangle">
+                <Rectangle Fill="{DynamicResource Green}" x:Name="FillRectangle">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <resourcesBuildTreeBuild:BuildFadeIn />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+
+                <Rectangle Stroke="{DynamicResource Green}" StrokeThickness="1" x:Name="StrokeRectangle" />
+
+
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <resourcesBuildTreeBuild:BuildFadeIn />
+                    <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
+                        <resourcesBuildTreeBuild:BuildGrow />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="false">
+                        <resourcesBuildTreeBuild:BuildShrink />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                        <triggerActions:ElementFadeOutScaleX Duration="0.4" Anchor="MiddleRight" />
+                    </ei:DataTrigger>
+                    <i:EventTrigger EventName="MouseEnter">
+                        <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseLeave">
+                        <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding MouseDownCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseUp">
+                        <i:InvokeCommandAction Command="{Binding MouseUpCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </Rectangle>
 
-            <Rectangle Stroke="{DynamicResource Green}" StrokeThickness="1" x:Name="StrokeRectangle"/>
 
+            </Grid>
             <Grid.RenderTransform>
                 <SkewTransform AngleX="-30" />
             </Grid.RenderTransform>
-
-            <i:Interaction.Triggers>
-                <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
-                    <resourcesBuildTreeBuild:BuildGrow />
-                </ei:DataTrigger>
-                <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="false">
-                    <resourcesBuildTreeBuild:BuildShrink />
-                </ei:DataTrigger>
-                <i:EventTrigger EventName="MouseEnter">
-                    <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseLeave">
-                    <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseDown">
-                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseUp">
-                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
-
         </Grid>
-
 
         <DataTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

@@ -5,16 +5,25 @@ using System.Windows.Media;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
-namespace BuildNotifications.Controls
+namespace BuildNotifications.Resources.Animation
 {
     internal class AnimatedWrapPanel : WrapPanel
     {
+        public double AnimationDuration { get; set; } = 0.4;
+
         protected override Size ArrangeOverride(Size finalSize)
         {
             var positions = new List<Point>();
             foreach (UIElement child in Children)
             {
-                positions.Add(child.TranslatePoint(new Point(0, 0), this));
+                var oldPos = child.TranslatePoint(new Point(0, 0), this);
+                if (child.RenderTransform is TranslateTransform translateTransform)
+                {
+                    oldPos.X += translateTransform.X;
+                    oldPos.Y += translateTransform.Y;
+                }
+
+                positions.Add(oldPos);
             }
 
             var arrangedSize = base.ArrangeOverride(finalSize);
@@ -53,7 +62,9 @@ namespace BuildNotifications.Controls
             var layoutTransform = new TranslateTransform(deltaX, deltaY);
             child.RenderTransform = layoutTransform;
 
-            return layoutTransform.Tween(x => x.X).And(x => x.Y).To(0).In(0.4).Delay(0.2).Ease(Easing.ExpoEaseOut);
+            var seq = new SequenceOfTarget(child, layoutTransform.Tween(x => x.X).And(x => x.Y).To(0).In(AnimationDuration).Delay(0.2).Ease(Easing.ExpoEaseOut));
+
+            return seq;
         }
     }
 }

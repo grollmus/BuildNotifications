@@ -6,6 +6,7 @@
         xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
         xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
         xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+        xmlns:views="clr-namespace:BuildNotifications.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
 
@@ -20,6 +21,8 @@
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
-
+<Grid>
     <ContentPresenter Content="{Binding BuildTree}"/>
+    <views:BusyIndicator IsBusy="{Binding Path=IsBusy}"/>
+</Grid>
 </Window>

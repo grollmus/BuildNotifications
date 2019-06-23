@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
+    <DataTemplate x:Key="DefinitionGroupNodeTemplate" DataType="{x:Type viewModelTree:DefinitionGroupNodeViewModel}">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}"
+                       Foreground="{DynamicResource Foreground1}" UseLayoutRounding="True" />
+            <StackPanel Orientation="Horizontal" x:Name="ButtonStackPanel" Opacity="0.01">
+                <Button Content="Add Build" Command="{Binding AddOneBuildCommand}" Height="16" Width="16" />
+                <Button Content="Remove Build" Command="{Binding RemoveOneChildCommand}" Height="16" Width="16" />
+                <Button Content="Add and remove" Command="{Binding AddAndRemoveCommand}" Height="16" Width="16" />
+                <Button Content="Highlight" Command="{Binding HighlightCommand}" Height="16" Width="16" />
+            </StackPanel>
+        </StackPanel>
+
+        <DataTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="1" TargetName="ButtonStackPanel" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+</ResourceDictionary>

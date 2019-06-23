@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Media;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
-    internal class ElementFadeIn : TweenTriggerAction
+    internal class ElementFadeInScaleX : TweenTriggerAction
     {
         protected override void Invoke(object parameter)
         {
@@ -14,14 +13,13 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             globalTweenHandler.ClearTweensOf(AssociatedObject);
 
             AssociatedObject.Opacity = 0;
-            AssociatedObject.Visibility = Visibility.Visible;
 
             var tweens = new List<Timeline>();
 
             if (DoScale)
             {
-                var scaleTransform = new ScaleTransform(0.5, 0.5, Anchor.Position(AssociatedObject).Width, Anchor.Position(AssociatedObject).Height);
-                tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.BackEaseOut));
+                var scaleTransform = new ScaleTransform(0, 1.0, Anchor.Position(AssociatedObject).Width, Anchor.Position(AssociatedObject).Height);
+                tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(1.0).In(Duration).Ease(Easing.QuadraticEaseInOut));
                 AssociatedObject.RenderTransform = scaleTransform;
             }
 

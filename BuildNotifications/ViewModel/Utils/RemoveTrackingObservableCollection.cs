@@ -32,6 +32,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Add(T item)
         {
+            item.IsRemoving = false;
             lock (_list)
             {
                 _list.Add(item);

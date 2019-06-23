@@ -2,23 +2,33 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:BuildNotifications.Resources.BuildTree"
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
-                    xmlns:controls="clr-namespace:BuildNotifications.Controls"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions">
+                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
 
 
     <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel>
-            <ContentPresenter Content="{Binding}"
-                              ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}"
-                              DockPanel.Dock="Top" />
+        <DockPanel Margin="{DynamicResource BlockThickness}">
+            <Viewbox Height="{DynamicResource BlockDouble}" Margin="{DynamicResource BlockQuarterThicknessOnYHalfOnX}"
+                     DockPanel.Dock="Top" HorizontalAlignment="Left">
+                <ContentPresenter Content="{Binding}"
+                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}">
+                    <ContentPresenter.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="Verdana" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+            </Viewbox>
+            <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
+                       HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
 
             <ItemsControl ItemsSource="{Binding Children}"
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
+                        <animation:AnimatedWrapPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
@@ -26,32 +36,57 @@
     </DataTemplate>
 
     <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel>
-            <ContentPresenter Content="{Binding}"
-                              ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}"
-                              DockPanel.Dock="Top" />
+        <DockPanel Margin="{DynamicResource BlockThicknessOnYQuartersOnX}">
+            <Grid DockPanel.Dock="Top" Width="{DynamicResource BlockThirty}">
+                <DockPanel>
+                    <Rectangle Height="{DynamicResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
+                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}" DockPanel.Dock="Top" />
+                    <Rectangle Height="{DynamicResource BlockHalf}" Fill="{DynamicResource Green}"
+                               VerticalAlignment="Bottom" DockPanel.Dock="Top"
+                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}" />
 
-            <ItemsControl ItemsSource="{Binding Children}"
-                          ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                    <DockPanel.RenderTransform>
+                        <SkewTransform AngleX="-30" />
+                    </DockPanel.RenderTransform>
+                </DockPanel>
+                <Border Height="{DynamicResource BlockDoubleAndHalf}" VerticalAlignment="Top"
+                        Margin="{DynamicResource BlockThreeQuartersLeftAndRight}">
+                    <Viewbox Height="{DynamicResource BlockDouble}" VerticalAlignment="Center"
+                             HorizontalAlignment="Left">
+                        <ContentPresenter Content="{Binding}"
+                                          ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
+                    </Viewbox>
+                </Border>
+
+            </Grid>
+
+            <Grid Margin="{DynamicResource BlockHalfYOnlyMargin}">
+                <ItemsControl ItemsSource="{Binding Children}"
+                              Margin="{DynamicResource BlockThreeQuartersLeftAndRight}"
+                              ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Margin="0"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
         </DockPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel>
-            <ContentPresenter Content="{Binding}"
-                              ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}"
-                              DockPanel.Dock="Left" />
+        <animation:AnimatedDockPanel AnimationDuration="0.4" HorizontalAlignment="Left"
+                                     Width="{DynamicResource BlockTwentyEight}">
+            <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                     DockPanel.Dock="Left">
+                <ContentPresenter Content="{Binding}"
+                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
+            </Viewbox>
 
-            <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" MaxWidth="220">
+            <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <controls:AnimatedWrapPanel />
+                        <animation:AnimatedWrapPanel AnimationDuration="0.4" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -63,10 +98,6 @@
                                 <i:EventTrigger EventName="Loaded">
                                     <triggerActions:ElementFadeIn />
                                 </i:EventTrigger>
-
-                                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:BuildFadeOut />
-                                </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ContentPresenter>
 
@@ -75,14 +106,13 @@
 
 
             </ItemsControl>
-        </DockPanel>
+        </animation:AnimatedDockPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel>
             <ContentPresenter Content="{Binding}"
-                              ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}"
-                              DockPanel.Dock="Top" />
+                              ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
         </DockPanel>
     </DataTemplate>
 

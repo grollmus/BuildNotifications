@@ -3,7 +3,8 @@
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree">
 
     <DataTemplate x:Key="SourceGroupNodeTemplate" DataType="{x:Type viewModelTree:SourceGroupNodeViewModel}">
-        <TextBlock Text="SOURCE"></TextBlock>
+        <TextBlock Text="GitHub" FontSize="{DynamicResource BlockFont}" Foreground="{DynamicResource Foreground1}"
+                   HorizontalAlignment="Left" UseLayoutRounding="True" FontWeight="Regular" TextTrimming="CharacterEllipsis"/>
     </DataTemplate>
 
 </ResourceDictionary>

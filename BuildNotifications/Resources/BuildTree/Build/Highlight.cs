@@ -21,9 +21,11 @@ namespace BuildNotifications.Resources.BuildTree.Build
             if (DoHighlight)
             {
                 var targetBrush = AssociatedObject.FindResource("Background3") as SolidColorBrush;
+                var initialHighlightBrush = AssociatedObject.FindResource("Foreground1") as SolidColorBrush;
                 var targetColor = targetBrush?.Color ?? Colors.White;
+                var initialColor = initialHighlightBrush?.Color ?? Colors.White;
 
-                brush.Color = Colors.White;
+                brush.Color = initialColor;
                 AssociatedObject.Fill = brush;
 
                 var highlightTween = brush.Tween(x => x.Color, ColorTween.ColorProgressFunction)

@@ -75,7 +75,7 @@ namespace BuildNotifications.ViewModel.Tree
                 case GroupDefinition.Branch:
                     return new BranchGroupNodeViewModel(node as IBranchGroupNode);
                 case GroupDefinition.BuildDefinition:
-                    return new BuildDefinitionGroupNodeViewModel(node);
+                    return new DefinitionGroupNodeViewModel(node as IDefinitionGroupNode);
                 case GroupDefinition.Source:
                     return new SourceGroupNodeViewModel(node);
                 case GroupDefinition.Status:
