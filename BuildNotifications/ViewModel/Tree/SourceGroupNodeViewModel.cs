@@ -4,7 +4,7 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class SourceGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        public SourceGroupNodeViewModel(IBuildTreeNode node)
+        public SourceGroupNodeViewModel(IBuildTreeNode node) : base(node)
         {
         }
     }

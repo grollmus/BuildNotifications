@@ -24,7 +24,7 @@ namespace BuildNotifications
 
             // set a maximum of 16 milliseconds to prevent too noticeable UI freezes
             var inMs = Math.Min(16, delta.Milliseconds);
-            GlobalTweenHandler.Update(delta.Milliseconds);
+            GlobalTweenHandler.Update(inMs);
         }
     }
 }

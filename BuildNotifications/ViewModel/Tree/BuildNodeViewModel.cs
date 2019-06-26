@@ -1,5 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
@@ -31,18 +33,32 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
+        private BuildStatus _buildStatus;
+
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
         public ICommand MouseDownCommand { get; set; }
         public ICommand MouseUpCommand { get; set; }
 
-        public BuildNodeViewModel(IBuildNode node)
+        private BuildStatus Status
+        {
+            get { return _buildStatus; }
+            set
+            {
+                _buildStatus = value;
+                OnPropertyChanged(nameof(BuildStatus));
+            }
+        }
+
+        public BuildNodeViewModel(IBuildNode node) : base(node)
         {
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
             MouseDownCommand = new DelegateCommand(OnMouseDown);
             MouseUpCommand = new DelegateCommand(OnMouseUp);
+
+            Status = Node?.Build?.Status ?? BuildStatus.None;
         }
 
         private void OnMouseEnter(object obj)
@@ -58,10 +74,13 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void OnMouseDown(object obj)
         {
+            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed);
         }
 
         private void OnMouseUp(object obj)
         {
         }
+
+        protected override BuildStatus CalculateBuildStatus() => Status;
     }
 }

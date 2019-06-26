@@ -4,7 +4,8 @@
                     xmlns:resourcesBuildTreeBuild="clr-namespace:BuildNotifications.Resources.BuildTree.Build"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions">
+                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                    xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter">
 
     <DataTemplate x:Key="BuildNodeTemplate" DataType="{x:Type viewModelTree:BuildNodeViewModel}">
         <Grid>
@@ -25,7 +26,7 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
-                <Rectangle Fill="{DynamicResource Green}" x:Name="FillRectangle">
+                <Rectangle Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" x:Name="FillRectangle">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <resourcesBuildTreeBuild:BuildFadeIn />
@@ -33,8 +34,7 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
-                <Rectangle Stroke="{DynamicResource Green}" StrokeThickness="1" x:Name="StrokeRectangle" />
-
+                <Rectangle Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" StrokeThickness="1" x:Name="StrokeRectangle" />
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
@@ -21,9 +25,27 @@ namespace BuildNotifications.ViewModel.Tree
 
         public ICommand HighlightCommand { get; set; }
 
-        protected BuildTreeNodeViewModel()
+        // only display status for the lowest and third lowest levels
+        public bool ShouldColorByStatus
         {
+            get
+            {
+                var thisLevelToDeepest = MaxTreeDepth - CurrentTreeLevelDepth;
+
+                return thisLevelToDeepest == 0 || thisLevelToDeepest == 2;
+            }
+        }
+
+        public BuildStatus BuildStatus => CalculateBuildStatus();
+
+        // object this ViewModel originates from
+        public IBuildTreeNode NodeSource { get; }
+
+        protected BuildTreeNodeViewModel(IBuildTreeNode nodeSource)
+        {
+            NodeSource = nodeSource;
             Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.4));
+            Children.CollectionChanged += ChildrenOnCollectionChanged;
             AddOneBuildCommand = new DelegateCommand(AddOneBuild);
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o =>
@@ -32,6 +54,45 @@ namespace BuildNotifications.ViewModel.Tree
                 RemoveOneChild(o);
             });
             HighlightCommand = new DelegateCommand(Highlight);
+        }
+
+        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (BuildTreeNodeViewModel child in e.NewItems)
+                    {
+                        child.PropertyChanged += OnChildPropertyChanged;
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (BuildTreeNodeViewModel child in e.OldItems)
+                    {
+                        child.PropertyChanged -= OnChildPropertyChanged;
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    foreach (var child in Children)
+                    {
+                        child.PropertyChanged -= OnChildPropertyChanged;
+                    }
+
+                    break;
+            }
+        }
+
+        private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(BuildStatus)))
+                OnPropertyChanged(nameof(BuildStatus));
+        }
+
+        protected virtual BuildStatus CalculateBuildStatus()
+        {
+            return !Children.Any() ? BuildStatus.None : Children.Max(x => x.BuildStatus);
         }
 
         private void Highlight(object obj)

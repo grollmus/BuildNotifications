@@ -4,17 +4,51 @@
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
-                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+                    xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter">
 
+    <ResourceDictionary x:Key="BuildTreeSpecificResources">
+        <Style TargetType="{x:Type icons:IconBatch}">
+            <Setter Property="Width" Value="{StaticResource Block}" />
+            <Setter Property="Height" Value="{StaticResource Block}" />
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                        <Binding Path="BuildStatus" />
+                        <Binding Path="ShouldColorByStatus" />
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+
+
+            <!--Value="{Binding Path=BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />-->
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                        <Binding Path="BuildStatus" />
+                        <Binding Path="ShouldColorByStatus" />
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+
+
+            <!--Value="{Binding Path=BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />-->
+        </Style>
+    </ResourceDictionary>
 
     <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel Margin="{DynamicResource BlockThickness}">
             <Viewbox Height="{DynamicResource BlockDouble}" Margin="{DynamicResource BlockQuarterThicknessOnYHalfOnX}"
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
-                <ContentPresenter Content="{Binding}"
-                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}">
-                </ContentPresenter>
+                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
                        HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
@@ -36,9 +70,19 @@
                 <DockPanel>
                     <Rectangle Height="{DynamicResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
                                Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}" DockPanel.Dock="Top" />
-                    <Rectangle Height="{DynamicResource BlockHalf}" Fill="{DynamicResource Green}"
+                    <Rectangle Height="{DynamicResource BlockHalf}"
                                VerticalAlignment="Bottom" DockPanel.Dock="Top"
-                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}" />
+                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}">
+                        <Rectangle.Fill>
+                            <MultiBinding
+                                Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                                <Binding Path="BuildStatus" />
+                                <Binding Path="ShouldColorByStatus" />
+                                <Binding />
+                            </MultiBinding>
+                        </Rectangle.Fill>
+
+                    </Rectangle>
 
                     <DockPanel.RenderTransform>
                         <SkewTransform AngleX="-30" />
@@ -48,7 +92,7 @@
                         Margin="{DynamicResource BlockThreeQuartersLeftAndRight}">
                     <Viewbox Height="{DynamicResource BlockDouble}" VerticalAlignment="Center"
                              HorizontalAlignment="Left">
-                        <ContentPresenter Content="{Binding}"
+                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
                     </Viewbox>
                 </Border>
@@ -61,7 +105,7 @@
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Margin="0"/>
+                            <StackPanel Orientation="Vertical" Margin="0" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
@@ -74,7 +118,7 @@
                                      Width="{DynamicResource BlockTwentyEight}">
             <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
-                <ContentPresenter Content="{Binding}"
+                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
 
@@ -106,7 +150,7 @@
 
     <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel>
-            <ContentPresenter Content="{Binding}"
+            <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
                               ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
         </DockPanel>
     </DataTemplate>

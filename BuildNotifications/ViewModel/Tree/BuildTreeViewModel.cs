@@ -6,7 +6,7 @@ namespace BuildNotifications.ViewModel.Tree
     {
         private IBuildTree _tree;
 
-        public BuildTreeViewModel(IBuildTree tree)
+        public BuildTreeViewModel(IBuildTree tree) : base(tree)
         {
             _tree = tree;
         }
