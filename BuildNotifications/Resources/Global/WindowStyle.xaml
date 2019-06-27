@@ -30,27 +30,57 @@
 
                         <Grid x:Name="LayoutRoot">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="{DynamicResource BlockDoubleRowLength}" />
+                                <RowDefinition Height="0" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <Grid x:Name="PART_HeaderBar" Background="{DynamicResource Background1}">
+                            <Grid x:Name="PART_HeaderBar" Background="{DynamicResource Background1}" Grid.Row="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0" />
+                                    <ColumnDefinition Width="{DynamicResource BlockSixthRowLength}" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
 
-                                <icons:IconBatch Grid.Column="0"
+                                <icons:IconBatch Grid.Column="1"
                                                  Type="BuildNotification" 
-                                                 Width="{DynamicResource BlockOneAndHalf}"
-                                                 Height="{DynamicResource BlockOneAndHalf}"
-                                                 Foreground="{DynamicResource Background3}" />
+                                                 Margin="{DynamicResource BlockHalfThickness}"
+                                                 Width="{DynamicResource BlockDouble}"
+                                                 Height="{DynamicResource BlockDouble}"
+                                                 Foreground="{DynamicResource Foreground1}" />
 
-                                <DockPanel Grid.Column="1" LastChildFill="False" Panel.ZIndex="0">
+                                <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
 
-                                    <TextBlock Text="{TemplateBinding Title}"
+                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                                                     Tag="Settings" 
+                                                     Margin="{DynamicResource BlockQuarterThickness}"
+                                                     Width="{DynamicResource BlockDouble}"
+                                                     Height="{DynamicResource BlockDouble}"
+                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
+                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
+                                                     Foreground="{DynamicResource Background3}" />
+
+                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                                                     Tag="Branch" 
+                                                     Margin="{DynamicResource BlockQuarterThickness}"
+                                                     Width="{DynamicResource BlockDouble}"
+                                                     Height="{DynamicResource BlockDouble}"
+                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
+                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
+                                                     Foreground="{DynamicResource Background3}" />
+
+                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                                                     Tag="Definition" 
+                                                     Margin="{DynamicResource BlockQuarterThickness}"
+                                                     Width="{DynamicResource BlockDouble}"
+                                                     Height="{DynamicResource BlockDouble}"
+                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
+                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
+                                                     Foreground="{DynamicResource Background3}" />
+
+                                    <TextBlock Text=""
                                                Margin="{DynamicResource BlockLeftAndRight}"
                                                TextTrimming="CharacterEllipsis"
                                                HorizontalAlignment="Stretch"
@@ -65,11 +95,11 @@
                                     <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter" DockPanel.Dock="Right"/>
                                 </DockPanel>
 
-                                <Grid x:Name="WindowControlsGrid" Grid.Column="2">
+                                <Grid x:Name="WindowControlsGrid" Grid.Column="3">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="36" />
-                                        <ColumnDefinition Width="36" />
-                                        <ColumnDefinition Width="36" />
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
                                     </Grid.ColumnDefinitions>
 
                                     <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}"
@@ -90,7 +120,7 @@
                             </Grid>
 
                             <Grid x:Name="PART_MainContentGrid"
-                                  Grid.Row="1"
+                                  Grid.Row="2"
                                   Panel.ZIndex="10">
                                 <ContentPresenter x:Name="PART_MainContentPresenter" Grid.Row="0" />
                             </Grid>

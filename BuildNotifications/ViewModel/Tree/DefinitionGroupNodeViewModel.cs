@@ -9,7 +9,7 @@ namespace BuildNotifications.ViewModel.Tree
     {
         private static Random rnd = new Random();
 
-        public DefinitionGroupNodeViewModel(IDefinitionGroupNode node)
+        public DefinitionGroupNodeViewModel(IDefinitionGroupNode node) : base(node)
         {
             DefinitionName = node?.Definition?.Name;
             AddAtRandom();

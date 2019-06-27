@@ -4,12 +4,9 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons">
     <DataTemplate x:Key="DefinitionGroupNodeTemplate" DataType="{x:Type viewModelTree:DefinitionGroupNodeViewModel}">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <icons:IconBatch Foreground="{DynamicResource Green}" Type="Definition"
-                             Margin="{DynamicResource BlockQuarterRight}"
-                             Width="{DynamicResource Block}" Height="{DynamicResource Block}" />
+            <icons:IconBatch Type="Definition" Margin="{DynamicResource BlockQuarterRight}" />
             <Grid>
-                <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}"
-                           Foreground="{DynamicResource Foreground2}" UseLayoutRounding="True" />
+                <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}" UseLayoutRounding="True" />
 
                 <StackPanel Orientation="Horizontal" x:Name="ButtonStackPanel" Opacity="0.01">
                     <Button Content="Add Build" Command="{Binding AddOneBuildCommand}" Height="16" Width="16" />

@@ -19,7 +19,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         public ICommand HighlightCommand { get; set; }
 
-        public BranchGroupNodeViewModel(IBranchGroupNode node)
+        public BranchGroupNodeViewModel(IBranchGroupNode node) : base(node)
         {
             _node = node;
             AddOneBuildCommand = new DelegateCommand(AddOneBuild);

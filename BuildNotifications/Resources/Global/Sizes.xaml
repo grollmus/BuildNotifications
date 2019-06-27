@@ -18,6 +18,8 @@
     <system:Double x:Key="BlockThirty">360</system:Double>
     <system:Double x:Key="BlockTwentyEight">336</system:Double>
 
+    <GridLength x:Key="BlockSixthRowLength">2</GridLength>
+    <GridLength x:Key="BlockQuarterRowLength">3</GridLength>
     <GridLength x:Key="BlockHalfRowLength">6</GridLength>
     <GridLength x:Key="BlockRowLength">12</GridLength>
     <GridLength x:Key="BlockDoubleRowLength">24</GridLength>

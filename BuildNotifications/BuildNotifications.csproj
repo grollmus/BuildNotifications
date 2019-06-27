@@ -10,9 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\BuildTree\Status\**" />
     <Compile Remove="Utils\**" />
+    <EmbeddedResource Remove="Resources\BuildTree\Status\**" />
     <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Resources\BuildTree\Status\**" />
     <None Remove="Utils\**" />
+    <Page Remove="Resources\BuildTree\Status\**" />
     <Page Remove="Utils\**" />
   </ItemGroup>
 
@@ -24,10 +28,12 @@
     <None Remove="Resources\BuildTree\LevelTemplates.xaml" />
     <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
     <None Remove="Resources\Global\DarkTheme.xaml" />
+    <None Remove="Resources\Global\IconBatchStyles.xaml" />
     <None Remove="Resources\Global\IconButtonStyles.xaml" />
     <None Remove="Resources\Global\LightTheme.xaml" />
     <None Remove="Resources\Global\Sizes.xaml" />
-    <None Remove="Resources\Global\TextBoxStyle.xaml" />
+    <None Remove="Resources\Global\TextBlockStyles.xaml" />
+    <None Remove="Resources\Global\TextBoxStyles.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
     <None Remove="Resources\Icons\IconBatch.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
@@ -37,10 +43,6 @@
 
   <ItemGroup>
     <Page Remove="Resources.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\BuildTree\Status\" />
   </ItemGroup>
 
   <ItemGroup>
