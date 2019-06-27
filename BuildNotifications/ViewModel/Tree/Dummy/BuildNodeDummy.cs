@@ -31,6 +31,6 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
         public DateTime? QueueTime { get; }
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
-        public BuildStatus Status => (BuildStatus) _rnd.Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed);
+        public BuildStatus Status => (BuildStatus) _rnd.Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
     }
 }

@@ -74,7 +74,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void OnMouseDown(object obj)
         {
-            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed);
+            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
         }
 
         private void OnMouseUp(object obj)
