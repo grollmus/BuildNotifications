@@ -5,9 +5,13 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
-    internal class ElementFadeOutScaleX : TweenTriggerAction
+    internal class ElementFadeOutScale : TweenTriggerAction
     {
-        public ElementFadeOutScaleX()
+        public double TargetScaleX { get; set; }
+
+        public double TargetScaleY { get; set; }
+
+        public ElementFadeOutScale()
         {
             Anchor = Anchor.MiddleLeft;
         }
@@ -21,7 +25,8 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             if (DoScale)
             {
                 var scaleTransform = new ScaleTransform(1.0, 1.0, Anchor.Position(AssociatedObject).Width, Anchor.Position(AssociatedObject).Height);
-                tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(0.0).In(Duration).Ease(Easing.QuadraticEaseInOut));
+                tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(TargetScaleX).In(Duration).Ease(Easing.QuadraticEaseInOut));
+                tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(TargetScaleY).In(Duration).Ease(Easing.QuadraticEaseInOut));
                 AssociatedObject.RenderTransform = scaleTransform;
             }
 

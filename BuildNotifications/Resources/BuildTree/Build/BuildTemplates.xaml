@@ -44,7 +44,7 @@
                         <resourcesBuildTreeBuild:BuildShrink />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                        <triggerActions:ElementFadeOutScaleX Duration="0.4" Anchor="MiddleRight" />
+                        <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="MiddleRight" TargetScaleX="0" TargetScaleY="1"/>
                     </ei:DataTrigger>
                     <i:EventTrigger EventName="MouseEnter">
                         <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />

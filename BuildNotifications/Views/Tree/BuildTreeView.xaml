@@ -16,13 +16,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical"/>
+                    <WrapPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

@@ -2,5 +2,6 @@
 {
     public interface ISourceGroupNode : IGroupNode
     {
+        string SourceName { get; set; }
     }
 }

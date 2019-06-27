@@ -31,5 +31,10 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
                 AddChild(node);
             }
         }
+        
+        public void Clear()
+        {
+            _children.Clear();
+        }
     }
 }

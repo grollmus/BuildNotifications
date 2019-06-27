@@ -23,7 +23,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected BuildTreeNodeViewModel()
         {
-            Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.4));
+            Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.8));
             AddOneBuildCommand = new DelegateCommand(AddOneBuild);
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o =>

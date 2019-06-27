@@ -26,7 +26,7 @@
                                 </i:EventTrigger>
 
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:ElementFadeOutScaleX Duration="1" Anchor="MiddleRight"/>
+                                    <triggerActions:ElementFadeOutScale Duration="1" Anchor="MiddleRight"/>
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </Rectangle>

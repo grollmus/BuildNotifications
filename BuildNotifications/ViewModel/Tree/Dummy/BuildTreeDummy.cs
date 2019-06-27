@@ -9,6 +9,6 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
             GroupDefinition = groupDefinition;
         }
 
-        public IBuildTreeGroupDefinition GroupDefinition { get; }
+        public IBuildTreeGroupDefinition GroupDefinition { get; set; }
     }
 }

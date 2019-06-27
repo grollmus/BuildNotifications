@@ -13,8 +13,7 @@
             <Viewbox Height="{DynamicResource BlockDouble}" Margin="{DynamicResource BlockQuarterThicknessOnYHalfOnX}"
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
                 <ContentPresenter Content="{Binding}"
-                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}">
-                </ContentPresenter>
+                                  ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
                        HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
@@ -23,7 +22,8 @@
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel Orientation="Horizontal" />
+                        <animation:AnimatedWrapPanel Orientation="Horizontal"
+                                                     VirtualizingStackPanel.IsVirtualizing="True" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
@@ -61,7 +61,8 @@
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Margin="0"/>
+                            <StackPanel Orientation="Vertical" Margin="0" VirtualizingStackPanel.IsVirtualizing="True"
+                                        IsItemsHost="True" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
@@ -70,8 +71,8 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <animation:AnimatedDockPanel AnimationDuration="0.4" HorizontalAlignment="Left"
-                                     Width="{DynamicResource BlockTwentyEight}">
+        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
+                   Width="{DynamicResource BlockTwentyEight}">
             <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
                 <ContentPresenter Content="{Binding}"
@@ -81,7 +82,7 @@
             <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel AnimationDuration="0.4" />
+                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True"  />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -99,6 +100,12 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
+
+                <!--<ItemsControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type ContentPresenter}">
+                        <Setter Property="DockPanel.Dock" Value="Right" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>-->
 
             </ItemsControl>
         </animation:AnimatedDockPanel>
