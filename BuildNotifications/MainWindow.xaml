@@ -8,6 +8,7 @@
                      xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                      xmlns:views="clr-namespace:BuildNotifications.Views"
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
+                     xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
@@ -27,20 +28,46 @@
             <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
                 <views:SearchView />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupDefinitionSelectionViewModel}">
+                <views:GroupDefinitionSelectionView />
+            </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>
         <ContentPresenter Content="{Binding BuildTree}" />
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
-        <Button Width="30" Height="30" Style="{StaticResource HiddenIconButton}" Tag="BuildNotification" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource Foreground2}" Command="{Binding LoadNewRandomTreeCommand}"/>
+        <Button Width="30" Height="30" Style="{StaticResource HiddenIconButton}" Tag="BuildNotification"
+                HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource Foreground2}"
+                Command="{Binding LoadNewRandomTreeCommand}" />
     </Grid>
 
     <window:CustomWindow.RightToTitleContent>
         <StackPanel Orientation="Horizontal">
-            <Button Style="{StaticResource HiddenIconButton}" Tag="Settings"
-                    Height="{DynamicResource BlockDouble}" Width="{DynamicResource BlockDouble}"
-                    MinHeight="{DynamicResource BlockDouble}" MinWidth="{DynamicResource BlockDouble}"
-                    Foreground="{DynamicResource Background3}" />
+            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                    Tag="Definition"
+                    Margin="{StaticResource BlockQuarterThickness}"
+                    Width="{StaticResource BlockDouble}"
+                    Height="{StaticResource BlockDouble}"
+                    MinWidth="{StaticResource BlockOneAndHalf}"
+                    MinHeight="{StaticResource BlockOneAndHalf}"
+                    Foreground="{StaticResource Background3}" />
+
+            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                    Tag="Grouping"
+                    Margin="{StaticResource BlockQuarterThickness}"
+                    Width="{StaticResource BlockDouble}"
+                    Height="{StaticResource BlockDouble}"
+                    MinWidth="{StaticResource BlockOneAndHalf}"
+                    MinHeight="{StaticResource BlockOneAndHalf}"
+                    Foreground="{StaticResource Background3}" />
+
+            <Grid Width="{StaticResource Block}" />
+
+            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
+            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
+            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
+            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
         </StackPanel>
     </window:CustomWindow.RightToTitleContent>
 </window:CustomWindow>

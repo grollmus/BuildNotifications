@@ -9,15 +9,20 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
     {
         public IBuild Build { get; }
 
-        public BuildNodeDummy()
+        public BuildNodeDummy(BuildStatus initialStatus = BuildStatus.Succeeded)
         {
-            Build = new BuildDummy();
+            Build = new BuildDummy(initialStatus);
         }
     }
 
     internal class BuildDummy : IBuild
     {
         private static Random _rnd = new Random();
+
+        public BuildDummy(BuildStatus initialStatus)
+        {
+            Status = initialStatus;
+        }
 
         public bool Equals(IBuild other)
         {
@@ -31,6 +36,6 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
         public DateTime? QueueTime { get; }
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
-        public BuildStatus Status => (BuildStatus) _rnd.Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
+        public BuildStatus Status { get; set; }
     }
 }

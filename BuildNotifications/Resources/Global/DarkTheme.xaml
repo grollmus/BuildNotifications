@@ -9,5 +9,6 @@
     <SolidColorBrush x:Key="Background2" Color="#3B4252"/>
     <SolidColorBrush x:Key="Background3" Color="#4C566A"/>
     <SolidColorBrush x:Key="Foreground1" Color="#D8DEE9"/>
+    <SolidColorBrush x:Key="Foreground1HalfTransparency" Color="#81D8DEE9"/>
     <SolidColorBrush x:Key="Foreground2" Color="#E5E9F0"/>
 </ResourceDictionary>

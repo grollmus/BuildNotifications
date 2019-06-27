@@ -2,9 +2,11 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.ViewModel.Tree.Dummy;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
@@ -82,6 +84,8 @@ namespace BuildNotifications.ViewModel.Tree
 
                     break;
             }
+
+            OnPropertyChanged(nameof(BuildStatus));
         }
 
         private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -107,14 +111,14 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private void AddOneBuild(object parameter)
+        private async void AddOneBuild(object parameter)
         {
             var otherBuild = Children.FirstOrDefault() as BuildNodeViewModel;
 
             if (otherBuild == null)
                 return;
 
-            var newBuild = new BuildNodeViewModel(otherBuild.Node)
+            var newBuild = new BuildNodeViewModel(new BuildNodeDummy((BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1)))
             {
                 MaxTreeDepth = otherBuild.MaxTreeDepth,
                 CurrentTreeLevelDepth = otherBuild.CurrentTreeLevelDepth,
@@ -127,6 +131,11 @@ namespace BuildNotifications.ViewModel.Tree
             }
 
             Children.Add(newBuild);
+
+            await Task.Delay(500);
+
+            if (newBuild.BuildStatus == BuildStatus.Failed)
+                newBuild.IsHighlighted = true;
         }
 
         private void RemoveOneChild(object parameter)

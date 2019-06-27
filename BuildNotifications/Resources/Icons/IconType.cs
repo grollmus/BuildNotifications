@@ -11,6 +11,8 @@
         Minimize,
         Restore,
         Settings,
-        Search
+        Search,
+        Grouping,
+        None
     }
 }

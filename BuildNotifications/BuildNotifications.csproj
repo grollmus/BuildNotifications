@@ -35,8 +35,9 @@
     <None Remove="Resources\Global\TextBlockStyles.xaml" />
     <None Remove="Resources\Global\TextBoxStyles.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
-    <None Remove="Resources\Icons\IconBatch.xaml" />
+    <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
+    <None Remove="Views\GroupDefinitionSelectionView.xaml" />
     <None Remove="Views\SearchView.xaml" />
     <None Remove="Views\Tree\BuildTreeView.xaml" />
   </ItemGroup>

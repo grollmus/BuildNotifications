@@ -168,6 +168,23 @@
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
+
+        <DrawingImage x:Key="GroupingDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V128 H128 V0 H0 Z">
+                    <DrawingGroup.Transform>
+                        <TranslateTransform X="64" Y="62.849998474121094" />
+                    </DrawingGroup.Transform>
+                    <DrawingGroup Opacity="1" Transform="1,0,0,1,64,62.85">
+                        <DrawingGroup Opacity="1">
+                            <DrawingGroup Opacity="1">
+                                <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M128,128z M0,0z M-3.65,46.35L-3.65,1.55 -41.15,-19 -41.15,22.15 -3.65,46.35 M-27.45,-55.1L-32,-62.85 -64,-44.6 -64,44.1 -32,62.85 -27.45,54.6 -54.85,39.05 -54.85,-39.1 -27.45,-55.1 M3.2,1.55L3.2,46.35 41.15,22.15 41.15,-19 3.2,1.55 M0,-5.25L38.85,-25.85 0,-46.4 -38.85,-25.85 0,-5.25 M32,-62.85L27.4,-55.1 54.85,-39.1 54.85,39.05 27.4,54.6 32,62.85 64,44.1 64,-44.6 32,-62.85z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
     </UserControl.Resources>
     <Viewbox StretchDirection="Both">
         <Image>
@@ -232,6 +249,12 @@
                             Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                             Value="Search">
                             <Setter Property="Image.Source" Value="{StaticResource SearchDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Grouping">
+                            <Setter Property="Image.Source" Value="{StaticResource GroupingDrawingImage}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

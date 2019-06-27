@@ -52,45 +52,6 @@
                                                  Foreground="{DynamicResource Foreground1}" />
 
                                 <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
-
-                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                                                     Tag="Settings" 
-                                                     Margin="{DynamicResource BlockQuarterThickness}"
-                                                     Width="{DynamicResource BlockDouble}"
-                                                     Height="{DynamicResource BlockDouble}"
-                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
-                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
-                                                     Foreground="{DynamicResource Background3}" />
-
-                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                                                     Tag="Branch" 
-                                                     Margin="{DynamicResource BlockQuarterThickness}"
-                                                     Width="{DynamicResource BlockDouble}"
-                                                     Height="{DynamicResource BlockDouble}"
-                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
-                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
-                                                     Foreground="{DynamicResource Background3}" />
-
-                                    <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                                                     Tag="Definition" 
-                                                     Margin="{DynamicResource BlockQuarterThickness}"
-                                                     Width="{DynamicResource BlockDouble}"
-                                                     Height="{DynamicResource BlockDouble}"
-                                                     MinWidth="{DynamicResource BlockOneAndHalf}"
-                                                     MinHeight="{DynamicResource BlockOneAndHalf}"
-                                                     Foreground="{DynamicResource Background3}" />
-
-                                    <TextBlock Text=""
-                                               Margin="{DynamicResource BlockLeftAndRight}"
-                                               TextTrimming="CharacterEllipsis"
-                                               HorizontalAlignment="Stretch"
-                                               FontSize="13"
-                                               TextAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Width="Auto"
-                                               Foreground="{DynamicResource Foreground2}"
-                                               IsEnabled="{TemplateBinding IsActive}" />
-
                                     <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left"/>
                                     <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter" DockPanel.Dock="Right"/>
                                 </DockPanel>

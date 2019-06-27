@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Tree.Dummy;
 using BuildNotifications.ViewModel.Utils;
@@ -27,9 +28,12 @@ namespace BuildNotifications.ViewModel
 
         public ICommand LoadNewRandomTreeCommand { get; set; }
 
+        public GroupDefinitionSelectionViewModel GroupDefinitionSelection { get; set; }
+
         public MainViewModel()
         {
             SearchViewModel = new SearchViewModel();
+            GroupDefinitionSelection = new GroupDefinitionSelectionViewModel();
             LoadNewRandomTreeCommand = new DelegateCommand(LoadNewRandomTree);
             _buildTreeSource = new BuildTreeDummy(null);
             LoadNewRandomTree(null);
