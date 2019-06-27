@@ -45,15 +45,16 @@
 
 
                                 <icons:IconBatch Grid.Column="1"
-                                                 Type="BuildNotification" 
+                                                 Type="BuildNotification"
                                                  Margin="{DynamicResource BlockHalfThickness}"
                                                  Width="{DynamicResource BlockDouble}"
                                                  Height="{DynamicResource BlockDouble}"
                                                  Foreground="{DynamicResource Foreground1}" />
 
                                 <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
-                                    <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left"/>
-                                    <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter" DockPanel.Dock="Right"/>
+                                    <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left" />
+                                    <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter"
+                                                      DockPanel.Dock="Right" />
                                 </DockPanel>
 
                                 <Grid x:Name="WindowControlsGrid" Grid.Column="3">
@@ -64,17 +65,21 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
                                             Tag="Minimize" Foreground="{DynamicResource Foreground2}" />
                                     <Button x:Name="MaximizeButton" Style="{StaticResource IconButton}"
                                             Tag="Maximize" Foreground="{DynamicResource Foreground2}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
                                             Grid.Column="1" />
 
                                     <Button x:Name="RestoreButton" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
                                             Tag="Restore" Foreground="{DynamicResource Foreground2}"
                                             Visibility="Collapsed"
                                             Grid.Column="1" />
 
                                     <Button x:Name="CloseButton" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
                                             Tag="Close" Foreground="{DynamicResource Foreground2}"
                                             Grid.Column="2" />
                                 </Grid>

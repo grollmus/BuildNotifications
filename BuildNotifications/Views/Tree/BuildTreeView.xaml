@@ -20,7 +20,7 @@
         <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical"/>
+                    <WrapPanel Orientation="Vertical" VirtualizingStackPanel.IsVirtualizing="True"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
