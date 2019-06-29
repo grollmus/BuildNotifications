@@ -8,6 +8,7 @@
                      xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                      xmlns:views="clr-namespace:BuildNotifications.Views"
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
+                     xmlns:groupDefinition="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
                      xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
@@ -29,8 +30,8 @@
                 <views:SearchView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupDefinitionSelectionViewModel}">
-                <views:GroupDefinitionSelectionView />
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:BuildTreeGroupDefinitionViewModel}">
+                <groupDefinition:BuildTreeGroupDefinitionView />
             </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
@@ -49,8 +50,6 @@
                     Margin="{StaticResource BlockQuarterThickness}"
                     Width="{StaticResource BlockDouble}"
                     Height="{StaticResource BlockDouble}"
-                    MinWidth="{StaticResource BlockOneAndHalf}"
-                    MinHeight="{StaticResource BlockOneAndHalf}"
                     Foreground="{StaticResource Background3}" />
 
             <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
@@ -58,15 +57,10 @@
                     Margin="{StaticResource BlockQuarterThickness}"
                     Width="{StaticResource BlockDouble}"
                     Height="{StaticResource BlockDouble}"
-                    MinWidth="{StaticResource BlockOneAndHalf}"
-                    MinHeight="{StaticResource BlockOneAndHalf}"
                     Foreground="{StaticResource Background3}" />
 
             <Grid Width="{StaticResource Block}" />
 
-            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
-            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
-            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
             <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
         </StackPanel>
     </window:CustomWindow.RightToTitleContent>

@@ -20,7 +20,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
 
             if (DoScale)
             {
-                var scaleTransform = new ScaleTransform(0.5, 0.5, Anchor.Position(AssociatedObject).Width, Anchor.Position(AssociatedObject).Height);
+                var scaleTransform = new ScaleTransform(0.5, 0.5, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
                 tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.BackEaseOut));
                 AssociatedObject.RenderTransform = scaleTransform;
             }

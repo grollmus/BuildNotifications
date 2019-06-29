@@ -15,6 +15,7 @@ namespace BuildNotifications.Resources.Icons
                 case GroupDefinition.Source:
                     return IconType.Connection;
                 case GroupDefinition.Status:
+                    return IconType.Status;
                 case GroupDefinition.None:
                 default:
                     return IconType.None;

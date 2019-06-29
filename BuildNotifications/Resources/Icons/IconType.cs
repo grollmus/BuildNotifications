@@ -13,6 +13,7 @@
         Settings,
         Search,
         Grouping,
+        Status,
         None
     }
 }

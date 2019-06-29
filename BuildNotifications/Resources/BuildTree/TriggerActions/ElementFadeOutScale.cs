@@ -24,7 +24,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             var tweens = new List<Timeline>();
             if (DoScale)
             {
-                var scaleTransform = new ScaleTransform(1.0, 1.0, Anchor.Position(AssociatedObject).Width, Anchor.Position(AssociatedObject).Height);
+                var scaleTransform = new ScaleTransform(1.0, 1.0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
                 tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(TargetScaleX).In(Duration).Ease(Easing.QuadraticEaseInOut));
                 tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(TargetScaleY).In(Duration).Ease(Easing.QuadraticEaseInOut));
                 AssociatedObject.RenderTransform = scaleTransform;

@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BuildNotifications.Views
+namespace BuildNotifications.Views.GroupDefinitionSelection
 {
     /// <summary>
-    /// Interaction logic for GroupDefinitionSelectionView.xaml
+    /// Interaction logic for BuildTreeGroupDefinitionView.xaml
     /// </summary>
-    public partial class GroupDefinitionSelectionView : UserControl
+    public partial class BuildTreeGroupDefinitionView : UserControl
     {
-        public GroupDefinitionSelectionView()
+        public BuildTreeGroupDefinitionView()
         {
             InitializeComponent();
         }

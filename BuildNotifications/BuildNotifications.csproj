@@ -38,6 +38,8 @@
     <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
     <None Remove="Views\GroupDefinitionSelectionView.xaml" />
+    <None Remove="Views\GroupDefinitionSelection\BuildTreeGroupDefinitionView.xaml" />
+    <None Remove="Views\GroupDefinitionSelection\SingleGroupDefinitionSelectionView.xaml" />
     <None Remove="Views\SearchView.xaml" />
     <None Remove="Views\Tree\BuildTreeView.xaml" />
   </ItemGroup>

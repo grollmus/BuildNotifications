@@ -4,7 +4,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
     internal static class AnchorExtension
     {
-        public static Size Position(this Anchor anchor, UIElement forElement)
+        public static Point Position(this Anchor anchor, UIElement forElement)
         {
             var size = forElement.RenderSize;
 
@@ -12,11 +12,11 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             {
                 default:
                 case Anchor.Center:
-                    return new Size(size.Width / 2, size.Height / 2);
+                    return new Point(size.Width / 2, size.Height / 2);
                 case Anchor.MiddleLeft:
-                    return new Size(0, size.Height / 2);
+                    return new Point(0, size.Height / 2);
                 case Anchor.MiddleRight:
-                    return new Size(size.Width, size.Height / 2);
+                    return new Point(size.Width, size.Height / 2);
             }
         }
     }

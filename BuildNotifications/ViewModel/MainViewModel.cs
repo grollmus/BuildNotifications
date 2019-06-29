@@ -28,12 +28,12 @@ namespace BuildNotifications.ViewModel
 
         public ICommand LoadNewRandomTreeCommand { get; set; }
 
-        public GroupDefinitionSelectionViewModel GroupDefinitionSelection { get; set; }
+        public BuildTreeGroupDefinitionViewModel GroupDefinitionSelection { get; set; }
 
         public MainViewModel()
         {
             SearchViewModel = new SearchViewModel();
-            GroupDefinitionSelection = new GroupDefinitionSelectionViewModel();
+            GroupDefinitionSelection = new BuildTreeGroupDefinitionViewModel();
             LoadNewRandomTreeCommand = new DelegateCommand(LoadNewRandomTree);
             _buildTreeSource = new BuildTreeDummy(null);
             LoadNewRandomTree(null);
@@ -94,7 +94,7 @@ namespace BuildNotifications.ViewModel
             {
                 RemoveChildrenIfNotOfType<BuildNodeDummy>();
 
-                for (var i = addToNode.Children.Count(); i < 5; i++)
+                for (var i = addToNode.Children.Count(); i < 3; i++)
                 {
                     addToNode.AddChild(new BuildNodeDummy());
                 }
@@ -108,7 +108,7 @@ namespace BuildNotifications.ViewModel
                 case GroupDefinition.Branch:
                     RemoveChildrenIfNotOfType<BranchGroupNodeDummy>();
 
-                    for (var i = addToNode.Children.Count(); i < 8; i++)
+                    for (var i = addToNode.Children.Count(); i < 4; i++)
                     {
                         var branchGroupNodeDummy = new BranchGroupNodeDummy("Branch " + (char)('A' + i));
                         CreateDummys(branchGroupNodeDummy, currentGroupingIndex + 1, groupDefinitions);
@@ -130,7 +130,7 @@ namespace BuildNotifications.ViewModel
                 case GroupDefinition.Source:
                     RemoveChildrenIfNotOfType<SourceGroupNodeDummy>();
 
-                    for (var i = addToNode.Children.Count(); i < 5; i++)
+                    for (var i = addToNode.Children.Count(); i < 2; i++)
                     {
                         var sourceGroupNodeDummy = new SourceGroupNodeDummy("Source " + i);
                         CreateDummys(sourceGroupNodeDummy, currentGroupingIndex + 1, groupDefinitions);

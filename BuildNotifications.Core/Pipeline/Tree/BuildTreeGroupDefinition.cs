@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
-    internal class BuildTreeGroupDefinition : IBuildTreeGroupDefinition
+    public class BuildTreeGroupDefinition : IBuildTreeGroupDefinition
     {
         public BuildTreeGroupDefinition()
             : this(Enumerable.Empty<GroupDefinition>())
