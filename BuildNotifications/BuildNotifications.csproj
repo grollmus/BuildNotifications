@@ -36,6 +36,7 @@
     <None Remove="Resources\Global\TextBoxStyles.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
     <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
+    <None Remove="Resources\Window\ScrollBar.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
     <None Remove="Views\GroupDefinitionSelectionView.xaml" />
     <None Remove="Views\GroupDefinitionSelection\BuildTreeGroupDefinitionView.xaml" />

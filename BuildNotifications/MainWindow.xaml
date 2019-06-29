@@ -13,13 +13,14 @@
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
-                     LeftToButtonsContent="{Binding SearchViewModel}">
+                     LeftToButtonsContent="{Binding SearchViewModel}" >
 
     <window:CustomWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml" />
                 <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
+                <ResourceDictionary Source="Resources/Window/ScrollBar.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModelTree:BuildTreeViewModel}">
@@ -46,7 +47,7 @@
     <window:CustomWindow.RightToTitleContent>
         <StackPanel Orientation="Horizontal">
             <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                    Tag="Definition"
+                    Tag="Settings"
                     Margin="{StaticResource BlockQuarterThickness}"
                     Width="{StaticResource BlockDouble}"
                     Height="{StaticResource BlockDouble}"

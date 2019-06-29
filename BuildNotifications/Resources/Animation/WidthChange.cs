@@ -1,12 +1,17 @@
 ﻿using System.Windows;
-using System.Windows.Interactivity;
+using BuildNotifications.Resources.BuildTree.TriggerActions;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.Animation
 {
-    internal class WidthChange : TriggerAction<FrameworkElement>
+    internal class WidthChange : TweenTriggerAction<FrameworkElement>
     {
+        public WidthChange()
+        {
+            Duration = 0.35;
+        }
+
         public static readonly DependencyProperty TargetWidthProperty = DependencyProperty.Register(
             "TargetWidth", typeof(double), typeof(WidthChange), new PropertyMetadata(default(double)));
 
@@ -16,14 +21,14 @@ namespace BuildNotifications.Resources.Animation
             set => SetValue(TargetWidthProperty, value);
         }
 
-        public double Duration { get; set; } = 0.35;
-
         protected override void Invoke(object parameter)
         {
             var globalTweenHandler = App.GlobalTweenHandler;
-            globalTweenHandler.ClearTweensOf(AssociatedObject);
+            var target = Target ?? AssociatedObject;
 
-            globalTweenHandler.Add(AssociatedObject.Tween(x => x.Width).To(TargetWidth).In(Duration).Ease(Easing.QuadraticEaseOut));
+            globalTweenHandler.ClearTweensOf(TargetElement);
+
+            globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Ease(Easing.QuadraticEaseOut));
         }
     }
 }
