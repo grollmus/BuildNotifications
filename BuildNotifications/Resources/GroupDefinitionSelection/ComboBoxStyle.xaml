@@ -55,7 +55,7 @@
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2"
                                IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
                                PlacementRectangle="91,21,0,0"
-                               PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+                               PopupAnimation="Fade"
                                Placement="Left">
                             <Grid>
                             <ItemsPresenter x:Name="ItemsPresenter"

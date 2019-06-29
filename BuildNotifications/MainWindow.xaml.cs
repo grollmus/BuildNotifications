@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Resources.Window;
+﻿using BuildNotifications.Core.Text;
+using BuildNotifications.Resources.Window;
 using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
@@ -9,6 +10,8 @@ namespace BuildNotifications
         {
             DataContext = new MainViewModel();
             InitializeComponent();
+
+            var text = StringLocalizer.Instance["Test"];
         }
     }
 }

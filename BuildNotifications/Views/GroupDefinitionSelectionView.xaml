@@ -6,6 +6,7 @@
              xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:groupDefinitionSelectionResources="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionSelectionViewModel} }">
@@ -45,7 +46,7 @@
                                 <Grid Background="Transparent" x:Name="Grid">
                                     <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
                                                 Margin="{StaticResource BlockQuarterThickness}">
-                                        <TextBlock Text="Group by" x:Name="GroupByTextBlock" TextAlignment="Right"
+                                        <TextBlock Text="{text:Localized GroupBy}" x:Name="GroupByTextBlock" TextAlignment="Right"
                                                    HorizontalAlignment="Right" Margin="0,0,13,0" 
                                                    Foreground="Transparent" Width="80" />
                                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center" 
@@ -63,7 +64,7 @@
                                             <ContentPresenter Margin="-13,0,0,0" />
                                         </Grid>
 
-                                        <TextBlock Text="{Binding GroupDefinition}" Width="80" Margin="6,0,0,0" 
+                                        <TextBlock Text="{Binding GroupDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}" Width="80" Margin="6,0,0,0" 
                                                    x:Name="NameTextBlock" Foreground="Transparent" />
 
                                     </StackPanel>
