@@ -75,7 +75,7 @@
                                     <Border Background="{DynamicResource Background1}" Opacity="0.01" Cursor="Hand" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
-                                            <triggerActions:ElementFadeIn DoScale="False" Duration="0.2"/>
+                                            <triggerActions:ElementFadeIn DoScale="False" Duration="0.3"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Grid>

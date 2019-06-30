@@ -12,6 +12,8 @@ namespace BuildNotifications.Resources.Animation
             Duration = 0.35;
         }
 
+        public double Delay { get; set; }
+
         public static readonly DependencyProperty TargetWidthProperty = DependencyProperty.Register(
             "TargetWidth", typeof(double), typeof(WidthChange), new PropertyMetadata(default(double)));
 
@@ -28,7 +30,7 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.ClearTweensOf(TargetElement);
 
-            globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Ease(Easing.QuadraticEaseOut));
+            globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
         }
     }
 }
