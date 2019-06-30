@@ -37,6 +37,8 @@ namespace BuildNotifications.ViewModel.Utils
             {
                 _list.Add(item);
             }
+
+            Sort();
         }
 
         public void Clear()
@@ -118,6 +120,8 @@ namespace BuildNotifications.ViewModel.Utils
             {
                 _list.Insert(index, item);
             }
+
+            Sort();
         }
 
         public void RemoveAt(int index)
@@ -142,6 +146,44 @@ namespace BuildNotifications.ViewModel.Utils
                 lock (_list)
                 {
                     _list[index] = value;
+                }
+            }
+        }
+
+        private IEnumerable<T> _sortFunction;
+
+        public void Sort<TKey>(Func<T, TKey> keySelector)
+        {
+            lock (_list)
+            {
+                _sortFunction = _list.OrderBy(keySelector);
+            }
+
+            Sort();
+        }
+
+        public void SortDescending<TKey>(Func<T, TKey> keySelector)
+        {
+            lock (_list) 
+            {
+                _sortFunction = _list.OrderByDescending(keySelector);
+            }
+
+            Sort();
+        }
+
+        private void Sort()
+        {
+            if (_sortFunction == null)
+                return;
+
+            lock (_list)
+            {
+                var sortedItemsList = _sortFunction.ToList();
+
+                foreach (var item in sortedItemsList)
+                {
+                    _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
                 }
             }
         }
