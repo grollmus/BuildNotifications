@@ -69,7 +69,7 @@
                                         <ContentPresenter Margin="0,0,-6,0" />
                                         <Rectangle Width="{StaticResource BlockOneAndHalf}" StrokeThickness="1"
                                                    x:Name="OverlayRectangle"
-                                                   Height="{DynamicResource BlockDouble}" Margin="0,0,-18,0">
+                                                   Height="{DynamicResource BlockOneAndHalf}" Margin="0,0,-18,0">
                                             <Rectangle.RenderTransform>
                                                 <SkewTransform AngleX="-35" />
                                             </Rectangle.RenderTransform>
