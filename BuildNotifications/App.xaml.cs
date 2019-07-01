@@ -7,24 +7,28 @@ namespace BuildNotifications
     public partial class App
     {
         public static TweenHandler GlobalTweenHandler;
-        private static DateTime _lastUpdate;
+        private static TimeSpan _lastUpdate;
 
         public App()
         {
             GlobalTweenHandler = new TweenHandler();
             CompositionTarget.Rendering += CompositionTargetOnRendering;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = TimeSpan.Zero;
         }
 
         private void CompositionTargetOnRendering(object sender, EventArgs e)
         {
-            var now = DateTime.Now;
-            var delta = now - _lastUpdate;
-            _lastUpdate = now;
+            var renderEventArgs = e as RenderingEventArgs;
+            if (renderEventArgs == null)
+                return;
 
-            // set a maximum of 16 milliseconds to prevent too noticeable UI freezes
-            var inMs = Math.Min(16, delta.Milliseconds);
-            GlobalTweenHandler.Update(inMs);
+            if (_lastUpdate == renderEventArgs.RenderingTime)
+                return;
+
+            var delta = renderEventArgs.RenderingTime - _lastUpdate;
+            _lastUpdate = renderEventArgs.RenderingTime;
+            
+            GlobalTweenHandler.Update(delta.Milliseconds);
         }
     }
 }

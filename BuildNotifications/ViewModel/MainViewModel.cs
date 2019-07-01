@@ -63,7 +63,7 @@ namespace BuildNotifications.ViewModel
         private async void LoadNewRandomTree(object obj)
         {
             IsBusy = true;
-            await Task.Delay(600);
+            await Task.Delay(1000);
             BuildTree = await Task.Run(() =>
             {
                 CreateRandomTree();
