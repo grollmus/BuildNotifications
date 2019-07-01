@@ -50,27 +50,48 @@
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Width" Value="{StaticResource BlockDouble}" />
+        <Setter Property="Width" Value="{StaticResource BlockFourTimes}" />
         <Setter Property="Height" Value="{StaticResource BlockOneAndHalf}" />
+        <Setter Property="MinWidth" Value="{StaticResource BlockDouble}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid x:Name="MainGrid" SnapsToDevicePixels="true">
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2"
                                IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                               PlacementRectangle="91,21,0,0"
+                               PlacementRectangle="-142,21,0,0"
                                PopupAnimation="Fade"
-                               Placement="Left">
+                               PlacementTarget="{Binding ElementName=ToggleButton}"
+                               Placement="Relative">
                             <Grid>
                             <ItemsPresenter x:Name="ItemsPresenter"
                                             KeyboardNavigation.DirectionalNavigation="Contained"
                                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>
                         </Popup>
+                        <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+
+                            <i:Interaction.Triggers>
+                                <ei:DataTrigger Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Value="false">
+                                    <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
+                                </ei:DataTrigger>
+                                <ei:DataTrigger Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                    <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
+                                </ei:DataTrigger>
+                            </i:Interaction.Triggers>
+
+                        </ContentPresenter>
                         <ToggleButton BorderBrush="{TemplateBinding BorderBrush}"
-                                      Background="{TemplateBinding Background}"
-                                      Width="{TemplateBinding Width}" Cursor="Hand"
-                                      Height="{TemplateBinding Height}"
+                                      
+                                      Width="{TemplateBinding MinWidth}" Cursor="Hand"
+                                      Height="{TemplateBinding Height}" x:Name="ToggleButton"
                                       IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                       Style="{StaticResource ComboBoxReadonlyToggleButton}">
                             
@@ -80,25 +101,6 @@
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ToggleButton>
-                        <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          IsHitTestVisible="false" Margin="{TemplateBinding Padding}"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-
-                            <i:Interaction.Triggers>
-                                <ei:DataTrigger Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Value="false">
-                                    <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4"/>
-                                </ei:DataTrigger>
-                                <ei:DataTrigger Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
-                                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.85" TargetScaleY="0.85"/>
-                                </ei:DataTrigger>
-                            </i:Interaction.Triggers>
-
-                        </ContentPresenter>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">

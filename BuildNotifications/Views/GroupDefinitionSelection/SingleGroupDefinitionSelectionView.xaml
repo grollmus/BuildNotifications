@@ -9,6 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
              xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
+             xmlns:views="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SingleGroupDefinitionSelectionViewModel} }">
@@ -18,10 +19,20 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingSelectionViewModel}">
+                <views:SortingSelectionView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupDefinitionViewModel}">
-                <icons:IconBatch Width="{DynamicResource Block}"
-                                 Height="{DynamicResource Block}"
-                                 Foreground="{DynamicResource Foreground1}" Type="{Binding IconType}" />
+                <DockPanel x:Name="DockPanel">
+                    <ContentPresenter DockPanel.Dock="Right" Content="{Binding SortingSelectionViewModel}"
+                                      Margin="0,0,-42,0"
+                                      Visibility="{Binding DataContext.DisplaySortingSelection, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=DockPanel}" />
+                    <icons:IconBatch Width="{DynamicResource Block}"
+                                     Height="{DynamicResource Block}" IsHitTestVisible="False"
+                                     Foreground="{DynamicResource Foreground1}" Type="{Binding IconType}" />
+                </DockPanel>
             </DataTemplate>
         </ResourceDictionary>
 
@@ -29,7 +40,8 @@
     </UserControl.Resources>
 
     <Grid Margin="{DynamicResource BlockQuarterThickness}">
-        <ComboBox HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource GroupDefinitionSelectionComboBoxStyle}"
+        <ComboBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Style="{StaticResource GroupDefinitionSelectionComboBoxStyle}"
                   ItemsSource="{Binding Definitions}" SelectedItem="{Binding SelectedDefinition}">
 
             <ComboBox.ItemsPanel>
@@ -45,14 +57,15 @@
                         <Setter.Value>
 
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Grid Background="Transparent" x:Name="Grid">
+                                <Grid x:Name="Grid">
                                     <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
                                                 Margin="{StaticResource BlockQuarterThickness}">
-                                        <TextBlock Text="{Binding GroupByText}" x:Name="GroupByTextBlock" TextAlignment="Right"
-                                                   HorizontalAlignment="Right" Margin="0,0,13,0" 
-                                                   Foreground="Transparent" Width="80" />
-                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                              Width="{DynamicResource BlockDouble}"
+                                        <TextBlock Text="{Binding GroupByText}" x:Name="GroupByTextBlock"
+                                                   TextAlignment="Right" 
+                                                   HorizontalAlignment="Right" Margin="0,0,13,0"
+                                                   Foreground="Transparent" Width="50" />
+                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Width="{DynamicResource BlockDouble}" 
                                               Height="{DynamicResource BlockOneAndHalf}">
                                             <Rectangle x:Name="BackgroundRectangle"
                                                        Fill="{DynamicResource Background1}"
@@ -66,8 +79,10 @@
                                             <ContentPresenter Margin="-13,0,0,0" />
                                         </Grid>
 
-                                        <TextBlock Text="{Binding GroupDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}" Width="80" Margin="6,0,0,0" 
-                                                   x:Name="NameTextBlock" Foreground="Transparent" />
+                                        <TextBlock 
+                                            Text="{Binding GroupDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
+                                            Width="80" Margin="3,0,0,0"
+                                            x:Name="NameTextBlock" Foreground="Transparent" />
 
                                     </StackPanel>
 
@@ -75,7 +90,7 @@
                                     <Border Background="{DynamicResource Background1}" Opacity="0.01" Cursor="Hand" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
-                                            <triggerActions:ElementFadeIn DoScale="False" Duration="0.3"/>
+                                            <triggerActions:ElementFadeInBackEase DoScale="False" Duration="0.3" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Grid>

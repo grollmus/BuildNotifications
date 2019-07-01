@@ -1,17 +1,32 @@
-﻿using BuildNotifications.Core.Text;
+﻿using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
-using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class GroupDefinitionViewModel : BaseViewModel
     {
         private string _groupByText;
-        public Core.Pipeline.Tree.GroupDefinition GroupDefinition { get; }
+        private bool _isSelected;
+        public GroupDefinition GroupDefinition { get; }
 
         public string IconTag { get; set; }
 
         public IconType IconType => GroupDefinition.ToIconType();
+
+        public bool DisplaySortingSelection => GroupDefinition != GroupDefinition.None && IsSelected;
+
+        public SortingSelectionViewModel SortingSelectionViewModel { get; set; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string GroupByText
         {
@@ -23,10 +38,11 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public GroupDefinitionViewModel(Core.Pipeline.Tree.GroupDefinition groupDefinition)
+        public GroupDefinitionViewModel(GroupDefinition groupDefinition)
         {
             GroupDefinition = groupDefinition;
             _groupByText = StringLocalizer.Instance["GroupBy"];
+            SortingSelectionViewModel = new SortingSelectionViewModel(groupDefinition);
         }
     }
 }

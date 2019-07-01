@@ -28,18 +28,37 @@ namespace BuildNotifications.ViewModel
 
         public ICommand LoadNewRandomTreeCommand { get; set; }
 
+        public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
+
         public BuildTreeGroupDefinitionViewModel GroupDefinitionSelection { get; set; }
+
+        public bool ShowGroupDefinitionSelection
+        {
+            get => _showGroupDefinitionSelection;
+            set
+            {
+                _showGroupDefinitionSelection = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MainViewModel()
         {
             SearchViewModel = new SearchViewModel();
             GroupDefinitionSelection = new BuildTreeGroupDefinitionViewModel();
             LoadNewRandomTreeCommand = new DelegateCommand(LoadNewRandomTree);
+            ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             _buildTreeSource = new BuildTreeDummy(null);
             LoadNewRandomTree(null);
         }
 
+        private void ToggleGroupDefinitionSelection(object obj)
+        {
+            ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
+        }
+
         private readonly BuildTreeDummy _buildTreeSource;
+        private bool _showGroupDefinitionSelection;
 
         private async void LoadNewRandomTree(object obj)
         {

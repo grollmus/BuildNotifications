@@ -6,7 +6,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
-    internal class ElementFadeIn : TweenTriggerAction<UIElement>
+    internal class ElementFadeInBackEase : TweenTriggerAction<UIElement>
     {
         protected override void Invoke(object parameter)
         {
@@ -20,8 +20,8 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
 
             if (DoScale)
             {
-                var scaleTransform = new ScaleTransform(0.5, 1, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);
-                tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.ExpoEaseOut));
+                var scaleTransform = new ScaleTransform(0.5, 0.5, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);
+                tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.BackEaseOut));
                 TargetElement.RenderTransform = scaleTransform;
             }
 

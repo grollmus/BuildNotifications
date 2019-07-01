@@ -10,17 +10,22 @@
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
                      xmlns:groupDefinition="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
                      xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
+                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                     xmlns:groupDefinitionSelection1="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
+                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
-                     LeftToButtonsContent="{Binding SearchViewModel}" >
+                     LeftToButtonsContent="{Binding SearchViewModel}">
 
     <window:CustomWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml" />
                 <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
-                <ResourceDictionary Source="Resources/Window/ScrollBar.xaml"/>
+                <ResourceDictionary Source="Resources/Window/ScrollBar.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModelTree:BuildTreeViewModel}">
@@ -53,16 +58,49 @@
                     Height="{StaticResource BlockDouble}"
                     Foreground="{StaticResource Background3}" />
 
+            <Grid>
             <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                    Tag="Grouping"
+                    Tag="GroupingEmpty"
                     Margin="{StaticResource BlockQuarterThickness}"
                     Width="{StaticResource BlockDouble}"
                     Height="{StaticResource BlockDouble}"
-                    Foreground="{StaticResource Background3}" />
-
+                    Foreground="{StaticResource Background3}"
+                    x:Name="GroupDefinitionButton"
+                    Command="{Binding ToggleGroupDefinitionSelectionCommand}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="true">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false" Duration="0.2"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="false">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true" Duration="0.4"/>
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+                <icons:IconBatch Margin="{StaticResource BlockQuarterThickness}"
+                                 Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
+                                 Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}" Type="GroupingSolo"/>
+            </Button>
+                
+            </Grid>
             <Grid Width="{StaticResource Block}" />
 
-            <ContentPresenter Content="{Binding GroupDefinitionSelection}" />
+            <ContentPresenter Content="{Binding GroupDefinitionSelection}" Opacity="0">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Value="true">
+                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Value="false">
+                        <triggerActions:ElementFadeOut Anchor="MiddleLeft" Duration="0.2"/>
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </ContentPresenter>
+
         </StackPanel>
     </window:CustomWindow.RightToTitleContent>
 </window:CustomWindow>

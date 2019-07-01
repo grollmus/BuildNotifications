@@ -53,8 +53,8 @@ namespace BuildNotifications.ViewModel.Tree
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o =>
             {
-                AddOneBuild(o);
                 RemoveOneChild(o);
+                AddOneBuild(o);
             });
             HighlightCommand = new DelegateCommand(Highlight);
         }

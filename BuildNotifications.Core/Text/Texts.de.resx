@@ -121,4 +121,19 @@
   <data name="ThenBy" xml:space="preserve">
     <value>Dann nach</value>
   </data>
+  <data name="AlphabeticalAscending" xml:space="preserve">
+    <value>alphabetisch aufsteigend</value>
+  </data>
+  <data name="AlphabeticalDescending" xml:space="preserve">
+    <value>alphabetisch absteigend</value>
+  </data>
+  <data name="StatusAscending" xml:space="preserve">
+    <value>nach Status aufsteigend</value>
+  </data>
+  <data name="StatusDescending" xml:space="preserve">
+    <value>nach Status absteigend</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Sortiere</value>
+  </data>
 </root>

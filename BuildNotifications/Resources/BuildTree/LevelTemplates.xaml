@@ -137,7 +137,7 @@
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
-                                    <triggerActions:ElementFadeIn />
+                                    <triggerActions:ElementFadeInBackEase />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContentPresenter>

@@ -83,15 +83,5 @@ namespace BuildNotifications.Resources.Animation
 
             tweenHandler.Add(new SequenceOfTarget(child, xTween, yTween));
         }
-
-        private bool IsOutsideWindowBounds(UIElement element)
-        {
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow == null)
-                return false;
-
-            var pos = element.TranslatePoint(new Point(0, 0), mainWindow);
-            return (pos.X + element.RenderSize.Width < 0) || (pos.Y + element.RenderSize.Height < 0) || (pos.X >= mainWindow.ActualWidth) || (pos.Y >= mainWindow.ActualHeight);
-        }
     }
 }

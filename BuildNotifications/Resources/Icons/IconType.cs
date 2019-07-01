@@ -14,6 +14,12 @@
         Search,
         Grouping,
         Status,
+        AlphabeticalAscending,
+        AlphabeticalDescending,
+        StatusAscending,
+        StatusDescending,
+        GroupingEmpty,
+        GroupingSolo,
         None
     }
 }

@@ -19,7 +19,11 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             set
             {
                 var oldValue = _selectedDefinition;
+                if (oldValue != null)
+                    oldValue.IsSelected = false;
                 _selectedDefinition = value;
+                if (_selectedDefinition != null)
+                    _selectedDefinition.IsSelected = true;
                 OnPropertyChanged();
                 SelectedDefinitionChanged?.Invoke(this, new GroupDefinitionSelectionChangedEventArgs(oldValue, value));
             }

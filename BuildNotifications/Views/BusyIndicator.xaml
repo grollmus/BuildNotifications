@@ -46,7 +46,7 @@
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="true">
-                    <triggerActions:ElementFadeIn Duration="0.5" Anchor="Center" DoScale="true"/>
+                    <triggerActions:ElementFadeInBackEase Duration="0.5" Anchor="Center" DoScale="true"/>
                 </ei:DataTrigger>
 
                 <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="false">
@@ -57,7 +57,7 @@
 
         <i:Interaction.Triggers>
             <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="true">
-                <triggerActions:ElementFadeIn Duration="2.5" Anchor="Center" DoScale="false"/>
+                <triggerActions:ElementFadeInBackEase Duration="2.5" Anchor="Center" DoScale="false"/>
             </ei:DataTrigger>
 
             <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="false">
