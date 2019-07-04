@@ -1,4 +1,5 @@
-﻿using DummyBuildServer.Models;
+﻿using System.Windows.Input;
+using DummyBuildServer.Models;
 
 namespace DummyBuildServer.ViewModels
 {
@@ -8,17 +9,26 @@ namespace DummyBuildServer.ViewModels
         {
             _serializer = serializer;
 
-            _config = _serializer.Load(Constants.DataFileName);
+            _config = _serializer.Load(ServerConstants.DataFileName);
 
             Users = new UserListViewModel(this, _config.Users);
             BuildDefinitions = new BuildDefinitionListViewModel(this, _config.BuildDefinitions);
             Branches = new BranchListViewModel(this, _config.Branches);
             Builds = new BuildListViewModel(this);
+
+            _server = new Server(_config);
+
+            StartServerCommand = new DelegateCommand(StartServer, IsServerStopped);
+            StopServerCommand = new DelegateCommand(StopServer, IsServerRunning);
         }
 
         public BranchListViewModel Branches { get; }
         public BuildDefinitionListViewModel BuildDefinitions { get; }
         public BuildListViewModel Builds { get; }
+        public int Port { get; set; } = 1111;
+
+        public ICommand StartServerCommand { get; }
+        public ICommand StopServerCommand { get; }
         public UserListViewModel Users { get; }
 
         public void AddBranch(Branch branch)
@@ -28,11 +38,6 @@ namespace DummyBuildServer.ViewModels
         }
 
         public void AddBuild(Build build)
-        {
-            // TODO: Implement
-        }
-
-        public void UpdateBuild(Build build)
         {
             // TODO: Implement
         }
@@ -67,12 +72,38 @@ namespace DummyBuildServer.ViewModels
             SaveData();
         }
 
+        public void UpdateBuild(Build build)
+        {
+            // TODO: Implement
+        }
+
+        private bool IsServerRunning(object arg)
+        {
+            return _server.IsRunning;
+        }
+
+        private bool IsServerStopped(object arg)
+        {
+            return !_server.IsRunning;
+        }
+
         private void SaveData()
         {
-            _serializer.Save(_config, Constants.DataFileName);
+            _serializer.Save(_config, ServerConstants.DataFileName);
+        }
+
+        private void StartServer(object arg)
+        {
+            _server.Start(Port);
+        }
+
+        private void StopServer(object arg)
+        {
+            _server.Stop();
         }
 
         private readonly DataSerializer _serializer;
         private readonly ServerConfig _config;
+        private readonly Server _server;
     }
 }

@@ -20,7 +20,7 @@
         <Style TargetType="TextBox">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinWidth" Value="50" />
-            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Margin" Value="5" />
         </Style>
 
         <Style TargetType="ListBox">
@@ -96,6 +96,14 @@
                     <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" />
                 </DockPanel>
             </DockPanel>
+        </GroupBox>
+        <GroupBox Header="Server">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Port" />
+                <TextBox Text="{Binding Port}" />
+                <Button Content="Start" Command="{Binding StartServerCommand}" />
+                <Button Content="Stop" Command="{Binding StopServerCommand}" />
+            </StackPanel>
         </GroupBox>
     </WrapPanel>
 </Window>

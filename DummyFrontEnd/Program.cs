@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,9 +34,37 @@ namespace DummyFrontEnd
             var serializer = new Serializer();
             var configSerializer = new ConfigurationSerializer(serializer);
             var config = configSerializer.Load("../../../config.json");
+            //var config = new Configuration();
+
+            //config.Connections.Add(new ConnectionData {Name = "LocalDummy", BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin", SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin", Options = new Dictionary<string, string>
+            //{
+            //    {"port", "1111" }
+            //}});
+            //config.Projects.Add(new ProjectConfiguration {BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
+
+            //configSerializer.Save(config, "../../../config.json");
 
             var treeBuilder = new TreeBuilder(config);
             var pipeline = new Pipeline(treeBuilder);
+
+            Console.WriteLine("Waiting for dummy server to start");
+            var tryCount = 0;
+            while (tryCount < 60)
+            {
+                ++tryCount;
+
+                try
+                {
+                    MemoryMappedFile.OpenExisting("BuildNotifications.DummyBuildServer");
+                    break;
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+
+            Console.WriteLine("Dummy server running");
 
             var projectFactory = new ProjectFactory(pluginRepo, config);
             var project = projectFactory.Construct(config.Projects.First());
