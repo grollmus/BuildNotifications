@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using DummyBuildServer.Models;
+using BuildNotifications.Plugin.DummyBuildServer;
 
 namespace DummyBuildServer.ViewModels
 {

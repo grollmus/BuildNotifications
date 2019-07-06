@@ -73,10 +73,9 @@
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Right">
                     <ComboBox ItemsSource="{Binding AvailableBuildStatuses}"
                               SelectedItem="{Binding SelectedBuildStatus}" />
-                    <ComboBox ItemsSource="{Binding AvailableBuildResults}"
-                              SelectedItem="{Binding SelectedBuildResult}" />
                     <TextBox Text="{Binding BuildProgress}" />
                     <Button Content="Update" Command="{Binding UpdateBuildCommand}" />
+                    <Button Content="Remove" Command="{Binding RemoveBuildCommand}" />
                 </StackPanel>
                 <DockPanel>
                     <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">

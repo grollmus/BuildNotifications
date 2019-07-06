@@ -47,7 +47,7 @@ namespace BuildNotifications.Core.Pipeline
                 var providerId = buildProvider.GetHashCode();
 
                 var builds = _lastUpdate.HasValue
-                    ? buildProvider.FetchBuildsStartedSince(_lastUpdate.Value)
+                    ? buildProvider.FetchBuildsChangedSince(_lastUpdate.Value)
                     : buildProvider.FetchAllBuilds();
 
                 await foreach (var build in builds)

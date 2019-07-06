@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
+using System.IO.Pipes;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Host;
 using BuildNotifications.PluginInterfaces.Options;
@@ -23,15 +22,16 @@ namespace BuildNotifications.Plugin.DummyBuildServer
                 return null;
             }
 
-            if (_connections.TryGetValue(port, out var connection))
+            if (Connections.TryGetValue(port, out var connection))
             {
                 return connection;
             }
 
-            var client = new TcpClient();
-            client.Connect(new IPEndPoint(IPAddress.Loopback, port));
-            connection = new Connection(client);
-            _connections.Add(port, connection);
+            var socket = new NamedPipeClientStream(".", $"BuildNotifications.DummyBuildServer.{port}", PipeDirection.InOut);
+            socket.Connect();
+
+            connection = new Connection(socket);
+            Connections.Add(port, connection);
             return connection;
         }
 
@@ -82,6 +82,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             throw new NotImplementedException();
         }
 
-        private readonly Dictionary<int, Connection> _connections = new Dictionary<int, Connection>();
+        private static readonly Dictionary<int, Connection> Connections = new Dictionary<int, Connection>();
     }
 }

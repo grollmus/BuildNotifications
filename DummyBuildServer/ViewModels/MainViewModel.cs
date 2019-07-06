@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using BuildNotifications.Plugin.DummyBuildServer;
 using DummyBuildServer.Models;
 
 namespace DummyBuildServer.ViewModels
@@ -39,7 +40,7 @@ namespace DummyBuildServer.ViewModels
 
         public void AddBuild(Build build)
         {
-            // TODO: Implement
+            _server.Builds.Add(build);
         }
 
         public void AddDefinition(BuildDefinition buildDefinition)
@@ -105,5 +106,10 @@ namespace DummyBuildServer.ViewModels
         private readonly DataSerializer _serializer;
         private readonly ServerConfig _config;
         private readonly Server _server;
+
+        public void RemoveBuild(Build build)
+        {
+            _server.Builds.Remove(build);
+        }
     }
 }

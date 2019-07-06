@@ -1,5 +1,4 @@
-﻿using System;
-using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
@@ -7,7 +6,17 @@ namespace BuildNotifications.Plugin.DummyBuildServer
     {
         public Branch()
         {
-            throw new NotImplementedException();
+        }
+
+        public Branch(string name)
+        {
+            DisplayName = Name = name;
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return DisplayName;
         }
 
         /// <inheritdoc />
@@ -17,9 +26,9 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         }
 
         /// <inheritdoc />
-        public string DisplayName { get; }
+        public string DisplayName { get; set; }
 
         /// <inheritdoc />
-        public string Name { get; }
+        public string Name { get; set; }
     }
 }

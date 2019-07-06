@@ -1,4 +1,4 @@
-﻿using DummyBuildServer.Models;
+﻿using BuildNotifications.Plugin.DummyBuildServer;
 
 namespace DummyBuildServer.ViewModels
 {

@@ -19,6 +19,34 @@ namespace DummyFrontEnd
 {
     internal class Program
     {
+        private static bool IsBuildRunning(IBuildNode b)
+        {
+            return b.Build.Status == BuildStatus.Pending || b.Build.Status == BuildStatus.Running;
+        }
+
+        private static IConfiguration LoadConfiguration(Serializer serializer)
+        {
+            var configSerializer = new ConfigurationSerializer(serializer);
+
+            IConfiguration config = new Configuration();
+
+            config.Connections.Add(new ConnectionData
+            {
+                Name = "LocalDummy",
+                BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
+                SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
+                Options = new Dictionary<string, string>
+                {
+                    {"port", "1111"}
+                }
+            });
+            config.Projects.Add(new ProjectConfiguration {BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
+
+            configSerializer.Save(config, "../../../config.json");
+            config = configSerializer.Load("../../../config.json");
+            return config;
+        }
+
         private static async Task Main()
         {
             SetupLogging();
@@ -32,17 +60,7 @@ namespace DummyFrontEnd
             var schema = plugin.GetSchema(host);
 
             var serializer = new Serializer();
-            var configSerializer = new ConfigurationSerializer(serializer);
-            var config = configSerializer.Load("../../../config.json");
-            //var config = new Configuration();
-
-            //config.Connections.Add(new ConnectionData {Name = "LocalDummy", BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin", SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin", Options = new Dictionary<string, string>
-            //{
-            //    {"port", "1111" }
-            //}});
-            //config.Projects.Add(new ProjectConfiguration {BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
-
-            //configSerializer.Save(config, "../../../config.json");
+            var config = LoadConfiguration(serializer);
 
             var treeBuilder = new TreeBuilder(config);
             var pipeline = new Pipeline(treeBuilder);
@@ -82,12 +100,6 @@ namespace DummyFrontEnd
                 Console.WriteLine("Sleeping 30 seconds...");
                 Thread.Sleep(TimeSpan.FromSeconds(30));
             }
-
-            //var buildDefinitions = await ToListAsync(project.BuildProvider.FetchExistingBuildDefinitions());
-            //var branches = await ToListAsync(project.BranchProvider.FetchExistingBranches());
-            //var builds = await ToListAsync(project.BuildProvider.FetchAllBuilds());
-            //var buildsToday = await ToListAsync(project.BuildProvider.FetchBuildsSince(DateTime.Today));
-            //var buildsForDefinition = await ToListAsync(project.BuildProvider.FetchBuildsForDefinition(buildDefinitions.First()));
         }
 
         private static void Notifier_Updated(object sender, PipelineUpdateEventArgs e)
@@ -98,7 +110,7 @@ namespace DummyFrontEnd
             var builds = e.Tree.Children.OfType<IBuildNode>().ToList();
             Console.WriteLine($"Builds in tree: {childrenCount}");
 
-            var nonCompleted = builds.Where(b => b.Build.Status == BuildStatus.Pending).ToList();
+            var nonCompleted = builds.Where(IsBuildRunning).ToList();
             Console.WriteLine($"Non completed builds: {nonCompleted.Count()}");
 
             Console.WriteLine(string.Join(", ", nonCompleted.Select(b => b.Build.Id)));

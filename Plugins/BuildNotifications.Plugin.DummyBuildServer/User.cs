@@ -11,13 +11,28 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             DisplayName = displayName;
         }
 
-        /// <inheritdoc />
-        public string DisplayName { get; }
+        public User()
+        {
+        }
+
+        public User(string name)
+        {
+            Id = DisplayName = UniqueName = name;
+        }
 
         /// <inheritdoc />
-        public string Id { get; }
+        public override string ToString()
+        {
+            return DisplayName;
+        }
 
         /// <inheritdoc />
-        public string UniqueName { get; }
+        public string DisplayName { get; set; }
+
+        /// <inheritdoc />
+        public string Id { get; set; }
+
+        /// <inheritdoc />
+        public string UniqueName { get; set; }
     }
 }

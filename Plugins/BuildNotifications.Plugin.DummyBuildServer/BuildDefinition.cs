@@ -4,6 +4,15 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 {
     internal class BuildDefinition : IBuildDefinition
     {
+        public BuildDefinition()
+        {
+        }
+
+        public BuildDefinition(string name)
+        {
+            Name = name;
+        }
+
         /// <inheritdoc />
         public bool Equals(IBuildDefinition other)
         {

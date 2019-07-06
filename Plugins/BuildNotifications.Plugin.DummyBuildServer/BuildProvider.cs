@@ -11,6 +11,8 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public BuildProvider(Connection connection)
         {
             _connection = connection;
+            _settings = new JsonSerializerSettings();
+            _settings.TypeNameHandling = TypeNameHandling.Auto;
         }
 
         /// <inheritdoc />
@@ -19,37 +21,58 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         /// <inheritdoc />
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
-            var json = await _connection.Query(Constants.Queries.Definitions);
+            var json = await _connection.Query(Constants.Queries.Builds);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
 
-            foreach (var build in JsonConvert.DeserializeObject<List<Build>>(json))
+            foreach (var build in list)
             {
                 yield return build;
             }
         }
 
         /// <inheritdoc />
-        public IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition)
+        public async IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
-            throw new NotImplementedException();
+            var json = await _connection.Query(Constants.Queries.Builds);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+
+            foreach (var build in list)
+            {
+                if (build.Definition.Equals(definition))
+                {
+                    yield return build;
+                }
+            }
         }
 
         /// <inheritdoc />
-        public IAsyncEnumerable<IBuild> FetchBuildsStartedSince(DateTime date)
+        public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime date)
         {
-            throw new NotImplementedException();
+            var json = await _connection.Query(Constants.Queries.Builds);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+
+            foreach (var build in list)
+            {
+                if (!build.LastChangedTime.HasValue || build.LastChangedTime > date)
+                {
+                    yield return build;
+                }
+            }
         }
 
         /// <inheritdoc />
         public async IAsyncEnumerable<IBuildDefinition> FetchExistingBuildDefinitions()
         {
             var json = await _connection.Query(Constants.Queries.Definitions);
+            var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings);
 
-            foreach (var buildDefinition in JsonConvert.DeserializeObject<List<BuildDefinition>>(json))
+            foreach (var buildDefinition in list)
             {
                 yield return buildDefinition;
             }
         }
 
         private readonly Connection _connection;
+        private JsonSerializerSettings _settings;
     }
 }

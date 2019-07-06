@@ -6,11 +6,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 {
     internal class Build : IBuild
     {
-        public Build()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <inheritdoc />
         public bool Equals(IBuild other)
         {
@@ -18,27 +13,30 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         }
 
         /// <inheritdoc />
-        public string BranchName { get; }
+        public string BranchName { get; set; }
 
         /// <inheritdoc />
-        public IBuildDefinition Definition { get; }
+        public IBuildDefinition Definition { get; set; }
 
         /// <inheritdoc />
-        public string Id { get; }
+        public string Id { get; set; }
 
         /// <inheritdoc />
-        public DateTime? LastChangedTime { get; }
+        public DateTime? LastChangedTime { get; set; }
 
         /// <inheritdoc />
-        public DateTime? QueueTime { get; }
+        public int Progress { get; set; }
 
         /// <inheritdoc />
-        public IUser RequestedBy { get; }
+        public DateTime? QueueTime { get; set; }
 
         /// <inheritdoc />
-        public IUser RequestedFor { get; }
+        public IUser RequestedBy { get; set; }
 
         /// <inheritdoc />
-        public BuildStatus Status { get; }
+        public IUser RequestedFor { get; set; }
+
+        /// <inheritdoc />
+        public BuildStatus Status { get; set; }
     }
 }
