@@ -49,6 +49,9 @@ namespace BuildNotifications.Plugin.Tfs
         public DateTime? LastChangedTime { get; }
 
         /// <inheritdoc />
+        public int Progress { get; }
+
+        /// <inheritdoc />
         public DateTime? QueueTime { get; }
 
         /// <inheritdoc />

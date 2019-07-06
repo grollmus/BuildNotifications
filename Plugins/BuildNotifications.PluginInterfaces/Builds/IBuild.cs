@@ -30,6 +30,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         DateTime? LastChangedTime { get; }
 
         /// <summary>
+        /// Progress in percent of this build.
+        /// </summary>
+        int Progress { get; }
+
+        /// <summary>
         /// Date and time this build was added to the build queue.
         /// </summary>
         DateTime? QueueTime { get; }

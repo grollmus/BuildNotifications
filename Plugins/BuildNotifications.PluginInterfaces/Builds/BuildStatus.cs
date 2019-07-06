@@ -14,6 +14,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         None,
 
         /// <summary>
+        /// Build is currently running
+        /// </summary>
+        Running,
+
+        /// <summary>
         /// Build has not yet been finished.
         /// </summary>
         Pending,
