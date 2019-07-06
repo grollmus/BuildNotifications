@@ -1,10 +1,11 @@
-﻿namespace BuildNotifications.ViewModel.GroupDefinitionSelection
+﻿namespace BuildNotifications.Core.Pipeline.Tree.Arrangement
 {
     public enum SortingDefinition
     {
         AlphabeticalDescending,
         AlphabeticalAscending,
         StatusAscending,
-        StatusDescending
+        StatusDescending,
+        Undefined
     }
 }

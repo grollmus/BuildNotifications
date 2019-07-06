@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -39,9 +39,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
             switch (group)
             {
-                case Tree.GroupDefinition.Branch:
+                case Arrangement.GroupDefinition.Branch:
                     return new BranchGroupNode(build.BranchName);
-                case Tree.GroupDefinition.BuildDefinition:
+                case Arrangement.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
                 //case Tree.GroupDefinition.Source:
                 //    throw new NotImplementedException();

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.ViewModel.Tree.Dummy
 {

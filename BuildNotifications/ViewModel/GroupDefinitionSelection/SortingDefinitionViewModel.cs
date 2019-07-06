@@ -1,9 +1,9 @@
-﻿using BuildNotifications.Core.Pipeline.Tree;
+﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Resources.Icons;
 
 namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
-    public class GroupDefinitionSortingViewModel : BaseViewModel
+    public class SortingDefinitionViewModel : BaseViewModel
     {
         public GroupDefinition ForDefinition { get; }
 
@@ -11,7 +11,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         public IconType IconType => SortingDefinition.ToIconType();
 
-        public GroupDefinitionSortingViewModel(GroupDefinition forDefinition, SortingDefinition sortingDefinition)
+        public SortingDefinitionViewModel(GroupDefinition forDefinition, SortingDefinition sortingDefinition)
         {
             ForDefinition = forDefinition;
             SortingDefinition = sortingDefinition;

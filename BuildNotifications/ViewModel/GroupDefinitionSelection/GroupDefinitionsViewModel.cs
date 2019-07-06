@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
-    public class SingleGroupDefinitionSelectionViewModel : BaseViewModel
+    public class GroupDefinitionsViewModel : BaseViewModel
     {
         private GroupDefinitionViewModel _selectedDefinition;
-        private string _groupByText;
         public ObservableCollection<GroupDefinitionViewModel> Definitions { get; set; }
 
-        public event EventHandler<GroupDefinitionSelectionChangedEventArgs> SelectedDefinitionChanged;
+        public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
 
         public GroupDefinitionViewModel SelectedDefinition
         {
@@ -25,8 +24,14 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 if (_selectedDefinition != null)
                     _selectedDefinition.IsSelected = true;
                 OnPropertyChanged();
-                SelectedDefinitionChanged?.Invoke(this, new GroupDefinitionSelectionChangedEventArgs(oldValue, value));
+                SelectedDefinitionChanged?.Invoke(this, new GroupDefinitionsSelectionChangedEventArgs(oldValue, value));
             }
+        }
+
+        public SortingDefinition SelectedSortingDefinition
+        {
+            get => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition;
+            set => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition = value;
         }
 
         public string GroupByText
@@ -41,7 +46,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public SingleGroupDefinitionSelectionViewModel()
+        public GroupDefinitionsViewModel()
         {
             Definitions = new ObservableCollection<GroupDefinitionViewModel>
             {

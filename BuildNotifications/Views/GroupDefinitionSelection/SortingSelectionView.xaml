@@ -12,14 +12,14 @@
              xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SortingSelectionViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SortingDefinitionsViewModel}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupDefinitionSortingViewModel}">
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingDefinitionViewModel}">
                 <Grid IsHitTestVisible="False">
                     <Rectangle Fill="{DynamicResource Background3}" Width="{StaticResource BlockOneAndHalf}"
                                DockPanel.Dock="Right" Height="{DynamicResource BlockDouble}" Margin="0,0,-12,0">
@@ -41,7 +41,7 @@
 
     <ComboBox HorizontalAlignment="Center" VerticalAlignment="Center"
               Style="{StaticResource GroupDefinitionSelectionComboBoxStyle}" Background="{DynamicResource Background3}"
-              ItemsSource="{Binding Sortings}" SelectedItem="{Binding SelectedSorting}"
+              ItemsSource="{Binding Sortings}" SelectedItem="{Binding SelectedViewModel}"
               Width="{StaticResource BlockOneAndHalf}" MinWidth="{StaticResource BlockOneAndHalf}">
 
         <ComboBox.ItemsPanel>
@@ -83,7 +83,7 @@
 
                                 </StackPanel>
 
-                                <!--Use a almost invisible background so mouse events are captured. This is necessary as this control is used within a PopUp that has AllowTransparency set to true-->
+                                <!--Use an almost invisible background so mouse events are captured. This is necessary as this control is used within a PopUp that has AllowTransparency set to true-->
                                 <Border Background="{DynamicResource Background1}" Opacity="0.01" Cursor="Hand" />
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">

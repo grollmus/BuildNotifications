@@ -1,4 +1,4 @@
-﻿using BuildNotifications.Core.Pipeline.Tree;
+﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Resources.Icons
 {

@@ -1,4 +1,4 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree
+﻿namespace BuildNotifications.Core.Pipeline.Tree.Arrangement
 {
     public enum GroupDefinition
     {

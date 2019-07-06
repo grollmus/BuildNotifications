@@ -36,7 +36,7 @@
                 <views:SearchView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type groupDefinitionSelection:BuildTreeGroupDefinitionViewModel}">
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
                 <groupDefinition:BuildTreeGroupDefinitionView />
             </DataTemplate>
         </ResourceDictionary>
@@ -86,7 +86,7 @@
             </Grid>
             <Grid Width="{StaticResource Block}" />
 
-            <ContentPresenter Content="{Binding GroupDefinitionSelection}" Opacity="0">
+            <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Opacity="0">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger
                         Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"

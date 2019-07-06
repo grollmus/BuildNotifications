@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BuildNotifications.Core.Pipeline.Tree;
+﻿using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.ViewModel.Tree
 {

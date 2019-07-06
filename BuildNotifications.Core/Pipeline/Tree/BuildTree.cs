@@ -1,4 +1,6 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree
+﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+
+namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class BuildTree : TreeNode, IBuildTree
     {

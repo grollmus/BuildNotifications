@@ -12,7 +12,7 @@
              xmlns:views="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SingleGroupDefinitionSelectionViewModel} }">
+             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionsViewModel} }">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -20,13 +20,13 @@
                 <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingSelectionViewModel}">
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingDefinitionsViewModel}">
                 <views:SortingSelectionView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupDefinitionViewModel}">
                 <DockPanel x:Name="DockPanel">
-                    <ContentPresenter DockPanel.Dock="Right" Content="{Binding SortingSelectionViewModel}"
+                    <ContentPresenter DockPanel.Dock="Right" Content="{Binding SortingDefinitionsViewModel}"
                                       Margin="0,0,-42,0"
                                       Visibility="{Binding DataContext.DisplaySortingSelection, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=DockPanel}" />
                     <icons:IconBatch Width="{DynamicResource Block}"

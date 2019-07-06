@@ -8,7 +8,7 @@
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type viewModel:BuildTreeGroupDefinitionViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type viewModel:GroupAndSortDefinitionsViewModel}}">
     <ItemsControl ItemsSource="{Binding Definitions}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>

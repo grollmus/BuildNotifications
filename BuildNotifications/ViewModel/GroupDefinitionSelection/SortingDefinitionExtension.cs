@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Resources.Icons;
+﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using BuildNotifications.Resources.Icons;
 
 namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {

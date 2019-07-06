@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BuildNotifications.Core.Pipeline.Tree
+namespace BuildNotifications.Core.Pipeline.Tree.Arrangement
 {
     public class BuildTreeGroupDefinition : IBuildTreeGroupDefinition
     {
@@ -21,13 +21,11 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
         }
 
-        /// <inheritdoc />
         public IEnumerator<GroupDefinition> GetEnumerator()
         {
             return _definitions.GetEnumerator();
         }
 
-        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _definitions.GetEnumerator();
