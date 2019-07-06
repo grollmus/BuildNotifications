@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,9 +17,11 @@ namespace BuildNotifications.ViewModel
     {
         private BuildTreeViewModel _buildTree;
 
-        public BuildTreeViewModel BuildTree {
+        public BuildTreeViewModel BuildTree
+        {
             get => _buildTree;
-            set {
+            set
+            {
                 _buildTree = value;
                 OnPropertyChanged();
             }
@@ -45,11 +48,27 @@ namespace BuildNotifications.ViewModel
         public MainViewModel()
         {
             SearchViewModel = new SearchViewModel();
+
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
-            LoadNewRandomTreeCommand = new DelegateCommand(LoadNewRandomTree);
+            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
+                {
+                    Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
+                    UpdateOrCreateBuildTree();
+                }
+
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
+                {
+                    Debug.WriteLine("Selected sortings: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition));
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                }
+            };
+
+            LoadNewRandomTreeCommand = new DelegateCommand(UpdateOrCreateBuildTree);
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             _buildTreeSource = new BuildTreeDummy(null);
-            LoadNewRandomTree(null);
+            UpdateOrCreateBuildTree();
         }
 
         private void ToggleGroupDefinitionSelection(object obj)
@@ -60,47 +79,57 @@ namespace BuildNotifications.ViewModel
         private readonly BuildTreeDummy _buildTreeSource;
         private bool _showGroupDefinitionSelection;
 
-        private async void LoadNewRandomTree(object obj)
+        private async void UpdateOrCreateBuildTree(object obj = null)
         {
             IsBusy = true;
             await Task.Delay(2500);
             BuildTree = await Task.Run(() =>
             {
-                CreateRandomTree();
+                RandomTree();
                 var factory = new BuildTreeViewModelFactory();
                 return factory.Produce(_buildTreeSource);
             });
             IsBusy = false;
         }
 
-        private void CreateRandomTree()
+        private void RandomTree()
         {
-            var groupings = RandomGroupings().ToList();
-            Debug.WriteLine(string.Join(',', groupings));
+            var groupings = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition.ToList();
             CreateDummys(_buildTreeSource, 0, groupings);
             var buildTreeGroupDefinition = new GroupDefinitionDummy();
             buildTreeGroupDefinition.AddRange(groupings);
             _buildTreeSource.GroupDefinition = buildTreeGroupDefinition;
         }
 
-        private IEnumerable<GroupDefinition> RandomGroupings()
-        {
-            return GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition
-        }
+        private static Random _random = new Random();
 
+        // RemoveChildrenIfNotOfType ensures that only elements of the type are within the list, therefore the ReSharper warning is taken care of
+        [SuppressMessage("ReSharper", "PossibleInvalidCastExceptionInForeachLoop")]
         private void CreateDummys(BuildTreeNodeDummy addToNode, int currentGroupingIndex, List<GroupDefinition> groupDefinitions)
         {
-            void RemoveChildrenIfNotOfType<T>() where T : BuildTreeNodeDummy
+            void RemoveChildrenIfNotOfType<T>(BuildTreeNodeDummy ofNode, int expectedCount) where T : BuildTreeNodeDummy
             {
-                if (!addToNode.Children.Any(x => x is T))
-                    addToNode.Clear();
+                if (!ofNode.Children.All(x => x is T))
+                {
+                    ofNode.Clear();
+                }
+                else
+                {
+                    var toRemove = ofNode.Children.Skip(expectedCount).ToList();
+                    foreach (var child in toRemove)
+                    {
+                        ofNode.RemoveChild(child);
+                    }
+                }
             }
 
+            var childCount = _random.Next(1, 5);
+                
             if (currentGroupingIndex >= groupDefinitions.Count)
             {
-                RemoveChildrenIfNotOfType<BuildNodeDummy>();
+                RemoveChildrenIfNotOfType<BuildNodeDummy>(addToNode,childCount);
 
-                for (var i = addToNode.Children.Count(); i < 3; i++)
+                for (var i = addToNode.Children.Count(); i < childCount; i++)
                 {
                     addToNode.AddChild(new BuildNodeDummy());
                 }
@@ -112,35 +141,49 @@ namespace BuildNotifications.ViewModel
             switch (groupDef)
             {
                 case GroupDefinition.Branch:
-                    RemoveChildrenIfNotOfType<BranchGroupNodeDummy>();
+                    RemoveChildrenIfNotOfType<BranchGroupNodeDummy>(addToNode,childCount);
 
-                    for (var i = addToNode.Children.Count(); i < 4; i++)
+                    for (var i = addToNode.Children.Count(); i < childCount; i++)
                     {
-                        var branchGroupNodeDummy = new BranchGroupNodeDummy("Branch " + (char)('A' + i));
-                        CreateDummys(branchGroupNodeDummy, currentGroupingIndex + 1, groupDefinitions);
+                        var branchGroupNodeDummy = new BranchGroupNodeDummy("Branch " + (char) ('A' + i));
                         addToNode.AddChild(branchGroupNodeDummy);
+                    }
+
+                    foreach (BranchGroupNodeDummy child in addToNode.Children)
+                    {
+                        CreateDummys(child, currentGroupingIndex + 1, groupDefinitions);
                     }
 
                     break;
                 case GroupDefinition.BuildDefinition:
-                    RemoveChildrenIfNotOfType<DefinitionGroupNodeDummy>();
+                    RemoveChildrenIfNotOfType<DefinitionGroupNodeDummy>(addToNode,childCount);
 
-                    for (var i = addToNode.Children.Count(); i < 4; i++)
+                    for (var i = addToNode.Children.Count(); i < childCount; i++)
                     {
                         var definitionGroupNodeDummy = new DefinitionGroupNodeDummy("Definition " + (i + 1));
                         CreateDummys(definitionGroupNodeDummy, currentGroupingIndex + 1, groupDefinitions);
                         addToNode.AddChild(definitionGroupNodeDummy);
                     }
 
+                    foreach (DefinitionGroupNodeDummy child in addToNode.Children)
+                    {
+                        CreateDummys(child, currentGroupingIndex + 1, groupDefinitions);
+                    }
+
                     break;
                 case GroupDefinition.Source:
-                    RemoveChildrenIfNotOfType<SourceGroupNodeDummy>();
+                    RemoveChildrenIfNotOfType<SourceGroupNodeDummy>(addToNode,childCount);
 
-                    for (var i = addToNode.Children.Count(); i < 2; i++)
+                    for (var i = addToNode.Children.Count(); i < childCount; i++)
                     {
                         var sourceGroupNodeDummy = new SourceGroupNodeDummy("Source " + i);
                         CreateDummys(sourceGroupNodeDummy, currentGroupingIndex + 1, groupDefinitions);
                         addToNode.AddChild(sourceGroupNodeDummy);
+                    }
+
+                    foreach (SourceGroupNodeDummy child in addToNode.Children)
+                    {
+                        CreateDummys(child, currentGroupingIndex + 1, groupDefinitions);
                     }
 
                     break;

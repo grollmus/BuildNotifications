@@ -3,11 +3,11 @@ using System.Windows.Controls;
 
 namespace BuildNotifications.Resources.Animation
 {
-    internal class AnimatedDockPanel : DockPanel
+    internal class AnimatedStackPanel : StackPanel
     {
         private readonly AnimatedPanelHelper _helper;
 
-        public AnimatedDockPanel()
+        public AnimatedStackPanel()
         {
             _helper = new AnimatedPanelHelper();
         }

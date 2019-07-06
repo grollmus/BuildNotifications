@@ -172,6 +172,12 @@ namespace BuildNotifications.ViewModel.Utils
             Sort();
         }
 
+        public void DontSort()
+        {
+            _sortFunction = null;
+            Sort();
+        }
+
         private void Sort()
         {
             if (_sortFunction == null)
@@ -191,5 +197,10 @@ namespace BuildNotifications.ViewModel.Utils
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void InvokeSort()
+        {
+            Sort();
+        }
     }
 }

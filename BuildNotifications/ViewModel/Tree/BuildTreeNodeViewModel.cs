@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Tree.Dummy;
 using BuildNotifications.ViewModel.Utils;
@@ -40,6 +42,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public BuildStatus BuildStatus => CalculateBuildStatus();
 
+        public string DisplayName => CalculateDisplayName();
+
         // object this ViewModel originates from
         public IBuildTreeNode NodeSource { get; }
 
@@ -47,7 +51,6 @@ namespace BuildNotifications.ViewModel.Tree
         {
             NodeSource = nodeSource;
             Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.8));
-            Children.Sort(x => x.BuildStatus);
             Children.CollectionChanged += ChildrenOnCollectionChanged;
             AddOneBuildCommand = new DelegateCommand(AddOneBuild);
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
@@ -92,13 +95,19 @@ namespace BuildNotifications.ViewModel.Tree
         private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(BuildStatus)))
+            {
                 OnPropertyChanged(nameof(BuildStatus));
+                if (_currentSortingDefinition == SortingDefinition.StatusAscending || _currentSortingDefinition == SortingDefinition.StatusDescending)
+                    Children.InvokeSort();
+            }
         }
 
         protected virtual BuildStatus CalculateBuildStatus()
         {
             return !Children.Any() ? BuildStatus.None : Children.Max(x => x.BuildStatus);
         }
+
+        protected virtual string CalculateDisplayName() => ToString();
 
         private void Highlight(object obj)
         {
@@ -144,6 +153,50 @@ namespace BuildNotifications.ViewModel.Tree
             var someBuild = Children.FirstOrDefault(x => !x.IsRemoving);
             if (someBuild != null)
                 Children.Remove(someBuild);
+        }
+
+        private SortingDefinition _currentSortingDefinition;
+
+        protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)
+        {
+            if (index >= sortingDefinitions.Count)
+            {
+                // the last group are expected to be builds anyway, these are only implicitly sorted by the order they are added to the list
+                _currentSortingDefinition = SortingDefinition.Undefined;
+                Children.DontSort();
+                return;
+            }
+
+            foreach (var child in Children)
+            {
+                child.SetSortings(sortingDefinitions, index + 1);
+            }
+            
+            var newSorting = sortingDefinitions[index];
+            if (newSorting == _currentSortingDefinition)
+                return;
+
+            _currentSortingDefinition = newSorting;
+            SetChildrenSorting(_currentSortingDefinition);
+        }
+
+        private void SetChildrenSorting(SortingDefinition sortingDefinition)
+        {
+            switch (sortingDefinition)
+            {
+                case SortingDefinition.AlphabeticalDescending:
+                    Children.Sort(x => x.DisplayName);
+                    break;
+                case SortingDefinition.AlphabeticalAscending:
+                    Children.SortDescending(x => x.DisplayName);
+                    break;
+                case SortingDefinition.StatusAscending:
+                    Children.Sort(x => x.BuildStatus);
+                    break;
+                case SortingDefinition.StatusDescending:
+                    Children.SortDescending(x => x.BuildStatus);
+                    break;
+            }
         }
     }
 }

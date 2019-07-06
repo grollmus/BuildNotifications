@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+﻿using System;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
 
@@ -17,6 +18,8 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         public bool DisplaySortingSelection => GroupDefinition != GroupDefinition.None && IsSelected;
 
         public SortingDefinitionsViewModel SortingDefinitionsViewModel { get; set; }
+        
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
         public bool IsSelected
         {
@@ -43,6 +46,12 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             GroupDefinition = groupDefinition;
             _groupByText = StringLocalizer.Instance["GroupBy"];
             SortingDefinitionsViewModel = new SortingDefinitionsViewModel(groupDefinition);
+            SortingDefinitionsViewModel.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
+        }
+
+        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        {
+            SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }
     }
 }

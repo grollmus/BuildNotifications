@@ -5,20 +5,20 @@ namespace BuildNotifications.Resources.Animation
 {
     internal class AnimatedWrapPanel : WrapPanel
     {
-        private readonly AnimatedPanelHelper Helper;
+        private readonly AnimatedPanelHelper _helper;
 
         public AnimatedWrapPanel()
         {
-            Helper = new AnimatedPanelHelper();
+            _helper = new AnimatedPanelHelper();
         }
 
         public double AnimationDuration { get; set; } = 0.4;
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            var positions = Helper.StoreOldPositions(this);
+            var positions = _helper.StoreOldPositions(this);
             var arrangedSize = base.ArrangeOverride(finalSize);
-            Helper.AnimateToNewPositions(positions, this, AnimationDuration);
+            _helper.AnimateToNewPositions(positions, this, AnimationDuration);
             return arrangedSize;
         }
     }

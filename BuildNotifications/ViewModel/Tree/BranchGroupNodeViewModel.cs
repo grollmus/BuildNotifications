@@ -12,5 +12,7 @@ namespace BuildNotifications.ViewModel.Tree
         {
             _node = node;
         }
+
+        protected override string CalculateDisplayName() => BranchName;
     }
 }

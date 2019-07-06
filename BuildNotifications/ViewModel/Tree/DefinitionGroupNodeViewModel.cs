@@ -28,5 +28,7 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         public string DefinitionName { get; set; }
+
+        protected override string CalculateDisplayName() => DefinitionName;
     }
 }

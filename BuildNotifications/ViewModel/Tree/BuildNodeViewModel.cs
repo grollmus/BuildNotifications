@@ -82,5 +82,6 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         protected override BuildStatus CalculateBuildStatus() => Status;
+        protected override string CalculateDisplayName() => "Build. Status: " + Status;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.ViewModel.Utils;
 
@@ -6,17 +7,23 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class SortingDefinitionsViewModel : BaseViewModel
     {
-        public GroupDefinition ForGroupDefinition { get; }
         private SortingDefinitionViewModel _selectedViewModel;
+
+        public GroupDefinition ForGroupDefinition { get; }
+
         public RemoveTrackingObservableCollection<SortingDefinitionViewModel> Sortings { get; set; }
+
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
         public SortingDefinitionViewModel SelectedViewModel
         {
             get => _selectedViewModel;
             set
             {
+                var oldValue = _selectedViewModel;
                 _selectedViewModel = value;
                 OnPropertyChanged();
+                SelectedSortingDefinitionChanged?.Invoke(this, new SortingDefinitionsSelectionChangedEventArgs(oldValue, value));
             }
         }
 

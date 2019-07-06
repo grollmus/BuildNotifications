@@ -91,6 +91,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                     foreach (GroupDefinitionsViewModel item in e.NewItems)
                     {
                         item.SelectedDefinitionChanged += SingleGroupDefinitionChanged;
+                        item.SelectedSortingDefinitionChanged += SingleSortingDefinitionChanged;
                     }
 
                     break;
@@ -98,6 +99,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                     foreach (GroupDefinitionsViewModel item in e.OldItems)
                     {
                         item.SelectedDefinitionChanged -= SingleGroupDefinitionChanged;
+                        item.SelectedSortingDefinitionChanged -= SingleSortingDefinitionChanged;
                     }
 
                     break;
@@ -114,11 +116,21 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 return;
 
             _suppressEvents = true;
-            CutOffAfterNone();
+            RemoveNoneElements();
             SwapDuplicates((GroupDefinitionsViewModel) sender, e);
             AddNoneAtEnd();
             SetTexts();
             _suppressEvents = false;
+            OnPropertyChanged(nameof(BuildTreeGroupDefinition));
+            OnPropertyChanged(nameof(BuildTreeSortingDefinition));
+        }
+
+        private void SingleSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        {
+            if (_suppressEvents)
+                return;
+
+            OnPropertyChanged(nameof(BuildTreeSortingDefinition));
         }
 
         private void SetTexts()
@@ -132,15 +144,15 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        private void CutOffAfterNone()
+        private void RemoveNoneElements()
         {
-            var firstNoneItem = Definitions.FirstOrDefault(x => x.SelectedDefinition.GroupDefinition == GroupDefinition.None);
-            if (firstNoneItem == null)
-                return;
-            var indexOfNone = Definitions.IndexOf(firstNoneItem);
+            var allNoneItems = Definitions.Where(x => x.SelectedDefinition.GroupDefinition == GroupDefinition.None).ToList();
+            var lastItem = Definitions.Last();
 
-            var itemsToRemove = Definitions.Skip(indexOfNone + 1).ToList();
-            foreach (var definition in itemsToRemove)
+            if (allNoneItems.Contains(lastItem))
+                allNoneItems.Remove(lastItem);
+
+            foreach (var definition in allNoneItems)
             {
                 Definitions.Remove(definition);
             }
@@ -148,8 +160,12 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         private void SwapDuplicates(GroupDefinitionsViewModel sender, GroupDefinitionsSelectionChangedEventArgs e)
         {
+            if (e.NewValue.GroupDefinition == GroupDefinition.None)
+                return;
+
             var newSelectedValue = e.NewValue.GroupDefinition;
             var otherElementThatHasSameValue = Definitions.FirstOrDefault(x => !x.IsRemoving && x != sender && x.SelectedDefinition.GroupDefinition == newSelectedValue);
+            var previousSelectedValue = sender.Definitions.First(x => x.GroupDefinition == e.OldValue.GroupDefinition);
 
             if (otherElementThatHasSameValue == null)
                 return;
@@ -157,7 +173,10 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             if (e.OldValue.GroupDefinition == GroupDefinition.None)
                 Definitions.Remove(otherElementThatHasSameValue);
             else
+            {
                 otherElementThatHasSameValue.SelectedDefinition = otherElementThatHasSameValue.Definitions.First(x => x.GroupDefinition == e.OldValue.GroupDefinition);
+                otherElementThatHasSameValue.SelectedSortingDefinition = previousSelectedValue.SortingDefinitionsViewModel.SelectedSortingDefinition;
+            }
         }
 
         private void AddNoneAtEnd()

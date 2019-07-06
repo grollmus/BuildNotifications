@@ -74,16 +74,16 @@ namespace BuildNotifications.ViewModel.Tree
             switch (groupDefinition)
             {
                 case GroupDefinition.Branch:
-                    return new BranchGroupNodeViewModel(node as IBranchGroupNode);
+                    return new BranchGroupNodeViewModel((IBranchGroupNode) node);
                 case GroupDefinition.BuildDefinition:
-                    return new DefinitionGroupNodeViewModel(node as IDefinitionGroupNode);
+                    return new DefinitionGroupNodeViewModel((IDefinitionGroupNode) node);
                 case GroupDefinition.Source:
-                    return new SourceGroupNodeViewModel(node);
+                    return new SourceGroupNodeViewModel((ISourceGroupNode) node);
                 case GroupDefinition.Status:
                     return new StatusGroupNodeViewModel(node);
                 case GroupDefinition.None:
                 default:
-                    return new BuildNodeViewModel(node as IBuildNode) { IsLargeSize = false };
+                    return new BuildNodeViewModel((IBuildNode) node) { IsLargeSize = false };
             }
         }
     }

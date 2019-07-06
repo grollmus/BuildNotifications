@@ -11,6 +11,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         public ObservableCollection<GroupDefinitionViewModel> Definitions { get; set; }
 
         public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
         public GroupDefinitionViewModel SelectedDefinition
         {
@@ -19,13 +20,26 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             {
                 var oldValue = _selectedDefinition;
                 if (oldValue != null)
+                {
                     oldValue.IsSelected = false;
+                    oldValue.SelectedSortingDefinitionChanged -= OnSelectedSortingDefinitionChanged;
+                }
+
                 _selectedDefinition = value;
                 if (_selectedDefinition != null)
+                {
                     _selectedDefinition.IsSelected = true;
+                    _selectedDefinition.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
+                }
+
                 OnPropertyChanged();
                 SelectedDefinitionChanged?.Invoke(this, new GroupDefinitionsSelectionChangedEventArgs(oldValue, value));
             }
+        }
+
+        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        {
+            SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }
 
         public SortingDefinition SelectedSortingDefinition

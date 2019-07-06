@@ -4,8 +4,13 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class SourceGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        public SourceGroupNodeViewModel(IBuildTreeNode node) : base(node)
+        private readonly ISourceGroupNode _node;
+
+        public SourceGroupNodeViewModel(ISourceGroupNode node) : base(node)
         {
+            _node = node;
         }
+
+        protected override string CalculateDisplayName() => _node.SourceName;
     }
 }
