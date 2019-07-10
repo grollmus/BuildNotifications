@@ -55,13 +55,34 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 if (nodeToInsert.Children.Any())
                 {
                     Merge(subTree, nodeToInsert.Children.First(), taggedNodes);
-                    taggedNodes.Remove(subTree);
                 }
+
+                taggedNodes.Remove(subTree);
             }
             else
             {
                 tree.AddChild(nodeToInsert);
                 taggedNodes.Remove(tree);
+            }
+        }
+
+        private void RemoveTaggedNodes(IBuildTreeNode tree, List<IBuildTreeNode> taggedNodes)
+        {
+            foreach (var node in tree.Children.ToList())
+            {
+                if (taggedNodes.Contains(node))
+                    tree.RemoveChild(node);
+                else
+                    RemoveTaggedNodes(node, taggedNodes);
+            }
+        }
+
+        private void TagAllNodesForDeletion(IBuildTreeNode tree, List<IBuildTreeNode> taggedNodes)
+        {
+            foreach (var node in tree.Children)
+            {
+                taggedNodes.Add(node);
+                TagAllNodesForDeletion(node, taggedNodes);
             }
         }
 
@@ -85,24 +106,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             RemoveTaggedNodes(tree, taggedNodes);
 
             return tree;
-        }
-
-        private void TagAllNodesForDeletion(IBuildTreeNode tree, List<IBuildTreeNode> taggedNodes)
-        {
-            foreach (var node in tree.Children)
-            {
-                taggedNodes.Add(node);
-                TagAllNodesForDeletion(node, taggedNodes);
-            }
-        }
-
-        private void RemoveTaggedNodes(IBuildTree tree, List<IBuildTreeNode> taggedNodes)
-        {
-            foreach (var node in tree.Children.ToList())
-            {
-                if( taggedNodes.Contains(node))
-                    tree.RemoveChild(node );
-            }
         }
 
         private readonly IConfiguration _config;

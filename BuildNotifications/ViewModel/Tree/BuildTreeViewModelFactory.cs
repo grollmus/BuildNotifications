@@ -89,8 +89,9 @@ namespace BuildNotifications.ViewModel.Tree
                 foreach (var child in nodeToInsert.Children)
                 {
                     MergeInternal(subTree, child, taggedNodes);
-                    taggedNodes.Remove(subTree);
                 }
+
+                taggedNodes.Remove(subTree);
             }
             else
             {
@@ -105,6 +106,8 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 if (taggedNodes.Contains(node))
                     tree.Children.Remove(node);
+                else
+                    RemoveTaggedNodes(node, taggedNodes);
             }
         }
 

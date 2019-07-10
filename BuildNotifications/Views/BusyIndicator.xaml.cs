@@ -73,7 +73,7 @@ namespace BuildNotifications.Views
 
         private void StopTask()
         {
-            if (_removeAndAddingTask == null)
+            if (_removeAndAddingTask == null || _removeAndAddingTask.Status == TaskStatus.WaitingForActivation)
                 return;
 
             _tokenSource.Cancel();
