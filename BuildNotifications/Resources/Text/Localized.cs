@@ -6,12 +6,12 @@ namespace BuildNotifications.Resources.Text
 {
     internal class Localized : MarkupExtension
     {
-        public string Key { get; set; }
-
         public Localized(string key)
         {
             Key = key;
         }
+
+        public string Key { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {

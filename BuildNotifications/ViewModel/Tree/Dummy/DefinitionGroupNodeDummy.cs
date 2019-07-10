@@ -1,8 +1,8 @@
-﻿using BuildNotifications.Core.Pipeline.Tree;
+﻿using System;
+using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.ViewModel.Tree.Dummy;
 
-namespace BuildNotifications.ViewModel
+namespace BuildNotifications.ViewModel.Tree.Dummy
 {
     internal class DefinitionGroupNodeDummy : BuildTreeNodeDummy, IDefinitionGroupNode
     {
@@ -20,7 +20,7 @@ namespace BuildNotifications.ViewModel
         {
             public bool Equals(IBuildDefinition other)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             public string Id { get; set; }

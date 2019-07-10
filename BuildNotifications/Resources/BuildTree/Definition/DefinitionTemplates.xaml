@@ -6,7 +6,8 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <icons:IconBatch Type="Definition" Margin="{DynamicResource BlockQuarterRight}" />
             <Grid>
-                <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}" UseLayoutRounding="True" />
+                <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}"
+                           UseLayoutRounding="True" />
 
                 <StackPanel Orientation="Horizontal" x:Name="ButtonStackPanel" Opacity="0.01">
                     <Button Content="Add Build" Command="{Binding AddOneBuildCommand}" Height="16" Width="16" />

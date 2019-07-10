@@ -7,13 +7,26 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class SortingDefinitionsViewModel : BaseViewModel
     {
-        private SortingDefinitionViewModel _selectedViewModel;
+        public SortingDefinitionsViewModel(GroupDefinition forGroupDefinition)
+        {
+            ForGroupDefinition = forGroupDefinition;
+            Sortings = new RemoveTrackingObservableCollection<SortingDefinitionViewModel>
+            {
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalDescending),
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalAscending),
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusAscending),
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusDescending)
+            };
+            SelectedViewModel = Sortings.First();
+        }
 
         public GroupDefinition ForGroupDefinition { get; }
 
-        public RemoveTrackingObservableCollection<SortingDefinitionViewModel> Sortings { get; set; }
-
-        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+        public SortingDefinition SelectedSortingDefinition
+        {
+            get => SelectedViewModel.SortingDefinition;
+            set => SelectedViewModel = Sortings.First(x => Equals(x.SortingDefinition, value));
+        }
 
         public SortingDefinitionViewModel SelectedViewModel
         {
@@ -27,23 +40,9 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public SortingDefinition SelectedSortingDefinition
-        {
-            get => SelectedViewModel.SortingDefinition;
-            set => SelectedViewModel = Sortings.First(x => Equals(x.SortingDefinition, value));
-        }
+        public RemoveTrackingObservableCollection<SortingDefinitionViewModel> Sortings { get; set; }
 
-        public SortingDefinitionsViewModel(GroupDefinition forGroupDefinition)
-        {
-            ForGroupDefinition = forGroupDefinition;
-            Sortings = new RemoveTrackingObservableCollection<SortingDefinitionViewModel>
-            {
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalDescending),
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalAscending),
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusAscending),
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusDescending),
-            };
-            SelectedViewModel = Sortings.First();
-        }
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+        private SortingDefinitionViewModel _selectedViewModel;
     }
 }

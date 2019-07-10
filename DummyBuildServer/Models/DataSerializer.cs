@@ -8,9 +8,7 @@ namespace DummyBuildServer.Models
         public ServerConfig Load(string fileName)
         {
             if (!File.Exists(fileName))
-            {
                 return new ServerConfig();
-            }
 
             var json = File.ReadAllText(fileName);
             return JsonConvert.DeserializeObject<ServerConfig>(json);

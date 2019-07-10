@@ -26,7 +26,9 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
-                <Rectangle Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" x:Name="FillRectangle">
+                <Rectangle
+                    Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
+                    x:Name="FillRectangle">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <resourcesBuildTreeBuild:BuildFadeIn />
@@ -34,7 +36,9 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
-                <Rectangle Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" StrokeThickness="1" x:Name="StrokeRectangle" />
+                <Rectangle
+                    Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
+                    StrokeThickness="1" x:Name="StrokeRectangle" />
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
@@ -44,7 +48,8 @@
                         <resourcesBuildTreeBuild:BuildShrink />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                        <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="MiddleRight" TargetScaleX="0" TargetScaleY="1"/>
+                        <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="MiddleRight" TargetScaleX="0"
+                                                            TargetScaleY="1" />
                     </ei:DataTrigger>
                     <i:EventTrigger EventName="MouseEnter">
                         <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />

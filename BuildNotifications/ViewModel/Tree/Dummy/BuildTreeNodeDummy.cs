@@ -10,9 +10,20 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
             _children = new List<IBuildTreeNode>();
         }
 
-        public IEnumerable<IBuildTreeNode> Children => _children;
+        public void AddRange(IEnumerable<IBuildTreeNode> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                AddChild(node);
+            }
+        }
 
-        private readonly List<IBuildTreeNode> _children;
+        public void Clear()
+        {
+            _children.Clear();
+        }
+
+        public IEnumerable<IBuildTreeNode> Children => _children;
 
         public void AddChild(IBuildTreeNode node)
         {
@@ -24,17 +35,6 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
             _children.Remove(node);
         }
 
-        public void AddRange(IEnumerable<IBuildTreeNode> nodes)
-        {
-            foreach (var node in nodes)
-            {
-                AddChild(node);
-            }
-        }
-        
-        public void Clear()
-        {
-            _children.Clear();
-        }
+        private readonly List<IBuildTreeNode> _children;
     }
 }

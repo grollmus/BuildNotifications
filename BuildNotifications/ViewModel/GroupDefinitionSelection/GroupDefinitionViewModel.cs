@@ -7,29 +7,15 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class GroupDefinitionViewModel : BaseViewModel
     {
-        private string _groupByText;
-        private bool _isSelected;
-        public GroupDefinition GroupDefinition { get; }
-
-        public string IconTag { get; set; }
-
-        public IconType IconType => GroupDefinition.ToIconType();
+        public GroupDefinitionViewModel(GroupDefinition groupDefinition)
+        {
+            GroupDefinition = groupDefinition;
+            _groupByText = StringLocalizer.Instance["GroupBy"];
+            SortingDefinitionsViewModel = new SortingDefinitionsViewModel(groupDefinition);
+            SortingDefinitionsViewModel.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
+        }
 
         public bool DisplaySortingSelection => GroupDefinition != GroupDefinition.None && IsSelected;
-
-        public SortingDefinitionsViewModel SortingDefinitionsViewModel { get; set; }
-        
-        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged();
-            }
-        }
 
         public string GroupByText
         {
@@ -41,17 +27,32 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public GroupDefinitionViewModel(GroupDefinition groupDefinition)
+        public GroupDefinition GroupDefinition { get; }
+
+        public string IconTag { get; set; }
+
+        public IconType IconType => GroupDefinition.ToIconType();
+
+        public bool IsSelected
         {
-            GroupDefinition = groupDefinition;
-            _groupByText = StringLocalizer.Instance["GroupBy"];
-            SortingDefinitionsViewModel = new SortingDefinitionsViewModel(groupDefinition);
-            SortingDefinitionsViewModel.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
         }
+
+        public SortingDefinitionsViewModel SortingDefinitionsViewModel { get; set; }
+
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
         private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
         {
             SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }
+
+        private string _groupByText;
+        private bool _isSelected;
     }
 }

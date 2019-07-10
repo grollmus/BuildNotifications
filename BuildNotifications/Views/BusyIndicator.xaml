@@ -13,20 +13,23 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="{DynamicResource Background1}">
 
-        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{DynamicResource NegativeBlockDoubleThicknessFromRight}"
-            ItemsSource="{Binding DummyItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}">
+        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Margin="{DynamicResource NegativeBlockDoubleThicknessFromRight}"
+                      ItemsSource="{Binding DummyItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}" Margin="{DynamicResource BlockHalfThickness}"
-                               Fill="{DynamicResource Foreground2}">
+                        <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}"
+                                   Margin="{DynamicResource BlockHalfThickness}"
+                                   Fill="{DynamicResource Foreground2}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
-                                    <triggerActions:ElementFadeInScaleX Duration="1" Anchor="MiddleLeft"/>
+                                    <triggerActions:ElementFadeInScaleX Duration="1" Anchor="MiddleLeft" />
                                 </i:EventTrigger>
 
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:ElementFadeOutScale Duration="1" Anchor="MiddleRight" TargetScaleX="0" TargetScaleY="1"/>
+                                    <triggerActions:ElementFadeOutScale Duration="1" Anchor="MiddleRight"
+                                                                        TargetScaleX="0" TargetScaleY="1" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </Rectangle>
@@ -45,23 +48,31 @@
             </ItemsControl.ItemsPanel>
 
             <i:Interaction.Triggers>
-                <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="true">
-                    <triggerActions:ElementFadeInBackEase Duration="0.5" Anchor="Center" DoScale="true"/>
+                <ei:DataTrigger
+                    Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
+                    Value="true">
+                    <triggerActions:ElementFadeInBackEase Duration="0.5" Anchor="Center" DoScale="true" />
                 </ei:DataTrigger>
 
-                <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="false">
-                    <triggerActions:ElementFadeOut Duration="0.5" Anchor="Center" DoScale="true"/>
+                <ei:DataTrigger
+                    Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
+                    Value="false">
+                    <triggerActions:ElementFadeOut Duration="0.5" Anchor="Center" DoScale="true" />
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
         </ItemsControl>
 
         <i:Interaction.Triggers>
-            <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="true">
-                <triggerActions:ElementFadeInBackEase Duration="2.5" Anchor="Center" DoScale="false"/>
+            <ei:DataTrigger
+                Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
+                Value="true">
+                <triggerActions:ElementFadeInBackEase Duration="2.5" Anchor="Center" DoScale="false" />
             </ei:DataTrigger>
 
-            <ei:DataTrigger Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}" Value="false">
-                <triggerActions:ElementFadeOut Duration="0.5" Anchor="Center" DoScale="false"/>
+            <ei:DataTrigger
+                Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
+                Value="false">
+                <triggerActions:ElementFadeOut Duration="0.5" Anchor="Center" DoScale="false" />
             </ei:DataTrigger>
         </i:Interaction.Triggers>
     </Grid>

@@ -8,17 +8,17 @@ namespace BuildNotifications.Resources.Window
     {
         public static int GetCurrentDPI()
         {
-            return (int)typeof(SystemParameters).GetProperty("Dpi", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null, null);
+            return (int) typeof(SystemParameters).GetProperty("Dpi", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null, null);
         }
 
         public static double GetCurrentDPIScaleFactor()
         {
-            return (double)SystemHelper.GetCurrentDPI() / 96;
+            return (double) GetCurrentDPI() / 96;
         }
 
         public static Point GetMouseScreenPosition()
         {
-            System.Drawing.Point point = Control.MousePosition;
+            var point = Control.MousePosition;
             return new Point(point.X, point.Y);
         }
     }

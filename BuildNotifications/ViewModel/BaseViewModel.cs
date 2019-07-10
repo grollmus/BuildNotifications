@@ -7,10 +7,6 @@ namespace BuildNotifications.ViewModel
 {
     public class BaseViewModel : INotifyPropertyChanged, IRemoveTracking
     {
-        private bool _isBusy;
-        private bool _isRemoving;
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public bool IsBusy
         {
             get => _isBusy;
@@ -27,6 +23,8 @@ namespace BuildNotifications.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public bool IsRemoving
         {
             get => _isRemoving;
@@ -36,5 +34,8 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool _isBusy;
+        private bool _isRemoving;
     }
 }

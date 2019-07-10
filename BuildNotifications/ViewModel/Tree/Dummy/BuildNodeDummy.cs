@@ -7,18 +7,16 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
 {
     internal class BuildNodeDummy : BuildTreeNodeDummy, IBuildNode
     {
-        public IBuild Build { get; }
-
         public BuildNodeDummy(BuildStatus initialStatus = BuildStatus.Succeeded)
         {
             Build = new BuildDummy(initialStatus);
         }
+
+        public IBuild Build { get; }
     }
 
     internal class BuildDummy : IBuild
     {
-        private static Random _rnd = new Random();
-
         public BuildDummy(BuildStatus initialStatus)
         {
             Status = initialStatus;
@@ -33,9 +31,11 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
         public IBuildDefinition Definition { get; }
         public string Id { get; }
         public DateTime? LastChangedTime { get; }
+        public int Progress { get; }
         public DateTime? QueueTime { get; }
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
         public BuildStatus Status { get; set; }
+        private static Random _rnd = new Random();
     }
 }

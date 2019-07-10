@@ -9,11 +9,11 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 {
     internal class BuildTreeNodeMultiBindingToBrushConverter : IMultiValueConverter
     {
-        public static BuildTreeNodeMultiBindingToBrushConverter Instance { get; } = new BuildTreeNodeMultiBindingToBrushConverter();
-
         private BuildTreeNodeMultiBindingToBrushConverter()
         {
         }
+
+        public static BuildTreeNodeMultiBindingToBrushConverter Instance { get; } = new BuildTreeNodeMultiBindingToBrushConverter();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

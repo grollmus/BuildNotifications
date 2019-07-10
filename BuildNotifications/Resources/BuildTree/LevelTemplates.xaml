@@ -53,7 +53,7 @@
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
                        HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
 
-            <ItemsControl ItemsSource="{Binding Children}" 
+            <ItemsControl ItemsSource="{Binding Children}"
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -106,8 +106,9 @@
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0" VirtualizingStackPanel.IsVirtualizing="True"
-                                        IsItemsHost="True" />
+                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0"
+                                                          VirtualizingStackPanel.IsVirtualizing="True"
+                                                          IsItemsHost="True" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
@@ -117,7 +118,7 @@
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
-                   Width="{DynamicResource BlockTwentyEight}">
+                                     Width="{DynamicResource BlockTwentyEight}">
             <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
                 <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
@@ -127,7 +128,7 @@
             <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True"  />
+                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 

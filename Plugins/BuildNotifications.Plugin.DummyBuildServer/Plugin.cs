@@ -13,19 +13,13 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         private Connection GetConnection(IReadOnlyDictionary<string, string> data)
         {
             if (!data.TryGetValue(Constants.Connection.Port, out var portString))
-            {
                 return null;
-            }
 
             if (!int.TryParse(portString, out var port))
-            {
                 return null;
-            }
 
             if (Connections.TryGetValue(port, out var connection))
-            {
                 return connection;
-            }
 
             var socket = new NamedPipeClientStream(".", $"BuildNotifications.DummyBuildServer.{port}", PipeDirection.InOut);
             socket.Connect();

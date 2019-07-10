@@ -23,27 +23,22 @@ namespace BuildNotifications.ViewModel.Tree
             return buildTree;
         }
 
-        private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)
+        private static BuildTreeNodeViewModel AsViewModel(IBuildTreeNode node, GroupDefinition groupDefinition)
         {
-            node.MaxTreeDepth = maxDepth;
-            foreach (var child in node.Children)
+            switch (groupDefinition)
             {
-                SetMaxDepths(child, maxDepth);
+                case GroupDefinition.Branch:
+                    return new BranchGroupNodeViewModel((IBranchGroupNode) node);
+                case GroupDefinition.BuildDefinition:
+                    return new DefinitionGroupNodeViewModel((IDefinitionGroupNode) node);
+                case GroupDefinition.Source:
+                    return new SourceGroupNodeViewModel((ISourceGroupNode) node);
+                case GroupDefinition.Status:
+                    return new StatusGroupNodeViewModel(node);
+                case GroupDefinition.None:
+                default:
+                    return new BuildNodeViewModel((IBuildNode) node) {IsLargeSize = false};
             }
-        }
-
-        private static int SetCurrentDepths(BuildTreeNodeViewModel node, int currentDepth = 0)
-        {
-            node.CurrentTreeLevelDepth = currentDepth;
-
-            var maxDepth = currentDepth;
-            foreach (var child in node.Children)
-            {
-                var deepestChildDepth = SetCurrentDepths(child, currentDepth + 1);
-                maxDepth = deepestChildDepth;
-            }
-
-            return maxDepth;
         }
 
         private IEnumerable<BuildTreeNodeViewModel> CreateChildren(IEnumerable<IBuildTreeNode> children, IReadOnlyList<GroupDefinition> groups, int groupIndex = 0)
@@ -69,21 +64,26 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private static BuildTreeNodeViewModel AsViewModel(IBuildTreeNode node, GroupDefinition groupDefinition)
+        private static int SetCurrentDepths(BuildTreeNodeViewModel node, int currentDepth = 0)
         {
-            switch (groupDefinition)
+            node.CurrentTreeLevelDepth = currentDepth;
+
+            var maxDepth = currentDepth;
+            foreach (var child in node.Children)
             {
-                case GroupDefinition.Branch:
-                    return new BranchGroupNodeViewModel((IBranchGroupNode) node);
-                case GroupDefinition.BuildDefinition:
-                    return new DefinitionGroupNodeViewModel((IDefinitionGroupNode) node);
-                case GroupDefinition.Source:
-                    return new SourceGroupNodeViewModel((ISourceGroupNode) node);
-                case GroupDefinition.Status:
-                    return new StatusGroupNodeViewModel(node);
-                case GroupDefinition.None:
-                default:
-                    return new BuildNodeViewModel((IBuildNode) node) { IsLargeSize = false };
+                var deepestChildDepth = SetCurrentDepths(child, currentDepth + 1);
+                maxDepth = deepestChildDepth;
+            }
+
+            return maxDepth;
+        }
+
+        private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)
+        {
+            node.MaxTreeDepth = maxDepth;
+            foreach (var child in node.Children)
+            {
+                SetMaxDepths(child, maxDepth);
             }
         }
     }

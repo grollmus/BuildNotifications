@@ -5,7 +5,7 @@ namespace BuildNotifications.Core.Config
     /// <summary>
     /// Data describing a project.
     /// </summary>
-    internal interface IProjectConfiguration
+    public interface IProjectConfiguration
     {
         /// <summary>
         /// List of branches to never load information for.

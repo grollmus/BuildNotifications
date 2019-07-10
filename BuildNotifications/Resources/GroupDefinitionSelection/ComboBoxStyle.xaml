@@ -7,7 +7,7 @@
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     mc:Ignorable="d">
-    
+
 
     <Style x:Key="ComboBoxReadonlyToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -18,14 +18,16 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border Name="border" BorderThickness="1" Padding="0,0" BorderBrush="{DynamicResource Background3}" CornerRadius="0" Background="{TemplateBinding Background}">
+                    <Border Name="border" BorderThickness="1" Padding="0,0" BorderBrush="{DynamicResource Background3}"
+                            CornerRadius="0" Background="{TemplateBinding Background}">
                         <Border.RenderTransform>
                             <SkewTransform AngleX="-35" />
                         </Border.RenderTransform>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground1HalfTransparency}" TargetName="border" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground1HalfTransparency}"
+                                    TargetName="border" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="BorderBrush" Value="{DynamicResource Foreground2}" TargetName="border" />
@@ -36,7 +38,7 @@
         </Setter>
     </Style>
 
-    
+
     <Style x:Key="GroupDefinitionSelectionComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="Foreground" Value="{DynamicResource Background3}" />
         <Setter Property="Background" Value="{DynamicResource Background1}" />
@@ -64,9 +66,9 @@
                                PlacementTarget="{Binding ElementName=ToggleButton}"
                                Placement="Relative">
                             <Grid>
-                            <ItemsPresenter x:Name="ItemsPresenter"
-                                            KeyboardNavigation.DirectionalNavigation="Contained"
-                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ItemsPresenter x:Name="ItemsPresenter"
+                                                KeyboardNavigation.DirectionalNavigation="Contained"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>
                         </Popup>
                         <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
@@ -79,25 +81,30 @@
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 
                             <i:Interaction.Triggers>
-                                <ei:DataTrigger Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Value="false">
+                                <ei:DataTrigger
+                                    Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Value="false">
                                     <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
                                 </ei:DataTrigger>
-                                <ei:DataTrigger Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                <ei:DataTrigger
+                                    Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Value="True">
                                     <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
 
                         </ContentPresenter>
                         <ToggleButton BorderBrush="{TemplateBinding BorderBrush}"
-                                      
+
                                       Width="{TemplateBinding MinWidth}" Cursor="Hand"
                                       Height="{TemplateBinding Height}" x:Name="ToggleButton"
                                       IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                       Style="{StaticResource ComboBoxReadonlyToggleButton}">
-                            
+
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="True">
-                                    <triggerActions:ElementFadeOutScale Duration="0.3" Anchor="Center" TargetScaleX="1" TargetScaleY="1"/>
+                                    <triggerActions:ElementFadeOutScale Duration="0.3" Anchor="Center" TargetScaleX="1"
+                                                                        TargetScaleY="1" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ToggleButton>

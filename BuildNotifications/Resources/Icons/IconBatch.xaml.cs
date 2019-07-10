@@ -9,8 +9,10 @@ namespace BuildNotifications.Resources.Icons
     /// </summary>
     public partial class IconBatch : UserControl
     {
-        public static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register(
-            "Foreground", typeof(Brush), typeof(IconBatch), new PropertyMetadata(default(Brush)));
+        public IconBatch()
+        {
+            InitializeComponent();
+        }
 
         public Brush Foreground
         {
@@ -18,18 +20,16 @@ namespace BuildNotifications.Resources.Icons
             set => SetValue(ForegroundProperty, value);
         }
 
-        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
-            "Type", typeof(IconType), typeof(IconBatch), new PropertyMetadata(default(IconType)));
-
         public IconType Type
         {
             get => (IconType) GetValue(TypeProperty);
             set => SetValue(TypeProperty, value);
         }
 
-        public IconBatch()
-        {
-            InitializeComponent();
-        }
+        public static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register(
+            "Foreground", typeof(Brush), typeof(IconBatch), new PropertyMetadata(default(Brush)));
+
+        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
+            "Type", typeof(IconType), typeof(IconBatch), new PropertyMetadata(default(IconType)));
     }
 }

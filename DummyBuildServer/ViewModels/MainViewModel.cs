@@ -61,6 +61,11 @@ namespace DummyBuildServer.ViewModels
             SaveData();
         }
 
+        public void RemoveBuild(Build build)
+        {
+            _server.Builds.Remove(build);
+        }
+
         public void RemoveDefinition(BuildDefinition buildDefinition)
         {
             _config.BuildDefinitions.Remove(buildDefinition);
@@ -106,10 +111,5 @@ namespace DummyBuildServer.ViewModels
         private readonly DataSerializer _serializer;
         private readonly ServerConfig _config;
         private readonly Server _server;
-
-        public void RemoveBuild(Build build)
-        {
-            _server.Builds.Remove(build);
-        }
     }
 }

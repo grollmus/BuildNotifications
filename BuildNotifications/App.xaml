@@ -6,17 +6,16 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Global/Sizes.xaml"/>
-                <ResourceDictionary Source="Resources/Global/DarkTheme.xaml"/>
-                <ResourceDictionary Source="Resources/Global/WindowStyle.xaml"/>
-                <ResourceDictionary Source="Resources/Global/TextBoxStyles.xaml"/>
-                <ResourceDictionary Source="Resources/Global/IconBatchStyles.xaml"/>
-                <ResourceDictionary Source="Resources/Global/TextBlockStyles.xaml"/>
+                <ResourceDictionary Source="Resources/Global/Sizes.xaml" />
+                <ResourceDictionary Source="Resources/Global/DarkTheme.xaml" />
+                <ResourceDictionary Source="Resources/Global/WindowStyle.xaml" />
+                <ResourceDictionary Source="Resources/Global/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/IconBatchStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/TextBlockStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
 
-            <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}">
-            </Style>
+            <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

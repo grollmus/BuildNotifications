@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Microsoft.Win32;
+using Button = System.Windows.Controls.Button;
+using MouseEventHandler = System.Windows.Input.MouseEventHandler;
 
 namespace BuildNotifications.Resources.Window
 {
     // Source https://github.com/NikolayVasilev/wpf-custom-window
     public partial class CustomWindow : System.Windows.Window
     {
-        private bool _isMouseButtonDown;
-        private bool _isManualDrag;
-        private Point _mouseDownPosition;
-        private Point _positionBeforeDrag;
-        private Point _previousScreenBounds;
+        static CustomWindow()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomWindow),
+                new FrameworkPropertyMetadata(typeof(CustomWindow)));
+        }
 
-        private Grid _layoutRoot;
-        private Button _minimizeButton;
-        private Button _maximizeButton;
-        private Button _restoreButton;
-        private Button _closeButton;
-        private Grid _headerBar;
-        private double _heightBeforeMaximize;
-        private double _widthBeforeMaximize;
-        private WindowState _previousState;
-        private ContentPresenter _rightToTitleContentPresenter;
-        private ContentPresenter _leftToButtonsContentPresenter;
-
-        public static readonly DependencyProperty RightToTitleContentProperty = DependencyProperty.Register(
-            "RightToTitleContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object), PropertyChangedCallback));
-
-        public static readonly DependencyProperty LeftToButtonsContentProperty = DependencyProperty.Register(
-            "LeftToButtonsContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object)));
+        protected CustomWindow()
+        {
+            var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            SizeChanged += OnSizeChanged;
+            StateChanged += OnStateChanged;
+            Loaded += OnLoaded;
+            var workingArea = screen.WorkingArea;
+            MaxHeight = (workingArea.Height + 16) / currentDpiScaleFactor;
+            SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
+            AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(OnMouseButtonUp), true);
+            AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove));
+        }
 
         public object LeftToButtonsContent
         {
@@ -44,49 +43,6 @@ namespace BuildNotifications.Resources.Window
         {
             get => GetValue(RightToTitleContentProperty);
             set => SetValue(RightToTitleContentProperty, value);
-        }
-
-        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(d is CustomWindow customWindow))
-                return;
-
-            switch (e.Property.Name)
-            {
-                case nameof(RightToTitleContent):
-                    if (customWindow._rightToTitleContentPresenter != null)
-                        customWindow._rightToTitleContentPresenter.Content = e.NewValue;
-                    break;
-                case nameof(LeftToButtonsContent):
-                    if (customWindow._leftToButtonsContentPresenter != null)
-                        customWindow._leftToButtonsContentPresenter.Content = e.NewValue;
-                    break;
-            }
-        }
-
-        static CustomWindow()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomWindow),
-                new FrameworkPropertyMetadata(typeof(CustomWindow)));
-        }
-
-        protected CustomWindow()
-        {
-            var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
-            var screen = System.Windows.Forms.Screen.FromHandle((new WindowInteropHelper(this)).Handle);
-            SizeChanged += OnSizeChanged;
-            StateChanged += OnStateChanged;
-            Loaded += OnLoaded;
-            var workingArea = screen.WorkingArea;
-            MaxHeight = (workingArea.Height + 16) / currentDpiScaleFactor;
-            SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
-            AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(OnMouseButtonUp), true);
-            AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove));
-        }
-
-        private T GetRequiredTemplateChild<T>(string childName) where T : DependencyObject
-        {
-            return (T) GetTemplateChild(childName);
         }
 
         public override void OnApplyTemplate()
@@ -127,12 +83,30 @@ namespace BuildNotifications.Resources.Window
             base.OnApplyTemplate();
         }
 
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private T GetRequiredTemplateChild<T>(string childName) where T : DependencyObject
+        {
+            return (T) GetTemplateChild(childName);
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleWindowState();
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
         private void OnHeaderBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (_isManualDrag)
-            {
                 return;
-            }
 
             var position = e.GetPosition(this);
             const int headerBarHeight = 36;
@@ -141,13 +115,9 @@ namespace BuildNotifications.Resources.Window
             if (position.X - _layoutRoot.Margin.Left <= leftmostClickableOffset && position.Y <= headerBarHeight)
             {
                 if (e.ClickCount != 2)
-                {
                     OpenSystemContextMenu(e);
-                }
                 else
-                {
                     Close();
-                }
 
                 e.Handled = true;
                 return;
@@ -178,25 +148,6 @@ namespace BuildNotifications.Resources.Window
             }
         }
 
-        private void ToggleWindowState() => WindowState = WindowState != WindowState.Maximized ? WindowState.Maximized : WindowState.Normal;
-
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e) => ToggleWindowState();
-
-        private void RestoreButton_Click(object sender, RoutedEventArgs e) => ToggleWindowState();
-
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
-
-        private void SetMaximizeButtonsVisibility(Visibility maximizeButtonVisibility, Visibility reverseMaximizeButtonVisiility)
-        {
-            if (_maximizeButton != null)
-                _maximizeButton.Visibility = maximizeButtonVisibility;
-
-            if (_restoreButton != null)
-                _restoreButton.Visibility = reverseMaximizeButtonVisiility;
-        }
-
         private void OpenSystemContextMenu(MouseButtonEventArgs e)
         {
             var position = e.GetPosition(this);
@@ -206,7 +157,7 @@ namespace BuildNotifications.Resources.Window
             if (position.Y >= num)
                 return;
 
-            var handle = (new WindowInteropHelper(this)).Handle;
+            var handle = new WindowInteropHelper(this).Handle;
             var systemMenu = NativeUtils.GetSystemMenu(handle, false);
 
             var uEnable = WindowState != WindowState.Maximized ? (uint) 0 : 1;
@@ -218,5 +169,65 @@ namespace BuildNotifications.Resources.Window
 
             NativeUtils.PostMessage(handle, 274, new IntPtr(num1), IntPtr.Zero);
         }
+
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is CustomWindow customWindow))
+                return;
+
+            switch (e.Property.Name)
+            {
+                case nameof(RightToTitleContent):
+                    if (customWindow._rightToTitleContentPresenter != null)
+                        customWindow._rightToTitleContentPresenter.Content = e.NewValue;
+                    break;
+                case nameof(LeftToButtonsContent):
+                    if (customWindow._leftToButtonsContentPresenter != null)
+                        customWindow._leftToButtonsContentPresenter.Content = e.NewValue;
+                    break;
+            }
+        }
+
+        private void RestoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleWindowState();
+        }
+
+        private void SetMaximizeButtonsVisibility(Visibility maximizeButtonVisibility, Visibility reverseMaximizeButtonVisiility)
+        {
+            if (_maximizeButton != null)
+                _maximizeButton.Visibility = maximizeButtonVisibility;
+
+            if (_restoreButton != null)
+                _restoreButton.Visibility = reverseMaximizeButtonVisiility;
+        }
+
+        private void ToggleWindowState()
+        {
+            WindowState = WindowState != WindowState.Maximized ? WindowState.Maximized : WindowState.Normal;
+        }
+
+        private bool _isMouseButtonDown;
+        private bool _isManualDrag;
+        private Point _mouseDownPosition;
+        private Point _positionBeforeDrag;
+        private Point _previousScreenBounds;
+
+        private Grid _layoutRoot;
+        private Button _minimizeButton;
+        private Button _maximizeButton;
+        private Button _restoreButton;
+        private Button _closeButton;
+        private Grid _headerBar;
+        private double _widthBeforeMaximize;
+        private WindowState _previousState;
+        private ContentPresenter _rightToTitleContentPresenter;
+        private ContentPresenter _leftToButtonsContentPresenter;
+
+        public static readonly DependencyProperty RightToTitleContentProperty = DependencyProperty.Register(
+            "RightToTitleContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default, PropertyChangedCallback));
+
+        public static readonly DependencyProperty LeftToButtonsContentProperty = DependencyProperty.Register(
+            "LeftToButtonsContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object)));
     }
 }

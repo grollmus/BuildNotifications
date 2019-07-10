@@ -18,7 +18,7 @@
 
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <animation:AnimatedWrapPanel Orientation="Horizontal" VerticalAlignment="Center" AnimationDuration="1"/>
+                <animation:AnimatedWrapPanel Orientation="Horizontal" VerticalAlignment="Center" AnimationDuration="1" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>

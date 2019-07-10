@@ -8,14 +8,14 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
     internal class ElementFadeOutScale : TweenTriggerAction<UIElement>
     {
-        public double TargetScaleX { get; set; }
-
-        public double TargetScaleY { get; set; }
-
         public ElementFadeOutScale()
         {
             Anchor = Anchor.MiddleLeft;
         }
+
+        public double TargetScaleX { get; set; }
+
+        public double TargetScaleY { get; set; }
 
         protected override void Invoke(object parameter)
         {

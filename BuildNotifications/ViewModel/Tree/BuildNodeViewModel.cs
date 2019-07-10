@@ -8,19 +8,15 @@ namespace BuildNotifications.ViewModel.Tree
 {
     internal class BuildNodeViewModel : BuildTreeNodeViewModel
     {
-        private bool _isLargeSize;
-        private bool _shouldBeLarge;
-        private bool _isHighlighted;
-        public IBuildNode Node { get; }
-
-        public bool IsLargeSize
+        public BuildNodeViewModel(IBuildNode node) : base(node)
         {
-            get => _isLargeSize;
-            set
-            {
-                _isLargeSize = value;
-                OnPropertyChanged();
-            }
+            Node = node;
+            MouseEnterCommand = new DelegateCommand(OnMouseEnter);
+            MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
+            MouseDownCommand = new DelegateCommand(OnMouseDown);
+            MouseUpCommand = new DelegateCommand(OnMouseUp);
+
+            Status = Node?.Build?.Status ?? BuildStatus.None;
         }
 
         public bool IsHighlighted
@@ -33,16 +29,26 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private BuildStatus _buildStatus;
+        public bool IsLargeSize
+        {
+            get => _isLargeSize;
+            set
+            {
+                _isLargeSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand MouseDownCommand { get; set; }
 
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
-        public ICommand MouseDownCommand { get; set; }
         public ICommand MouseUpCommand { get; set; }
+        public IBuildNode Node { get; }
 
         private BuildStatus Status
         {
-            get { return _buildStatus; }
+            get => _buildStatus;
             set
             {
                 _buildStatus = value;
@@ -50,15 +56,19 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        public BuildNodeViewModel(IBuildNode node) : base(node)
+        protected override BuildStatus CalculateBuildStatus()
         {
-            Node = node;
-            MouseEnterCommand = new DelegateCommand(OnMouseEnter);
-            MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            MouseDownCommand = new DelegateCommand(OnMouseDown);
-            MouseUpCommand = new DelegateCommand(OnMouseUp);
+            return Status;
+        }
 
-            Status = Node?.Build?.Status ?? BuildStatus.None;
+        protected override string CalculateDisplayName()
+        {
+            return "Build. Status: " + Status;
+        }
+
+        private void OnMouseDown(object obj)
+        {
+            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
         }
 
         private void OnMouseEnter(object obj)
@@ -72,16 +82,14 @@ namespace BuildNotifications.ViewModel.Tree
             IsLargeSize = _shouldBeLarge;
         }
 
-        private void OnMouseDown(object obj)
-        {
-            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
-        }
-
         private void OnMouseUp(object obj)
         {
         }
 
-        protected override BuildStatus CalculateBuildStatus() => Status;
-        protected override string CalculateDisplayName() => "Build. Status: " + Status;
+        private bool _isLargeSize;
+        private bool _shouldBeLarge;
+        private bool _isHighlighted;
+
+        private BuildStatus _buildStatus;
     }
 }

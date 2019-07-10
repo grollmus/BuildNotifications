@@ -39,9 +39,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             foreach (var build in list)
             {
                 if (build.Definition.Equals(definition))
-                {
                     yield return build;
-                }
             }
         }
 
@@ -54,9 +52,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             foreach (var build in list)
             {
                 if (!build.LastChangedTime.HasValue || build.LastChangedTime > date)
-                {
                     yield return build;
-                }
             }
         }
 

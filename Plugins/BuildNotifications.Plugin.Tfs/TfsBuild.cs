@@ -66,9 +66,7 @@ namespace BuildNotifications.Plugin.Tfs
             get
             {
                 if (!_nativeStatus.HasValue)
-                {
                     return BuildStatus.None;
-                }
 
                 switch (_nativeStatus.Value)
                 {
@@ -82,9 +80,7 @@ namespace BuildNotifications.Plugin.Tfs
                 }
 
                 if (!_nativeResult.HasValue)
-                {
                     return BuildStatus.Pending;
-                }
 
                 switch (_nativeResult.Value)
                 {

@@ -94,9 +94,7 @@ namespace DummyBuildServer.Models
                 var args = split.Length > 1 ? split[1] : string.Empty;
 
                 if (_commandMap.TryGetValue(cmd, out var action))
-                {
                     action(args, responseStream);
-                }
             }
         }
 

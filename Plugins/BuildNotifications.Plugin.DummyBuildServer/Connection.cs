@@ -32,9 +32,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         private string Prepare(string query)
         {
             if (!query.EndsWith(Constants.Queries.Terminator))
-            {
                 query += Constants.Queries.Terminator;
-            }
 
             return query;
         }

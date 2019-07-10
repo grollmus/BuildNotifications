@@ -8,11 +8,11 @@ namespace BuildNotifications.Resources.Text
 {
     internal class EnumNameToLocalizedTextConverter : IValueConverter
     {
-        public static EnumNameToLocalizedTextConverter Instance { get; } = new EnumNameToLocalizedTextConverter();
-
         private EnumNameToLocalizedTextConverter()
         {
         }
+
+        public static EnumNameToLocalizedTextConverter Instance { get; } = new EnumNameToLocalizedTextConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

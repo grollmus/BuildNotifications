@@ -21,9 +21,7 @@ namespace BuildNotifications.Core.Plugin.Options
         public void Add(IOption option)
         {
             if (option == null)
-            {
                 throw new ArgumentNullException(nameof(option));
-            }
 
             _options.Add(option);
         }

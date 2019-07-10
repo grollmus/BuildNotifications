@@ -4,7 +4,7 @@ using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Core.Config
 {
-    internal interface IConfiguration
+    public interface IConfiguration
     {
         /// <summary>
         /// How many builds initially shall be loaded.
@@ -37,6 +37,11 @@ namespace BuildNotifications.Core.Config
         BuildNotificationMode FailedBuildNotifyConfig { get; }
 
         /// <summary>
+        /// Defines how builds should be grouped.
+        /// </summary>
+        IBuildTreeGroupDefinition GroupDefinition { get; }
+
+        /// <summary>
         /// List of all configured projects.
         /// </summary>
         IList<IProjectConfiguration> Projects { get; }
@@ -45,11 +50,6 @@ namespace BuildNotifications.Core.Config
         /// For which succeeded builds to receive notifications for
         /// </summary>
         BuildNotificationMode SucceededBuildNotifyConfig { get; }
-
-        /// <summary>
-        /// Defines how builds should be grouped.
-        /// </summary>
-        IBuildTreeGroupDefinition GroupDefinition { get; }
 
         /// <summary>
         /// Seconds between each update cycle.

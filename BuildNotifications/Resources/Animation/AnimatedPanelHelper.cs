@@ -10,18 +10,6 @@ namespace BuildNotifications.Resources.Animation
 {
     internal class AnimatedPanelHelper
     {
-        public Dictionary<UIElement, Point> StoreOldPositions(Panel panel)
-        {
-            var positions = new Dictionary<UIElement, Point>();
-            foreach (UIElement child in panel.Children)
-            {
-                var oldPos = child.TranslatePoint(new Point(0, 0), panel);
-                positions.Add(child, oldPos);
-            }
-
-            return positions;
-        }
-
         public void AnimateToNewPositions(Dictionary<UIElement, Point> positions, Panel panel, double animationDuration)
         {
             var origin = new Point(0, 0);
@@ -38,9 +26,7 @@ namespace BuildNotifications.Resources.Animation
                     continue;
 
                 if (oldPos.Equals(origin))
-                {
                     oldPos = new Point(newPos.X + 30, newPos.Y);
-                }
 
                 CreateTween(oldPos, newPos, child, animationDuration, globalTweenHandler);
             }
@@ -80,6 +66,18 @@ namespace BuildNotifications.Resources.Animation
                 .Ease(Easing.ExpoEaseOut);
 
             tweenHandler.Add(new SequenceOfTarget(child, xTween, yTween));
+        }
+
+        public Dictionary<UIElement, Point> StoreOldPositions(Panel panel)
+        {
+            var positions = new Dictionary<UIElement, Point>();
+            foreach (UIElement child in panel.Children)
+            {
+                var oldPos = child.TranslatePoint(new Point(0, 0), panel);
+                positions.Add(child, oldPos);
+            }
+
+            return positions;
         }
     }
 }

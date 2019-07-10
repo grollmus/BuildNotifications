@@ -40,7 +40,8 @@
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Foreground1}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1HalfTransparency}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1HalfTransparency}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Blue}" />
@@ -80,14 +81,12 @@
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                             <icons:IconBatch Type="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}"
                                              Width="{TemplateBinding Width}" Height="{TemplateBinding Width}"
-                                              x:Name="Icon" Opacity="0"
+                                             x:Name="Icon" Opacity="0"
                                              Foreground="{TemplateBinding Foreground}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-
-                        </Trigger>
+                        <Trigger Property="IsDefaulted" Value="true" />
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Opacity" TargetName="Icon" Value="1" />
                         </Trigger>

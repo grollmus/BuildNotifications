@@ -28,9 +28,7 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)
-            {
                 LogTo.Warn($"Failed to find build plugin for type {typeName}");
-            }
 
             return plugin;
         }
@@ -40,9 +38,7 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)
-            {
                 LogTo.Warn($"Failed to find source control plugin for type {typeName}");
-            }
 
             return plugin;
         }

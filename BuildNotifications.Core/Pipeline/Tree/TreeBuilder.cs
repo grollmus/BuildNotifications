@@ -25,9 +25,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 var parent = ConstructNode(group, build);
 
                 if (node != null)
-                {
                     parent.AddChild(node);
-                }
 
                 node = parent;
             }
@@ -55,9 +53,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
             var target = tree.Children.FirstOrDefault(c => c == path);
             if (target == null)
-            {
                 tree.AddChild(path);
-            }
             else
             {
                 foreach (var child in path.Children)
@@ -76,9 +72,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             {
                 var path = BuildPath(build);
                 if (path == null)
-                {
                     continue;
-                }
 
                 Merge(tree, path);
             }

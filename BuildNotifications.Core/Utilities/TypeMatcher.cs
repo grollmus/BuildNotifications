@@ -40,14 +40,10 @@ namespace BuildNotifications.Core.Utilities
             private bool Equals(TypeName other)
             {
                 if (!_fullTypeName.Equals(other._fullTypeName, StringComparison.OrdinalIgnoreCase))
-                {
                     return false;
-                }
 
                 if (string.IsNullOrEmpty(_assemblyName))
-                {
                     return true;
-                }
 
                 return _assemblyName.Equals(other._assemblyName, StringComparison.OrdinalIgnoreCase);
             }

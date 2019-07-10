@@ -10,14 +10,12 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 {
     internal class BuildStatusToBrushConverter : IValueConverter
     {
-        public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
-
         private BuildStatusToBrushConverter()
         {
         }
 
-        private const string DefaultBrushKey = "Foreground1";
-        
+        public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
+
         public Brush Convert(BuildStatus status)
         {
             switch (status)
@@ -38,13 +36,17 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                     return GetBrush("Background3");
             }
         }
-        
+
         public Brush Convert(BuildTreeNodeViewModel node)
         {
             if (node.ShouldColorByStatus)
                 return Convert(node.BuildStatus);
-            else
-                return GetBrush(DefaultBrushKey);
+            return GetBrush(DefaultBrushKey);
+        }
+
+        private Brush GetBrush(string key)
+        {
+            return Application.Current.FindResource(key) as Brush;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -60,14 +62,11 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             }
         }
 
-        private Brush GetBrush(string key)
-        {
-            return Application.Current.FindResource(key) as Brush;
-        }
-
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
+        private const string DefaultBrushKey = "Foreground1";
     }
 }

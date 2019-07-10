@@ -25,9 +25,7 @@ namespace BuildNotifications.Core.Plugin
             {
                 var defaultAssembly = Default.LoadFromAssemblyName(assemblyName);
                 if (defaultAssembly != null)
-                {
                     return defaultAssembly;
-                }
             }
             catch
             {
@@ -37,9 +35,7 @@ namespace BuildNotifications.Core.Plugin
             var fileName = assemblyName.Name + ".dll";
             var path = Path.Combine(_folder, fileName);
             if (File.Exists(path))
-            {
                 return LoadFromAssemblyPath(path);
-            }
 
             return null;
         }
@@ -52,6 +48,9 @@ namespace BuildNotifications.Core.Plugin
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
             var fullPath = Path.GetFullPath(folder);
+            if (!Directory.Exists(fullPath))
+                yield break;
+
             var pluginFolders = Directory.GetDirectories(fullPath);
 
             foreach (var pluginFolder in pluginFolders)
@@ -63,9 +62,7 @@ namespace BuildNotifications.Core.Plugin
                 foreach (var dll in files)
                 {
                     if (!Path.GetFileName(dll).Contains("plugin", StringComparison.OrdinalIgnoreCase))
-                    {
                         continue;
-                    }
 
                     Assembly assembly;
                     try

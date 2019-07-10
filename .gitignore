@@ -347,3 +347,4 @@ MigrationBackup/
 /DummyFrontEnd/plugins/tfs
 /DummyFrontEnd/config.json
 /DummyFrontEnd/plugins/dummy
+/BuildNotifications/plugins

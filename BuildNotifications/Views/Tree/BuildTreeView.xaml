@@ -1,27 +1,29 @@
 ﻿<UserControl x:Class="BuildNotifications.Views.Tree.BuildTreeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModelsTree="clr-namespace:BuildNotifications.ViewModel.Tree"
              xmlns:resourcesBuildTree="clr-namespace:BuildNotifications.Resources.BuildTree"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type={x:Type viewModelsTree:BuildTreeViewModel}}">
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModelsTree:BuildTreeViewModel}}">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Resources/BuildTree/BuildTreeResources.xaml"/>
+                <ResourceDictionary Source="../../Resources/BuildTree/BuildTreeResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Children}" ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
+        <ItemsControl ItemsSource="{Binding Children}"
+                      ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedWrapPanel Orientation="Vertical" VirtualizingStackPanel.IsVirtualizing="True"/>
+                    <animation:AnimatedWrapPanel Orientation="Vertical" VirtualizingStackPanel.IsVirtualizing="True" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

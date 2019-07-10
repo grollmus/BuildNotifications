@@ -11,10 +11,6 @@ namespace BuildNotifications.ViewModel.Utils
 {
     public class RemoveTrackingObservableCollection<T> : IList<T>, INotifyCollectionChanged, INotifyPropertyChanged where T : IRemoveTracking
     {
-        private readonly ObservableCollection<T> _list;
-
-        public TimeSpan RemoveDelay { get; set; }
-
         public RemoveTrackingObservableCollection() : this(TimeSpan.FromSeconds(0.15), Enumerable.Empty<T>())
         {
         }
@@ -28,6 +24,67 @@ namespace BuildNotifications.ViewModel.Utils
             RemoveDelay = removeDelay;
             _list = new ObservableCollection<T>(initialValues);
             _list.CollectionChanged += (sender, args) => CollectionChanged?.Invoke(sender, args);
+        }
+
+        public TimeSpan RemoveDelay { get; set; }
+
+        public void DontSort()
+        {
+            _sortFunction = null;
+            Sort();
+        }
+
+        public void InvokeSort()
+        {
+            Sort();
+        }
+
+        public void Sort<TKey>(Func<T, TKey> keySelector)
+        {
+            lock (_list)
+            {
+                _sortFunction = _list.OrderBy(keySelector);
+            }
+
+            Sort();
+        }
+
+        public void SortDescending<TKey>(Func<T, TKey> keySelector)
+        {
+            lock (_list)
+            {
+                _sortFunction = _list.OrderByDescending(keySelector);
+            }
+
+            Sort();
+        }
+
+        private async void RemoveWithDelay(T item)
+        {
+            item.IsRemoving = true;
+
+            await Task.Delay(RemoveDelay);
+            lock (_list)
+            {
+                if (_list.Contains(item))
+                    _list.Remove(item);
+            }
+        }
+
+        private void Sort()
+        {
+            if (_sortFunction == null)
+                return;
+
+            lock (_list)
+            {
+                var sortedItemsList = _sortFunction.ToList();
+
+                foreach (var item in sortedItemsList)
+                {
+                    _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
+                }
+            }
         }
 
         public void Add(T item)
@@ -71,18 +128,6 @@ namespace BuildNotifications.ViewModel.Utils
             return true;
         }
 
-        private async void RemoveWithDelay(T item)
-        {
-            item.IsRemoving = true;
-
-            await Task.Delay(RemoveDelay);
-            lock (_list)
-            {
-                if (_list.Contains(item))
-                    _list.Remove(item);
-            }
-        }
-
         public int Count
         {
             get
@@ -104,7 +149,10 @@ namespace BuildNotifications.ViewModel.Utils
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public int IndexOf(T item)
         {
@@ -150,57 +198,11 @@ namespace BuildNotifications.ViewModel.Utils
             }
         }
 
-        private IEnumerable<T> _sortFunction;
-
-        public void Sort<TKey>(Func<T, TKey> keySelector)
-        {
-            lock (_list)
-            {
-                _sortFunction = _list.OrderBy(keySelector);
-            }
-
-            Sort();
-        }
-
-        public void SortDescending<TKey>(Func<T, TKey> keySelector)
-        {
-            lock (_list) 
-            {
-                _sortFunction = _list.OrderByDescending(keySelector);
-            }
-
-            Sort();
-        }
-
-        public void DontSort()
-        {
-            _sortFunction = null;
-            Sort();
-        }
-
-        private void Sort()
-        {
-            if (_sortFunction == null)
-                return;
-
-            lock (_list)
-            {
-                var sortedItemsList = _sortFunction.ToList();
-
-                foreach (var item in sortedItemsList)
-                {
-                    _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
-                }
-            }
-        }
-
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ObservableCollection<T> _list;
 
-        public void InvokeSort()
-        {
-            Sort();
-        }
+        private IEnumerable<T> _sortFunction;
     }
 }

@@ -6,9 +6,6 @@ namespace BuildNotifications
 {
     public partial class App
     {
-        public static TweenHandler GlobalTweenHandler;
-        private static TimeSpan _lastUpdate;
-
         public App()
         {
             GlobalTweenHandler = new TweenHandler();
@@ -35,9 +32,7 @@ namespace BuildNotifications
             {
                 // ignore super big spikes
                 if (tooMuchTime > 200)
-                {
                     tooMuchTime = 200;
-                }
 
                 _lastUpdate -= TimeSpan.FromMilliseconds(tooMuchTime);
                 delta = TimeSpan.FromMilliseconds(maxTimePerFrame);
@@ -45,5 +40,8 @@ namespace BuildNotifications
 
             GlobalTweenHandler.Update(delta.Milliseconds);
         }
+
+        private static TimeSpan _lastUpdate;
+        public static TweenHandler GlobalTweenHandler;
     }
 }

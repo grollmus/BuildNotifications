@@ -11,7 +11,7 @@ namespace BuildNotifications.Core.Tests.Text
         private IEnumerable<CultureInfo> AllCultures => CultureInfo.GetCultures(CultureTypes.AllCultures);
 
         private const string NativeName = nameof(NativeName);
-        
+
         [Fact]
         public void AllSupportedCulturesShouldHaveNativeNameLocalized()
         {

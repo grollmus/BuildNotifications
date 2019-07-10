@@ -7,11 +7,31 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class GroupDefinitionsViewModel : BaseViewModel
     {
-        private GroupDefinitionViewModel _selectedDefinition;
+        public GroupDefinitionsViewModel()
+        {
+            Definitions = new ObservableCollection<GroupDefinitionViewModel>
+            {
+                new GroupDefinitionViewModel(GroupDefinition.Branch),
+                new GroupDefinitionViewModel(GroupDefinition.BuildDefinition),
+                new GroupDefinitionViewModel(GroupDefinition.Source),
+                new GroupDefinitionViewModel(GroupDefinition.None)
+            };
+            SelectedDefinition = Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
+        }
+
         public ObservableCollection<GroupDefinitionViewModel> Definitions { get; set; }
 
-        public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
-        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+        public string GroupByText
+        {
+            get => Definitions.FirstOrDefault()?.GroupByText;
+            set
+            {
+                foreach (var definition in Definitions)
+                {
+                    definition.GroupByText = value;
+                }
+            }
+        }
 
         public GroupDefinitionViewModel SelectedDefinition
         {
@@ -37,39 +57,20 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
-        {
-            SelectedSortingDefinitionChanged?.Invoke(sender, e);
-        }
-
         public SortingDefinition SelectedSortingDefinition
         {
             get => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition;
             set => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition = value;
         }
 
-        public string GroupByText
+        public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+
+        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
         {
-            get => Definitions.FirstOrDefault()?.GroupByText;
-            set
-            {
-                foreach (var definition in Definitions)
-                {
-                    definition.GroupByText = value;
-                }
-            }
+            SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }
 
-        public GroupDefinitionsViewModel()
-        {
-            Definitions = new ObservableCollection<GroupDefinitionViewModel>
-            {
-                new GroupDefinitionViewModel(GroupDefinition.Branch),
-                new GroupDefinitionViewModel(GroupDefinition.BuildDefinition),
-                new GroupDefinitionViewModel(GroupDefinition.Source),
-                new GroupDefinitionViewModel(GroupDefinition.None),
-            };
-            SelectedDefinition = Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
-        }
+        private GroupDefinitionViewModel _selectedDefinition;
     }
 }

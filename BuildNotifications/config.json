@@ -1,0 +1,44 @@
+{
+  "BuildsToLoadCount": 200,
+  "BuildsToShow": 5,
+  "CanceledBuildNotifyConfig": 1,
+  "Connections": [
+    {
+      "BuildPluginType": "BuildNotifications.Plugin.DummyBuildServer.Plugin",
+      "Name": "LocalDummy",
+      "Options": {
+        "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib",
+        "port": "1111"
+      },
+      "SourceControlPluginType": "BuildNotifications.Plugin.DummyBuildServer.Plugin"
+    }
+  ],
+  "Culture": "en-US",
+  "Projects": [
+    {
+      "$type": "BuildNotifications.Core.Config.ProjectConfiguration, BuildNotifications.Core",
+      "BranchBlacklist": [],
+      "BranchWhitelist": [],
+      "BuildConnectionName": "LocalDummy",
+      "BuildDefinitionBlacklist": [],
+      "BuildDefinitionWhitelist": [],
+      "DefaultCompareBranch": "",
+      "HideCompletedPullRequests": true,
+      "LoadWhitelistedBranchesExclusively": false,
+      "LoadWhitelistedDefinitionsExclusively": false,
+      "ShowPullRequests": true,
+      "SourceControlConnectionName": "LocalDummy"
+    }
+  ],
+  "FailedBuildNotifyConfig": 3,
+  "SucceededBuildNotifyConfig": 1,
+  "GroupDefinition": {
+    "$type": "BuildNotifications.Core.Pipeline.Tree.Arrangement.BuildTreeGroupDefinition, BuildNotifications.Core",
+    "$values": [
+      2,
+      0,
+      1
+    ]
+  },
+  "UpdateInterval": 30
+}

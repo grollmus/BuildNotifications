@@ -31,9 +31,7 @@ namespace BuildNotifications.Core.Plugin.Options
             int defaultValue = 0, bool required = false)
         {
             if (minValue.HasValue && maxValue.HasValue && minValue >= maxValue)
-            {
                 throw new ArgumentException($"{nameof(minValue)} must be smaller than {nameof(maxValue)}");
-            }
 
             return new NumberOption(id, name, description, minValue, maxValue, defaultValue, required);
         }
@@ -50,9 +48,7 @@ namespace BuildNotifications.Core.Plugin.Options
         {
             var itemList = items.ToArray();
             if (defaultValue != null && !itemList.Contains(defaultValue))
-            {
                 throw new ArgumentException($"{nameof(defaultValue)} is not contained in {nameof(items)}");
-            }
 
             return new SetOption(id, name, description, itemList, defaultValue, required);
         }

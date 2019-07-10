@@ -3,13 +3,12 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace BuildNotifications.Resources.Window
 {
     public partial class CustomWindow
     {
-        private const double DoubleTolerance = 0.000001;
-
         private Thickness GetDefaultMarginForDpi()
         {
             var currentDpi = SystemHelper.GetCurrentDPI();
@@ -60,83 +59,23 @@ namespace BuildNotifications.Resources.Window
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var screen = Screen.FromHandle((new WindowInteropHelper(this)).Handle);
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
             var width = (double) screen.WorkingArea.Width;
             var workingArea = screen.WorkingArea;
             _previousScreenBounds = new Point(width, workingArea.Height);
         }
 
-        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        private void OnMouseButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var screen = Screen.FromHandle((new WindowInteropHelper(this)).Handle);
-            var width = (double) screen.WorkingArea.Width;
-            var workingArea = screen.WorkingArea;
-            _previousScreenBounds = new Point(width, workingArea.Height);
-            RefreshWindowState();
+            _isMouseButtonDown = false;
+            _isManualDrag = false;
+            ReleaseMouseCapture();
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (WindowState == WindowState.Normal)
-            {
-                _heightBeforeMaximize = ActualHeight;
-                _widthBeforeMaximize = ActualWidth;
-                return;
-            }
-
-            if (WindowState == WindowState.Maximized)
-            {
-                var screen = Screen.FromHandle((new WindowInteropHelper(this)).Handle);
-                if (Math.Abs(_previousScreenBounds.X - screen.WorkingArea.Width) > DoubleTolerance ||
-                    Math.Abs(_previousScreenBounds.Y - screen.WorkingArea.Height) > DoubleTolerance)
-                {
-                    var width = (double) screen.WorkingArea.Width;
-                    var workingArea = screen.WorkingArea;
-                    _previousScreenBounds = new Point(width, workingArea.Height);
-                    RefreshWindowState();
-                }
-            }
-        }
-
-        private void OnStateChanged(object sender, EventArgs e)
-        {
-            var screen = Screen.FromHandle((new WindowInteropHelper(this)).Handle);
-            var thickness = new Thickness(0);
-            if (WindowState != WindowState.Maximized)
-            {
-                var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
-                var workingArea = screen.WorkingArea;
-                MaxHeight = (workingArea.Height + 16) / currentDpiScaleFactor;
-                MaxWidth = double.PositiveInfinity;
-
-                if (WindowState != WindowState.Maximized)
-                {
-                    SetMaximizeButtonsVisibility(Visibility.Visible, Visibility.Collapsed);
-                }
-            }
-            else
-            {
-                thickness = GetDefaultMarginForDpi();
-                if (_previousState == WindowState.Minimized ||
-                    Math.Abs(Left - _positionBeforeDrag.X) < DoubleTolerance &&
-                    Math.Abs(Top - _positionBeforeDrag.Y) < DoubleTolerance)
-                {
-                    thickness = GetFromMinimizedMarginForDpi();
-                }
-
-                SetMaximizeButtonsVisibility(Visibility.Collapsed, Visibility.Visible);
-            }
-
-            _layoutRoot.Margin = thickness;
-            _previousState = WindowState;
-        }
-
-        private void OnMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (!_isMouseButtonDown)
-            {
                 return;
-            }
 
             var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
             var position = e.GetPosition(this);
@@ -149,13 +88,9 @@ namespace BuildNotifications.Resources.Window
                 var actualWidth = _mouseDownPosition.X;
 
                 if (_mouseDownPosition.X <= 0)
-                {
                     actualWidth = 0;
-                }
                 else if (_mouseDownPosition.X >= ActualWidth)
-                {
                     actualWidth = _widthBeforeMaximize;
-                }
 
                 if (WindowState == WindowState.Maximized)
                 {
@@ -172,11 +107,55 @@ namespace BuildNotifications.Resources.Window
             }
         }
 
-        private void OnMouseButtonUp(object sender, MouseButtonEventArgs e)
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _isMouseButtonDown = false;
-            _isManualDrag = false;
-            ReleaseMouseCapture();
+            if (WindowState == WindowState.Normal)
+            {
+                _widthBeforeMaximize = ActualWidth;
+                return;
+            }
+
+            if (WindowState == WindowState.Maximized)
+            {
+                var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+                if (Math.Abs(_previousScreenBounds.X - screen.WorkingArea.Width) > DoubleTolerance ||
+                    Math.Abs(_previousScreenBounds.Y - screen.WorkingArea.Height) > DoubleTolerance)
+                {
+                    var width = (double) screen.WorkingArea.Width;
+                    var workingArea = screen.WorkingArea;
+                    _previousScreenBounds = new Point(width, workingArea.Height);
+                    RefreshWindowState();
+                }
+            }
+        }
+
+        private void OnStateChanged(object sender, EventArgs e)
+        {
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var thickness = new Thickness(0);
+            if (WindowState != WindowState.Maximized)
+            {
+                var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
+                var workingArea = screen.WorkingArea;
+                MaxHeight = (workingArea.Height + 16) / currentDpiScaleFactor;
+                MaxWidth = double.PositiveInfinity;
+
+                if (WindowState != WindowState.Maximized)
+                    SetMaximizeButtonsVisibility(Visibility.Visible, Visibility.Collapsed);
+            }
+            else
+            {
+                thickness = GetDefaultMarginForDpi();
+                if (_previousState == WindowState.Minimized ||
+                    Math.Abs(Left - _positionBeforeDrag.X) < DoubleTolerance &&
+                    Math.Abs(Top - _positionBeforeDrag.Y) < DoubleTolerance)
+                    thickness = GetFromMinimizedMarginForDpi();
+
+                SetMaximizeButtonsVisibility(Visibility.Collapsed, Visibility.Visible);
+            }
+
+            _layoutRoot.Margin = thickness;
+            _previousState = WindowState;
         }
 
         private void RefreshWindowState()
@@ -187,5 +166,16 @@ namespace BuildNotifications.Resources.Window
                 ToggleWindowState();
             }
         }
+
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        {
+            var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+            var width = (double) screen.WorkingArea.Width;
+            var workingArea = screen.WorkingArea;
+            _previousScreenBounds = new Point(width, workingArea.Height);
+            RefreshWindowState();
+        }
+
+        private const double DoubleTolerance = 0.000001;
     }
 }

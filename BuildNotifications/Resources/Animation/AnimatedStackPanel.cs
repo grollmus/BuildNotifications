@@ -5,8 +5,6 @@ namespace BuildNotifications.Resources.Animation
 {
     internal class AnimatedStackPanel : StackPanel
     {
-        private readonly AnimatedPanelHelper _helper;
-
         public AnimatedStackPanel()
         {
             _helper = new AnimatedPanelHelper();
@@ -21,5 +19,7 @@ namespace BuildNotifications.Resources.Animation
             _helper.AnimateToNewPositions(positions, this, AnimationDuration);
             return arrangedSize;
         }
+
+        private readonly AnimatedPanelHelper _helper;
     }
 }

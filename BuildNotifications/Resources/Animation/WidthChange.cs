@@ -14,9 +14,6 @@ namespace BuildNotifications.Resources.Animation
 
         public double Delay { get; set; }
 
-        public static readonly DependencyProperty TargetWidthProperty = DependencyProperty.Register(
-            "TargetWidth", typeof(double), typeof(WidthChange), new PropertyMetadata(default(double)));
-
         public double TargetWidth
         {
             get => (double) GetValue(TargetWidthProperty);
@@ -32,5 +29,8 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
         }
+
+        public static readonly DependencyProperty TargetWidthProperty = DependencyProperty.Register(
+            "TargetWidth", typeof(double), typeof(WidthChange), new PropertyMetadata(default(double)));
     }
 }

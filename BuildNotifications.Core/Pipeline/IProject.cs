@@ -8,7 +8,7 @@ namespace BuildNotifications.Core.Pipeline
     /// A project is a combination of a BuildProvider and SourceControlProvider
     /// that can be used to gather information about a single software project.
     /// </summary>
-    internal interface IProject
+    public interface IProject
     {
         /// <summary>
         /// Branch provider that is used to fetch branch information for this project.

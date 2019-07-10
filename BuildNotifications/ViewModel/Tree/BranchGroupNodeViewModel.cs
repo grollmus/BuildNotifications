@@ -4,15 +4,18 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BranchGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        private readonly IBranchGroupNode _node;
-
-        public string BranchName => _node.BranchName;
-
         public BranchGroupNodeViewModel(IBranchGroupNode node) : base(node)
         {
             _node = node;
         }
 
-        protected override string CalculateDisplayName() => BranchName;
+        public string BranchName => _node.BranchName;
+
+        protected override string CalculateDisplayName()
+        {
+            return BranchName;
+        }
+
+        private readonly IBranchGroupNode _node;
     }
 }

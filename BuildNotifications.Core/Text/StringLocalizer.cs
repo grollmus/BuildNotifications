@@ -12,30 +12,14 @@ namespace BuildNotifications.Core.Text
     /// </summary>
     public class StringLocalizer
     {
-        public static StringLocalizer Instance { get; } = new StringLocalizer();
-
-        public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
-
-        public static IEnumerable<CultureInfo> SupportedCultures()
-        {
-            yield return CultureInfo.GetCultureInfo("en-US");
-            yield return CultureInfo.GetCultureInfo("de");
-            yield return CultureInfo.GetCultureInfo("de-LU");
-            yield return CultureInfo.GetCultureInfo("de-LI");
-            yield return CultureInfo.GetCultureInfo("de-IT");
-            yield return CultureInfo.GetCultureInfo("de-DE");
-            yield return CultureInfo.GetCultureInfo("de-BE");
-            yield return CultureInfo.GetCultureInfo("de-AT");
-            yield return CultureInfo.GetCultureInfo("de-CH");
-        }
-
-        private readonly ResourceManager _resourceManager;
-
         private StringLocalizer()
         {
             var resourceManager = new ResourceManager("BuildNotifications.Core.Text.Texts", Assembly.GetAssembly(typeof(StringLocalizer)));
             _resourceManager = resourceManager;
         }
+
+        public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
+        public static StringLocalizer Instance { get; } = new StringLocalizer();
 
         public string this[string key] => GetText(key);
 
@@ -64,5 +48,20 @@ namespace BuildNotifications.Core.Text
                 }
             }
         }
+
+        public static IEnumerable<CultureInfo> SupportedCultures()
+        {
+            yield return CultureInfo.GetCultureInfo("en-US");
+            yield return CultureInfo.GetCultureInfo("de");
+            yield return CultureInfo.GetCultureInfo("de-LU");
+            yield return CultureInfo.GetCultureInfo("de-LI");
+            yield return CultureInfo.GetCultureInfo("de-IT");
+            yield return CultureInfo.GetCultureInfo("de-DE");
+            yield return CultureInfo.GetCultureInfo("de-BE");
+            yield return CultureInfo.GetCultureInfo("de-AT");
+            yield return CultureInfo.GetCultureInfo("de-CH");
+        }
+
+        private readonly ResourceManager _resourceManager;
     }
 }

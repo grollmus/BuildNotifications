@@ -6,9 +6,10 @@
 
     <DataTemplate x:Key="SourceGroupNodeTemplate" DataType="{x:Type viewModelTree:SourceGroupNodeViewModel}">
         <DockPanel>
-            <icons:IconBatch Type="Connection" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}"/>
+            <icons:IconBatch Type="Connection" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" />
             <TextBlock Text="GitHub" FontSize="{DynamicResource BlockFont}"
-                   HorizontalAlignment="Left" UseLayoutRounding="True" FontWeight="Regular" TextTrimming="CharacterEllipsis"/>
+                       HorizontalAlignment="Left" UseLayoutRounding="True" FontWeight="Regular"
+                       TextTrimming="CharacterEllipsis" />
         </DockPanel>
     </DataTemplate>
 

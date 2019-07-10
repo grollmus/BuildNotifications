@@ -10,42 +10,11 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
     public class GroupAndSortDefinitionsViewModel : BaseViewModel
     {
-        public RemoveTrackingObservableCollection<GroupDefinitionsViewModel> Definitions { get; set; }
-
         public GroupAndSortDefinitionsViewModel()
         {
             Definitions = new RemoveTrackingObservableCollection<GroupDefinitionsViewModel>(TimeSpan.FromSeconds(0.4));
             Definitions.CollectionChanged += DefinitionsOnCollectionChanged;
             Definitions.Add(new GroupDefinitionsViewModel());
-        }
-
-        public IBuildTreeSortingDefinition BuildTreeSortingDefinition
-        {
-            get => new BuildTreeSortingDefinition(ToSortDefinitions());
-            set => FromSortDefinitions(value);
-        }
-
-        private IEnumerable<SortingDefinition> ToSortDefinitions()
-        {
-            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
-            {
-                yield return def.SelectedDefinition.SortingDefinitionsViewModel.SelectedViewModel.SortingDefinition;
-            }
-        }
-
-        private void FromSortDefinitions(IEnumerable<SortingDefinition> definitions)
-        {
-            var index = 0;
-            foreach (var sortingDefinition in definitions)
-            {
-                if (Definitions.Count <= index)
-                    break;
-
-                var viewModelAtIndex = Definitions[index];
-                viewModelAtIndex.SelectedSortingDefinition = sortingDefinition;
-
-                index++;
-            }
         }
 
         public IBuildTreeGroupDefinition BuildTreeGroupDefinition
@@ -54,11 +23,42 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             set => FromGroupDefinitions(value);
         }
 
-        private IEnumerable<GroupDefinition> ToGroupDefinitions()
+        public IBuildTreeSortingDefinition BuildTreeSortingDefinition
         {
-            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
+            get => new BuildTreeSortingDefinition(ToSortDefinitions());
+            set => FromSortDefinitions(value);
+        }
+
+        public RemoveTrackingObservableCollection<GroupDefinitionsViewModel> Definitions { get; set; }
+
+        private void AddNoneAtEnd()
+        {
+            if (Definitions.LastOrDefault()?.SelectedDefinition.GroupDefinition == GroupDefinition.None)
+                return;
+
+            Definitions.Add(new GroupDefinitionsViewModel());
+        }
+
+        private void DefinitionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
             {
-                yield return def.SelectedDefinition.GroupDefinition;
+                case NotifyCollectionChangedAction.Add:
+                    foreach (GroupDefinitionsViewModel item in e.NewItems)
+                    {
+                        item.SelectedDefinitionChanged += SingleGroupDefinitionChanged;
+                        item.SelectedSortingDefinitionChanged += SingleSortingDefinitionChanged;
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (GroupDefinitionsViewModel item in e.OldItems)
+                    {
+                        item.SelectedDefinitionChanged -= SingleGroupDefinitionChanged;
+                        item.SelectedSortingDefinitionChanged -= SingleSortingDefinitionChanged;
+                    }
+
+                    break;
             }
         }
 
@@ -83,32 +83,45 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             Definitions.Last().SelectedDefinition = Definitions.Last().Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
         }
 
-        private void DefinitionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void FromSortDefinitions(IEnumerable<SortingDefinition> definitions)
         {
-            switch (e.Action)
+            var index = 0;
+            foreach (var sortingDefinition in definitions)
             {
-                case NotifyCollectionChangedAction.Add:
-                    foreach (GroupDefinitionsViewModel item in e.NewItems)
-                    {
-                        item.SelectedDefinitionChanged += SingleGroupDefinitionChanged;
-                        item.SelectedSortingDefinitionChanged += SingleSortingDefinitionChanged;
-                    }
+                if (Definitions.Count <= index)
+                    break;
 
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    foreach (GroupDefinitionsViewModel item in e.OldItems)
-                    {
-                        item.SelectedDefinitionChanged -= SingleGroupDefinitionChanged;
-                        item.SelectedSortingDefinitionChanged -= SingleSortingDefinitionChanged;
-                    }
+                var viewModelAtIndex = Definitions[index];
+                viewModelAtIndex.SelectedSortingDefinition = sortingDefinition;
 
-                    break;
-                default:
-                    break;
+                index++;
             }
         }
 
-        private bool _suppressEvents;
+        private void RemoveNoneElements()
+        {
+            var allNoneItems = Definitions.Where(x => x.SelectedDefinition.GroupDefinition == GroupDefinition.None).ToList();
+            var lastItem = Definitions.Last();
+
+            if (allNoneItems.Contains(lastItem))
+                allNoneItems.Remove(lastItem);
+
+            foreach (var definition in allNoneItems)
+            {
+                Definitions.Remove(definition);
+            }
+        }
+
+        private void SetTexts()
+        {
+            var setFirst = false;
+            foreach (var definition in Definitions.Where(x => !x.IsRemoving))
+            {
+                var key = setFirst ? "ThenBy" : "GroupBy";
+                setFirst = true;
+                definition.GroupByText = StringLocalizer.Instance[key];
+            }
+        }
 
         private void SingleGroupDefinitionChanged(object sender, GroupDefinitionsSelectionChangedEventArgs e)
         {
@@ -133,31 +146,6 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             OnPropertyChanged(nameof(BuildTreeSortingDefinition));
         }
 
-        private void SetTexts()
-        {
-            var setFirst = false;
-            foreach (var definition in Definitions.Where(x => !x.IsRemoving))
-            {
-                var key = setFirst ? "ThenBy" : "GroupBy";
-                setFirst = true;
-                definition.GroupByText = StringLocalizer.Instance[key];
-            }
-        }
-
-        private void RemoveNoneElements()
-        {
-            var allNoneItems = Definitions.Where(x => x.SelectedDefinition.GroupDefinition == GroupDefinition.None).ToList();
-            var lastItem = Definitions.Last();
-
-            if (allNoneItems.Contains(lastItem))
-                allNoneItems.Remove(lastItem);
-
-            foreach (var definition in allNoneItems)
-            {
-                Definitions.Remove(definition);
-            }
-        }
-
         private void SwapDuplicates(GroupDefinitionsViewModel sender, GroupDefinitionsSelectionChangedEventArgs e)
         {
             if (e.NewValue.GroupDefinition == GroupDefinition.None)
@@ -179,12 +167,22 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        private void AddNoneAtEnd()
+        private IEnumerable<GroupDefinition> ToGroupDefinitions()
         {
-            if (Definitions.LastOrDefault()?.SelectedDefinition.GroupDefinition == GroupDefinition.None)
-                return;
-
-            Definitions.Add(new GroupDefinitionsViewModel());
+            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
+            {
+                yield return def.SelectedDefinition.GroupDefinition;
+            }
         }
+
+        private IEnumerable<SortingDefinition> ToSortDefinitions()
+        {
+            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
+            {
+                yield return def.SelectedDefinition.SortingDefinitionsViewModel.SelectedViewModel.SortingDefinition;
+            }
+        }
+
+        private bool _suppressEvents;
     }
 }

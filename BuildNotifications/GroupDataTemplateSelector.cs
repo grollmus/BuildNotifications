@@ -1,6 +1,6 @@
 ﻿namespace BuildNotifications
 {
-    class GroupDataTemplateSelector
+    internal class GroupDataTemplateSelector
     {
     }
 }

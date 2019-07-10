@@ -25,9 +25,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var connection = _connectionPool.CreateConnection(data);
             if (connection == null)
-            {
                 return null;
-            }
 
             if (!data.TryGetValue(TfsConstants.Connection.ProjectId, out var projectId) || string.IsNullOrEmpty(projectId))
             {
@@ -58,9 +56,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var connection = _connectionPool.CreateConnection(data);
             if (connection == null)
-            {
                 return null;
-            }
 
             if (!data.TryGetValue(TfsConstants.Connection.RepositoryId, out var repositoryId) || string.IsNullOrEmpty(repositoryId))
             {

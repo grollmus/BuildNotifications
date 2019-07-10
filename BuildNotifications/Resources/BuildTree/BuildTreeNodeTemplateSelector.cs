@@ -7,15 +7,14 @@ namespace BuildNotifications.Resources.BuildTree
 {
     internal class BuildTreeNodeTemplateSelector : DataTemplateSelector
     {
-        private readonly bool _forLayout;
-
-        public static BuildTreeNodeTemplateSelector ForNodeDisplay { get; } = new BuildTreeNodeTemplateSelector(false);
-        public static BuildTreeNodeTemplateSelector ForLevelLayout { get; } = new BuildTreeNodeTemplateSelector(true);
-
         private BuildTreeNodeTemplateSelector(bool forLayout)
         {
             _forLayout = forLayout;
         }
+
+        public static BuildTreeNodeTemplateSelector ForLevelLayout { get; } = new BuildTreeNodeTemplateSelector(true);
+
+        public static BuildTreeNodeTemplateSelector ForNodeDisplay { get; } = new BuildTreeNodeTemplateSelector(false);
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -30,8 +29,22 @@ namespace BuildNotifications.Resources.BuildTree
 
             if (template == null)
                 return base.SelectTemplate(item, container);
-            else
-                return template;
+            return template;
+        }
+
+        private static DataTemplate DataTemplateByName(object groupNode, FrameworkElement element)
+        {
+            var type = groupNode.GetType();
+            var fullName = type.Name;
+            var withoutViewModel = fullName.Replace("ViewModel", "");
+            var expectedKey = $"{withoutViewModel}Template";
+
+            return element.TryFindResource(expectedKey) as DataTemplate;
+        }
+
+        private DataTemplate DisplayTemplate(BuildTreeNodeViewModel node, FrameworkElement element)
+        {
+            return DataTemplateByName(node, element);
         }
 
         private DataTemplate LayoutTemplate(BuildTreeNodeViewModel buildNode, FrameworkElement element)
@@ -58,19 +71,6 @@ namespace BuildNotifications.Resources.BuildTree
             }
         }
 
-        private DataTemplate DisplayTemplate(BuildTreeNodeViewModel node, FrameworkElement element)
-        {
-            return DataTemplateByName(node, element);
-        }
-
-        private static DataTemplate DataTemplateByName(object groupNode, FrameworkElement element)
-        {
-            var type = groupNode.GetType();
-            var fullName = type.Name;
-            var withoutViewModel = fullName.Replace("ViewModel", "");
-            var expectedKey = $"{withoutViewModel}Template";
-
-            return element.TryFindResource(expectedKey) as DataTemplate;
-        }
+        private readonly bool _forLayout;
     }
 }

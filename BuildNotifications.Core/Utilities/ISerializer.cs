@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides serialization functionality.
     /// </summary>
-    internal interface ISerializer
+    public interface ISerializer
     {
         /// <summary>
         /// Deserializes an object from its string representation.

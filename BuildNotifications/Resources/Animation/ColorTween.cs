@@ -1,4 +1,4 @@
-﻿using Color = System.Windows.Media.Color;
+﻿using System.Windows.Media;
 
 namespace BuildNotifications.Resources.Animation
 {

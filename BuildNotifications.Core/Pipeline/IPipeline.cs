@@ -5,7 +5,7 @@ namespace BuildNotifications.Core.Pipeline
     /// <summary>
     /// The build pipeline that processes builds
     /// </summary>
-    internal interface IPipeline
+    public interface IPipeline
     {
         /// <summary>
         /// Object that raises events when pipeline fetches new data or updates existing data.

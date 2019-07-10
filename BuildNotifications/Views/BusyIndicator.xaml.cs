@@ -11,29 +11,17 @@ namespace BuildNotifications.Views
 {
     public partial class BusyIndicator : UserControl
     {
-        public class DummyItem : BaseViewModel
+        public BusyIndicator()
         {
+            InitializeComponent();
+            DummyItems = new RemoveTrackingObservableCollection<DummyItem>(TimeSpan.FromSeconds(1), new[]
+            {
+                new DummyItem()
+            });
+            _tokenSource = new CancellationTokenSource();
         }
 
         public RemoveTrackingObservableCollection<DummyItem> DummyItems { get; set; }
-
-        public static readonly DependencyProperty IsBusyProperty = DependencyProperty.Register(
-            "IsBusy", typeof(bool), typeof(BusyIndicator), new PropertyMetadata(default(bool), PropertyChangedCallback));
-
-        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.Property.Equals(IsBusyProperty) && d is BusyIndicator busyIndicator)
-            {
-                if ((bool) e.NewValue)
-                {
-                    busyIndicator.StartTask();
-                }
-                else
-                {
-                    busyIndicator.StopTask();
-                }
-            }
-        }
 
         public bool IsBusy
         {
@@ -41,28 +29,15 @@ namespace BuildNotifications.Views
             set => SetValue(IsBusyProperty, value);
         }
 
-        public BusyIndicator()
+        private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            InitializeComponent();
-            DummyItems = new RemoveTrackingObservableCollection<DummyItem>(TimeSpan.FromSeconds(1), new[]
+            if (e.Property.Equals(IsBusyProperty) && d is BusyIndicator busyIndicator)
             {
-                new DummyItem(),
-            });
-            _tokenSource = new CancellationTokenSource();
-        }
-
-        private Task _removeAndAddingTask;
-        private CancellationTokenSource _tokenSource;
-
-        private void StopTask()
-        {
-            if (_removeAndAddingTask == null)
-                return;
-
-            _tokenSource.Cancel();
-            _removeAndAddingTask.Wait();
-            _removeAndAddingTask = null;
-            _tokenSource = new CancellationTokenSource();
+                if ((bool) e.NewValue)
+                    busyIndicator.StartTask();
+                else
+                    busyIndicator.StopTask();
+            }
         }
 
         private void StartTask()
@@ -94,6 +69,27 @@ namespace BuildNotifications.Views
                     }
                 }
             }, _tokenSource.Token);
+        }
+
+        private void StopTask()
+        {
+            if (_removeAndAddingTask == null)
+                return;
+
+            _tokenSource.Cancel();
+            _removeAndAddingTask.Wait();
+            _removeAndAddingTask = null;
+            _tokenSource = new CancellationTokenSource();
+        }
+
+        private Task _removeAndAddingTask;
+        private CancellationTokenSource _tokenSource;
+
+        public static readonly DependencyProperty IsBusyProperty = DependencyProperty.Register(
+            "IsBusy", typeof(bool), typeof(BusyIndicator), new PropertyMetadata(default(bool), PropertyChangedCallback));
+
+        public class DummyItem : BaseViewModel
+        {
         }
     }
 }

@@ -8,12 +8,12 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
 {
     internal class OffsettingStackPanel : StackPanel
     {
-        public double Offset { get; set; }
-
         public OffsettingStackPanel()
         {
             Orientation = Orientation.Vertical;
         }
+
+        public double Offset { get; set; }
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
@@ -26,9 +26,7 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
             {
                 var child = children[i];
                 if (child == null || child.Visibility == Visibility.Collapsed)
-                {
                     continue;
-                }
 
                 rcChild.Y += previousChildSize;
                 rcChild.X = previousXOffset;

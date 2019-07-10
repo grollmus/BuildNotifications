@@ -22,18 +22,18 @@ namespace BuildNotifications.PluginInterfaces.Builds
         IAsyncEnumerable<IBuild> FetchAllBuilds();
 
         /// <summary>
-        /// Fetches all builds for a given build definition.
-        /// </summary>
-        /// <param name="definition">Definition to fetch builds for.</param>
-        /// <returns>List of all builds available for the given definition.</returns>
-        IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition);
-
-        /// <summary>
         /// Fetches all builds that have been changed since a given date and time.
         /// </summary>
         /// <param name="date">Date and time since when to fetch builds.</param>
         /// <returns>List of all builds changed since <paramref name="date" />.</returns>
         IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime date);
+
+        /// <summary>
+        /// Fetches all builds for a given build definition.
+        /// </summary>
+        /// <param name="definition">Definition to fetch builds for.</param>
+        /// <returns>List of all builds available for the given definition.</returns>
+        IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition);
 
         /// <summary>
         /// Fetches all existing build definitions.

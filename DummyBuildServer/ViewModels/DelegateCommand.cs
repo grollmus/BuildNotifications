@@ -46,9 +46,7 @@ namespace DummyBuildServer.ViewModels
         public void Execute(object parameter)
         {
             if (!_canExecuteFunc((TParam) parameter))
-            {
                 return;
-            }
 
             _executeAction((TParam) parameter);
         }

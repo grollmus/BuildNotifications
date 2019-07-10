@@ -3,11 +3,11 @@
                     xmlns:local="clr-namespace:BuildNotifications.Resources.BuildTree">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Branch/BranchTemplates.xaml"/>
-        <ResourceDictionary Source="Build/BuildTemplates.xaml"/>
-        <ResourceDictionary Source="Definition/DefinitionTemplates.xaml"/>
-        <ResourceDictionary Source="Source/SourceTemplates.xaml"/>
-        <ResourceDictionary Source="LevelTemplates.xaml"/>
+        <ResourceDictionary Source="Branch/BranchTemplates.xaml" />
+        <ResourceDictionary Source="Build/BuildTemplates.xaml" />
+        <ResourceDictionary Source="Definition/DefinitionTemplates.xaml" />
+        <ResourceDictionary Source="Source/SourceTemplates.xaml" />
+        <ResourceDictionary Source="LevelTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
