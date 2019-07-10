@@ -51,7 +51,7 @@ namespace BuildNotifications.Core.Config
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
 
         /// <inheritdoc />
-        public IBuildTreeGroupDefinition GroupDefinition { get; }
+        public IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
         /// <inheritdoc />
         public int UpdateInterval { get; set; }

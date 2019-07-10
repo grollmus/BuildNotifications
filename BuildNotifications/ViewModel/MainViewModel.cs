@@ -14,15 +14,20 @@ namespace BuildNotifications.ViewModel
     {
         public MainViewModel()
         {
+            _coreSetup = new CoreSetup();
+
             SearchViewModel = new SearchViewModel();
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
+            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
             GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
                 {
                     Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
                     UpdateOrCreateBuildTree();
+
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
                 }
 
                 if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
@@ -34,8 +39,6 @@ namespace BuildNotifications.ViewModel
 
             LoadNewRandomTreeCommand = new DelegateCommand(UpdateOrCreateBuildTree);
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
-
-            _coreSetup = new CoreSetup();
 
             var projectProvider = _coreSetup.ProjectProvider;
             foreach (var project in projectProvider.AllProjects())
@@ -54,6 +57,7 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _buildTree = value;
+
                 OnPropertyChanged();
             }
         }
@@ -81,6 +85,7 @@ namespace BuildNotifications.ViewModel
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
             BuildTree = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
         }
 
         // RemoveChildrenIfNotOfType ensures that only elements of the type are within the list, therefore the ReSharper warning is taken care of

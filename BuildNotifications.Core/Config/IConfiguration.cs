@@ -39,7 +39,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Defines how builds should be grouped.
         /// </summary>
-        IBuildTreeGroupDefinition GroupDefinition { get; }
+        IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
         /// <summary>
         /// List of all configured projects.

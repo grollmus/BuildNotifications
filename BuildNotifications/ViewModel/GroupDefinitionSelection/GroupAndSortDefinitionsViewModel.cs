@@ -66,7 +66,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         {
             var definitionsList = definitions.ToList();
             var neededAmountOfVms = definitionsList.Count + 1;
-
+            _suppressEvents = true;
             for (var i = Definitions.Count; i < neededAmountOfVms; i++)
             {
                 Definitions.Add(new GroupDefinitionsViewModel());
@@ -81,6 +81,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
 
             Definitions.Last().SelectedDefinition = Definitions.Last().Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
+            _suppressEvents = false;
         }
 
         private void FromSortDefinitions(IEnumerable<SortingDefinition> definitions)
