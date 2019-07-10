@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:DummyBuildServer.ViewModels"
-        xmlns:views="clr-namespace:DummyBuildServer.Views"
+        xmlns:views="clr-namespace:DummyBuildServer.Views" SizeToContent="Height"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         Title="MainWindow" Height="450" Width="800">
 
@@ -92,7 +92,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" />
+                    <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" MaxHeight="400" Height="400" />
                 </DockPanel>
             </DockPanel>
         </GroupBox>
