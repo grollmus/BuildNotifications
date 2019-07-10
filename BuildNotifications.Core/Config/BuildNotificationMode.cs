@@ -23,6 +23,6 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Builds that were either automatically or manually started.
         /// </summary>
-        RequestedByOrForMe = RequestedByMe & RequestedForMe
+        RequestedByOrForMe = RequestedByMe | RequestedForMe
     }
 }

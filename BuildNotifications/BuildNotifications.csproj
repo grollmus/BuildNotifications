@@ -9,6 +9,10 @@
     <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Resources\BuildTree\Status\**" />
     <Compile Remove="Utils\**" />

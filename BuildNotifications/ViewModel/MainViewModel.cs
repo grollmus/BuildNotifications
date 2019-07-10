@@ -82,7 +82,6 @@ namespace BuildNotifications.ViewModel
         private async void UpdateOrCreateBuildTree(object obj = null)
         {
             IsBusy = true;
-            await Task.Delay(2500);
             BuildTree = await Task.Run(() =>
             {
                 RandomTree();

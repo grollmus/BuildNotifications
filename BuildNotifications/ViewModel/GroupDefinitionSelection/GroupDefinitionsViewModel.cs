@@ -67,7 +67,6 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 new GroupDefinitionViewModel(GroupDefinition.Branch),
                 new GroupDefinitionViewModel(GroupDefinition.BuildDefinition),
                 new GroupDefinitionViewModel(GroupDefinition.Source),
-                new GroupDefinitionViewModel(GroupDefinition.Status),
                 new GroupDefinitionViewModel(GroupDefinition.None),
             };
             SelectedDefinition = Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
