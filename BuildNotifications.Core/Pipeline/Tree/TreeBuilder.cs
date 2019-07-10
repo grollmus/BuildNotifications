@@ -52,10 +52,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var subTree = insertTarget.Children.FirstOrDefault(node => node.Equals(nodeToInsert));
             if (subTree != null)
             {
+                subTree.UpdateWithValuesFrom(nodeToInsert);
+
                 if (nodeToInsert.Children.Any())
-                {
                     Merge(subTree, nodeToInsert.Children.First(), taggedNodes);
-                }
 
                 taggedNodes.Remove(subTree);
             }

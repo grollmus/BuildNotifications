@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.ViewModel.Tree.Dummy;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
@@ -20,16 +18,18 @@ namespace BuildNotifications.ViewModel.Tree
             NodeSource = nodeSource;
             Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.8));
             Children.CollectionChanged += ChildrenOnCollectionChanged;
-            AddOneBuildCommand = new DelegateCommand(AddOneBuild);
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o =>
             {
                 RemoveOneChild(o);
-                AddOneBuild(o);
             });
             HighlightCommand = new DelegateCommand(Highlight);
         }
-        
+
+        public virtual void BackendPropertiesChanged()
+        {
+        }
+
         public ICommand AddAndRemoveCommand { get; set; }
 
         public ICommand AddOneBuildCommand { get; set; }
@@ -92,33 +92,6 @@ namespace BuildNotifications.ViewModel.Tree
 
             _currentSortingDefinition = newSorting;
             SetChildrenSorting(_currentSortingDefinition);
-        }
-
-        private async void AddOneBuild(object parameter)
-        {
-            var otherBuild = Children.FirstOrDefault() as BuildNodeViewModel;
-
-            if (otherBuild == null)
-                return;
-
-            var newBuild = new BuildNodeViewModel(new BuildNodeDummy((BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1)))
-            {
-                MaxTreeDepth = otherBuild.MaxTreeDepth,
-                CurrentTreeLevelDepth = otherBuild.CurrentTreeLevelDepth,
-                IsLargeSize = true
-            };
-
-            foreach (var build in Children.OfType<BuildNodeViewModel>().Where(x => x.IsLargeSize))
-            {
-                build.IsLargeSize = false;
-            }
-
-            Children.Add(newBuild);
-
-            await Task.Delay(500);
-
-            if (newBuild.BuildStatus == BuildStatus.Failed)
-                newBuild.IsHighlighted = true;
         }
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

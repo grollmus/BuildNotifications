@@ -13,10 +13,6 @@ namespace BuildNotifications.ViewModel.Tree
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            MouseDownCommand = new DelegateCommand(OnMouseDown);
-            MouseUpCommand = new DelegateCommand(OnMouseUp);
-
-            Status = Node?.Build?.Status ?? BuildStatus.None;
         }
 
         public bool IsHighlighted
@@ -39,36 +35,23 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        public ICommand MouseDownCommand { get; set; }
-
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
-        public ICommand MouseUpCommand { get; set; }
         public IBuildNode Node { get; }
 
-        private BuildStatus Status
+        public override void BackendPropertiesChanged()
         {
-            get => _buildStatus;
-            set
-            {
-                _buildStatus = value;
-                OnPropertyChanged(nameof(BuildStatus));
-            }
+            OnPropertyChanged(nameof(BuildStatus));
         }
 
         protected override BuildStatus CalculateBuildStatus()
         {
-            return Status;
+            return Node?.Status ?? BuildStatus.None;
         }
 
         protected override string CalculateDisplayName()
         {
-            return "Build. Status: " + Status;
-        }
-
-        private void OnMouseDown(object obj)
-        {
-            Status = (BuildStatus) new Random().Next((int) BuildStatus.Cancelled, (int) BuildStatus.Failed + 1);
+            return "Build. Status: " + BuildStatus;
         }
 
         private void OnMouseEnter(object obj)
@@ -82,14 +65,8 @@ namespace BuildNotifications.ViewModel.Tree
             IsLargeSize = _shouldBeLarge;
         }
 
-        private void OnMouseUp(object obj)
-        {
-        }
-
         private bool _isLargeSize;
         private bool _shouldBeLarge;
         private bool _isHighlighted;
-
-        private BuildStatus _buildStatus;
     }
 }

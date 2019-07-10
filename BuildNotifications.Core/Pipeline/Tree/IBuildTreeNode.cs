@@ -8,5 +8,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         IEnumerable<IBuildTreeNode> Children { get; }
         void AddChild(IBuildTreeNode node);
         void RemoveChild(IBuildTreeNode node);
+        void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert);
     }
 }

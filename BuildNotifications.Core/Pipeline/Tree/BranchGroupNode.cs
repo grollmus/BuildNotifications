@@ -8,7 +8,12 @@
         }
 
         /// <inheritdoc />
-        public string BranchName { get; }
+        public string BranchName { get; private set; }
+
+        public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
+        {
+            BranchName = (nodeToInsert as BranchGroupNode)?.BranchName ?? string.Empty;
+        }
 
         public override bool Equals(IBuildTreeNode other)
         {

@@ -92,6 +92,7 @@ namespace BuildNotifications.ViewModel.Tree
                 }
 
                 taggedNodes.Remove(subTree);
+                subTree.BackendPropertiesChanged();
             }
             else
             {

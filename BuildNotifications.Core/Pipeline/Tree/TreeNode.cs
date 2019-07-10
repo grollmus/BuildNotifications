@@ -19,6 +19,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
             _childList.Remove(node);
         }
 
+        public virtual void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
+        {
+        }
+
         public IEnumerable<IBuildTreeNode> Children => _childList;
 
         public abstract bool Equals(IBuildTreeNode other);

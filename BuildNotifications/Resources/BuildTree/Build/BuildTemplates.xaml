@@ -57,12 +57,6 @@
                     <i:EventTrigger EventName="MouseLeave">
                         <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" />
                     </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseDown">
-                        <i:InvokeCommandAction Command="{Binding MouseDownCommand}" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding MouseUpCommand}" />
-                    </i:EventTrigger>
                 </i:Interaction.Triggers>
 
 
