@@ -24,18 +24,23 @@ namespace BuildNotifications.PluginInterfaces.Builds
         Pending = 2,
 
         /// <summary>
+        /// Build is currently running
+        /// </summary>
+        Running = 3,
+
+        /// <summary>
         /// Build succeeded.
         /// </summary>
-        Succeeded = 3,
+        Succeeded = 4,
 
         /// <summary>
         /// Build completed with warnings.
         /// </summary>
-        PartiallySucceeded = 4,
+        PartiallySucceeded = 5,
 
         /// <summary>
         /// Build failed with errors.
         /// </summary>
-        Failed = 5
+        Failed = 6
     }
 }

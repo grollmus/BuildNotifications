@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Pipeline.Cache;
@@ -45,13 +46,18 @@ namespace BuildNotifications.Core.Pipeline
             {
                 var providerId = buildProvider.GetHashCode();
 
-                var builds = buildProvider.FetchAllBuilds();
+                var builds = _lastUpdate.HasValue
+                    ? buildProvider.FetchBuildsChangedSince(_lastUpdate.Value)
+                    : buildProvider.FetchAllBuilds();
+
                 await foreach (var build in builds)
                 {
                     var key = new CacheKey(providerId, build.GetHashCode());
                     _buildCache.AddOrReplace(key, build);
                 }
             }
+
+            _lastUpdate = DateTime.Now;
         }
 
         private async Task FetchDefinitions()
@@ -82,9 +88,9 @@ namespace BuildNotifications.Core.Pipeline
         {
             var branchTask = FetchBranches();
             var definitionsTask = FetchDefinitions();
-            var buildTask = FetchBuilds();
+            var buildsTask = FetchBuilds();
 
-            await Task.WhenAll(branchTask, definitionsTask, buildTask);
+            await Task.WhenAll(branchTask, definitionsTask, buildsTask);
 
             var builds = _buildCache.ContentCopy();
             var branches = _branchCache.ContentCopy();
@@ -101,7 +107,7 @@ namespace BuildNotifications.Core.Pipeline
         private readonly IPipelineCache<IBranch> _branchCache;
         private readonly IPipelineCache<IBuildDefinition> _definitionCache;
         private readonly PipelineNotifier _pipelineNotifier;
-
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
+        private DateTime? _lastUpdate;
     }
 }

@@ -346,3 +346,4 @@ healthchecksdb
 MigrationBackup/
 /DummyFrontEnd/plugins/tfs
 /DummyFrontEnd/config.json
+/DummyFrontEnd/plugins/dummy
