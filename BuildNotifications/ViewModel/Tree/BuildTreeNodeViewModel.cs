@@ -29,7 +29,7 @@ namespace BuildNotifications.ViewModel.Tree
             });
             HighlightCommand = new DelegateCommand(Highlight);
         }
-
+        
         public ICommand AddAndRemoveCommand { get; set; }
 
         public ICommand AddOneBuildCommand { get; set; }
@@ -148,7 +148,22 @@ namespace BuildNotifications.ViewModel.Tree
                     break;
             }
 
+            if (Children.Any(x => x is BuildNodeViewModel))
+                SetBuildLargeStatus();
+
             OnPropertyChanged(nameof(BuildStatus));
+        }
+
+        private void SetBuildLargeStatus()
+        {
+            var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
+
+            foreach (var child in buildChildren)
+            {
+                child.IsLargeSize = false;
+            }
+
+            buildChildren.Last().IsLargeSize = true;
         }
 
         private void Highlight(object obj)

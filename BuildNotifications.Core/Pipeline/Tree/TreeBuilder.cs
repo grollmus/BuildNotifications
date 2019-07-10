@@ -51,15 +51,18 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
             var subTree = insertTarget.Children.FirstOrDefault(node => node.Equals(nodeToInsert));
             if (subTree != null)
-                Merge(subTree, nodeToInsert.Children.First());
+            {
+                if (nodeToInsert.Children.Any())
+                    Merge(subTree, nodeToInsert.Children.First());
+            }
             else
                 tree.AddChild(nodeToInsert);
         }
 
         /// <inheritdoc />
-        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions)
+        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null)
         {
-            var tree = new BuildTree(GroupDefinition);
+            var tree = oldTree ?? new BuildTree(GroupDefinition);
 
             foreach (var build in builds)
             {

@@ -55,18 +55,6 @@ namespace BuildNotifications.ViewModel
             UpdateTimer();
         }
 
-        private async Task UpdateTimer()
-        {
-            while (true)
-            {
-                IsBusy = true;
-                await _coreSetup.Update();
-                IsBusy = false;
-
-                await Task.Delay(TimeSpan.FromSeconds(15));
-            }
-        }
-
         public BuildTreeViewModel BuildTree
         {
             get => _buildTree;
@@ -97,7 +85,9 @@ namespace BuildNotifications.ViewModel
 
         private void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
         {
-            BuildTree = new BuildTreeViewModelFactory().Produce(e.Tree);
+            var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
+
+            BuildTree = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
         }
 
         // RemoveChildrenIfNotOfType ensures that only elements of the type are within the list, therefore the ReSharper warning is taken care of
@@ -213,11 +203,23 @@ namespace BuildNotifications.ViewModel
             //IsBusy = false;
         }
 
+        private async Task UpdateTimer()
+        {
+            while (true)
+            {
+                IsBusy = true;
+                await _coreSetup.Update();
+                IsBusy = false;
+
+                await Task.Delay(TimeSpan.FromSeconds(15));
+            }
+        }
+
         private readonly BuildTreeDummy _buildTreeSource;
+        private readonly CoreSetup _coreSetup;
         private BuildTreeViewModel _buildTree;
         private bool _showGroupDefinitionSelection;
 
         private static readonly Random _random = new Random();
-        private readonly CoreSetup _coreSetup;
     }
 }

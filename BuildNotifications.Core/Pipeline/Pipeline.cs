@@ -93,9 +93,11 @@ namespace BuildNotifications.Core.Pipeline
             var builds = _buildCache.ContentCopy();
             var branches = _branchCache.ContentCopy();
             var definitions = _definitionCache.ContentCopy();
-            var tree = _treeBuilder.Build(builds, branches, definitions);
+            var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
 
             _pipelineNotifier.Notify(tree);
+
+            _oldTree = tree;
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
@@ -107,5 +109,6 @@ namespace BuildNotifications.Core.Pipeline
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private DateTime? _lastUpdate;
+        private IBuildTree _oldTree;
     }
 }

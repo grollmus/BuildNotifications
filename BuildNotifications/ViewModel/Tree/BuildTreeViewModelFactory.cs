@@ -7,7 +7,17 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildTreeViewModelFactory
     {
-        public BuildTreeViewModel Produce(IBuildTree tree)
+        private BuildTreeViewModel Merge(BuildTreeViewModel tree1, BuildTreeViewModel tree2)
+        {
+            foreach (var child in tree2.Children)
+            {
+                MergeInternal(tree1, child);
+            }
+
+            return tree1;
+        }
+
+        public BuildTreeViewModel Produce(IBuildTree tree, BuildTreeViewModel existingTree)
         {
             var groupsAsList = tree.GroupDefinition.ToList();
             var buildTree = new BuildTreeViewModel(tree);
@@ -16,6 +26,9 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 buildTree.Children.Add(childVm);
             }
+
+            if (existingTree != null)
+                buildTree = Merge(existingTree, buildTree);
 
             var treeDepth = SetCurrentDepths(buildTree);
             SetMaxDepths(buildTree, treeDepth);
@@ -56,12 +69,25 @@ namespace BuildNotifications.ViewModel.Tree
                     nodeVm.Children.Add(childVm);
                 }
 
-                var lastBuild = nodeVm.Children.OfType<BuildNodeViewModel>().LastOrDefault();
-                if (lastBuild != null)
-                    lastBuild.IsLargeSize = true;
-
                 yield return nodeVm;
             }
+        }
+
+        private void MergeInternal(BuildTreeNodeViewModel tree1, BuildTreeNodeViewModel tree2)
+        {
+            var insertTarget = tree1;
+            var nodeToInsert = tree2;
+
+            var subTree = insertTarget.Children.FirstOrDefault(node => node.NodeSource.Equals(nodeToInsert.NodeSource));
+            if (subTree != null)
+            {
+                foreach (var child in nodeToInsert.Children)
+                {
+                    MergeInternal(subTree, child);
+                }
+            }
+            else
+                tree1.Children.Add(nodeToInsert);
         }
 
         private static int SetCurrentDepths(BuildTreeNodeViewModel node, int currentDepth = 0)
