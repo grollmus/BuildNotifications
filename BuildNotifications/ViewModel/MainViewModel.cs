@@ -211,7 +211,7 @@ namespace BuildNotifications.ViewModel
                 await _coreSetup.Update();
                 IsBusy = false;
 
-                await Task.Delay(TimeSpan.FromSeconds(15));
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
 

@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        private void Merge(IBuildTreeNode tree, IBuildTreeNode nodeToInsert)
+        private void Merge(IBuildTreeNode tree, IBuildTreeNode nodeToInsert, List<IBuildTreeNode> taggedNodes)
         {
             var insertTarget = tree;
 
@@ -53,10 +53,16 @@ namespace BuildNotifications.Core.Pipeline.Tree
             if (subTree != null)
             {
                 if (nodeToInsert.Children.Any())
-                    Merge(subTree, nodeToInsert.Children.First());
+                {
+                    Merge(subTree, nodeToInsert.Children.First(), taggedNodes);
+                    taggedNodes.Remove(subTree);
+                }
             }
             else
+            {
                 tree.AddChild(nodeToInsert);
+                taggedNodes.Remove(tree);
+            }
         }
 
         /// <inheritdoc />
@@ -64,16 +70,39 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
             var tree = oldTree ?? new BuildTree(GroupDefinition);
 
+            var taggedNodes = new List<IBuildTreeNode>();
+            TagAllNodesForDeletion(tree, taggedNodes);
+
             foreach (var build in builds)
             {
                 var path = BuildPath(build);
                 if (path == null)
                     continue;
 
-                Merge(tree, path);
+                Merge(tree, path, taggedNodes);
             }
 
+            RemoveTaggedNodes(tree, taggedNodes);
+
             return tree;
+        }
+
+        private void TagAllNodesForDeletion(IBuildTreeNode tree, List<IBuildTreeNode> taggedNodes)
+        {
+            foreach (var node in tree.Children)
+            {
+                taggedNodes.Add(node);
+                TagAllNodesForDeletion(node, taggedNodes);
+            }
+        }
+
+        private void RemoveTaggedNodes(IBuildTree tree, List<IBuildTreeNode> taggedNodes)
+        {
+            foreach (var node in tree.Children.ToList())
+            {
+                if( taggedNodes.Contains(node))
+                    tree.RemoveChild(node );
+            }
         }
 
         private readonly IConfiguration _config;

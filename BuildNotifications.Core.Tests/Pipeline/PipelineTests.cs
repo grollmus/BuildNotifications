@@ -31,7 +31,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         {
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
-            var sut = new Core.Pipeline.Pipeline(builder);
+            var configuration = Substitute.For<IConfiguration>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var branchProvider = Substitute.For<IBranchProvider>();
 
@@ -53,7 +54,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         {
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
-            var sut = new Core.Pipeline.Pipeline(builder);
+            var configuration = Substitute.For<IConfiguration>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project1 = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
@@ -74,7 +76,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         {
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
-            var sut = new Core.Pipeline.Pipeline(builder);
+            var configuration = Substitute.For<IConfiguration>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
@@ -92,7 +95,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
         {
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
-            var sut = new Core.Pipeline.Pipeline(builder);
+            var configuration = Substitute.For<IConfiguration>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
@@ -139,7 +143,9 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var branchProvider = Substitute.For<IBranchProvider>();
             branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
 
-            var pipeline = new Core.Pipeline.Pipeline(treeBuilder);
+            var configuration = Substitute.For<IConfiguration>();
+            configuration.BuildsToShow.Returns(int.MaxValue);
+            var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration);
 
             var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>());
             pipeline.AddProject(project);

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -11,14 +12,33 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Pipeline : IPipeline
     {
-        public Pipeline(ITreeBuilder treeBuilder)
+        public Pipeline(ITreeBuilder treeBuilder, IConfiguration configuration)
         {
             _treeBuilder = treeBuilder;
+            _configuration = configuration;
             _buildCache = new PipelineCache<IBuild>();
             _branchCache = new PipelineCache<IBranch>();
             _definitionCache = new PipelineCache<IBuildDefinition>();
 
             _pipelineNotifier = new PipelineNotifier();
+        }
+
+        private void CutTree(IBuildTreeNode tree)
+        {
+            var buildChildrenToRemove = tree.Children.OfType<IBuildNode>()
+                .OrderByDescending(x => x.Build.LastChangedTime ?? DateTime.MinValue)
+                .Skip(_configuration.BuildsToShow)
+                .ToList();
+
+            foreach (var node in buildChildrenToRemove)
+            {
+                tree.RemoveChild(node);
+            }
+
+            foreach (var child in tree.Children)
+            {
+                CutTree(child);
+            }
         }
 
         private async Task FetchBranches()
@@ -94,6 +114,7 @@ namespace BuildNotifications.Core.Pipeline
             var branches = _branchCache.ContentCopy();
             var definitions = _definitionCache.ContentCopy();
             var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
+            CutTree(tree);
 
             _pipelineNotifier.Notify(tree);
 
@@ -103,6 +124,7 @@ namespace BuildNotifications.Core.Pipeline
         public IPipelineNotifier Notifier => _pipelineNotifier;
 
         private readonly ITreeBuilder _treeBuilder;
+        private readonly IConfiguration _configuration;
         private readonly IPipelineCache<IBuild> _buildCache;
         private readonly IPipelineCache<IBranch> _branchCache;
         private readonly IPipelineCache<IBuildDefinition> _definitionCache;

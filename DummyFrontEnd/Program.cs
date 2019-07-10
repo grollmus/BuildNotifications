@@ -63,7 +63,7 @@ namespace DummyFrontEnd
             var config = LoadConfiguration(serializer);
 
             var treeBuilder = new TreeBuilder(config);
-            var pipeline = new Pipeline(treeBuilder);
+            var pipeline = new Pipeline(treeBuilder, config);
 
             Console.WriteLine("Waiting for dummy server to start");
             var tryCount = 0;

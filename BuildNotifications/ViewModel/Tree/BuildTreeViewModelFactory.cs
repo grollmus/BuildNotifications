@@ -7,16 +7,6 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildTreeViewModelFactory
     {
-        private BuildTreeViewModel Merge(BuildTreeViewModel tree1, BuildTreeViewModel tree2)
-        {
-            foreach (var child in tree2.Children)
-            {
-                MergeInternal(tree1, child);
-            }
-
-            return tree1;
-        }
-
         public BuildTreeViewModel Produce(IBuildTree tree, BuildTreeViewModel existingTree)
         {
             var groupsAsList = tree.GroupDefinition.ToList();
@@ -73,7 +63,22 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private void MergeInternal(BuildTreeNodeViewModel tree1, BuildTreeNodeViewModel tree2)
+        private BuildTreeViewModel Merge(BuildTreeViewModel tree1, BuildTreeViewModel tree2)
+        {
+            var taggedNodes = new List<BuildTreeNodeViewModel>();
+            TagAllNodesForDeletion(tree1, taggedNodes);
+
+            foreach (var child in tree2.Children)
+            {
+                MergeInternal(tree1, child, taggedNodes);
+            }
+
+            RemoveTaggedNodes(tree1, taggedNodes);
+
+            return tree1;
+        }
+
+        private void MergeInternal(BuildTreeNodeViewModel tree1, BuildTreeNodeViewModel tree2, List<BuildTreeNodeViewModel> taggedNodes)
         {
             var insertTarget = tree1;
             var nodeToInsert = tree2;
@@ -83,11 +88,24 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 foreach (var child in nodeToInsert.Children)
                 {
-                    MergeInternal(subTree, child);
+                    MergeInternal(subTree, child, taggedNodes);
+                    taggedNodes.Remove(subTree);
                 }
             }
             else
+            {
                 tree1.Children.Add(nodeToInsert);
+                taggedNodes.Remove(tree1);
+            }
+        }
+
+        private void RemoveTaggedNodes(BuildTreeNodeViewModel tree, List<BuildTreeNodeViewModel> taggedNodes)
+        {
+            foreach (var node in tree.Children.ToList())
+            {
+                if (taggedNodes.Contains(node))
+                    tree.Children.Remove(node);
+            }
         }
 
         private static int SetCurrentDepths(BuildTreeNodeViewModel node, int currentDepth = 0)
@@ -110,6 +128,15 @@ namespace BuildNotifications.ViewModel.Tree
             foreach (var child in node.Children)
             {
                 SetMaxDepths(child, maxDepth);
+            }
+        }
+
+        private void TagAllNodesForDeletion(BuildTreeNodeViewModel tree, List<BuildTreeNodeViewModel> taggedNodes)
+        {
+            foreach (var node in tree.Children)
+            {
+                taggedNodes.Add(node);
+                TagAllNodesForDeletion(node, taggedNodes);
             }
         }
     }
