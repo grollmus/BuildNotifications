@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
-    internal interface IDefinitionGroupNode : IGroupNode
+    public interface IDefinitionGroupNode : IGroupNode
     {
         IBuildDefinition Definition { get; }
     }

@@ -1,6 +1,6 @@
 ﻿namespace BuildNotifications.Core.Pipeline.Tree
 {
-    internal interface IBranchGroupNode : IGroupNode
+    public interface IBranchGroupNode : IGroupNode
     {
         string BranchName { get; }
     }

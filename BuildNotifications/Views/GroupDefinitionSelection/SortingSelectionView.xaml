@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="BuildNotifications.Views.GroupDefinitionSelection.SortingSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
+             xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             xmlns:groupDefinitionSelection1="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SortingDefinitionsViewModel}}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingDefinitionViewModel}">
+                <Grid IsHitTestVisible="False">
+                    <Rectangle Fill="{DynamicResource Background3}" Width="{StaticResource BlockOneAndHalf}"
+                               DockPanel.Dock="Right" Height="{DynamicResource BlockDouble}" Margin="0,0,-12,0">
+                        <Rectangle.RenderTransform>
+                            <SkewTransform AngleX="-35" />
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+
+                    <icons:IconBatch Width="{DynamicResource Block}" HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Height="{DynamicResource Block}" Foreground="{DynamicResource Foreground1}"
+                                     Type="{Binding IconType}" />
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+
+
+    </UserControl.Resources>
+
+    <ComboBox HorizontalAlignment="Center" VerticalAlignment="Center"
+              Style="{StaticResource GroupDefinitionSelectionComboBoxStyle}" Background="{DynamicResource Background3}"
+              ItemsSource="{Binding Sortings}" SelectedItem="{Binding SelectedViewModel}"
+              Width="{StaticResource BlockOneAndHalf}" MinWidth="{StaticResource BlockOneAndHalf}">
+
+        <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <groupDefinitionSelection1:OffsettingStackPanel Offset="-15" />
+            </ItemsPanelTemplate>
+        </ComboBox.ItemsPanel>
+
+        <ComboBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem">
+                <Setter Property="Template">
+
+                    <Setter.Value>
+
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Grid x:Name="Grid">
+                                <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
+                                            Margin="{StaticResource BlockQuarterThickness}">
+                                    <TextBlock Text="{text:Localized Sort}" x:Name="GroupByTextBlock" TextAlignment="Right"
+                                               HorizontalAlignment="Right" Margin="0,0,8,0" 
+                                               Foreground="Transparent" Width="62" />
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Width="{DynamicResource BlockOneAndHalf}" Margin="0,0,0,0"
+                                          Height="{DynamicResource BlockOneAndHalf}">
+                                        <ContentPresenter Margin="0,0,-6,0" />
+                                        <Rectangle Width="{StaticResource BlockOneAndHalf}" StrokeThickness="1"
+                                                   x:Name="OverlayRectangle"
+                                                   Height="{DynamicResource BlockOneAndHalf}" Margin="0,0,-18,0">
+                                            <Rectangle.RenderTransform>
+                                                <SkewTransform AngleX="-35" />
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Grid>
+
+                                    <TextBlock
+                                        Text="{Binding SortingDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
+                                        Width="150" Margin="12,0,0,0" 
+                                        x:Name="NameTextBlock" Foreground="Transparent" />
+
+                                </StackPanel>
+
+                                <!--Use an almost invisible background so mouse events are captured. This is necessary as this control is used within a PopUp that has AllowTransparency set to true-->
+                                <Border Background="{DynamicResource Background1}" Opacity="0.01" Cursor="Hand" />
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <triggerActions:ElementFadeInBackEase DoScale="False" Duration="0.3" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                            TargetName="GroupByTextBlock" />
+                                    <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                            TargetName="NameTextBlock" />
+                                    <Setter Property="Stroke" Value="{DynamicResource Foreground1}"
+                                            TargetName="OverlayRectangle" />
+                                    <Setter Property="Background" Value="{DynamicResource Background1}"
+                                            TargetName="Grid" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter TargetName="DockPanel" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+
+                    </Setter.Value>
+
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="true">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ComboBox.ItemContainerStyle>
+
+    </ComboBox>
+</UserControl>

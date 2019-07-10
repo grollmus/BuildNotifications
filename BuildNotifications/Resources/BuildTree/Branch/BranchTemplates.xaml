@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons">
+
+    <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">
+        <DockPanel HorizontalAlignment="Left">
+            <icons:IconBatch Type="Branch" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}"/>
+            <TextBlock Text="{Binding BranchName}" FontSize="{DynamicResource BlockFont}" UseLayoutRounding="True" />
+        </DockPanel>
+    </DataTemplate>
+</ResourceDictionary>

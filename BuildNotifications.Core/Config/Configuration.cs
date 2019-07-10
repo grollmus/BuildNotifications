@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Core.Config
 {
@@ -19,9 +19,9 @@ namespace BuildNotifications.Core.Config
             FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe;
 
             GroupDefinition = new BuildTreeGroupDefinition(
-                Pipeline.Tree.GroupDefinition.Source,
-                Pipeline.Tree.GroupDefinition.Branch,
-                Pipeline.Tree.GroupDefinition.BuildDefinition);
+                Pipeline.Tree.Arrangement.GroupDefinition.Source,
+                Pipeline.Tree.Arrangement.GroupDefinition.Branch,
+                Pipeline.Tree.Arrangement.GroupDefinition.BuildDefinition);
 
             Culture = CultureInfo.GetCultureInfo("en-US");
         }

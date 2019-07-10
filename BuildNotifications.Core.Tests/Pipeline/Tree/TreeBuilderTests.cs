@@ -2,6 +2,7 @@
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;

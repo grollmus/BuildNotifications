@@ -1,17 +1,106 @@
-﻿<Window x:Class="BuildNotifications.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<window:CustomWindow x:Class="BuildNotifications.MainWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
+                     xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
+                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+                     xmlns:views="clr-namespace:BuildNotifications.Views"
+                     xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
+                     xmlns:groupDefinition="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
+                     xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
+                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                     xmlns:groupDefinitionSelection1="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
+                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                     mc:Ignorable="d"
+                     Title="BuildNotifications" Height="450" Width="800"
+                     d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
+                     LeftToButtonsContent="{Binding SearchViewModel}">
+
+    <window:CustomWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/BuildTree/BuildTreeResources.xaml" />
+                <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
+                <ResourceDictionary Source="Resources/Window/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModelTree:BuildTreeViewModel}">
+                <viewsTree:BuildTreeView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
+                <views:SearchView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
+                <groupDefinition:BuildTreeGroupDefinitionView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </window:CustomWindow.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="9*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
-        <Label Content="Hello .NET Core!" HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontSize="40" />
-        <Button Content="Exit" Grid.Row="1" FontSize="20" Click="ButtonExit_Click" />
+        <ContentPresenter Content="{Binding BuildTree}" />
+        <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
+        <Button Width="30" Height="30" Style="{StaticResource HiddenIconButton}" Tag="BuildNotification"
+                HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource Foreground2}"
+                Command="{Binding LoadNewRandomTreeCommand}" />
     </Grid>
-</Window>
+
+    <window:CustomWindow.RightToTitleContent>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                    Tag="Settings"
+                    Margin="{StaticResource BlockQuarterThickness}"
+                    Width="{StaticResource BlockDouble}"
+                    Height="{StaticResource BlockDouble}"
+                    Foreground="{StaticResource Background3}" />
+
+            <Grid>
+            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                    Tag="GroupingEmpty"
+                    Margin="{StaticResource BlockQuarterThickness}"
+                    Width="{StaticResource BlockDouble}"
+                    Height="{StaticResource BlockDouble}"
+                    Foreground="{StaticResource Background3}"
+                    x:Name="GroupDefinitionButton"
+                    Command="{Binding ToggleGroupDefinitionSelectionCommand}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="true">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false" Duration="0.2"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="false">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true" Duration="0.4"/>
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+                <icons:IconBatch Margin="{StaticResource BlockQuarterThickness}"
+                                 Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
+                                 Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}" Type="GroupingSolo"/>
+            </Button>
+                
+            </Grid>
+            <Grid Width="{StaticResource Block}" />
+
+            <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Opacity="0">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Value="true">
+                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Value="false">
+                        <triggerActions:ElementFadeOut Anchor="MiddleLeft" Duration="0.2"/>
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </ContentPresenter>
+
+        </StackPanel>
+    </window:CustomWindow.RightToTitleContent>
+</window:CustomWindow>

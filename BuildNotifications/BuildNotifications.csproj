@@ -6,6 +6,67 @@
     <UseWPF>true</UseWPF>
     <LangVersion>8.0</LangVersion>
     <NullableContextOptions>enable</NullableContextOptions>
+    <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Resources\BuildTree\Status\**" />
+    <Compile Remove="Utils\**" />
+    <EmbeddedResource Remove="Resources\BuildTree\Status\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Resources\BuildTree\Status\**" />
+    <None Remove="Utils\**" />
+    <Page Remove="Resources\BuildTree\Status\**" />
+    <Page Remove="Utils\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml" />
+    <None Remove="Resources\BuildTree\Definition\DefinitionTemplates.xaml" />
+    <None Remove="Resources\BuildTree\BuildTemplates.xaml" />
+    <None Remove="Resources\BuildTree\BuildTreeResources.xaml" />
+    <None Remove="Resources\BuildTree\LevelTemplates.xaml" />
+    <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
+    <None Remove="Resources\Global\DarkTheme.xaml" />
+    <None Remove="Resources\Global\IconBatchStyles.xaml" />
+    <None Remove="Resources\Global\IconButtonStyles.xaml" />
+    <None Remove="Resources\Global\LightTheme.xaml" />
+    <None Remove="Resources\Global\Sizes.xaml" />
+    <None Remove="Resources\Global\TextBlockStyles.xaml" />
+    <None Remove="Resources\Global\TextBoxStyles.xaml" />
+    <None Remove="Resources\Global\WindowStyle.xaml" />
+    <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
+    <None Remove="Resources\Window\ScrollBar.xaml" />
+    <None Remove="Views\BusyIndicator.xaml" />
+    <None Remove="Views\GroupDefinitionSelectionView.xaml" />
+    <None Remove="Views\GroupDefinitionSelection\BuildTreeGroupDefinitionView.xaml" />
+    <None Remove="Views\GroupDefinitionSelection\SingleGroupDefinitionSelectionView.xaml" />
+    <None Remove="Views\GroupDefinitionSelection\SortingSelectionView.xaml" />
+    <None Remove="Views\SearchView.xaml" />
+    <None Remove="Views\Tree\BuildTreeView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Resources.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
+    <PackageReference Include="TweenSharp" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
+  </ItemGroup>
 
 </Project>

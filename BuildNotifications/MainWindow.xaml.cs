@@ -1,17 +1,17 @@
-﻿using System.Windows;
+﻿using BuildNotifications.Core.Text;
+using BuildNotifications.Resources.Window;
+using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
 {
-    public partial class MainWindow
+    public partial class MainWindow : CustomWindow
     {
         public MainWindow()
         {
+            DataContext = new MainViewModel();
             InitializeComponent();
-        }
 
-        private void ButtonExit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
+            var text = StringLocalizer.Instance["Test"];
         }
     }
 }

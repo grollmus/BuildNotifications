@@ -1,0 +1,99 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:window="clr-namespace:BuildNotifications.Resources.Window">
+
+    <Style TargetType="window:CustomWindow" x:Key="CustomWindowStyle">
+        <Setter Property="Background" Value="{DynamicResource Background1}" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="MinHeight" Value="320" />
+        <Setter Property="MinWidth" Value="480" />
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome GlassFrameThickness="1"
+                              ResizeBorderThickness="4"
+                              CaptionHeight="0" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type window:CustomWindow}">
+
+                    <ControlTemplate.Resources>
+                        <ResourceDictionary Source="../Icons/IconButtonStyles.xaml" />
+                    </ControlTemplate.Resources>
+
+                    <Grid Background="{DynamicResource Background1}" x:Name="WindowRoot">
+
+                        <Grid x:Name="LayoutRoot">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid x:Name="PART_HeaderBar" Background="{DynamicResource Background1}" Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{DynamicResource BlockSixthRowLength}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+
+                                <icons:IconBatch Grid.Column="1"
+                                                 Type="BuildNotification"
+                                                 Margin="{DynamicResource BlockHalfThickness}"
+                                                 Width="{DynamicResource BlockDouble}"
+                                                 Height="{DynamicResource BlockDouble}"
+                                                 Foreground="{DynamicResource Foreground1}" />
+
+                                <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
+                                    <ContentPresenter x:Name="PART_RightToTitleContentPresenter" DockPanel.Dock="Left" />
+                                    <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter"
+                                                      DockPanel.Dock="Right" />
+                                </DockPanel>
+
+                                <Grid x:Name="WindowControlsGrid" Grid.Column="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                        <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
+                                            Tag="Minimize" Foreground="{DynamicResource Foreground2}" />
+                                    <Button x:Name="MaximizeButton" Style="{StaticResource IconButton}"
+                                            Tag="Maximize" Foreground="{DynamicResource Foreground2}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
+                                            Grid.Column="1" />
+
+                                    <Button x:Name="RestoreButton" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
+                                            Tag="Restore" Foreground="{DynamicResource Foreground2}"
+                                            Visibility="Collapsed"
+                                            Grid.Column="1" />
+
+                                    <Button x:Name="CloseButton" Style="{StaticResource IconButton}"
+                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
+                                            Tag="Close" Foreground="{DynamicResource Foreground2}"
+                                            Grid.Column="2" />
+                                </Grid>
+                            </Grid>
+
+                            <Grid x:Name="PART_MainContentGrid"
+                                  Grid.Row="2"
+                                  Panel.ZIndex="10">
+                                <ContentPresenter x:Name="PART_MainContentPresenter" Grid.Row="0" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
