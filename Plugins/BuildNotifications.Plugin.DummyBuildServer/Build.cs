@@ -4,13 +4,14 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class Build : IBuild
+    internal class Build : IBaseBuild
     {
-        /// <inheritdoc />
-        public bool Equals(IBuild other)
+        public Build()
         {
-            return Id == (other as Build)?.Id;
+            Id = (++_idCounter).ToString();
         }
+
+        public string ProjectName { get; }
 
         /// <inheritdoc />
         public string BranchName { get; set; }
@@ -38,5 +39,12 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         /// <inheritdoc />
         public BuildStatus Status { get; set; }
+
+        public bool Equals(IBaseBuild other)
+        {
+            return Id == (other as Build)?.Id;
+        }
+
+        private static int _idCounter;
     }
 }

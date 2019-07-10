@@ -25,7 +25,7 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsBuildDefinition(definition);
         }
 
-        private IBuild Convert(Build build)
+        private IBaseBuild Convert(Build build)
         {
             return new TfsBuild(build);
         }
@@ -46,7 +46,7 @@ namespace BuildNotifications.Plugin.Tfs
         public IUser User { get; }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchAllBuilds()
+        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
@@ -60,7 +60,7 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition)
+        public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
@@ -81,7 +81,7 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime date)
+        public async IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date)
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();

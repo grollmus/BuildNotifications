@@ -5,12 +5,14 @@ namespace BuildNotifications.Plugin.DummyBuildServer
     internal class BuildDefinition : IBuildDefinition
     {
         public BuildDefinition()
+            : this(string.Empty)
         {
         }
 
         public BuildDefinition(string name)
         {
             Name = name;
+            Id = (++_idCounter).ToString();
         }
 
         /// <inheritdoc />
@@ -24,5 +26,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         /// <inheritdoc />
         public string Name { get; set; }
+
+        private static int _idCounter;
     }
 }

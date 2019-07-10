@@ -11,5 +11,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         /// <inheritdoc />
         public IBuildTreeGroupDefinition GroupDefinition { get; }
+
+        public override bool Equals(IBuildTreeNode other)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

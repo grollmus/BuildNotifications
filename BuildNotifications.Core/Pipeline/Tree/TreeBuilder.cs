@@ -18,15 +18,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         private IBuildTreeNode? BuildPath(IBuild build)
         {
-            IBuildTreeNode? node = null;
+            var node = ConstructNode(Arrangement.GroupDefinition.None, build);
 
             foreach (var group in GroupDefinition.Reverse())
             {
                 var parent = ConstructNode(group, build);
-
-                if (node != null)
-                    parent.AddChild(node);
-
+                parent.AddChild(node);
                 node = parent;
             }
 
@@ -41,26 +38,22 @@ namespace BuildNotifications.Core.Pipeline.Tree
                     return new BranchGroupNode(build.BranchName);
                 case Arrangement.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
-                //case Tree.GroupDefinition.Source:
-                //    throw new NotImplementedException();
-
+                case Arrangement.GroupDefinition.Source:
+                    return new SourceGroupNode(build.ProjectName);
                 default:
                     return new BuildNode(build);
             }
         }
 
-        private void Merge(IBuildTreeNode tree, IBuildTreeNode path)
+        private void Merge(IBuildTreeNode tree, IBuildTreeNode nodeToInsert)
         {
-            var target = tree.Children.FirstOrDefault(c => c == path);
-            if (target == null)
-                tree.AddChild(path);
+            var insertTarget = tree;
+
+            var subTree = insertTarget.Children.FirstOrDefault(node => node.Equals(nodeToInsert));
+            if (subTree != null)
+                Merge(subTree, nodeToInsert.Children.First());
             else
-            {
-                foreach (var child in path.Children)
-                {
-                    Merge(target, child);
-                }
-            }
+                tree.AddChild(nodeToInsert);
         }
 
         /// <inheritdoc />

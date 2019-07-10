@@ -6,7 +6,7 @@ using BuildStatus = BuildNotifications.PluginInterfaces.Builds.BuildStatus;
 
 namespace BuildNotifications.Plugin.Tfs
 {
-    internal class TfsBuild : IBuild
+    internal class TfsBuild : IBaseBuild
     {
         public TfsBuild(Build build)
         {
@@ -24,17 +24,10 @@ namespace BuildNotifications.Plugin.Tfs
             Definition = new TfsBuildDefinition(build.Definition);
         }
 
-        /// <inheritdoc />
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(_id, Id);
-        }
+        public bool Equals(IBaseBuild other) => _id == (other as TfsBuild)?._id;
 
         /// <inheritdoc />
-        public bool Equals(IBuild other)
-        {
-            return _id == (other as TfsBuild)?._id;
-        }
+        public override int GetHashCode() => HashCode.Combine(_id, Id);
 
         /// <inheritdoc />
         public string BranchName { get; }

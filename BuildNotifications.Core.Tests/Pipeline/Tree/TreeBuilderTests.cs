@@ -10,9 +10,37 @@ using Xunit;
 
 namespace BuildNotifications.Core.Tests.Pipeline.Tree
 {
+    internal class BuildTreeParser
+    {
+        public BuildTreeParser(IBuildTreeNode tree)
+        {
+            _tree = tree;
+        }
+
+        public IEnumerable<IBuildTreeNode> ChildrenAtLevel(int level)
+        {
+            if (level == 0)
+                return _tree.Yield();
+
+            var currentLevel = 1;
+
+            var currentChildren = _tree.Children.ToList();
+
+            while (currentLevel < level && currentChildren.Any())
+            {
+                currentChildren = currentChildren.SelectMany(x => x.Children).ToList();
+                ++currentLevel;
+            }
+
+            return currentChildren;
+        }
+
+        private readonly IBuildTreeNode _tree;
+    }
+
     public class TreeBuilderTests
     {
-        private static TreeBuilder Construct(params GroupDefinition[] definitions)
+        internal static TreeBuilder Construct(params GroupDefinition[] definitions)
         {
             var groupDefinition = new BuildTreeGroupDefinition(definitions ?? new GroupDefinition[0]);
 
@@ -20,34 +48,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             config.GroupDefinition.Returns(groupDefinition);
 
             return new TreeBuilder(config);
-        }
-
-        private class BuildTreeParser
-        {
-            public BuildTreeParser(IBuildTreeNode tree)
-            {
-                _tree = tree;
-            }
-
-            public IEnumerable<IBuildTreeNode> ChildrenAtLevel(int level)
-            {
-                if (level == 0)
-                    _tree.Yield();
-
-                var currentLevel = 1;
-
-                var currentChildren = _tree.Children.ToList();
-
-                while (currentLevel <= level && currentChildren.Any())
-                {
-                    currentChildren = currentChildren.SelectMany(x => x.Children).ToList();
-                    ++currentLevel;
-                }
-
-                return currentChildren;
-            }
-
-            private readonly IBuildTreeNode _tree;
         }
 
         [Fact]
@@ -89,6 +89,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
         [Theory]
         [InlineData(GroupDefinition.Branch)]
         [InlineData(GroupDefinition.BuildDefinition)]
+        [InlineData(GroupDefinition.None)]
         public void BuildShouldCreateFlatListWhenGroupingByOneCriteria(GroupDefinition grouping)
         {
             // Arrange
@@ -142,11 +143,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Assert
             var parser = new BuildTreeParser(actual);
 
-            Assert.All(parser.ChildrenAtLevel(0), x => Assert.IsAssignableFrom<IBuildTree>(x.GetType()));
-            Assert.All(parser.ChildrenAtLevel(1), x => Assert.IsAssignableFrom<ISourceGroupNode>(x.GetType()));
-            Assert.All(parser.ChildrenAtLevel(2), x => Assert.IsAssignableFrom<IBranchGroupNode>(x.GetType()));
-            Assert.All(parser.ChildrenAtLevel(3), x => Assert.IsAssignableFrom<IDefinitionGroupNode>(x.GetType()));
-            Assert.All(parser.ChildrenAtLevel(4), x => Assert.IsAssignableFrom<IBuildNode>(x.GetType()));
+            Assert.All(parser.ChildrenAtLevel(0), x => Assert.IsAssignableFrom<IBuildTree>(x));
+            Assert.All(parser.ChildrenAtLevel(1), x => Assert.IsAssignableFrom<ISourceGroupNode>(x));
+            Assert.All(parser.ChildrenAtLevel(2), x => Assert.IsAssignableFrom<IBranchGroupNode>(x));
+            Assert.All(parser.ChildrenAtLevel(3), x => Assert.IsAssignableFrom<IDefinitionGroupNode>(x));
+            Assert.All(parser.ChildrenAtLevel(4), x => Assert.IsAssignableFrom<IBuildNode>(x));
+            Assert.NotEmpty(parser.ChildrenAtLevel(4));
         }
     }
 }

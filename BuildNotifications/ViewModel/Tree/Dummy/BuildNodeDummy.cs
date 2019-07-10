@@ -22,11 +22,6 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
             Status = initialStatus;
         }
 
-        public bool Equals(IBuild other)
-        {
-            throw new NotImplementedException();
-        }
-
         public string BranchName { get; }
         public IBuildDefinition Definition { get; }
         public string Id { get; }
@@ -36,6 +31,13 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
         public BuildStatus Status { get; set; }
+
+        public bool Equals(IBaseBuild other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ProjectName { get; }
         private static Random _rnd = new Random();
     }
 }

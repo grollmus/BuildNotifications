@@ -32,6 +32,8 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                     return GetBrush("Yellow");
                 case BuildStatus.Failed:
                     return GetBrush("Red");
+                case BuildStatus.Running:
+                    return GetBrush("Blue");
                 default:
                     return GetBrush("Background3");
             }

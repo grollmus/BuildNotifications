@@ -11,6 +11,7 @@ namespace BuildNotifications.Core.Config
             BuildDefinitionBlacklist = new List<string>();
             BuildDefinitionWhitelist = new List<string>();
 
+            ProjectName = string.Empty;
             BuildConnectionName = string.Empty;
             SourceControlConnectionName = string.Empty;
             DefaultCompareBranch = string.Empty;
@@ -20,6 +21,9 @@ namespace BuildNotifications.Core.Config
             LoadWhitelistedBranchesExclusively = false;
             LoadWhitelistedDefinitionsExclusively = false;
         }
+
+        /// <inheritdoc />
+        public string ProjectName { get; set; }
 
         /// <inheritdoc />
         public IList<string> BranchBlacklist { get; set; }

@@ -6,28 +6,15 @@ namespace BuildNotifications.Core.Pipeline.Cache
     internal class PipelineCache<T> : IPipelineCache<T>
     {
         /// <inheritdoc />
-        public CacheAction AddOrReplace(CacheKey key, T item)
+        public void AddOrReplace(CacheKey key, T item)
         {
-            var action = CacheAction.Add;
-            _items.AddOrUpdate(key, cacheKey => item, (cacheKey, oldItem) =>
-            {
-                if (Equals(oldItem, item))
-                {
-                    action = CacheAction.None;
-                    return oldItem;
-                }
-
-                action = CacheAction.Update;
-                return item;
-            });
-
-            return action;
+            _items[key] = item;
         }
 
         /// <inheritdoc />
         public void Remove(CacheKey key)
         {
-            _items.TryRemove(key, out _);
+            _items.Remove(key, out _);
         }
 
         /// <inheritdoc />
@@ -42,6 +29,6 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return new List<T>(_items.Values);
         }
 
-        private readonly ConcurrentDictionary<CacheKey, T> _items = new ConcurrentDictionary<CacheKey, T>();
+        private readonly Dictionary<CacheKey, T> _items = new Dictionary<CacheKey, T>();
     }
 }

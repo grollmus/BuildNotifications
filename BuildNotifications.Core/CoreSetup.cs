@@ -75,7 +75,7 @@ namespace BuildNotifications.Core
                     {"port", "1111"}
                 }
             });
-            config.Projects.Add(new ProjectConfiguration {BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
+            config.Projects.Add(new ProjectConfiguration { ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
 
             configSerializer.Save(config, "../../../config.json");
             config = configSerializer.Load("../../../config.json");

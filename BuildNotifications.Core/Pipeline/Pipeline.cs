@@ -32,7 +32,7 @@ namespace BuildNotifications.Core.Pipeline
                 var branches = branchProvider.FetchExistingBranches();
                 await foreach (var branch in branches)
                 {
-                    var key = new CacheKey(providerId, branch.GetHashCode());
+                    var key = new CacheKey(providerId, branch.Name.GetHashCode());
                     _branchCache.AddOrReplace(key, branch);
                 }
             }
@@ -40,19 +40,17 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task FetchBuilds()
         {
-            var providers = _projectList.Select(p => p.BuildProvider).Distinct();
-
-            foreach (var buildProvider in providers)
+            foreach (var project in _projectList)
             {
-                var providerId = buildProvider.GetHashCode();
+                var projectId = project.GetHashCode();
 
                 var builds = _lastUpdate.HasValue
-                    ? buildProvider.FetchBuildsChangedSince(_lastUpdate.Value)
-                    : buildProvider.FetchAllBuilds();
+                    ? project.FetchBuildsChangedSince(_lastUpdate.Value)
+                    : project.FetchAllBuilds();
 
                 await foreach (var build in builds)
                 {
-                    var key = new CacheKey(providerId, build.GetHashCode());
+                    var key = new CacheKey(projectId, build.Id.GetHashCode());
                     _buildCache.AddOrReplace(key, build);
                 }
             }
@@ -71,7 +69,7 @@ namespace BuildNotifications.Core.Pipeline
                 var definitions = buildProvider.FetchExistingBuildDefinitions();
                 await foreach (var definition in definitions)
                 {
-                    var key = new CacheKey(providerId, definition.GetHashCode());
+                    var key = new CacheKey(providerId, definition.Id.GetHashCode());
                     _definitionCache.AddOrReplace(key, definition);
                 }
             }

@@ -59,8 +59,11 @@ namespace BuildNotifications.ViewModel
         {
             while (true)
             {
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                IsBusy = true;
                 await _coreSetup.Update();
+                IsBusy = false;
+
+                await Task.Delay(TimeSpan.FromSeconds(15));
             }
         }
 

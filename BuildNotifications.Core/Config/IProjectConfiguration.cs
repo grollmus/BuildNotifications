@@ -8,6 +8,11 @@ namespace BuildNotifications.Core.Config
     public interface IProjectConfiguration
     {
         /// <summary>
+        /// Name of the project.
+        /// </summary>
+        string ProjectName { get; }
+
+        /// <summary>
         /// List of branches to never load information for.
         /// </summary>
         IList<string> BranchBlacklist { get; }

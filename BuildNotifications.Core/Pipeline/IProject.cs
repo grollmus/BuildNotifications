@@ -1,4 +1,6 @@
-﻿using BuildNotifications.Core.Config;
+﻿using System;
+using System.Collections.Generic;
+using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -13,16 +15,24 @@ namespace BuildNotifications.Core.Pipeline
         /// <summary>
         /// Branch provider that is used to fetch branch information for this project.
         /// </summary>
-        IBranchProvider BranchProvider { get; }
+        IBranchProvider BranchProvider { get; set; }
 
         /// <summary>
         /// Build provider that is used to fetch build information for this project.
         /// </summary>
-        IBuildProvider BuildProvider { get; }
+        IBuildProvider BuildProvider { get; set; }
 
         /// <summary>
         /// Configuration for this project.
         /// </summary>
-        IProjectConfiguration Config { get; }
+        IProjectConfiguration Config { get; set; }
+
+        /// <summary>
+        /// Display name of this project.
+        /// </summary>
+        string Name { get; set; }
+
+        IAsyncEnumerable<IBuild> FetchAllBuilds();
+        IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate);
     }
 }

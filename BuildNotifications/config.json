@@ -17,6 +17,7 @@
   "Projects": [
     {
       "$type": "BuildNotifications.Core.Config.ProjectConfiguration, BuildNotifications.Core",
+      "ProjectName": "Projecto",
       "BranchBlacklist": [],
       "BranchWhitelist": [],
       "BuildConnectionName": "LocalDummy",

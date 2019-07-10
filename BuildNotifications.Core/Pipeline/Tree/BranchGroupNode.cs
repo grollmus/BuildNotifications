@@ -9,5 +9,10 @@
 
         /// <inheritdoc />
         public string BranchName { get; }
+
+        public override bool Equals(IBuildTreeNode other)
+        {
+            return BranchName.Equals((other as BranchGroupNode)?.BranchName);
+        }
     }
 }

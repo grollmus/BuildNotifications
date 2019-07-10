@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.ViewModel.Tree.Dummy
@@ -33,6 +34,11 @@ namespace BuildNotifications.ViewModel.Tree.Dummy
         public void RemoveChild(IBuildTreeNode node)
         {
             _children.Remove(node);
+        }
+
+        public bool Equals(IBuildTreeNode other)
+        {
+            throw new NotImplementedException();
         }
 
         private readonly List<IBuildTreeNode> _children;

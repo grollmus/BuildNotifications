@@ -19,7 +19,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public IUser User { get; }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchAllBuilds()
+        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {
             var json = await _connection.Query(Constants.Queries.Builds);
             var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
@@ -31,7 +31,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchBuildsForDefinition(IBuildDefinition definition)
+        public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
             var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
@@ -44,7 +44,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         }
 
         /// <inheritdoc />
-        public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime date)
+        public async IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
             var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);

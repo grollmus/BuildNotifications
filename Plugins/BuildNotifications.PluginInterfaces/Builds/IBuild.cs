@@ -4,10 +4,22 @@ using JetBrains.Annotations;
 namespace BuildNotifications.PluginInterfaces.Builds
 {
     /// <summary>
+    /// Contains enriched information about a single build.
+    /// </summary>
+    [PublicAPI]
+    public interface IBuild : IBaseBuild
+    {
+        /// <summary>
+        /// Name of the project this build originates from.
+        /// </summary>
+        string ProjectName { get; }
+    }
+
+    /// <summary>
     /// Contains information about a single build.
     /// </summary>
     [PublicAPI]
-    public interface IBuild : IEquatable<IBuild>
+    public interface IBaseBuild : IEquatable<IBaseBuild>
     {
         /// <summary>
         /// Name of the branch the build was for.

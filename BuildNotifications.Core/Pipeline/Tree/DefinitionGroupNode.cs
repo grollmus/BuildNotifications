@@ -11,5 +11,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         /// <inheritdoc />
         public IBuildDefinition Definition { get; }
+
+        public override bool Equals(IBuildTreeNode other)
+        {
+            return Definition.Id.Equals((other as DefinitionGroupNode)?.Definition?.Id);
+        }
     }
 }

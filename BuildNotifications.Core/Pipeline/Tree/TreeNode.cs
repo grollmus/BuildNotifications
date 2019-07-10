@@ -19,8 +19,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
             _childList.Remove(node);
         }
 
-        /// <inheritdoc />
         public IEnumerable<IBuildTreeNode> Children => _childList;
+
+        public abstract bool Equals(IBuildTreeNode other);
 
         private readonly List<IBuildTreeNode> _childList;
     }

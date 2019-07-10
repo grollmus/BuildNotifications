@@ -20,7 +20,7 @@
             if (obj.GetType() != GetType())
                 return false;
 
-            return Equals((CacheKey) obj);
+            return EqualsOtherCacheKey((CacheKey) obj);
         }
 
         /// <inheritdoc />
@@ -32,7 +32,7 @@
             }
         }
 
-        private bool Equals(CacheKey other)
+        private bool EqualsOtherCacheKey(CacheKey other)
         {
             return _providerId == other._providerId && _itemId == other._itemId;
         }

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
-    public interface IBuildTreeNode
+    public interface IBuildTreeNode : IEquatable<IBuildTreeNode>
     {
         IEnumerable<IBuildTreeNode> Children { get; }
         void AddChild(IBuildTreeNode node);
