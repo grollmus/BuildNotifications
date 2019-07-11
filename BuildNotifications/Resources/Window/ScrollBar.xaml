@@ -1,8 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:BuildNotifications.Resources.Window"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
 
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">

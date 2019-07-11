@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
              xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:groupDefinitionSelection1="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
@@ -18,7 +17,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingDefinitionViewModel}">
                 <Grid IsHitTestVisible="False">
                     <Rectangle Fill="{DynamicResource Background3}" Width="{StaticResource BlockOneAndHalf}"

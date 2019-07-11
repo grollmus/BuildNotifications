@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace BuildNotifications.Resources.Icons
@@ -7,7 +6,7 @@ namespace BuildNotifications.Resources.Icons
     /// <summary>
     /// Interaction logic for IconBatch.xaml
     /// </summary>
-    public partial class IconBatch : UserControl
+    public partial class IconBatch
     {
         public IconBatch()
         {

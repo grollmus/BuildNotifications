@@ -16,23 +16,21 @@ namespace BuildNotifications.Resources.BuildTree
 
         public static BuildTreeNodeTemplateSelector ForNodeDisplay { get; } = new BuildTreeNodeTemplateSelector(false);
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             var element = container as FrameworkElement;
-            DataTemplate template;
             var buildNode = item as BuildTreeNodeViewModel;
 
-            template =
-                _forLayout
-                    ? LayoutTemplate(buildNode, element)
-                    : DisplayTemplate(buildNode, element);
+            var template = _forLayout
+                ? LayoutTemplate(buildNode, element)
+                : DisplayTemplate(buildNode, element);
 
             if (template == null)
                 return base.SelectTemplate(item, container);
             return template;
         }
 
-        private static DataTemplate DataTemplateByName(object groupNode, FrameworkElement element)
+        private static DataTemplate? DataTemplateByName(object groupNode, FrameworkElement element)
         {
             var type = groupNode.GetType();
             var fullName = type.Name;
@@ -42,12 +40,12 @@ namespace BuildNotifications.Resources.BuildTree
             return element.TryFindResource(expectedKey) as DataTemplate;
         }
 
-        private DataTemplate DisplayTemplate(BuildTreeNodeViewModel node, FrameworkElement element)
+        private DataTemplate? DisplayTemplate(BuildTreeNodeViewModel node, FrameworkElement element)
         {
             return DataTemplateByName(node, element);
         }
 
-        private DataTemplate LayoutTemplate(BuildTreeNodeViewModel buildNode, FrameworkElement element)
+        private DataTemplate? LayoutTemplate(BuildTreeNodeViewModel buildNode, FrameworkElement element)
         {
             if (buildNode == null)
                 return null;

@@ -3,7 +3,6 @@
                     xmlns:local="clr-namespace:BuildNotifications.Resources.BuildTree"
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"

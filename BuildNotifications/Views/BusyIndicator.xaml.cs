@@ -3,13 +3,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using BuildNotifications.ViewModel;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.Views
 {
-    public partial class BusyIndicator : UserControl
+    public partial class BusyIndicator
     {
         public BusyIndicator()
         {

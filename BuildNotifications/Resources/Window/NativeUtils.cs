@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows;
+
 // ReSharper disable All
 
 namespace BuildNotifications.Resources.Window

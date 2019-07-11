@@ -1,10 +1,9 @@
 ﻿using BuildNotifications.Core.Text;
-using BuildNotifications.Resources.Window;
 using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
 {
-    public partial class MainWindow : CustomWindow
+    public partial class MainWindow
     {
         public MainWindow()
         {

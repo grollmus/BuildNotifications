@@ -44,9 +44,6 @@
     <Grid>
         <ContentPresenter Content="{Binding BuildTree}" />
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
-        <Button Width="30" Height="30" Style="{StaticResource HiddenIconButton}" Tag="BuildNotification"
-                HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{DynamicResource Foreground2}"
-                Command="{Binding LoadNewRandomTreeCommand}" />
     </Grid>
 
     <window:CustomWindow.RightToTitleContent>

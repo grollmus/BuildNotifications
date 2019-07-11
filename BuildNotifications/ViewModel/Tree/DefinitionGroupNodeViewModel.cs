@@ -16,7 +16,5 @@ namespace BuildNotifications.ViewModel.Tree
         {
             return DefinitionName;
         }
-
-        private static Random rnd = new Random();
     }
 }

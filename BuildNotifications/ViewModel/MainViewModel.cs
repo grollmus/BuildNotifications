@@ -25,7 +25,6 @@ namespace BuildNotifications.ViewModel
                 if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
                 {
                     Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
-                    UpdateOrCreateBuildTree();
 
                     _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
                 }
@@ -37,7 +36,6 @@ namespace BuildNotifications.ViewModel
                 }
             };
 
-            LoadNewRandomTreeCommand = new DelegateCommand(UpdateOrCreateBuildTree);
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
 
             var projectProvider = _coreSetup.ProjectProvider;
@@ -63,8 +61,6 @@ namespace BuildNotifications.ViewModel
         }
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
-
-        public ICommand LoadNewRandomTreeCommand { get; set; }
 
         public SearchViewModel SearchViewModel { get; set; }
 
@@ -95,18 +91,6 @@ namespace BuildNotifications.ViewModel
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
 
-        private async void UpdateOrCreateBuildTree(object obj = null)
-        {
-            //IsBusy = true;
-            //BuildTree = await Task.Run(() =>
-            //{
-            //    RandomTree();
-            //    var factory = new BuildTreeViewModelFactory();
-            //    return factory.Produce(_buildTreeSource);
-            //});
-            //IsBusy = false;
-        }
-
         private async Task UpdateTimer()
         {
             while (true)
@@ -117,6 +101,8 @@ namespace BuildNotifications.ViewModel
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
             }
+
+            // ReSharper disable once FunctionNeverReturns
         }
 
         private readonly CoreSetup _coreSetup;
