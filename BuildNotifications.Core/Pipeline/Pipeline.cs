@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Tree;
@@ -47,13 +48,21 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var branchProvider in providers)
             {
-                var providerId = branchProvider.GetHashCode();
-
-                var branches = branchProvider.FetchExistingBranches();
-                await foreach (var branch in branches)
+                try
                 {
-                    var key = new CacheKey(providerId, branch.Name.GetHashCode());
-                    _branchCache.AddOrReplace(key, branch);
+                    var providerId = branchProvider.GetHashCode();
+
+                    var branches = branchProvider.FetchExistingBranches();
+                    await foreach (var branch in branches)
+                    {
+                        var key = new CacheKey(providerId, branch.Name.GetHashCode());
+                        _branchCache.AddOrReplace(key, branch);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var typeName = branchProvider.GetType().AssemblyQualifiedName;
+                    LogTo.WarnException($"Exception when trying to fetch branches from Provider {typeName}", ex);
                 }
             }
         }
@@ -62,16 +71,24 @@ namespace BuildNotifications.Core.Pipeline
         {
             foreach (var project in _projectList)
             {
-                var projectId = project.GetHashCode();
-
-                var builds = _lastUpdate.HasValue
-                    ? project.FetchBuildsChangedSince(_lastUpdate.Value)
-                    : project.FetchAllBuilds();
-
-                await foreach (var build in builds)
+                try
                 {
-                    var key = new CacheKey(projectId, build.Id.GetHashCode());
-                    _buildCache.AddOrReplace(key, build);
+                    var projectId = project.GetHashCode();
+
+                    var builds = _lastUpdate.HasValue
+                        ? project.FetchBuildsChangedSince(_lastUpdate.Value)
+                        : project.FetchAllBuilds();
+
+                    await foreach (var build in builds)
+                    {
+                        var key = new CacheKey(projectId, build.Id.GetHashCode());
+                        _buildCache.AddOrReplace(key, build);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var projectName = project.Name;
+                    LogTo.WarnException($"Exception when trying to fetch builds for project {projectName}", ex);
                 }
             }
 
@@ -84,13 +101,21 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var buildProvider in providers)
             {
-                var providerId = buildProvider.GetHashCode();
-
-                var definitions = buildProvider.FetchExistingBuildDefinitions();
-                await foreach (var definition in definitions)
+                try
                 {
-                    var key = new CacheKey(providerId, definition.Id.GetHashCode());
-                    _definitionCache.AddOrReplace(key, definition);
+                    var providerId = buildProvider.GetHashCode();
+
+                    var definitions = buildProvider.FetchExistingBuildDefinitions();
+                    await foreach (var definition in definitions)
+                    {
+                        var key = new CacheKey(providerId, definition.Id.GetHashCode());
+                        _definitionCache.AddOrReplace(key, definition);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var typeName = buildProvider.GetType().AssemblyQualifiedName;
+                    LogTo.WarnException($"Exception when trying to fetch BuildDefinitions from Provider {typeName}", ex);
                 }
             }
         }

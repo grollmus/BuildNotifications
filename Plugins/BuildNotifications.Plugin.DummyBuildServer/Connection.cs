@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,11 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             _socket = socket;
         }
 
-        public Task<string> Query(string query)
+        public async Task<string> Query(string query)
         {
+            if (!_socket.IsConnected)
+                await _socket.ConnectAsync((int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+
             var buffer = Encoding.ASCII.GetBytes(Prepare(query));
             Debug.WriteLine($"C Sending {buffer.Length} bytes: {query} ...");
             _socket.Write(buffer, 0, buffer.Length);
@@ -26,7 +30,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             var response = Encoding.ASCII.GetString(buffer, 0, received);
             Debug.WriteLine($"C Received {received} bytes: {response}");
 
-            return Task.FromResult(response);
+            return response;
         }
 
         private string Prepare(string query)
