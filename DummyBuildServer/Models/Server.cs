@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.IO.Pipes;
+using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using BuildNotifications.Plugin.DummyBuildServer;
 using Newtonsoft.Json;
 
@@ -17,6 +19,17 @@ namespace DummyBuildServer.Models
         {
             Config = config;
             _parser = new ServerCommandParser(this);
+            _buildNotificationsProcessHook = new BuildNotificationsProcessHook();
+            _buildNotificationsProcessHook.OnProcessExited += OnBuildNotificationsProcessTerminated;
+        }
+
+        private async void OnBuildNotificationsProcessTerminated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("BuildNotifications.exe terminated. Auto restarting server...");
+            Stop();
+            // waiting on windows to actually close the pipes
+            await Task.Delay(100);
+            Start(_port);
         }
 
         public List<Build> Builds { get; } = new List<Build>();
@@ -28,6 +41,7 @@ namespace DummyBuildServer.Models
         public void Start(int port)
         {
             _port = port;
+            _cancelToken = new CancellationTokenSource();
             _networkThread = new Thread(Run);
             IsRunning = true;
             _networkThread.Start();
@@ -38,15 +52,28 @@ namespace DummyBuildServer.Models
         public void Stop()
         {
             IsRunning = false;
+            _cancelToken?.Cancel();
             _networkThread?.Join();
-
             _memoryFile.Dispose();
         }
 
-        private void Run()
+        private CancellationTokenSource _cancelToken;
+
+        private async void Run()
         {
-            var pipeServer = new NamedPipeServerStream($"BuildNotifications.DummyBuildServer.{_port}", PipeDirection.InOut, 1);
-            pipeServer.WaitForConnection();
+            var pipeServer = new NamedPipeServerStream($"BuildNotifications.DummyBuildServer.{_port}", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+
+            try
+            {
+                await pipeServer.WaitForConnectionAsync(_cancelToken.Token);
+            }
+            catch (Exception)
+            {
+                pipeServer.Close();
+                return;
+            }
+
+            _buildNotificationsProcessHook.SearchForProcess();
 
             pipeServer.ReadMode = PipeTransmissionMode.Byte;
 
@@ -71,6 +98,35 @@ namespace DummyBuildServer.Models
         private Thread? _networkThread;
         private MemoryMappedFile _memoryFile;
         private int _port;
+        private BuildNotificationsProcessHook _buildNotificationsProcessHook;
+    }
+
+    internal class BuildNotificationsProcessHook
+    {
+        public void SearchForProcess()
+        {
+            if (_process != null)
+                return;
+
+            var process = Process.GetProcessesByName("BuildNotifications").FirstOrDefault();
+            if (process != null)
+            {
+                Debug.WriteLine("Found BuildNotifications.exe. Waiting for termination for auto restart.");
+                _process = process;
+                WaitForProcess();
+            }
+        }
+
+        private async void WaitForProcess()
+        {
+            await Task.Run(() => _process.WaitForExit());
+            
+            _process = null;
+            OnProcessExited?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler OnProcessExited;
+        private Process _process;
     }
 
     internal class ServerCommandParser

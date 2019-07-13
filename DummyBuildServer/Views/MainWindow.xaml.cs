@@ -6,7 +6,9 @@
         {
             InitializeComponent();
 
-            DataContext = Kernel.MainViewModel();
+            var mainViewModel = Kernel.MainViewModel();
+            Closing += (sender, args) => mainViewModel.StopServerCommand.Execute(null);
+            DataContext = mainViewModel;
         }
     }
 }
