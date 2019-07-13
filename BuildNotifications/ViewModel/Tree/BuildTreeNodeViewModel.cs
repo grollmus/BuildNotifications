@@ -18,6 +18,8 @@ namespace BuildNotifications.ViewModel.Tree
             NodeSource = nodeSource;
             Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.8));
             Children.CollectionChanged += ChildrenOnCollectionChanged;
+            SetChildrenSorting(_currentSortingDefinition);
+
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o =>
             {
