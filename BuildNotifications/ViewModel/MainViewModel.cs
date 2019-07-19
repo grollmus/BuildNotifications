@@ -5,6 +5,7 @@ using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
+using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 
@@ -12,11 +13,13 @@ namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
+
         public MainViewModel()
         {
             _coreSetup = new CoreSetup();
 
             SearchViewModel = new SearchViewModel();
+            SettingsViewModel = new SettingsViewModel();
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
             GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
@@ -37,6 +40,7 @@ namespace BuildNotifications.ViewModel
             };
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
+            ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
 
             var projectProvider = _coreSetup.ProjectProvider;
             foreach (var project in projectProvider.AllProjects())
@@ -60,9 +64,21 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
-
         public SearchViewModel SearchViewModel { get; set; }
+
+        public SettingsViewModel SettingsViewModel { get; set; }
+
+        public bool ShowSettings
+        {
+            get => _showSettings;
+            set
+            {
+                _showSettings = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
         public bool ShowGroupDefinitionSelection
         {
@@ -75,6 +91,7 @@ namespace BuildNotifications.ViewModel
         }
 
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
+        public ICommand ToggleShowSettingsCommand { get; set; }
 
         private void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
         {
@@ -89,6 +106,11 @@ namespace BuildNotifications.ViewModel
         private void ToggleGroupDefinitionSelection(object obj)
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
+        }
+        
+        private void ToggleShowSettings(object obj)
+        {
+            ShowSettings = !ShowSettings;
         }
 
         private async Task UpdateTimer()
@@ -108,5 +130,6 @@ namespace BuildNotifications.ViewModel
         private readonly CoreSetup _coreSetup;
         private BuildTreeViewModel _buildTree;
         private bool _showGroupDefinitionSelection;
+        private bool _showSettings;
     }
 }

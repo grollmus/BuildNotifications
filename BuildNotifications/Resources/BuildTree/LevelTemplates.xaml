@@ -21,9 +21,6 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
-
-
-            <!--Value="{Binding Path=BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />-->
         </Style>
 
         <Style TargetType="{x:Type TextBlock}">
@@ -36,15 +33,12 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
-
-
-            <!--Value="{Binding Path=BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />-->
         </Style>
     </ResourceDictionary>
 
     <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel Margin="{DynamicResource BlockThickness}">
-            <Viewbox Height="{DynamicResource BlockDouble}" Margin="{DynamicResource BlockQuarterThicknessOnYHalfOnX}"
+        <DockPanel Margin="{StaticResource BlockThickness}">
+            <Viewbox Height="{StaticResource BlockDouble}" Margin="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
                 <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
@@ -65,14 +59,14 @@
     </DataTemplate>
 
     <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel Margin="{DynamicResource BlockThicknessOnYQuartersOnX}">
-            <Grid DockPanel.Dock="Top" Width="{DynamicResource BlockThirty}">
+        <DockPanel Margin="{StaticResource BlockThicknessOnYQuartersOnX}">
+            <Grid DockPanel.Dock="Top" Width="{StaticResource BlockThirty}">
                 <DockPanel>
-                    <Rectangle Height="{DynamicResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
-                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}" DockPanel.Dock="Top" />
-                    <Rectangle Height="{DynamicResource BlockHalf}"
+                    <Rectangle Height="{StaticResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
+                               Margin="{StaticResource BlockThreeQuartersLeftAndNegativeRight}" DockPanel.Dock="Top" />
+                    <Rectangle Height="{StaticResource BlockHalf}"
                                VerticalAlignment="Bottom" DockPanel.Dock="Top"
-                               Margin="{DynamicResource BlockThreeQuartersLeftAndNegativeRight}">
+                               Margin="{StaticResource BlockThreeQuartersLeftAndNegativeRight}">
                         <Rectangle.Fill>
                             <MultiBinding
                                 Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
@@ -88,20 +82,20 @@
                         <SkewTransform AngleX="-30" />
                     </DockPanel.RenderTransform>
                 </DockPanel>
-                <Border Height="{DynamicResource BlockDoubleAndHalf}" VerticalAlignment="Top"
-                        Margin="{DynamicResource BlockThreeQuartersLeftAndRight}">
-                    <Viewbox Height="{DynamicResource BlockDouble}" VerticalAlignment="Center"
+                <Border Height="{StaticResource BlockDoubleAndHalf}" VerticalAlignment="Top"
+                        Margin="{StaticResource BlockThreeQuartersLeftAndRight}">
+                    <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
                              HorizontalAlignment="Left">
-                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockNineteenTimes}"
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
                     </Viewbox>
                 </Border>
 
             </Grid>
 
-            <Grid Margin="{DynamicResource BlockHalfYOnlyMargin}">
+            <Grid Margin="{StaticResource BlockHalfYOnlyMargin}">
                 <ItemsControl ItemsSource="{Binding Children}"
-                              Margin="{DynamicResource BlockThreeQuartersLeftAndRight}"
+                              Margin="{StaticResource BlockThreeQuartersLeftAndRight}"
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -117,10 +111,10 @@
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
-                                     Width="{DynamicResource BlockTwentyEight}">
-            <Viewbox Height="{DynamicResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                     Width="{StaticResource BlockTwentyEight}">
+            <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
-                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockTwelveTimes}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
 
@@ -144,14 +138,6 @@
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-
-
-                <!--<ItemsControl.ItemContainerStyle>
-                    <Style TargetType="{x:Type ContentPresenter}">
-                        <Setter Property="DockPanel.Dock" Value="Right" />
-                    </Style>
-                </ItemsControl.ItemContainerStyle>-->
-
             </ItemsControl>
         </animation:AnimatedDockPanel>
     </DataTemplate>

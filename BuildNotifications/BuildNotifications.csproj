@@ -47,6 +47,7 @@
     <None Remove="Views\GroupDefinitionSelection\SingleGroupDefinitionSelectionView.xaml" />
     <None Remove="Views\GroupDefinitionSelection\SortingSelectionView.xaml" />
     <None Remove="Views\SearchView.xaml" />
+    <None Remove="Views\Settings\SettingsView.xaml" />
     <None Remove="Views\Tree\BuildTreeView.xaml" />
   </ItemGroup>
 

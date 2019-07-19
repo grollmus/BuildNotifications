@@ -3,10 +3,12 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                     xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
                      xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
                      xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
+                     xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
                      xmlns:views="clr-namespace:BuildNotifications.Views"
+                     xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
+                     xmlns:viewsSettings="clr-namespace:BuildNotifications.Views.Settings"
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
                      xmlns:groupDefinition="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
                      xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
@@ -15,6 +17,8 @@
                      xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                      xmlns:groupDefinitionSelection1="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
                      xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+                     xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
@@ -36,13 +40,29 @@
                 <views:SearchView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModelSettings:SettingsViewModel}">
+                <viewsSettings:SettingsView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
                 <groupDefinition:BuildTreeGroupDefinitionView />
             </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>
-        <ContentPresenter Content="{Binding BuildTree}" />
+        <DockPanel x:Name="DockPanel">
+            <ContentPresenter Content="{Binding SettingsViewModel}" Width="0" DockPanel.Dock="Left">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="false">
+                        <animation:WidthChange TargetWidth="0"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="true">
+                        <animation:WidthChange TargetWidth="{StaticResource BlockThirty}"/>
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </ContentPresenter>
+            <ContentPresenter Content="{Binding BuildTree}" />
+        </DockPanel>
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
     </Grid>
 
@@ -53,37 +73,47 @@
                     Margin="{StaticResource BlockQuarterThickness}"
                     Width="{StaticResource BlockDouble}"
                     Height="{StaticResource BlockDouble}"
-                    Foreground="{StaticResource Background3}" />
+                    Foreground="{StaticResource Background3}" 
+                    Command="{Binding ToggleShowSettingsCommand}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding ShowSettings}"
+                                    Value="true">
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding ShowSettings}"
+                                    Value="false">
+                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-            <Grid>
-                <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                        Tag="GroupingEmpty"
-                        Margin="{StaticResource BlockQuarterThickness}"
-                        Width="{StaticResource BlockDouble}"
-                        Height="{StaticResource BlockDouble}"
-                        Foreground="{StaticResource Background3}"
-                        x:Name="GroupDefinitionButton"
-                        Command="{Binding ToggleGroupDefinitionSelectionCommand}">
-                    <i:Interaction.Triggers>
-                        <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
-                                        Value="true">
-                            <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false" Duration="0.2" />
-                        </ei:DataTrigger>
-                        <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
-                                        Value="false">
-                            <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true" Duration="0.4" />
-                        </ei:DataTrigger>
-                    </i:Interaction.Triggers>
-                    <icons:IconBatch Margin="{StaticResource BlockQuarterThickness}"
-                                     Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
-                                     Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"
-                                     Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}"
-                                     Type="GroupingSolo" />
-                </Button>
+            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
+                    Tag="GroupingEmpty"
+                    Margin="{StaticResource BlockQuarterThickness}"
+                    Width="{StaticResource BlockDouble}"
+                    Height="{StaticResource BlockDouble}"
+                    Foreground="{StaticResource Background3}"
+                    x:Name="GroupDefinitionButton"
+                    Command="{Binding ToggleGroupDefinitionSelectionCommand}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="true">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false" Duration="0.2" />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
+                                    Value="false">
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true" Duration="0.4" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+                <icons:IconBatch Margin="{StaticResource BlockQuarterThickness}"
+                                 Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
+                                 Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}"
+                                 Type="GroupingSolo" />
+            </Button>
 
-            </Grid>
-            <Grid Width="{StaticResource Block}" />
+            <Rectangle Width="{StaticResource Block}" />
 
             <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Opacity="0">
                 <i:Interaction.Triggers>
