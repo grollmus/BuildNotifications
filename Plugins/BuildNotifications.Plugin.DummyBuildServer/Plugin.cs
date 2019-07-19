@@ -22,7 +22,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
                 return connection;
 
             var socket = new NamedPipeClientStream(".", $"BuildNotifications.DummyBuildServer.{port}", PipeDirection.InOut);
-            socket.Connect();
 
             connection = new Connection(socket);
             Connections.Add(port, connection);
