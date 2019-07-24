@@ -46,7 +46,8 @@ namespace BuildNotifications.Core
 
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
-            var treeBuilder = new TreeBuilder(Configuration);
+            var branchNameExtractor = new BranchNameExtractor();
+            var treeBuilder = new TreeBuilder(Configuration, branchNameExtractor);
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration);
 
             Pipeline.Notifier.Updated += Notifier_Updated;
@@ -59,6 +60,11 @@ namespace BuildNotifications.Core
 
         public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
 
+        public Task Update()
+        {
+            return Pipeline.Update();
+        }
+
         private static IConfiguration LoadConfiguration(ISerializer serializer)
         {
             var configSerializer = new ConfigurationSerializer(serializer);
@@ -70,12 +76,13 @@ namespace BuildNotifications.Core
                 Name = "LocalDummy",
                 BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
                 SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
-                Options = new Dictionary<string, string>
+                Options = new Dictionary<string, string?>
                 {
                     {"port", "1111"}
                 }
             });
-            config.Projects.Add(new ProjectConfiguration { ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
+
+            config.Projects.Add(new ProjectConfiguration {ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
 
             configSerializer.Save(config, "../../../config.json");
             config = configSerializer.Load("../../../config.json");
@@ -86,7 +93,5 @@ namespace BuildNotifications.Core
         {
             PipelineUpdated?.Invoke(this, e);
         }
-
-        public Task Update() => Pipeline.Update();
     }
 }

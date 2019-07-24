@@ -3,6 +3,7 @@ using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
@@ -47,7 +48,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var config = Substitute.For<IConfiguration>();
             config.GroupDefinition.Returns(groupDefinition);
 
-            return new TreeBuilder(config);
+            var branchNameExtractor = Substitute.For<IBranchNameExtractor>();
+
+            return new TreeBuilder(config, branchNameExtractor);
         }
 
         [Fact]
