@@ -51,6 +51,14 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public async IAsyncEnumerable<IBuild> FetchRemovedBuilds()
+        {
+            await foreach (var build in BuildProvider.RemovedBuilds())
+            {
+                yield return Enrich(build);
+            }
+        }
+
         private class EnrichedBuild : IBuild
         {
             public EnrichedBuild(IBaseBuild build, string projectName)

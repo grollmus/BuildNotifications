@@ -84,6 +84,14 @@ namespace BuildNotifications.Core.Pipeline
                         var key = new CacheKey(projectId, build.Id.GetHashCode());
                         _buildCache.AddOrReplace(key, build);
                     }
+
+                    var removedBuilds = project.FetchRemovedBuilds();
+
+                    await foreach (var build in removedBuilds)
+                    {
+                        var key = new CacheKey(projectId, build.Id.GetHashCode());
+                        _buildCache.Remove(key);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -156,6 +164,6 @@ namespace BuildNotifications.Core.Pipeline
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private DateTime? _lastUpdate;
-        private IBuildTree _oldTree;
+        private IBuildTree? _oldTree;
     }
 }

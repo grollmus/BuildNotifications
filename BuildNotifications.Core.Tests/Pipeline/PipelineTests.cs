@@ -18,7 +18,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
     {
         private async IAsyncEnumerable<T> ToAsync<T>(IEnumerable<T> source)
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
 
             foreach (var build in source)
             {

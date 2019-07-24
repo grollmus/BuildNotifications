@@ -32,7 +32,23 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         string Name { get; set; }
 
+        /// <summary>
+        /// Fetches all builds for this project.
+        /// </summary>
+        /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchAllBuilds();
+
+        /// <summary>
+        /// Fetches all builds for this project that have been changed since a given time.
+        /// </summary>
+        /// <param name="lastUpdate">Time to fetch updated builds since.</param>
+        /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate);
+
+        /// <summary>
+        /// Fetches all builds that no longer exist for this project.
+        /// </summary>
+        /// <returns>List of builds.</returns>
+        IAsyncEnumerable<IBuild> FetchRemovedBuilds();
     }
 }

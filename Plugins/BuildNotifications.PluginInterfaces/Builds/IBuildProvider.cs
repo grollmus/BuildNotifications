@@ -40,5 +40,17 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// </summary>
         /// <returns>List of all existing build definitions.</returns>
         IAsyncEnumerable<IBuildDefinition> FetchExistingBuildDefinitions();
+
+        /// <summary>
+        /// Returns a list of build definitions that no longer exist in the source.
+        /// </summary>
+        /// <returns>List of removed build definitions.</returns>
+        IAsyncEnumerable<IBuildDefinition> RemovedBuildDefinitions();
+
+        /// <summary>
+        /// Returns a list of builds that no longer exist in the source.
+        /// </summary>
+        /// <returns>List of removed builds.</returns>
+        IAsyncEnumerable<IBaseBuild> RemovedBuilds();
     }
 }
