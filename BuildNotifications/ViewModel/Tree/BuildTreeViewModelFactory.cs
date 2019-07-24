@@ -38,7 +38,6 @@ namespace BuildNotifications.ViewModel.Tree
                     return new SourceGroupNodeViewModel((ISourceGroupNode) node);
                 case GroupDefinition.Status:
                     return new StatusGroupNodeViewModel(node);
-                case GroupDefinition.None:
                 default:
                     return new BuildNodeViewModel((IBuildNode) node) {IsLargeSize = false};
             }

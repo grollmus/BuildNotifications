@@ -23,15 +23,6 @@ namespace DummyBuildServer.Models
             _buildNotificationsProcessHook.OnProcessExited += OnBuildNotificationsProcessTerminated;
         }
 
-        private async void OnBuildNotificationsProcessTerminated(object sender, EventArgs e)
-        {
-            Debug.WriteLine("BuildNotifications.exe terminated. Auto restarting server...");
-            Stop();
-            // waiting on windows to actually close the pipes
-            await Task.Delay(100);
-            Start(_port);
-        }
-
         public List<Build> Builds { get; } = new List<Build>();
 
         public ServerConfig Config { get; }
@@ -57,7 +48,14 @@ namespace DummyBuildServer.Models
             _memoryFile.Dispose();
         }
 
-        private CancellationTokenSource _cancelToken;
+        private async void OnBuildNotificationsProcessTerminated(object sender, EventArgs e)
+        {
+            Debug.WriteLine("BuildNotifications.exe terminated. Auto restarting server...");
+            Stop();
+            // waiting on windows to actually close the pipes
+            await Task.Delay(100);
+            Start(_port);
+        }
 
         private async void Run()
         {
@@ -95,14 +93,18 @@ namespace DummyBuildServer.Models
         }
 
         private readonly ServerCommandParser _parser;
+
+        private CancellationTokenSource _cancelToken;
         private Thread? _networkThread;
         private MemoryMappedFile _memoryFile;
         private int _port;
-        private BuildNotificationsProcessHook _buildNotificationsProcessHook;
+        private readonly BuildNotificationsProcessHook _buildNotificationsProcessHook;
     }
 
     internal class BuildNotificationsProcessHook
     {
+        public event EventHandler OnProcessExited;
+
         public void SearchForProcess()
         {
             if (_process != null)
@@ -120,12 +122,11 @@ namespace DummyBuildServer.Models
         private async void WaitForProcess()
         {
             await Task.Run(() => _process.WaitForExit());
-            
+
             _process = null;
             OnProcessExited?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler OnProcessExited;
         private Process _process;
     }
 

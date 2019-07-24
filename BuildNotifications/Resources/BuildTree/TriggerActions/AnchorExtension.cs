@@ -11,7 +11,6 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             switch (anchor)
             {
                 default:
-                case Anchor.Center:
                     return new Point(size.Width / 2, size.Height / 2);
                 case Anchor.MiddleLeft:
                     return new Point(0, size.Height / 2);

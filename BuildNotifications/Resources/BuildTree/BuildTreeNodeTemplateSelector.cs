@@ -57,7 +57,6 @@ namespace BuildNotifications.Resources.BuildTree
             var levelToDisplay = Math.Max(1, 4 - distanceToDeepestLevel); // 4 is the maximum of supported depths, beyond that display every group the same as level 1
             switch (levelToDisplay)
             {
-                case 1:
                 default:
                     return element.TryFindResource("FirstLevelTemplate") as DataTemplate;
                 case 2:

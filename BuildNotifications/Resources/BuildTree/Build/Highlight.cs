@@ -40,7 +40,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
             var targetColor = targetBrush?.Color ?? Colors.White;
             var initialColor = initialHighlightBrush?.Color ?? Colors.White;
 
-            brush.Color = background.Color;
+            brush.Color = background?.Color ?? new Color();
             AssociatedObject.Fill = brush;
 
             var initialTime = 0.5;

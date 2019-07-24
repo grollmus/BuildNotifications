@@ -13,7 +13,6 @@ namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-
         public MainViewModel()
         {
             _coreSetup = new CoreSetup();
@@ -50,7 +49,7 @@ namespace BuildNotifications.ViewModel
 
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
 
-            UpdateTimer();
+            UpdateTimer().FireAndForget();
         }
 
         public BuildTreeViewModel BuildTree
@@ -64,21 +63,11 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
+
         public SearchViewModel SearchViewModel { get; set; }
 
         public SettingsViewModel SettingsViewModel { get; set; }
-
-        public bool ShowSettings
-        {
-            get => _showSettings;
-            set
-            {
-                _showSettings = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
         public bool ShowGroupDefinitionSelection
         {
@@ -86,6 +75,16 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _showGroupDefinitionSelection = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowSettings
+        {
+            get => _showSettings;
+            set
+            {
+                _showSettings = value;
                 OnPropertyChanged();
             }
         }
@@ -107,7 +106,7 @@ namespace BuildNotifications.ViewModel
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
-        
+
         private void ToggleShowSettings(object obj)
         {
             ShowSettings = !ShowSettings;
