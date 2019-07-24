@@ -44,25 +44,22 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task FetchBranches()
         {
-            var providers = _projectList.Select(p => p.BranchProvider).Distinct();
-
-            foreach (var branchProvider in providers)
+            foreach (var project in _projectList)
             {
                 try
                 {
-                    var providerId = branchProvider.GetHashCode();
+                    var projectId = project.GetHashCode();
 
-                    var branches = branchProvider.FetchExistingBranches();
+                    var branches = project.FetchExistingBranches();
                     await foreach (var branch in branches)
                     {
-                        var key = new CacheKey(providerId, branch.Name.GetHashCode());
+                        var key = new CacheKey(projectId, branch.Name.GetHashCode());
                         _branchCache.AddOrReplace(key, branch);
                     }
                 }
                 catch (Exception ex)
                 {
-                    var typeName = branchProvider.GetType().AssemblyQualifiedName;
-                    LogTo.WarnException($"Exception when trying to fetch branches from Provider {typeName}", ex);
+                    LogTo.WarnException("Exception when trying to fetch branches from project", ex);
                 }
             }
         }
@@ -105,25 +102,22 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task FetchDefinitions()
         {
-            var providers = _projectList.Select(p => p.BuildProvider).Distinct();
-
-            foreach (var buildProvider in providers)
+            foreach (var project in _projectList)
             {
                 try
                 {
-                    var providerId = buildProvider.GetHashCode();
+                    var projectId = project.GetHashCode();
 
-                    var definitions = buildProvider.FetchExistingBuildDefinitions();
+                    var definitions = project.FetchBuildDefinitions();
                     await foreach (var definition in definitions)
                     {
-                        var key = new CacheKey(providerId, definition.Id.GetHashCode());
+                        var key = new CacheKey(projectId, definition.Id.GetHashCode());
                         _definitionCache.AddOrReplace(key, definition);
                     }
                 }
                 catch (Exception ex)
                 {
-                    var typeName = buildProvider.GetType().AssemblyQualifiedName;
-                    LogTo.WarnException($"Exception when trying to fetch BuildDefinitions from Provider {typeName}", ex);
+                    LogTo.WarnException("Exception when trying to fetch BuildDefinitions from project", ex);
                 }
             }
         }

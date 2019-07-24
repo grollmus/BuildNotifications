@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -9,23 +10,23 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders, IProjectConfiguration config)
         {
             Name = config.ProjectName;
-            BuildProvider = buildProvider;
-            BranchProvider = branchProvider;
+            _buildProviders = buildProviders.ToList();
+            _branchProviders = branchProviders.ToList();
             Config = config;
+        }
+
+        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
+            : this(buildProvider.Yield(), branchProvider.Yield(), config)
+        {
         }
 
         private IBuild Enrich(IBaseBuild build)
         {
             return new EnrichedBuild(build, Name);
         }
-
-        public IBranchProvider BranchProvider { get; set; }
-
-        /// <inheritdoc />
-        public IBuildProvider BuildProvider { get; set; }
 
         /// <inheritdoc />
         public IProjectConfiguration Config { get; set; }
@@ -36,28 +37,63 @@ namespace BuildNotifications.Core.Pipeline
         /// <inheritdoc />
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
-            await foreach (var build in BuildProvider.FetchAllBuilds())
+            foreach (var buildProvider in _buildProviders)
             {
-                yield return Enrich(build);
+                await foreach (var build in buildProvider.FetchAllBuilds())
+                {
+                    yield return Enrich(build);
+                }
             }
         }
 
         /// <inheritdoc />
         public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate)
         {
-            await foreach (var build in BuildProvider.FetchBuildsChangedSince(lastUpdate))
+            foreach (var buildProvider in _buildProviders)
             {
-                yield return Enrich(build);
+                await foreach (var build in buildProvider.FetchBuildsChangedSince(lastUpdate))
+                {
+                    yield return Enrich(build);
+                }
+            }
+        }
+
+        public async IAsyncEnumerable<IBranch> FetchExistingBranches()
+        {
+            foreach (var branchProvider in _branchProviders)
+            {
+                await foreach (var branch in branchProvider.FetchExistingBranches())
+                {
+                    yield return branch;
+                }
             }
         }
 
         public async IAsyncEnumerable<IBuild> FetchRemovedBuilds()
         {
-            await foreach (var build in BuildProvider.RemovedBuilds())
+            foreach (var buildProvider in _buildProviders)
             {
-                yield return Enrich(build);
+                await foreach (var build in buildProvider.RemovedBuilds())
+                {
+                    yield return Enrich(build);
+                }
             }
         }
+
+        public async IAsyncEnumerable<IBuildDefinition> FetchBuildDefinitions()
+        {
+            foreach (var buildProvider in _buildProviders)
+            {
+                await foreach (var definition in buildProvider.FetchExistingBuildDefinitions())
+                {
+                    yield return definition;
+                }
+            }
+        }
+
+        private readonly List<IBranchProvider> _branchProviders;
+
+        private readonly List<IBuildProvider> _buildProviders;
 
         private class EnrichedBuild : IBuild
         {
