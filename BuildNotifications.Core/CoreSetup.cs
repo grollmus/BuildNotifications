@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
@@ -10,30 +8,6 @@ using BuildNotifications.Core.Utilities;
 
 namespace BuildNotifications.Core
 {
-    public interface IProjectProvider
-    {
-        IEnumerable<IProject> AllProjects();
-    }
-
-    internal class ProjectProvider : IProjectProvider
-    {
-        public ProjectProvider(IConfiguration configuration, IPluginRepository pluginRepository)
-        {
-            _configuration = configuration;
-
-            _projectFactory = new ProjectFactory(pluginRepository, configuration);
-        }
-
-        public IEnumerable<IProject> AllProjects()
-        {
-            var project = _projectFactory.Construct(_configuration.Projects.First());
-            yield return project;
-        }
-
-        private readonly IConfiguration _configuration;
-        private readonly ProjectFactory _projectFactory;
-    }
-
     public class CoreSetup
     {
         public CoreSetup()
@@ -42,7 +16,7 @@ namespace BuildNotifications.Core
             Configuration = LoadConfiguration(serializer);
 
             var pluginLoader = new PluginLoader();
-            PluginRepository = pluginLoader.LoadPlugins(new[] {"../../../plugins"});
+            PluginRepository = pluginLoader.LoadPlugins(new[] {"plugins"});
 
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
@@ -67,26 +41,10 @@ namespace BuildNotifications.Core
 
         private static IConfiguration LoadConfiguration(ISerializer serializer)
         {
+            const string configFilename = "config.json";
+
             var configSerializer = new ConfigurationSerializer(serializer);
-
-            IConfiguration config = new Configuration();
-
-            config.Connections.Add(new ConnectionData
-            {
-                Name = "LocalDummy",
-                BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
-                SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
-                Options = new Dictionary<string, string?>
-                {
-                    {"port", "1111"}
-                }
-            });
-
-            config.Projects.Add(new ProjectConfiguration {ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
-
-            configSerializer.Save(config, "../../../config.json");
-            config = configSerializer.Load("../../../config.json");
-            return config;
+            return configSerializer.Load(configFilename);
         }
 
         private void Notifier_Updated(object sender, PipelineUpdateEventArgs e)

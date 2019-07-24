@@ -3,7 +3,7 @@ using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Utilities
 {
-    internal interface IBranchNameExtractor
+    public interface IBranchNameExtractor
     {
         /// <summary>
         /// Extract name from branch that can be used for display in the UI.
