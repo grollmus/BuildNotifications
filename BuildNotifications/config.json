@@ -20,7 +20,7 @@
       "ProjectName": "Projecto",
       "BranchBlacklist": [],
       "BranchWhitelist": [],
-      "BuildConnectionName": "LocalDummy",
+      "BuildConnectionNames": [ "LocalDummy" ],
       "BuildDefinitionBlacklist": [],
       "BuildDefinitionWhitelist": [],
       "DefaultCompareBranch": "",
@@ -28,7 +28,7 @@
       "LoadWhitelistedBranchesExclusively": false,
       "LoadWhitelistedDefinitionsExclusively": false,
       "ShowPullRequests": true,
-      "SourceControlConnectionName": "LocalDummy"
+      "SourceControlConnectionNames": [ "LocalDummy" ]
     }
   ],
   "FailedBuildNotifyConfig": 3,

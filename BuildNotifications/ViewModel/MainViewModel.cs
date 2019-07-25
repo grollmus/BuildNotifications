@@ -14,8 +14,12 @@ namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
-        private const string ConfigFileName = "Configuration.json";
+        private const string ConfigFileName = "config.json";
+#if DEBUG
+        private string ConfigFilePath => ConfigFileName;
+#else
         private string ConfigFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{Path.DirectorySeparatorChar}BuildNotifications{Path.DirectorySeparatorChar}{ConfigFileName}");
+#endif
 
         public MainViewModel()
         {
@@ -53,7 +57,7 @@ namespace BuildNotifications.ViewModel
 
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
 
-            UpdateTimer();
+            UpdateTimer().FireAndForget();
         }
 
         public BuildTreeViewModel BuildTree
@@ -67,21 +71,11 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
+
         public SearchViewModel SearchViewModel { get; set; }
 
         public SettingsViewModel SettingsViewModel { get; set; }
-
-        public bool ShowSettings
-        {
-            get => _showSettings;
-            set
-            {
-                _showSettings = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
         public bool ShowGroupDefinitionSelection
         {
@@ -89,6 +83,16 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _showGroupDefinitionSelection = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowSettings
+        {
+            get => _showSettings;
+            set
+            {
+                _showSettings = value;
                 OnPropertyChanged();
             }
         }
@@ -110,7 +114,7 @@ namespace BuildNotifications.ViewModel
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
-        
+
         private void ToggleShowSettings(object obj)
         {
             ShowSettings = !ShowSettings;

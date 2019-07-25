@@ -13,16 +13,6 @@ namespace BuildNotifications.Core.Pipeline
     public interface IProject
     {
         /// <summary>
-        /// Branch provider that is used to fetch branch information for this project.
-        /// </summary>
-        IBranchProvider BranchProvider { get; set; }
-
-        /// <summary>
-        /// Build provider that is used to fetch build information for this project.
-        /// </summary>
-        IBuildProvider BuildProvider { get; set; }
-
-        /// <summary>
         /// Configuration for this project.
         /// </summary>
         IProjectConfiguration Config { get; set; }
@@ -32,7 +22,35 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         string Name { get; set; }
 
+        /// <summary>
+        /// Fetches all builds for this project.
+        /// </summary>
+        /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchAllBuilds();
+
+        /// <summary>
+        /// Fetches all available definitions for this project.
+        /// </summary>
+        /// <returns>List of all build definitions</returns>
+        IAsyncEnumerable<IBuildDefinition> FetchBuildDefinitions();
+
+        /// <summary>
+        /// Fetches all builds for this project that have been changed since a given time.
+        /// </summary>
+        /// <param name="lastUpdate">Time to fetch updated builds since.</param>
+        /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate);
+
+        /// <summary>
+        /// Fetches all branches that exist for this project.
+        /// </summary>
+        /// <returns>List of branches.</returns>
+        IAsyncEnumerable<IBranch> FetchExistingBranches();
+
+        /// <summary>
+        /// Fetches all builds that no longer exist for this project.
+        /// </summary>
+        /// <returns>List of builds.</returns>
+        IAsyncEnumerable<IBuild> FetchRemovedBuilds();
     }
 }

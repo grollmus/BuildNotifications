@@ -23,7 +23,7 @@ namespace BuildNotifications.Resources.Settings
             var group = new TransformGroup();
             group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
             AssociatedObject.RenderTransform = group;
-            
+
             var existingBrush = AssociatedObject.Foreground as SolidColorBrush;
             var brush = new SolidColorBrush(existingBrush?.Color ?? Colors.White);
 

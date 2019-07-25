@@ -23,10 +23,10 @@ namespace BuildNotifications.Core.Config
         IList<string> BranchWhitelist { get; }
 
         /// <summary>
-        /// Name of the <see cref="ConnectionData" /> that is used to
+        /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        string BuildConnectionName { get; }
+        IList<string> BuildConnectionNames { get; }
 
         /// <summary>
         /// List of build definitions to never load information for.
@@ -64,9 +64,9 @@ namespace BuildNotifications.Core.Config
         bool ShowPullRequests { get; }
 
         /// <summary>
-        /// Name of the <see cref="ConnectionData" /> that is used to
+        /// Name of the <see cref="ConnectionData" /> that are used to
         /// fetch branch information for this project.
         /// </summary>
-        string SourceControlConnectionName { get; }
+        IList<string> SourceControlConnectionNames { get; }
     }
 }

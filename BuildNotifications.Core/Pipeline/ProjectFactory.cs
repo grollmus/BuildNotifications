@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
@@ -88,23 +89,35 @@ namespace BuildNotifications.Core.Pipeline
         /// <inheritdoc />
         public IProject? Construct(IProjectConfiguration config)
         {
-            LogTo.Debug($"Trying to construct project from {config.BuildConnectionName} and {config.SourceControlConnectionName}");
+            LogTo.Debug($"Trying to construct project from {config.BuildConnectionNames} and {config.SourceControlConnectionNames}");
 
-            var buildProvider = BuildProvider(config.BuildConnectionName);
-            if (buildProvider == null)
+            var buildProviders = new List<IBuildProvider>();
+            foreach (var connectionName in config.BuildConnectionNames)
             {
-                LogTo.Error("Failed to construct build provider");
-                return null;
+                var buildProvider = BuildProvider(connectionName);
+                if (buildProvider == null)
+                {
+                    LogTo.Error($"Failed to construct build provider for connection {connectionName}");
+                    return null;
+                }
+
+                buildProviders.Add(buildProvider);
             }
 
-            var branchProvider = BranchProvider(config.SourceControlConnectionName);
-            if (branchProvider == null)
+            var branchProviders = new List<IBranchProvider>();
+            foreach (var connectionName in config.SourceControlConnectionNames)
             {
-                LogTo.Error("Failed to construct branch provider");
-                return null;
+                var branchProvider = BranchProvider(connectionName);
+                if (branchProvider == null)
+                {
+                    LogTo.Error($"Failed to construct branch provider for connection {connectionName}");
+                    return null;
+                }
+
+                branchProviders.Add(branchProvider);
             }
 
-            return new Project(buildProvider, branchProvider, config);
+            return new Project(buildProviders, branchProviders, config);
         }
 
         private readonly IPluginRepository _pluginRepository;

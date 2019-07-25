@@ -65,9 +65,7 @@ namespace BuildNotifications.Plugin.Tfs
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var tfsDefinition = definition as TfsBuildDefinition;
-
-            if (tfsDefinition == null)
+            if (!(definition is TfsBuildDefinition tfsDefinition))
             {
                 Debug.Fail("Incompatible build definition given");
                 yield break;
@@ -105,6 +103,20 @@ namespace BuildNotifications.Plugin.Tfs
             {
                 yield return Convert(definition);
             }
+        }
+
+        public async IAsyncEnumerable<IBuildDefinition> RemovedBuildDefinitions()
+        {
+            await Task.CompletedTask;
+
+            yield break;
+        }
+
+        public async IAsyncEnumerable<IBaseBuild> RemovedBuilds()
+        {
+            await Task.CompletedTask;
+
+            yield break;
         }
 
         private readonly VssConnection _connection;

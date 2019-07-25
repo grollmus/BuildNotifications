@@ -11,10 +11,10 @@ namespace BuildNotifications.Core.Config
             BranchWhitelist = new List<string>();
             BuildDefinitionBlacklist = new List<string>();
             BuildDefinitionWhitelist = new List<string>();
+            BuildConnectionNames = new List<string>();
+            SourceControlConnectionNames = new List<string>();
 
             ProjectName = string.Empty;
-            BuildConnectionName = string.Empty;
-            SourceControlConnectionName = string.Empty;
             DefaultCompareBranch = string.Empty;
 
             ShowPullRequests = true;
@@ -31,9 +31,8 @@ namespace BuildNotifications.Core.Config
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchWhitelist { get; set; }
 
-        public string BuildConnectionName { get; set; }
-        
-        [TypesForInstantiation(typeof(List<string>))]
+        public IList<string> BuildConnectionNames { get; set; }
+
         public IList<string> BuildDefinitionBlacklist { get; set; }
         
         [TypesForInstantiation(typeof(List<string>))]
@@ -49,6 +48,6 @@ namespace BuildNotifications.Core.Config
 
         public bool ShowPullRequests { get; set; }
 
-        public string SourceControlConnectionName { get; set; }
+        public IList<string> SourceControlConnectionNames { get; set; }
     }
 }

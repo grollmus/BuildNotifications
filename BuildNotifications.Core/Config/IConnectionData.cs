@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
@@ -27,6 +28,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Options for this connection.
         /// </summary>
+        [TypesForInstantiation(typeof(Dictionary<string, string?>))]
         public IReadOnlyDictionary<string, string?> Options { get; set; }
 
         /// <summary>

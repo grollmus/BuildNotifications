@@ -1,5 +1,4 @@
-﻿using System;
-using BuildNotifications.Core.Pipeline.Tree;
+﻿using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.ViewModel.Tree
 {
@@ -7,7 +6,7 @@ namespace BuildNotifications.ViewModel.Tree
     {
         public DefinitionGroupNodeViewModel(IDefinitionGroupNode node) : base(node)
         {
-            DefinitionName = node?.Definition?.Name;
+            DefinitionName = node?.Definition?.Name ?? string.Empty;
         }
 
         public string DefinitionName { get; set; }

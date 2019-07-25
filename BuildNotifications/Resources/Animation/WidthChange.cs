@@ -23,7 +23,6 @@ namespace BuildNotifications.Resources.Animation
         protected override void Invoke(object parameter)
         {
             var globalTweenHandler = App.GlobalTweenHandler;
-            var target = Target ?? AssociatedObject;
 
             globalTweenHandler.ClearTweensOf(TargetElement);
 

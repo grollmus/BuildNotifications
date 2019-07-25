@@ -2,6 +2,7 @@
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -9,20 +10,21 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class TreeBuilder : ITreeBuilder
     {
-        public TreeBuilder(IConfiguration config)
+        public TreeBuilder(IConfiguration config, IBranchNameExtractor branchNameExtractor)
         {
             _config = config;
+            _branchNameExtractor = branchNameExtractor;
         }
 
         private IBuildTreeGroupDefinition GroupDefinition => _config.GroupDefinition;
 
-        private IBuildTreeNode? BuildPath(IBuild build)
+        private IBuildTreeNode BuildPath(IBuild build, IList<IBranch> branches)
         {
-            var node = ConstructNode(Arrangement.GroupDefinition.None, build);
+            var node = ConstructNode(Arrangement.GroupDefinition.None, build, branches);
 
             foreach (var group in GroupDefinition.Reverse())
             {
-                var parent = ConstructNode(group, build);
+                var parent = ConstructNode(group, build, branches);
                 parent.AddChild(node);
                 node = parent;
             }
@@ -30,12 +32,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
             return node;
         }
 
-        private static IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build)
+        private IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build, IEnumerable<IBranch> branches)
         {
             switch (group)
             {
                 case Arrangement.GroupDefinition.Branch:
-                    return new BranchGroupNode(build.BranchName);
+                    return new BranchGroupNode(_branchNameExtractor.ExtractDisplayName(build.BranchName, branches));
                 case Arrangement.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
                 case Arrangement.GroupDefinition.Source:
@@ -89,6 +91,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         /// <inheritdoc />
         public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null)
         {
+            var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
 
             var taggedNodes = new List<IBuildTreeNode>();
@@ -96,7 +99,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
             foreach (var build in builds)
             {
-                var path = BuildPath(build);
+                var path = BuildPath(build, branchList);
                 if (path == null)
                     continue;
 
@@ -109,5 +112,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         private readonly IConfiguration _config;
+        private readonly IBranchNameExtractor _branchNameExtractor;
     }
 }
