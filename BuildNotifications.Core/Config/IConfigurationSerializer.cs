@@ -3,7 +3,7 @@
     /// <summary>
     /// (De)serializes configurations from and to a file.
     /// </summary>
-    internal interface IConfigurationSerializer
+    public interface IConfigurationSerializer
     {
         /// <summary>
         /// Load configuration from file. If file does not exist,

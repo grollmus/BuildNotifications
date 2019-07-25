@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using BuildNotifications.Core;
@@ -13,13 +14,15 @@ namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : BaseViewModel
     {
+        private const string ConfigFileName = "Configuration.json";
+        private string ConfigFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{Path.DirectorySeparatorChar}BuildNotifications{Path.DirectorySeparatorChar}{ConfigFileName}");
 
         public MainViewModel()
         {
-            _coreSetup = new CoreSetup();
+            _coreSetup = new CoreSetup(ConfigFilePath);
 
             SearchViewModel = new SearchViewModel();
-            SettingsViewModel = new SettingsViewModel();
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
             GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;

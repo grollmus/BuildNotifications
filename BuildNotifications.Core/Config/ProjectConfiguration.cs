@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
@@ -22,40 +23,32 @@ namespace BuildNotifications.Core.Config
             LoadWhitelistedDefinitionsExclusively = false;
         }
 
-        /// <inheritdoc />
         public string ProjectName { get; set; }
 
-        /// <inheritdoc />
+        [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchBlacklist { get; set; }
-
-        /// <inheritdoc />
+        
+        [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchWhitelist { get; set; }
 
-        /// <inheritdoc />
         public string BuildConnectionName { get; set; }
-
-        /// <inheritdoc />
+        
+        [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BuildDefinitionBlacklist { get; set; }
-
-        /// <inheritdoc />
+        
+        [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BuildDefinitionWhitelist { get; set; }
 
-        /// <inheritdoc />
         public string DefaultCompareBranch { get; set; }
 
-        /// <inheritdoc />
         public bool HideCompletedPullRequests { get; set; }
 
-        /// <inheritdoc />
         public bool LoadWhitelistedBranchesExclusively { get; set; }
 
-        /// <inheritdoc />
         public bool LoadWhitelistedDefinitionsExclusively { get; set; }
 
-        /// <inheritdoc />
         public bool ShowPullRequests { get; set; }
 
-        /// <inheritdoc />
         public string SourceControlConnectionName { get; set; }
     }
 }

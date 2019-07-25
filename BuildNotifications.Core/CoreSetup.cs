@@ -26,6 +26,9 @@ namespace BuildNotifications.Core
 
         public IEnumerable<IProject> AllProjects()
         {
+            if (!_configuration.Projects.Any())
+                yield break;
+
             var project = _projectFactory.Construct(_configuration.Projects.First());
             yield return project;
         }
@@ -36,10 +39,15 @@ namespace BuildNotifications.Core
 
     public class CoreSetup
     {
-        public CoreSetup()
+        private readonly string _configFilePath;
+        private readonly ConfigurationSerializer _configurationSerializer;
+
+        public CoreSetup(string configFilePath)
         {
+            _configFilePath = configFilePath;
             var serializer = new Serializer();
-            Configuration = LoadConfiguration(serializer);
+            _configurationSerializer = new ConfigurationSerializer(serializer);
+            Configuration = _configurationSerializer.Load(configFilePath);
 
             var pluginLoader = new PluginLoader();
             PluginRepository = pluginLoader.LoadPlugins(new[] {"../../../plugins"});
@@ -52,6 +60,11 @@ namespace BuildNotifications.Core
             Pipeline.Notifier.Updated += Notifier_Updated;
         }
 
+        public void PersistConfigurationChanges()
+        {
+            _configurationSerializer.Save(Configuration, _configFilePath);
+        }
+
         public IConfiguration Configuration { get; }
         public IPipeline Pipeline { get; }
         public IPluginRepository PluginRepository { get; }
@@ -59,29 +72,25 @@ namespace BuildNotifications.Core
 
         public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
 
-        private static IConfiguration LoadConfiguration(ISerializer serializer)
-        {
-            var configSerializer = new ConfigurationSerializer(serializer);
+        //public IConfiguration DefaultConfiguration()
+        //{
+        //    var config = new Configuration();
 
-            IConfiguration config = new Configuration();
+        //    config.Connections.Add(new ConnectionData
+        //    {
+        //        Name = "LocalDummy",
+        //        BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
+        //        SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
+        //        Options = new Dictionary<string, string>
+        //        {
+        //            {"port", "1111"}
+        //        }
+        //    });
+        //    config.Projects.Add(new ProjectConfiguration { ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
 
-            config.Connections.Add(new ConnectionData
-            {
-                Name = "LocalDummy",
-                BuildPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
-                SourceControlPluginType = "BuildNotifications.Plugin.DummyBuildServer.Plugin",
-                Options = new Dictionary<string, string>
-                {
-                    {"port", "1111"}
-                }
-            });
-            config.Projects.Add(new ProjectConfiguration { ProjectName = "Projecto", BuildConnectionName = "LocalDummy", SourceControlConnectionName = "LocalDummy"});
-
-            configSerializer.Save(config, "../../../config.json");
-            config = configSerializer.Load("../../../config.json");
-            return config;
-        }
-
+        //    return config;
+        //}
+        
         private void Notifier_Updated(object sender, PipelineUpdateEventArgs e)
         {
             PipelineUpdated?.Invoke(this, e);

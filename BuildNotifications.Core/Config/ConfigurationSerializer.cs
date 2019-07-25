@@ -4,7 +4,7 @@ using BuildNotifications.Core.Utilities;
 
 namespace BuildNotifications.Core.Config
 {
-    internal class ConfigurationSerializer : IConfigurationSerializer
+    public class ConfigurationSerializer : IConfigurationSerializer
     {
         public ConfigurationSerializer(ISerializer serializer)
         {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using JetBrains.Annotations;
+using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
@@ -26,34 +28,38 @@ namespace BuildNotifications.Core.Config
             Culture = CultureInfo.GetCultureInfo("en-US");
         }
 
-        /// <inheritdoc />
+        [MinMax(1, int.MaxValue)]
         public int BuildsToLoadCount { get; set; }
 
-        /// <inheritdoc />
+        [MinMax(1, 10)]
         public int BuildsToShow { get; set; }
 
-        /// <inheritdoc />
         public BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
 
-        /// <inheritdoc />
+        [TypesForInstantiation(typeof(List<ConnectionData>))]
         public IList<ConnectionData> Connections { get; set; }
 
-        /// <inheritdoc />
+        [CalculatedValues(nameof(PossibleCultures))]
         public CultureInfo Culture { get; set; }
 
-        /// <inheritdoc />
+        [UsedImplicitly]
+        public IEnumerable<CultureInfo> PossibleCultures()
+        {
+            yield return CultureInfo.GetCultureInfo("en-US");
+            yield return CultureInfo.GetCultureInfo("de");
+        }
+
+        [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
         public IList<IProjectConfiguration> Projects { get; set; }
 
-        /// <inheritdoc />
         public BuildNotificationMode FailedBuildNotifyConfig { get; set; }
 
-        /// <inheritdoc />
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
 
-        /// <inheritdoc />
+        [TypesForInstantiation(typeof(BuildTreeGroupDefinition))]
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
-        /// <inheritdoc />
+        [MinMax(30, int.MaxValue)]
         public int UpdateInterval { get; set; }
     }
 }
