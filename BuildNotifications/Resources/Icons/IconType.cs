@@ -2,6 +2,7 @@
 {
     public enum IconType
     {
+        None,
         Connection,
         Branch,
         Definition,
@@ -20,6 +21,8 @@
         StatusDescending,
         GroupingEmpty,
         GroupingSolo,
-        None
+        Integer,
+        Float,
+        Text
     }
 }

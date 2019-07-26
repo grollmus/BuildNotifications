@@ -3,25 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              mc:Ignorable="d">
 
-    <Grid Width="{DynamicResource BlockDouble}">
-        <TextBox />
-
-        <icons:IconBatch Type="Search" Foreground="{DynamicResource Background3}" IsHitTestVisible="False"
-                         Width="{DynamicResource Block}" Height="{DynamicResource Block}"
-                         Background="{DynamicResource Background1}"
-                         HorizontalAlignment="Right" Margin="{DynamicResource BlockQuarterXOnlyMargin}" />
-
+    <Grid Width="{StaticResource BlockDouble}">
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Icon="Search"
+                               Margin="{DynamicResource BlockQuarterXOnlyMargin}"/>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
-                <animation:WidthChange TargetWidth="{DynamicResource BlockFourteenTimes}" />
+                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
             </i:EventTrigger>
             <i:EventTrigger EventName="LostKeyboardFocus">
-                <animation:WidthChange TargetWidth="{DynamicResource BlockDouble}" />
+                <animation:WidthChange TargetWidth="{StaticResource BlockDouble}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
     </Grid>
