@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Resources/Global/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/IconBatchStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/DecoratedComboBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
 

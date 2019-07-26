@@ -6,6 +6,7 @@
                     xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                    xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
                     mc:Ignorable="d">
 
 
@@ -71,9 +72,10 @@
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>
                         </Popup>
-                        <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                        <settings:NotifyingContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           Content="{TemplateBinding SelectionBoxItem}"
+                                          NotifyingContent="{TemplateBinding SelectionBoxItem}"
                                           ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
@@ -82,18 +84,17 @@
 
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger
-                                    Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Value="false">
-                                    <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
-                                </ei:DataTrigger>
-                                <ei:DataTrigger
                                     Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="True">
                                     <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
                                 </ei:DataTrigger>
+                                
+                                <i:EventTrigger EventName="ContentUpdated">
+                                    <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
+                                </i:EventTrigger>
                             </i:Interaction.Triggers>
 
-                        </ContentPresenter>
+                        </settings:NotifyingContentPresenter>
                         <ToggleButton BorderBrush="{TemplateBinding BorderBrush}"
 
                                       Width="{TemplateBinding MinWidth}" Cursor="Hand"

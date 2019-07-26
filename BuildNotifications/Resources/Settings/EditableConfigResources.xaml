@@ -24,21 +24,16 @@
         <DockPanel>
             <TextBlock DockPanel.Dock="Left" Text="{Binding PropertyInfo.Name, StringFormat=- {0}:}" Width="150"
                        Foreground="AliceBlue" />
-            <ComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" />
+            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" />
         </DockPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableEnumTemplate" DataType="{x:Type editableConfigs:IEditableEnum}">
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Left" Text="{Binding PropertyInfo.Name, StringFormat=- {0}:}" Width="150"
-                       Foreground="AliceBlue" />
-            <ComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}" />
-        </DockPanel>
+        <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}" Label="{Binding PropertyInfo.Name}"/>
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexComboboxTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
         <DockPanel>
             <TextBlock DockPanel.Dock="Left" Text="{Binding PropertyInfo.Name, StringFormat=- {0}:}" Width="150"
                        Foreground="AliceBlue" />
-            <ComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" />
         </DockPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">

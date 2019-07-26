@@ -6,12 +6,12 @@
 
     <Style TargetType="TextBlock" x:Key="TextBoxLabelStyle">
         <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
-        <Setter Property="FontSize" Value="{StaticResource BlockThreeQuarters}" />
+        <Setter Property="FontSize" Value="{StaticResource BlockFiveSixths}" />
     </Style>
 
 
     <Style TargetType="{x:Type text:DecoratedTextBox}">
-        <Setter Property="Height" Value="{StaticResource BlockOneAndHalf}" />
+        <Setter Property="MaxHeight" Value="{StaticResource BlockOneAndHalf}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />
         <Setter Property="BorderThickness" Value="1" />
 
@@ -19,7 +19,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
-        <Setter Property="Margin" Value="{StaticResource BlockThickness}" />
+        <Setter Property="Margin" Value="{StaticResource BlockHalfThickness}" />
 
         <Setter Property="SelectionBrush" Value="{DynamicResource Foreground1}" />
 
@@ -43,7 +43,7 @@
                                 <text:FontSizeChange TargetSize="{StaticResource Block}" Target="{Binding ElementName=Label}" Duration="0.1"/>
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LostKeyboardFocus">
-                                <text:FontSizeChange TargetSize="{StaticResource BlockThreeQuarters}" Target="{Binding ElementName=Label}" Duration="0.35"/>
+                                <text:FontSizeChange TargetSize="{StaticResource BlockFiveSixths}" Target="{Binding ElementName=Label}" Duration="0.35"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Border>
@@ -64,6 +64,7 @@
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Foreground1}"/>
                             <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}"/>
                             <Setter Property="Foreground" TargetName="Label" Value="{DynamicResource Foreground1}"/>
+                            <Setter Property="MaxHeight" Value="9999"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

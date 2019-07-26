@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using BuildNotifications.Resources.Icons;
 
 namespace BuildNotifications.Resources.Text
@@ -22,6 +23,31 @@ namespace BuildNotifications.Resources.Text
         {
             get => (string) GetValue(LabelProperty);
             set => SetValue(LabelProperty, value);
+        }
+
+        public DecoratedTextBox()
+        {
+            GotFocus += OnGotFocus;
+            PreviewMouseDown += OnPreviewMouseDown;
+        }
+
+        private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (IsFocused)
+                return;
+
+            if (!string.IsNullOrWhiteSpace(SelectedText))
+                return;
+
+            Focus();
+            SelectAll();
+            e.Handled = true;
+        }
+
+        private void OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(SelectedText))
+                SelectAll();
         }
     }
 }
