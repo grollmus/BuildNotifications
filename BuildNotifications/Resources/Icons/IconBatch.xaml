@@ -326,6 +326,18 @@
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
+
+        <DrawingImage x:Key="PlusDrawingImage">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M64,42.65L64,21.85 42.65,21.85 42.65,0 21.35,0 21.35,21.85 0,21.85 0,42.65 21.35,42.65 21.35,64 42.65,64 42.65,42.65 64,42.65z" />
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
     </UserControl.Resources>
     <Viewbox StretchDirection="Both">
         <Image>
@@ -456,6 +468,12 @@
                             Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                             Value="Text">
                             <Setter Property="Image.Source" Value="{StaticResource TextDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Plus">
+                            <Setter Property="Image.Source" Value="{StaticResource PlusDrawingImage}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

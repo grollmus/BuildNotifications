@@ -54,10 +54,10 @@
             <ContentPresenter Content="{Binding SettingsViewModel}" Width="0" DockPanel.Dock="Left">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="false">
-                        <animation:WidthChange TargetWidth="0"/>
+                        <animation:WidthChange TargetWidth="0" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="true">
-                        <animation:WidthChange TargetWidth="{StaticResource BlockThirty}"/>
+                        <animation:WidthChange TargetWidth="{StaticResource BlockThirty}" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </ContentPresenter>
@@ -68,13 +68,13 @@
 
     <window:CustomWindow.RightToTitleContent>
         <StackPanel Orientation="Horizontal">
-            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                    Tag="Settings"
-                    Margin="{StaticResource BlockQuarterThickness}"
-                    Width="{StaticResource BlockDouble}"
-                    Height="{StaticResource BlockDouble}"
-                    Foreground="{StaticResource Background3}" 
-                    Command="{Binding ToggleShowSettingsCommand}">
+            <icons:IconButton DockPanel.Dock="Left"
+                              Icon="Settings"
+                              Margin="{StaticResource BlockQuarterThickness}"
+                              Width="{StaticResource BlockDouble}"
+                              Height="{StaticResource BlockDouble}"
+                              Foreground="{StaticResource Background3}"
+                              Command="{Binding ToggleShowSettingsCommand}">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="true">
@@ -85,16 +85,16 @@
                         <settings:SettingsButtonToggle DoHide="true" Duration="0.4" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
-            </Button>
+            </icons:IconButton>
 
-            <Button Style="{StaticResource IconButton}" DockPanel.Dock="Left"
-                    Tag="GroupingEmpty"
-                    Margin="{StaticResource BlockQuarterThickness}"
-                    Width="{StaticResource BlockDouble}"
-                    Height="{StaticResource BlockDouble}"
-                    Foreground="{StaticResource Background3}"
-                    x:Name="GroupDefinitionButton"
-                    Command="{Binding ToggleGroupDefinitionSelectionCommand}">
+            <icons:IconButton DockPanel.Dock="Left"
+                              Icon="GroupingEmpty"
+                              Margin="{StaticResource BlockQuarterThickness}"
+                              Width="{StaticResource BlockDouble}"
+                              Height="{StaticResource BlockDouble}"
+                              Foreground="{StaticResource Background3}"
+                              x:Name="GroupDefinitionButton"
+                              Command="{Binding ToggleGroupDefinitionSelectionCommand}">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
                                     Value="true">
@@ -111,7 +111,7 @@
                                  VerticalAlignment="Center"
                                  Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}"
                                  Type="GroupingSolo" />
-            </Button>
+            </icons:IconButton>
 
             <Rectangle Width="{StaticResource Block}" />
 

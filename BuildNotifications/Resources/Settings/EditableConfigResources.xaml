@@ -2,20 +2,23 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:BuildNotifications.Resources.Settings"
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
-                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
 
     <Style TargetType="ComboBox">
         <Setter Property="Margin" Value="5" />
     </Style>
 
     <DataTemplate x:Key="EditableIntTemplate" DataType="{x:Type editableConfigs:EditableInt}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"/>
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableDoubleTemplate" DataType="{x:Type editableConfigs:EditableDouble}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"/>
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableStringTemplate" DataType="{x:Type editableConfigs:EditableString}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"/>
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableStringComboboxTemplate" DataType="{x:Type editableConfigs:EditableString}">
         <DockPanel>
@@ -59,7 +62,16 @@
             <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                 <TextBlock Text="{Binding PropertyInfo.Name}" DockPanel.Dock="Left" FontSize="15"
                            Foreground="AliceBlue" Opacity="0.5" />
-                <Button Content="+" Background="Transparent" BorderBrush="Transparent" Command="{Binding AddNewItemCommand}" Foreground="White" DockPanel.Dock="Right"/>
+                <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
+                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                  Width="{StaticResource BlockOneAndHalf}" Height="{StaticResource BlockOneAndHalf}"
+                                  IconSize="{StaticResource Block}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <icons:ButtonInvokedAnimation/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </icons:IconButton>
             </DockPanel>
             <GroupBox BorderBrush="#55FFFFFF" Margin="5" Padding="5" BorderThickness="0.1" IsTabStop="False">
                 <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False"

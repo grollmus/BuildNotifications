@@ -63,24 +63,24 @@
                                         <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Button x:Name="MinimizeButton" Grid.Column="0" Style="{StaticResource IconButton}"
-                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
-                                            Tag="Minimize" Foreground="{DynamicResource Foreground2}" />
-                                    <Button x:Name="MaximizeButton" Style="{StaticResource IconButton}"
-                                            Tag="Maximize" Foreground="{DynamicResource Foreground2}"
-                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
-                                            Grid.Column="1" />
+                                    <icons:IconButton x:Name="MinimizeButton" Grid.Column="0"
+                                                      IconSize="{DynamicResource Block}"
+                                                      Icon="Minimize" Foreground="{DynamicResource Foreground2}" />
+                                    <icons:IconButton x:Name="MaximizeButton"
+                                                      Icon="Maximize" Foreground="{DynamicResource Foreground2}"
+                                                      IconSize="{DynamicResource Block}"
+                                                      Grid.Column="1" />
 
-                                    <Button x:Name="RestoreButton" Style="{StaticResource IconButton}"
-                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
-                                            Tag="Restore" Foreground="{DynamicResource Foreground2}"
-                                            Visibility="Collapsed"
-                                            Grid.Column="1" />
+                                    <icons:IconButton x:Name="RestoreButton"
+                                                      IconSize="{DynamicResource Block}"
+                                                      Icon="Restore" Foreground="{DynamicResource Foreground2}"
+                                                      Visibility="Collapsed"
+                                                      Grid.Column="1" />
 
-                                    <Button x:Name="CloseButton" Style="{StaticResource IconButton}"
-                                            MinWidth="{DynamicResource Block}" MinHeight="{DynamicResource Block}"
-                                            Tag="Close" Foreground="{DynamicResource Foreground2}"
-                                            Grid.Column="2" />
+                                    <icons:IconButton x:Name="CloseButton"
+                                                      IconSize="{DynamicResource Block}"
+                                                      Icon="Close" Foreground="{DynamicResource Foreground2}"
+                                                      Grid.Column="2" />
                                 </Grid>
                             </Grid>
 

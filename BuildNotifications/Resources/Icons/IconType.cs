@@ -23,6 +23,7 @@
         GroupingSolo,
         Integer,
         Float,
-        Text
+        Text,
+        Plus
     }
 }
