@@ -98,6 +98,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public async IAsyncEnumerable<IBaseBuild> RemovedBuilds()
         {
+            yield break;
             var json = await _connection.Query(Constants.Queries.Builds);
             var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
 

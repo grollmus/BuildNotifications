@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using JetBrains.Annotations;
 using ReflectSettings.Attributes;
@@ -39,6 +40,11 @@ namespace BuildNotifications.Core.Config
         [TypesForInstantiation(typeof(List<ConnectionData>))]
         public IList<ConnectionData> Connections { get; set; }
 
+        public IEnumerable<string> ConnectionNames()
+        {
+            return Connections.Select(x => x.Name);
+        }
+
         [CalculatedValues(nameof(PossibleCultures))]
         public CultureInfo Culture { get; set; }
 
@@ -50,6 +56,7 @@ namespace BuildNotifications.Core.Config
         }
 
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
+        [CalculatedValues(nameof(ConnectionNames), nameof(ConnectionNames))]
         public IList<IProjectConfiguration> Projects { get; set; }
 
         public BuildNotificationMode FailedBuildNotifyConfig { get; set; }
