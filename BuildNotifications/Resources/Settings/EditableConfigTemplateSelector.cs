@@ -12,6 +12,12 @@ namespace BuildNotifications.Resources.Settings
         {
             var element = container as FrameworkElement;
 
+            var template = ResolveTemplate(item, element);
+            return template ?? base.SelectTemplate(item, container);
+        }
+
+        private static DataTemplate ResolveTemplate(object item, FrameworkElement element)
+        {
             switch (item)
             {
                 case EditableString editableString:
@@ -19,6 +25,8 @@ namespace BuildNotifications.Resources.Settings
                         return element?.TryFindResource("EditableStringComboboxTemplate") as DataTemplate;
                     else
                         return DataTemplateByName(editableString, element);
+                case IReadOnlyEditableCollection _:
+                    return element?.TryFindResource("ReadOnlyEditableCollectionTemplate") as DataTemplate;
                 case IEditableCollection _:
                     return element?.TryFindResource("EditableCollectionTemplate") as DataTemplate;
                 case IEditableComplex editableComplex:
@@ -35,8 +43,10 @@ namespace BuildNotifications.Resources.Settings
 
         private static DataTemplate? DataTemplateByName(object item, FrameworkElement element)
         {
-            var type = item.GetType();
-            var name = type.Name;
+            var type = item?.GetType();
+            var name = type?.Name;
+            if (name == null)
+                return null;
             var expectedKey = $"{name}Template";
 
             return element.TryFindResource(expectedKey) as DataTemplate;

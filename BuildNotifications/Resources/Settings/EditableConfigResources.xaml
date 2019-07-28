@@ -12,61 +12,47 @@
     </Style>
 
     <DataTemplate x:Key="EditableIntTemplate" DataType="{x:Type editableConfigs:EditableInt}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"
+                               Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableDoubleTemplate" DataType="{x:Type editableConfigs:EditableDouble}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"
+                               Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableStringTemplate" DataType="{x:Type editableConfigs:EditableString}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}" />
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Label="{Binding PropertyInfo.Name}"
+                               Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableStringComboboxTemplate" DataType="{x:Type editableConfigs:EditableString}">
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Left" Text="{Binding PropertyInfo.Name, StringFormat=- {0}:}" Width="150"
-                       Foreground="AliceBlue" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" />
-        </DockPanel>
+        <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}"
+                                 Label="{Binding PropertyInfo.Name}" Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableEnumTemplate" DataType="{x:Type editableConfigs:IEditableEnum}">
-        <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}" Label="{Binding PropertyInfo.Name}"/>
+        <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}"
+                                 Label="{Binding PropertyInfo.Name}" Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexComboboxTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Left" Text="{Binding PropertyInfo.Name, StringFormat=- {0}:}" Width="150"
-                       Foreground="AliceBlue" />
-        </DockPanel>
+        <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}"
+                                 Label="{Binding PropertyInfo.Name}" Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
-        <DockPanel>
-            <TextBlock Text="{Binding PropertyInfo.Name}" DockPanel.Dock="Top" FontSize="15" Foreground="AliceBlue"
-                       Opacity="0.5" />
-            <GroupBox BorderBrush="#55FFFFFF" Margin="5" Padding="5" BorderThickness="0.1" IsTabStop="False">
-                <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False"
-                              ItemTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </GroupBox>
-        </DockPanel>
+        <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False"
+                      ItemTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </DataTemplate>
-    <DataTemplate x:Key="EditableCollectionTemplate" DataType="{x:Type editableConfigs:IEditableCollection}">
+
+
+
+    <DataTemplate x:Key="ReadOnlyEditableCollectionTemplate" DataType="{x:Type editableConfigs:IEditableCollection}">
         <DockPanel>
             <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                 <TextBlock Text="{Binding PropertyInfo.Name}" DockPanel.Dock="Left" FontSize="15"
                            Foreground="AliceBlue" Opacity="0.5" />
-                <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
-                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
-                                  Width="{StaticResource BlockOneAndHalf}" Height="{StaticResource BlockOneAndHalf}"
-                                  IconSize="{StaticResource Block}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <icons:ButtonInvokedAnimation/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </icons:IconButton>
             </DockPanel>
             <GroupBox BorderBrush="#55FFFFFF" Margin="5" Padding="5" BorderThickness="0.1" IsTabStop="False">
                 <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False"
@@ -78,6 +64,58 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </GroupBox>
+        </DockPanel>
+
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="EditableCollectionTemplate" DataType="{x:Type editableConfigs:IEditableCollection}">
+        <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
+            <Grid DockPanel.Dock="Top">
+                <DockPanel>
+                    <Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
+                               DockPanel.Dock="Top" />
+                    <Rectangle Height="{StaticResource BlockQuarter}"
+                               VerticalAlignment="Bottom" DockPanel.Dock="Top"
+                               Fill="{DynamicResource Blue}" />
+                </DockPanel>
+                <DockPanel VerticalAlignment="Center">
+                    
+                    <TextBlock Text="{Binding PropertyInfo.Name}"
+                               Foreground="{DynamicResource Foreground1HalfTransparency}" FontSize="14" />
+
+                </DockPanel>
+
+            </Grid>
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+                    <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
+                                      Foreground="{DynamicResource Background2}" DockPanel.Dock="Bottom"
+                                      Background="{DynamicResource Background1}"
+                                      Height="{StaticResource BlockThreeQuarters}"
+                                      IconSize="{StaticResource BlockThreeQuarters}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <icons:ButtonInvokedAnimation />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </icons:IconButton>
+
+                    <ListBox ItemsSource="{Binding SubEditables}" 
+                         x:Name="ListBox">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding PropertyInfo.Name}" 
+                                       Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
+                </DockPanel>
+                <ContentPresenter Margin="{StaticResource BlockHalfThickness}" VerticalAlignment="Top"
+                    ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
+                    Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+            </DockPanel>
         </DockPanel>
 
     </DataTemplate>

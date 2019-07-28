@@ -12,7 +12,7 @@
         <ResourceDictionary Source="../../Resources/Settings/EditableConfigResources.xaml"/>
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl ItemsSource="{Binding Configs}"
+        <ItemsControl ItemsSource="{Binding Configs}" Margin="{StaticResource BlockHalfXOnlyMargin}"
                       ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

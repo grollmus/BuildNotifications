@@ -36,6 +36,7 @@
     <None Remove="Resources\Global\IconBatchStyles.xaml" />
     <None Remove="Resources\Global\IconButtonStyles.xaml" />
     <None Remove="Resources\Global\LightTheme.xaml" />
+    <None Remove="Resources\Global\ListBoxStyles.xaml" />
     <None Remove="Resources\Global\Sizes.xaml" />
     <None Remove="Resources\Global\TextBlockStyles.xaml" />
     <None Remove="Resources\Global\TextBoxStyles.xaml" />
