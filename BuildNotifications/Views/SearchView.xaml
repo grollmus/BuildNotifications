@@ -8,15 +8,15 @@
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              mc:Ignorable="d">
 
-    <Grid Width="{StaticResource BlockDouble}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Icon="Search"
-                               Margin="{DynamicResource BlockQuarterXOnlyMargin}"/>
+    <Grid Width="{StaticResource BlockTriple}">
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Icon="Search" MaxHeight="{StaticResource BlockOneAndHalf}"
+                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap"/>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
                 <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
             </i:EventTrigger>
             <i:EventTrigger EventName="LostKeyboardFocus">
-                <animation:WidthChange TargetWidth="{StaticResource BlockDouble}" />
+                <animation:WidthChange TargetWidth="{StaticResource BlockTriple}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
     </Grid>
