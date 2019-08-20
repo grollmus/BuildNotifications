@@ -11,42 +11,37 @@ namespace BuildNotifications.Core.Config
     {
         public Configuration()
         {
-            Projects = new List<IProjectConfiguration>();
-            Connections = new List<ConnectionData>();
-
-            BuildsToLoadCount = 200;
-            BuildsToShow = 5;
-            UpdateInterval = 30;
-            CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
-            SucceededBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
-            FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe;
-
             GroupDefinition = new BuildTreeGroupDefinition(
                 Pipeline.Tree.Arrangement.GroupDefinition.Source,
                 Pipeline.Tree.Arrangement.GroupDefinition.Branch,
                 Pipeline.Tree.Arrangement.GroupDefinition.BuildDefinition);
-
-            Culture = CultureInfo.GetCultureInfo("en-US");
         }
 
+        [TypesForInstantiation(typeof(BuildTreeGroupDefinition))]
+        public IBuildTreeGroupDefinition GroupDefinition { get; set; }
+
         [MinMax(1, int.MaxValue)]
-        public int BuildsToLoadCount { get; set; }
+        public int BuildsToLoadCount { get; set; } = 200;
 
         [MinMax(1, 10)]
-        public int BuildsToShow { get; set; }
+        public int BuildsToShow { get; set; } = 5;
 
-        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
+        [MinMax(30, int.MaxValue)]
+        public int UpdateInterval { get; set; } = 30;
+
+        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+
+        public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+
+        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+
+        [CalculatedValues(nameof(PossibleCultures))]
+        public CultureInfo Culture { get; set; }
 
         [TypesForInstantiation(typeof(List<ConnectionData>))]
         public IList<ConnectionData> Connections { get; set; }
 
-        public IEnumerable<string> ConnectionNames()
-        {
-            return Connections.Select(x => x.Name);
-        }
-
-        [CalculatedValues(nameof(PossibleCultures))]
-        public CultureInfo Culture { get; set; }
+        public IEnumerable<string> ConnectionNames() => Connections.Select(x => x.Name);
 
         [UsedImplicitly]
         public IEnumerable<CultureInfo> PossibleCultures()
@@ -58,15 +53,5 @@ namespace BuildNotifications.Core.Config
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
         [CalculatedValues(nameof(ConnectionNames), nameof(ConnectionNames))]
         public IList<IProjectConfiguration> Projects { get; set; }
-
-        public BuildNotificationMode FailedBuildNotifyConfig { get; set; }
-
-        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
-
-        [TypesForInstantiation(typeof(BuildTreeGroupDefinition))]
-        public IBuildTreeGroupDefinition GroupDefinition { get; set; }
-
-        [MinMax(30, int.MaxValue)]
-        public int UpdateInterval { get; set; }
     }
 }

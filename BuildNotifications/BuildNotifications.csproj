@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="config.json" />
     <None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml" />
     <None Remove="Resources\BuildTree\Definition\DefinitionTemplates.xaml" />
     <None Remove="Resources\BuildTree\BuildTemplates.xaml" />
@@ -42,8 +43,6 @@
     <None Remove="Resources\Global\TextBoxStyles.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
     <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
-    <None Remove="Resources\Settings\DecoratedComboBoxStyle.xaml" />
-    <None Remove="Resources\Settings\EditableConfigResources.xaml" />
     <None Remove="Resources\Window\ScrollBar.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
     <None Remove="Views\GroupDefinitionSelectionView.xaml" />
@@ -66,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReflectSettings" Version="1.0.1" />
+    <PackageReference Include="ReflectSettings" Version="1.0.4" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     <PackageReference Include="System.Windows.Forms" Version="4.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
@@ -78,9 +77,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Resources\Settings\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

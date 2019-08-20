@@ -23,6 +23,7 @@ namespace BuildNotifications.Core.Config
             LoadWhitelistedDefinitionsExclusively = false;
         }
 
+        [IsDisplayName]
         public string ProjectName { get; set; }
 
         [TypesForInstantiation(typeof(List<string>))]

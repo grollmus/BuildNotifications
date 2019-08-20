@@ -27,8 +27,11 @@ namespace BuildNotifications.Resources.Settings
                         return DataTemplateByName(editableString, element);
                 case IReadOnlyEditableCollection _:
                     return element?.TryFindResource("ReadOnlyEditableCollectionTemplate") as DataTemplate;
-                case IEditableCollection _:
-                    return element?.TryFindResource("EditableCollectionTemplate") as DataTemplate;
+                case IEditableCollection editableCollection:
+                    if (editableCollection.SubItemType.IsPrimitive || editableCollection.SubItemType == typeof(string))
+                        return element?.TryFindResource("EditablePrimitiveCollectionTemplate") as DataTemplate;
+                    else
+                        return element?.TryFindResource("EditableCollectionTemplate") as DataTemplate;
                 case IEditableComplex editableComplex:
                     if (editableComplex.HasPredefinedValues)
                         return element?.TryFindResource("EditableComplexComboboxTemplate") as DataTemplate;

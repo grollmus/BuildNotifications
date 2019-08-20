@@ -136,4 +136,10 @@
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
+  <data name="BuildPluginType" xml:space="preserve">
+    <value>Build Plugin</value>
+  </data>
+  <data name="SourceControlPluginType" xml:space="preserve">
+    <value>Source Plugin</value>
+  </data>
 </root>
