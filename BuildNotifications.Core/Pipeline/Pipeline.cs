@@ -64,8 +64,7 @@ namespace BuildNotifications.Core.Pipeline
                     var branches = project.FetchExistingBranches();
                     await foreach (var branch in branches)
                     {
-                        var key = new CacheKey(projectId, branch.Name.GetHashCode());
-                        _branchCache.AddOrReplace(key, branch);
+                        _branchCache.AddOrReplace(projectId, branch.Name.GetHashCode(), branch);
                     }
                 }
                 catch (Exception ex)
@@ -89,16 +88,14 @@ namespace BuildNotifications.Core.Pipeline
 
                     await foreach (var build in builds)
                     {
-                        var key = new CacheKey(projectId, build.Id.GetHashCode());
-                        _buildCache.AddOrReplace(key, build);
+                        _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(), build);
                     }
 
                     var removedBuilds = project.FetchRemovedBuilds();
 
                     await foreach (var build in removedBuilds)
                     {
-                        var key = new CacheKey(projectId, build.Id.GetHashCode());
-                        _buildCache.Remove(key);
+                        _buildCache.Remove(projectId, build.Id.GetHashCode());
                     }
                 }
                 catch (Exception ex)
@@ -122,15 +119,13 @@ namespace BuildNotifications.Core.Pipeline
                     var definitions = project.FetchBuildDefinitions();
                     await foreach (var definition in definitions)
                     {
-                        var key = new CacheKey(projectId, definition.Id.GetHashCode());
-                        _definitionCache.AddOrReplace(key, definition);
+                        _definitionCache.AddOrReplace(projectId, definition.Id.GetHashCode(), definition);
                     }
 
                     var removedDefinitions = project.FetchRemovedBuildDefinitions();
                     await foreach (var definition in removedDefinitions)
                     {
-                        var key = new CacheKey(projectId, definition.Id.GetHashCode());
-                        _definitionCache.Remove(key);
+                        _definitionCache.Remove(projectId, definition.Id.GetHashCode());
                     }
                 }
                 catch (Exception ex)

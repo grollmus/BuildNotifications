@@ -17,11 +17,28 @@ namespace BuildNotifications.Core.Pipeline.Cache
         void AddOrReplace(CacheKey key, T item);
 
         /// <summary>
+        /// Adds or replaces an item into the cache.
+        /// </summary>
+        /// <param name="providerId">Provider part of the key to add item for.</param>
+        /// <param name="itemId">Item part of the key to add item for.</param>
+        /// <param name="item">Item to add.</param>
+        /// <returns>Action that was performed by this operation.</returns>
+        void AddOrReplace(int providerId, int itemId, T item);
+
+        /// <summary>
         /// Determine if an item with a given key exists in the cache.
         /// </summary>
         /// <param name="key">Key to check for.</param>
         /// <returns><c>true</c> if the item exists; otherwise <c>false</c>.</returns>
         bool Contains(CacheKey key);
+
+        /// <summary>
+        /// Determine if an item with a given key exists in the cache.
+        /// </summary>
+        /// <param name="providerId">Provider part of the key to add item for.</param>
+        /// <param name="itemId">Item part of the key to add item for.</param>
+        /// <returns><c>true</c> if the item exists; otherwise <c>false</c>.</returns>
+        bool Contains(int providerId, int itemId);
 
         /// <summary>
         /// Determine if an item with a given value exists in the cache.
@@ -41,6 +58,13 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="key">Key to remove item for.</param>
         void Remove(CacheKey key);
+
+        /// <summary>
+        /// Removes an item from the cache.
+        /// </summary>
+        /// <param name="providerId">Provider part of the key to add item for.</param>
+        /// <param name="itemId">Item part of the key to add item for.</param>
+        void Remove(int providerId, int itemId);
 
         /// <summary>
         /// Removes an item from the cache.
