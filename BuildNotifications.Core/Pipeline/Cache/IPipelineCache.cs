@@ -24,6 +24,13 @@ namespace BuildNotifications.Core.Pipeline.Cache
         bool Contains(CacheKey key);
 
         /// <summary>
+        /// Determine if an item with a given value exists in the cache.
+        /// </summary>
+        /// <param name="value">Value to check for.</param>
+        /// <returns><c>true</c> if the item exists; otherwise <c>false</c>.</returns>
+        bool ContainsValue(T value);
+
+        /// <summary>
         /// Creates a copy of the caches content that can be iterated over.
         /// </summary>
         /// <returns>A copy of the content of the cache.</returns>
@@ -34,5 +41,11 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="key">Key to remove item for.</param>
         void Remove(CacheKey key);
+
+        /// <summary>
+        /// Removes an item from the cache.
+        /// </summary>
+        /// <param name="value">Value to remove item for.</param>
+        void RemoveValue(T value);
     }
 }

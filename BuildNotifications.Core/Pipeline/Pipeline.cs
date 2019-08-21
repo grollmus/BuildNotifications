@@ -24,6 +24,17 @@ namespace BuildNotifications.Core.Pipeline
             _pipelineNotifier = new PipelineNotifier();
         }
 
+        private void CleanupBuilds()
+        {
+            var builds = _buildCache.ContentCopy();
+
+            foreach (var build in builds)
+            {
+                if (!_definitionCache.ContainsValue(build.Definition))
+                    _buildCache.RemoveValue(build);
+            }
+        }
+
         private void CutTree(IBuildTreeNode tree)
         {
             var buildChildrenToRemove = tree.Children.OfType<IBuildNode>()
@@ -114,6 +125,13 @@ namespace BuildNotifications.Core.Pipeline
                         var key = new CacheKey(projectId, definition.Id.GetHashCode());
                         _definitionCache.AddOrReplace(key, definition);
                     }
+
+                    var removedDefinitions = project.FetchRemovedBuildDefinitions();
+                    await foreach (var definition in removedDefinitions)
+                    {
+                        var key = new CacheKey(projectId, definition.Id.GetHashCode());
+                        _definitionCache.Remove(key);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -136,6 +154,8 @@ namespace BuildNotifications.Core.Pipeline
             var buildsTask = FetchBuilds();
 
             await Task.WhenAll(branchTask, definitionsTask, buildsTask);
+
+            CleanupBuilds();
 
             var builds = _buildCache.ContentCopy();
             var branches = _branchCache.ContentCopy();

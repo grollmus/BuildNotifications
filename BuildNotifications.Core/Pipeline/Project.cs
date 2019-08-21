@@ -80,6 +80,17 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public async IAsyncEnumerable<IBuildDefinition> FetchRemovedBuildDefinitions()
+        {
+            foreach (var buildProvider in _buildProviders)
+            {
+                await foreach (var definition in buildProvider.RemovedBuildDefinitions())
+                {
+                    yield return definition;
+                }
+            }
+        }
+
         public async IAsyncEnumerable<IBuildDefinition> FetchBuildDefinitions()
         {
             foreach (var buildProvider in _buildProviders)

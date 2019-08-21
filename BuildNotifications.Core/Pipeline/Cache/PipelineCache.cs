@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BuildNotifications.Core.Pipeline.Cache
 {
@@ -20,6 +21,20 @@ namespace BuildNotifications.Core.Pipeline.Cache
         public bool Contains(CacheKey key)
         {
             return _items.ContainsKey(key);
+        }
+
+        public bool ContainsValue(T value)
+        {
+            return _items.ContainsValue(value);
+        }
+
+        public void RemoveValue(T value)
+        {
+            var entries = _items.Where(it => it.Value?.Equals(value) == true);
+            foreach (var kvp in entries)
+            {
+                _items.Remove(kvp.Key);
+            }
         }
 
         /// <inheritdoc />
