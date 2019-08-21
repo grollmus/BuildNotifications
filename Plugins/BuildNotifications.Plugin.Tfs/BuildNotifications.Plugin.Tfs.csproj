@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Anotar.NLog.Fody" Version="5.0.0" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.143.1" />
+    <PackageReference Include="ReflectSettings" Version="1.0.6.3" />
   </ItemGroup>
 
   <ItemGroup>

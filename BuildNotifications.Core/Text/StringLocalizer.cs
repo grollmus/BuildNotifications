@@ -15,13 +15,17 @@ namespace BuildNotifications.Core.Text
         private StringLocalizer()
         {
             var resourceManager = new ResourceManager("BuildNotifications.Core.Text.Texts", Assembly.GetAssembly(typeof(StringLocalizer)));
+            resourceManager.IgnoreCase = true;
             _resourceManager = resourceManager;
+            var resourceSet = _resourceManager.GetResourceSet(CultureInfo.GetCultureInfo("en"), false, false);
         }
 
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();
 
         public string this[string key] => GetText(key);
+
+        public IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
 
         public string GetText(string key, CultureInfo culture = null)
         {
@@ -31,22 +35,52 @@ namespace BuildNotifications.Core.Text
             if (culture == null)
                 culture = CultureInfo.CurrentUICulture;
 
+            if (TryCached(key, culture, out var localizedText))
+                return localizedText;
+
             try
             {
-                return _resourceManager.GetString(key, culture);
+                localizedText = _resourceManager.GetString(key, culture);
             }
             catch (Exception)
             {
                 try
                 {
-                    return _resourceManager.GetString(key, DefaultCulture);
+                    localizedText = _resourceManager.GetString(key, DefaultCulture);
                 }
                 catch (Exception)
                 {
                     LogTo.Warn($"Failed to retrieve localized text for key: \"{key}\"");
-                    return key;
+                    localizedText = key;
                 }
             }
+
+            StoreInCache(key, culture, localizedText);
+            return localizedText;
+        }
+
+        private bool TryCached(string key, CultureInfo culture, out string cachedEntry)
+        {
+            cachedEntry = key;
+            if (!Cache.ContainsKey(culture))
+                return false;
+
+            if (Cache[culture].TryGetValue(key, out var result))
+            {
+                cachedEntry = result;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void StoreInCache(string key, CultureInfo culture, string localizedText)
+        {
+            if (!Cache.ContainsKey(culture))
+                Cache.Add(culture, new Dictionary<string, string>());
+
+            if (!Cache[culture].ContainsKey(key))
+                Cache[culture].Add(key, localizedText);
         }
 
         public static IEnumerable<CultureInfo> SupportedCultures()

@@ -8,7 +8,7 @@ namespace BuildNotifications.Core.Utilities
         {
             _settings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameHandling = TypeNameHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore 
             };
         }

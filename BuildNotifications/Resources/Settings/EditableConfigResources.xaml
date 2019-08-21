@@ -11,6 +11,13 @@
         <Setter Property="Margin" Value="5" />
     </Style>
 
+    <DataTemplate x:Key="EditableBoolTemplate" DataType="{x:Type editableConfigs:EditableInt}">
+        <CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
+                  Margin="{StaticResource BlockHalfYOnlyMargin}">
+<TextBlock Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" Foreground="{DynamicResource Background3}"/>
+        </CheckBox>
+    </DataTemplate>
+
     <DataTemplate x:Key="EditableIntTemplate" DataType="{x:Type editableConfigs:EditableInt}">
         <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
                                Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
@@ -146,9 +153,13 @@
                         <ContentPresenter VerticalAlignment="Top"
                                           ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
                                           Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
-                        <DockPanel Margin="{StaticResource BlockQuarterThickness}" Visibility="Collapsed" x:Name="InfoDockPanel">
-                            <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}" DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}" Margin="{StaticResource BlockQuarterThickness}"/>
-                            <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}"/>
+                        <DockPanel Margin="{StaticResource BlockQuarterThickness}" Visibility="Collapsed"
+                                   x:Name="InfoDockPanel">
+                            <icons:IconBatch Type="Arrow" Width="{StaticResource Block}"
+                                             Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                             Foreground="{DynamicResource Foreground1}"
+                                             Margin="{StaticResource BlockQuarterThickness}" />
+                            <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
                         </DockPanel>
                     </Grid>
                 </DockPanel>
@@ -156,7 +167,7 @@
         </Expander>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding ItemCount}" Value="0">
-                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

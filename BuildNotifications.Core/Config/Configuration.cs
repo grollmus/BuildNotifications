@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using BuildNotifications.Core.Plugin;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using ReflectSettings.Attributes;
@@ -42,22 +44,44 @@ namespace BuildNotifications.Core.Config
 
         [CalculatedValues(nameof(PossibleLanguages))]
         public string Language { get; set; }
-        
+
         [IgnoredForConfig]
         [JsonIgnore]
         public Func<IEnumerable<string>> PossibleBuildPluginsFunction { get; set; }
-        
+
         [IgnoredForConfig]
         [JsonIgnore]
         public Func<IEnumerable<string>> PossibleSourceControlPluginsFunction { get; set; }
+
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public IPluginRepository PluginRepository { get; set; }
 
         public IEnumerable<string> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke();
 
         public IEnumerable<string> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke();
 
+        public Type BuildPluginConfigurationType(ConnectionData connectionData)
+        {
+            if (PluginRepository == null)
+                LogTo.Warn("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+            var type = PluginRepository?.FindConfigurationType(connectionData.BuildPluginType);
+            return type ?? typeof(object);
+        }
+
+        public Type SourceControlPluginConfigurationType(ConnectionData connectionData)
+        {
+            if (PluginRepository == null)
+                LogTo.Warn("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+            var type = PluginRepository?.FindConfigurationType(connectionData.SourceControlPluginType);
+            return type ?? typeof(object);
+        }
+
         [TypesForInstantiation(typeof(List<ConnectionData>))]
         [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
         [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
+        [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
+        [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
         public IList<ConnectionData> Connections { get; set; }
 
         public IEnumerable<string> ConnectionNames() => Connections.Select(x => x.Name);

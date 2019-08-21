@@ -113,12 +113,14 @@
                                Width="{Binding ActualWidth, ElementName=MainGrid}"
                                IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
                                PopupAnimation="Fade" PlacementTarget="{Binding ElementName=MainGrid}"
-                               PlacementRectangle="0,32,0,0"
+                               PlacementRectangle="0,18,0,0"
                                Placement="Bottom">
                             <Grid Background="{TemplateBinding Background}">
+                                <Border Padding="{StaticResource BlockQuarterThickness}">
                                 <ItemsPresenter x:Name="ItemsPresenter" FocusVisualStyle="{x:Null}"
                                                 KeyboardNavigation.DirectionalNavigation="Contained"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
                             </Grid>
                         </Popup>
                         <local:NotifyingContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"

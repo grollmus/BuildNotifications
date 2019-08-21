@@ -29,6 +29,7 @@ namespace BuildNotifications.Core.Config
 
             configuration.PossibleBuildPluginsFunction = () => _pluginRepository.Build.Select(x => x.GetType().FullName);
             configuration.PossibleSourceControlPluginsFunction = () => _pluginRepository.SourceControl.Select(x => x.GetType().FullName);
+            configuration.PluginRepository = _pluginRepository;
 
             return configuration;
         }
