@@ -65,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReflectSettings" Version="1.0.4" />
+    <PackageReference Include="ReflectSettings" Version="1.0.5.13" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     <PackageReference Include="System.Windows.Forms" Version="4.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
@@ -77,7 +77,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Settings\" />
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
@@ -35,19 +37,36 @@ namespace BuildNotifications.Core.Config
 
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
 
-        [CalculatedValues(nameof(PossibleCultures))]
-        public CultureInfo Culture { get; set; }
+        [JsonIgnore]
+        public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
+
+        [CalculatedValues(nameof(PossibleLanguages))]
+        public string Language { get; set; }
+        
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public Func<IEnumerable<string>> PossibleBuildPluginsFunction { get; set; }
+        
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public Func<IEnumerable<string>> PossibleSourceControlPluginsFunction { get; set; }
+
+        public IEnumerable<string> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke();
+
+        public IEnumerable<string> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke();
 
         [TypesForInstantiation(typeof(List<ConnectionData>))]
+        [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
+        [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
         public IList<ConnectionData> Connections { get; set; }
 
         public IEnumerable<string> ConnectionNames() => Connections.Select(x => x.Name);
 
         [UsedImplicitly]
-        public IEnumerable<CultureInfo> PossibleCultures()
+        public IEnumerable<string> PossibleLanguages()
         {
-            yield return CultureInfo.GetCultureInfo("en-US");
-            yield return CultureInfo.GetCultureInfo("de");
+            yield return "en-US";
+            yield return "de";
         }
 
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]

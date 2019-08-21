@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using BuildNotifications.Core.Config;
 using ReflectSettings.EditableConfigs;
 
 namespace BuildNotifications.Resources.Settings
@@ -22,7 +23,12 @@ namespace BuildNotifications.Resources.Settings
             {
                 case EditableString editableString:
                     if (editableString.HasPredefinedValues)
-                        return element?.TryFindResource("EditableStringComboboxTemplate") as DataTemplate;
+                    {
+                        if (editableString.PropertyInfo.Name == nameof(ConnectionData.BuildPluginType) || editableString.PropertyInfo.Name == nameof(ConnectionData.SourceControlPluginType))
+                            return element?.TryFindResource("PluginSelectionTemplate") as DataTemplate;
+                        else
+                            return element?.TryFindResource("EditableStringComboboxTemplate") as DataTemplate;
+                    }
                     else
                         return DataTemplateByName(editableString, element);
                 case IReadOnlyEditableCollection _:

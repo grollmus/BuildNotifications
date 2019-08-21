@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
+using Anotar.NLog;
+using NLog;
 using TweenSharp;
 
 namespace BuildNotifications

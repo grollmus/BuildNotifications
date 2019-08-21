@@ -9,7 +9,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
     /// Plugin that allows adding new build server sources.
     /// </summary>
     [PublicAPI]
-    public interface IBuildPlugin
+    public interface IBuildPlugin : IPlugin
     {
         /// <summary>
         /// Constructs a provider from a set of key-value-pairs.

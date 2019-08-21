@@ -19,10 +19,11 @@
                      xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                      xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
                      xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
+                     xmlns:viewModelOverlays="clr-namespace:BuildNotifications.ViewModel.Overlays"
+                     xmlns:viewsOverlays="clr-namespace:BuildNotifications.Views.Overlays"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
-                     d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}"
-                     LeftToButtonsContent="{Binding SearchViewModel}">
+                     d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
 
     <window:CustomWindow.Resources>
         <ResourceDictionary>
@@ -47,6 +48,10 @@
             <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
                 <groupDefinition:BuildTreeGroupDefinitionView />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelOverlays:InitialSetupOverlayViewModel}">
+                <viewsOverlays:InitialSetupOverlayView />
+            </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>
@@ -63,11 +68,18 @@
             </ContentPresenter>
             <ContentPresenter Content="{Binding BuildTree}" />
         </DockPanel>
+        <ContentPresenter Content="{Binding Overlay}" />
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
     </Grid>
 
+    <window:CustomWindow.LeftToButtonsContent>
+        <Grid Visibility="{Binding TitleBarToolsVisibility}">
+            <ContentPresenter Content="{Binding SearchViewModel}" />
+        </Grid>
+    </window:CustomWindow.LeftToButtonsContent>
+
     <window:CustomWindow.RightToTitleContent>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Visibility="{Binding TitleBarToolsVisibility}">
             <icons:IconButton DockPanel.Dock="Left"
                               Icon="Settings"
                               Margin="{StaticResource BlockQuarterThickness}"

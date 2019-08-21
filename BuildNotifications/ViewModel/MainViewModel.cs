@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
+using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
@@ -23,40 +27,7 @@ namespace BuildNotifications.ViewModel
         public MainViewModel()
         {
             _coreSetup = new CoreSetup(ConfigFilePath);
-
-            SearchViewModel = new SearchViewModel();
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
-
-            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
-            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
-            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
-                {
-                    Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
-
-                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
-                }
-
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
-                {
-                    Debug.WriteLine("Selected sortings: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition));
-                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                }
-            };
-
-            ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
-            ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
-
-            var projectProvider = _coreSetup.ProjectProvider;
-            foreach (var project in projectProvider.AllProjects())
-            {
-                _coreSetup.Pipeline.AddProject(project);
-            }
-
-            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
-
-            UpdateTimer().FireAndForget();
+            Initialize();
         }
 
         public BuildTreeViewModel BuildTree
@@ -69,6 +40,19 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public BaseViewModel Overlay
+        {
+            get => _overlay;
+            set
+            {
+                _overlay = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TitleBarToolsVisibility));
+            }
+        }
+
+        public Visibility TitleBarToolsVisibility => Overlay == null ? Visibility.Visible : Visibility.Collapsed;
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
@@ -99,6 +83,67 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
+        private void Initialize()
+        {
+            SetupViewModel();
+            LoadProjects();
+            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
+            UpdateTimer().FireAndForget();
+            ShowOverlay();
+        }
+
+        private void ShowOverlay()
+        {
+            var nothingConfigured = !_coreSetup.Configuration.Projects.Any() || !_coreSetup.Configuration.Connections.Any();
+            if (!nothingConfigured)
+                return;
+
+            Overlay = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+        }
+
+        private void LoadProjects()
+        {
+            var projectProvider = _coreSetup.ProjectProvider;
+            foreach (var project in projectProvider.AllProjects())
+            {
+                _coreSetup.Pipeline.AddProject(project);
+            }
+        }
+
+        private void SetupViewModel()
+        {
+            SearchViewModel = new SearchViewModel();
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
+            SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
+
+            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
+            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
+            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
+                {
+                    Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
+
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                }
+
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
+                {
+                    Debug.WriteLine("Selected sortings: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition));
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                }
+            };
+
+            ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
+            ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
+        }
+
+        private void SettingsViewModelOnEditConnectionsRequested(object sender, EventArgs e)
+        {
+            ToggleShowSettingsCommand.Execute(null);
+            Overlay = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+        }
+
         private void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
@@ -106,8 +151,6 @@ namespace BuildNotifications.ViewModel
             BuildTree = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
         }
-
-        // RemoveChildrenIfNotOfType ensures that only elements of the type are within the list, therefore the ReSharper warning is taken care of
 
         private void ToggleGroupDefinitionSelection(object obj)
         {
@@ -137,5 +180,6 @@ namespace BuildNotifications.ViewModel
         private BuildTreeViewModel _buildTree;
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;
+        private BaseViewModel _overlay;
     }
 }

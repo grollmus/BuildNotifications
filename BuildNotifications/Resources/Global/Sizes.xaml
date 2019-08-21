@@ -11,6 +11,7 @@
     <system:Double x:Key="BlockThreeQuarters">9</system:Double>
     <system:Double x:Key="BlockFiveSixths">10</system:Double>
     <system:Double x:Key="Block">12</system:Double>
+    <system:Double x:Key="BlockOneAndQuarter">15</system:Double>
     <system:Double x:Key="BlockOneAndHalf">18</system:Double>
     <system:Double x:Key="BlockDouble">24</system:Double>
     <system:Double x:Key="BlockDoubleAndHalf">30</system:Double>

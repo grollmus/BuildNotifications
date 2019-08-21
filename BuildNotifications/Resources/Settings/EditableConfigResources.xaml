@@ -114,22 +114,51 @@
                                  x:Name="ListBox">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock
-                                        Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-                                        TextWrapping="Wrap" Width="{StaticResource BlockFourTimes}"
-                                        MaxHeight="{StaticResource BlockFourTimes}" TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                    <DockPanel>
+                                        <icons:IconButton Icon="Minus" Command="{Binding RemoveItemCommand}"
+                                                          CommandParameter="{Binding}"
+                                                          x:Name="IconBtn"
+                                                          Foreground="{DynamicResource Background2}"
+                                                          DockPanel.Dock="Right"
+                                                          Background="{DynamicResource Background1}"
+                                                          Height="{StaticResource BlockThreeQuarters}"
+                                                          IconSize="{StaticResource BlockThreeQuarters}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <icons:ButtonInvokedAnimation />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </icons:IconButton>
+
+                                        <TextBlock
+                                            Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                                            TextWrapping="Wrap" Width="{StaticResource BlockFourTimes}"
+                                            MaxHeight="{StaticResource BlockFourTimes}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                    </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
 
                         </ListBox>
                     </DockPanel>
-                    <ContentPresenter VerticalAlignment="Top"
-                                      ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
-                                      Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+                    <Grid>
+                        <ContentPresenter VerticalAlignment="Top"
+                                          ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
+                                          Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+                        <DockPanel Margin="{StaticResource BlockQuarterThickness}" Visibility="Collapsed" x:Name="InfoDockPanel">
+                            <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}" DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}" Margin="{StaticResource BlockQuarterThickness}"/>
+                            <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}"/>
+                        </DockPanel>
+                    </Grid>
                 </DockPanel>
             </DockPanel>
         </Expander>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ItemCount}" Value="0">
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible"></Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
     <DataTemplate x:Key="EditablePrimitiveCollectionTemplate" DataType="{x:Type editableConfigs:IEditableCollection}">

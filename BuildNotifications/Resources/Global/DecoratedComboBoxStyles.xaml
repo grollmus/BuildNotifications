@@ -18,7 +18,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border Name="border" BorderThickness="0,0,0,1" Padding="0,0"
+                    <Border Name="border" BorderThickness="1" Padding="2"
                             BorderBrush="{DynamicResource Background3}"
                             CornerRadius="0" Background="Transparent" />
                     <ControlTemplate.Triggers>
@@ -49,7 +49,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="{StaticResource BlockHalfThickness}" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="{StaticResource BlockQuarterXOnlyMargin}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="ItemContainerStyle">
@@ -182,13 +182,14 @@
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ToggleButton>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False"
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False" Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                     Height="{StaticResource BlockOneAndHalf}">
                             <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
                                              Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                              DockPanel.Dock="Right"
                                              x:Name="Icon" HorizontalAlignment="Right" />
                             <TextBlock
+                                
                                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                 Foreground="{DynamicResource Background3}" x:Name="Label" HorizontalAlignment="Right"
                                 Style="{StaticResource TextBoxLabelStyle}" DockPanel.Dock="Right"

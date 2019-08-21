@@ -78,5 +78,9 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         private TfsConnectionPool _connectionPool;
+
+        public string DisplayName => "Azure DevOps Server";
+
+        public string IconSvgPath => "F1 M64,64z M0,0z M48.2,14.3L48.15,14.3 28.45,0 28.65,6.7 6.3,15.05 0,23.1 0,41.55 7.6,43.9 7.6,21.85 48.2,14.3 M64,11.2L48.25,14.3 48.25,41.7 48.25,49.05 7.65,43.9 24.35,63.9 24.15,55.7 48.05,64 64,50.5 64,11.2z";
     }
 }

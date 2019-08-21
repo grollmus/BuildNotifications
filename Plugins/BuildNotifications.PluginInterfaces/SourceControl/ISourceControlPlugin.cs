@@ -10,7 +10,7 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
     /// Plugin that allows adding new source control sources.
     /// </summary>
     [PublicAPI]
-    public interface ISourceControlPlugin
+    public interface ISourceControlPlugin : IPlugin
     {
         /// <summary>
         /// Constructs a provider from a set of key-value-pairs.

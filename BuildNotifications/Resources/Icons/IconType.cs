@@ -24,6 +24,9 @@
         Integer,
         Float,
         Text,
-        Plus
+        Plus,
+        Minus,
+        Arrow,
+        Dummy
     }
 }

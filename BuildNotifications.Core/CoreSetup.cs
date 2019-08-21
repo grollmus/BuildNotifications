@@ -17,11 +17,12 @@ namespace BuildNotifications.Core
         {
             _configFilePath = configFilePath;
             var serializer = new Serializer();
-            _configurationSerializer = new ConfigurationSerializer(serializer);
-            Configuration = LoadConfiguration(configFilePath);
             
             var pluginLoader = new PluginLoader();
             PluginRepository = pluginLoader.LoadPlugins(new[] {"plugins"});
+            
+            _configurationSerializer = new ConfigurationSerializer(serializer, PluginRepository);
+            Configuration = LoadConfiguration(configFilePath);
 
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 

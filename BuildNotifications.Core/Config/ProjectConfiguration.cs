@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BuildNotifications.Core.Text;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
@@ -14,7 +15,7 @@ namespace BuildNotifications.Core.Config
             BuildConnectionNames = new List<string>();
             SourceControlConnectionNames = new List<string>();
 
-            ProjectName = string.Empty;
+            ProjectName = StringLocalizer.Instance["New Project"];
             DefaultCompareBranch = string.Empty;
 
             ShowPullRequests = true;
@@ -26,14 +27,17 @@ namespace BuildNotifications.Core.Config
         [IsDisplayName]
         public string ProjectName { get; set; }
 
+        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
+        public IList<string> BuildConnectionNames { get; set; }
+
+        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
+        public IList<string> SourceControlConnectionNames { get; set; }
+
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchBlacklist { get; set; }
         
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchWhitelist { get; set; }
-
-        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
-        public IList<string> BuildConnectionNames { get; set; }
 
         public IList<string> BuildDefinitionBlacklist { get; set; }
         
@@ -49,8 +53,5 @@ namespace BuildNotifications.Core.Config
         public bool LoadWhitelistedDefinitionsExclusively { get; set; }
 
         public bool ShowPullRequests { get; set; }
-        
-        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
-        public IList<string> SourceControlConnectionNames { get; set; }
     }
 }
