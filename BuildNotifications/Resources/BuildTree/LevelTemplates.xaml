@@ -86,7 +86,8 @@
                         Margin="{StaticResource BlockThreeQuartersLeftAndRight}">
                     <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
                              HorizontalAlignment="Left">
-                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockNineteenTimes}"
+                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                          MaxWidth="{StaticResource BlockNineteenTimes}"
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
                     </Viewbox>
                 </Border>
@@ -114,7 +115,8 @@
                                      Width="{StaticResource BlockTwentyEight}">
             <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
-                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockTwelveTimes}"
+                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                  MaxWidth="{StaticResource BlockTwelveTimes}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
 

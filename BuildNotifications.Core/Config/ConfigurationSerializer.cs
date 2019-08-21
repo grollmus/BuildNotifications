@@ -21,7 +21,8 @@ namespace BuildNotifications.Core.Config
             {
                 var json = File.ReadAllText(fileName);
                 configuration = _serializer.Deserialize<Configuration>(json);
-            }else
+            }
+            else
             {
                 LogTo.Warn($"File {fileName} does not exist. Using default configuration");
                 configuration = new Configuration();

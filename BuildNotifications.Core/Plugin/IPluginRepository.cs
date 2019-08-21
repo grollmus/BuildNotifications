@@ -27,24 +27,24 @@ namespace BuildNotifications.Core.Plugin
         IBuildPlugin? FindBuildPlugin(string typeName);
 
         /// <summary>
-        /// Searches for a source control plugin that matches the given typename.
+        /// Searches for any plugin that matches the given typename.
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The source control plugin or <c>null</c> if none matches <paramref name="typeName" />.</returns>
-        ISourceControlPlugin? FindSourceControlPlugin(string typeName);
-        
+        /// <returns>The plugin IconGeometry or <c>null</c> if none matches <paramref name="typeName" />.</returns>
+        string? FindIconGeometry(string typeName);
+
         /// <summary>
         /// Searches for any plugin that matches the given typename.
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
         /// <returns>The plugin DisplayName or <c>null</c> if none matches <paramref name="typeName" />.</returns>
         string? FindPluginName(string typeName);
-        
+
         /// <summary>
-        /// Searches for any plugin that matches the given typename.
+        /// Searches for a source control plugin that matches the given typename.
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The plugin IconGeometry or <c>null</c> if none matches <paramref name="typeName" />.</returns>
-        string? FindIconGeometry(string typeName);
+        /// <returns>The source control plugin or <c>null</c> if none matches <paramref name="typeName" />.</returns>
+        ISourceControlPlugin? FindSourceControlPlugin(string typeName);
     }
 }

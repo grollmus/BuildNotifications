@@ -4,8 +4,7 @@
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
     <Style TargetType="ComboBox">
         <Setter Property="Margin" Value="5" />
@@ -146,9 +145,13 @@
                         <ContentPresenter VerticalAlignment="Top"
                                           ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
                                           Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
-                        <DockPanel Margin="{StaticResource BlockQuarterThickness}" Visibility="Collapsed" x:Name="InfoDockPanel">
-                            <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}" DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}" Margin="{StaticResource BlockQuarterThickness}"/>
-                            <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}"/>
+                        <DockPanel Margin="{StaticResource BlockQuarterThickness}" Visibility="Collapsed"
+                                   x:Name="InfoDockPanel">
+                            <icons:IconBatch Type="Arrow" Width="{StaticResource Block}"
+                                             Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                             Foreground="{DynamicResource Foreground1}"
+                                             Margin="{StaticResource BlockQuarterThickness}" />
+                            <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
                         </DockPanel>
                     </Grid>
                 </DockPanel>
@@ -156,7 +159,7 @@
         </Expander>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding ItemCount}" Value="0">
-                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible"></Setter>
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

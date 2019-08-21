@@ -13,6 +13,13 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public string ProjectName { get; }
 
+        public override int GetHashCode()
+        {
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            return Id.GetHashCode();
+            // ReSharper restore NonReadonlyMemberInGetHashCode
+        }
+
         /// <inheritdoc />
         public string BranchName { get; set; }
 
@@ -43,13 +50,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public bool Equals(IBaseBuild other)
         {
             return Id == (other as Build)?.Id;
-        }
-
-        public override int GetHashCode()
-        {
-            // ReSharper disable NonReadonlyMemberInGetHashCode
-            return Id.GetHashCode();
-            // ReSharper restore NonReadonlyMemberInGetHashCode
         }
 
         private static int _idCounter;

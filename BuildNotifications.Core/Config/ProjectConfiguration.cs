@@ -35,12 +35,12 @@ namespace BuildNotifications.Core.Config
 
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchBlacklist { get; set; }
-        
+
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BranchWhitelist { get; set; }
 
         public IList<string> BuildDefinitionBlacklist { get; set; }
-        
+
         [TypesForInstantiation(typeof(List<string>))]
         public IList<string> BuildDefinitionWhitelist { get; set; }
 

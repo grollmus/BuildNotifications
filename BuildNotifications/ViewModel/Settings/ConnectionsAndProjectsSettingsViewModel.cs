@@ -8,8 +8,6 @@ namespace BuildNotifications.ViewModel.Settings
 {
     internal class ConnectionsAndProjectsSettingsViewModel : BaseViewModel
     {
-        public ObservableCollection<IButtonNavigationItem> Items { get; set; }
-
         public ConnectionsAndProjectsSettingsViewModel(SettingsSubSetViewModel connectionSettings, SettingsSubSetViewModel projectsSettings, IPluginRepository pluginRepository)
         {
             Items = new ObservableCollection<IButtonNavigationItem>();
@@ -29,5 +27,7 @@ namespace BuildNotifications.ViewModel.Settings
             Items.Add(new ButtonNavigationItem(connectionSettings, "Connections", IconType.Connection));
             Items.Add(new ButtonNavigationItem(projectsSettings, "Projects", IconType.GroupingEmpty));
         }
+
+        public ObservableCollection<IButtonNavigationItem> Items { get; set; }
     }
 }

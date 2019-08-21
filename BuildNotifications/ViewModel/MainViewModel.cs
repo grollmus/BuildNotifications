@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;

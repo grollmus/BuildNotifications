@@ -10,9 +10,9 @@
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-             xmlns:build="clr-namespace:BuildNotifications.Resources.BuildTree.Build"
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}" Background="{DynamicResource Background1}">
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
+             Background="{DynamicResource Background1}">
 
 
     <DockPanel>
@@ -26,10 +26,10 @@
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource Foreground1HalfTransparency}" VerticalAlignment="Top"
                 Margin="{StaticResource BlockHalfThickness}">
-                
+
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding AnimateDisplay}" Value="true">
-                        <settings:TextChangedAnimation Duration="2" Anchor="MiddleLeft"/>
+                        <settings:TextChangedAnimation Duration="2" Anchor="MiddleLeft" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </TextBlock>

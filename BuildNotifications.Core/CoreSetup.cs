@@ -10,17 +10,14 @@ namespace BuildNotifications.Core
 {
     public class CoreSetup
     {
-        private readonly string _configFilePath;
-        private readonly ConfigurationSerializer _configurationSerializer;
-
         public CoreSetup(string configFilePath)
         {
             _configFilePath = configFilePath;
             var serializer = new Serializer();
-            
+
             var pluginLoader = new PluginLoader();
             PluginRepository = pluginLoader.LoadPlugins(new[] {"plugins"});
-            
+
             _configurationSerializer = new ConfigurationSerializer(serializer, PluginRepository);
             Configuration = LoadConfiguration(configFilePath);
 
@@ -43,14 +40,14 @@ namespace BuildNotifications.Core
 
         public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
 
-        public Task Update()
-        {
-            return Pipeline.Update();
-        }
-
         public void PersistConfigurationChanges()
         {
             _configurationSerializer.Save(Configuration, _configFilePath);
+        }
+
+        public Task Update()
+        {
+            return Pipeline.Update();
         }
 
         private IConfiguration LoadConfiguration(string configFilePath)
@@ -58,9 +55,12 @@ namespace BuildNotifications.Core
             return _configurationSerializer.Load(configFilePath);
         }
 
-        private void Notifier_Updated(object sender, PipelineUpdateEventArgs e)
+        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
         {
             PipelineUpdated?.Invoke(this, e);
         }
+
+        private readonly string _configFilePath;
+        private readonly ConfigurationSerializer _configurationSerializer;
     }
 }

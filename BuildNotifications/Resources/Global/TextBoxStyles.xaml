@@ -32,8 +32,9 @@
                         <Grid>
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
-                            <Grid HorizontalAlignment="Right" >
-                                <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom" x:Name="Overlay">
+                            <Grid HorizontalAlignment="Right">
+                                <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom"
+                                        x:Name="Overlay">
                                     <DockPanel Margin="{StaticResource BlockHalfXOnlyMargin}">
                                         <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
                                                          Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type text:DecoratedTextBox}, Mode=FindAncestor}}"

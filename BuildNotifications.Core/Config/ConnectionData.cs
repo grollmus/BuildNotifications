@@ -16,12 +16,6 @@ namespace BuildNotifications.Core.Config
         }
 
         /// <summary>
-        /// Display name of the connection.
-        /// </summary>
-        [IsDisplayName]
-        public string Name { get; set; }
-
-        /// <summary>
         /// Type name of the plugin that is able to construct a build provider
         /// for this connection.
         /// </summary>
@@ -29,16 +23,22 @@ namespace BuildNotifications.Core.Config
         public string? BuildPluginType { get; set; }
 
         /// <summary>
-        /// Type name of the plugin that is able to construct a branch provider
-        /// for this connection.
+        /// Display name of the connection.
         /// </summary>
-        [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
-        public string? SourceControlPluginType { get; set; }
+        [IsDisplayName]
+        public string Name { get; set; }
 
         /// <summary>
         /// Options for this connection.
         /// </summary>
         [TypesForInstantiation(typeof(Dictionary<string, string?>))]
         public IReadOnlyDictionary<string, string?> Options { get; set; }
+
+        /// <summary>
+        /// Type name of the plugin that is able to construct a branch provider
+        /// for this connection.
+        /// </summary>
+        [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
+        public string? SourceControlPluginType { get; set; }
     }
 }

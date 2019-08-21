@@ -6,8 +6,10 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
 {
     internal class ButtonNavigation : Control
     {
-        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
-            "Items", typeof(ObservableCollection<IButtonNavigationItem>), typeof(ButtonNavigation), new PropertyMetadata(default(ObservableCollection<IButtonNavigationItem>)));
+        public ButtonNavigation()
+        {
+            Items = new ObservableCollection<IButtonNavigationItem>();
+        }
 
         public ObservableCollection<IButtonNavigationItem> Items
         {
@@ -15,18 +17,16 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             set => SetValue(ItemsProperty, value);
         }
 
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", typeof(IButtonNavigationItem), typeof(ButtonNavigation), new PropertyMetadata(default(IButtonNavigationItem)));
-
         public IButtonNavigationItem SelectedItem
         {
             get => (IButtonNavigationItem) GetValue(SelectedItemProperty);
             set => SetValue(SelectedItemProperty, value);
         }
 
-        public ButtonNavigation()
-        {
-            Items = new ObservableCollection<IButtonNavigationItem>();
-        }
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
+            "Items", typeof(ObservableCollection<IButtonNavigationItem>), typeof(ButtonNavigation), new PropertyMetadata(default(ObservableCollection<IButtonNavigationItem>)));
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
+            "SelectedItem", typeof(IButtonNavigationItem), typeof(ButtonNavigation), new PropertyMetadata(default(IButtonNavigationItem)));
     }
 }

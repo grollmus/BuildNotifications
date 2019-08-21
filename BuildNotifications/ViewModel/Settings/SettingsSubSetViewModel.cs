@@ -8,13 +8,13 @@ namespace BuildNotifications.ViewModel.Settings
 {
     public class SettingsSubSetViewModel
     {
-        public ObservableCollection<IEditableConfig> Configs { get; }
-
-        public DataTemplateSelector DataTemplateSelector { get; set; } = EditableConfigTemplateSelector.Instance;
-
         public SettingsSubSetViewModel(IEnumerable<IEditableConfig> editableConfigs)
         {
             Configs = new ObservableCollection<IEditableConfig>(editableConfigs);
         }
+
+        public ObservableCollection<IEditableConfig> Configs { get; }
+
+        public DataTemplateSelector DataTemplateSelector { get; set; } = EditableConfigTemplateSelector.Instance;
     }
 }

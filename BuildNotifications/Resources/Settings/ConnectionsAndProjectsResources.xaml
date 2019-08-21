@@ -4,12 +4,10 @@
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings"
-                    xmlns:settings1="clr-namespace:BuildNotifications.Views.Settings">
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     <DataTemplate x:Key="ConnectionsAndProjectsEditableCollectionTemplate"
                   DataType="{x:Type editableConfigs:IEditableCollection}">
-        <DockPanel x:Name="DockPanel" >
+        <DockPanel x:Name="DockPanel">
             <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
                 <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
                                   Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
@@ -23,7 +21,7 @@
                     </i:Interaction.Triggers>
                 </icons:IconButton>
 
-                <ListBox ItemsSource="{Binding SubEditables}" SelectedIndex="0" Margin="0" Padding="0" 
+                <ListBox ItemsSource="{Binding SubEditables}" SelectedIndex="0" Margin="0" Padding="0"
                          x:Name="ListBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -73,7 +71,9 @@
 
     <DataTemplate x:Key="PluginSelectionTemplate" DataType="{x:Type editableConfigs:EditableString}">
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" FontSize="{StaticResource Block}" Foreground="{DynamicResource Background3}"/>
+            <TextBlock DockPanel.Dock="Top"
+                       Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                       FontSize="{StaticResource Block}" Foreground="{DynamicResource Background3}" />
             <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0"
                      SelectedItem="{Binding Value}">
 

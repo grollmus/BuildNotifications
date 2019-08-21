@@ -93,12 +93,12 @@ namespace DummyBuildServer.Models
         }
 
         private readonly ServerCommandParser _parser;
+        private readonly BuildNotificationsProcessHook _buildNotificationsProcessHook;
 
         private CancellationTokenSource _cancelToken;
         private Thread? _networkThread;
         private MemoryMappedFile _memoryFile;
         private int _port;
-        private readonly BuildNotificationsProcessHook _buildNotificationsProcessHook;
     }
 
     internal class BuildNotificationsProcessHook

@@ -2,8 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-                    xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings">
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
     <Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
         <Setter Property="Template">
             <Setter.Value>
@@ -33,7 +32,8 @@
                             </ListBox>
                         </DockPanel>
                         <Border>
-                        <ContentPresenter VerticalAlignment="Top" Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
+                            <ContentPresenter VerticalAlignment="Top"
+                                              Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
                         </Border>
                     </DockPanel>
                 </ControlTemplate>

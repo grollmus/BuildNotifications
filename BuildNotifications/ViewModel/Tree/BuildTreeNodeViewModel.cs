@@ -21,15 +21,8 @@ namespace BuildNotifications.ViewModel.Tree
             SetChildrenSorting(_currentSortingDefinition);
 
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
-            AddAndRemoveCommand = new DelegateCommand(o =>
-            {
-                RemoveOneChild(o);
-            });
+            AddAndRemoveCommand = new DelegateCommand(o => { RemoveOneChild(o); });
             HighlightCommand = new DelegateCommand(Highlight);
-        }
-
-        public virtual void BackendPropertiesChanged()
-        {
         }
 
         public ICommand AddAndRemoveCommand { get; set; }
@@ -61,6 +54,10 @@ namespace BuildNotifications.ViewModel.Tree
 
                 return thisLevelToDeepest == 0 || thisLevelToDeepest == 2;
             }
+        }
+
+        public virtual void BackendPropertiesChanged()
+        {
         }
 
         protected virtual BuildStatus CalculateBuildStatus()
@@ -129,18 +126,6 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(BuildStatus));
         }
 
-        private void SetBuildLargeStatus()
-        {
-            var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
-
-            foreach (var child in buildChildren)
-            {
-                child.IsLargeSize = false;
-            }
-
-            buildChildren.Last().IsLargeSize = true;
-        }
-
         private void Highlight(object obj)
         {
             bool? targetValue = null;
@@ -168,6 +153,18 @@ namespace BuildNotifications.ViewModel.Tree
             var someBuild = Children.FirstOrDefault(x => !x.IsRemoving);
             if (someBuild != null)
                 Children.Remove(someBuild);
+        }
+
+        private void SetBuildLargeStatus()
+        {
+            var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
+
+            foreach (var child in buildChildren)
+            {
+                child.IsLargeSize = false;
+            }
+
+            buildChildren.Last().IsLargeSize = true;
         }
 
         private void SetChildrenSorting(SortingDefinition sortingDefinition)

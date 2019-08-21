@@ -4,42 +4,35 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
-using BuildNotifications.ViewModel.Utils;
 using ReflectSettings;
 using ReflectSettings.EditableConfigs;
+using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
 
 namespace BuildNotifications.ViewModel.Settings
 {
     public class SettingsViewModel
     {
-        public IConfiguration Configuration { get; }
-        private readonly Action _saveMethod;
-
-        public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
-
-        public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
-
-        public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
-
-        public event EventHandler SettingsChanged;
-
-        public event EventHandler EditConnectionsRequested;
-
-        public ICommand EditConnectionsCommand { get; set; }
-
         public SettingsViewModel(IConfiguration configuration, Action saveMethod)
         {
             Configuration = configuration;
             _saveMethod = saveMethod;
-            EditConnectionsCommand = new Utils.DelegateCommand(OnEditConnections);
+            EditConnectionsCommand = new DelegateCommand(OnEditConnections);
 
             CreateEditables();
         }
 
-        private void OnEditConnections(object parameter)
-        {
-            EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
-        }
+        public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
+        public IConfiguration Configuration { get; }
+
+        public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
+
+        public ICommand EditConnectionsCommand { get; set; }
+
+        public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
+
+        public event EventHandler EditConnectionsRequested;
+
+        public event EventHandler SettingsChanged;
 
         private void CreateEditables()
         {
@@ -75,5 +68,12 @@ namespace BuildNotifications.ViewModel.Settings
                 SettingsChanged?.Invoke(this, EventArgs.Empty);
             };
         }
+
+        private void OnEditConnections(object parameter)
+        {
+            EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private readonly Action _saveMethod;
     }
 }

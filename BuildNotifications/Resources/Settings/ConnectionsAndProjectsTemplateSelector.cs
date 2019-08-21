@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using BuildNotifications.Core.Config;
 using ReflectSettings.EditableConfigs;
 
 namespace BuildNotifications.Resources.Settings

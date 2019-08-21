@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+﻿using System;
+using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
@@ -14,7 +15,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public override bool Equals(IBuildTreeNode other)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
