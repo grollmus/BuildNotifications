@@ -64,7 +64,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected virtual BuildStatus CalculateBuildStatus()
         {
-            return !Children.Any() ? BuildStatus.None : Children.Max(x => x.BuildStatus);
+            return !Children.Any() ? BuildStatus.None : Children.ToList().Max(x => x.BuildStatus);
         }
 
         protected virtual string CalculateDisplayName()

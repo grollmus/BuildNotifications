@@ -143,7 +143,10 @@ namespace BuildNotifications.ViewModel
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
-            BuildTree = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            var buildTreeViewModel = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            if (buildTreeViewModel != BuildTree)
+                BuildTree = buildTreeViewModel;
+
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
         }
 

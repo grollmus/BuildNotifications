@@ -58,8 +58,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             foreach (var build in list)
             {
-                if (_knownBuilds.All(b => b.Id != build.Id))
-                    _knownBuilds.Add(build);
+                _knownBuilds.Add(build);
 
                 if (!build.LastChangedTime.HasValue || build.LastChangedTime > date)
                     yield return build;
