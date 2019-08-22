@@ -11,11 +11,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         /// <inheritdoc />
-        public IBuildTreeGroupDefinition GroupDefinition { get; }
-
-        public override bool Equals(IBuildTreeNode other)
-        {
-            throw new NotImplementedException();
-        }
+        public IBuildTreeGroupDefinition GroupDefinition { get; set; }
     }
 }

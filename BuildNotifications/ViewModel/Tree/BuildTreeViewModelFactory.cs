@@ -20,7 +20,7 @@ namespace BuildNotifications.ViewModel.Tree
             if (existingTree != null)
                 buildTree = Merge(existingTree, buildTree);
 
-            var treeDepth = SetCurrentDepths(buildTree);
+            var treeDepth = GetMaxDepth(buildTree);
             SetMaxDepths(buildTree, treeDepth);
 
             return buildTree;
@@ -111,14 +111,12 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private static int SetCurrentDepths(BuildTreeNodeViewModel node, int currentDepth = 0)
+        private static int GetMaxDepth(BuildTreeNodeViewModel node, int currentDepth = 0)
         {
-            node.CurrentTreeLevelDepth = currentDepth;
-
             var maxDepth = currentDepth;
             foreach (var child in node.Children)
             {
-                var deepestChildDepth = SetCurrentDepths(child, currentDepth + 1);
+                var deepestChildDepth = GetMaxDepth(child, currentDepth + 1);
                 maxDepth = deepestChildDepth;
             }
 

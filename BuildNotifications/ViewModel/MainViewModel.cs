@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -35,7 +35,6 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _buildTree = value;
-
                 OnPropertyChanged();
             }
         }
@@ -121,16 +120,13 @@ namespace BuildNotifications.ViewModel
             {
                 if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
                 {
-                    Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
-
                     _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    UpdateNow();
                 }
 
                 if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
-                {
-                    Debug.WriteLine("Selected sortings: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition));
                     BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                }
             };
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
@@ -163,18 +159,31 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateTimer()
         {
-            while (true)
+            _cancellationTokenSource = new CancellationTokenSource();
+            while (_keepUpdating)
             {
                 IsBusy = true;
                 await _coreSetup.Update();
                 IsBusy = false;
-
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), _cancellationTokenSource.Token);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
-
-            // ReSharper disable once FunctionNeverReturns
         }
 
+        private void UpdateNow()
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        private CancellationTokenSource _cancellationTokenSource;
+        private bool _keepUpdating = true;
         private readonly CoreSetup _coreSetup;
         private BuildTreeViewModel _buildTree;
         private bool _showGroupDefinitionSelection;

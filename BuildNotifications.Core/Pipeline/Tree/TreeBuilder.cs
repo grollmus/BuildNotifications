@@ -21,12 +21,16 @@ namespace BuildNotifications.Core.Pipeline.Tree
         private IBuildTreeNode BuildPath(IBuild build, IList<IBranch> branches)
         {
             var node = ConstructNode(Arrangement.GroupDefinition.None, build, branches);
+            var currentDepth = GroupDefinition.Count();
+            node.Depth = currentDepth + 1;
 
             foreach (var group in GroupDefinition.Reverse())
             {
                 var parent = ConstructNode(group, build, branches);
                 parent.AddChild(node);
                 node = parent;
+                node.Depth = currentDepth;
+                currentDepth -= 1;
             }
 
             return node;
@@ -59,12 +63,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 if (nodeToInsert.Children.Any())
                     Merge(subTree, nodeToInsert.Children.First(), taggedNodes);
 
-                taggedNodes.Remove(subTree);
+                taggedNodes.RemoveAll(x => ReferenceEquals(x, subTree));
             }
             else
             {
                 tree.AddChild(nodeToInsert);
-                taggedNodes.Remove(tree);
+                taggedNodes.RemoveAll(x => ReferenceEquals(x, tree));
             }
         }
 
@@ -72,7 +76,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
             foreach (var node in tree.Children.ToList())
             {
-                if (taggedNodes.Contains(node))
+                if (taggedNodes.Any(x => ReferenceEquals(x, node)))
                     tree.RemoveChild(node);
                 else
                     RemoveTaggedNodes(node, taggedNodes);
@@ -93,6 +97,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
             var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
+
+            if (tree.GroupDefinition != GroupDefinition)
+                tree.GroupDefinition = GroupDefinition;
 
             var taggedNodes = new List<IBuildTreeNode>();
             TagAllNodesForDeletion(tree, taggedNodes);

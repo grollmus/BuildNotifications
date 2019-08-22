@@ -23,6 +23,7 @@ namespace BuildNotifications.ViewModel.Tree
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
             AddAndRemoveCommand = new DelegateCommand(o => { RemoveOneChild(o); });
             HighlightCommand = new DelegateCommand(Highlight);
+            CurrentTreeLevelDepth = nodeSource.Depth;
         }
 
         public ICommand AddAndRemoveCommand { get; set; }
@@ -32,7 +33,7 @@ namespace BuildNotifications.ViewModel.Tree
         public BuildStatus BuildStatus => CalculateBuildStatus();
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
-        public int CurrentTreeLevelDepth { get; set; }
+        public int CurrentTreeLevelDepth { get; private set; }
 
         public string DisplayName => CalculateDisplayName();
 
@@ -58,6 +59,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         public virtual void BackendPropertiesChanged()
         {
+            CurrentTreeLevelDepth = NodeSource.Depth;
         }
 
         protected virtual BuildStatus CalculateBuildStatus()
