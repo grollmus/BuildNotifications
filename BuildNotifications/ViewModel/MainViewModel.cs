@@ -20,7 +20,7 @@ namespace BuildNotifications.ViewModel
 #if DEBUG
         private string ConfigFilePath => ConfigFileName;
 #else
-        private string ConfigFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{Path.DirectorySeparatorChar}BuildNotifications{Path.DirectorySeparatorChar}{ConfigFileName}");
+        private string ConfigFilePath => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"BuildNotifications{System.IO.Path.DirectorySeparatorChar}{ConfigFileName}");
 #endif
 
         public MainViewModel()

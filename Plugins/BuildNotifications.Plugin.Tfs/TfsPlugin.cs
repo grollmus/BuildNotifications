@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Anotar.NLog;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfaces.Host;
-using BuildNotifications.PluginInterfaces.Options;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Identity;
@@ -21,60 +19,48 @@ namespace BuildNotifications.Plugin.Tfs
             _connectionPool = new TfsConnectionPool();
         }
 
-        IBuildProvider? IBuildPlugin.ConstructProvider(IReadOnlyDictionary<string, string?> data)
+        IBuildProvider? IBuildPlugin.ConstructProvider(object data)
         {
-            var connection = _connectionPool.CreateConnection(data);
+            var configuration = data as TfsConfiguration;
+            if (configuration == null)
+            {
+                LogTo.Error("Given data was no TfsConfiguration");
+                return null;
+            }
+
+            var connection = _connectionPool.CreateConnection(configuration);
             if (connection == null)
                 return null;
-
-            if (!data.TryGetValue(TfsConstants.Connection.ProjectId, out var projectId) || string.IsNullOrEmpty(projectId))
+            
+            if (string.IsNullOrEmpty(configuration.ProjectId))
             {
                 LogTo.Error("ProjectId not given in connection data");
                 return null;
             }
 
-            return new TfsBuildProvider(connection, projectId);
+            return new TfsBuildProvider(connection, configuration.ProjectId);
         }
 
-        IOptionSchema IBuildPlugin.GetSchema(IPluginHost host)
+        IBranchProvider? ISourceControlPlugin.ConstructProvider(object data)
         {
-            var schema = host.SchemaFactory.Schema();
+            var configuration = data as TfsConfiguration;
+            if (configuration == null)
+            {
+                LogTo.Error("Given data was no TfsConfiguration");
+                return null;
+            }
 
-            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.Url, "Url", "Url of the TeamFoundation Server you want to connect to"));
-            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.Collection, "Collection", "Name of the collection you want to connect to"));
-            schema.Add(host.SchemaFactory.Text(TfsConstants.Connection.ProjectId, "Project", "Name of the project"));
-
-            return schema;
-        }
-
-        IReadOnlyDictionary<string, string?> IBuildPlugin.Serialize(IBuildProvider provider)
-        {
-            throw new NotImplementedException();
-        }
-
-        IBranchProvider? ISourceControlPlugin.ConstructProvider(IReadOnlyDictionary<string, string?> data)
-        {
-            var connection = _connectionPool.CreateConnection(data);
+            var connection = _connectionPool.CreateConnection(configuration);
             if (connection == null)
                 return null;
 
-            if (!data.TryGetValue(TfsConstants.Connection.RepositoryId, out var repositoryId) || string.IsNullOrEmpty(repositoryId))
+            if (string.IsNullOrEmpty(configuration.RepositoryId))
             {
                 LogTo.Error("RepositoryId not given in connection data");
                 return null;
             }
 
-            return new TfsSourceControlProvider(connection, repositoryId);
-        }
-
-        IOptionSchema ISourceControlPlugin.GetSchema(IPluginHost host)
-        {
-            throw new NotImplementedException();
-        }
-
-        IReadOnlyDictionary<string, string?> ISourceControlPlugin.Serialize(IBuildProvider provider)
-        {
-            throw new NotImplementedException();
+            return new TfsSourceControlProvider(connection, configuration.RepositoryId);
         }
 
         private TfsConnectionPool _connectionPool;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BuildNotifications.Core.Text;
+﻿using BuildNotifications.Core.Text;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
@@ -12,7 +11,6 @@ namespace BuildNotifications.Core.Config
         public ConnectionData()
         {
             Name = StringLocalizer.Instance["New Connection"];
-            Options = new Dictionary<string, string?>();
         }
 
         /// <summary>
@@ -46,11 +44,5 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         [CalculatedType(nameof(Configuration.SourceControlPluginConfigurationType))]
         public object SourceControlPluginConfiguration { get; set; }
-
-        /// <summary>
-        /// Options for this connection.
-        /// </summary>
-        [TypesForInstantiation(typeof(Dictionary<string, string?>))]
-        public IReadOnlyDictionary<string, string?> Options { get; set; }
     }
 }

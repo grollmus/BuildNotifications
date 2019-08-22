@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Resources;
 using Anotar.NLog;
@@ -17,7 +19,17 @@ namespace BuildNotifications.Core.Text
             var resourceManager = new ResourceManager("BuildNotifications.Core.Text.Texts", Assembly.GetAssembly(typeof(StringLocalizer)));
             resourceManager.IgnoreCase = true;
             _resourceManager = resourceManager;
-            var resourceSet = _resourceManager.GetResourceSet(CultureInfo.GetCultureInfo("en"), false, false);
+
+            foreach (var culture in LocalizedCultures())
+            {
+                var resourceSet = _resourceManager.GetResourceSet(culture, true, true);
+                var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
+                    .ToDictionary(r => r.Key.ToString(), r => r.Value.ToString());
+
+                Cache.Add(culture, resourceDictionary);
+            }
+
+            _defaultDictionary = Cache[DefaultCulture];
         }
 
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
@@ -27,6 +39,8 @@ namespace BuildNotifications.Core.Text
 
         public IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
 
+        private readonly IDictionary<string, string> _defaultDictionary;
+
         public string GetText(string key, CultureInfo culture = null)
         {
             if (key == null)
@@ -35,52 +49,19 @@ namespace BuildNotifications.Core.Text
             if (culture == null)
                 culture = CultureInfo.CurrentUICulture;
 
-            if (TryCached(key, culture, out var localizedText))
-                return localizedText;
-
-            try
+            if (!Cache.TryGetValue(culture, out var dictionary))
             {
-                localizedText = _resourceManager.GetString(key, culture);
+                if (!Cache.TryGetValue(culture.Parent, out dictionary))
+                    dictionary = _defaultDictionary;
             }
-            catch (Exception)
+
+            if (!dictionary.TryGetValue(key, out var localizedText))
             {
-                try
-                {
-                    localizedText = _resourceManager.GetString(key, DefaultCulture);
-                }
-                catch (Exception)
-                {
-                    LogTo.Warn($"Failed to retrieve localized text for key: \"{key}\"");
+                if (!_defaultDictionary.TryGetValue(key, out localizedText))
                     localizedText = key;
-                }
             }
 
-            StoreInCache(key, culture, localizedText);
             return localizedText;
-        }
-
-        private bool TryCached(string key, CultureInfo culture, out string cachedEntry)
-        {
-            cachedEntry = key;
-            if (!Cache.ContainsKey(culture))
-                return false;
-
-            if (Cache[culture].TryGetValue(key, out var result))
-            {
-                cachedEntry = result;
-                return true;
-            }
-
-            return false;
-        }
-
-        private void StoreInCache(string key, CultureInfo culture, string localizedText)
-        {
-            if (!Cache.ContainsKey(culture))
-                Cache.Add(culture, new Dictionary<string, string>());
-
-            if (!Cache[culture].ContainsKey(key))
-                Cache[culture].Add(key, localizedText);
         }
 
         public static IEnumerable<CultureInfo> SupportedCultures()
@@ -94,6 +75,12 @@ namespace BuildNotifications.Core.Text
             yield return CultureInfo.GetCultureInfo("de-BE");
             yield return CultureInfo.GetCultureInfo("de-AT");
             yield return CultureInfo.GetCultureInfo("de-CH");
+        }
+
+        private static IEnumerable<CultureInfo> LocalizedCultures()
+        {
+            yield return CultureInfo.GetCultureInfo("en-US");
+            yield return CultureInfo.GetCultureInfo("de");
         }
 
         private readonly ResourceManager _resourceManager;

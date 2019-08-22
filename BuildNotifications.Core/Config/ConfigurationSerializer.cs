@@ -26,6 +26,7 @@ namespace BuildNotifications.Core.Config
             {
                 LogTo.Warn($"File {fileName} does not exist. Using default configuration");
                 configuration = new Configuration();
+                Save(configuration, fileName);
             }
 
             configuration.PossibleBuildPluginsFunction = () => _pluginRepository.Build.Select(x => x.GetType().FullName);
@@ -38,6 +39,13 @@ namespace BuildNotifications.Core.Config
         public void Save(IConfiguration configuration, string fileName)
         {
             var json = _serializer.Serialize(configuration);
+            var directory = Path.GetDirectoryName(fileName);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+                LogTo.Warn($"Creating directory for config \"{directory}\" as it does not exist.");
+            }
+
             File.WriteAllText(fileName, json);
         }
 
