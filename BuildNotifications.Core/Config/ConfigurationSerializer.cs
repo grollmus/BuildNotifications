@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Config
         {
             var json = _serializer.Serialize(configuration);
             var directory = Path.GetDirectoryName(fileName);
-            if (!Directory.Exists(directory))
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
                 LogTo.Warn($"Creating directory for config \"{directory}\" as it does not exist.");
