@@ -4,8 +4,7 @@
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
     <Style TargetType="ComboBox">
         <Setter Property="Margin" Value="5" />

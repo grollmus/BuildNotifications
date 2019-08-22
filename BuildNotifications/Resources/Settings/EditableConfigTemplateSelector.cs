@@ -17,6 +17,17 @@ namespace BuildNotifications.Resources.Settings
             return template ?? base.SelectTemplate(item, container);
         }
 
+        private static DataTemplate? DataTemplateByName(object item, FrameworkElement element)
+        {
+            var type = item?.GetType();
+            var name = type?.Name;
+            if (name == null)
+                return null;
+            var expectedKey = $"{name}Template";
+
+            return element.TryFindResource(expectedKey) as DataTemplate;
+        }
+
         private static DataTemplate ResolveTemplate(object item, FrameworkElement element)
         {
             switch (item)
@@ -26,8 +37,7 @@ namespace BuildNotifications.Resources.Settings
                     {
                         if (editableString.PropertyInfo.Name == nameof(ConnectionData.BuildPluginType) || editableString.PropertyInfo.Name == nameof(ConnectionData.SourceControlPluginType))
                             return element?.TryFindResource("PluginSelectionTemplate") as DataTemplate;
-                        else
-                            return element?.TryFindResource("EditableStringComboboxTemplate") as DataTemplate;
+                        return element?.TryFindResource("EditableStringComboboxTemplate") as DataTemplate;
                     }
                     else
                         return DataTemplateByName(editableString, element);
@@ -48,17 +58,6 @@ namespace BuildNotifications.Resources.Settings
                 default:
                     return DataTemplateByName(item, element);
             }
-        }
-
-        private static DataTemplate? DataTemplateByName(object item, FrameworkElement element)
-        {
-            var type = item?.GetType();
-            var name = type?.Name;
-            if (name == null)
-                return null;
-            var expectedKey = $"{name}Template";
-
-            return element.TryFindResource(expectedKey) as DataTemplate;
         }
     }
 }

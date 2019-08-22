@@ -10,7 +10,8 @@
                 VerticalAlignment="Stretch">
 
             <DockPanel>
-                <TextBlock Text="+" Foreground="{DynamicResource Foreground1}" x:Name="TextBlock" VerticalAlignment="Center" FontSize="{StaticResource Block}"/>
+                <TextBlock Text="+" Foreground="{DynamicResource Foreground1}" x:Name="TextBlock"
+                           VerticalAlignment="Center" FontSize="{StaticResource Block}" />
                 <ContentPresenter x:Name="HeaderContent" ContentSource="Content" />
             </DockPanel>
         </Border>

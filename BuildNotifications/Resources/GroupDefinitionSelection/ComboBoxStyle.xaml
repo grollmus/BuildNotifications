@@ -72,15 +72,16 @@
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </Grid>
                         </Popup>
-                        <settings:NotifyingContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          NotifyingContent="{TemplateBinding SelectionBoxItem}"
-                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <settings:NotifyingContentPresenter
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Content="{TemplateBinding SelectionBoxItem}"
+                            NotifyingContent="{TemplateBinding SelectionBoxItem}"
+                            ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger
@@ -88,7 +89,7 @@
                                     Value="True">
                                     <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
                                 </ei:DataTrigger>
-                                
+
                                 <i:EventTrigger EventName="ContentUpdated">
                                     <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
                                 </i:EventTrigger>

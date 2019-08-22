@@ -124,15 +124,15 @@
                             </Grid>
                         </Popup>
                         <local:NotifyingContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          NotifyingContent="{TemplateBinding SelectionBoxItem}"
-                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Grid.Column="0">
+                                                         ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                         Content="{TemplateBinding SelectionBoxItem}"
+                                                         NotifyingContent="{TemplateBinding SelectionBoxItem}"
+                                                         ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                         IsHitTestVisible="true" Margin="{TemplateBinding Padding}"
+                                                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                         Grid.Column="0">
                             <ContentPresenter.Resources>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
@@ -184,14 +184,15 @@
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ToggleButton>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False" Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False"
+                                    Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                     Height="{StaticResource BlockOneAndHalf}">
                             <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
                                              Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                              DockPanel.Dock="Right"
                                              x:Name="Icon" HorizontalAlignment="Right" />
                             <TextBlock
-                                
+
                                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                 Foreground="{DynamicResource Background3}" x:Name="Label" HorizontalAlignment="Right"
                                 Style="{StaticResource TextBoxLabelStyle}" DockPanel.Dock="Right"

@@ -8,11 +8,6 @@ namespace BuildNotifications.Core.Config
     public interface IProjectConfiguration
     {
         /// <summary>
-        /// Name of the project.
-        /// </summary>
-        string ProjectName { get; set; }
-
-        /// <summary>
         /// List of branches to never load information for.
         /// </summary>
         IList<string> BranchBlacklist { get; set; }
@@ -59,9 +54,14 @@ namespace BuildNotifications.Core.Config
         bool LoadWhitelistedDefinitionsExclusively { get; set; }
 
         /// <summary>
+        /// Name of the project.
+        /// </summary>
+        string ProjectName { get; set; }
+
+        /// <summary>
         /// Whether Pull-Request "Branches" shall be displayed.
         /// </summary>
-        bool ShowPullRequests { get; set;}
+        bool ShowPullRequests { get; set; }
 
         /// <summary>
         /// Name of the <see cref="ConnectionData" /> that are used to

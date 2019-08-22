@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Media;
-using Anotar.NLog;
-using NLog;
 using TweenSharp;
 
 namespace BuildNotifications
@@ -15,7 +13,7 @@ namespace BuildNotifications
             _lastUpdate = TimeSpan.Zero;
         }
 
-        private void CompositionTargetOnRendering(object sender, EventArgs e)
+        private void CompositionTargetOnRendering(object? sender, EventArgs e)
         {
             var renderEventArgs = e as RenderingEventArgs;
             if (renderEventArgs == null)

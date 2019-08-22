@@ -10,11 +10,11 @@ namespace BuildNotifications.Resources.Settings
 {
     internal class PluginTypeToIconConverter : IMultiValueConverter
     {
-        public static PluginTypeToIconConverter Instance { get; } = new PluginTypeToIconConverter();
-
         private PluginTypeToIconConverter()
         {
         }
+
+        public static PluginTypeToIconConverter Instance { get; } = new PluginTypeToIconConverter();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

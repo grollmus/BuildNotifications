@@ -26,7 +26,7 @@ namespace BuildNotifications.Core.Tests.Config
             // Assert
             Assert.NotNull(config);
         }
-        
+
         [Fact]
         public void LoadShouldSetBuildAndSourceControlFunctionsOfPluginRepo()
         {

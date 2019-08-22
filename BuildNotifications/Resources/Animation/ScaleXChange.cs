@@ -15,9 +15,6 @@ namespace BuildNotifications.Resources.Animation
 
         public double Delay { get; set; }
 
-        public static readonly DependencyProperty TargetScaleXProperty = DependencyProperty.Register(
-            "TargetScaleX", typeof(double), typeof(ScaleXChange), new PropertyMetadata(1.0));
-
         public double TargetScaleX
         {
             get => (double) GetValue(TargetScaleXProperty);
@@ -39,5 +36,8 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.Add(scaleTransform.Tween(x => x.ScaleX).To(TargetScaleX).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
         }
+
+        public static readonly DependencyProperty TargetScaleXProperty = DependencyProperty.Register(
+            "TargetScaleX", typeof(double), typeof(ScaleXChange), new PropertyMetadata(1.0));
     }
 }

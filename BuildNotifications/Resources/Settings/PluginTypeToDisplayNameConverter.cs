@@ -8,11 +8,11 @@ namespace BuildNotifications.Resources.Settings
 {
     internal class PluginTypeToDisplayNameConverter : IMultiValueConverter
     {
-        public static PluginTypeToDisplayNameConverter Instance { get; } = new PluginTypeToDisplayNameConverter();
-
         private PluginTypeToDisplayNameConverter()
         {
         }
+
+        public static PluginTypeToDisplayNameConverter Instance { get; } = new PluginTypeToDisplayNameConverter();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

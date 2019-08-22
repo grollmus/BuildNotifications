@@ -6,10 +6,13 @@ namespace BuildNotifications.Resources.Settings
 {
     internal class NotifyingContentPresenter : ContentPresenter
     {
-        public event EventHandler ContentUpdated;
+        public object NotifyingContent
+        {
+            get => GetValue(NotifyingContentProperty);
+            set => SetValue(NotifyingContentProperty, value);
+        }
 
-        public static readonly DependencyProperty NotifyingContentProperty = DependencyProperty.Register(
-            "NotifyingContent", typeof(object), typeof(NotifyingContentPresenter), new PropertyMetadata(default(object), PropertyChangedCallback));
+        public event EventHandler ContentUpdated;
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -23,10 +26,7 @@ namespace BuildNotifications.Resources.Settings
             ContentUpdated?.Invoke(this, EventArgs.Empty);
         }
 
-        public object NotifyingContent
-        {
-            get => (object) GetValue(NotifyingContentProperty);
-            set => SetValue(NotifyingContentProperty, value);
-        }
+        public static readonly DependencyProperty NotifyingContentProperty = DependencyProperty.Register(
+            "NotifyingContent", typeof(object), typeof(NotifyingContentPresenter), new PropertyMetadata(default, PropertyChangedCallback));
     }
 }

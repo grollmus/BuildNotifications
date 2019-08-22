@@ -48,7 +48,7 @@ namespace BuildNotifications.Core.Plugin
         {
             IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
-            if(plugin == null)
+            if (plugin == null)
                 plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
             if (plugin == null)
@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Plugin
         {
             IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
-            if(plugin == null)
+            if (plugin == null)
                 plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
             if (plugin == null)

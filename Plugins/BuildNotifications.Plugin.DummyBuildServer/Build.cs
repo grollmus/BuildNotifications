@@ -13,6 +13,13 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public string ProjectName { get; }
 
+        public override int GetHashCode()
+        {
+            // ReSharper disable NonReadonlyMemberInGetHashCode
+            return Id.GetHashCode();
+            // ReSharper restore NonReadonlyMemberInGetHashCode
+        }
+
         /// <inheritdoc />
         public string BranchName { get; set; }
 

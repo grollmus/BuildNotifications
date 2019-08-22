@@ -29,8 +29,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             foreach (var build in list)
             {
-                if (_knownBuilds.All(b => b.Id != build.Id))
-                    _knownBuilds.Add(build);
+                _knownBuilds.Add(build);
 
                 yield return build;
             }
@@ -44,8 +43,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             foreach (var build in list)
             {
-                if (_knownBuilds.All(b => b.Id != build.Id))
-                    _knownBuilds.Add(build);
+                _knownBuilds.Add(build);
 
                 if (build.Definition.Equals(definition))
                     yield return build;
@@ -76,8 +74,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             foreach (var buildDefinition in list)
             {
-                if (_knownBuildDefinitions.All(d => d.Id != buildDefinition.Id))
-                    _knownBuildDefinitions.Add(buildDefinition);
+                _knownBuildDefinitions.Add(buildDefinition);
 
                 yield return buildDefinition;
             }
@@ -88,7 +85,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             var json = await _connection.Query(Constants.Queries.Definitions);
             var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings);
 
-            var deletedDefinitions = _knownBuildDefinitions.Except(list);
+            var deletedDefinitions = _knownBuildDefinitions.Except(list, new BuildComparer());
 
             foreach (var definition in deletedDefinitions)
             {
@@ -98,11 +95,10 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public async IAsyncEnumerable<IBaseBuild> RemovedBuilds()
         {
-            yield break;
             var json = await _connection.Query(Constants.Queries.Builds);
             var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
 
-            var deletedBuilds = _knownBuilds.Except(list);
+            var deletedBuilds = _knownBuilds.Except(list, new BuildComparer());
 
             foreach (var build in deletedBuilds)
             {
@@ -110,8 +106,8 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
-        private readonly List<BuildDefinition> _knownBuildDefinitions = new List<BuildDefinition>();
-        private readonly List<Build> _knownBuilds = new List<Build>();
+        private readonly HashSet<BuildDefinition> _knownBuildDefinitions = new HashSet<BuildDefinition>(new BuildComparer());
+        private readonly HashSet<Build> _knownBuilds = new HashSet<Build>(new BuildComparer());
 
         private readonly Connection _connection;
         private JsonSerializerSettings _settings;

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:BuildNotifications.Views.Settings"
              xmlns:resourcesSettings="clr-namespace:BuildNotifications.Resources.Settings"
              xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type viewModelSettings:SettingsViewModel}}"
@@ -13,7 +12,8 @@
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
         <DockPanel>
-            <Button Content="Edit Connections" DockPanel.Dock="Bottom" HorizontalAlignment="Center" Command="{Binding EditConnectionsCommand}"/>
+            <Button Content="Edit Connections" DockPanel.Dock="Bottom" HorizontalAlignment="Center"
+                    Command="{Binding EditConnectionsCommand}" />
 
             <ItemsControl ItemsSource="{Binding Configs}" Margin="{StaticResource BlockHalfXOnlyMargin}"
                           ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">

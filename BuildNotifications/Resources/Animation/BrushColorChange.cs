@@ -15,22 +15,16 @@ namespace BuildNotifications.Resources.Animation
 
         public double Delay { get; set; }
 
-        public static readonly DependencyProperty TargetDependencyPropertyProperty = DependencyProperty.Register(
-            "TargetDependencyProperty", typeof(DependencyProperty), typeof(BrushColorChange), new PropertyMetadata(default(DependencyProperty)));
+        public SolidColorBrush TargetColor
+        {
+            get => (SolidColorBrush) GetValue(TargetColorProperty);
+            set => SetValue(TargetColorProperty, value);
+        }
 
         public DependencyProperty TargetDependencyProperty
         {
-            get { return (DependencyProperty) GetValue(TargetDependencyPropertyProperty); }
-            set { SetValue(TargetDependencyPropertyProperty, value); }
-        }
-
-        public static readonly DependencyProperty TargetColorProperty = DependencyProperty.Register(
-            "TargetColor", typeof(SolidColorBrush), typeof(BrushColorChange), new PropertyMetadata(default(SolidColorBrush)));
-
-        public SolidColorBrush TargetColor
-        {
-            get { return (SolidColorBrush) GetValue(TargetColorProperty); }
-            set { SetValue(TargetColorProperty, value); }
+            get => (DependencyProperty) GetValue(TargetDependencyPropertyProperty);
+            set => SetValue(TargetDependencyPropertyProperty, value);
         }
 
         protected override void Invoke(object parameter)
@@ -50,5 +44,11 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.Add(new SequenceOfTarget(TargetElement, brushTween));
         }
+
+        public static readonly DependencyProperty TargetColorProperty = DependencyProperty.Register(
+            "TargetColor", typeof(SolidColorBrush), typeof(BrushColorChange), new PropertyMetadata(default(SolidColorBrush)));
+
+        public static readonly DependencyProperty TargetDependencyPropertyProperty = DependencyProperty.Register(
+            "TargetDependencyProperty", typeof(DependencyProperty), typeof(BrushColorChange), new PropertyMetadata(default(DependencyProperty)));
     }
 }

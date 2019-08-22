@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style TargetType="ListBox">
-        <Setter Property="IsTabStop" Value="False"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
@@ -30,7 +30,8 @@
                                         </MultiTrigger.Conditions>
                                         <Setter Property="BorderBrush" TargetName="Bd"
                                                 Value="{DynamicResource Foreground1HalfTransparency}" />
-                                        <Setter Property="Panel.Background" TargetName="Bd" Value="{DynamicResource Background2}" />
+                                        <Setter Property="Panel.Background" TargetName="Bd"
+                                                Value="{DynamicResource Background2}" />
                                     </MultiTrigger>
                                     <Trigger Property="UIElement.IsMouseOver" Value="True">
                                         <Setter Property="Panel.Background" TargetName="Bd"
