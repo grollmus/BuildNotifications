@@ -29,11 +29,6 @@
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                     x:Name="FillRectangle">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Loaded">
-                            <resourcesBuildTreeBuild:BuildFadeIn />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
                 </Rectangle>
 
                 <Rectangle

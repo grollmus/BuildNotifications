@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 using TweenSharp.Animation;
@@ -8,8 +9,12 @@ namespace BuildNotifications.Resources.BuildTree.Build
 {
     internal class BuildFadeIn : TriggerAction<UIElement>
     {
+        private static HashSet<UIElement> _alreadyFadedInElements = new HashSet<UIElement>();
         protected override void Invoke(object parameter)
         {
+            if (_alreadyFadedInElements.Contains(AssociatedObject))
+                return;
+            _alreadyFadedInElements.Add(AssociatedObject);
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(AssociatedObject);
 
