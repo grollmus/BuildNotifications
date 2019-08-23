@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Plugin;
@@ -18,10 +19,17 @@ namespace BuildNotifications.Core.Config
         {
             Configuration configuration;
             if (File.Exists(fileName))
-            {
-                var json = File.ReadAllText(fileName);
-                configuration = _serializer.Deserialize<Configuration>(json);
-            }
+                try
+                {
+                    var json = File.ReadAllText(fileName);
+                    configuration = _serializer.Deserialize<Configuration>(json);
+                }
+                catch (Exception e)
+                {
+                    LogTo.WarnException("Failed to load existing config.", e);
+                    configuration = new Configuration();
+                    Save(configuration, fileName);
+                }
             else
             {
                 LogTo.Warn($"File {fileName} does not exist. Using default configuration");

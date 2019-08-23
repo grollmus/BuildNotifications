@@ -14,6 +14,7 @@ namespace BuildNotifications.Plugin.Tfs
             Id = build.Id.ToString();
 
             QueueTime = build.QueueTime;
+            LastChangedTime = build.QueueTime;
             BranchName = build.SourceBranch;
 
             _nativeResult = build.Result;

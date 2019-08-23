@@ -6,6 +6,8 @@
         AlphabeticalAscending,
         StatusAscending,
         StatusDescending,
+        DateAscending,
+        DateDescending,
         Undefined
     }
 }

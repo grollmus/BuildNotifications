@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -139,11 +140,11 @@ namespace BuildNotifications.ViewModel
             Overlay = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
         }
 
-        private void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
+        private async void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
-
-            var buildTreeViewModel = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            
+            var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree);
             if (buildTreeViewModel != BuildTree)
                 BuildTree = buildTreeViewModel;
 

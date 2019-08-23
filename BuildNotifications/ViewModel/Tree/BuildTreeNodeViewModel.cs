@@ -31,6 +31,9 @@ namespace BuildNotifications.ViewModel.Tree
         public ICommand AddOneBuildCommand { get; set; }
 
         public BuildStatus BuildStatus => CalculateBuildStatus();
+
+        public DateTime ChangedDate => CalculateChangedDate();
+
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
         public int CurrentTreeLevelDepth { get; private set; }
@@ -62,9 +65,32 @@ namespace BuildNotifications.ViewModel.Tree
             CurrentTreeLevelDepth = NodeSource.Depth;
         }
 
-        protected virtual BuildStatus CalculateBuildStatus()
+        protected virtual BuildStatus CalculateBuildStatus() => _buildStatus;
+
+        private BuildStatus _buildStatus;
+
+        private void UpdateBuildStatus()
         {
-            return !Children.Any() ? BuildStatus.None : Children.ToList().Max(x => x.BuildStatus);
+            var newStatus = !Children.Any() ? BuildStatus.None : Children.ToList().Max(x => x.BuildStatus);
+            if (_buildStatus == newStatus)
+                return;
+
+            _buildStatus = newStatus;
+            OnPropertyChanged(nameof(BuildStatus));
+        }
+
+        protected virtual DateTime CalculateChangedDate() => _changedDate;
+
+        protected DateTime _changedDate;
+
+        private void UpdateChangedDate()
+        {
+            var newDate = !Children.Any() ? DateTime.MinValue : Children.ToList().Max(x => x.ChangedDate);
+            if (_changedDate == newDate)
+                return;
+
+            _changedDate = newDate;
+            OnPropertyChanged(nameof(ChangedDate));
         }
 
         protected virtual string CalculateDisplayName()
@@ -74,26 +100,28 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)
         {
-            if (index >= sortingDefinitions.Count)
-            {
-                // the last group are expected to be builds anyway, these are only implicitly sorted by the order they are added to the list
-                _currentSortingDefinition = SortingDefinition.Undefined;
-                Children.DontSort();
-                return;
-            }
+            if (!ChildrenAreBuilds)
+                foreach (var child in Children)
+                {
+                    child.SetSortings(sortingDefinitions, index + 1);
+                }
 
-            foreach (var child in Children)
-            {
-                child.SetSortings(sortingDefinitions, index + 1);
-            }
+            SortingDefinition newSorting;
 
-            var newSorting = sortingDefinitions[index];
+            // the last group are expected to be builds anyway, these are sorted by Date
+            if (index >= sortingDefinitions.Count || ChildrenAreBuilds)
+                newSorting = SortingDefinition.DateAscending;
+            else
+                newSorting = sortingDefinitions[index];
+
             if (newSorting == _currentSortingDefinition)
                 return;
 
             _currentSortingDefinition = newSorting;
             SetChildrenSorting(_currentSortingDefinition);
         }
+
+        protected bool ChildrenAreBuilds { get; private set; }
 
         private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -103,6 +131,8 @@ namespace BuildNotifications.ViewModel.Tree
                     foreach (BuildTreeNodeViewModel child in e.NewItems)
                     {
                         child.PropertyChanged += OnChildPropertyChanged;
+                        if (child is BuildNodeViewModel)
+                            ChildrenAreBuilds = true;
                     }
 
                     break;
@@ -120,12 +150,19 @@ namespace BuildNotifications.ViewModel.Tree
                     }
 
                     break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                default:
+                    return;
             }
 
-            if (Children.Any(x => x is BuildNodeViewModel))
+            if (ChildrenAreBuilds)
                 SetBuildLargeStatus();
 
-            OnPropertyChanged(nameof(BuildStatus));
+            UpdateBuildStatus();
+            UpdateChangedDate();
         }
 
         private void Highlight(object obj)
@@ -144,8 +181,15 @@ namespace BuildNotifications.ViewModel.Tree
         {
             if (e.PropertyName.Equals(nameof(BuildStatus)))
             {
-                OnPropertyChanged(nameof(BuildStatus));
+                UpdateBuildStatus();
                 if (_currentSortingDefinition == SortingDefinition.StatusAscending || _currentSortingDefinition == SortingDefinition.StatusDescending)
+                    Children.InvokeSort();
+            }
+
+            if (e.PropertyName.Equals(nameof(ChangedDate)))
+            {
+                UpdateChangedDate();
+                if (_currentSortingDefinition == SortingDefinition.DateAscending || _currentSortingDefinition == SortingDefinition.DateDescending)
                     Children.InvokeSort();
             }
         }
@@ -159,6 +203,12 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void SetBuildLargeStatus()
         {
+            if (!ChildrenAreBuilds)
+                return;
+
+            _currentSortingDefinition = SortingDefinition.DateAscending;
+
+            SetChildrenSorting(_currentSortingDefinition);
             var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
 
             foreach (var child in buildChildren)
@@ -184,6 +234,12 @@ namespace BuildNotifications.ViewModel.Tree
                     break;
                 case SortingDefinition.StatusDescending:
                     Children.SortDescending(x => x.BuildStatus);
+                    break;
+                case SortingDefinition.DateAscending:
+                    Children.Sort(x => x.ChangedDate);
+                    break;
+                case SortingDefinition.DateDescending:
+                    Children.SortDescending(x => x.ChangedDate);
                     break;
             }
         }

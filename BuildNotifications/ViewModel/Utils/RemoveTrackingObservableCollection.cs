@@ -41,20 +41,14 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Sort<TKey>(Func<T, TKey> keySelector)
         {
-            lock (_list)
-            {
-                _sortFunction = _list.OrderBy(keySelector);
-            }
+            _sortFunction = _list.OrderBy(keySelector);
 
             Sort();
         }
 
         public void SortDescending<TKey>(Func<T, TKey> keySelector)
         {
-            lock (_list)
-            {
-                _sortFunction = _list.OrderByDescending(keySelector);
-            }
+            _sortFunction = _list.OrderByDescending(keySelector);
 
             Sort();
         }
@@ -64,11 +58,8 @@ namespace BuildNotifications.ViewModel.Utils
             item.IsRemoving = true;
 
             await Task.Delay(RemoveDelay);
-            lock (_list)
-            {
-                if (_list.Contains(item))
-                    _list.Remove(item);
-            }
+            if (_list.Contains(item))
+                _list.Remove(item);
         }
 
         private void Sort()
@@ -76,50 +67,35 @@ namespace BuildNotifications.ViewModel.Utils
             if (_sortFunction == null)
                 return;
 
-            lock (_list)
-            {
-                var sortedItemsList = _sortFunction.ToList();
+            var sortedItemsList = _sortFunction.ToList();
 
-                foreach (var item in sortedItemsList)
-                {
-                    _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
-                }
+            foreach (var item in sortedItemsList)
+            {
+                _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
             }
         }
 
         public void Add(T item)
         {
             item.IsRemoving = false;
-            lock (_list)
-            {
-                _list.Add(item);
-            }
+            _list.Add(item);
 
             Sort();
         }
 
         public void Clear()
         {
-            lock (_list)
-            {
-                _list.Clear();
-            }
+            _list.Clear();
         }
 
         public bool Contains(T item)
         {
-            lock (_list)
-            {
-                return _list.Contains(item);
-            }
+            return _list.Contains(item);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            lock (_list)
-            {
-                _list.CopyTo(array, arrayIndex);
-            }
+            _list.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(T item)
@@ -130,23 +106,14 @@ namespace BuildNotifications.ViewModel.Utils
 
         public int Count
         {
-            get
-            {
-                lock (_list)
-                {
-                    return _list.Count;
-                }
-            }
+            get { return _list.Count; }
         }
 
         public bool IsReadOnly => false;
 
         public IEnumerator<T> GetEnumerator()
         {
-            lock (_list)
-            {
-                return _list.ToList().GetEnumerator();
-            }
+            return _list.ToList().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -156,46 +123,25 @@ namespace BuildNotifications.ViewModel.Utils
 
         public int IndexOf(T item)
         {
-            lock (_list)
-            {
-                return _list.IndexOf(item);
-            }
+            return _list.IndexOf(item);
         }
 
         public void Insert(int index, T item)
         {
-            lock (_list)
-            {
-                _list.Insert(index, item);
-            }
+            _list.Insert(index, item);
 
             Sort();
         }
 
         public void RemoveAt(int index)
         {
-            lock (_list)
-            {
-                _list.RemoveAt(index);
-            }
+            _list.RemoveAt(index);
         }
 
         public T this[int index]
         {
-            get
-            {
-                lock (_list)
-                {
-                    return _list[index];
-                }
-            }
-            set
-            {
-                lock (_list)
-                {
-                    _list[index] = value;
-                }
-            }
+            get { return _list[index]; }
+            set { _list[index] = value; }
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;

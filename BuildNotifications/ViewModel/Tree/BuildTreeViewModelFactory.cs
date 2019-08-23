@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
@@ -7,23 +8,28 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildTreeViewModelFactory
     {
-        public BuildTreeViewModel Produce(IBuildTree tree, BuildTreeViewModel existingTree)
+        public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel existingTree)
         {
-            var groupsAsList = tree.GroupDefinition.ToList();
-            var buildTree = new BuildTreeViewModel(tree);
-            var children = CreateChildren(tree.Children, groupsAsList);
-            foreach (var childVm in children)
+            var buildTreeResult = await Task.Run(() =>
             {
-                buildTree.Children.Add(childVm);
-            }
+                var groupsAsList = tree.GroupDefinition.ToList();
+                var buildTree = new BuildTreeViewModel(tree);
+                var children = CreateChildren(tree.Children, groupsAsList);
+                foreach (var childVm in children)
+                {
+                    buildTree.Children.Add(childVm);
+                }
+
+                return buildTree;
+            });
 
             if (existingTree != null)
-                buildTree = Merge(existingTree, buildTree);
-
-            var treeDepth = GetMaxDepth(buildTree);
-            SetMaxDepths(buildTree, treeDepth);
-
-            return buildTree;
+                buildTreeResult = Merge(existingTree, buildTreeResult);
+            
+            var treeDepth = GetMaxDepth(buildTreeResult);
+            SetMaxDepths(buildTreeResult, treeDepth);
+            
+            return buildTreeResult;
         }
 
         private static BuildTreeNodeViewModel AsViewModel(IBuildTreeNode node, GroupDefinition groupDefinition)
