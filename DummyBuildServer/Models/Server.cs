@@ -170,15 +170,23 @@ namespace DummyBuildServer.Models
             WriteObject(response, _server.Config.BuildDefinitions);
         }
 
-        private void WriteObject(Stream response, object data)
+        private async void WriteObject(Stream response, object data)
         {
-            var settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.Auto;
+            try
+            {
+                var settings = new JsonSerializerSettings();
+                settings.TypeNameHandling = TypeNameHandling.Auto;
 
-            var json = JsonConvert.SerializeObject(data, Formatting.None, settings);
-            var buffer = Encoding.ASCII.GetBytes(json);
-            response.Write(buffer, 0, buffer.Length);
-            response.Flush();
+                var json = JsonConvert.SerializeObject(data, Formatting.None, settings);
+                var buffer = Encoding.ASCII.GetBytes(json);
+                
+                await response.WriteAsync(buffer, 0, buffer.Length);
+                response.Flush();
+            }
+            catch (Exception)
+            {
+                _server.Stop();
+            }
         }
 
         private readonly Dictionary<string, Action<string, Stream>> _commandMap = new Dictionary<string, Action<string, Stream>>();

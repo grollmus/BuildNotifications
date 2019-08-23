@@ -118,7 +118,7 @@ namespace DummyBuildServer.ViewModels
             var rnd = new Random();
             foreach (var build in Builds)
             {
-                UpdateSpecificBuild(build.Build, (BuildStatus)rnd.Next(7));
+                UpdateSpecificBuild(build.Build, (BuildStatus) rnd.Next(1, 7));
             }
         }
 
