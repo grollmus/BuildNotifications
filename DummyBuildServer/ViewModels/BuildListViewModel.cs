@@ -22,6 +22,7 @@ namespace DummyBuildServer.ViewModels
             UpdateBuildCommand = new DelegateCommand(UpdateBuild, IsBuildSelected);
             EnqueueBuildCommand = new DelegateCommand(EnqueueBuild, IsBuildDataSelected);
             RemoveBuildCommand = new DelegateCommand(RemoveBuild, IsBuildSelected);
+            RandomizeStatusOfAllBuildsCommand = new DelegateCommand(RandomizeStatusOfAllBuilds);
         }
 
         public IEnumerable<BuildStatus> AvailableBuildStatuses
@@ -47,12 +48,16 @@ namespace DummyBuildServer.ViewModels
         public BuildDefinitionViewModel SelectedDefinition { get; set; }
         public UserViewModel SelectedUser { get; set; }
         public ICommand UpdateBuildCommand { get; }
+        public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
 
         private void EnqueueBuild(object arg)
         {
+            EnqueueSpecificBuild(SelectedDefinition.Definition, SelectedBranch.Branch);
+        }
+
+        public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
+        {
             var user = SelectedUser.User;
-            var branch = SelectedBranch.Branch;
-            var definition = SelectedDefinition.Definition;
 
             var build = new Build
             {
@@ -96,12 +101,25 @@ namespace DummyBuildServer.ViewModels
 
         private void UpdateBuild(object arg)
         {
-            var build = SelectedBuild!.Build;
-            build.Status = SelectedBuildStatus;
+            UpdateSpecificBuild(SelectedBuild!.Build, SelectedBuildStatus);
+        }
+
+        private void UpdateSpecificBuild(Build build, BuildStatus toStatus)
+        {
+            build.Status = toStatus;
             build.Progress = BuildProgress;
             build.LastChangedTime = DateTime.Now;
 
             _mainViewModel.UpdateBuild(build);
+        }
+
+        private void RandomizeStatusOfAllBuilds(object obj)
+        {
+            var rnd = new Random();
+            foreach (var build in Builds)
+            {
+                UpdateSpecificBuild(build.Build, (BuildStatus)rnd.Next(7));
+            }
         }
 
         private readonly MainViewModel _mainViewModel;
