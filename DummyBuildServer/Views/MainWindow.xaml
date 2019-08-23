@@ -103,6 +103,8 @@
                 <TextBox Text="{Binding Port}" />
                 <Button Content="Start" Command="{Binding StartServerCommand}" />
                 <Button Content="Stop" Command="{Binding StopServerCommand}" />
+                <Button Content="Permutate and queue all" Command="{Binding EnqueuePermutatedBuildsCommand}" />
+                <Button Content="Randomize all build status" Command="{Binding RandomizeStatusOfAllBuildsCommand}" />
             </StackPanel>
         </GroupBox>
     </WrapPanel>

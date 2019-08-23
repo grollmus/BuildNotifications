@@ -144,23 +144,27 @@ namespace BuildNotifications.Core.Pipeline
         /// <inheritdoc />
         public async Task Update()
         {
-            var branchTask = FetchBranches();
-            var definitionsTask = FetchDefinitions();
-            var buildsTask = FetchBuilds();
+            var treeResult = await Task.Run(async () =>
+            {
+                var branchTask = FetchBranches();
+                var definitionsTask = FetchDefinitions();
+                var buildsTask = FetchBuilds();
 
-            await Task.WhenAll(branchTask, definitionsTask, buildsTask);
+                await Task.WhenAll(branchTask, definitionsTask, buildsTask);
 
-            CleanupBuilds();
+                CleanupBuilds();
 
-            var builds = _buildCache.ContentCopy();
-            var branches = _branchCache.ContentCopy();
-            var definitions = _definitionCache.ContentCopy();
-            var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-            CutTree(tree);
+                var builds = _buildCache.ContentCopy();
+                var branches = _branchCache.ContentCopy();
+                var definitions = _definitionCache.ContentCopy();
+                var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
+                CutTree(tree);
+                return tree;
+            });
 
-            _pipelineNotifier.Notify(tree);
+            _pipelineNotifier.Notify(treeResult);
 
-            _oldTree = tree;
+            _oldTree = treeResult;
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
