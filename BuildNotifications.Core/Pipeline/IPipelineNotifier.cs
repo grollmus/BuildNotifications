@@ -11,5 +11,10 @@ namespace BuildNotifications.Core.Pipeline
         /// Raised when the pipeline has been updated.
         /// </summary>
         event EventHandler<PipelineUpdateEventArgs> Updated;
+        
+        /// <summary>
+        /// Raised when an error during an Pipeline update event occured.
+        /// </summary>
+        event EventHandler<PipelineErrorEventArgs> ErrorOccured;
     }
 }

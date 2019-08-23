@@ -19,6 +19,7 @@ namespace BuildNotifications.Core.Config
         {
             Configuration configuration;
             if (File.Exists(fileName))
+            {
                 try
                 {
                     var json = File.ReadAllText(fileName);
@@ -30,6 +31,7 @@ namespace BuildNotifications.Core.Config
                     configuration = new Configuration();
                     Save(configuration, fileName);
                 }
+            }
             else
             {
                 LogTo.Warn($"File {fileName} does not exist. Using default configuration");

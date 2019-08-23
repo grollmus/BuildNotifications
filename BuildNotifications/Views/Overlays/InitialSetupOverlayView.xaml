@@ -12,12 +12,15 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
-             Background="{DynamicResource Background1}">
+             Background="{DynamicResource Background1}" Opacity="{Binding Opacity}">
 
 
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
-            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}"
+            <icons:IconButton HorizontalAlignment="Right" VerticalAlignment="Top" Width="{StaticResource Block}"
+                              Height="{StaticResource Block}" DockPanel.Dock="Right" Margin="{StaticResource BlockThickness}"
+                              IconSize="{StaticResource Block}" Icon="Close" Command="{Binding RequestCloseCommand}" Foreground="{StaticResource Foreground1}"/>
+            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}" 
                              Height="{StaticResource BlockDouble}"
                              Foreground="{DynamicResource Yellow}" Margin="{StaticResource BlockHalfThickness}" />
             <TextBlock

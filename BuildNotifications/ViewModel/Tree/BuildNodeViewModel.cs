@@ -59,6 +59,8 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(BuildStatus));
         }
 
+        private DateTime _changedDate;
+
         private void UpdateChangedDate()
         {
             var newDate = Node?.LastChangedTime ?? DateTime.MinValue;

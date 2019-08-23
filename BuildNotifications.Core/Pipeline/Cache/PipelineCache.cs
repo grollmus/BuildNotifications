@@ -58,6 +58,8 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return new List<T>(_items.Values);
         }
 
+        public void Clear() => _items.Clear();
+
         private readonly Dictionary<CacheKey, T> _items = new Dictionary<CacheKey, T>();
     }
 }

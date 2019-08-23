@@ -52,6 +52,10 @@
             <DataTemplate DataType="{x:Type viewModelOverlays:InitialSetupOverlayViewModel}">
                 <viewsOverlays:InitialSetupOverlayView />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelOverlays:StatusIndicatorViewModel}">
+                <viewsOverlays:StatusIndicator />
+            </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>
@@ -68,8 +72,9 @@
             </ContentPresenter>
             <ContentPresenter Content="{Binding BuildTree}" />
         </DockPanel>
-        <ContentPresenter Content="{Binding Overlay}" />
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
+        <ContentPresenter Content="{Binding StatusIndicator}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <ContentPresenter Content="{Binding Overlay}" />
     </Grid>
 
     <window:CustomWindow.LeftToButtonsContent>

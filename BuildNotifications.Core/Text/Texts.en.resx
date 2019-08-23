@@ -229,4 +229,13 @@
   <data name="InitialSetupCompleteConfig" xml:space="preserve">
     <value>When you're done configuring the project. You can test your settings by using the test tab.</value>
   </data>
+  <data name="ErrorFetchingBranches" xml:space="preserve">
+    <value>An error occurred while fetching Branches for project "{0}". Error:</value>
+  </data>
+  <data name="ErrorFetchingBuilds" xml:space="preserve">
+    <value>An error occurred while fetching Builds for project "{0}". Error:</value>
+  </data>
+  <data name="ErrorFetchingDefinitions" xml:space="preserve">
+    <value>An error occurred while fetching Build-Definitions for project "{0}". Error:</value>
+  </data>
 </root>

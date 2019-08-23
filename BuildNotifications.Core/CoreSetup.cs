@@ -28,6 +28,7 @@ namespace BuildNotifications.Core
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration);
 
             Pipeline.Notifier.Updated += Notifier_Updated;
+            Pipeline.Notifier.ErrorOccured += Notifier_ErrorOccured;
         }
 
         public IConfiguration Configuration { get; }
@@ -39,6 +40,8 @@ namespace BuildNotifications.Core
         public IProjectProvider ProjectProvider { get; }
 
         public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
+
+        public event EventHandler<PipelineErrorEventArgs> ErrorOccurred;
 
         public void PersistConfigurationChanges()
         {
@@ -58,6 +61,11 @@ namespace BuildNotifications.Core
         private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
         {
             PipelineUpdated?.Invoke(this, e);
+        }
+
+        private void Notifier_ErrorOccured(object sender, PipelineErrorEventArgs e)
+        {
+            ErrorOccurred?.Invoke(this, e);
         }
 
         private readonly string _configFilePath;

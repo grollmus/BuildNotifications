@@ -81,7 +81,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected virtual DateTime CalculateChangedDate() => _changedDate;
 
-        protected DateTime _changedDate;
+        private DateTime _changedDate;
 
         private void UpdateChangedDate()
         {
@@ -101,18 +101,17 @@ namespace BuildNotifications.ViewModel.Tree
         protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)
         {
             if (!ChildrenAreBuilds)
+            {
                 foreach (var child in Children)
                 {
                     child.SetSortings(sortingDefinitions, index + 1);
                 }
+            }
 
-            SortingDefinition newSorting;
+            if (index >= sortingDefinitions.Count)
+                return;
 
-            // the last group are expected to be builds anyway, these are sorted by Date
-            if (index >= sortingDefinitions.Count || ChildrenAreBuilds)
-                newSorting = SortingDefinition.DateAscending;
-            else
-                newSorting = sortingDefinitions[index];
+            var newSorting = sortingDefinitions[index];
 
             if (newSorting == _currentSortingDefinition)
                 return;
@@ -203,12 +202,6 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void SetBuildLargeStatus()
         {
-            if (!ChildrenAreBuilds)
-                return;
-
-            _currentSortingDefinition = SortingDefinition.DateAscending;
-
-            SetChildrenSorting(_currentSortingDefinition);
             var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
 
             foreach (var child in buildChildren)
@@ -244,6 +237,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private SortingDefinition _currentSortingDefinition;
+        private SortingDefinition _currentSortingDefinition = SortingDefinition.DateAscending;
     }
 }

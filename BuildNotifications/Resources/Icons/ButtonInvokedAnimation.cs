@@ -13,6 +13,8 @@ namespace BuildNotifications.Resources.Icons
             Duration = 0.2;
         }
 
+        public int Repeat { get; set; } = 0;
+
         protected override void Invoke(object parameter)
         {
             var scaleTransform = new ScaleTransform(1.25, 1.25, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
@@ -22,8 +24,8 @@ namespace BuildNotifications.Resources.Icons
             AssociatedObject.RenderTransform = group;
 
             var tweens = new List<Timeline>();
-            tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(1.0).In(Duration).Ease(Easing.QuadraticEaseIn));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.QuadraticEaseIn));
+            tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(1.0).In(Duration).Ease(Easing.QuadraticEaseIn).Repeat(Repeat));
+            tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.QuadraticEaseIn).Repeat(Repeat));
             tweens.Add(rotateTransform.Tween(x => x.Angle).To(0).In(Duration).Ease(Easing.QuadraticEaseIn));
 
             var globalTweenHandler = App.GlobalTweenHandler;

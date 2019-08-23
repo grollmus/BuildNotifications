@@ -71,5 +71,10 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="value">Value to remove item for.</param>
         void RemoveValue(T value);
+
+        /// <summary>
+        /// Clears all stored data.
+        /// </summary>
+        void Clear();
     }
 }

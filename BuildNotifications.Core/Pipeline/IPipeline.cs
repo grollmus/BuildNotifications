@@ -19,6 +19,11 @@ namespace BuildNotifications.Core.Pipeline
         void AddProject(IProject project);
 
         /// <summary>
+        /// Clears all projects and cached data.
+        /// </summary>
+        void ClearProjects();
+
+        /// <summary>
         /// Updates the pipeline i.e. fetch data from projects, group builds and
         /// raise notifications.
         /// </summary>

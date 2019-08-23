@@ -70,6 +70,7 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     LogTo.WarnException("Exception when trying to fetch branches from project", ex);
+                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingBranches", project.Name);
                 }
             }
         }
@@ -102,6 +103,7 @@ namespace BuildNotifications.Core.Pipeline
                 {
                     var projectName = project.Name;
                     LogTo.WarnException($"Exception when trying to fetch builds for project {projectName}", ex);
+                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingBuilds", projectName);
                 }
             }
 
@@ -131,6 +133,7 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     LogTo.WarnException("Exception when trying to fetch BuildDefinitions from project", ex);
+                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingDefinitions", project.Name);
                 }
             }
         }
@@ -139,6 +142,15 @@ namespace BuildNotifications.Core.Pipeline
         public void AddProject(IProject project)
         {
             _projectList.Add(project);
+        }
+
+        public void ClearProjects()
+        {
+            _projectList.Clear();
+            _definitionCache.Clear();
+            _buildCache.Clear();
+            _branchCache.Clear();
+            _lastUpdate = null;
         }
 
         /// <inheritdoc />

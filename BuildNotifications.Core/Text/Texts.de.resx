@@ -229,4 +229,13 @@
   <data name="InitialSetupCompleteConfig" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ErrorFetchingBranches" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ErrorFetchingBuilds" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ErrorFetchingDefinitions" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
