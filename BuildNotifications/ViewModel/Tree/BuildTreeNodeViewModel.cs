@@ -21,15 +21,9 @@ namespace BuildNotifications.ViewModel.Tree
             SetChildrenSorting(_currentSortingDefinition);
 
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
-            AddAndRemoveCommand = new DelegateCommand(o =>
-            {
-                RemoveOneChild(o);
-            });
+            AddAndRemoveCommand = new DelegateCommand(o => { RemoveOneChild(o); });
             HighlightCommand = new DelegateCommand(Highlight);
-        }
-
-        public virtual void BackendPropertiesChanged()
-        {
+            CurrentTreeLevelDepth = nodeSource.Depth;
         }
 
         public ICommand AddAndRemoveCommand { get; set; }
@@ -39,7 +33,7 @@ namespace BuildNotifications.ViewModel.Tree
         public BuildStatus BuildStatus => CalculateBuildStatus();
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
-        public int CurrentTreeLevelDepth { get; set; }
+        public int CurrentTreeLevelDepth { get; private set; }
 
         public string DisplayName => CalculateDisplayName();
 
@@ -63,9 +57,14 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
+        public virtual void BackendPropertiesChanged()
+        {
+            CurrentTreeLevelDepth = NodeSource.Depth;
+        }
+
         protected virtual BuildStatus CalculateBuildStatus()
         {
-            return !Children.Any() ? BuildStatus.None : Children.Max(x => x.BuildStatus);
+            return !Children.Any() ? BuildStatus.None : Children.ToList().Max(x => x.BuildStatus);
         }
 
         protected virtual string CalculateDisplayName()
@@ -129,18 +128,6 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(BuildStatus));
         }
 
-        private void SetBuildLargeStatus()
-        {
-            var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
-
-            foreach (var child in buildChildren)
-            {
-                child.IsLargeSize = false;
-            }
-
-            buildChildren.Last().IsLargeSize = true;
-        }
-
         private void Highlight(object obj)
         {
             bool? targetValue = null;
@@ -168,6 +155,18 @@ namespace BuildNotifications.ViewModel.Tree
             var someBuild = Children.FirstOrDefault(x => !x.IsRemoving);
             if (someBuild != null)
                 Children.Remove(someBuild);
+        }
+
+        private void SetBuildLargeStatus()
+        {
+            var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
+
+            foreach (var child in buildChildren)
+            {
+                child.IsLargeSize = false;
+            }
+
+            buildChildren.Last().IsLargeSize = true;
         }
 
         private void SetChildrenSorting(SortingDefinition sortingDefinition)

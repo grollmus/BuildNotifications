@@ -7,6 +7,9 @@ namespace BuildNotifications.Core.Utilities
         /// <inheritdoc />
         public bool MatchesType(Type type, string typeName)
         {
+            if (typeName == null)
+                return false;
+
             var typeToMatch = new TypeName(type.AssemblyQualifiedName.Split(','));
             var typeToCheck = new TypeName(typeName.Split(','));
 

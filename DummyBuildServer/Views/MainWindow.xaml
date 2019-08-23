@@ -92,7 +92,8 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" MaxHeight="400" Height="400" />
+                    <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" MaxHeight="400"
+                             Height="400" />
                 </DockPanel>
             </DockPanel>
         </GroupBox>
@@ -102,6 +103,8 @@
                 <TextBox Text="{Binding Port}" />
                 <Button Content="Start" Command="{Binding StartServerCommand}" />
                 <Button Content="Stop" Command="{Binding StopServerCommand}" />
+                <Button Content="Permutate and queue all" Command="{Binding EnqueuePermutatedBuildsCommand}" />
+                <Button Content="Randomize all build status" Command="{Binding RandomizeStatusOfAllBuildsCommand}" />
             </StackPanel>
         </GroupBox>
     </WrapPanel>

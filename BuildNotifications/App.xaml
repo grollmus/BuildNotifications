@@ -14,6 +14,10 @@
                 <ResourceDictionary Source="Resources/Global/TextBlockStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/DecoratedComboBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ListBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/ExpanderStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/CheckboxStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/IconBatchResources.xaml" />
+                <ResourceDictionary Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
 

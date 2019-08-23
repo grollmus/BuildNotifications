@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
+using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
@@ -17,46 +20,13 @@ namespace BuildNotifications.ViewModel
 #if DEBUG
         private string ConfigFilePath => ConfigFileName;
 #else
-        private string ConfigFilePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{Path.DirectorySeparatorChar}BuildNotifications{Path.DirectorySeparatorChar}{ConfigFileName}");
+        private string ConfigFilePath => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"BuildNotifications{System.IO.Path.DirectorySeparatorChar}{ConfigFileName}");
 #endif
 
         public MainViewModel()
         {
             _coreSetup = new CoreSetup(ConfigFilePath);
-
-            SearchViewModel = new SearchViewModel();
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
-
-            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
-            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
-            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
-                {
-                    Debug.WriteLine("Selected groups: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition));
-
-                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
-                }
-
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
-                {
-                    Debug.WriteLine("Selected sortings: " + string.Join(',', GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition));
-                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                }
-            };
-
-            ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
-            ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
-
-            var projectProvider = _coreSetup.ProjectProvider;
-            foreach (var project in projectProvider.AllProjects())
-            {
-                _coreSetup.Pipeline.AddProject(project);
-            }
-
-            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
-
-            UpdateTimer().FireAndForget();
+            Initialize();
         }
 
         public BuildTreeViewModel BuildTree
@@ -65,10 +35,22 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _buildTree = value;
-
                 OnPropertyChanged();
             }
         }
+
+        public BaseViewModel Overlay
+        {
+            get => _overlay;
+            set
+            {
+                _overlay = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TitleBarToolsVisibility));
+            }
+        }
+
+        public Visibility TitleBarToolsVisibility => Overlay == null ? Visibility.Visible : Visibility.Collapsed;
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
@@ -99,15 +81,74 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
+        private void Initialize()
+        {
+            SetupViewModel();
+            LoadProjects();
+            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
+            UpdateTimer().FireAndForget();
+            ShowOverlay();
+        }
+
+        private void ShowOverlay()
+        {
+            var nothingConfigured = !_coreSetup.Configuration.Projects.Any() || !_coreSetup.Configuration.Connections.Any();
+            if (!nothingConfigured)
+                return;
+
+            Overlay = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+        }
+
+        private void LoadProjects()
+        {
+            var projectProvider = _coreSetup.ProjectProvider;
+            foreach (var project in projectProvider.AllProjects())
+            {
+                _coreSetup.Pipeline.AddProject(project);
+            }
+        }
+
+        private void SetupViewModel()
+        {
+            SearchViewModel = new SearchViewModel();
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
+            SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
+
+            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
+            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
+            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
+                {
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    UpdateNow();
+                }
+
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+            };
+
+            ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
+            ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
+        }
+
+        private void SettingsViewModelOnEditConnectionsRequested(object sender, EventArgs e)
+        {
+            ToggleShowSettingsCommand.Execute(null);
+            Overlay = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+        }
+
         private void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
-            BuildTree = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            var buildTreeViewModel = buildTreeViewModelFactory.Produce(e.Tree, BuildTree);
+            if (buildTreeViewModel != BuildTree)
+                BuildTree = buildTreeViewModel;
+
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
         }
-
-        // RemoveChildrenIfNotOfType ensures that only elements of the type are within the list, therefore the ReSharper warning is taken care of
 
         private void ToggleGroupDefinitionSelection(object obj)
         {
@@ -121,21 +162,35 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateTimer()
         {
-            while (true)
+            _cancellationTokenSource = new CancellationTokenSource();
+            while (_keepUpdating)
             {
                 IsBusy = true;
                 await _coreSetup.Update();
                 IsBusy = false;
-
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), _cancellationTokenSource.Token);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
-
-            // ReSharper disable once FunctionNeverReturns
         }
 
+        private void UpdateNow()
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        private CancellationTokenSource _cancellationTokenSource;
+        private bool _keepUpdating = true;
         private readonly CoreSetup _coreSetup;
         private BuildTreeViewModel _buildTree;
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;
+        private BaseViewModel _overlay;
     }
 }

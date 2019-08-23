@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Anotar.NLog;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 
@@ -8,9 +7,10 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsConnectionPool
     {
-        internal VssConnection? CreateConnection(IReadOnlyDictionary<string, string?> data)
+        internal VssConnection? CreateConnection(TfsConfiguration data)
         {
-            if (!data.TryGetValue(TfsConstants.Connection.Url, out var url) || string.IsNullOrWhiteSpace(url))
+            var url = data.Url;
+            if (string.IsNullOrWhiteSpace(url))
                 return null;
 
             if (_connections.TryGetValue(url, out var cachedConnection))
@@ -25,21 +25,14 @@ namespace BuildNotifications.Plugin.Tfs
             return connection;
         }
 
-        private VssCredentials CreateCredentials(IReadOnlyDictionary<string, string?> data)
+        private VssCredentials CreateCredentials(TfsConfiguration data)
         {
-            if (!data.TryGetValue(TfsConstants.Connection.AuthenticationType, out var authType))
-                authType = TfsConstants.Connection.WindowsAuthentication;
+            if (data.AuthenticationType == AuthenticationType.Windows)
+                return new VssCredentials();
 
-            if (authType == TfsConstants.Connection.AccountAuthentication)
-            {
-                if (data.TryGetValue(TfsConstants.Connection.UserName, out var userName) &&
-                    data.TryGetValue(TfsConstants.Connection.Password, out var password))
-                    return new VssCredentials(new VssBasicCredential(userName, password));
-
-                LogTo.Warn("AuthenticationType was set to Account but credentials are missing in configuration");
-            }
-
-            return new VssCredentials();
+            var username = data.Username;
+            var pw = data.Password;
+            return new VssCredentials(new VssBasicCredential(username, pw));
         }
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>();

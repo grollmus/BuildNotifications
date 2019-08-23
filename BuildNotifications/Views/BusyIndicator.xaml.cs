@@ -60,7 +60,7 @@ namespace BuildNotifications.Views
                     var firstItem = DummyItems.FirstOrDefault(x => !x.IsRemoving);
                     if (!_tokenSource.IsCancellationRequested)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        Application.Current?.Dispatcher?.Invoke(() =>
                         {
                             DummyItems.Remove(firstItem);
                             DummyItems.Add(new DummyItem());

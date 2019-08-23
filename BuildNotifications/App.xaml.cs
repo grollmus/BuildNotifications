@@ -13,7 +13,7 @@ namespace BuildNotifications
             _lastUpdate = TimeSpan.Zero;
         }
 
-        private void CompositionTargetOnRendering(object sender, EventArgs e)
+        private void CompositionTargetOnRendering(object? sender, EventArgs e)
         {
             var renderEventArgs = e as RenderingEventArgs;
             if (renderEventArgs == null)

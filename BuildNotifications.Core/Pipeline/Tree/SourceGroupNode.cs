@@ -11,7 +11,7 @@
 
         public override bool Equals(IBuildTreeNode other)
         {
-            return SourceName.Equals((other as SourceGroupNode)?.SourceName);
+            return base.Equals(other) && SourceName.Equals((other as SourceGroupNode)?.SourceName);
         }
     }
 }

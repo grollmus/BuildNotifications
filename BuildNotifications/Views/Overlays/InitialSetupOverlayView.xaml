@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="BuildNotifications.Views.Overlays.InitialSetupOverlayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:overlays="clr-namespace:BuildNotifications.ViewModel.Overlays"
+             xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
+             xmlns:viewsSettings="clr-namespace:BuildNotifications.Views.Settings"
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
+             Background="{DynamicResource Background1}">
+
+
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}"
+                             Height="{StaticResource BlockDouble}"
+                             Foreground="{DynamicResource Yellow}" Margin="{StaticResource BlockHalfThickness}" />
+            <TextBlock
+                Text="{Binding DisplayedTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                FontSize="{StaticResource BlockOneAndQuarter}"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource Foreground1HalfTransparency}" VerticalAlignment="Top"
+                Margin="{StaticResource BlockHalfThickness}">
+
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding AnimateDisplay}" Value="true">
+                        <settings:TextChangedAnimation Duration="2" Anchor="MiddleLeft" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </TextBlock>
+        </DockPanel>
+        <ContentPresenter Content="{Binding ConnectionsAndProjectsSettingsViewModel}">
+            <ContentPresenter.Resources>
+                <DataTemplate DataType="{x:Type viewModelSettings:ConnectionsAndProjectsSettingsViewModel}">
+                    <viewsSettings:ConnectionsAndProjectsSettingsView />
+                </DataTemplate>
+            </ContentPresenter.Resources>
+        </ContentPresenter>
+
+    </DockPanel>
+
+</UserControl>

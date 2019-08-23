@@ -9,8 +9,9 @@
              mc:Ignorable="d">
 
     <Grid Width="{StaticResource BlockTriple}">
-        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Icon="Search" MaxHeight="{StaticResource BlockOneAndHalf}"
-                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap"/>
+        <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" Icon="Search"
+                               MaxHeight="{StaticResource BlockOneAndHalf}"
+                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap" />
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
                 <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />

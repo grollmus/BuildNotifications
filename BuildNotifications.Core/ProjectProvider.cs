@@ -20,8 +20,11 @@ namespace BuildNotifications.Core
             if (!_configuration.Projects.Any())
                 yield break;
 
-            var project = _projectFactory.Construct(_configuration.Projects.First());
-            yield return project;
+            foreach (var projectConfiguration in _configuration.Projects)
+            {
+                var project = _projectFactory.Construct(projectConfiguration);
+                yield return project;
+            }
         }
 
         private readonly IConfiguration _configuration;

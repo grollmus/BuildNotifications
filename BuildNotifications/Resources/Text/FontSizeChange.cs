@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using BuildNotifications.Resources.Animation;
 using BuildNotifications.Resources.BuildTree.TriggerActions;
 using TweenSharp.Animation;
 using TweenSharp.Factory;

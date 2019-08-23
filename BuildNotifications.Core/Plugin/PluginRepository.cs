@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
@@ -41,6 +42,45 @@ namespace BuildNotifications.Core.Plugin
                 LogTo.Warn($"Failed to find source control plugin for type {typeName}");
 
             return plugin;
+        }
+
+        public string FindPluginName(string typeName)
+        {
+            IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
+
+            return plugin?.DisplayName;
+        }
+
+        public string FindIconGeometry(string typeName)
+        {
+            IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
+
+            return plugin?.IconSvgPath;
+        }
+
+        public Type FindConfigurationType(string typeName)
+        {
+            IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if(plugin == null)
+                plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
+
+            return plugin?.GetConfigurationType();
         }
 
         private readonly ITypeMatcher _typeMatcher;

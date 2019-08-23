@@ -27,51 +27,6 @@ namespace BuildNotifications.Core.Tests.Pipeline
         }
 
         [Fact]
-        public async Task BranchProviderShouldNotBeCalledMultipleTimesWhenDefinedInMultipleProjects()
-        {
-            // Arrange
-            var builder = Substitute.For<ITreeBuilder>();
-            var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
-
-            var branchProvider = Substitute.For<IBranchProvider>();
-
-            var project1 = new Project(Substitute.For<IBuildProvider>(), branchProvider, Substitute.For<IProjectConfiguration>());
-            var project2 = new Project(Substitute.For<IBuildProvider>(), branchProvider, Substitute.For<IProjectConfiguration>());
-
-            sut.AddProject(project1);
-            sut.AddProject(project2);
-
-            // Act
-            await sut.Update();
-
-            // Assert
-            await branchProvider.Received(1).FetchExistingBranches().GetAsyncEnumerator().DisposeAsync();
-        }
-
-        [Fact]
-        public async Task BuildProviderShouldNotBeCalledMultipleTimesWhenDefinedInMultipleProjects()
-        {
-            // Arrange
-            var builder = Substitute.For<ITreeBuilder>();
-            var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
-
-            var buildProvider = Substitute.For<IBuildProvider>();
-            var project1 = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
-            var project2 = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
-
-            sut.AddProject(project1);
-            sut.AddProject(project2);
-
-            // Act
-            await sut.Update();
-
-            // Assert
-            await buildProvider.Received(1).FetchExistingBuildDefinitions().GetAsyncEnumerator().DisposeAsync();
-        }
-
-        [Fact]
         public async Task UpdateShouldFetchAllBuildDefinitions()
         {
             // Arrange
@@ -118,9 +73,9 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var treeBuilder = TreeBuilderTests.Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
             var masterBranch = Substitute.For<IBranch>();
-            var ciDefinition = Substitute.For<IBuildDefinition>();
+            var ciDefinition = new MockBuildDefinition("1", "ci");
             var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
+            var nightlyDefinition = new MockBuildDefinition("2", "nightly");
 
             var branches = new[] {masterBranch, stageBranch};
             var definitions = new[] {ciDefinition, nightlyDefinition};

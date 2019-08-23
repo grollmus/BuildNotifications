@@ -6,7 +6,9 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
-                    xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter">
+                    xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:build="clr-namespace:BuildNotifications.Resources.BuildTree.Build">
 
     <ResourceDictionary x:Key="BuildTreeSpecificResources">
         <Style TargetType="{x:Type icons:IconBatch}">
@@ -55,6 +57,13 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
+
+            <i:Interaction.Triggers>
+                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
+                                                        TargetScaleY="0.8" />
+                </ei:DataTrigger>
+            </i:Interaction.Triggers>
         </DockPanel>
     </DataTemplate>
 
@@ -86,7 +95,8 @@
                         Margin="{StaticResource BlockThreeQuartersLeftAndRight}">
                     <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
                              HorizontalAlignment="Left">
-                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockNineteenTimes}"
+                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                          MaxWidth="{StaticResource BlockNineteenTimes}"
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
                     </Viewbox>
                 </Border>
@@ -106,6 +116,15 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </Grid>
+
+
+            <i:Interaction.Triggers>
+                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
+                                                        TargetScaleY="0.8" />
+                </ei:DataTrigger>
+            </i:Interaction.Triggers>
+
         </DockPanel>
     </DataTemplate>
 
@@ -114,7 +133,8 @@
                                      Width="{StaticResource BlockTwentyEight}">
             <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
                      DockPanel.Dock="Left">
-                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}" MaxWidth="{StaticResource BlockTwelveTimes}"
+                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                  MaxWidth="{StaticResource BlockTwelveTimes}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
 
@@ -139,6 +159,13 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <i:Interaction.Triggers>
+                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
+                                                        TargetScaleY="0.8" />
+                </ei:DataTrigger>
+            </i:Interaction.Triggers>
         </animation:AnimatedDockPanel>
     </DataTemplate>
 

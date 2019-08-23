@@ -24,10 +24,16 @@ namespace BuildNotifications.Plugin.Tfs
             Definition = new TfsBuildDefinition(build.Definition);
         }
 
-        public bool Equals(IBaseBuild other) => _id == (other as TfsBuild)?._id;
-
         /// <inheritdoc />
-        public override int GetHashCode() => HashCode.Combine(_id, Id);
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_id, Id);
+        }
+
+        public bool Equals(IBaseBuild other)
+        {
+            return _id == (other as TfsBuild)?._id;
+        }
 
         /// <inheritdoc />
         public string BranchName { get; }

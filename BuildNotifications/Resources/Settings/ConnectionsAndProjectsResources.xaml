@@ -1,0 +1,160 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BuildNotifications.Resources.Settings"
+                    xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+    <DataTemplate x:Key="ConnectionsAndProjectsEditableCollectionTemplate"
+                  DataType="{x:Type editableConfigs:IEditableCollection}">
+        <DockPanel x:Name="DockPanel">
+            <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+                <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
+                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
+                                  Background="{DynamicResource Background1}"
+                                  Height="{StaticResource BlockThreeQuarters}"
+                                  IconSize="{StaticResource BlockThreeQuarters}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <icons:ButtonInvokedAnimation />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </icons:IconButton>
+
+                <ListBox ItemsSource="{Binding SubEditables}" SelectedIndex="0" Margin="0" Padding="0"
+                         x:Name="ListBox">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock
+                                    Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                                    TextWrapping="Wrap" Width="{StaticResource BlockTwelveTimes}"
+                                    MaxHeight="{StaticResource BlockFourTimes}" TextTrimming="CharacterEllipsis"
+                                    Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                <icons:IconButton Icon="Minus"
+                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=DockPanel}"
+                                                  CommandParameter="{Binding Value}" x:Name="IconBtn"
+                                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                                  Height="{StaticResource BlockThreeQuarters}"
+                                                  IconSize="{StaticResource BlockThreeQuarters}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <icons:ButtonInvokedAnimation />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </icons:IconButton>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
+            </DockPanel>
+            <Grid>
+                <ContentPresenter VerticalAlignment="Top"
+                                  ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
+                                  Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+                <DockPanel Visibility="Collapsed"
+                           x:Name="InfoDockPanel">
+                    <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}"
+                                     DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
+                                     Margin="{StaticResource BlockQuarterThickness}" />
+                    <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ItemCount}" Value="0">
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="PluginSelectionTemplate" DataType="{x:Type editableConfigs:EditableString}">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top"
+                       Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                       FontSize="{StaticResource Block}" Foreground="{DynamicResource Background3}" />
+            <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0"
+                     SelectedItem="{Binding Value}">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Background="#01000000">
+                            <DockPanel.Resources>
+                                <DrawingImage x:Key="PluginIconNormal">
+                                    <DrawingImage.Drawing>
+                                        <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                                            <GeometryDrawing Brush="{DynamicResource Foreground1HalfTransparency}">
+                                                <GeometryDrawing.Geometry>
+                                                    <MultiBinding
+                                                        Converter="{x:Static local:PluginTypeToIconConverter.Instance}">
+                                                        <Binding />
+                                                        <Binding Path="DataContext.AdditionalData"
+                                                                 ElementName="ListBox" />
+                                                    </MultiBinding>
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+                                        </DrawingGroup>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+
+                                <DrawingImage x:Key="PluginIconHover">
+                                    <DrawingImage.Drawing>
+                                        <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                                            <GeometryDrawing Brush="{DynamicResource Foreground1}">
+                                                <GeometryDrawing.Geometry>
+                                                    <MultiBinding
+                                                        Converter="{x:Static local:PluginTypeToIconConverter.Instance}">
+                                                        <Binding />
+                                                        <Binding Path="DataContext.AdditionalData"
+                                                                 ElementName="ListBox" />
+                                                    </MultiBinding>
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+                                        </DrawingGroup>
+                                    </DrawingImage.Drawing>
+                                </DrawingImage>
+                            </DockPanel.Resources>
+                            <TextBlock DockPanel.Dock="Bottom" x:Name="TextBlock"
+                                       Foreground="{DynamicResource Foreground1HalfTransparency}">
+                                <TextBlock.Text>
+                                    <MultiBinding
+                                        Converter="{x:Static local:PluginTypeToDisplayNameConverter.Instance}">
+                                        <Binding />
+                                        <Binding ElementName="ListBox" Path="DataContext.AdditionalData" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+
+                            <Grid>
+                                <Image Width="{StaticResource BlockDouble}" Height="{StaticResource BlockDouble}"
+                                       x:Name="ImageNormal" Source="{StaticResource PluginIconNormal}" />
+
+                                <Image Width="{StaticResource BlockDouble}" Height="{StaticResource BlockDouble}"
+                                       x:Name="ImageHover" Source="{StaticResource PluginIconHover}"
+                                       Visibility="Collapsed" />
+                            </Grid>
+                        </DockPanel>
+
+                        <DataTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Visibility" Value="Visible" TargetName="ImageHover" />
+                                <Setter Property="Visibility" Value="Collapsed" TargetName="ImageNormal" />
+                                <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                        TargetName="TextBlock" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+            </ListBox>
+        </DockPanel>
+    </DataTemplate>
+</ResourceDictionary>

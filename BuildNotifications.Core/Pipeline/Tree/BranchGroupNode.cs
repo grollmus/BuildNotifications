@@ -17,7 +17,7 @@
 
         public override bool Equals(IBuildTreeNode other)
         {
-            return BranchName.Equals((other as BranchGroupNode)?.BranchName);
+            return base.Equals(other) && BranchName.Equals((other as BranchGroupNode)?.BranchName);
         }
     }
 }

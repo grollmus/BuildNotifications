@@ -8,45 +8,40 @@ namespace BuildNotifications.Core.Config
     public interface IProjectConfiguration
     {
         /// <summary>
-        /// Name of the project.
-        /// </summary>
-        string ProjectName { get; }
-
-        /// <summary>
         /// List of branches to never load information for.
         /// </summary>
-        IList<string> BranchBlacklist { get; }
+        IList<string> BranchBlacklist { get; set; }
 
         /// <summary>
         /// List of branches to always load information for.
         /// </summary>
-        IList<string> BranchWhitelist { get; }
+        IList<string> BranchWhitelist { get; set; }
 
         /// <summary>
         /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        IList<string> BuildConnectionNames { get; }
+        IList<string> BuildConnectionNames { get; set; }
 
         /// <summary>
         /// List of build definitions to never load information for.
         /// </summary>
-        IList<string> BuildDefinitionBlacklist { get; }
+        IList<string> BuildDefinitionBlacklist { get; set; }
 
         /// <summary>
         /// List of build definitions to always load information for.
         /// </summary>
-        IList<string> BuildDefinitionWhitelist { get; }
+        IList<string> BuildDefinitionWhitelist { get; set; }
 
         /// <summary>
         /// Branch that should be used by default to use for branch comparision.
         /// </summary>
-        string DefaultCompareBranch { get; }
+        string DefaultCompareBranch { get; set; }
 
         /// <summary>
         /// Whether to hide Pull-Requests that has been merged.
         /// </summary>
-        bool HideCompletedPullRequests { get; }
+        bool HideCompletedPullRequests { get; set; }
 
         /// <summary>
         /// Whether only white listed branches shall be loaded.
@@ -59,9 +54,14 @@ namespace BuildNotifications.Core.Config
         bool LoadWhitelistedDefinitionsExclusively { get; set; }
 
         /// <summary>
+        /// Name of the project.
+        /// </summary>
+        string ProjectName { get; set; }
+
+        /// <summary>
         /// Whether Pull-Request "Branches" shall be displayed.
         /// </summary>
-        bool ShowPullRequests { get; }
+        bool ShowPullRequests { get; set; }
 
         /// <summary>
         /// Name of the <see cref="ConnectionData" /> that are used to

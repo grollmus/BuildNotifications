@@ -12,16 +12,16 @@ namespace BuildNotifications.Core.Pipeline.Tree
             UpdateProperties(build);
         }
 
-        public DateTime? LastChangedTime { get; private set; }
-        public int Progress { get; private set; }
-        public BuildStatus Status { get; private set; }
-
         private void UpdateProperties(IBuild otherBuild)
         {
             LastChangedTime = otherBuild.LastChangedTime;
             Status = otherBuild.Status;
             Progress = otherBuild.Progress;
         }
+
+        public DateTime? LastChangedTime { get; private set; }
+        public int Progress { get; private set; }
+        public BuildStatus Status { get; private set; }
 
         /// <inheritdoc />
         public IBuild Build { get; }
@@ -37,7 +37,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public override bool Equals(IBuildTreeNode other)
         {
-            return Build.Id.Equals((other as BuildNode)?.Build?.Id);
+            return base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build?.Id);
         }
     }
 }

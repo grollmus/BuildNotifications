@@ -16,8 +16,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public void RemoveChild(IBuildTreeNode node)
         {
-            _childList.Remove(node);
+            _childList.RemoveAll(x => ReferenceEquals(x, node));
         }
+
+        public int Depth { get; set; }
 
         public virtual void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
         {
@@ -25,7 +27,13 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public IEnumerable<IBuildTreeNode> Children => _childList;
 
-        public abstract bool Equals(IBuildTreeNode other);
+        public virtual bool Equals(IBuildTreeNode other)
+        {
+            if (other == null)
+                return false;
+
+            return Depth == other.Depth;
+        }
 
         private readonly List<IBuildTreeNode> _childList;
     }

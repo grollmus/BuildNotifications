@@ -136,4 +136,97 @@
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
+  <data name="BuildPluginType" xml:space="preserve">
+    <value>Build Plugin</value>
+  </data>
+  <data name="SourceControlPluginType" xml:space="preserve">
+    <value>Source Plugin</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="BranchBlacklist" xml:space="preserve">
+    <value>Branch blacklist</value>
+  </data>
+  <data name="BranchWhitelist" xml:space="preserve">
+    <value>Branch whitelist</value>
+  </data>
+  <data name="BuildConnectionNames" xml:space="preserve">
+    <value>Connections to fetch builds</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="BuildDefinitionBlacklist" xml:space="preserve">
+    <value>Build-Definition blacklist</value>
+  </data>
+  <data name="BuildDefinitionWhitelist" xml:space="preserve">
+    <value>Build-Definition whitelist</value>
+  </data>
+  <data name="DefaultCompareBranch" xml:space="preserve">
+    <value>Compare branch</value>
+  </data>
+  <data name="HideCompletedPullRequests" xml:space="preserve">
+    <value>Hide completed pull requests</value>
+  </data>
+  <data name="LoadWhitelistedBranchesExclusively" xml:space="preserve">
+    <value>Load whitelisted branches exclusively</value>
+  </data>
+  <data name="LoadWhitelistedDefinitionsExclusively" xml:space="preserve">
+    <value>Load whitelisted definitions exclusively</value>
+  </data>
+  <data name="ShowPullRequests" xml:space="preserve">
+    <value>Show pull requests</value>
+  </data>
+  <data name="SourceControlConnectionNames" xml:space="preserve">
+    <value>Connections to fetch Branches</value>
+  </data>
+  <data name="New connection" xml:space="preserve">
+    <value>New connection</value>
+  </data>
+  <data name="New Project" xml:space="preserve">
+    <value>New project</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="BuildsToLoadCount" xml:space="preserve">
+    <value>Builds to load</value>
+  </data>
+  <data name="BuildsToShow" xml:space="preserve">
+    <value>Builds per group</value>
+  </data>
+  <data name="UpdateInterval" xml:space="preserve">
+    <value>Update interval</value>
+  </data>
+  <data name="CanceledBuildNotifyConfig" xml:space="preserve">
+    <value>Notify level for cancelled builds</value>
+  </data>
+  <data name="FailedBuildNotifyConfig" xml:space="preserve">
+    <value>Notify level for failed builds</value>
+  </data>
+  <data name="SucceededBuildNotifyConfig" xml:space="preserve">
+    <value>Notify level for succeeded builds</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="InitialSetupEmptyConf" xml:space="preserve">
+    <value>Welcome to BuildNotifications. To get started create a new connection with provider of your choice.</value>
+  </data>
+  <data name="InitialSetupEmptyProjects" xml:space="preserve">
+    <value>When your connection is set up. Create a new project, which actually uses your connection.</value>
+  </data>
+  <data name="InitialSetupEmptyConnections" xml:space="preserve">
+    <value>A project needs a connection to work off. Create a new one in the "Connections" Tab.</value>
+  </data>
+  <data name="InitialSetupCompleteConfig" xml:space="preserve">
+    <value>When you're done configuring the project. You can test your settings by using the test tab.</value>
+  </data>
 </root>
