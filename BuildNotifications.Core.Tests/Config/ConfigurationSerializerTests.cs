@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
@@ -18,6 +19,9 @@ namespace BuildNotifications.Core.Tests.Config
             const string fileName = "non.existing";
             var serializer = Substitute.For<ISerializer>();
             var pluginRepo = Substitute.For<IPluginRepository>();
+
+            if (File.Exists(fileName))
+                File.Delete(fileName);
             var sut = new ConfigurationSerializer(serializer, pluginRepo);
 
             // Act
@@ -28,6 +32,26 @@ namespace BuildNotifications.Core.Tests.Config
         }
 
         [Fact]
+        public void LoadShouldNotCreateFileWhenFileDoesNotExist()
+        {
+            // Arrange
+            const string fileName = "non.existing";
+            var serializer = Substitute.For<ISerializer>();
+            var pluginRepo = Substitute.For<IPluginRepository>();
+
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+
+            var sut = new ConfigurationSerializer(serializer, pluginRepo);
+
+            // Act
+            var config = sut.Load(fileName);
+
+            // Assert
+            Assert.False(File.Exists(fileName));
+        }
+
+        [Fact]
         public void LoadShouldSetBuildAndSourceControlFunctionsOfPluginRepo()
         {
             // Arrange
@@ -35,6 +59,10 @@ namespace BuildNotifications.Core.Tests.Config
             var serializer = Substitute.For<ISerializer>();
             var pluginRepo = Substitute.For<IPluginRepository>();
             pluginRepo.Build.Returns(new List<IBuildPlugin> {Substitute.For<IBuildPlugin>()});
+
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+
             var sut = new ConfigurationSerializer(serializer, pluginRepo);
 
             // Act

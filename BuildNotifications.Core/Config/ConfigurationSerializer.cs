@@ -29,14 +29,12 @@ namespace BuildNotifications.Core.Config
                 {
                     LogTo.WarnException("Failed to load existing config.", e);
                     configuration = new Configuration();
-                    Save(configuration, fileName);
                 }
             }
             else
             {
                 LogTo.Warn($"File {fileName} does not exist. Using default configuration");
                 configuration = new Configuration();
-                Save(configuration, fileName);
             }
 
             configuration.PossibleBuildPluginsFunction = () => _pluginRepository.Build.Select(x => x.GetType().FullName);

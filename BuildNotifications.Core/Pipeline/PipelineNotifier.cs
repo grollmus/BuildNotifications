@@ -5,9 +5,9 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class PipelineNotifier : IPipelineNotifier
     {
-        public void Notify(IBuildTree tree)
+        public void Notify(IBuildTree tree, IBuildTreeBuildsDelta delta)
         {
-            Updated?.Invoke(this, new PipelineUpdateEventArgs(tree));
+            Updated?.Invoke(this, new PipelineUpdateEventArgs(tree, delta));
         }
 
         public void NotifyError(Exception exception, string messageTextId, params string[] messageParameter)
@@ -15,7 +15,6 @@ namespace BuildNotifications.Core.Pipeline
             ErrorOccured?.Invoke(this, new PipelineErrorEventArgs(exception, messageTextId, messageParameter));
         }
 
-        /// <inheritdoc />
         public event EventHandler<PipelineUpdateEventArgs> Updated;
 
         public event EventHandler<PipelineErrorEventArgs> ErrorOccured;

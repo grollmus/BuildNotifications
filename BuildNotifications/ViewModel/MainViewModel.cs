@@ -91,7 +91,7 @@ namespace BuildNotifications.ViewModel
             SetupViewModel();
             LoadProjects();
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
-            _coreSetup.ErrorOccurred += CoreSetupErrorOccurred;
+            _coreSetup.ErrorOccurred += CoreSetup_ErrorOccurred;
             ShowOverlay();
             if (Overlay == null)
                 StartUpdating();
@@ -194,7 +194,7 @@ namespace BuildNotifications.ViewModel
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
         }
 
-        private void CoreSetupErrorOccurred(object sender, PipelineErrorEventArgs e)
+        private void CoreSetup_ErrorOccurred(object sender, PipelineErrorEventArgs e)
         {
             StopUpdating();
             StatusIndicator.UpdateStatus = UpdateStatus.Error;
@@ -216,7 +216,6 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StatusIndicator.UpdateStatus = UpdateStatus.None;
-
         }
 
         private async Task UpdateTimer()

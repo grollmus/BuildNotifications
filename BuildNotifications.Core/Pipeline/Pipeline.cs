@@ -37,6 +37,9 @@ namespace BuildNotifications.Core.Pipeline
 
         private void CutTree(IBuildTreeNode tree)
         {
+            if (tree == null)
+                return;
+
             var buildChildrenToRemove = tree.Children.OfType<IBuildNode>()
                 .OrderByDescending(x => x.Build.LastChangedTime ?? DateTime.MinValue)
                 .Skip(_configuration.BuildsToShow)
@@ -169,14 +172,14 @@ namespace BuildNotifications.Core.Pipeline
                 var builds = _buildCache.ContentCopy();
                 var branches = _branchCache.ContentCopy();
                 var definitions = _definitionCache.ContentCopy();
-                var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-                CutTree(tree);
-                return tree;
+                var result = _treeBuilder.Build(builds, branches, definitions, _oldTree);
+                CutTree(result.Tree);
+                return result;
             });
 
-            _pipelineNotifier.Notify(treeResult);
+            _pipelineNotifier.Notify(treeResult.Tree, treeResult.Delta);
 
-            _oldTree = treeResult;
+            _oldTree = treeResult.Tree;
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
