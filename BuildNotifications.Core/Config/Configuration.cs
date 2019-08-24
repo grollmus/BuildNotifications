@@ -5,6 +5,7 @@ using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.PluginInterfaces;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using ReflectSettings.Attributes;
@@ -96,5 +97,9 @@ namespace BuildNotifications.Core.Config
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
         [CalculatedValues(nameof(ConnectionNames), nameof(ConnectionNames))]
         public IList<IProjectConfiguration> Projects { get; set; }
+
+        [JsonIgnore]
+        [IgnoredForConfig]
+        public IList<IUser> IdentitiesOfCurrentUser { get; } = new List<IUser>();
     }
 }

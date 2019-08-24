@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Cache;
+using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -20,7 +21,7 @@ namespace BuildNotifications.Core.Pipeline
             _buildCache = new PipelineCache<IBuild>();
             _branchCache = new PipelineCache<IBranch>();
             _definitionCache = new PipelineCache<IBuildDefinition>();
-
+            _notificationFactory = new NotificationFactory(configuration);
             _pipelineNotifier = new PipelineNotifier();
         }
 
@@ -174,12 +175,13 @@ namespace BuildNotifications.Core.Pipeline
                 var definitions = _definitionCache.ContentCopy();
                 var result = _treeBuilder.Build(builds, branches, definitions, _oldTree);
                 CutTree(result.Tree);
-                return result;
+                var notifications = _notificationFactory.ProduceNotifications(result.Delta);
+                return (BuildTree: result.Tree, Notifications:notifications);
             });
 
-            _pipelineNotifier.Notify(treeResult.Tree, treeResult.Delta);
+            _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
 
-            _oldTree = treeResult.Tree;
+            _oldTree = treeResult.BuildTree;
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
@@ -193,5 +195,6 @@ namespace BuildNotifications.Core.Pipeline
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
+        private NotificationFactory _notificationFactory;
     }
 }

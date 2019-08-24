@@ -238,4 +238,55 @@
   <data name="ErrorFetchingDefinitions" xml:space="preserve">
     <value></value>
   </data>
+  <data name="DefinitionChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TwoDefinitionsChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ThreeDefinitionsChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildsChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedSingular" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedPlural" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SucceededSingular" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SucceededPlural" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="CancelledSingular" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="CancelledPlural" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BranchChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TwoBranchesChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ThreeBranchesChangedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BranchAndDefinitionFailedTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildNotificationContentSingularTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildNotificationContentPluralTextId" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -238,4 +238,55 @@
   <data name="ErrorFetchingDefinitions" xml:space="preserve">
     <value>An error occurred while fetching Build-Definitions for project "{0}". Error:</value>
   </data>
+  <data name="DefinitionChangedTextId" xml:space="preserve">
+    <value>Definition {1} {0}.</value>
+  </data>
+  <data name="TwoDefinitionsChangedTextId" xml:space="preserve">
+    <value>Definitions {1} and {2} {0}.</value>
+  </data>
+  <data name="ThreeDefinitionsChangedTextId" xml:space="preserve">
+    <value>Definitions {1}, {2} and {3} {0}.</value>
+  </data>
+  <data name="BuildChangedTextId" xml:space="preserve">
+    <value>Build {1} on {2} {0}.</value>
+  </data>
+  <data name="BuildsChangedTextId" xml:space="preserve">
+    <value>{1} builds {0}.</value>
+  </data>
+  <data name="FailedSingular" xml:space="preserve">
+    <value>failed</value>
+  </data>
+  <data name="FailedPlural" xml:space="preserve">
+    <value>failed</value>
+  </data>
+  <data name="SucceededSingular" xml:space="preserve">
+    <value>succeeded</value>
+  </data>
+  <data name="SucceededPlural" xml:space="preserve">
+    <value>succeeded</value>
+  </data>
+  <data name="CancelledSingular" xml:space="preserve">
+    <value>was cancelled</value>
+  </data>
+  <data name="CancelledPlural" xml:space="preserve">
+    <value>were cancelled</value>
+  </data>
+  <data name="BranchChangedTextId" xml:space="preserve">
+    <value>Branch {1} {0}.</value>
+  </data>
+  <data name="TwoBranchesChangedTextId" xml:space="preserve">
+    <value>Branches {1} and {2} {0}.</value>
+  </data>
+  <data name="ThreeBranchesChangedTextId" xml:space="preserve">
+    <value>Branches {1}, {2} {3} {0}.</value>
+  </data>
+  <data name="BranchAndDefinitionFailedTextId" xml:space="preserve">
+    <value>{1} on {2} {0}.</value>
+  </data>
+  <data name="BuildNotificationContentPluralTextId" xml:space="preserve">
+    <value>{0} builds.</value>
+  </data>
+  <data name="BuildNotificationContentSingularTextId" xml:space="preserve">
+    <value>One build.</value>
+  </data>
 </root>

@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using BuildNotifications.PluginInterfaces;
+using Newtonsoft.Json;
+using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
@@ -55,5 +58,9 @@ namespace BuildNotifications.Core.Config
         /// Seconds between each update cycle.
         /// </summary>
         int UpdateInterval { get; }
+
+        [JsonIgnore]
+        [IgnoredForConfig]
+        IList<IUser> IdentitiesOfCurrentUser { get; }
     }
 }

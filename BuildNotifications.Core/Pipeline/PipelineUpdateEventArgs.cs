@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.Core.Pipeline
 {
     public class PipelineUpdateEventArgs : EventArgs
     {
-        public PipelineUpdateEventArgs(IBuildTree tree, IBuildTreeBuildsDelta delta)
+        public PipelineUpdateEventArgs(IBuildTree tree, IEnumerable<INotification> notifications)
         {
             Tree = tree;
-            Delta = delta;
+            Notifications = notifications;
         }
 
         public IBuildTree Tree { get; }
-        public IBuildTreeBuildsDelta Delta { get; }
+
+        public IEnumerable<INotification> Notifications { get; }
     }
 }
