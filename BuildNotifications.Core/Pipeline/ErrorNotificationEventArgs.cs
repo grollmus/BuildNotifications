@@ -4,11 +4,11 @@ using BuildNotifications.Core.Pipeline.Notification;
 
 namespace BuildNotifications.Core.Pipeline
 {
-    public class PipelineErrorEventArgs : EventArgs
+    public class ErrorNotificationEventArgs : EventArgs
     {
         public IEnumerable<INotification> ErrorNotifications { get; }
 
-        public PipelineErrorEventArgs(params INotification[] errorNotifications)
+        public ErrorNotificationEventArgs(params INotification[] errorNotifications)
         {
             ErrorNotifications = errorNotifications;
         }

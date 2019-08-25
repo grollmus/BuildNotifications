@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
+using NLog.Config;
 using TweenSharp;
 
 namespace BuildNotifications
@@ -11,6 +12,12 @@ namespace BuildNotifications
             GlobalTweenHandler = new TweenHandler();
             CompositionTarget.Rendering += CompositionTargetOnRendering;
             _lastUpdate = TimeSpan.Zero;
+
+            // setup global event logger
+            ConfigurationItemFactory
+                .Default
+                .Targets
+                .RegisterDefinition("GlobalErrorLog", typeof(GlobalErrorLogTarget));
         }
 
         private void CompositionTargetOnRendering(object? sender, EventArgs e)

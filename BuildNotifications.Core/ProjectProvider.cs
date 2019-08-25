@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
@@ -13,6 +14,7 @@ namespace BuildNotifications.Core
             _configuration = configuration;
 
             _projectFactory = new ProjectFactory(pluginRepository, configuration);
+            _projectFactory.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
         }
 
         public IEnumerable<IProject> AllProjects()
@@ -23,9 +25,12 @@ namespace BuildNotifications.Core
             foreach (var projectConfiguration in _configuration.Projects)
             {
                 var project = _projectFactory.Construct(projectConfiguration);
-                yield return project;
+                if (project != null)
+                    yield return project;
             }
         }
+
+        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
 
         private readonly IConfiguration _configuration;
         private readonly ProjectFactory _projectFactory;

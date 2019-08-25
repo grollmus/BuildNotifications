@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Core.Config;
+﻿using System;
+using BuildNotifications.Core.Config;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -13,5 +14,10 @@ namespace BuildNotifications.Core.Pipeline
         /// <param name="config">Configuration that is used to construct the project.</param>
         /// <returns>The constructed project or <c>null</c> if construction failed.</returns>
         IProject? Construct(IProjectConfiguration config);
+
+        /// <summary>
+        /// Gets called whenever an error occurs when constructing a project.
+        /// </summary>
+        event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
     }
 }

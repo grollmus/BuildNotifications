@@ -37,6 +37,8 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
+        public NotificationType NotificationType => _notification.Type;
+
         public void InvokeTimeUntilNowUpdate() => OnPropertyChanged(nameof(TimeUntilNow));
 
         public BuildStatus BuildStatus => _notification.Status;

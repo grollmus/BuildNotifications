@@ -72,7 +72,7 @@
                         <animation:WidthChange TargetWidth="0" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="true">
-                        <animation:WidthChange TargetWidth="{StaticResource BlockThirty}" />
+                        <animation:WidthChange TargetWidth="{StaticResource BlockTwentyFive}" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </ContentPresenter>

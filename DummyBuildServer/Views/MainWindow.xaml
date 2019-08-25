@@ -93,8 +93,14 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <ListBox ItemsSource="{Binding Builds}" SelectedItem="{Binding SelectedBuild}" MaxHeight="400"
-                             Height="400" />
+                    <ListBox ItemsSource="{Binding Builds}" MaxHeight="400" SelectionMode="Extended"
+                             Height="400">
+                        <ListBox.Resources>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
                 </DockPanel>
             </DockPanel>
         </GroupBox>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
+using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -82,6 +83,8 @@ namespace BuildNotifications.Core.Plugin
 
             return plugin?.GetConfigurationType();
         }
+
+        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
 
         private readonly ITypeMatcher _typeMatcher;
     }

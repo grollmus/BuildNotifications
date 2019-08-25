@@ -310,4 +310,31 @@
   <data name="AnErrorOccured" xml:space="preserve">
     <value></value>
   </data>
+  <data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedToConstructBuildProviderForConnection" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedToConstructBuildProviderFromPlugin" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildPluginNotFound" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConnectionNotFound" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name=" " xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedToFindBuildPluginForType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="FailedToFindSourceControlPluginForType" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

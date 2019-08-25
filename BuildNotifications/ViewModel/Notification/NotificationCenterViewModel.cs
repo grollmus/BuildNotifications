@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.ViewModel.Utils;
 
@@ -42,6 +43,15 @@ namespace BuildNotifications.ViewModel.Notification
             foreach (var notification in Notifications)
             {
                 notification.InvokeTimeUntilNowUpdate();
+            }
+        }
+
+        public void ClearNotificationsOfType(NotificationType type)
+        {
+            var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
+            foreach (var viewModel in toRemove)
+            {
+                Notifications.Remove(viewModel);
             }
         }
     }

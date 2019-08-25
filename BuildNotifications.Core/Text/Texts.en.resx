@@ -313,4 +313,27 @@
   <data name="AnErrorOccured" xml:space="preserve">
     <value>An error occurred.</value>
   </data>
+  <data name="ConnectionNotFound" xml:space="preserve">
+    <value>No connection with name '{0}' found.</value>
+  </data>
+  <data name=" " xml:space="preserve">
+    <value>No source control plugin '{0}' found.</value>
+  </data>
+  <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
+    <value>Failed to construct branch provider from plugin '{0}'. Error:
+{1}</value>
+  </data>
+  <data name="BuildPluginNotFound" xml:space="preserve">
+    <value>No build plugin '{0}' found.</value>
+  </data>
+  <data name="FailedToConstructBuildProviderFromPlugin" xml:space="preserve">
+    <value>Failed to construct build provider from plugin '{0}'. Error:
+{1}</value>
+  </data>
+  <data name="FailedToConstructBuildProviderForConnection" xml:space="preserve">
+    <value>Failed to construct build provider for connection '{0}'.</value>
+  </data>
+  <data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
+    <value>Failed to construct branch provider for connection '{0}'.</value>
+  </data>
 </root>

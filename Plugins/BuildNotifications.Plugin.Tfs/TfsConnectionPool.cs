@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Anotar.NLog;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 
@@ -11,7 +12,10 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
+            {
+                LogTo.Error("Given URL was empty.");
                 return null;
+            }
 
             if (_connections.TryGetValue(url, out var cachedConnection))
                 return cachedConnection;

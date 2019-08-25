@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -14,6 +16,7 @@ namespace BuildNotifications.Core.Pipeline
         public ProjectFactory(IPluginRepository pluginRepository, IConfiguration configuration)
         {
             _pluginRepository = pluginRepository;
+            _pluginRepository.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
             _configuration = configuration;
         }
 
@@ -22,7 +25,7 @@ namespace BuildNotifications.Core.Pipeline
             var connectionData = FindConnection(connectionName);
             if (connectionData == null)
             {
-                LogTo.Error($"No connection with name '{connectionName}' found");
+                ReportError("ConnectionNotFound", connectionName);
                 return null;
             }
 
@@ -30,7 +33,7 @@ namespace BuildNotifications.Core.Pipeline
             var sourceControlPlugin = _pluginRepository.FindSourceControlPlugin(pluginType);
             if (sourceControlPlugin == null)
             {
-                LogTo.Error($"No source control plugin '{pluginType}' found");
+                ReportError("SourceControlPluginNotFound", pluginType);
                 return null;
             }
 
@@ -42,7 +45,7 @@ namespace BuildNotifications.Core.Pipeline
             }
             catch (Exception e)
             {
-                LogTo.ErrorException($"Failed to construct branch provider from plugin {sourceControlPlugin.GetType()}", e);
+                ReportError("FailedToConstructBranchProviderFromPlugin", sourceControlPlugin.GetType(), e);
                 return null;
             }
 
@@ -54,7 +57,7 @@ namespace BuildNotifications.Core.Pipeline
             var connectionData = FindConnection(connectionName);
             if (connectionData == null)
             {
-                LogTo.Error($"No connection with name '{connectionName}' found");
+                ReportError("ConnectionNotFound", connectionName);
                 return null;
             }
 
@@ -62,7 +65,7 @@ namespace BuildNotifications.Core.Pipeline
             var buildPlugin = _pluginRepository.FindBuildPlugin(pluginType);
             if (buildPlugin == null)
             {
-                LogTo.Error($"No build plugin '{pluginType}' found");
+                ReportError("BuildPluginNotFound", pluginType);
                 return null;
             }
 
@@ -74,7 +77,7 @@ namespace BuildNotifications.Core.Pipeline
             }
             catch (Exception e)
             {
-                LogTo.ErrorException($"Failed to construct build provider from plugin {buildPlugin.GetType()}", e);
+                ReportError("FailedToConstructBuildProviderFromPlugin", buildPlugin.GetType(), e);
                 return null;
             }
 
@@ -97,7 +100,7 @@ namespace BuildNotifications.Core.Pipeline
                 var buildProvider = BuildProvider(connectionName);
                 if (buildProvider == null)
                 {
-                    LogTo.Error($"Failed to construct build provider for connection {connectionName}");
+                    ReportError("FailedToConstructBuildProviderForConnection", connectionName);
                     return null;
                 }
 
@@ -110,7 +113,7 @@ namespace BuildNotifications.Core.Pipeline
                 var branchProvider = BranchProvider(connectionName);
                 if (branchProvider == null)
                 {
-                    LogTo.Error($"Failed to construct branch provider for connection {connectionName}");
+                    ReportError("FailedToConstructBranchProviderForConnection", connectionName);
                     return null;
                 }
 
@@ -119,6 +122,18 @@ namespace BuildNotifications.Core.Pipeline
 
             return new Project(buildProviders, branchProviders, config);
         }
+
+        private void ReportError(string messageTextId, params object[] parameter)
+        {
+            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
+            var fullMessage = string.Format(localizedMessage, parameter);
+            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
+                LogTo.ErrorException(fullMessage, exception);
+            else
+                LogTo.Error(fullMessage);
+        }
+
+        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
 
         private readonly IPluginRepository _pluginRepository;
         private readonly IConfiguration _configuration;

@@ -9,6 +9,8 @@ namespace DummyBuildServer.ViewModels
             Build = build;
         }
 
+        public bool IsSelected { get; set; }
+
         public Build Build { get; }
 
         public int Progress { get; set; }

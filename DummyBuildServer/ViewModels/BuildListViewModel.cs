@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Plugin.DummyBuildServer;
@@ -43,12 +44,13 @@ namespace DummyBuildServer.ViewModels
         public ICommand EnqueueBuildCommand { get; }
         public ICommand RemoveBuildCommand { get; }
         public BranchViewModel SelectedBranch { get; set; }
-        public BuildViewModel? SelectedBuild { get; set; }
         public BuildStatus SelectedBuildStatus { get; set; }
         public BuildDefinitionViewModel SelectedDefinition { get; set; }
         public UserViewModel SelectedUser { get; set; }
         public ICommand UpdateBuildCommand { get; }
         public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
+
+        private IEnumerable<BuildViewModel> SelectedBuilds() => Builds.Where(x => x.IsSelected).ToList();
 
         private void EnqueueBuild(object arg)
         {
@@ -71,7 +73,17 @@ namespace DummyBuildServer.ViewModels
             };
 
             _mainViewModel.AddBuild(build);
-            Builds.Add(new BuildViewModel(build));
+            var buildViewModel = new BuildViewModel(build);
+            buildViewModel.PropertyChanged += BuildViewModel_OnPropertyChanged;
+            Builds.Add(buildViewModel);
+        }
+
+        private void BuildViewModel_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(BuildViewModel.IsSelected))
+                return;
+
+            OnSelectedBuildChanged();
         }
 
         private bool IsBuildDataSelected(object arg)
@@ -81,27 +93,37 @@ namespace DummyBuildServer.ViewModels
 
         private bool IsBuildSelected(object arg)
         {
-            return SelectedBuild != null;
+            return SelectedBuilds().Any();
         }
 
         [UsedImplicitly]
         private void OnSelectedBuildChanged()
         {
-            BuildProgress = SelectedBuild!.Progress;
-            SelectedBuildStatus = SelectedBuild.Build.Status;
+            var firstBuild = SelectedBuilds().FirstOrDefault();
+
+            if (firstBuild == null)
+                return;
+
+            BuildProgress = firstBuild!.Progress;
+            SelectedBuildStatus = firstBuild.Build.Status;
         }
 
         private void RemoveBuild(object obj)
         {
-            _mainViewModel.RemoveBuild(SelectedBuild!.Build);
-            Builds.Remove(SelectedBuild);
-
-            SelectedBuild = null;
+            foreach (var selectedBuild in SelectedBuilds())
+            {
+                _mainViewModel.RemoveBuild(selectedBuild!.Build);
+                selectedBuild.PropertyChanged -= BuildViewModel_OnPropertyChanged;
+                Builds.Remove(selectedBuild);
+            }
         }
 
         private void UpdateBuild(object arg)
         {
-            UpdateSpecificBuild(SelectedBuild!.Build, SelectedBuildStatus);
+            foreach (var selectedBuild in SelectedBuilds())
+            {
+                UpdateSpecificBuild(selectedBuild.Build, SelectedBuildStatus);
+            }
         }
 
         private void UpdateSpecificBuild(Build build, BuildStatus toStatus)

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
@@ -33,6 +31,8 @@ namespace BuildNotifications.ViewModel
         public MainViewModel()
         {
             _coreSetup = new CoreSetup(ConfigFilePath);
+            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
+            GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             Initialize();
         }
 
@@ -107,8 +107,6 @@ namespace BuildNotifications.ViewModel
         {
             SetupViewModel();
             LoadProjects();
-            _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
-            _coreSetup.ErrorOccurred += CoreSetup_ErrorOccurred;
             ShowOverlay();
             if (Overlay == null)
                 StartUpdating();
@@ -247,11 +245,13 @@ namespace BuildNotifications.ViewModel
             NotificationCenter.ShowNotifications(e.Notifications);
         }
 
-        private void CoreSetup_ErrorOccurred(object sender, PipelineErrorEventArgs e)
+        private void GlobalErrorLog_ErrorOccurred(object sender, ErrorNotificationEventArgs e)
         {
             StopUpdating();
             StatusIndicator.Error(e.ErrorNotifications);
-            NotificationCenter.ShowNotifications(e.ErrorNotifications);
+
+            // errors may occur on any thread. 
+            Application.Current.Dispatcher?.Invoke(() => { NotificationCenter.ShowNotifications(e.ErrorNotifications); });
         }
 
         private void ToggleGroupDefinitionSelection(object obj)
@@ -278,10 +278,10 @@ namespace BuildNotifications.ViewModel
 
         private void ResetError()
         {
-            if (!StatusIndicator.ErrorVisible)
-                return;
+            if (StatusIndicator.ErrorVisible)
+                StatusIndicator.ClearStatus();
 
-            StatusIndicator.ClearStatus();
+            NotificationCenter.ClearNotificationsOfType(NotificationType.Error);
         }
 
         private async Task UpdateTimer()
@@ -327,7 +327,7 @@ namespace BuildNotifications.ViewModel
 
         private void UpdateNow()
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 

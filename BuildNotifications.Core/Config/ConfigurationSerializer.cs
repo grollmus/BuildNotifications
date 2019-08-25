@@ -27,13 +27,13 @@ namespace BuildNotifications.Core.Config
                 }
                 catch (Exception e)
                 {
-                    LogTo.WarnException("Failed to load existing config.", e);
+                    LogTo.InfoException("Failed to load existing config.", e);
                     configuration = new Configuration();
                 }
             }
             else
             {
-                LogTo.Warn($"File {fileName} does not exist. Using default configuration");
+                LogTo.Info($"File {fileName} does not exist. Using default configuration");
                 configuration = new Configuration();
             }
 
@@ -51,7 +51,7 @@ namespace BuildNotifications.Core.Config
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
-                LogTo.Warn($"Creating directory for config \"{directory}\" as it does not exist.");
+                LogTo.Info($"Creating directory for config \"{directory}\" as it does not exist.");
             }
 
             File.WriteAllText(fileName, json);

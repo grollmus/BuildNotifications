@@ -5,7 +5,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    internal class ErrorNotification : INotification
+    public class ErrorNotification : INotification
     {
         private readonly object[] _parameter;
 

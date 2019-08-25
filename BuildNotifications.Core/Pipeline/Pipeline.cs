@@ -8,6 +8,7 @@ using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -74,8 +75,7 @@ namespace BuildNotifications.Core.Pipeline
                 }
                 catch (Exception ex)
                 {
-                    LogTo.WarnException("Exception when trying to fetch branches from project", ex);
-                    _pipelineNotifier.StoreError(ex, "ErrorFetchingBranches", project.Name);
+                    ReportError("ErrorFetchingBranches", project.Name, ex);
                 }
             }
         }
@@ -107,8 +107,7 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     var projectName = project.Name;
-                    LogTo.WarnException($"Exception when trying to fetch builds for project {projectName}", ex);
-                    _pipelineNotifier.StoreError(ex, "ErrorFetchingBuilds", projectName);
+                    ReportError("ErrorFetchingBuilds", projectName, ex);
                 }
             }
 
@@ -137,8 +136,7 @@ namespace BuildNotifications.Core.Pipeline
                 }
                 catch (Exception ex)
                 {
-                    LogTo.WarnException("Exception when trying to fetch BuildDefinitions from project", ex);
-                    _pipelineNotifier.StoreError(ex, "ErrorFetchingDefinitions", project.Name);
+                    ReportError("ErrorFetchingDefinitions", project.Name, ex);
                 }
             }
         }
@@ -156,6 +154,16 @@ namespace BuildNotifications.Core.Pipeline
             _buildCache.Clear();
             _branchCache.Clear();
             _lastUpdate = null;
+        }
+
+        private void ReportError(string messageTextId, params object[] parameter)
+        {
+            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
+            var fullMessage = string.Format(localizedMessage, parameter);
+            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
+                LogTo.ErrorException(fullMessage, exception);
+            else
+                LogTo.Error(fullMessage);
         }
 
         /// <inheritdoc />
@@ -193,31 +201,8 @@ namespace BuildNotifications.Core.Pipeline
             });
 
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
-            // notify the previously stored errors. This is to ensure that the notifications happens within the same thread
-            _pipelineNotifier.NotifyErrors();
 
             _oldTree = treeResult.BuildTree;
-        }
-
-        private void HandleBuildUpdate(IBuildNode existingNode, IBuildNode updatedNode, BuildTreeBuildsDelta buildTreeBuildsDelta)
-        {
-            // status did not change, nothing to note
-            if (existingNode.Status == updatedNode.Status)
-                return;
-
-            switch (updatedNode.Status)
-            {
-                case BuildStatus.Cancelled:
-                    buildTreeBuildsDelta.CancelledBuilds.Add(existingNode);
-                    break;
-                case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
-                    buildTreeBuildsDelta.SucceededBuilds.Add(existingNode);
-                    break;
-                case BuildStatus.Failed:
-                    buildTreeBuildsDelta.FailedBuilds.Add(existingNode);
-                    break;
-            }
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;

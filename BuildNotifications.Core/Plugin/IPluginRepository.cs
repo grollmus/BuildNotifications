@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BuildNotifications.Core.Pipeline;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -54,5 +55,10 @@ namespace BuildNotifications.Core.Plugin
         /// <param name="typeName">Type name to search for.</param>
         /// <returns>The type of the configuration the plugin wants.</returns>
         Type? FindConfigurationType(string typeName);
+
+        /// <summary>
+        /// Gets called whenever an error occurs when constructing plugin.
+        /// </summary>
+        event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
     }
 }
