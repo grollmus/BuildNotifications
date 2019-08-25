@@ -183,7 +183,7 @@ namespace BuildNotifications.ViewModel
                 buildNode.IsHighlighted = false;
             }
 
-            var buildsVm = BuildTree.AllBuilds().Where(b => e.BuildNodes.Any(bn => ReferenceEquals(b.NodeSource, bn)));
+            var buildsVm = BuildTree.AllBuilds().Where(b => e.BuildNodes.Any(bn => b.Node.Build.Id == bn.Build.Id && b.Node.Build.ProjectName == bn.Build.ProjectName));
             foreach (var buildNode in buildsVm)
             {
                 buildNode.IsHighlighted = true;

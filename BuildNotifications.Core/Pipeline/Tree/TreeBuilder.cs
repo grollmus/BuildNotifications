@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
@@ -52,67 +51,24 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        private void Merge(IBuildTreeNode tree, IBuildTreeNode nodeToInsert, List<IBuildTreeNode> taggedNodes, BuildTreeBuildsDelta buildTreeBuildsDelta)
+        private void Merge(IBuildTreeNode tree, IBuildTreeNode nodeToInsert, List<IBuildTreeNode> taggedNodes)
         {
             var insertTarget = tree;
 
             var subTree = insertTarget.Children.FirstOrDefault(node => node.Equals(nodeToInsert));
             if (subTree != null)
             {
-                if (nodeToInsert is IBuildNode buildNode && subTree is IBuildNode existingNode)
-                    HandleBuildUpdate(existingNode, buildNode, buildTreeBuildsDelta);
-
                 subTree.UpdateWithValuesFrom(nodeToInsert);
 
                 if (nodeToInsert.Children.Any())
-                    Merge(subTree, nodeToInsert.Children.First(), taggedNodes, buildTreeBuildsDelta);
+                    Merge(subTree, nodeToInsert.Children.First(), taggedNodes);
 
                 taggedNodes.RemoveAll(x => ReferenceEquals(x, subTree));
             }
             else
             {
                 tree.AddChild(nodeToInsert);
-                if (nodeToInsert is IBuildNode buildNode)
-                    HandleBuildUpdate(buildNode, buildTreeBuildsDelta);
                 taggedNodes.RemoveAll(x => ReferenceEquals(x, tree));
-            }
-        }
-
-        private void HandleBuildUpdate(IBuildNode existingNode, IBuildNode updatedNode, BuildTreeBuildsDelta buildTreeBuildsDelta)
-        {
-            // status did not change, nothing to note
-            if (existingNode.Status == updatedNode.Status)
-                return;
-
-            switch (updatedNode.Status)
-            {
-                case BuildStatus.Cancelled:
-                    buildTreeBuildsDelta.CancelledBuilds.Add(existingNode);
-                    break;
-                case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
-                    buildTreeBuildsDelta.SucceededBuilds.Add(existingNode);
-                    break;
-                case BuildStatus.Failed:
-                    buildTreeBuildsDelta.FailedBuilds.Add(existingNode);
-                    break;
-            }
-        }
-
-        private void HandleBuildUpdate(IBuildNode newNode, BuildTreeBuildsDelta buildTreeBuildsDelta)
-        {
-            switch (newNode.Status)
-            {
-                case BuildStatus.Cancelled:
-                    buildTreeBuildsDelta.CancelledBuilds.Add(newNode);
-                    break;
-                case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
-                    buildTreeBuildsDelta.SucceededBuilds.Add(newNode);
-                    break;
-                case BuildStatus.Failed:
-                    buildTreeBuildsDelta.FailedBuilds.Add(newNode);
-                    break;
             }
         }
 
@@ -136,7 +92,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        public (IBuildTree Tree, IBuildTreeBuildsDelta Delta) Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null)
+        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree oldTree = null)
         {
             var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
@@ -147,20 +103,18 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var taggedNodes = new List<IBuildTreeNode>();
             TagAllNodesForDeletion(tree, taggedNodes);
 
-            var buildTreeChanges = new BuildTreeBuildsDelta();
-
             foreach (var build in builds)
             {
                 var path = BuildPath(build, branchList);
                 if (path == null)
                     continue;
 
-                Merge(tree, path, taggedNodes, buildTreeChanges);
+                Merge(tree, path, taggedNodes);
             }
 
             RemoveTaggedNodes(tree, taggedNodes);
 
-            return (tree, buildTreeChanges);
+            return tree;
         }
 
         private readonly IConfiguration _config;

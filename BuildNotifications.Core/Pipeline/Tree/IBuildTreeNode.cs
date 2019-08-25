@@ -15,5 +15,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         void AddChild(IBuildTreeNode node);
         void RemoveChild(IBuildTreeNode node);
         void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert);
+
+        IEnumerable<IBuildTreeNode> AllChildren();
     }
 }

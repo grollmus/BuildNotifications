@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
@@ -36,11 +37,8 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private void CutTree((IBuildTreeNode Tree, IBuildTreeBuildsDelta Delta) treeBuilderResult)
+        private void CutTree(IBuildTreeNode tree)
         {
-            var tree = treeBuilderResult.Tree;
-            var delta = treeBuilderResult.Delta;
-
             if (tree == null)
                 return;
 
@@ -52,12 +50,11 @@ namespace BuildNotifications.Core.Pipeline
             foreach (var node in buildChildrenToRemove)
             {
                 tree.RemoveChild(node);
-                delta.RemoveNode(node);
             }
 
             foreach (var child in tree.Children)
             {
-                CutTree((Tree: child, Delta: delta));
+                CutTree(child);
             }
         }
 
@@ -166,6 +163,7 @@ namespace BuildNotifications.Core.Pipeline
         {
             var treeResult = await Task.Run(async () =>
             {
+                var previousBuildStatus = _buildCache.ContentCopy().ToDictionary(x => (BuildId: x.Id, Project: x.ProjectName), x => x.Status);
                 var branchTask = FetchBranches();
                 var definitionsTask = FetchDefinitions();
                 var buildsTask = FetchBuilds();
@@ -174,16 +172,24 @@ namespace BuildNotifications.Core.Pipeline
 
                 CleanupBuilds();
 
-                var builds = _buildCache.ContentCopy();
+                var builds = _buildCache.ContentCopy().ToList();
                 var branches = _branchCache.ContentCopy();
                 var definitions = _definitionCache.ContentCopy();
-                var result = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-                CutTree(result);
-                if (_oldTree == null)
-                    result.Delta.Clear();
 
-                var notifications = _notificationFactory.ProduceNotifications(result.Delta).ToList();
-                return (BuildTree: result.Tree, Notifications: notifications);
+                var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
+                CutTree(tree);
+
+                var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
+                IBuildTreeBuildsDelta delta;
+
+                // don't show any notifications for the initial fetch
+                if (_oldTree == null)
+                    delta = new BuildTreeBuildsDelta();
+                else
+                    delta = new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus);
+
+                var notifications = _notificationFactory.ProduceNotifications(delta).ToList();
+                return (BuildTree: tree, Notifications: notifications);
             });
 
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
@@ -191,6 +197,27 @@ namespace BuildNotifications.Core.Pipeline
             _pipelineNotifier.NotifyErrors();
 
             _oldTree = treeResult.BuildTree;
+        }
+
+        private void HandleBuildUpdate(IBuildNode existingNode, IBuildNode updatedNode, BuildTreeBuildsDelta buildTreeBuildsDelta)
+        {
+            // status did not change, nothing to note
+            if (existingNode.Status == updatedNode.Status)
+                return;
+
+            switch (updatedNode.Status)
+            {
+                case BuildStatus.Cancelled:
+                    buildTreeBuildsDelta.CancelledBuilds.Add(existingNode);
+                    break;
+                case BuildStatus.Succeeded:
+                case BuildStatus.PartiallySucceeded:
+                    buildTreeBuildsDelta.SucceededBuilds.Add(existingNode);
+                    break;
+                case BuildStatus.Failed:
+                    buildTreeBuildsDelta.FailedBuilds.Add(existingNode);
+                    break;
+            }
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;

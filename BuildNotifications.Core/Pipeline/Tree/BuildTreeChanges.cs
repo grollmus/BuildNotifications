@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
@@ -28,6 +29,45 @@ namespace BuildNotifications.Core.Pipeline.Tree
             FailedBuilds.Clear();
             SucceededBuilds.Clear();
             CancelledBuilds.Clear();
+        }
+
+        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, Dictionary<(string BuildId, string Project), BuildStatus> previousStatesOfBuildIds)
+        {
+            // without information of the previous state, a delta is not possible to calculate
+            if (previousStatesOfBuildIds == null)
+                return;
+
+            foreach (var newBuild in currentBuildNodes)
+            {
+                if (previousStatesOfBuildIds.TryGetValue((BuildId: newBuild.Build.Id, Project: newBuild.Build.ProjectName), out var previousStatus))
+                {
+                    if (previousStatus != newBuild.Status)
+                        AddToDelta(newBuild);
+                }
+                else
+                    AddToDelta(newBuild);
+            }
+
+            void AddToDelta(IBuildNode buildNode)
+            {
+                switch (buildNode.Status)
+                {
+                    case BuildStatus.Cancelled:
+                        CancelledBuilds.Add(buildNode);
+                        break;
+                    case BuildStatus.Failed:
+                        FailedBuilds.Add(buildNode);
+                        break;
+                    case BuildStatus.Succeeded:
+                    case BuildStatus.PartiallySucceeded:
+                        SucceededBuilds.Add(buildNode);
+                        break;
+                }
+            }
+        }
+
+        public BuildTreeBuildsDelta()
+        {
         }
     }
 }

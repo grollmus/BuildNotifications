@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
@@ -24,6 +25,8 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public virtual void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
         {
         }
+
+        public IEnumerable<IBuildTreeNode> AllChildren() => Children.Concat(Children.SelectMany(c => c.AllChildren()));
 
         public IEnumerable<IBuildTreeNode> Children => _childList;
 

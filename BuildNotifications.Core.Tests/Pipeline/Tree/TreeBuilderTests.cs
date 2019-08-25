@@ -68,7 +68,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var actual = sut.Build(builds, branches, definitions);
 
             // Assert
-            Assert.Empty(actual.Tree.Children);
+            Assert.Empty(actual.Children);
         }
 
         [Theory]
@@ -87,7 +87,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var actual = sut.Build(builds, branches, definitions);
 
             // Assert
-            Assert.Empty(actual.Tree.Children);
+            Assert.Empty(actual.Children);
         }
 
         [Theory]
@@ -117,7 +117,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
 
             // Assert
             var expectedCount = builds.Count;
-            Assert.Equal(expectedCount, actual.Tree.Children.Count());
+            Assert.Equal(expectedCount, actual.Children.Count());
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var actual = sut.Build(builds, branches, definitions);
 
             // Assert
-            var parser = new BuildTreeParser(actual.Tree);
+            var parser = new BuildTreeParser(actual);
 
             Assert.All(parser.ChildrenAtLevel(0), x => Assert.IsAssignableFrom<IBuildTree>(x));
             Assert.All(parser.ChildrenAtLevel(1), x => Assert.IsAssignableFrom<ISourceGroupNode>(x));
@@ -190,11 +190,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild2.Status.Returns(expectedResult);
 
             var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-
-            var result = sut.Build(updatedBuilds, branches, definitions, firstResult.Tree);
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
+            
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            var delta = result.Delta;
             switch (expectedResult)
             {
                 case BuildStatus.Cancelled:
@@ -247,11 +249,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild2.Status.Returns(expectedResult);
 
             var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-
-            var result = sut.Build(updatedBuilds, branches, definitions, firstResult.Tree);
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
+            
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            var delta = result.Delta;
             switch (expectedResult)
             {
                 case BuildStatus.Cancelled:
@@ -309,11 +313,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild3.Status.Returns(BuildStatus.Cancelled);
 
             var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
-            var result = sut.Build(updatedBuilds, branches, definitions, firstResult.Tree);
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            var delta = result.Delta;
             Assert.Equal(delta.Failed.Count(), 1);
             Assert.Equal(delta.Cancelled.Count(), 1);
             Assert.Equal(delta.Succeeded.Count(), 1);
@@ -359,11 +365,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild3.Status.Returns(BuildStatus.Cancelled);
 
             var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
-
-            var result = sut.Build(updatedBuilds, branches, definitions, firstResult.Tree);
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
+            
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            var delta = result.Delta;
             Assert.Equal(delta.Failed.Count(), 0);
             Assert.Equal(delta.Cancelled.Count(), 0);
             Assert.Equal(delta.Succeeded.Count(), 0);

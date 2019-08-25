@@ -141,6 +141,8 @@ namespace BuildNotifications.ViewModel.Tree
                         child.PropertyChanged -= OnChildPropertyChanged;
                     }
 
+                    if (!Children.Any())
+                        ChildrenAreBuilds = false;
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     foreach (var child in Children)
@@ -148,6 +150,7 @@ namespace BuildNotifications.ViewModel.Tree
                         child.PropertyChanged -= OnChildPropertyChanged;
                     }
 
+                    ChildrenAreBuilds = false;
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
@@ -203,6 +206,12 @@ namespace BuildNotifications.ViewModel.Tree
         private void SetBuildLargeStatus()
         {
             var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
+
+            if (!buildChildren.Any())
+            {
+                ChildrenAreBuilds = false;
+                return;
+            }
 
             foreach (var child in buildChildren)
             {
