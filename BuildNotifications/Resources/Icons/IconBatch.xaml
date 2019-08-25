@@ -160,6 +160,24 @@
                             Value="Dummy">
                             <Setter Property="Image.Source" Value="{StaticResource DummyDrawingImage}" />
                         </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Notification">
+                            <Setter Property="Image.Source" Value="{StaticResource NotificationsDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="SingleBuild">
+                            <Setter Property="Image.Source" Value="{StaticResource SingleBuildDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Pause">
+                            <Setter Property="Image.Source" Value="{StaticResource PauseDrawingImage}" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Image.Style>

@@ -289,4 +289,25 @@
   <data name="BuildNotificationContentPluralTextId" xml:space="preserve">
     <value></value>
   </data>
+  <data name="NDaysAgoTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OneDayAgoTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NHoursAgoTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NMinutesAgoTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NSecondsAgoTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="JustNowTextId" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="AnErrorOccured" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

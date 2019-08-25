@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
+using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
@@ -55,6 +59,8 @@ namespace BuildNotifications.ViewModel
 
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
+        public NotificationCenterViewModel NotificationCenter { get; set; }
+
         public Visibility TitleBarToolsVisibility => Overlay == null ? Visibility.Visible : Visibility.Collapsed;
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
@@ -83,8 +89,19 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public bool ShowNotificationCenter
+        {
+            get => _showNotificationCenter;
+            set
+            {
+                _showNotificationCenter = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
+        public ICommand ToggleShowNotificationCenterCommand { get; set; }
 
         private void Initialize()
         {
@@ -120,6 +137,10 @@ namespace BuildNotifications.ViewModel
         {
             SearchViewModel = new SearchViewModel();
             StatusIndicator = new StatusIndicatorViewModel();
+            StatusIndicator.ResumeRequested += StatusIndicator_OnResumeRequested;
+            StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
+            NotificationCenter = new NotificationCenterViewModel();
+            NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
@@ -140,6 +161,34 @@ namespace BuildNotifications.ViewModel
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
+            ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
+        }
+
+        private void StatusIndicator_OnOpenErrorMessageRequested(object sender, OpenErrorRequestEventArgs e)
+        {
+            ToggleShowNotificationCenterCommand.Execute(null);
+        }
+
+        private void StatusIndicator_OnResumeRequested(object sender, EventArgs e)
+        {
+            StartUpdating();
+        }
+
+        private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
+
+        private void NotificationCenterOnHighlightRequested(object sender, HighlightRequestedEventArgs e)
+        {
+            foreach (var buildNode in _highlightedBuilds)
+            {
+                buildNode.IsHighlighted = false;
+            }
+
+            var buildsVm = BuildTree.AllBuilds().Where(b => e.BuildNodes.Any(bn => ReferenceEquals(b.NodeSource, bn)));
+            foreach (var buildNode in buildsVm)
+            {
+                buildNode.IsHighlighted = true;
+                _highlightedBuilds.Add(buildNode);
+            }
         }
 
         private void SettingsViewModelOnEditConnectionsRequested(object sender, EventArgs e)
@@ -152,6 +201,8 @@ namespace BuildNotifications.ViewModel
         {
             if (Overlay != null)
                 return;
+
+            StopUpdating();
             var vm = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
@@ -192,12 +243,15 @@ namespace BuildNotifications.ViewModel
                 BuildTree = buildTreeViewModel;
 
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+
+            NotificationCenter.ShowNotifications(e.Notifications);
         }
 
         private void CoreSetup_ErrorOccurred(object sender, PipelineErrorEventArgs e)
         {
             StopUpdating();
-            StatusIndicator.UpdateStatus = UpdateStatus.Error;
+            StatusIndicator.Error(e.ErrorNotifications);
+            NotificationCenter.ShowNotifications(e.ErrorNotifications);
         }
 
         private void ToggleGroupDefinitionSelection(object obj)
@@ -208,14 +262,26 @@ namespace BuildNotifications.ViewModel
         private void ToggleShowSettings(object obj)
         {
             ShowSettings = !ShowSettings;
+            if (ShowSettings && ShowNotificationCenter)
+                ShowNotificationCenter = false;
+        }
+
+        private void ToggleShowNotificationCenter(object obj)
+        {
+            ShowNotificationCenter = !ShowNotificationCenter;
+            if (ShowSettings && ShowNotificationCenter)
+                ShowSettings = false;
+
+            if (ShowNotificationCenter)
+                StatusIndicator.ClearStatus();
         }
 
         private void ResetError()
         {
-            if (StatusIndicator.UpdateStatus != UpdateStatus.Error)
+            if (!StatusIndicator.ErrorVisible)
                 return;
 
-            StatusIndicator.UpdateStatus = UpdateStatus.None;
+            StatusIndicator.ClearStatus();
         }
 
         private async Task UpdateTimer()
@@ -224,12 +290,13 @@ namespace BuildNotifications.ViewModel
             while (_keepUpdating)
             {
                 if (StatusIndicator.UpdateStatus == UpdateStatus.None)
-                    StatusIndicator.UpdateStatus = UpdateStatus.Busy;
+                    StatusIndicator.Busy();
 
                 await _coreSetup.Update();
 
                 if (StatusIndicator.UpdateStatus == UpdateStatus.Busy)
-                    StatusIndicator.UpdateStatus = UpdateStatus.None;
+                    StatusIndicator.ClearStatus();
+
                 try
                 {
                     await Task.Delay(TimeSpan.FromSeconds(5), _cancellationTokenSource.Token);
@@ -247,12 +314,15 @@ namespace BuildNotifications.ViewModel
                 return;
             _keepUpdating = true;
             UpdateTimer().FireAndForget();
+
+            StatusIndicator.Resume();
         }
 
         private void StopUpdating()
         {
             _keepUpdating = false;
             UpdateNow(); // cancels the wait timer
+            StatusIndicator.Pause();
         }
 
         private void UpdateNow()
@@ -268,5 +338,6 @@ namespace BuildNotifications.ViewModel
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;
         private BaseViewModel _overlay;
+        private bool _showNotificationCenter;
     }
 }

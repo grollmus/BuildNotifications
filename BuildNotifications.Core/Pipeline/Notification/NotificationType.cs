@@ -6,6 +6,7 @@
         Definition,
         DefinitionAndBranch,
         Build,
-        None
+        None,
+        Error
     }
 }

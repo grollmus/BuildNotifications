@@ -36,8 +36,11 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private void CutTree(IBuildTreeNode tree)
+        private void CutTree((IBuildTreeNode Tree, IBuildTreeBuildsDelta Delta) treeBuilderResult)
         {
+            var tree = treeBuilderResult.Tree;
+            var delta = treeBuilderResult.Delta;
+
             if (tree == null)
                 return;
 
@@ -49,11 +52,12 @@ namespace BuildNotifications.Core.Pipeline
             foreach (var node in buildChildrenToRemove)
             {
                 tree.RemoveChild(node);
+                delta.RemoveNode(node);
             }
 
             foreach (var child in tree.Children)
             {
-                CutTree(child);
+                CutTree((Tree: child, Delta: delta));
             }
         }
 
@@ -74,7 +78,7 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     LogTo.WarnException("Exception when trying to fetch branches from project", ex);
-                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingBranches", project.Name);
+                    _pipelineNotifier.StoreError(ex, "ErrorFetchingBranches", project.Name);
                 }
             }
         }
@@ -107,7 +111,7 @@ namespace BuildNotifications.Core.Pipeline
                 {
                     var projectName = project.Name;
                     LogTo.WarnException($"Exception when trying to fetch builds for project {projectName}", ex);
-                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingBuilds", projectName);
+                    _pipelineNotifier.StoreError(ex, "ErrorFetchingBuilds", projectName);
                 }
             }
 
@@ -137,7 +141,7 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     LogTo.WarnException("Exception when trying to fetch BuildDefinitions from project", ex);
-                    _pipelineNotifier.NotifyError(ex, "ErrorFetchingDefinitions", project.Name);
+                    _pipelineNotifier.StoreError(ex, "ErrorFetchingDefinitions", project.Name);
                 }
             }
         }
@@ -174,12 +178,17 @@ namespace BuildNotifications.Core.Pipeline
                 var branches = _branchCache.ContentCopy();
                 var definitions = _definitionCache.ContentCopy();
                 var result = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-                CutTree(result.Tree);
-                var notifications = _notificationFactory.ProduceNotifications(result.Delta);
-                return (BuildTree: result.Tree, Notifications:notifications);
+                CutTree(result);
+                if (_oldTree == null)
+                    result.Delta.Clear();
+
+                var notifications = _notificationFactory.ProduceNotifications(result.Delta).ToList();
+                return (BuildTree: result.Tree, Notifications: notifications);
             });
 
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
+            // notify the previously stored errors. This is to ensure that the notifications happens within the same thread
+            _pipelineNotifier.NotifyErrors();
 
             _oldTree = treeResult.BuildTree;
         }

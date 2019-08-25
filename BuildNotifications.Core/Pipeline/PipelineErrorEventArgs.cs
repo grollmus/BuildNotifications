@@ -1,20 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using BuildNotifications.Core.Pipeline.Notification;
 
 namespace BuildNotifications.Core.Pipeline
 {
     public class PipelineErrorEventArgs : EventArgs
     {
-        public Exception Exception { get; }
+        public IEnumerable<INotification> ErrorNotifications { get; }
 
-        public string MessageTextId { get; }
-
-        public string[] MessageParameter { get; }
-
-        public PipelineErrorEventArgs(Exception exception, string messageTextId, string[] messageParameter)
+        public PipelineErrorEventArgs(params INotification[] errorNotifications)
         {
-            Exception = exception;
-            MessageTextId = messageTextId;
-            MessageParameter = messageParameter;
+            ErrorNotifications = errorNotifications;
         }
     }
 }

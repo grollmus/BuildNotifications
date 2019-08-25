@@ -5,7 +5,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    public abstract class BaseNotification : INotification
+    public abstract class BaseBuildNotification : INotification
     {
         public const string FailedSingular = nameof(FailedSingular);
         public const string FailedPlural = nameof(FailedPlural);
@@ -22,13 +22,13 @@ namespace BuildNotifications.Core.Pipeline.Notification
         // {0} builds. E.g. 25 builds
         private const string BuildNotificationContentPluralTextId = nameof(BuildNotificationContentPluralTextId);
 
-        public string DisplayTitle => string.Format(StringLocalizer.Instance.GetText(TitleTextId), Parameters.ToArray());
-        
-        public string TitleTextId => GetMessageTextId();
+        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), Parameters.ToArray());
 
-        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), new[] {BuildNodes.Count});
+        public string ContentTextId => GetMessageTextId();
 
-        public string ContentTextId => BuildNodes.Count == 1 ? BuildNotificationContentSingularTextId : BuildNotificationContentPluralTextId;
+        public string DisplayTitle => string.Format(StringLocalizer.Instance.GetText(TitleTextId), new object[] {StatusTextId(BuildNodes.Count == 1), BuildNodes.Count.ToString()});
+
+        public string TitleTextId => BuildNodes.Count == 1 ? BuildNotificationContentSingularTextId : BuildNotificationContentPluralTextId;
 
         public NotificationType Type { get; }
 
@@ -38,7 +38,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         protected List<string> Parameters { get; } = new List<string>();
 
-        protected BaseNotification(NotificationType type, IList<IBuildNode> buildNodes, BuildStatus status)
+        protected BaseBuildNotification(NotificationType type, IList<IBuildNode> buildNodes, BuildStatus status)
         {
             Type = type;
             BuildNodes = buildNodes;
@@ -50,10 +50,10 @@ namespace BuildNotifications.Core.Pipeline.Notification
         protected string StatusTextId(bool isSingular) =>
             Status switch
             {
-                BuildStatus.Cancelled => (isSingular ? CancelledSingular : CancelledPlural),
-                BuildStatus.Succeeded => (isSingular ? SucceededSingular : SucceededPlural),
-                BuildStatus.PartiallySucceeded => (isSingular ? SucceededSingular : SucceededPlural),
-                _ => (isSingular ? FailedSingular : FailedPlural)
+                BuildStatus.Cancelled => StringLocalizer.Instance.GetText(isSingular ? CancelledSingular : CancelledPlural),
+                BuildStatus.Succeeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
+                BuildStatus.PartiallySucceeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
+                _ => StringLocalizer.Instance.GetText(isSingular ? FailedSingular : FailedPlural)
             };
     }
 }

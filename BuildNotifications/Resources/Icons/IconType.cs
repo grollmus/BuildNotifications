@@ -27,6 +27,9 @@
         Plus,
         Minus,
         Arrow,
-        Dummy
+        Dummy,
+        Notification,
+        SingleBuild,
+        Pause
     }
 }

@@ -318,6 +318,56 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             Assert.Equal(delta.Cancelled.Count(), 1);
             Assert.Equal(delta.Succeeded.Count(), 1);
         }
+
+        [Fact]
+        public void BuildTreeWithNoneBuildsChangingStatusShouldCreateEmptyDelta()
+        {
+            // Arrange
+            var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            var masterBranch = Substitute.For<IBranch>();
+            var ciDefinition = Substitute.For<IBuildDefinition>();
+            var stageBranch = Substitute.For<IBranch>();
+            var nightlyDefinition = Substitute.For<IBuildDefinition>();
+
+            var branches = new[] {masterBranch, stageBranch};
+            var definitions = new[] {ciDefinition, nightlyDefinition};
+
+            var builds = new List<IBuild>();
+
+            var build1 = CreateBuild(ciDefinition, stageBranch, "1");
+            build1.Status.Returns(BuildStatus.Failed);
+            builds.Add(build1);
+
+            var build2 = CreateBuild(ciDefinition, stageBranch, "2");
+            build2.Status.Returns(BuildStatus.Succeeded);
+            builds.Add(build2);
+
+            var build3 = CreateBuild(ciDefinition, stageBranch, "3");
+            build3.Status.Returns(BuildStatus.Cancelled);
+            builds.Add(build3);
+
+            // Act
+            var firstResult = sut.Build(builds, branches, definitions);
+            var newBuild1 = CreateBuild(ciDefinition, stageBranch, "1");
+            newBuild1.Status.Returns(BuildStatus.Failed);
+
+            var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
+            newBuild2.Status.Returns(BuildStatus.Succeeded);
+
+            var newBuild3 = CreateBuild(ciDefinition, stageBranch, "3");
+            newBuild3.Status.Returns(BuildStatus.Cancelled);
+
+            var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
+
+            var result = sut.Build(updatedBuilds, branches, definitions, firstResult.Tree);
+
+            // Assert
+            var delta = result.Delta;
+            Assert.Equal(delta.Failed.Count(), 0);
+            Assert.Equal(delta.Cancelled.Count(), 0);
+            Assert.Equal(delta.Succeeded.Count(), 0);
+        }
         
         private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)
         {

@@ -143,9 +143,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, DefinitionAndBranchNotification.BranchAndDefinitionFailedTextId);
-            Assert.True(message.DisplayTitle.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, DefinitionAndBranchNotification.BranchAndDefinitionFailedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -163,8 +163,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, DefinitionNotification.DefinitionChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, DefinitionNotification.DefinitionChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -186,9 +186,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, DefinitionNotification.TwoDefinitionsChangedTextId, StringComparer.Ordinal);
-            Assert.True(message.DisplayTitle.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, DefinitionNotification.TwoDefinitionsChangedTextId, StringComparer.Ordinal);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -210,10 +210,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, DefinitionNotification.ThreeDefinitionsChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_cloudDefinition.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, DefinitionNotification.ThreeDefinitionsChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_cloudDefinition.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -231,8 +231,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -254,8 +254,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -277,9 +277,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BranchNotification.TwoBranchesChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.TwoBranchesChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -301,10 +301,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BranchNotification.ThreeBranchesChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_stageBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_featureBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_featureBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -326,8 +326,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BranchNotification.ThreeBranchesChangedTextId);
-            Assert.False(message.DisplayTitle.Contains(LongFeatureNameBase, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
+            Assert.False(message.DisplayContent.Contains(LongFeatureNameBase, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -343,9 +343,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BuildNotification.BuildChangedTextId);
-            Assert.True(message.DisplayTitle.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayTitle.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -367,7 +367,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.TitleTextId, BuildNotification.BuildsChangedTextId);
+            Assert.Equal(message.ContentTextId, BuildNotification.BuildsChangedTextId);
         }
 
         [Fact]

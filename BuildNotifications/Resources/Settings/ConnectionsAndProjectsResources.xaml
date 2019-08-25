@@ -22,6 +22,7 @@
                 </icons:IconButton>
 
                 <ListBox ItemsSource="{Binding SubEditables}" SelectedIndex="0" Margin="0" Padding="0"
+                         HorizontalContentAlignment="Left" 
                          x:Name="ListBox">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -74,7 +75,7 @@
             <TextBlock DockPanel.Dock="Top"
                        Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                        FontSize="{StaticResource Block}" Foreground="{DynamicResource Background3}" />
-            <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0"
+            <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0" HorizontalContentAlignment="Left"
                      SelectedItem="{Binding Value}">
 
                 <ListBox.ItemTemplate>

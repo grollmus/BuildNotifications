@@ -38,7 +38,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
             foreach (var buildNodes in allGroups.Where(x => x.Count > 0))
             {
-                var status = buildNodes.First().Status;
+                var status = buildNodes.Max(x => x.Status);
 
                 // try to group by definition/branch etc.
                 var groupedByDefinitionAndBranch = GroupByDefinitionAndBranch(buildNodes).ToList();
@@ -51,7 +51,10 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
                 // for a single build, also display the build notification
                 if (smallestCount > 3 || allGroups.SelectMany(x => x).Count() == 1)
+                {
                     yield return BuildsNotifications(buildNodes, status);
+                    continue;
+                }
 
                 // only give this message if it's exactly the same definition and branch for every build
                 // otherwise there would be two many messages
@@ -59,10 +62,14 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 {
                     var tuple = groupedByDefinitionAndBranch.First().Key;
                     yield return DefinitionAndBranchNotification(buildNodes, status, tuple.definition, tuple.branch);
+                    continue;
                 }
 
                 if (groupedByDefinition.Count == smallestCount)
+                {
                     yield return DefinitionNotification(buildNodes, status, groupedByDefinition.Select(x => x.Key));
+                    continue;
+                }
 
                 yield return BranchNotification(buildNodes, status, groupedByBranch.Select(x => x.Key));
             }

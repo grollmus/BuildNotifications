@@ -4,7 +4,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    internal class DefinitionNotification : BaseNotification
+    internal class DefinitionNotification : BaseBuildNotification
     {
         private readonly IList<string> _definitionNames;
 

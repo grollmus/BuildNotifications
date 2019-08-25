@@ -12,6 +12,8 @@ namespace BuildNotifications.Resources.Settings
     {
         public bool DoHide { get; set; }
 
+        public bool DoRotate { get; set; }
+
         protected override void Invoke(object parameter)
         {
             var targetColorKey = DoHide ? "Background3" : "Foreground1";
@@ -21,7 +23,11 @@ namespace BuildNotifications.Resources.Settings
             var scaleTransform = new ScaleTransform(DoHide ? 1.2 : 1.0, DoHide ? 1.2 : 1.0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
             var rotateTransform = new RotateTransform(DoHide ? 90 : 0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
             var group = new TransformGroup();
-            group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
+            if (DoRotate)
+                @group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
+            else
+                @group.Children = new TransformCollection(new Transform[] {scaleTransform});
+
             AssociatedObject.RenderTransform = group;
 
             var existingBrush = AssociatedObject.Foreground as SolidColorBrush;

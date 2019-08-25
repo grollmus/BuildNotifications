@@ -16,12 +16,12 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <Grid>
+    <StackPanel Orientation="Horizontal">
         <views:BusyIndicator IsBusy="{Binding BusyVisible}" />
         <icons:IconButton Icon="Status" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
                           Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
                           Visibility="{Binding ErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          HorizontalAlignment="Right"
+                          HorizontalAlignment="Right" Margin="{StaticResource BlockQuarterXOnlyMargin}"
                           DockPanel.Dock="Right" Command="{Binding OpenErrorMessageCommand}">
 
             <i:Interaction.Triggers>
@@ -29,9 +29,22 @@
                     <icons:ButtonInvokedAnimation />
                 </i:EventTrigger>
                 <ei:DataTrigger Binding="{Binding ErrorVisible}" Value="True">
-                    <icons:ButtonInvokedAnimation Repeat="5"/>
+                    <icons:ButtonInvokedAnimation Repeat="2"/>
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
         </icons:IconButton>
-    </Grid>
+        
+        <icons:IconButton Icon="Pause" Foreground="{DynamicResource Foreground1}" Width="{StaticResource BlockDouble}"
+                          Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
+                          Visibility="{Binding PauseVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          HorizontalAlignment="Right" Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                          DockPanel.Dock="Right" Command="{Binding RequestResumeCommand}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <icons:ButtonInvokedAnimation />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </icons:IconButton>
+    </StackPanel>
 </UserControl>

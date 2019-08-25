@@ -12,5 +12,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
         IEnumerable<IBuildNode> Cancelled { get; }
 
         IEnumerable<IBuildNode> Succeeded { get; }
+
+        void RemoveNode(IBuildNode node);
+
+        void Clear();
     }
 }

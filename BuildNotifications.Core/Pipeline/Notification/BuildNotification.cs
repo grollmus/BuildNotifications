@@ -5,7 +5,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    public class BuildNotification : BaseNotification
+    public class BuildNotification : BaseBuildNotification
     {
         // Build {1} on {2} {0}. E.g. Build Ci on stage failed.
         public const string BuildChangedTextId = nameof(BuildChangedTextId);

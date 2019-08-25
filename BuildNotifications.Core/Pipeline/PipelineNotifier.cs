@@ -12,9 +12,24 @@ namespace BuildNotifications.Core.Pipeline
             Updated?.Invoke(this, new PipelineUpdateEventArgs(tree, delta));
         }
 
-        public void NotifyError(Exception exception, string messageTextId, params string[] messageParameter)
+        private readonly IList<PipelineErrorEventArgs> _storedErrors = new List<PipelineErrorEventArgs>();
+
+        /// <summary>
+        /// Stores an error eventArgs instance for later release.
+        /// </summary>
+        public void StoreError(Exception exception, string messageTextId, params string[] messageParameter)
         {
-            ErrorOccured?.Invoke(this, new PipelineErrorEventArgs(exception, messageTextId, messageParameter));
+            _storedErrors.Add(new PipelineErrorEventArgs(new ErrorNotification(messageTextId, messageParameter, exception)));
+        }
+
+        public void NotifyErrors()
+        {
+            foreach (var error in _storedErrors)
+            {
+                ErrorOccured?.Invoke(this, error);
+            }
+
+            _storedErrors.Clear();
         }
 
         public event EventHandler<PipelineUpdateEventArgs> Updated;

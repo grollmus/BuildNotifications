@@ -6,7 +6,7 @@ using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Tree
 {
-    internal class BuildNodeViewModel : BuildTreeNodeViewModel
+    public class BuildNodeViewModel : BuildTreeNodeViewModel
     {
         public BuildNodeViewModel(IBuildNode node) : base(node)
         {

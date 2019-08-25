@@ -21,6 +21,8 @@
                      xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
                      xmlns:viewModelOverlays="clr-namespace:BuildNotifications.ViewModel.Overlays"
                      xmlns:viewsOverlays="clr-namespace:BuildNotifications.Views.Overlays"
+                     xmlns:viewModelNotification="clr-namespace:BuildNotifications.ViewModel.Notification"
+                     xmlns:viewsNotification="clr-namespace:BuildNotifications.Views.Notification"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
@@ -56,6 +58,10 @@
             <DataTemplate DataType="{x:Type viewModelOverlays:StatusIndicatorViewModel}">
                 <viewsOverlays:StatusIndicator />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelNotification:NotificationCenterViewModel}">
+                <viewsNotification:NotificationCenterView />
+            </DataTemplate>
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>
@@ -70,17 +76,50 @@
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </ContentPresenter>
+
+
+            <ContentPresenter Content="{Binding NotificationCenter}" x:Name="NotificationCenter" Width="0" DockPanel.Dock="Right" Margin="{StaticResource NegativeTwoThirdsBlockToTheLeftMargin}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}" Value="false">
+                        <animation:WidthChange TargetWidth="0" />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}" Value="true">
+                        <animation:WidthChange TargetWidth="{StaticResource BlockTwentyFive}" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </ContentPresenter>
             <ContentPresenter Content="{Binding BuildTree}" />
         </DockPanel>
         <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
-        <ContentPresenter Content="{Binding StatusIndicator}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <DockPanel >
+            <Rectangle x:Name="DistanceHolder" DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=NotificationCenter}"/>
+            <ContentPresenter Content="{Binding StatusIndicator}"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        </DockPanel>
         <ContentPresenter Content="{Binding Overlay}" />
     </Grid>
 
     <window:CustomWindow.LeftToButtonsContent>
-        <Grid Visibility="{Binding TitleBarToolsVisibility}">
+        <DockPanel Visibility="{Binding TitleBarToolsVisibility}">
+            <icons:IconButton Icon="Notification" DockPanel.Dock="Right"
+                              Margin="{StaticResource BlockQuarterThickness}"
+                              Width="{StaticResource BlockDouble}"
+                              Height="{StaticResource BlockDouble}"
+                              Foreground="{StaticResource Background3}"
+                              Command="{Binding ToggleShowNotificationCenterCommand}">
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding ShowNotificationCenter}"
+                                    Value="true">
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding ShowNotificationCenter}"
+                                    Value="false">
+                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </icons:IconButton>
             <ContentPresenter Content="{Binding SearchViewModel}" />
-        </Grid>
+            
+        </DockPanel>
     </window:CustomWindow.LeftToButtonsContent>
 
     <window:CustomWindow.RightToTitleContent>
@@ -95,11 +134,11 @@
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="true">
-                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" />
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" DoRotate="True"/>
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="false">
-                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" />
+                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" DoRotate="True"/>
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </icons:IconButton>

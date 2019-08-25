@@ -380,4 +380,40 @@
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
+
+    <DrawingImage x:Key="NotificationsDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M62.4,47Q60.85,45.45,58.7,45.45L24.9,45.45Q22.7,45.45 21.15,47 19.6,48.55 19.6,50.8L19.6,53.7Q19.6,55.9 21.15,57.45 22.7,59 24.9,59L58.7,59Q60.85,59 62.4,57.45 64,55.9 64,53.7L64,50.8Q64,48.6,62.4,47 M64,30.6Q64,28.4 62.4,26.8 60.85,25.25 58.7,25.25L24.9,25.25Q22.7,25.25 21.15,26.8 19.6,28.35 19.6,30.6L19.6,33.5Q19.6,35.7 21.15,37.25 22.7,38.8 24.9,38.8L58.7,38.8Q60.85,38.8 62.4,37.25 64,35.7 64,33.5L64,30.6 M62.4,17Q64,15.45,64,13.25L64,10.35Q64,8.15 62.4,6.55 60.85,5 58.7,5L24.9,5Q22.8,5 21.15,6.55 19.6,8.25 19.6,10.35L19.6,13.25Q19.6,15.35 21.15,17 22.7,18.55 24.9,18.55L58.7,18.55Q60.85,18.55,62.4,17 M13.6,11.8Q13.6,8.9 11.65,6.95 9.7,5 6.8,5 3.95,5 2,6.95 0,8.9 0,11.8 0,14.6 2,16.6 3.95,18.55 6.8,18.55 9.7,18.55 11.65,16.6 13.6,14.6 13.6,11.8 M6.8,45.45Q3.95,45.45 2,47.4 0,49.35 0,52.25 0,55.05 2,57.05 3.95,59 6.8,59 9.7,59 11.65,57.05 13.6,55.05 13.6,52.25 13.6,49.35 11.65,47.4 9.7,45.45 6.8,45.45 M6.8,38.8Q9.7,38.8 11.65,36.85 13.6,34.85 13.6,32.05 13.6,29.15 11.65,27.2 9.7,25.25 6.8,25.25 3.95,25.25 2,27.2 0,29.15 0,32.05 0,34.85 2,36.85 3.95,38.8 6.8,38.8z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="SingleBuildDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M42.75,46.4L59.35,17.65 0,17.65 0,46.4 42.75,46.4z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="PauseDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M57.1,63.85L57.1,0 38.15,0 38.15,63.85 57.1,63.85 M25.85,0L6.9,0 6.9,63.85 25.85,63.85 25.85,0z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

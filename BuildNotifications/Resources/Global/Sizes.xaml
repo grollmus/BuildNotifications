@@ -19,6 +19,7 @@
     <system:Double x:Key="BlockFourTimes">48</system:Double>
     <system:Double x:Key="BlockTwelveTimes">144</system:Double>
     <system:Double x:Key="BlockFourteenTimes">168</system:Double>
+    <system:Double x:Key="BlockTwentyFive">300</system:Double>
     <system:Double x:Key="BlockThirty">360</system:Double>
     <system:Double x:Key="BlockTwentyEight">336</system:Double>
     <system:Double x:Key="BlockNineteenTimes">228</system:Double>
@@ -38,46 +39,31 @@
     <system:Double x:Key="BlockFont">12</system:Double>
     <system:Double x:Key="BlockTripleFont">24</system:Double>
 
-    <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}"
-               Top="{StaticResource BlockQuarter}" Bottom="{StaticResource BlockQuarter}" x:Key="BlockQuarterThickness" />
-    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource BlockHalf}"
-               Bottom="{StaticResource BlockHalf}" x:Key="BlockHalfThickness" />
-    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource BlockThreeQuarters}"
-               Top="{StaticResource BlockThreeQuarters}" Bottom="{StaticResource BlockThreeQuarters}"
-               x:Key="BlockThreeQuartersThickness" />
-    <Thickness Left="{StaticResource Block}" Right="{StaticResource Block}" Top="{StaticResource Block}"
-               Bottom="{StaticResource Block}" x:Key="BlockThickness" />
-    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource Block}"
-               Bottom="{StaticResource Block}" x:Key="BlockThicknessOnYHalfOnX" />
-    <Thickness Left="6" Right="6" Top="{StaticResource Block}" Bottom="{StaticResource Block}"
-               x:Key="BlockThicknessOnYQuartersOnX" />
-    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource BlockQuarter}"
-               Bottom="{StaticResource BlockQuarter}" x:Key="BlockQuarterThicknessOnYHalfOnX" />
-    <Thickness Left="{StaticResource BlockDouble}" Right="{StaticResource BlockDouble}"
-               Top="{StaticResource BlockDouble}" Bottom="{StaticResource BlockDouble}" x:Key="BlockDoubleThickness" />
-    <Thickness Left="{StaticResource BlockOneAndHalf}" Right="{StaticResource BlockOneAndHalf}"
-               Top="{StaticResource BlockOneAndHalf}" Bottom="{StaticResource BlockOneAndHalf}"
-               x:Key="BlockOneAndHalfThickness" />
+    <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="{StaticResource BlockQuarter}" Bottom="{StaticResource BlockQuarter}" x:Key="BlockQuarterThickness"/>
+    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource BlockHalf}" Bottom="{StaticResource BlockHalf}" x:Key="BlockHalfThickness"/>
+    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource BlockThreeQuarters}" Top="{StaticResource BlockThreeQuarters}" Bottom="{StaticResource BlockThreeQuarters}" x:Key="BlockThreeQuartersThickness"/>
+    <Thickness Left="{StaticResource Block}" Right="{StaticResource Block}" Top="{StaticResource Block}" Bottom="{StaticResource Block}" x:Key="BlockThickness"/>
+    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource Block}" Bottom="{StaticResource Block}" x:Key="BlockThicknessOnYHalfOnX"/>
+    <Thickness Left="6" Right="6" Top="{StaticResource Block}" Bottom="{StaticResource Block}" x:Key="BlockThicknessOnYQuartersOnX"/>
+    <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource BlockQuarter}" Bottom="{StaticResource BlockQuarter}" x:Key="BlockQuarterThicknessOnYHalfOnX"/>
+    <Thickness Left="{StaticResource BlockDouble}" Right="{StaticResource BlockDouble}" Top="{StaticResource BlockDouble}" Bottom="{StaticResource BlockDouble}" x:Key="BlockDoubleThickness"/>
+    <Thickness Left="{StaticResource BlockOneAndHalf}" Right="{StaticResource BlockOneAndHalf}" Top="{StaticResource BlockOneAndHalf}" Bottom="{StaticResource BlockOneAndHalf}" x:Key="BlockOneAndHalfThickness"/>
 
-    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource NegativeBlockThreeQuarters}" Top="0"
-               Bottom="0" x:Key="BlockThreeQuartersLeftAndNegativeRight" />
-    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource BlockThreeQuarters}" Top="0"
-               Bottom="0" x:Key="BlockThreeQuartersLeftAndRight" />
-    <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0"
-               x:Key="BlockLeftAndRight" />
-    <Thickness Left="0" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockQuarterRight" />
-    <Thickness Left="{StaticResource NegativeBlockHalf}" Right="{StaticResource NegativeBlockHalf}"
-               Top="{StaticResource NegativeBlockHalf}" Bottom="{StaticResource NegativeBlockHalf}"
-               x:Key="NegativeBlockHalfThickness" />
-    <Thickness Left="-6.5" Right="-6.5" Top="-4.46" Bottom="-4.46" x:Key="NegativeBlockHalfThicknessAndABit" />
-    <Thickness Left="0" Right="0" Top="3" Bottom="3" x:Key="BlockQuarterYOnlyMargin" />
-    <Thickness Left="0" Right="0" Top="6" Bottom="6" x:Key="BlockHalfYOnlyMargin" />
-    <Thickness Left="6" Right="6" Top="0" Bottom="0" x:Key="BlockHalfXOnlyMargin" />
-    <Thickness Left="3" Right="3" Top="0" Bottom="0" x:Key="BlockQuarterXOnlyMargin" />
+    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource NegativeBlockThreeQuarters}" Top="0" Bottom="0" x:Key="BlockThreeQuartersLeftAndNegativeRight"/>
+    <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource BlockThreeQuarters}" Top="0" Bottom="0" x:Key="BlockThreeQuartersLeftAndRight"/>
+    <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockLeftAndRight"/>
+    <Thickness Left="0" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockQuarterRight"/>
+    <Thickness Left="{StaticResource NegativeBlockHalf}" Right="{StaticResource NegativeBlockHalf}" Top="{StaticResource NegativeBlockHalf}" Bottom="{StaticResource NegativeBlockHalf}" x:Key="NegativeBlockHalfThickness"/>
+    <Thickness Left="-6.5" Right="-6.5" Top="-4.46" Bottom="-4.46" x:Key="NegativeBlockHalfThicknessAndABit"/>
+    <Thickness Left="0" Right="0" Top="3" Bottom="3" x:Key="BlockQuarterYOnlyMargin"/>
+    <Thickness Left="0" Right="0" Top="6" Bottom="6" x:Key="BlockHalfYOnlyMargin"/>
+    <Thickness Left="6" Right="6" Top="0" Bottom="0" x:Key="BlockHalfXOnlyMargin"/>
+    <Thickness Left="3" Right="3" Top="0" Bottom="0" x:Key="BlockQuarterXOnlyMargin"/>
+    <Thickness Left="-8" Right="0" Top="0" Bottom="0" x:Key="NegativeTwoThirdsBlockToTheLeftMargin"/>
 
-    <Thickness Left="12" Right="12" Top="0" Bottom="0" x:Key="BlockXOnlyMargin" />
-    <Thickness Left="10" Right="10" Top="{StaticResource BlockSixth}" Bottom="{StaticResource BlockSixth}"
-               x:Key="BlockThreeQuartersPlusOneXSixthBlockOneYMargin" />
-    <Thickness Left="0" Right="-24" Top="0" Bottom="0" x:Key="NegativeBlockDoubleThicknessFromRight" />
+    <Thickness Left="12" Right="12" Top="0" Bottom="0" x:Key="BlockXOnlyMargin"/>
+    <Thickness Left="10" Right="10" Top="{StaticResource BlockSixth}" Bottom="{StaticResource BlockSixth}" x:Key="BlockThreeQuartersPlusOneXSixthBlockOneYMargin"/>
+    <Thickness Left="0" Right="-24" Top="0" Bottom="0" x:Key="NegativeBlockDoubleThicknessFromRight"/>
 
 </ResourceDictionary>
+

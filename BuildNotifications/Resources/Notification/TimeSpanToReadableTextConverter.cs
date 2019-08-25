@@ -1,0 +1,32 @@
+﻿using System;
+using System.Globalization;
+using System.Windows.Data;
+using BuildNotifications.Core.Utilities;
+
+namespace BuildNotifications.Resources.Notification
+{
+    internal class TimeSpanToReadableTextConverter : IValueConverter
+    {
+        public static TimeSpanToReadableTextConverter Instance { get; } = new TimeSpanToReadableTextConverter();
+
+        private readonly TimeSpanToStringConverter _converter;
+
+        private TimeSpanToReadableTextConverter()
+        {
+            _converter = new TimeSpanToStringConverter();
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (!(value is TimeSpan timeSpan))
+                return "";
+
+            return _converter.Convert(timeSpan);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

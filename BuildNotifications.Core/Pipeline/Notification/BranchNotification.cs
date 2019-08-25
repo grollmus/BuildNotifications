@@ -5,7 +5,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    internal class BranchNotification : BaseNotification
+    internal class BranchNotification : BaseBuildNotification
     {
         private readonly IList<string> _branchNames;
 
@@ -44,8 +44,9 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 var allTheSame = true;
                 foreach (var branchName in branchNames)
                 {
+                    // this will happen, when a name is a substring of another name. In this case we cannot detect what to truncate
                     if (i >= branchName.Length)
-                        break;
+                        return branchNames;
 
                     if (currentChar == null)
                     {

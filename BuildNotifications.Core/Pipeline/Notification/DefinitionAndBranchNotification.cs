@@ -4,7 +4,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    internal class DefinitionAndBranchNotification : BaseNotification
+    internal class DefinitionAndBranchNotification : BaseBuildNotification
     {
         private readonly string _definitionName;
         private readonly string _branchName;

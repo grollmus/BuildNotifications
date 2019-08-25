@@ -6,7 +6,7 @@ using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.ViewModel.Tree
 {
-    public class BuildTreeViewModelFactory
+    internal class BuildTreeViewModelFactory
     {
         public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel existingTree)
         {

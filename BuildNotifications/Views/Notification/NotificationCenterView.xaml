@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="BuildNotifications.Views.Notification.NotificationCenterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModelNotification="clr-namespace:BuildNotifications.ViewModel.Notification"
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+             xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModelNotification:NotificationCenterViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <CollectionViewSource Source="{Binding Notifications}" x:Key="NotificationsSortedByDate">
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription PropertyName="Timestamp" Direction="Descending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Source={StaticResource NotificationsSortedByDate}}"
+             Style="{StaticResource StretchingListBox}" SelectedItem="{Binding SelectedNotification, Mode=TwoWay}">
+
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <animation:AnimatedStackPanel IsItemsHost="True" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type viewModelNotification:NotificationViewModel}">
+                <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
+                    <icons:IconBatch Width="{StaticResource BlockDouble}" Height="{StaticResource BlockDouble}"
+                                     Foreground="{DynamicResource Background3}" Type="{Binding IconType}"
+                                     DockPanel.Dock="Left"
+                                     x:Name="Icon" Margin="{StaticResource BlockHalfThickness}" VerticalAlignment="Top" />
+
+                    <DockPanel DockPanel.Dock="Top">
+                        <TextBlock
+                            Text="{Binding TimeUntilNow, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
+                            FontSize="{StaticResource BlockFiveSixths}" Margin="{StaticResource BlockHalfXOnlyMargin}"
+                            Foreground="{DynamicResource Foreground1HalfTransparency}" DockPanel.Dock="Right" />
+                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" x:Name="TitleText"
+                                   TextWrapping="Wrap" FontWeight="Bold"
+                                   Foreground="{DynamicResource Foreground1}" />
+                    </DockPanel>
+                    <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap"
+                               Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
+                </DockPanel>
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
+                        <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="TitleText" />
+                        <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="Icon" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding BuildStatus}" Value="Succeeded">
+                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
+                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding BuildStatus}" Value="PartiallySucceeded">
+                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
+                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding BuildStatus}" Value="Cancelled">
+                        <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="TitleText" />
+                        <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="Icon" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>
