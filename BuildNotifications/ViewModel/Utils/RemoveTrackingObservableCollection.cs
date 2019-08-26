@@ -23,8 +23,15 @@ namespace BuildNotifications.ViewModel.Utils
         {
             RemoveDelay = removeDelay;
             _list = new ObservableCollection<T>(initialValues);
-            _list.CollectionChanged += (sender, args) => CollectionChanged?.Invoke(sender, args);
+            _list.CollectionChanged += (sender, args) =>
+            {
+                if (_supressEvents)
+                    return;
+                CollectionChanged?.Invoke(sender, args);
+            };
         }
+
+        private bool _supressEvents;
 
         public TimeSpan RemoveDelay { get; set; }
 
@@ -71,7 +78,12 @@ namespace BuildNotifications.ViewModel.Utils
 
             foreach (var item in sortedItemsList)
             {
-                _list.Move(IndexOf(item), sortedItemsList.IndexOf(item));
+                var oldIndex = IndexOf(item);
+                var newIndex = sortedItemsList.IndexOf(item);
+                if (oldIndex == newIndex)
+                    continue;
+
+                _list.Move(oldIndex, newIndex);
             }
         }
 

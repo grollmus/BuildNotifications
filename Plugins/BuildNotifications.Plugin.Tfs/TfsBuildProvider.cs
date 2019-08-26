@@ -84,7 +84,7 @@ namespace BuildNotifications.Plugin.Tfs
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var builds = await buildClient.GetBuildsAsync(project.Id, null, null, null, date);
+            var builds = await buildClient.GetBuildsAsync2(project.Id, minFinishTime: date);
             foreach (var build in builds)
             {
                 yield return Convert(build);

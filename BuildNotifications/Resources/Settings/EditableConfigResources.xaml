@@ -6,14 +6,12 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
-    <Style TargetType="ComboBox">
-        <Setter Property="Margin" Value="5" />
-    </Style>
-
     <DataTemplate x:Key="EditableBoolTemplate" DataType="{x:Type editableConfigs:EditableInt}">
         <CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
                   Margin="{StaticResource BlockHalfYOnlyMargin}">
-<TextBlock Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" Foreground="{DynamicResource Background3}"/>
+            <TextBlock
+                Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                Foreground="{DynamicResource Background3}" />
         </CheckBox>
     </DataTemplate>
 
@@ -48,13 +46,17 @@
                                  Margin="{StaticResource BlockHalfYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
-        <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False"
-                      ItemTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}">
+        <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
+                    <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}" MaxWidth="{StaticResource BlockThirty}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
         </ItemsControl>
     </DataTemplate>
 
@@ -172,7 +174,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="EditablePrimitiveCollectionTemplate" DataType="{x:Type editableConfigs:IEditableCollection}">
-        <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
+        <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}" x:Name="DockPanel">
             <Grid DockPanel.Dock="Top">
                 <DockPanel>
                     <Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
@@ -186,14 +188,13 @@
                     <TextBlock
                         Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                         Foreground="{DynamicResource Foreground1HalfTransparency}" FontSize="14" />
-
                 </DockPanel>
 
             </Grid>
-            <DockPanel>
-                <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+            <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+                <DockPanel DockPanel.Dock="Bottom">
                     <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
-                                      Foreground="{DynamicResource Background2}" DockPanel.Dock="Bottom"
+                                      Foreground="{DynamicResource Background2}" DockPanel.Dock="Left"
                                       Background="{DynamicResource Background1}"
                                       Height="{StaticResource BlockThreeQuarters}"
                                       IconSize="{StaticResource BlockThreeQuarters}">
@@ -203,14 +204,45 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </icons:IconButton>
-
-                    <ItemsControl ItemsSource="{Binding SubEditables}"
-                                  ItemTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
-                                  x:Name="ListBox" />
+                    <DockPanel Visibility="Collapsed"
+                               x:Name="InfoDockPanel">
+                        <icons:IconBatch Type="Arrow" Width="{StaticResource Block}"
+                                         Height="{StaticResource Block}"
+                                         DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
+                                         Margin="{StaticResource BlockQuarterThickness}" />
+                        <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
+                    </DockPanel>
                 </DockPanel>
+                <ItemsControl ItemsSource="{Binding SubEditables}" x:Name="ListBox">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=DockPanel}"
+                                                  CommandParameter="{Binding Value}" x:Name="IconBtn"
+                                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                                  Height="{StaticResource BlockThreeQuarters}"
+                                                  IconSize="{StaticResource BlockThreeQuarters}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <icons:ButtonInvokedAnimation />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </icons:IconButton>
+                                <ContentPresenter Content="{Binding}"
+                                                  ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </DockPanel>
         </DockPanel>
 
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding ItemCount}" Value="0">
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
 </ResourceDictionary>

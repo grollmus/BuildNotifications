@@ -7,7 +7,7 @@
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     <DataTemplate x:Key="ConnectionsAndProjectsEditableCollectionTemplate"
                   DataType="{x:Type editableConfigs:IEditableCollection}">
-        <DockPanel x:Name="DockPanel">
+        <DockPanel x:Name="ConnectionsAndProjectsEditableCollectionDockPanel">
             <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
                 <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
                                   Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
@@ -33,7 +33,7 @@
                                     MaxHeight="{StaticResource BlockFourTimes}" TextTrimming="CharacterEllipsis"
                                     Foreground="{DynamicResource Foreground1HalfTransparency}" />
                                 <icons:IconButton Icon="Minus"
-                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=DockPanel}"
+                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=ConnectionsAndProjectsEditableCollectionDockPanel}"
                                                   CommandParameter="{Binding Value}" x:Name="IconBtn"
                                                   Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
                                                   Height="{StaticResource BlockThreeQuarters}"

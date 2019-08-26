@@ -21,7 +21,7 @@ namespace BuildNotifications.ViewModel.Tree
             SetChildrenSorting(_currentSortingDefinition);
 
             RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
-            AddAndRemoveCommand = new DelegateCommand(o => { RemoveOneChild(o); });
+            AddAndRemoveCommand = new DelegateCommand(RemoveOneChild);
             HighlightCommand = new DelegateCommand(Highlight);
             CurrentTreeLevelDepth = nodeSource.Depth;
         }
@@ -71,12 +71,46 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateBuildStatus()
         {
-            var newStatus = !Children.Any() ? BuildStatus.None : Children.ToList().Max(x => x.BuildStatus);
+            BuildStatus newStatus;
+            if (!Children.Any())
+                newStatus = BuildStatus.None;
+            else
+            {
+                if (ChildrenAreBuilds)
+                    newStatus = MostCurrentBuildStatus(Children.OfType<BuildNodeViewModel>());
+                else
+                    newStatus = Children.ToList().Max(x => x.BuildStatus);
+            }
+
             if (_buildStatus == newStatus)
                 return;
 
             _buildStatus = newStatus;
             OnPropertyChanged(nameof(BuildStatus));
+        }
+
+        private static IList<BuildStatus> BuildStatusToIgnore { get; } = new List<BuildStatus> {BuildStatus.Cancelled, BuildStatus.Pending};
+
+        private BuildStatus MostCurrentBuildStatus(IEnumerable<BuildNodeViewModel> buildNodes)
+        {
+            var byDateDescending = buildNodes.OrderByDescending(x => x.ChangedDate).ToList();
+            var status = BuildStatus.None;
+
+            foreach (var build in byDateDescending)
+            {
+                var buildStatus = build.BuildStatus;
+                if (BuildStatusToIgnore.Contains(buildStatus))
+                {
+                    if (status == BuildStatus.None)
+                        status = buildStatus;
+                    continue;
+                }
+
+                status = buildStatus;
+                break;
+            }
+
+            return status;
         }
 
         protected virtual DateTime CalculateChangedDate() => _changedDate;
@@ -100,12 +134,12 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)
         {
-            if (!ChildrenAreBuilds)
+            if (ChildrenAreBuilds)
+                return;
+
+            foreach (var child in Children)
             {
-                foreach (var child in Children)
-                {
-                    child.SetSortings(sortingDefinitions, index + 1);
-                }
+                child.SetSortings(sortingDefinitions, index + 1);
             }
 
             if (index >= sortingDefinitions.Count)
@@ -150,16 +184,20 @@ namespace BuildNotifications.ViewModel.Tree
                         child.PropertyChanged -= OnChildPropertyChanged;
                     }
 
-                    ChildrenAreBuilds = false;
+                    if (!Children.Any())
+                        ChildrenAreBuilds = false;
                     break;
 
                 case NotifyCollectionChangedAction.Replace:
                     break;
                 case NotifyCollectionChangedAction.Move:
+                    if (ChildrenAreBuilds)
+                        SetBuildLargeStatus();
+                    return;
                 default:
                     return;
             }
-
+            
             if (ChildrenAreBuilds)
                 SetBuildLargeStatus();
 

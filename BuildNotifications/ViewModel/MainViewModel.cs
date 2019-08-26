@@ -150,10 +150,11 @@ namespace BuildNotifications.ViewModel
                 {
                     _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
                     _coreSetup.PersistConfigurationChanges();
+                    BuildTree = null;
                     UpdateNow();
                 }
 
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition))
+                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) && BuildTree != null)
                     BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
             };
 

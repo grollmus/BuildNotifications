@@ -25,6 +25,11 @@
             </Setter>
         </Style>
 
+        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+            <Setter Property="Background" Value="{DynamicResource Background2}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Background3}"/>
+        </Style>
+
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground">
                 <Setter.Value>
@@ -149,11 +154,6 @@
                     <DataTemplate>
                         <ContentPresenter Content="{Binding}"
                                           ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Loaded">
-                                    <triggerActions:ElementFadeInBackEase />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
                         </ContentPresenter>
 
                     </DataTemplate>

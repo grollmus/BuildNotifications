@@ -41,14 +41,16 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         public Brush Convert(BuildTreeNodeViewModel node)
         {
-            if (node.ShouldColorByStatus)
+            if (node != null && node.ShouldColorByStatus)
                 return Convert(node.BuildStatus);
             return GetBrush(DefaultBrushKey);
         }
 
         private Brush GetBrush(string key)
         {
-            return Application.Current.FindResource(key) as Brush;
+            var findResource = Application.Current.FindResource(key) as Brush;
+
+            return findResource;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

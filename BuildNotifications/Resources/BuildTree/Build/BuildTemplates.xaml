@@ -13,6 +13,10 @@
                   Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
                   Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}">
 
+                <Grid.ToolTip>
+                    <TextBlock Text="{Binding ChangedDate}" Foreground="{DynamicResource Foreground1}" Background="Transparent"/>
+                </Grid.ToolTip>
+
                 <Rectangle Fill="{DynamicResource Background3}"
                            Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
                            Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True">
@@ -28,8 +32,7 @@
 
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
-                    x:Name="FillRectangle">
-                </Rectangle>
+                    x:Name="FillRectangle" />
 
                 <Rectangle
                     Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"

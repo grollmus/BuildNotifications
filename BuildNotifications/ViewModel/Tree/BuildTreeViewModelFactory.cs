@@ -54,7 +54,7 @@ namespace BuildNotifications.ViewModel.Tree
             if (children == null)
                 yield break;
 
-            foreach (var node in children)
+            foreach (var node in children.ToList())
             {
                 var groupDefinition = groupIndex >= groups.Count ? GroupDefinition.None : groups[groupIndex];
                 var nodeVm = AsViewModel(node, groupDefinition);
