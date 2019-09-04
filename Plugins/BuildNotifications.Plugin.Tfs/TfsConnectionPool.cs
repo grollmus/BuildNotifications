@@ -19,6 +19,8 @@ namespace BuildNotifications.Plugin.Tfs
                 return null;
             }
 
+            url = AppendCollectionName(data.CollectionName, url);
+
             if (_connections.TryGetValue(url, out var cachedConnection))
                 return cachedConnection;
 
@@ -30,18 +32,6 @@ namespace BuildNotifications.Plugin.Tfs
 
             return connection;
         }
-
-        private VssCredentials CreateCredentials(TfsConfiguration data)
-        {
-            if (data.AuthenticationType == AuthenticationType.Windows)
-                return new VssCredentials();
-
-            var username = data.Username;
-            var pw = data.Password;
-            return new VssCredentials(new VssBasicCredential(username, pw));
-        }
-
-        private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>();
 
         internal async Task<ConnectionTestResult> TestConnection(TfsConfiguration data)
         {
@@ -59,5 +49,30 @@ namespace BuildNotifications.Plugin.Tfs
                 return ConnectionTestResult.Failure(ex.Message);
             }
         }
+
+        private static string AppendCollectionName(string collectionName, string url)
+        {
+            if (!url.EndsWith(collectionName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (url.EndsWith('/'))
+                    url += collectionName;
+                else
+                    url += "/" + collectionName;
+            }
+
+            return url;
+        }
+
+        private VssCredentials CreateCredentials(TfsConfiguration data)
+        {
+            if (data.AuthenticationType == AuthenticationType.Windows)
+                return new VssCredentials();
+
+            var username = data.Username;
+            var pw = data.Password;
+            return new VssCredentials(new VssBasicCredential(username, pw));
+        }
+
+        private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
     }
 }
