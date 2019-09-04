@@ -6,6 +6,8 @@ namespace BuildNotifications.Core.Tests
     {
         public MockBuildDefinition()
         {
+            Id = string.Empty;
+            Name = string.Empty;
         }
 
         public MockBuildDefinition(string id, string name)

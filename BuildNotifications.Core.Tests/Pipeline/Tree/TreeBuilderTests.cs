@@ -54,6 +54,16 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             return new TreeBuilder(config, branchNameExtractor);
         }
 
+        private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)
+        {
+            var build = Substitute.For<IBuild>();
+            build.Definition.Returns(definition);
+            build.BranchName.Returns(branch.Name);
+            build.Id.Returns(id);
+
+            return build;
+        }
+
         [Fact]
         public void BuildShouldCreateEmptyTreeWhenDefinitionIsEmpty()
         {
@@ -154,128 +164,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             Assert.All(parser.ChildrenAtLevel(4), x => Assert.IsAssignableFrom<IBuildNode>(x));
             Assert.NotEmpty(parser.ChildrenAtLevel(4));
         }
-        
-        [Theory]
-        [InlineData(BuildStatus.Succeeded)]
-        [InlineData(BuildStatus.PartiallySucceeded)]
-        [InlineData(BuildStatus.Failed)]
-        [InlineData(BuildStatus.Cancelled)]
-        public void BuildTreeWithOneBuildWithUpdatedStatusShouldCreateDelta(BuildStatus expectedResult)
-        {
-            // Arrange
-            var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
-            var ciDefinition = Substitute.For<IBuildDefinition>();
-            var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
-
-            var builds = new List<IBuild>();
-
-            var build1 = CreateBuild(ciDefinition, stageBranch, "1");
-            builds.Add(build1);
-
-            var build2 = CreateBuild(ciDefinition, stageBranch, "2");
-            builds.Add(build2);
-
-            var build3 = CreateBuild(ciDefinition, stageBranch, "3");
-            builds.Add(build3);
-
-            // Act
-            var firstResult = sut.Build(builds, branches, definitions);
-            var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
-            newBuild2.Status.Returns(expectedResult);
-
-            var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
-            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
-            
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
-
-            // Assert
-            switch (expectedResult)
-            {
-                case BuildStatus.Cancelled:
-                    Assert.Equal(delta.Cancelled.Count(), 1);
-                    break;
-                case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
-                    Assert.Equal(delta.Succeeded.Count(), 1);
-                    break;
-                case BuildStatus.Failed:
-                    Assert.Equal(delta.Failed.Count(), 1);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(expectedResult), expectedResult, null);
-            }
-        }
-        
-        [Theory]
-        [InlineData(BuildStatus.Succeeded)]
-        [InlineData(BuildStatus.PartiallySucceeded)]
-        [InlineData(BuildStatus.Failed)]
-        [InlineData(BuildStatus.Cancelled)]
-        public void BuildTreeWithUpdatesStatusShouldNotProduceDeltaForDifferentStatus(BuildStatus expectedResult)
-        {
-            // Arrange
-            var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
-
-            var masterBranch = Substitute.For<IBranch>();
-            var ciDefinition = Substitute.For<IBuildDefinition>();
-            var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
-
-            var builds = new List<IBuild>();
-
-            var build1 = CreateBuild(ciDefinition, stageBranch, "1");
-            builds.Add(build1);
-
-            var build2 = CreateBuild(ciDefinition, stageBranch, "2");
-            builds.Add(build2);
-
-            var build3 = CreateBuild(ciDefinition, stageBranch, "3");
-            builds.Add(build3);
-
-            // Act
-            var firstResult = sut.Build(builds, branches, definitions);
-            var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
-            newBuild2.Status.Returns(expectedResult);
-
-            var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
-            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
-            
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
-
-            // Assert
-            switch (expectedResult)
-            {
-                case BuildStatus.Cancelled:
-                    Assert.Equal(delta.Succeeded.Count(), 0);
-                    Assert.Equal(delta.Failed.Count(), 0);
-                    break;
-                case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
-                    Assert.Equal(delta.Failed.Count(), 0);
-                    Assert.Equal(delta.Cancelled.Count(), 0);
-                    break;
-                case BuildStatus.Failed:
-                    Assert.Equal(delta.Succeeded.Count(), 0);
-                    Assert.Equal(delta.Cancelled.Count(), 0);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(expectedResult), expectedResult, null);
-            }
-        }
-        
         [Fact]
         public void BuildTreeWithMultipleBuildsChangingStatusShouldCreateDelta()
         {
@@ -320,9 +209,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            Assert.Equal(delta.Failed.Count(), 1);
-            Assert.Equal(delta.Cancelled.Count(), 1);
-            Assert.Equal(delta.Succeeded.Count(), 1);
+            Assert.Single(delta.Failed);
+            Assert.Single(delta.Cancelled);
+            Assert.Single(delta.Succeeded);
         }
 
         [Fact]
@@ -367,24 +256,135 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
             var newTree = sut.Build(updatedBuilds, branches, definitions);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
-            
+
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
 
             // Assert
-            Assert.Equal(delta.Failed.Count(), 0);
-            Assert.Equal(delta.Cancelled.Count(), 0);
-            Assert.Equal(delta.Succeeded.Count(), 0);
+            Assert.Empty(delta.Failed);
+            Assert.Empty(delta.Cancelled);
+            Assert.Empty(delta.Succeeded);
         }
-        
-        private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)
-        {
-            var build = Substitute.For<IBuild>();
-            build.Definition.Returns(definition);
-            build.BranchName.Returns(branch.Name);
-            build.Id.Returns(id);
 
-            return build;
+        [Theory]
+        [InlineData(BuildStatus.Succeeded)]
+        [InlineData(BuildStatus.PartiallySucceeded)]
+        [InlineData(BuildStatus.Failed)]
+        [InlineData(BuildStatus.Cancelled)]
+        public void BuildTreeWithOneBuildWithUpdatedStatusShouldCreateDelta(BuildStatus expectedResult)
+        {
+            // Arrange
+            var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            var masterBranch = Substitute.For<IBranch>();
+            var ciDefinition = Substitute.For<IBuildDefinition>();
+            var stageBranch = Substitute.For<IBranch>();
+            var nightlyDefinition = Substitute.For<IBuildDefinition>();
+
+            var branches = new[] {masterBranch, stageBranch};
+            var definitions = new[] {ciDefinition, nightlyDefinition};
+
+            var builds = new List<IBuild>();
+
+            var build1 = CreateBuild(ciDefinition, stageBranch, "1");
+            builds.Add(build1);
+
+            var build2 = CreateBuild(ciDefinition, stageBranch, "2");
+            builds.Add(build2);
+
+            var build3 = CreateBuild(ciDefinition, stageBranch, "3");
+            builds.Add(build3);
+
+            // Act
+            var firstResult = sut.Build(builds, branches, definitions);
+            var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
+            newBuild2.Status.Returns(expectedResult);
+
+            var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
+
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+
+            // Assert
+            switch (expectedResult)
+            {
+                case BuildStatus.Cancelled:
+                    Assert.Single(delta.Cancelled);
+                    break;
+                case BuildStatus.Succeeded:
+                case BuildStatus.PartiallySucceeded:
+                    Assert.Single(delta.Succeeded);
+                    break;
+                case BuildStatus.Failed:
+                    Assert.Single(delta.Failed);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(expectedResult), expectedResult, null);
+            }
+        }
+
+        [Theory]
+        [InlineData(BuildStatus.Succeeded)]
+        [InlineData(BuildStatus.PartiallySucceeded)]
+        [InlineData(BuildStatus.Failed)]
+        [InlineData(BuildStatus.Cancelled)]
+        public void BuildTreeWithUpdatesStatusShouldNotProduceDeltaForDifferentStatus(BuildStatus expectedResult)
+        {
+            // Arrange
+            var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            var masterBranch = Substitute.For<IBranch>();
+            var ciDefinition = Substitute.For<IBuildDefinition>();
+            var stageBranch = Substitute.For<IBranch>();
+            var nightlyDefinition = Substitute.For<IBuildDefinition>();
+
+            var branches = new[] {masterBranch, stageBranch};
+            var definitions = new[] {ciDefinition, nightlyDefinition};
+
+            var builds = new List<IBuild>();
+
+            var build1 = CreateBuild(ciDefinition, stageBranch, "1");
+            builds.Add(build1);
+
+            var build2 = CreateBuild(ciDefinition, stageBranch, "2");
+            builds.Add(build2);
+
+            var build3 = CreateBuild(ciDefinition, stageBranch, "3");
+            builds.Add(build3);
+
+            // Act
+            var firstResult = sut.Build(builds, branches, definitions);
+            var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
+            newBuild2.Status.Returns(expectedResult);
+
+            var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
+            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
+
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+
+            // Assert
+            switch (expectedResult)
+            {
+                case BuildStatus.Cancelled:
+                    Assert.Empty(delta.Succeeded);
+                    Assert.Empty(delta.Failed);
+                    break;
+                case BuildStatus.Succeeded:
+                case BuildStatus.PartiallySucceeded:
+                    Assert.Empty(delta.Failed);
+                    Assert.Empty(delta.Cancelled);
+                    break;
+                case BuildStatus.Failed:
+                    Assert.Empty(delta.Succeeded);
+                    Assert.Empty(delta.Cancelled);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(expectedResult), expectedResult, null);
+            }
         }
     }
 }

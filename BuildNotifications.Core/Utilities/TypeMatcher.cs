@@ -5,12 +5,13 @@ namespace BuildNotifications.Core.Utilities
     internal class TypeMatcher : ITypeMatcher
     {
         /// <inheritdoc />
-        public bool MatchesType(Type type, string typeName)
+        public bool MatchesType(Type type, string? typeName)
         {
             if (typeName == null)
                 return false;
 
-            var typeToMatch = new TypeName(type.AssemblyQualifiedName.Split(','));
+            var typeAssemblyQualifiedName = type.AssemblyQualifiedName ?? string.Empty;
+            var typeToMatch = new TypeName(typeAssemblyQualifiedName.Split(','));
             var typeToCheck = new TypeName(typeName.Split(','));
 
             return typeToCheck.Equals(typeToMatch);
@@ -25,7 +26,7 @@ namespace BuildNotifications.Core.Utilities
             }
 
             /// <inheritdoc />
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 return ReferenceEquals(this, obj) || obj is TypeName other && Equals(other);
             }

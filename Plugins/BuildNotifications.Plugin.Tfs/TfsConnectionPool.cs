@@ -15,11 +15,12 @@ namespace BuildNotifications.Plugin.Tfs
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
             {
-                LogTo.Error("Given URL was empty.");
+                LogTo.Error(ErrorMessages.UrlWasEmpty);
                 return null;
             }
 
-            url = AppendCollectionName(data.CollectionName, url);
+            if (!string.IsNullOrWhiteSpace(data.CollectionName))
+                url = AppendCollectionName(data.CollectionName, url);
 
             if (_connections.TryGetValue(url, out var cachedConnection))
                 return cachedConnection;
@@ -35,6 +36,9 @@ namespace BuildNotifications.Plugin.Tfs
 
         internal async Task<ConnectionTestResult> TestConnection(TfsConfiguration data)
         {
+            if (string.IsNullOrWhiteSpace(data.Url))
+                return ConnectionTestResult.Failure(ErrorMessages.UrlWasEmpty);
+
             try
             {
                 var credentials = CreateCredentials(data);

@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 var groupedByDefinition = GroupByDefinition(buildNodes).ToList();
                 var groupedByBranch = GroupByBranch(buildNodes).ToList();
 
-                // only display groups with a size of up to 3 elements                
+                // only display groups with a size of up to 3 elements
                 var allGroupings = new List<IEnumerable<object>> {groupedByDefinitionAndBranch, groupedByDefinition, groupedByBranch};
                 var smallestCount = allGroupings.Min(x => x.Count());
 
@@ -144,7 +144,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             }
         }
 
-        private bool IsSameUser(IUser userA, IUser userB) => userA.UniqueName == userB.UniqueName;
+        private bool IsSameUser(IUser userA, IUser? userB) => userA.UniqueName == userB?.UniqueName;
 
         private BuildNotificationMode NotifySetting(IBuildNode buildNode)
         {

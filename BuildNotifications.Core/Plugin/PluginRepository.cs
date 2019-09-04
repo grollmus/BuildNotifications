@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Plugin
             return plugin;
         }
 
-        public string FindPluginName(string typeName)
+        public string? FindPluginName(string typeName)
         {
             IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
@@ -58,7 +58,7 @@ namespace BuildNotifications.Core.Plugin
             return plugin?.DisplayName;
         }
 
-        public string FindIconGeometry(string typeName)
+        public string? FindIconGeometry(string typeName)
         {
             IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
@@ -71,7 +71,7 @@ namespace BuildNotifications.Core.Plugin
             return plugin?.IconSvgPath;
         }
 
-        public Type FindConfigurationType(string typeName)
+        public Type? FindConfigurationType(string typeName)
         {
             IPlugin plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 

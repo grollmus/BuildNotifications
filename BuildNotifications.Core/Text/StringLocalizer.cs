@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
-using Anotar.NLog;
 
 namespace BuildNotifications.Core.Text
 {
@@ -16,15 +14,17 @@ namespace BuildNotifications.Core.Text
     {
         private StringLocalizer()
         {
-            var resourceManager = new ResourceManager("BuildNotifications.Core.Text.Texts", Assembly.GetAssembly(typeof(StringLocalizer)));
-            resourceManager.IgnoreCase = true;
-            _resourceManager = resourceManager;
+            var assembly = Assembly.GetAssembly(typeof(StringLocalizer)) ?? Assembly.GetExecutingAssembly();
+            var resourceManager = new ResourceManager("BuildNotifications.Core.Text.Texts", assembly)
+            {
+                IgnoreCase = true
+            };
 
             foreach (var culture in LocalizedCultures())
             {
-                var resourceSet = _resourceManager.GetResourceSet(culture, true, true);
+                var resourceSet = resourceManager.GetResourceSet(culture, true, true);
                 var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
-                    .ToDictionary(r => r.Key.ToString(), r => r.Value.ToString());
+                    .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
 
                 Cache.Add(culture, resourceDictionary);
             }
@@ -32,16 +32,14 @@ namespace BuildNotifications.Core.Text
             _defaultDictionary = Cache[DefaultCulture];
         }
 
+        public IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
+
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();
 
         public string this[string key] => GetText(key);
 
-        public IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
-
-        private readonly IDictionary<string, string> _defaultDictionary;
-
-        public string GetText(string key, CultureInfo culture = null)
+        public string GetText(string key, CultureInfo? culture = null)
         {
             if (key == null)
                 return "";
@@ -83,6 +81,6 @@ namespace BuildNotifications.Core.Text
             yield return CultureInfo.GetCultureInfo("de");
         }
 
-        private readonly ResourceManager _resourceManager;
+        private readonly IDictionary<string, string> _defaultDictionary;
     }
 }

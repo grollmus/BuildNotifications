@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Tests.Text
         [Fact]
         public void NullValueShouldResultInEmptyString()
         {
-            var result = StringLocalizer.Instance[null];
+            var result = StringLocalizer.Instance[null!];
 
             Assert.NotNull(result);
             Assert.True(string.IsNullOrEmpty(result));

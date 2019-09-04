@@ -92,7 +92,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree oldTree = null)
+        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null)
         {
             var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
