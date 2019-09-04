@@ -16,6 +16,9 @@ namespace BuildNotifications.Core.Config
     {
         public Configuration()
         {
+            Connections = new List<ConnectionData>();
+            Projects = new List<IProjectConfiguration>();
+
             GroupDefinition = new BuildTreeGroupDefinition(
                 Pipeline.Tree.Arrangement.GroupDefinition.Source,
                 Pipeline.Tree.Arrangement.GroupDefinition.Branch,
@@ -48,19 +51,19 @@ namespace BuildNotifications.Core.Config
 
         [IgnoredForConfig]
         [JsonIgnore]
-        public Func<IEnumerable<string>> PossibleBuildPluginsFunction { get; set; }
+        public Func<IEnumerable<string?>>? PossibleBuildPluginsFunction { get; set; }
 
         [IgnoredForConfig]
         [JsonIgnore]
-        public Func<IEnumerable<string>> PossibleSourceControlPluginsFunction { get; set; }
+        public Func<IEnumerable<string?>>? PossibleSourceControlPluginsFunction { get; set; }
 
         [IgnoredForConfig]
         [JsonIgnore]
-        public IPluginRepository PluginRepository { get; set; }
+        public IPluginRepository? PluginRepository { get; set; }
 
-        public IEnumerable<string> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke();
+        public IEnumerable<string?> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
-        public IEnumerable<string> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke();
+        public IEnumerable<string?> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
         public Type BuildPluginConfigurationType(ConnectionData connectionData)
         {

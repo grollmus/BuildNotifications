@@ -54,7 +54,7 @@ namespace BuildNotifications.Core.Plugin
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
         /// <returns>The type of the configuration the plugin wants.</returns>
-        Type? FindConfigurationType(string typeName);
+        Type? FindConfigurationType(string? typeName);
 
         /// <summary>
         /// Gets called whenever an error occurs when constructing plugin.

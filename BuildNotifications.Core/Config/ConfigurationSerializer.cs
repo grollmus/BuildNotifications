@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Anotar.NLog;
@@ -42,6 +43,17 @@ namespace BuildNotifications.Core.Config
             configuration.PluginRepository = _pluginRepository;
 
             return configuration;
+        }
+
+        public IEnumerable<ConnectionData> LoadPredefinedConnections(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return Enumerable.Empty<ConnectionData>();
+
+            var json = File.ReadAllText(fileName);
+            var list = _serializer.Deserialize<List<ConnectionData>>(json);
+
+            return list;
         }
 
         public void Save(IConfiguration configuration, string fileName)
