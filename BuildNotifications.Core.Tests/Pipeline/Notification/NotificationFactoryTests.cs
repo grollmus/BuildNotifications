@@ -380,7 +380,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
 
             // assert
-            Assert.Equal(messages.Count(), 0);
+            Assert.Empty(messages);
         }
 
         [Theory]

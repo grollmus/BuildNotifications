@@ -29,15 +29,15 @@ namespace BuildNotifications.ViewModel.Utils
                     return;
                 CollectionChanged?.Invoke(sender, args);
             };
-        }
 
-        private bool _supressEvents;
+            _sortFunction = _list;
+        }
 
         public TimeSpan RemoveDelay { get; set; }
 
         public void DontSort()
         {
-            _sortFunction = null;
+            _sortFunction = _list;
             Sort();
         }
 
@@ -116,10 +116,7 @@ namespace BuildNotifications.ViewModel.Utils
             return true;
         }
 
-        public int Count
-        {
-            get { return _list.Count; }
-        }
+        public int Count => _list.Count;
 
         public bool IsReadOnly => false;
 
@@ -152,14 +149,16 @@ namespace BuildNotifications.ViewModel.Utils
 
         public T this[int index]
         {
-            get { return _list[index]; }
-            set { _list[index] = value; }
+            get => _list[index];
+            set => _list[index] = value;
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ObservableCollection<T> _list;
+
+        private bool _supressEvents;
 
         private IEnumerable<T> _sortFunction;
     }
