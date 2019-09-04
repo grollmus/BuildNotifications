@@ -1,8 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    mc:Ignorable="d"
+                    xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings">
     <Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
         <Setter Property="Template">
             <Setter.Value>
@@ -32,8 +36,13 @@
                             </ListBox>
                         </DockPanel>
                         <Border>
-                            <ContentPresenter VerticalAlignment="Top"
-                                              Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
+                            <DockPanel
+                                d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsAndProjectsSettingsViewModel}}">
+                                <Button DockPanel.Dock="Bottom" Command="{Binding TestConnectionCommand}"
+                                        Content="{Binding TestConnectionTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
+                                <ContentPresenter VerticalAlignment="Top"
+                                                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
+                            </DockPanel>
                         </Border>
                     </DockPanel>
                 </ControlTemplate>

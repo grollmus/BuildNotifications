@@ -25,20 +25,20 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         [CalculatedValues(nameof(Configuration.PossibleBuildPlugins))]
         public string? BuildPluginType { get; set; }
-        
+
         /// <summary>
         /// Configuration instance for the selected BuildPlugin to use
         /// </summary>
         [CalculatedType(nameof(Configuration.BuildPluginConfigurationType))]
         public object BuildPluginConfiguration { get; set; }
-        
+
         /// <summary>
         /// Type name of the plugin that is able to construct a branch provider
         /// for this connection.
         /// </summary>
         [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
         public string? SourceControlPluginType { get; set; }
-        
+
         /// <summary>
         /// Configuration instance for the selected SourceControlPlugin to use
         /// </summary>

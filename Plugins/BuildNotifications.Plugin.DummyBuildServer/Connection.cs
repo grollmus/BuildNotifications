@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class Connection
+    internal class Connection : IDisposable
     {
         public Connection(NamedPipeClientStream socket)
         {
@@ -15,8 +15,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public async Task<string> Query(string query)
         {
-            if (!_socket.IsConnected)
-                await _socket.ConnectAsync((int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+            await Connect();
 
             var buffer = Encoding.ASCII.GetBytes(Prepare(query));
             Debug.WriteLine($"C Sending {buffer.Length} bytes: {query} ...");
@@ -33,12 +32,23 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             return response;
         }
 
+        internal async Task Connect()
+        {
+            if (!_socket.IsConnected)
+                await _socket.ConnectAsync((int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+        }
+
         private string Prepare(string query)
         {
             if (!query.EndsWith(Constants.Queries.Terminator))
                 query += Constants.Queries.Terminator;
 
             return query;
+        }
+
+        public void Dispose()
+        {
+            _socket?.Dispose();
         }
 
         private readonly NamedPipeClientStream _socket;

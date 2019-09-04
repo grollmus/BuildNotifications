@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
+using System.Threading.Tasks;
+using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -22,7 +24,31 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             return connection;
         }
 
-        private static readonly Dictionary<int, Connection> Connections = new Dictionary<int, Connection>();
+        private async Task<ConnectionTestResult> TestConnection(object data)
+        {
+            try
+            {
+                using var connection = GetConnection(data as Configuration);
+                await connection.Connect();
+            }
+            catch (Exception ex)
+            {
+                return ConnectionTestResult.Failure(ex.Message);
+            }
+
+            return ConnectionTestResult.Success;
+        }
+
+        IBuildProvider IBuildPlugin.ConstructProvider(object data)
+        {
+            var connection = GetConnection(data as Configuration);
+            return new BuildProvider(connection);
+        }
+
+        Task<ConnectionTestResult> IBuildPlugin.TestConnection(object data)
+        {
+            return TestConnection(data);
+        }
 
         public string DisplayName => "Dummy Build Server";
 
@@ -43,10 +69,9 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             throw new NotImplementedException();
         }
 
-        IBuildProvider IBuildPlugin.ConstructProvider(object data)
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(object data)
         {
-            var connection = GetConnection(data as Configuration);
-            return new BuildProvider(connection);
+            return TestConnection(data);
         }
 
         public IBranchProvider ConstructProvider(object data)
@@ -54,5 +79,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             var connection = GetConnection(data as Configuration);
             return new SourceControlProvider(connection);
         }
+
+        private static readonly Dictionary<int, Connection> Connections = new Dictionary<int, Connection>();
     }
 }

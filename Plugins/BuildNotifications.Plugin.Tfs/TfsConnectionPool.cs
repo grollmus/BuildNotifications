@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Anotar.NLog;
+using BuildNotifications.PluginInterfaces;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 
@@ -40,5 +42,22 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>();
+
+        internal async Task<ConnectionTestResult> TestConnection(TfsConfiguration data)
+        {
+            try
+            {
+                var credentials = CreateCredentials(data);
+                using var connection = new VssConnection(new Uri(data.Url), credentials);
+
+                await connection.ConnectAsync();
+
+                return ConnectionTestResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return ConnectionTestResult.Failure(ex.Message);
+            }
+        }
     }
 }

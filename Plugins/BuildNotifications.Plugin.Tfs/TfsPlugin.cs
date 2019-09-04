@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Anotar.NLog;
+using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.VisualStudio.Services.Common;
@@ -19,10 +20,17 @@ namespace BuildNotifications.Plugin.Tfs
             _connectionPool = new TfsConnectionPool();
         }
 
+        private async Task<ConnectionTestResult> TestConnection(object data)
+        {
+            if (!(data is TfsConfiguration tfsConfiguration))
+                return ConnectionTestResult.Failure(string.Empty);
+
+            return await _connectionPool.TestConnection(tfsConfiguration);
+        }
+
         IBuildProvider? IBuildPlugin.ConstructProvider(object data)
         {
-            var configuration = data as TfsConfiguration;
-            if (configuration == null)
+            if (!(data is TfsConfiguration configuration))
             {
                 LogTo.Error("Given data was no TfsConfiguration");
                 return null;
@@ -31,7 +39,7 @@ namespace BuildNotifications.Plugin.Tfs
             var connection = _connectionPool.CreateConnection(configuration);
             if (connection == null)
                 return null;
-            
+
             if (string.IsNullOrEmpty(configuration.ProjectId))
             {
                 LogTo.Error("ProjectId not given in connection data");
@@ -41,10 +49,19 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsBuildProvider(connection, configuration.ProjectId);
         }
 
+        Task<ConnectionTestResult> IBuildPlugin.TestConnection(object data)
+        {
+            return TestConnection(data);
+        }
+
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(object data)
+        {
+            return TestConnection(data);
+        }
+
         IBranchProvider? ISourceControlPlugin.ConstructProvider(object data)
         {
-            var configuration = data as TfsConfiguration;
-            if (configuration == null)
+            if (!(data is TfsConfiguration configuration))
             {
                 LogTo.Error("Given data was no TfsConfiguration");
                 return null;
@@ -62,8 +79,6 @@ namespace BuildNotifications.Plugin.Tfs
 
             return new TfsSourceControlProvider(connection, configuration.RepositoryId);
         }
-
-        private TfsConnectionPool _connectionPool;
 
         public string DisplayName => "Azure DevOps Server";
 
@@ -83,5 +98,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             throw new NotImplementedException();
         }
+
+        private TfsConnectionPool _connectionPool;
     }
 }

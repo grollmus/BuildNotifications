@@ -26,7 +26,7 @@ namespace BuildNotifications.Core.Plugin
         public IReadOnlyList<ISourceControlPlugin> SourceControl { get; }
 
         /// <inheritdoc />
-        public IBuildPlugin? FindBuildPlugin(string typeName)
+        public IBuildPlugin? FindBuildPlugin(string? typeName)
         {
             var plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)
@@ -36,7 +36,7 @@ namespace BuildNotifications.Core.Plugin
         }
 
         /// <inheritdoc />
-        public ISourceControlPlugin? FindSourceControlPlugin(string typeName)
+        public ISourceControlPlugin? FindSourceControlPlugin(string? typeName)
         {
             var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)

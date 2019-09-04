@@ -18,6 +18,6 @@ namespace BuildNotifications.Core.Utilities
         /// <param name="type">Type to check for match.</param>
         /// <param name="typeName">Type name to use for checking.</param>
         /// <returns><c>true</c> if the types match; otherwise <c>false</c>.</returns>
-        bool MatchesType(Type type, string typeName);
+        bool MatchesType(Type type, string? typeName);
     }
 }
