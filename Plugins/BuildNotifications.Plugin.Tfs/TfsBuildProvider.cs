@@ -7,6 +7,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
+using BuildStatus = Microsoft.TeamFoundation.Build.WebApi.BuildStatus;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -84,7 +85,13 @@ namespace BuildNotifications.Plugin.Tfs
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var builds = await buildClient.GetBuildsAsync2(project.Id, minFinishTime: date);
+            var builds = await buildClient.GetBuildsAsync2(project.Id, minFinishTime: date, queryOrder: BuildQueryOrder.QueueTimeAscending);
+            foreach (var build in builds)
+            {
+                yield return Convert(build);
+            }
+
+            builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: BuildStatus.InProgress);
             foreach (var build in builds)
             {
                 yield return Convert(build);

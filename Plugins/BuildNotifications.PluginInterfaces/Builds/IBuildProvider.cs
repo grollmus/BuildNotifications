@@ -24,6 +24,8 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Fetches all builds that have been changed since a given date and time.
         /// </summary>
+        /// <remarks>Changed means the build has been newly created or changed one or more
+        /// of its properties (e.g. status or progress).</remarks>
         /// <param name="date">Date and time since when to fetch builds.</param>
         /// <returns>List of all builds changed since <paramref name="date" />.</returns>
         IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date);
