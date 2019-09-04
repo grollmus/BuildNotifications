@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using BuildNotifications.Core;
 
-namespace BuildNotifications.Core
+namespace BuildNotifications
 {
     internal class PathResolver : IPathResolver
     {
@@ -18,6 +20,12 @@ namespace BuildNotifications.Core
 
         public string UserConfigurationFileName => "config.json";
         public string UserConfigurationFilePath => Path.Combine(ConfigurationFolder, UserConfigurationFileName);
+
+        public IEnumerable<string> PluginFolders
+        {
+            get { yield return "plugins"; }
+        }
+
         public string PredefinedConfigurationFileName => "predefined.json";
         public string PredefinedConfigurationFilePath => Path.Combine(ConfigurationFolder, PredefinedConfigurationFileName);
     }

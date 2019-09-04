@@ -16,7 +16,7 @@ namespace BuildNotifications.Core
             var serializer = new Serializer();
 
             var pluginLoader = new PluginLoader();
-            PluginRepository = pluginLoader.LoadPlugins(new[] {"plugins"});
+            PluginRepository = pluginLoader.LoadPlugins( pathResolver.PluginFolders );
 
             _configurationSerializer = new ConfigurationSerializer(serializer, PluginRepository);
             var configurationBuilder = new ConfigurationBuilder(_pathResolver, _configurationSerializer);
