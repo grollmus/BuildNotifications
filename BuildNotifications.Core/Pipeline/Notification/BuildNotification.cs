@@ -8,10 +8,10 @@ namespace BuildNotifications.Core.Pipeline.Notification
     public class BuildNotification : BaseBuildNotification
     {
         // Build {1} on {2} {0}. E.g. Build Ci on stage failed.
-        public const string BuildChangedTextId = nameof(BuildChangedTextId);
+        internal const string BuildChangedTextId = nameof(BuildChangedTextId);
 
         // {1} builds {0}. E.g. 25 builds failed.
-        public const string BuildsChangedTextId = nameof(BuildsChangedTextId);
+        internal const string BuildsChangedTextId = nameof(BuildsChangedTextId);
 
         public BuildNotification(IList<IBuildNode> buildNodes, BuildStatus status) : base(NotificationType.Build, buildNodes, status)
         {

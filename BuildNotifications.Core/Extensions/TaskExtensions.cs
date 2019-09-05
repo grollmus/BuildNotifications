@@ -10,6 +10,7 @@ namespace BuildNotifications.Core
         /// <param name="task">Task to "ignore"</param>
         public static void FireAndForget(this Task task)
         {
+            // Do nothing. Method is only used to get rid of compiler warning.
         }
     }
 }

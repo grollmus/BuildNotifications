@@ -48,13 +48,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         // One build.
         private const string BuildNotificationContentSingularTextId = nameof(BuildNotificationContentSingularTextId);
-        public const string CancelledPlural = nameof(CancelledPlural);
-
-        public const string CancelledSingular = nameof(CancelledSingular);
-        public const string FailedPlural = nameof(FailedPlural);
-        public const string FailedSingular = nameof(FailedSingular);
-        public const string SucceededPlural = nameof(SucceededPlural);
-
-        public const string SucceededSingular = nameof(SucceededSingular);
+        private const string CancelledPlural = nameof(CancelledPlural);
+        private const string CancelledSingular = nameof(CancelledSingular);
+        private const string FailedPlural = nameof(FailedPlural);
+        private const string FailedSingular = nameof(FailedSingular);
+        private const string SucceededPlural = nameof(SucceededPlural);
+        private const string SucceededSingular = nameof(SucceededSingular);
     }
 }
