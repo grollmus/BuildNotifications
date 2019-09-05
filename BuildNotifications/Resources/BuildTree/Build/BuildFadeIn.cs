@@ -9,12 +9,11 @@ namespace BuildNotifications.Resources.BuildTree.Build
 {
     internal class BuildFadeIn : TriggerAction<UIElement>
     {
-        private static HashSet<UIElement> _alreadyFadedInElements = new HashSet<UIElement>();
         protected override void Invoke(object parameter)
         {
-            if (_alreadyFadedInElements.Contains(AssociatedObject))
+            if (AlreadyFadedInElements.Contains(AssociatedObject))
                 return;
-            _alreadyFadedInElements.Add(AssociatedObject);
+            AlreadyFadedInElements.Add(AssociatedObject);
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(AssociatedObject);
 
@@ -23,5 +22,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
 
             AssociatedObject.RenderTransform = scaleTransform;
         }
+
+        private static readonly HashSet<UIElement> AlreadyFadedInElements = new HashSet<UIElement>();
     }
 }

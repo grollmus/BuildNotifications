@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
@@ -141,6 +140,16 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        private void ReportError(string messageTextId, params object[] parameter)
+        {
+            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
+            var fullMessage = string.Format(localizedMessage, parameter);
+            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
+                LogTo.ErrorException(fullMessage, exception);
+            else
+                LogTo.Error(fullMessage);
+        }
+
         /// <inheritdoc />
         public void AddProject(IProject project)
         {
@@ -154,16 +163,6 @@ namespace BuildNotifications.Core.Pipeline
             _buildCache.Clear();
             _branchCache.Clear();
             _lastUpdate = null;
-        }
-
-        private void ReportError(string messageTextId, params object[] parameter)
-        {
-            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
-            var fullMessage = string.Format(localizedMessage, parameter);
-            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
-            else
-                LogTo.Error(fullMessage);
         }
 
         /// <inheritdoc />
@@ -216,6 +215,6 @@ namespace BuildNotifications.Core.Pipeline
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
-        private NotificationFactory _notificationFactory;
+        private readonly NotificationFactory _notificationFactory;
     }
 }

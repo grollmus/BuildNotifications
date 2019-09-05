@@ -8,18 +8,6 @@ namespace BuildNotifications.Core.Utilities
     /// </summary>
     public class TimeSpanToStringConverter
     {
-        /// <summary>
-        ///     Maximum amount of seconds that may be passed, for a timeSpan to be considered "just now"
-        /// </summary>
-        public const int JustNowSeconds = 10;
-
-        public const string NDaysAgoTextId = nameof(NDaysAgoTextId);
-        public const string OneDayAgoTextId = nameof(OneDayAgoTextId);
-        public const string NHoursAgoTextId = nameof(NHoursAgoTextId);
-        public const string NMinutesAgoTextId = nameof(NMinutesAgoTextId);
-        public const string NSecondsAgoTextId = nameof(NSecondsAgoTextId);
-        public const string JustNowTextId = nameof(JustNowTextId);
-
         public string Convert(TimeSpan value)
         {
             var amount = 1;
@@ -55,7 +43,7 @@ namespace BuildNotifications.Core.Utilities
             else if (value.Seconds + value.Minutes * 60 > JustNowSeconds)
             {
                 text = NSecondsAgoTextId;
-                amount = value.Seconds + value.Minutes*60;
+                amount = value.Seconds + value.Minutes * 60;
             }
             // just now
             else
@@ -63,5 +51,18 @@ namespace BuildNotifications.Core.Utilities
 
             return string.Format(StringLocalizer.Instance.GetText(text), amount);
         }
+
+        /// <summary>
+        /// Maximum amount of seconds that may be passed, for a timeSpan to be considered "just now"
+        /// </summary>
+        public const int JustNowSeconds = 10;
+
+        public const string JustNowTextId = nameof(JustNowTextId);
+
+        public const string NDaysAgoTextId = nameof(NDaysAgoTextId);
+        public const string NHoursAgoTextId = nameof(NHoursAgoTextId);
+        public const string NMinutesAgoTextId = nameof(NMinutesAgoTextId);
+        public const string NSecondsAgoTextId = nameof(NSecondsAgoTextId);
+        public const string OneDayAgoTextId = nameof(OneDayAgoTextId);
     }
 }

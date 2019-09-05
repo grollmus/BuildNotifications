@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using System.Windows.Shapes;
 using BuildNotifications.Resources.BuildTree.TriggerActions;
 using TweenSharp.Animation;

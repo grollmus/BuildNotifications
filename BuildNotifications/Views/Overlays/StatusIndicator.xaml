@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:BuildNotifications.Views.Overlays"
              xmlns:views="clr-namespace:BuildNotifications.Views"
              xmlns:viewModelOverlays="clr-namespace:BuildNotifications.ViewModel.Overlays"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"

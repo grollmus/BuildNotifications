@@ -7,20 +7,27 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     public abstract class BaseBuildNotification : INotification
     {
-        public const string FailedSingular = nameof(FailedSingular);
-        public const string FailedPlural = nameof(FailedPlural);
+        protected BaseBuildNotification(NotificationType type, IList<IBuildNode> buildNodes, BuildStatus status)
+        {
+            Type = type;
+            BuildNodes = buildNodes;
+            Status = status;
+        }
 
-        public const string SucceededSingular = nameof(SucceededSingular);
-        public const string SucceededPlural = nameof(SucceededPlural);
+        protected List<string> Parameters { get; } = new List<string>();
 
-        public const string CancelledSingular = nameof(CancelledSingular);
-        public const string CancelledPlural = nameof(CancelledPlural);
+        protected abstract string GetMessageTextId();
 
-        // One build.
-        private const string BuildNotificationContentSingularTextId = nameof(BuildNotificationContentSingularTextId);
-
-        // {0} builds. E.g. 25 builds
-        private const string BuildNotificationContentPluralTextId = nameof(BuildNotificationContentPluralTextId);
+        protected string StatusTextId(bool isSingular)
+        {
+            return Status switch
+            {
+                BuildStatus.Cancelled => StringLocalizer.Instance.GetText(isSingular ? CancelledSingular : CancelledPlural),
+                BuildStatus.Succeeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
+                BuildStatus.PartiallySucceeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
+                _ => StringLocalizer.Instance.GetText(isSingular ? FailedSingular : FailedPlural)
+            };
+        }
 
         public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), Parameters.ToArray());
 
@@ -36,24 +43,18 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         public BuildStatus Status { get; }
 
-        protected List<string> Parameters { get; } = new List<string>();
+        // {0} builds. E.g. 25 builds
+        private const string BuildNotificationContentPluralTextId = nameof(BuildNotificationContentPluralTextId);
 
-        protected BaseBuildNotification(NotificationType type, IList<IBuildNode> buildNodes, BuildStatus status)
-        {
-            Type = type;
-            BuildNodes = buildNodes;
-            Status = status;
-        }
+        // One build.
+        private const string BuildNotificationContentSingularTextId = nameof(BuildNotificationContentSingularTextId);
+        public const string CancelledPlural = nameof(CancelledPlural);
 
-        protected abstract string GetMessageTextId();
+        public const string CancelledSingular = nameof(CancelledSingular);
+        public const string FailedPlural = nameof(FailedPlural);
+        public const string FailedSingular = nameof(FailedSingular);
+        public const string SucceededPlural = nameof(SucceededPlural);
 
-        protected string StatusTextId(bool isSingular) =>
-            Status switch
-            {
-                BuildStatus.Cancelled => StringLocalizer.Instance.GetText(isSingular ? CancelledSingular : CancelledPlural),
-                BuildStatus.Succeeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
-                BuildStatus.PartiallySucceeded => StringLocalizer.Instance.GetText(isSingular ? SucceededSingular : SucceededPlural),
-                _ => StringLocalizer.Instance.GetText(isSingular ? FailedSingular : FailedPlural)
-            };
+        public const string SucceededSingular = nameof(SucceededSingular);
     }
 }
