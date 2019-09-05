@@ -23,4 +23,4 @@ test_script:
 - ps: >-
     dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln
 
-    & java -jar ./codacy-test-reporter.jar report -l CSharp -t ${CODACY_PROJECT_TOKEN} -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml
+    & java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t $env:CODACY_PROJECT_TOKEN
