@@ -32,4 +32,9 @@
     <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Plugin\Host\" />
+    <Folder Include="Plugin\Options\" />
+  </ItemGroup>
+
 </Project>
