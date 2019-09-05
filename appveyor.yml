@@ -14,6 +14,14 @@ install:
     & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100-preview9-014004'
 
     & Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
+    
+    & dotnet tool install --global coverlet.console
+    
+    & dotnet add BuildNotifications.Core.Tests/BuildNotifications.Core.Tests.csproj coverlet.msbuild
+    
+    & dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj coverlet.msbuild
+    
+    & dotnet restore
 before_build:
 - ps: nuget restore
 build:
