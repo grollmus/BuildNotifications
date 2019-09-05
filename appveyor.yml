@@ -4,13 +4,23 @@ image: Visual Studio 2019
 configuration: Release
 init:
 - ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH)-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
+environment:
+  CODACY_PROJECT_TOKEN:
+    secure: h6bHJ858ESn0aT/lw91WDwp1SLTWvqYipdiJNNoUO5FJYFL0xsexrB6R9++zt8pD
 install:
 - ps: >-
     Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
 
     & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100-preview9-014004'
+
+    & Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 before_build:
 - ps: nuget restore
 build:
   parallel: true
   verbosity: normal
+test_script:
+- ps: >-
+    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln
+
+    & java -jar ./codacy-test-reporter.jar report -l CSharp -t ${CODACY_PROJECT_TOKEN} -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml
