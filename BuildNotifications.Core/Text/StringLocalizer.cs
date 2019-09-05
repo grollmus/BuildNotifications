@@ -24,7 +24,8 @@ namespace BuildNotifications.Core.Text
             {
                 var resourceSet = resourceManager.GetResourceSet(culture, true, true);
                 var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
-                    .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
+                    .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
+                    .ToDictionary(r => r.Key.ToString()!, r => r.Value.ToString());
 
                 Cache.Add(culture, resourceDictionary);
             }
@@ -32,7 +33,7 @@ namespace BuildNotifications.Core.Text
             _defaultDictionary = Cache[DefaultCulture];
         }
 
-        public IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
+        internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
 
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();

@@ -45,5 +45,19 @@ namespace BuildNotifications.Core.Tests.Text
             Assert.NotNull(result);
             Assert.True(string.IsNullOrEmpty(result));
         }
+
+        [Fact]
+        public void NotTranslatedTextReturnsFallbackLanguageTranslation()
+        {
+            var localizer = StringLocalizer.Instance;
+            const string textOnlyInEnglishId = nameof(textOnlyInEnglishId);
+            const string textOnlyInEnglish = nameof(textOnlyInEnglish);
+            localizer.Cache[StringLocalizer.DefaultCulture].Add(textOnlyInEnglishId, textOnlyInEnglish);
+
+            foreach (var supportedCulture in StringLocalizer.SupportedCultures())
+            {
+                Assert.Equal(StringLocalizer.Instance.GetText(textOnlyInEnglishId, supportedCulture), textOnlyInEnglish);
+            }
+        }
     }
 }
