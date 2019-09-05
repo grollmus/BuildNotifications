@@ -17,9 +17,9 @@ install:
     
     & dotnet tool install --global coverlet.console
     
-    & dotnet add BuildNotifications.Core.Tests/BuildNotifications.Core.Tests.csproj coverlet.msbuild
+    & dotnet add BuildNotifications.Core.Tests/BuildNotifications.Core.Tests.csproj package coverlet.msbuild
     
-    & dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj coverlet.msbuild
+    & dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
     
     & dotnet restore
 before_build:
