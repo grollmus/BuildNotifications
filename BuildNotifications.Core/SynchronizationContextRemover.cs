@@ -15,6 +15,7 @@ namespace BuildNotifications.Core
 
         public void GetResult()
         {
+            // Only exists because this class needs to be awaited.
         }
 
         /// <inheritdoc />

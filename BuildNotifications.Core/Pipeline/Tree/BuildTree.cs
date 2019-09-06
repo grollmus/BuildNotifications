@@ -1,5 +1,4 @@
-﻿using System;
-using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+﻿using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {

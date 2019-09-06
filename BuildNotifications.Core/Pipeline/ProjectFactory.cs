@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -89,6 +88,16 @@ namespace BuildNotifications.Core.Pipeline
             return _configuration.Connections.FirstOrDefault(c => c.Name == connectionName);
         }
 
+        private void ReportError(string messageTextId, params object[] parameter)
+        {
+            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
+            var fullMessage = string.Format(localizedMessage, parameter);
+            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
+                LogTo.ErrorException(fullMessage, exception);
+            else
+                LogTo.Error(fullMessage);
+        }
+
         /// <inheritdoc />
         public IProject? Construct(IProjectConfiguration config)
         {
@@ -121,16 +130,6 @@ namespace BuildNotifications.Core.Pipeline
             }
 
             return new Project(buildProviders, branchProviders, config);
-        }
-
-        private void ReportError(string messageTextId, params object[] parameter)
-        {
-            var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
-            var fullMessage = string.Format(localizedMessage, parameter);
-            if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
-            else
-                LogTo.Error(fullMessage);
         }
 
         public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;

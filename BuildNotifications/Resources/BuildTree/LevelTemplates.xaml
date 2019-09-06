@@ -7,8 +7,7 @@
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
                     xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
-                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                    xmlns:build="clr-namespace:BuildNotifications.Resources.BuildTree.Build">
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
 
     <ResourceDictionary x:Key="BuildTreeSpecificResources">
         <Style TargetType="{x:Type icons:IconBatch}">

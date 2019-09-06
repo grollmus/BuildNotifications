@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using BuildNotifications.Plugin.DummyBuildServer;
 using DummyBuildServer.Models;
 
@@ -28,11 +27,11 @@ namespace DummyBuildServer.ViewModels
         public BranchListViewModel Branches { get; }
         public BuildDefinitionListViewModel BuildDefinitions { get; }
         public BuildListViewModel Builds { get; }
+        public ICommand EnqueuePermutatedBuildsCommand { get; }
         public int Port { get; set; } = 1111;
 
         public ICommand StartServerCommand { get; }
         public ICommand StopServerCommand { get; }
-        public ICommand EnqueuePermutatedBuildsCommand { get; }
         public UserListViewModel Users { get; }
 
         public void AddBranch(Branch branch)
@@ -86,6 +85,17 @@ namespace DummyBuildServer.ViewModels
             // TODO: Implement
         }
 
+        private void EnqueuePermutatedBuilds(object obj)
+        {
+            foreach (var definition in BuildDefinitions.Definitions)
+            {
+                foreach (var branch in Branches.Branches)
+                {
+                    Builds.EnqueueSpecificBuild(definition.Definition, branch.Branch);
+                }
+            }
+        }
+
         private bool IsServerRunning(object arg)
         {
             return _server.IsRunning;
@@ -109,17 +119,6 @@ namespace DummyBuildServer.ViewModels
         private void StopServer(object arg)
         {
             _server.Stop();
-        }
-
-        private void EnqueuePermutatedBuilds(object obj)
-        {
-            foreach (var definition in BuildDefinitions.Definitions)
-            {
-                foreach (var branch in Branches.Branches)
-                {
-                    Builds.EnqueueSpecificBuild(definition.Definition, branch.Branch);
-                }
-            }
         }
 
         private readonly DataSerializer _serializer;

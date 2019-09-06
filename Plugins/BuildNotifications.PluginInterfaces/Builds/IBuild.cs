@@ -57,7 +57,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         IUser RequestedBy { get; }
 
         /// <summary>
-        /// User this been has been requested for.
+        /// User this build has been requested for.
         /// </summary>
         IUser? RequestedFor { get; }
 

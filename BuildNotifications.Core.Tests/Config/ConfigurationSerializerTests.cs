@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Tests.Config
             var sut = new ConfigurationSerializer(serializer, pluginRepo);
 
             // Act
-            var config = sut.Load(fileName);
+            var unused = sut.Load(fileName);
 
             // Assert
             Assert.False(File.Exists(fileName));
