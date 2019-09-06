@@ -1,7 +1,9 @@
 ![alt text](https://i.imgur.com/QysizI7.png "BuildNotifications - For the neccessary summary")
 [![AppVeyor Badge](https://ci.appveyor.com/api/projects/status/github/grollmus/buildnotifications?svg=true)](https://ci.appveyor.com/project/TheSylence/buildnotifications)
+![AppVeyor tests (compact)](https://img.shields.io/appveyor/tests/TheSylence/BuildNotifications?compact_message)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c8a9c1f0e9f4ed1ab12e9c7204682ba)](https://www.codacy.com/manual/Grollmus/BuildNotifications?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=grollmus/BuildNotifications&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0c8a9c1f0e9f4ed1ab12e9c7204682ba)](https://www.codacy.com/manual/Grollmus/BuildNotifications?utm_source=github.com&utm_medium=referral&utm_content=grollmus/BuildNotifications&utm_campaign=Badge_Coverage)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/grollmus/BuildNotifications)
 
 # Still under development, watchout for the releases page for the first version
 
