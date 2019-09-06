@@ -142,15 +142,21 @@ namespace BuildNotifications.ViewModel
                 // as the user either changed or checked the critical settings
                 if (e.ProjectOrConnectionsChanged || !_keepUpdating)
                 {
-                    ResetError();
-                    StopUpdating();
-                    LoadProjects();
+                    ResetAndRestart();
                 }
 
                 StartUpdating();
             });
 
             App.GlobalTweenHandler.Add(tween);
+        }
+
+        private void ResetAndRestart()
+        {
+            ResetError();
+            StopUpdating();
+            LoadProjects();
+            StartUpdating();
         }
 
         private void LoadProjects()
@@ -269,7 +275,7 @@ namespace BuildNotifications.ViewModel
 
         private void StatusIndicator_OnResumeRequested(object sender, EventArgs e)
         {
-            StartUpdating();
+            ResetAndRestart();
         }
 
         private void StopUpdating()
