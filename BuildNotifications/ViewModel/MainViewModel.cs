@@ -20,7 +20,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel, IDisposable
     {
         public MainViewModel()
         {
@@ -119,6 +119,24 @@ namespace BuildNotifications.ViewModel
             Application.Current.Dispatcher?.Invoke(() => { NotificationCenter.ShowNotifications(e.ErrorNotifications); });
         }
 
+        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition):
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree = null;
+                    UpdateNow();
+                    break;
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) when BuildTree != null:
+                    _coreSetup.Configuration.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    break;
+            }
+        }
+
         private void Initialize()
         {
             SetupViewModel();
@@ -141,22 +159,12 @@ namespace BuildNotifications.ViewModel
                 // when connections or projects changed or the update is stopped. Now is the time to reload and restart the pipeline
                 // as the user either changed or checked the critical settings
                 if (e.ProjectOrConnectionsChanged || !_keepUpdating)
-                {
                     ResetAndRestart();
-                }
 
                 StartUpdating();
             });
 
             App.GlobalTweenHandler.Add(tween);
-        }
-
-        private void ResetAndRestart()
-        {
-            ResetError();
-            StopUpdating();
-            LoadProjects();
-            StartUpdating();
         }
 
         private void LoadProjects()
@@ -182,6 +190,14 @@ namespace BuildNotifications.ViewModel
                 buildNode.IsHighlighted = true;
                 _highlightedBuilds.Add(buildNode);
             }
+        }
+
+        private void ResetAndRestart()
+        {
+            ResetError();
+            StopUpdating();
+            LoadProjects();
+            StartUpdating();
         }
 
         private void ResetError()
@@ -217,24 +233,6 @@ namespace BuildNotifications.ViewModel
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
-        }
-
-        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            switch (args.PropertyName)
-            {
-                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition):
-                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
-                    _coreSetup.PersistConfigurationChanges();
-                    BuildTree = null;
-                    UpdateNow();
-                    break;
-                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) when BuildTree != null:
-                    _coreSetup.Configuration.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                    _coreSetup.PersistConfigurationChanges();
-                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                    break;
-            }
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -337,9 +335,13 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public void Dispose()
+        {
+            _cancellationTokenSource?.Dispose();
+        }
+
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
-
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private BuildTreeViewModel _buildTree;

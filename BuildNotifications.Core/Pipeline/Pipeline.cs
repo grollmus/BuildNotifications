@@ -176,6 +176,8 @@ namespace BuildNotifications.Core.Pipeline
         /// <inheritdoc />
         public async Task Update()
         {
+            await new SynchronizationContextRemover();
+
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.ContentCopy().ToDictionary(x => (BuildId: x.Id, Project: x.ProjectName), x => x.Status);

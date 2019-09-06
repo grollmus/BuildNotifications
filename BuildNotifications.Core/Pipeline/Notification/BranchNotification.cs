@@ -36,7 +36,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             if (branchNames.Count <= 1)
                 return branchNames;
 
-            var stringToTruncate = "";
+            var truncationLength = 0;
             var maxLength = branchNames.Max(x => x.Length);
             for (var i = 0; i < maxLength; i++)
             {
@@ -62,12 +62,12 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 }
 
                 if (allTheSame && currentChar != null)
-                    stringToTruncate += currentChar.Value;
+                    truncationLength++;
                 else
                     break;
             }
 
-            return branchNames.Select(s => s.Remove(0, stringToTruncate.Length));
+            return branchNames.Select(s => s.Remove(0, truncationLength));
         }
 
         protected override string GetMessageTextId() =>

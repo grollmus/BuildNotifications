@@ -7,49 +7,50 @@
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     mc:Ignorable="d"
                     xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings">
-    <Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <DockPanel>
-                        <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
-                            <ListBox ItemsSource="{Binding Items}" SelectedIndex="0" x:Name="ListBox"
-                                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Height="{StaticResource BlockOneAndHalf}">
-                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding IconType}"
-                                                             Margin="{StaticResource BlockQuarterThickness}"
-                                                             Foreground="{DynamicResource Foreground1HalfTransparency}"
-                                                             Width="{StaticResource Block}"
-                                                             Height="{StaticResource Block}" />
-                                            <TextBlock
-                                                Text="{Binding DisplayNameTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-                                                TextWrapping="Wrap" MaxHeight="{StaticResource BlockFourTimes}"
-                                                TextTrimming="CharacterEllipsis"
-                                                FontSize="{StaticResource Block}"
-                                                Foreground="{DynamicResource Foreground1HalfTransparency}" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
+	<Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<DockPanel d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigation}">
+						<DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+							<ListBox ItemsSource="{Binding Items}" SelectedIndex="0" x:Name="ListBox"
+							         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<DockPanel Height="{StaticResource BlockOneAndHalf}"
+										           d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigationItem}">
+											<icons:IconBatch DockPanel.Dock="Left" Type="{Binding IconType}"
+											                 Margin="{StaticResource BlockQuarterThickness}"
+											                 Foreground="{DynamicResource Foreground1HalfTransparency}"
+											                 Width="{StaticResource Block}"
+											                 Height="{StaticResource Block}" />
+											<TextBlock
+												Text="{Binding DisplayNameTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+												TextWrapping="Wrap" MaxHeight="{StaticResource BlockFourTimes}"
+												TextTrimming="CharacterEllipsis"
+												FontSize="{StaticResource Block}"
+												Foreground="{DynamicResource Foreground1HalfTransparency}" />
+										</DockPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
 
-                            </ListBox>
-                        </DockPanel>
-                        <Border>
-                            <DockPanel
-                                d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsAndProjectsSettingsViewModel}}">
-                                <Button DockPanel.Dock="Bottom" Command="{Binding TestConnectionCommand}"
-                                        Content="{Binding TestConnectionTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
-                                <ContentPresenter VerticalAlignment="Top"
-                                                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
-                            </DockPanel>
-                        </Border>
-                    </DockPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+							</ListBox>
+						</DockPanel>
+						<Border>
+							<DockPanel
+								d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsAndProjectsSettingsViewModel}}">
+								<Button DockPanel.Dock="Bottom" Command="{Binding TestConnectionCommand}"
+								        Content="{Binding TestConnectionTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
+								<ContentPresenter VerticalAlignment="Top"
+								                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
+							</DockPanel>
+						</Border>
+					</DockPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 
-    </Style>
+	</Style>
 
 
 </ResourceDictionary>

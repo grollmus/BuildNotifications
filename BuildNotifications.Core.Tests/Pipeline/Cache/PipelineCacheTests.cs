@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BuildNotifications.Core.Pipeline.Cache;
 using Xunit;
 
@@ -21,6 +22,22 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
             var content = sut.ContentCopy().ToList();
 
             Assert.Collection(content, str => Assert.Equal("test", str));
+        }
+
+        [Fact]
+        public void ClearShouldClearCacheContent()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            sut.AddOrReplace(1, 1, "test");
+            sut.AddOrReplace(1, 2, "test");
+            sut.AddOrReplace(1, 3, "test");
+
+            // Act
+            sut.Clear();
+
+            // Assert
+            Assert.Empty(sut.ContentCopy());
         }
 
         [Fact]
@@ -67,6 +84,25 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         }
 
         [Fact]
+        public void ContentCopyShouldReturnCopyOfStoredElements()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            sut.AddOrReplace(1, 1, "test1");
+            sut.AddOrReplace(1, 2, "test2");
+            sut.AddOrReplace(1, 3, "test3");
+
+            // Act
+            var actual = sut.ContentCopy();
+
+            // Assert
+            var expectedSubset = new HashSet<string> {"test1", "test2", "test3"};
+            var actualSet = actual.ToHashSet();
+
+            Assert.Subset(expectedSubset, actualSet);
+        }
+
+        [Fact]
         public void RemoveShouldRemoveItemFromCache()
         {
             // Arrange
@@ -82,6 +118,25 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
             // Assert
             Assert.True(before);
             Assert.False(after);
+        }
+
+        [Fact]
+        public void RemoveValueShouldOnlyRemoveMatchingEntries()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            sut.AddOrReplace(1, 1, "test1");
+            sut.AddOrReplace(1, 2, "test2");
+            sut.AddOrReplace(1, 3, "test3");
+
+            // Act
+            sut.RemoveValue("test2");
+
+            // Assert
+            var expectedSubset = new HashSet<string> {"test1", "test3"};
+            var actualSet = sut.ContentCopy().ToHashSet();
+
+            Assert.Subset(expectedSubset, actualSet);
         }
     }
 }

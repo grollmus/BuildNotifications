@@ -8,7 +8,9 @@ namespace BuildNotifications.Resources.Window
     {
         public static int GetCurrentDPI()
         {
-            return (int) typeof(SystemParameters).GetProperty("Dpi", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null, null);
+            var propertyInfo = typeof(SystemParameters).GetProperty("Dpi", BindingFlags.Static | BindingFlags.NonPublic);
+            var value = propertyInfo?.GetValue(null, null);
+            return (int?) value ?? 96;
         }
 
         public static double GetCurrentDPIScaleFactor()
