@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -204,23 +205,30 @@ namespace BuildNotifications.ViewModel
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
             GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
-            GroupAndSortDefinitionsSelection.PropertyChanged += (sender, args) =>
-            {
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition))
-                {
-                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
-                    _coreSetup.PersistConfigurationChanges();
-                    BuildTree = null;
-                    UpdateNow();
-                }
-
-                if (args.PropertyName == nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) && BuildTree != null)
-                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-            };
+            GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition;
+            GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
+        }
+
+        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition):
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree = null;
+                    UpdateNow();
+                    break;
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) when BuildTree != null:
+                    _coreSetup.Configuration.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    break;
+            }
         }
 
         private void ShowInitialSetupOverlayViewModel()

@@ -24,6 +24,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         Pending,
 
         /// <summary>
+        /// Build is currently running
+        /// </summary>
+        Running,
+
+        /// <summary>
         /// Build succeeded.
         /// </summary>
         Succeeded,
@@ -37,10 +42,5 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Build failed with errors.
         /// </summary>
         Failed,
-
-        /// <summary>
-        /// Build is currently running
-        /// </summary>
-        Running,
     }
 }

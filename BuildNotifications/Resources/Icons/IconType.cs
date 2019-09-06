@@ -19,6 +19,8 @@
         AlphabeticalDescending,
         StatusAscending,
         StatusDescending,
+        DateAscending,
+        DateDescending,
         GroupingEmpty,
         GroupingSolo,
         Integer,
