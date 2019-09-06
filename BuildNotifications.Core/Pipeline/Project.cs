@@ -69,6 +69,17 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public async IAsyncEnumerable<IBranch> FetchRemovedBranches()
+        {
+            foreach (var branchProvider in _branchProviders)
+            {
+                await foreach (var branch in branchProvider.RemovedBranches())
+                {
+                    yield return branch;
+                }
+            }
+        }
+
         public async IAsyncEnumerable<IBuild> FetchRemovedBuilds()
         {
             foreach (var buildProvider in _buildProviders)

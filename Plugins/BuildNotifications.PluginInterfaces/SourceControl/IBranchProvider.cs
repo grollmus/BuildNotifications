@@ -14,5 +14,11 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
         /// </summary>
         /// <returns>List of all available branches</returns>
         IAsyncEnumerable<IBranch> FetchExistingBranches();
+      
+        /// <summary>
+        /// Returns a list of branches that no longer exist in the source.
+        /// </summary>
+        /// <returns>List of removed branches.</returns>
+        IAsyncEnumerable<IBranch> RemovedBranches();
     }
 }

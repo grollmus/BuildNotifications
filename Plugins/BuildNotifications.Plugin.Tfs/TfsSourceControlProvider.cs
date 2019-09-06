@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
@@ -29,6 +30,13 @@ namespace BuildNotifications.Plugin.Tfs
             {
                 yield return Convert(branch);
             }
+        }
+
+        public async IAsyncEnumerable<IBranch> RemovedBranches()
+        {
+            await Task.CompletedTask;
+
+            yield break;
         }
 
         private readonly VssConnection _connection;

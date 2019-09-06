@@ -48,6 +48,12 @@ namespace BuildNotifications.Core.Pipeline
         IAsyncEnumerable<IBranch> FetchExistingBranches();
 
         /// <summary>
+        /// Fetches all branches that no longer exist for this project.
+        /// </summary>
+        /// <returns>List of branches.</returns>
+        IAsyncEnumerable<IBranch> FetchRemovedBranches();
+
+        /// <summary>
         /// Fetches all build definitions that no longer exist for this project.
         /// </summary>
         /// <returns>List of all build definitions.</returns>

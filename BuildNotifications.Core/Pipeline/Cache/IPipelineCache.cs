@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BuildNotifications.Core.Pipeline.Cache
 {
@@ -26,6 +27,11 @@ namespace BuildNotifications.Core.Pipeline.Cache
         void AddOrReplace(int providerId, int itemId, T item);
 
         /// <summary>
+        /// Clears all stored data.
+        /// </summary>
+        void Clear();
+
+        /// <summary>
         /// Determine if an item with a given key exists in the cache.
         /// </summary>
         /// <param name="key">Key to check for.</param>
@@ -39,6 +45,13 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// <param name="itemId">Item part of the key to add item for.</param>
         /// <returns><c>true</c> if the item exists; otherwise <c>false</c>.</returns>
         bool Contains(int providerId, int itemId);
+
+        /// <summary>
+        /// Determine if an item that matches the given predicate exists in the cache.
+        /// </summary>
+        /// <param name="predicate">Predicate to use for searching the item.</param>
+        /// <returns><c>true</c> if at least one item in the cache matches the predicate; otherwise <c>false</c>.</returns>
+        bool Contains(Predicate<T> predicate);
 
         /// <summary>
         /// Determine if an item with a given value exists in the cache.
@@ -71,10 +84,5 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="value">Value to remove item for.</param>
         void RemoveValue(T value);
-
-        /// <summary>
-        /// Clears all stored data.
-        /// </summary>
-        void Clear();
     }
 }
