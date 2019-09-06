@@ -14,8 +14,8 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             {
                 new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalDescending),
                 new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.AlphabeticalAscending),
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusAscending),
-                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusDescending)
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusDescending),
+                new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.DateDescending)
             };
             SelectedViewModel = Sortings.First();
         }

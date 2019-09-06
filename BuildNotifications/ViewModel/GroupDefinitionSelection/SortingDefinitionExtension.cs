@@ -17,6 +17,10 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                     return IconType.StatusAscending;
                 case SortingDefinition.StatusDescending:
                     return IconType.StatusDescending;
+                case SortingDefinition.DateDescending:
+                    return IconType.DateDescending;
+                case SortingDefinition.DateAscending:
+                    return IconType.DateAscending;
                 default:
                     return IconType.None;
             }

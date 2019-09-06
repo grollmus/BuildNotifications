@@ -192,14 +192,14 @@ namespace BuildNotifications.ViewModel.Tree
                     break;
                 case NotifyCollectionChangedAction.Move:
                     if (ChildrenAreBuilds)
-                        SetBuildLargeStatus();
+                        SetSpecificBuildChildrenProperties();
                     return;
                 default:
                     return;
             }
-            
+
             if (ChildrenAreBuilds)
-                SetBuildLargeStatus();
+                SetSpecificBuildChildrenProperties();
 
             UpdateBuildStatus();
             UpdateChangedDate();
@@ -241,7 +241,7 @@ namespace BuildNotifications.ViewModel.Tree
                 Children.Remove(someBuild);
         }
 
-        private void SetBuildLargeStatus()
+        private void SetSpecificBuildChildrenProperties()
         {
             var buildChildren = Children.OfType<BuildNodeViewModel>().ToList();
 
@@ -251,12 +251,60 @@ namespace BuildNotifications.ViewModel.Tree
                 return;
             }
 
+            SetBuildLargeStatus(buildChildren);
+            SetBuildHollowStatus(buildChildren);
+        }
+
+        private void SetBuildLargeStatus(IReadOnlyCollection<BuildNodeViewModel> buildChildren)
+        {
             foreach (var child in buildChildren)
             {
                 child.IsLargeSize = false;
             }
 
             buildChildren.Last().IsLargeSize = true;
+        }
+
+        private void SetBuildHollowStatus(IReadOnlyCollection<BuildNodeViewModel> buildChildren)
+        {
+            foreach (var child in buildChildren)
+            {
+                child.DisplayAsHollow = false;
+            }
+
+            var reversed = buildChildren.ToList();
+            reversed.Reverse();
+
+            var failedOrInconclusiveBuilds = new List<BuildNodeViewModel>();
+            var latestBuildsDidFail = false;
+
+            foreach (var build in reversed)
+            {
+                var status = build.BuildStatus;
+
+                if (status == BuildStatus.Failed)
+                {
+                    failedOrInconclusiveBuilds.Add(build);
+                    latestBuildsDidFail = true;
+                    continue;
+                }
+
+                if (status == BuildStatus.Cancelled)
+                {
+                    failedOrInconclusiveBuilds.Add(build);
+                    continue;
+                }
+
+                break;
+            }
+
+            if (!latestBuildsDidFail)
+                return;
+
+            foreach (var build in failedOrInconclusiveBuilds)
+            {
+                build.DisplayAsHollow = true;
+            }
         }
 
         private void SetChildrenSorting(SortingDefinition sortingDefinition)

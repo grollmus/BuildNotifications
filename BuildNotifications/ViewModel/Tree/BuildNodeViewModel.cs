@@ -13,8 +13,7 @@ namespace BuildNotifications.ViewModel.Tree
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            UpdateBuildStatus();
-            UpdateChangedDate();
+            BackendPropertiesChanged();
         }
 
         public bool IsHighlighted
@@ -37,6 +36,36 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
+        private const double DoubleTolerance = 0.0000000001;
+
+        public double Progress
+        {
+            get => _progress;
+            set
+            {
+                if (value < 0)
+                    value = 0;
+                if (value > 1)
+                    value = 1;
+
+                if (Math.Abs(_progress - value) < DoubleTolerance)
+                    return;
+
+                _progress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool DisplayAsHollow
+        {
+            get => _displayAsHollow;
+            set
+            {
+                _displayAsHollow = value;
+                OnPropertyChanged();
+            }
+        }
+
         private BuildStatus _buildStatus;
 
         public ICommand MouseEnterCommand { get; set; }
@@ -47,6 +76,9 @@ namespace BuildNotifications.ViewModel.Tree
         {
             UpdateBuildStatus();
             UpdateChangedDate();
+            
+            // always display at least 20%, so the user has a reasonable area to click on
+            Progress = Node.Progress / 80.0 + 0.2;
         }
 
         private void UpdateBuildStatus()
@@ -94,5 +126,7 @@ namespace BuildNotifications.ViewModel.Tree
         private bool _isLargeSize;
         private bool _shouldBeLarge;
         private bool _isHighlighted;
+        private double _progress;
+        private bool _displayAsHollow;
     }
 }

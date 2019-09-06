@@ -45,6 +45,11 @@ namespace BuildNotifications.Core.Config
         IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
         /// <summary>
+        /// Defines how builds should be sorted.
+        /// </summary>
+        IBuildTreeSortingDefinition SortingDefinition { get; set; }
+
+        /// <summary>
         /// List of all configured projects.
         /// </summary>
         IList<IProjectConfiguration> Projects { get; }

@@ -109,6 +109,18 @@
 
                         <DataTrigger
                             Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="DateAscending">
+                            <Setter Property="Image.Source" Value="{StaticResource DateAscendingDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="DateDescending">
+                            <Setter Property="Image.Source" Value="{StaticResource DateDescendingDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                             Value="GroupingSolo">
                             <Setter Property="Image.Source" Value="{StaticResource GroupingSoloDrawingImage}" />
                         </DataTrigger>

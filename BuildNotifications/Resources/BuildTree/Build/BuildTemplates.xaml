@@ -69,6 +69,28 @@
                 <Setter Property="Fill" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
                 <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="StrokeRectangle" />
             </Trigger>
+
+            <DataTrigger Binding="{Binding BuildStatus}" Value="Running">
+                <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
+                <Setter Property="RenderTransform" TargetName="FillRectangle">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="{Binding Progress}" ScaleY="1"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding BuildStatus}" Value="Pending">
+                <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
+                <Setter Property="RenderTransform" TargetName="FillRectangle">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="{Binding Progress}" ScaleY="1"/>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding DisplayAsHollow}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="FillRectangle" />
+            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 </ResourceDictionary>

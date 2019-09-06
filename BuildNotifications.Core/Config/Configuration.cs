@@ -23,10 +23,16 @@ namespace BuildNotifications.Core.Config
                 Pipeline.Tree.Arrangement.GroupDefinition.Source,
                 Pipeline.Tree.Arrangement.GroupDefinition.Branch,
                 Pipeline.Tree.Arrangement.GroupDefinition.BuildDefinition);
+
+            SortingDefinition = new BuildTreeSortingDefinition(
+                Pipeline.Tree.Arrangement.SortingDefinition.AlphabeticalAscending,
+                Pipeline.Tree.Arrangement.SortingDefinition.DateDescending,
+                Pipeline.Tree.Arrangement.SortingDefinition.AlphabeticalAscending);
         }
 
-        [TypesForInstantiation(typeof(BuildTreeGroupDefinition))]
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
+
+        public IBuildTreeSortingDefinition SortingDefinition { get; set; }
 
         [MinMax(1, int.MaxValue)]
         public int BuildsToLoadCount { get; set; } = 200;
