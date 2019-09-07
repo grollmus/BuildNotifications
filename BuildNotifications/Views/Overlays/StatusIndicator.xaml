@@ -15,28 +15,11 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal">
-        <views:BusyIndicator IsBusy="{Binding BusyVisible}" />
-        <icons:IconButton Icon="Status" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
-                          Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
-                          Visibility="{Binding ErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          HorizontalAlignment="Right" Margin="{StaticResource BlockQuarterXOnlyMargin}"
-                          DockPanel.Dock="Right" Command="{Binding OpenErrorMessageCommand}">
-
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Click">
-                    <icons:ButtonInvokedAnimation />
-                </i:EventTrigger>
-                <ei:DataTrigger Binding="{Binding ErrorVisible}" Value="True">
-                    <icons:ButtonInvokedAnimation Repeat="2"/>
-                </ei:DataTrigger>
-            </i:Interaction.Triggers>
-        </icons:IconButton>
-        
+    <DockPanel>
         <icons:IconButton Icon="Pause" Foreground="{DynamicResource Foreground1}" Width="{StaticResource BlockDouble}"
                           Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
                           Visibility="{Binding PauseVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          HorizontalAlignment="Right" Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                          Margin="{StaticResource BlockQuarterXOnlyMargin}"
                           DockPanel.Dock="Right" Command="{Binding RequestResumeCommand}">
 
             <i:Interaction.Triggers>
@@ -45,5 +28,23 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </icons:IconButton>
-    </StackPanel>
+
+        <icons:IconButton Icon="Status" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
+                          Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
+                          Visibility="{Binding ErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                          DockPanel.Dock="Right" Command="{Binding OpenErrorMessageCommand}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <icons:ButtonInvokedAnimation />
+                </i:EventTrigger>
+                <ei:DataTrigger Binding="{Binding ErrorVisible}" Value="True">
+                    <icons:ButtonInvokedAnimation Repeat="2" />
+                </ei:DataTrigger>
+            </i:Interaction.Triggers>
+        </icons:IconButton>
+
+        <views:BusyIndicator IsBusy="{Binding BusyVisible}" Margin="{StaticResource BlockXOnlyMargin}" />
+    </DockPanel>
 </UserControl>

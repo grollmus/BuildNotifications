@@ -190,7 +190,8 @@ namespace BuildNotifications.Core.Pipeline
                 var definitions = _definitionCache.ContentCopy();
 
                 var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-                CutTree(tree);
+                if (_configuration.GroupDefinition.Any())
+                    CutTree(tree);
 
                 var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
                 IBuildTreeBuildsDelta delta;

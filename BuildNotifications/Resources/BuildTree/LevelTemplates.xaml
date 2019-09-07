@@ -26,7 +26,7 @@
 
         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
             <Setter Property="Background" Value="{DynamicResource Background2}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource Background3}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />
         </Style>
 
         <Style TargetType="{x:Type TextBlock}">
@@ -43,7 +43,7 @@
     </ResourceDictionary>
 
     <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel Margin="{StaticResource BlockThickness}">
+        <DockPanel>
             <Viewbox Height="{StaticResource BlockDouble}" Margin="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
                 <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
@@ -71,15 +71,16 @@
         </DockPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <DockPanel Margin="{StaticResource BlockThicknessOnYQuartersOnX}">
-            <Grid DockPanel.Dock="Top" Width="{StaticResource BlockThirty}">
-                <DockPanel>
-                    <Rectangle Height="{StaticResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
-                               Margin="{StaticResource BlockThreeQuartersLeftAndNegativeRight}" DockPanel.Dock="Top" />
-                    <Rectangle Height="{StaticResource BlockHalf}"
-                               VerticalAlignment="Bottom" DockPanel.Dock="Top"
-                               Margin="{StaticResource BlockThreeQuartersLeftAndNegativeRight}">
+    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}" x:Key="SecondLevelHeaderTemplate">
+        <Grid DockPanel.Dock="Top" Width="{StaticResource BlockThirty}">
+            <DockPanel>
+                <Rectangle Height="{StaticResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
+                           Margin="{StaticResource BlockOneAndQuarterLeftAndNegativeBlockHalfRight}"
+                           DockPanel.Dock="Top" />
+                <Grid Height="{StaticResource BlockHalf}"
+                      VerticalAlignment="Bottom" DockPanel.Dock="Top"
+                      Margin="{StaticResource BlockOneAndQuarterLeftAndNegativeBlockHalfRight}">
+                    <Rectangle>
                         <Rectangle.Fill>
                             <MultiBinding
                                 Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
@@ -88,28 +89,39 @@
                                 <Binding />
                             </MultiBinding>
                         </Rectangle.Fill>
-
                     </Rectangle>
+                </Grid>
+                <DockPanel.RenderTransform>
+                    <SkewTransform AngleX="-30" />
+                </DockPanel.RenderTransform>
+            </DockPanel>
+            <Border Height="{StaticResource BlockDoubleAndHalf}" VerticalAlignment="Top"
+                    Margin="{StaticResource BlockOneAndQuarterLeftAndThreeQuartersRight}">
+                <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
+                         HorizontalAlignment="Left" x:Name="HeaderViewBox">
+                    <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                      MaxWidth="{StaticResource BlockNineteenTimes}" x:Name="HeaderContentPresenter"
+                                      ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
+                </Viewbox>
+            </Border>
 
-                    <DockPanel.RenderTransform>
-                        <SkewTransform AngleX="-30" />
-                    </DockPanel.RenderTransform>
-                </DockPanel>
-                <Border Height="{StaticResource BlockDoubleAndHalf}" VerticalAlignment="Top"
-                        Margin="{StaticResource BlockThreeQuartersLeftAndRight}">
-                    <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
-                             HorizontalAlignment="Left">
-                        <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
-                                          MaxWidth="{StaticResource BlockNineteenTimes}"
-                                          ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
-                    </Viewbox>
-                </Border>
+        </Grid>
+        <DataTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HeaderViewBox" Property="StretchDirection" Value="Both" />
+                <Setter TargetName="HeaderContentPresenter" Property="MaxWidth" Value="99999" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
-            </Grid>
+    <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <DockPanel Margin="{StaticResource BlockThicknessOnYQuartersOnX}">
+            <ContentPresenter DockPanel.Dock="Top" Width="{StaticResource BlockThirty}"
+                              ContentTemplate="{StaticResource SecondLevelHeaderTemplate}" />
 
             <Grid Margin="{StaticResource BlockHalfYOnlyMargin}">
                 <ItemsControl ItemsSource="{Binding Children}"
-                              Margin="{StaticResource BlockThreeQuartersLeftAndRight}"
+                              Margin="{StaticResource BlockOneAndQuarterLeftAndThreeQuartersRight}"
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -152,8 +164,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <ContentPresenter Content="{Binding}"
-                                          ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
-                        </ContentPresenter>
+                                          ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}" />
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

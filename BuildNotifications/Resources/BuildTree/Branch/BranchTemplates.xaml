@@ -7,7 +7,7 @@
         <DockPanel HorizontalAlignment="Left">
             <icons:IconBatch Type="Branch" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" />
             <TextBlock Text="{Binding BranchName}" FontSize="{DynamicResource BlockFont}" UseLayoutRounding="True"
-                       TextTrimming="CharacterEllipsis" />
+                       TextTrimming="CharacterEllipsis" x:Name="BranchTextBlock"/>
         </DockPanel>
     </DataTemplate>
 </ResourceDictionary>

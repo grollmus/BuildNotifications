@@ -78,22 +78,25 @@
             </ContentPresenter>
 
 
-            <ContentPresenter Content="{Binding NotificationCenter}" x:Name="NotificationCenter" Width="0" DockPanel.Dock="Right" Margin="{StaticResource NegativeTwoThirdsBlockToTheLeftMargin}">
+            <ContentPresenter Content="{Binding NotificationCenter}" x:Name="NotificationCenter" Width="0"
+                              DockPanel.Dock="Right" Margin="{StaticResource NegativeTwoThirdsBlockToTheLeftMargin}">
                 <i:Interaction.Triggers>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}" Value="false">
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
+                                    Value="false">
                         <animation:WidthChange TargetWidth="0" />
                     </ei:DataTrigger>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}" Value="true">
+                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
+                                    Value="true">
                         <animation:WidthChange TargetWidth="{StaticResource BlockTwentyFive}" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </ContentPresenter>
             <ContentPresenter Content="{Binding BuildTree}" />
         </DockPanel>
-        <views:BusyIndicator IsBusy="{Binding Path=IsBusy}" />
-        <DockPanel >
-            <Rectangle x:Name="DistanceHolder" DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=NotificationCenter}"/>
-            <ContentPresenter Content="{Binding StatusIndicator}"  HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <DockPanel>
+            <!--Distance holder-->
+            <Rectangle DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=NotificationCenter}" />
+            <ContentPresenter Content="{Binding StatusIndicator}" HorizontalAlignment="Right" VerticalAlignment="Top" />
         </DockPanel>
         <ContentPresenter Content="{Binding Overlay}" />
     </Grid>
@@ -109,7 +112,7 @@
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowNotificationCenter}"
                                     Value="true">
-                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2"/>
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding ShowNotificationCenter}"
                                     Value="false">
@@ -118,7 +121,7 @@
                 </i:Interaction.Triggers>
             </icons:IconButton>
             <ContentPresenter Content="{Binding SearchViewModel}" />
-            
+
         </DockPanel>
     </window:CustomWindow.LeftToButtonsContent>
 
@@ -134,11 +137,11 @@
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="true">
-                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" DoRotate="True"/>
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" DoRotate="True" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="false">
-                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" DoRotate="True"/>
+                        <settings:SettingsButtonToggle DoHide="true" Duration="0.4" DoRotate="True" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </icons:IconButton>

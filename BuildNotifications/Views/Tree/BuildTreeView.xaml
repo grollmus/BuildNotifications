@@ -6,6 +6,7 @@
              xmlns:viewModelsTree="clr-namespace:BuildNotifications.ViewModel.Tree"
              xmlns:resourcesBuildTree="clr-namespace:BuildNotifications.Resources.BuildTree"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+             xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type={x:Type viewModelsTree:BuildTreeViewModel}}">
@@ -19,11 +20,11 @@
     </UserControl.Resources>
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Children}"
+        <ItemsControl ItemsSource="{Binding Children}" Margin="{StaticResource BlockThicknessOnXHalfOnY}"
                       ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedWrapPanel Orientation="Vertical" VirtualizingStackPanel.IsVirtualizing="True" />
+                    <animation:AnimatedWrapPanel Orientation="{Binding MaxTreeDepth, Converter={x:Static converter:MaxTreeDepthToOrientationConverter.Instance}}" VirtualizingStackPanel.IsVirtualizing="True" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

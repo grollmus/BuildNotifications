@@ -11,11 +11,13 @@ namespace BuildNotifications.ViewModel.Notification
     {
         private readonly NotificationViewModelFactory _notificationViewModelFactory;
         private NotificationViewModel? _selectedNotification;
-        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; } = new RemoveTrackingObservableCollection<NotificationViewModel>();
+        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
 
         public NotificationCenterViewModel()
         {
             _notificationViewModelFactory = new NotificationViewModelFactory();
+            Notifications = new RemoveTrackingObservableCollection<NotificationViewModel>();
+            Notifications.SortDescending(x => x.Timestamp);
         }
 
         public NotificationViewModel? SelectedNotification

@@ -7,16 +7,6 @@ namespace BuildNotifications.ViewModel
 {
     public class BaseViewModel : INotifyPropertyChanged, IRemoveTracking
     {
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set
-            {
-                _isBusy = value;
-                OnPropertyChanged();
-            }
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -35,7 +25,6 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private bool _isBusy;
         private bool _isRemoving;
     }
 }

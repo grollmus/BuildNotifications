@@ -15,7 +15,7 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
 
         protected override void Invoke(object parameter)
         {
-            if (!(AssociatedObject is UIElement associatedUiElement))
+            if (!(AssociatedObject.Content is UIElement buttonContent))
                 return;
 
             var targetColorKey = DoHide ? "Background3" : "Foreground1";
@@ -28,8 +28,8 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
             group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
             AssociatedObject.RenderTransform = group;
 
-            var counterScaleTransform = new ScaleTransform(DoHide ? 0.8 : 1.0, DoHide ? 0.8 : 1.0, Anchor.Position(associatedUiElement).X, Anchor.Position(associatedUiElement).Y);
-            var counterRotateTransform = new RotateTransform(DoHide ? -90 : 0, Anchor.Position(associatedUiElement).X, Anchor.Position(associatedUiElement).Y);
+            var counterScaleTransform = new ScaleTransform(DoHide ? 0.8 : 1.0, DoHide ? 0.8 : 1.0, Anchor.Position(buttonContent).X, Anchor.Position(buttonContent).Y);
+            var counterRotateTransform = new RotateTransform(DoHide ? -90 : 0, Anchor.Position(buttonContent).X, Anchor.Position(buttonContent).Y);
             var counterGroup = new TransformGroup
             {
                 Children = new TransformCollection(new Transform[] {counterScaleTransform, counterRotateTransform})

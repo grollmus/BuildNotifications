@@ -7,20 +7,12 @@
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
              xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
-             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type viewModelNotification:NotificationCenterViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <CollectionViewSource Source="{Binding Notifications}" x:Key="NotificationsSortedByDate">
-            <CollectionViewSource.SortDescriptions>
-                <componentModel:SortDescription PropertyName="Timestamp" Direction="Descending" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
-    </UserControl.Resources>
 
-    <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Source={StaticResource NotificationsSortedByDate}}"
-             Style="{StaticResource StretchingListBox}" SelectedItem="{Binding SelectedNotification, Mode=TwoWay}">
+    <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Notifications}"
+             Style="{StaticResource StretchingListBox}" SelectedItem="{Binding SelectedNotification, Mode=TwoWay}" Width="{StaticResource BlockTwentyFive}">
 
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
@@ -44,7 +36,7 @@
                                    TextWrapping="Wrap" FontWeight="Bold"
                                    Foreground="{DynamicResource Foreground1}" />
                     </DockPanel>
-                    <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap"
+                    <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap" 
                                Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
                 </DockPanel>
 

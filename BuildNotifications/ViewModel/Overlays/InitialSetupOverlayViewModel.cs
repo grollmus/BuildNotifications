@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using BuildNotifications.Core.Plugin;
-using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Utils;
@@ -19,7 +18,6 @@ namespace BuildNotifications.ViewModel.Overlays
         {
             _settingsViewModel = settingsViewModel;
             ConnectionsAndProjectsSettingsViewModel = new ConnectionsAndProjectsSettingsViewModel(settingsViewModel.ConnectionsSubSet, settingsViewModel.ProjectsSubSet, pluginRepository);
-            ConnectionsAndProjectsSettingsViewModel.Items.Add(new ButtonNavigationItem("Placeholder. Restart BuildNotifications with setup Project and Connection to get to the default view", "Test", IconType.Dummy));
             settingsViewModel.SettingsChanged += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
             App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
