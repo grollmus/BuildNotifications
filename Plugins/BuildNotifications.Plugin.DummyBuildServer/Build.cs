@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 
@@ -9,6 +10,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public Build()
         {
             Id = (++_idCounter).ToString();
+            StartProgress();
         }
 
         public string ProjectName { get; }
@@ -18,6 +20,23 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             // ReSharper disable NonReadonlyMemberInGetHashCode
             return Id.GetHashCode();
             // ReSharper restore NonReadonlyMemberInGetHashCode
+        }
+
+        private async Task StartProgress()
+        {
+            while ((Status == BuildStatus.Running || Status == BuildStatus.Pending || Status == BuildStatus.None) && Progress < 100)
+            {
+                await Task.Delay(100);
+                if (Status == BuildStatus.Pending)
+                    continue;
+                Progress += 1;
+                Progress = Progress;
+                if (Progress >= 100)
+                {
+                    Progress = 100;
+                    Status = BuildStatus.Succeeded;
+                }
+            }
         }
 
         /// <inheritdoc />

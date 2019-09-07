@@ -141,9 +141,7 @@ namespace BuildNotifications.ViewModel
                 // when connections or projects changed or the update is stopped. Now is the time to reload and restart the pipeline
                 // as the user either changed or checked the critical settings
                 if (e.ProjectOrConnectionsChanged || !_keepUpdating)
-                {
                     ResetAndRestart();
-                }
 
                 StartUpdating();
             });

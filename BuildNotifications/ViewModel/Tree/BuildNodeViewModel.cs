@@ -3,6 +3,9 @@ using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Utils;
+using TweenSharp.Animation;
+using TweenSharp.Factory;
+using Timeline = TweenSharp.Animation.Timeline;
 
 namespace BuildNotifications.ViewModel.Tree
 {
@@ -38,9 +41,9 @@ namespace BuildNotifications.ViewModel.Tree
 
         private const double DoubleTolerance = 0.0000000001;
 
-        public double Progress
+        public double ProgressToDisplay
         {
-            get => _progress;
+            get => _progressToDisplay;
             set
             {
                 if (value < 0)
@@ -48,13 +51,36 @@ namespace BuildNotifications.ViewModel.Tree
                 if (value > 1)
                     value = 1;
 
-                if (Math.Abs(_progress - value) < DoubleTolerance)
+                if (Math.Abs(_progressToDisplay - value) < DoubleTolerance)
                     return;
 
-                _progress = value;
+                _progressToDisplay = value;
                 OnPropertyChanged();
             }
         }
+
+        public double ActualProgress
+        {
+            get => _actualProgress;
+            set
+            {
+                _actualProgress = value;
+                // Ensure the TweenHandler is only touched by a single thread.
+                App.Current.Dispatcher.Invoke(() =>
+                {
+                    var globalTweenHandler = App.GlobalTweenHandler;
+                    if (_progressTween != null && globalTweenHandler.Contains(_progressTween))
+                        globalTweenHandler.Remove(_progressTween);
+
+                    // always display at least 20%, so the user has a reasonable area to click on
+                    var targetProgress = Node.Progress / 80.0 + 0.2;
+                    _progressTween = this.Tween(x => x.ProgressToDisplay).To(targetProgress).In(5).Ease(Easing.Linear);
+                    globalTweenHandler.Add(_progressTween);
+                });
+            }
+        }
+
+        private Timeline _progressTween;
 
         public bool DisplayAsHollow
         {
@@ -76,9 +102,8 @@ namespace BuildNotifications.ViewModel.Tree
         {
             UpdateBuildStatus();
             UpdateChangedDate();
-            
-            // always display at least 20%, so the user has a reasonable area to click on
-            Progress = Node.Progress / 80.0 + 0.2;
+
+            ActualProgress = Node.Progress;
         }
 
         private void UpdateBuildStatus()
@@ -126,7 +151,8 @@ namespace BuildNotifications.ViewModel.Tree
         private bool _isLargeSize;
         private bool _shouldBeLarge;
         private bool _isHighlighted;
-        private double _progress;
+        private double _progressToDisplay = 0.2;
         private bool _displayAsHollow;
+        private double _actualProgress;
     }
 }

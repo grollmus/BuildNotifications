@@ -74,7 +74,7 @@
                 <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
                 <Setter Property="RenderTransform" TargetName="FillRectangle">
                     <Setter.Value>
-                        <ScaleTransform ScaleX="{Binding Progress}" ScaleY="1"/>
+                        <ScaleTransform ScaleX="{Binding ProgressToDisplay}" ScaleY="1"/>
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
@@ -83,7 +83,7 @@
                 <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
                 <Setter Property="RenderTransform" TargetName="FillRectangle">
                     <Setter.Value>
-                        <ScaleTransform ScaleX="{Binding Progress}" ScaleY="1"/>
+                        <ScaleTransform ScaleX="{Binding ProgressToDisplay}" ScaleY="1"/>
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
