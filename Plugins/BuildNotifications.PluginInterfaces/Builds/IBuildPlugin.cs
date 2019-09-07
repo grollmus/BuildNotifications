@@ -20,7 +20,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// The constructed provider. Return <c>null</c> when you are
         /// unable to construct a provider from <paramref name="data" />
         /// </returns>
-        IBuildProvider? ConstructProvider(object data);
+        IBuildProvider? ConstructProvider(object? data);
 
         /// <summary>
         /// Determines whether a connection can be established with the given configuration.

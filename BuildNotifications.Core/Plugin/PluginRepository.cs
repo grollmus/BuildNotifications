@@ -78,8 +78,6 @@ namespace BuildNotifications.Core.Plugin
             return plugin?.GetConfigurationType();
         }
 
-        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
-
         private readonly ITypeMatcher _typeMatcher;
     }
 }

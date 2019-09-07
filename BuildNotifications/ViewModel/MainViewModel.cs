@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
 
-        public BaseViewModel Overlay
+        public BaseViewModel? Overlay
         {
             get => _overlay;
             set
@@ -97,7 +97,7 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
-        private async void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
+        private async void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
@@ -110,13 +110,31 @@ namespace BuildNotifications.ViewModel
             NotificationCenter.ShowNotifications(e.Notifications);
         }
 
-        private void GlobalErrorLog_ErrorOccurred(object sender, ErrorNotificationEventArgs e)
+        private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
         {
             StopUpdating();
             StatusIndicator.Error(e.ErrorNotifications);
 
             // errors may occur on any thread. 
             Application.Current.Dispatcher?.Invoke(() => { NotificationCenter.ShowNotifications(e.ErrorNotifications); });
+        }
+
+        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition):
+                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree = null;
+                    UpdateNow();
+                    break;
+                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) when BuildTree != null:
+                    _coreSetup.Configuration.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    _coreSetup.PersistConfigurationChanges();
+                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+                    break;
+            }
         }
 
         private void Initialize()
@@ -128,7 +146,7 @@ namespace BuildNotifications.ViewModel
                 StartUpdating();
         }
 
-        private void InitialSetup_CloseRequested(object sender, InitialSetupEventArgs e)
+        private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
         {
             if (!(sender is InitialSetupOverlayViewModel vm))
                 return;
@@ -149,14 +167,6 @@ namespace BuildNotifications.ViewModel
             App.GlobalTweenHandler.Add(tween);
         }
 
-        private void ResetAndRestart()
-        {
-            ResetError();
-            StopUpdating();
-            LoadProjects();
-            StartUpdating();
-        }
-
         private void LoadProjects()
         {
             _coreSetup.Pipeline.ClearProjects();
@@ -167,7 +177,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private void NotificationCenterOnHighlightRequested(object sender, HighlightRequestedEventArgs e)
+        private void NotificationCenterOnHighlightRequested(object? sender, HighlightRequestedEventArgs e)
         {
             foreach (var buildNode in _highlightedBuilds)
             {
@@ -182,6 +192,14 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        private void ResetAndRestart()
+        {
+            ResetError();
+            StopUpdating();
+            LoadProjects();
+            StartUpdating();
+        }
+
         private void ResetError()
         {
             if (StatusIndicator.ErrorVisible)
@@ -190,7 +208,7 @@ namespace BuildNotifications.ViewModel
             NotificationCenter.ClearNotificationsOfType(NotificationType.Error);
         }
 
-        private void SettingsViewModelOnEditConnectionsRequested(object sender, EventArgs e)
+        private void SettingsViewModelOnEditConnectionsRequested(object? sender, EventArgs e)
         {
             ToggleShowSettingsCommand.Execute(null);
             ShowInitialSetupOverlayViewModel();
@@ -207,32 +225,16 @@ namespace BuildNotifications.ViewModel
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
-            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
-            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
-            GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition;
+            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
+            {
+                BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition, 
+                BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition
+            };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
-        }
-
-        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            switch (args.PropertyName)
-            {
-                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeGroupDefinition):
-                    _coreSetup.Configuration.GroupDefinition = GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition;
-                    _coreSetup.PersistConfigurationChanges();
-                    BuildTree = null;
-                    UpdateNow();
-                    break;
-                case nameof(GroupAndSortDefinitionsViewModel.BuildTreeSortingDefinition) when BuildTree != null:
-                    _coreSetup.Configuration.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                    _coreSetup.PersistConfigurationChanges();
-                    BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-                    break;
-            }
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -266,12 +268,12 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.Resume();
         }
 
-        private void StatusIndicator_OnOpenErrorMessageRequested(object sender, OpenErrorRequestEventArgs e)
+        private void StatusIndicator_OnOpenErrorMessageRequested(object? sender, OpenErrorRequestEventArgs e)
         {
             ToggleShowNotificationCenterCommand.Execute(null);
         }
 
-        private void StatusIndicator_OnResumeRequested(object sender, EventArgs e)
+        private void StatusIndicator_OnResumeRequested(object? sender, EventArgs e)
         {
             ResetAndRestart();
         }
@@ -337,7 +339,6 @@ namespace BuildNotifications.ViewModel
 
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
-
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private BuildTreeViewModel _buildTree;

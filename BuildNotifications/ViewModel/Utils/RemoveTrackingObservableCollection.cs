@@ -60,7 +60,7 @@ namespace BuildNotifications.ViewModel.Utils
             Sort();
         }
 
-        private async void RemoveWithDelay(T item)
+        private async Task RemoveWithDelay(T item)
         {
             item.IsRemoving = true;
 

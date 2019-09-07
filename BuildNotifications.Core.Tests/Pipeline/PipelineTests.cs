@@ -72,9 +72,9 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var treeBuilder = TreeBuilderTests.Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
+            var masterBranch = new MockBranch("master");
             var ciDefinition = new MockBuildDefinition("1", "ci");
-            var stageBranch = Substitute.For<IBranch>();
+            var stageBranch = new MockBranch("stage");
             var nightlyDefinition = new MockBuildDefinition("2", "nightly");
 
             var branches = new[] {masterBranch, stageBranch};

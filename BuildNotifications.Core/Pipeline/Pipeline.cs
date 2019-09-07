@@ -32,7 +32,8 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var build in builds)
             {
-                if (!_definitionCache.ContainsValue(build.Definition))
+                if (!_definitionCache.ContainsValue(build.Definition)
+                    || !_branchCache.Contains(b => b.Name.Equals(build.BranchName)))
                     _buildCache.RemoveValue(build);
             }
         }
@@ -70,6 +71,13 @@ namespace BuildNotifications.Core.Pipeline
                     await foreach (var branch in branches)
                     {
                         _branchCache.AddOrReplace(projectId, branch.Name.GetHashCode(), branch);
+                    }
+
+                    var removedBranches = project.FetchRemovedBranches();
+
+                    await foreach (var branch in removedBranches)
+                    {
+                        _branchCache.Remove(projectId, branch.Name.GetHashCode());
                     }
                 }
                 catch (Exception ex)
@@ -168,6 +176,8 @@ namespace BuildNotifications.Core.Pipeline
         /// <inheritdoc />
         public async Task Update()
         {
+            await new SynchronizationContextRemover();
+
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.ContentCopy().ToDictionary(x => (BuildId: x.Id, Project: x.ProjectName), x => x.Status);
@@ -213,8 +223,8 @@ namespace BuildNotifications.Core.Pipeline
         private readonly IPipelineCache<IBuildDefinition> _definitionCache;
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
+        private readonly NotificationFactory _notificationFactory;
         private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
-        private readonly NotificationFactory _notificationFactory;
     }
 }

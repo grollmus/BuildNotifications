@@ -13,7 +13,7 @@ namespace BuildNotifications.Resources.Icons
             Duration = 0.2;
         }
 
-        public int Repeat { get; set; } = 0;
+        public int Repeat { get; set; }
 
         protected override void Invoke(object parameter)
         {

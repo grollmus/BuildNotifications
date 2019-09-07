@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BuildNotifications.Core.Pipeline.Cache
@@ -38,6 +39,11 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return Contains(new CacheKey(providerId, itemId));
         }
 
+        public bool Contains(Predicate<T> predicate)
+        {
+            return _items.Values.Any(it => predicate(it));
+        }
+
         public bool ContainsValue(T value)
         {
             return _items.ContainsValue(value);
@@ -58,7 +64,10 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return new List<T>(_items.Values);
         }
 
-        public void Clear() => _items.Clear();
+        public void Clear()
+        {
+            _items.Clear();
+        }
 
         private readonly Dictionary<CacheKey, T> _items = new Dictionary<CacheKey, T>();
     }

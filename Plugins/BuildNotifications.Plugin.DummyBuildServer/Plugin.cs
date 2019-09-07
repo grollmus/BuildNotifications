@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
@@ -73,7 +74,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         {
             return TestConnection(data);
         }
-
+      
         public IBranchProvider ConstructProvider(object data)
         {
             var connection = GetConnection(data as Configuration);

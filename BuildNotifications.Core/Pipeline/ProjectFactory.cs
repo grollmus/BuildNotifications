@@ -15,7 +15,6 @@ namespace BuildNotifications.Core.Pipeline
         public ProjectFactory(IPluginRepository pluginRepository, IConfiguration configuration)
         {
             _pluginRepository = pluginRepository;
-            _pluginRepository.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
             _configuration = configuration;
         }
 
@@ -96,6 +95,8 @@ namespace BuildNotifications.Core.Pipeline
                 LogTo.ErrorException(fullMessage, exception);
             else
                 LogTo.Error(fullMessage);
+
+            ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs());
         }
 
         /// <inheritdoc />

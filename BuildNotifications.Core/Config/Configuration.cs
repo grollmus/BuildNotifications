@@ -19,6 +19,8 @@ namespace BuildNotifications.Core.Config
             Connections = new List<ConnectionData>();
             Projects = new List<IProjectConfiguration>();
 
+            Language = PossibleLanguages().First();
+
             GroupDefinition = new BuildTreeGroupDefinition(
                 Pipeline.Tree.Arrangement.GroupDefinition.Source,
                 Pipeline.Tree.Arrangement.GroupDefinition.Branch,
