@@ -6,7 +6,6 @@ namespace BuildNotifications.Core.Pipeline.Cache
 {
     internal class PipelineCache<T> : IPipelineCache<T>
     {
-        /// <inheritdoc />
         public void AddOrReplace(CacheKey key, T item)
         {
             _items[key] = item;
@@ -17,7 +16,6 @@ namespace BuildNotifications.Core.Pipeline.Cache
             AddOrReplace(new CacheKey(providerId, itemId), item);
         }
 
-        /// <inheritdoc />
         public void Remove(CacheKey key)
         {
             _items.Remove(key, out _);
@@ -28,7 +26,6 @@ namespace BuildNotifications.Core.Pipeline.Cache
             Remove(new CacheKey(providerId, itemId));
         }
 
-        /// <inheritdoc />
         public bool Contains(CacheKey key)
         {
             return _items.ContainsKey(key);
@@ -58,7 +55,6 @@ namespace BuildNotifications.Core.Pipeline.Cache
             }
         }
 
-        /// <inheritdoc />
         public IEnumerable<T> ContentCopy()
         {
             return new List<T>(_items.Values);

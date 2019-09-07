@@ -4,7 +4,6 @@ namespace BuildNotifications.Core.Utilities
 {
     internal class TypeMatcher : ITypeMatcher
     {
-        /// <inheritdoc />
         public bool MatchesType(Type type, string? typeName)
         {
             if (typeName == null)
@@ -25,13 +24,11 @@ namespace BuildNotifications.Core.Utilities
                 _fullTypeName = typeParts[0].Trim();
             }
 
-            /// <inheritdoc />
             public override bool Equals(object? obj)
             {
                 return ReferenceEquals(this, obj) || obj is TypeName other && Equals(other);
             }
 
-            /// <inheritdoc />
             public override int GetHashCode()
             {
                 unchecked

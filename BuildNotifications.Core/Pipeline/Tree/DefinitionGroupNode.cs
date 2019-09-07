@@ -9,7 +9,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             Definition = definition;
         }
 
-        /// <inheritdoc />
         public IBuildDefinition Definition { get; }
 
         public override bool Equals(IBuildTreeNode other)

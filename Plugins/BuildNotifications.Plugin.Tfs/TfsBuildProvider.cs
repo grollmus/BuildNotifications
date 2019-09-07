@@ -43,10 +43,8 @@ namespace BuildNotifications.Plugin.Tfs
             return _project;
         }
 
-        /// <inheritdoc />
         public IUser User { get; }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {
             var project = await GetProject();
@@ -60,7 +58,6 @@ namespace BuildNotifications.Plugin.Tfs
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
             var project = await GetProject();
@@ -79,7 +76,6 @@ namespace BuildNotifications.Plugin.Tfs
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date)
         {
             var project = await GetProject();
@@ -98,7 +94,6 @@ namespace BuildNotifications.Plugin.Tfs
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBuildDefinition> FetchExistingBuildDefinitions()
         {
             var project = await GetProject();

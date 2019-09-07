@@ -5,12 +5,10 @@ namespace DummyBuildServer.ViewModels
 {
     internal class DelegateCommand : DelegateCommand<object>
     {
-        /// <inheritdoc />
         public DelegateCommand(Action<object> executeAction, Func<object, bool> canExecuteFunc) : base(executeAction, canExecuteFunc)
         {
         }
 
-        /// <inheritdoc />
         public DelegateCommand(Action<object> executeAction) : base(executeAction)
         {
         }
@@ -36,13 +34,11 @@ namespace DummyBuildServer.ViewModels
             CanExecuteChangedInternal?.Invoke(this, EventArgs.Empty);
         }
 
-        /// <inheritdoc />
         public bool CanExecute(object parameter)
         {
             return _canExecuteFunc((TParam) parameter);
         }
 
-        /// <inheritdoc />
         public void Execute(object parameter)
         {
             if (!_canExecuteFunc((TParam) parameter))
@@ -51,7 +47,6 @@ namespace DummyBuildServer.ViewModels
             _executeAction((TParam) parameter);
         }
 
-        /// <inheritdoc />
         public event EventHandler CanExecuteChanged
         {
             add

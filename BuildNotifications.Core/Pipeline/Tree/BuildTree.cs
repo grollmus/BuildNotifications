@@ -9,7 +9,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             GroupDefinition = groupDefinition;
         }
 
-        /// <inheritdoc />
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
     }
 }

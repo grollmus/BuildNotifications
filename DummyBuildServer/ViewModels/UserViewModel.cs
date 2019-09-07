@@ -13,7 +13,6 @@ namespace DummyBuildServer.ViewModels
         public string Name { get; set; }
         public User User { get; }
 
-        /// <inheritdoc />
         public override string ToString()
         {
             return Name;

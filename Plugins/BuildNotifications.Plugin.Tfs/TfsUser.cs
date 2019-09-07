@@ -20,13 +20,10 @@ namespace BuildNotifications.Plugin.Tfs
             UniqueName = identity.Descriptor.Identifier;
         }
 
-        /// <inheritdoc />
         public string DisplayName { get; }
 
-        /// <inheritdoc />
         public string Id { get; }
 
-        /// <inheritdoc />
         public string UniqueName { get; }
     }
 }

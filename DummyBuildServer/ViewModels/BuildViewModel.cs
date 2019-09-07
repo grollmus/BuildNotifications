@@ -15,7 +15,6 @@ namespace DummyBuildServer.ViewModels
 
         public int Progress { get; set; }
 
-        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Build.Id} - {Build.Definition.Name} on {Build.BranchName}";

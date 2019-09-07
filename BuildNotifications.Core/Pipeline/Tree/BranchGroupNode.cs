@@ -7,7 +7,6 @@
             BranchName = branchName;
         }
 
-        /// <inheritdoc />
         public string BranchName { get; private set; }
 
         public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)

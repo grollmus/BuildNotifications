@@ -20,19 +20,15 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             Id = DisplayName = UniqueName = name;
         }
 
-        /// <inheritdoc />
         public override string ToString()
         {
             return DisplayName;
         }
 
-        /// <inheritdoc />
         public string DisplayName { get; set; }
 
-        /// <inheritdoc />
         public string Id { get; set; }
 
-        /// <inheritdoc />
         public string UniqueName { get; set; }
     }
 }

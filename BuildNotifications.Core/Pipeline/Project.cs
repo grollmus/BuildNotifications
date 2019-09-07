@@ -28,13 +28,10 @@ namespace BuildNotifications.Core.Pipeline
             return new EnrichedBuild(build, Name);
         }
 
-        /// <inheritdoc />
         public IProjectConfiguration Config { get; set; }
 
-        /// <inheritdoc />
         public string Name { get; set; }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
             foreach (var buildProvider in _buildProviders)
@@ -46,7 +43,6 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate)
         {
             foreach (var buildProvider in _buildProviders)

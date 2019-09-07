@@ -9,7 +9,6 @@ namespace BuildNotifications.Core.Tests.Utilities
     {
         private class EmptySerializerTestCases : IEnumerable<object[]>
         {
-            /// <inheritdoc />
             public IEnumerator<object[]> GetEnumerator()
             {
                 yield return new[] {new object()};
@@ -18,7 +17,6 @@ namespace BuildNotifications.Core.Tests.Utilities
                 yield return new object[] {new int[0]};
             }
 
-            /// <inheritdoc />
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();

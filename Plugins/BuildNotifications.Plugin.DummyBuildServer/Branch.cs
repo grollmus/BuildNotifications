@@ -13,22 +13,18 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             DisplayName = Name = name;
         }
 
-        /// <inheritdoc />
         public override string ToString()
         {
             return DisplayName;
         }
 
-        /// <inheritdoc />
         public bool Equals(IBranch other)
         {
             return Name == (other as Branch)?.Name;
         }
 
-        /// <inheritdoc />
         public string DisplayName { get; set; }
 
-        /// <inheritdoc />
         public string Name { get; set; }
     }
 }

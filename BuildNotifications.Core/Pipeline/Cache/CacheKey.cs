@@ -8,7 +8,6 @@
             _itemId = itemId;
         }
 
-        /// <inheritdoc />
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
@@ -23,7 +22,6 @@
             return EqualsOtherCacheKey((CacheKey) obj);
         }
 
-        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked

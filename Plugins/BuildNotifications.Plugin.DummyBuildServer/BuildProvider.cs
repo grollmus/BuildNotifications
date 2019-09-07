@@ -18,10 +18,8 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             };
         }
 
-        /// <inheritdoc />
         public IUser User => new User("Me");
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {
             var json = await _connection.Query(Constants.Queries.Builds);
@@ -35,7 +33,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
@@ -50,7 +47,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
@@ -65,7 +61,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBuildDefinition> FetchExistingBuildDefinitions()
         {
             var json = await _connection.Query(Constants.Queries.Definitions);

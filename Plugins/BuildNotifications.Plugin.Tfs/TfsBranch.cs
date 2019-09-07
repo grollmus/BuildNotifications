@@ -17,16 +17,13 @@ namespace BuildNotifications.Plugin.Tfs
             return branchName.Replace("refs/heads/", "");
         }
 
-        /// <inheritdoc />
         public bool Equals(IBranch other)
         {
             return _id == (other as TfsBranch)?._id;
         }
 
-        /// <inheritdoc />
         public string DisplayName { get; }
 
-        /// <inheritdoc />
         public string Name { get; }
 
         private readonly string _id;

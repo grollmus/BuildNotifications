@@ -99,7 +99,6 @@ namespace BuildNotifications.Core.Pipeline
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs());
         }
 
-        /// <inheritdoc />
         public IProject? Construct(IProjectConfiguration config)
         {
             LogTo.Debug($"Trying to construct project from {config.BuildConnectionNames} and {config.SourceControlConnectionNames}");

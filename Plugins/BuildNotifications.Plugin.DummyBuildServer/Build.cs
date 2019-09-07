@@ -37,31 +37,22 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
-        /// <inheritdoc />
         public string BranchName { get; set; }
 
-        /// <inheritdoc />
         public IBuildDefinition Definition { get; set; }
 
-        /// <inheritdoc />
         public string Id { get; set; }
 
-        /// <inheritdoc />
         public DateTime? LastChangedTime { get; set; }
 
-        /// <inheritdoc />
         public int Progress { get; set; }
 
-        /// <inheritdoc />
         public DateTime? QueueTime { get; set; }
 
-        /// <inheritdoc />
         public IUser RequestedBy { get; set; }
 
-        /// <inheritdoc />
         public IUser RequestedFor { get; set; }
 
-        /// <inheritdoc />
         public BuildStatus Status { get; set; }
 
         public bool Equals(IBaseBuild other)

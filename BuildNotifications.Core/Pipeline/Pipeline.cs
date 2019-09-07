@@ -158,7 +158,6 @@ namespace BuildNotifications.Core.Pipeline
                 LogTo.Error(fullMessage);
         }
 
-        /// <inheritdoc />
         public void AddProject(IProject project)
         {
             _projectList.Add(project);
@@ -173,7 +172,6 @@ namespace BuildNotifications.Core.Pipeline
             _lastUpdate = null;
         }
 
-        /// <inheritdoc />
         public async Task Update()
         {
             var treeResult = await Task.Run(async () =>

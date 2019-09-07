@@ -77,7 +77,6 @@ namespace BuildNotifications.Core.Plugin
             }
         }
 
-        /// <inheritdoc />
         public IPluginRepository LoadPlugins(IEnumerable<string> folders)
         {
             var folderList = folders.ToList();

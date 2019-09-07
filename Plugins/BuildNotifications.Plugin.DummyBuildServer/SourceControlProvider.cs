@@ -12,7 +12,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             _connection = connection;
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
         {
             var json = await _connection.Query(Constants.Queries.Branches);

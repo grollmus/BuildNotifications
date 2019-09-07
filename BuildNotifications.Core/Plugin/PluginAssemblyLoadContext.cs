@@ -11,7 +11,6 @@ namespace BuildNotifications.Core.Plugin
             _folder = folder;
         }
 
-        /// <inheritdoc />
         protected override Assembly? Load(AssemblyName assemblyName)
         {
             try

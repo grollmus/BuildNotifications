@@ -23,7 +23,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
 
-        /// <inheritdoc />
         public IBuild Build { get; }
 
         public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)

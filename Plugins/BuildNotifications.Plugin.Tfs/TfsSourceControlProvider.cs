@@ -20,7 +20,6 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsBranch(branch);
         }
 
-        /// <inheritdoc />
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
         {
             var gitClient = await _connection.GetClientAsync<GitHttpClient>();

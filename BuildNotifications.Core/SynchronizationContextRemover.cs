@@ -18,7 +18,6 @@ namespace BuildNotifications.Core
             // Only exists because this class needs to be awaited.
         }
 
-        /// <inheritdoc />
         public void OnCompleted(Action continuation)
         {
             var prevContext = SynchronizationContext.Current;
