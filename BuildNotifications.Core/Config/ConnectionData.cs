@@ -30,7 +30,7 @@ namespace BuildNotifications.Core.Config
         /// Configuration instance for the selected BuildPlugin to use
         /// </summary>
         [CalculatedType(nameof(Configuration.BuildPluginConfigurationType))]
-        public object BuildPluginConfiguration { get; set; }
+        public object? BuildPluginConfiguration { get; set; }
 
         /// <summary>
         /// Type name of the plugin that is able to construct a branch provider
@@ -43,6 +43,6 @@ namespace BuildNotifications.Core.Config
         /// Configuration instance for the selected SourceControlPlugin to use
         /// </summary>
         [CalculatedType(nameof(Configuration.SourceControlPluginConfigurationType))]
-        public object SourceControlPluginConfiguration { get; set; }
+        public object? SourceControlPluginConfiguration { get; set; }
     }
 }

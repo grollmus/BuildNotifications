@@ -28,7 +28,7 @@ namespace BuildNotifications.Plugin.Tfs
             return await _connectionPool.TestConnection(tfsConfiguration);
         }
 
-        IBuildProvider? IBuildPlugin.ConstructProvider(object data)
+        IBuildProvider? IBuildPlugin.ConstructProvider(object? data)
         {
             if (!(data is TfsConfiguration configuration))
             {
@@ -59,7 +59,7 @@ namespace BuildNotifications.Plugin.Tfs
             return TestConnection(data);
         }
 
-        IBranchProvider? ISourceControlPlugin.ConstructProvider(object data)
+        IBranchProvider? ISourceControlPlugin.ConstructProvider(object? data)
         {
             if (!(data is TfsConfiguration configuration))
             {

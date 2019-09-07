@@ -20,7 +20,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable
+    public class MainViewModel : BaseViewModel
     {
         public MainViewModel()
         {
@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
 
-        public BaseViewModel Overlay
+        public BaseViewModel? Overlay
         {
             get => _overlay;
             set
@@ -97,7 +97,7 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
-        private async void CoreSetup_PipelineUpdated(object sender, PipelineUpdateEventArgs e)
+        private async void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
@@ -110,7 +110,7 @@ namespace BuildNotifications.ViewModel
             NotificationCenter.ShowNotifications(e.Notifications);
         }
 
-        private void GlobalErrorLog_ErrorOccurred(object sender, ErrorNotificationEventArgs e)
+        private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
         {
             StopUpdating();
             StatusIndicator.Error(e.ErrorNotifications);
@@ -146,7 +146,7 @@ namespace BuildNotifications.ViewModel
                 StartUpdating();
         }
 
-        private void InitialSetup_CloseRequested(object sender, InitialSetupEventArgs e)
+        private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
         {
             if (!(sender is InitialSetupOverlayViewModel vm))
                 return;
@@ -177,7 +177,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private void NotificationCenterOnHighlightRequested(object sender, HighlightRequestedEventArgs e)
+        private void NotificationCenterOnHighlightRequested(object? sender, HighlightRequestedEventArgs e)
         {
             foreach (var buildNode in _highlightedBuilds)
             {
@@ -208,7 +208,7 @@ namespace BuildNotifications.ViewModel
             NotificationCenter.ClearNotificationsOfType(NotificationType.Error);
         }
 
-        private void SettingsViewModelOnEditConnectionsRequested(object sender, EventArgs e)
+        private void SettingsViewModelOnEditConnectionsRequested(object? sender, EventArgs e)
         {
             ToggleShowSettingsCommand.Execute(null);
             ShowInitialSetupOverlayViewModel();
@@ -225,9 +225,11 @@ namespace BuildNotifications.ViewModel
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
-            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel();
-            GroupAndSortDefinitionsSelection.BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition;
-            GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition;
+            GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
+            {
+                BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition, 
+                BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition
+            };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
@@ -266,12 +268,12 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.Resume();
         }
 
-        private void StatusIndicator_OnOpenErrorMessageRequested(object sender, OpenErrorRequestEventArgs e)
+        private void StatusIndicator_OnOpenErrorMessageRequested(object? sender, OpenErrorRequestEventArgs e)
         {
             ToggleShowNotificationCenterCommand.Execute(null);
         }
 
-        private void StatusIndicator_OnResumeRequested(object sender, EventArgs e)
+        private void StatusIndicator_OnResumeRequested(object? sender, EventArgs e)
         {
             ResetAndRestart();
         }
@@ -333,11 +335,6 @@ namespace BuildNotifications.ViewModel
                     // ignored
                 }
             }
-        }
-
-        public void Dispose()
-        {
-            _cancellationTokenSource?.Dispose();
         }
 
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();

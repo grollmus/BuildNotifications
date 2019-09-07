@@ -25,7 +25,7 @@ namespace BuildNotifications.Core.Text
                 var resourceSet = resourceManager.GetResourceSet(culture, true, true);
                 var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
                     .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
-                    .ToDictionary(r => r.Key.ToString()!, r => r.Value.ToString());
+                    .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
 
                 Cache.Add(culture, resourceDictionary);
             }

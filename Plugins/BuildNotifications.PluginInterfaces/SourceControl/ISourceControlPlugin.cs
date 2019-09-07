@@ -21,7 +21,7 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
         /// The constructed provider. Return <c>null</c> when you are
         /// unable to construct a provider from <paramref name="data" />
         /// </returns>
-        IBranchProvider? ConstructProvider(object data);
+        IBranchProvider? ConstructProvider(object? data);
 
         /// <summary>
         /// Determines whether a connection can be established with the given configuration.
