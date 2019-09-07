@@ -15,6 +15,9 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
 
         protected override void Invoke(object parameter)
         {
+            if (!(AssociatedObject is UIElement associatedUiElement))
+                return;
+
             var targetColorKey = DoHide ? "Background3" : "Foreground1";
             var targetColorBrush = (SolidColorBrush) AssociatedObject.TryFindResource(targetColorKey);
             var targetColor = targetColorBrush.Color;
@@ -25,10 +28,13 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
             group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
             AssociatedObject.RenderTransform = group;
 
-            var counterScaleTransform = new ScaleTransform(DoHide ? 0.8 : 1.0, DoHide ? 0.8 : 1.0, Anchor.Position(AssociatedObject.Content as UIElement).X, Anchor.Position(AssociatedObject.Content as UIElement).Y);
-            var counterRotateTransform = new RotateTransform(DoHide ? -90 : 0, Anchor.Position(AssociatedObject.Content as UIElement).X, Anchor.Position(AssociatedObject.Content as UIElement).Y);
-            var counterGroup = new TransformGroup();
-            counterGroup.Children = new TransformCollection(new Transform[] {counterScaleTransform, counterRotateTransform});
+            var counterScaleTransform = new ScaleTransform(DoHide ? 0.8 : 1.0, DoHide ? 0.8 : 1.0, Anchor.Position(associatedUiElement).X, Anchor.Position(associatedUiElement).Y);
+            var counterRotateTransform = new RotateTransform(DoHide ? -90 : 0, Anchor.Position(associatedUiElement).X, Anchor.Position(associatedUiElement).Y);
+            var counterGroup = new TransformGroup
+            {
+                Children = new TransformCollection(new Transform[] {counterScaleTransform, counterRotateTransform})
+            };
+
             ((UIElement) AssociatedObject.Content).RenderTransform = counterGroup;
 
             var existingBrush = AssociatedObject.Foreground as SolidColorBrush;
@@ -36,15 +42,16 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
 
             AssociatedObject.Foreground = brush;
 
-            var tweens = new List<Timeline>();
-            tweens.Add(brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(rotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : 90).In(Duration).Ease(Easing.ExpoEaseOut));
-
-            tweens.Add(counterScaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 0.8).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(counterScaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 0.8).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(counterRotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : -90).In(Duration).Ease(Easing.ExpoEaseOut));
+            var tweens = new List<Timeline>
+            {
+                brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration),
+                scaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut),
+                scaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut),
+                rotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : 90).In(Duration).Ease(Easing.ExpoEaseOut),
+                counterScaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 0.8).In(Duration).Ease(Easing.ExpoEaseOut),
+                counterScaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 0.8).In(Duration).Ease(Easing.ExpoEaseOut),
+                counterRotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : -90).In(Duration).Ease(Easing.ExpoEaseOut)
+            };
 
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(AssociatedObject);

@@ -84,6 +84,8 @@
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 
                             <i:Interaction.Triggers>
+                                <!--Combobox is designed to be used with IRemoveTracking objects-->
+                                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
                                 <ei:DataTrigger
                                     Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="True">

@@ -8,7 +8,7 @@ namespace BuildNotifications.ViewModel.Tree
 {
     internal class BuildTreeViewModelFactory
     {
-        public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel existingTree)
+        public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel? existingTree)
         {
             var buildTreeResult = await Task.Run(() =>
             {

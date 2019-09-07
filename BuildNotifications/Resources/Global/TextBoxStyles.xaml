@@ -13,8 +13,6 @@
     <Style TargetType="{x:Type text:DecoratedTextBox}">
         <Setter Property="MaxHeight" Value="{StaticResource BlockOneAndHalf}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />
-        <Setter Property="BorderThickness" Value="1" />
-
         <Setter Property="Background" Value="{DynamicResource Background1}" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
         <Setter Property="TextWrapping" Value="Wrap" />

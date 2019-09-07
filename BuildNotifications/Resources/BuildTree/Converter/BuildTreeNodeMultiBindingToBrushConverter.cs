@@ -25,7 +25,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             if (buildStatus.Any())
                 return BuildStatusToBrushConverter.Instance.Convert(buildStatus.First());
 
-            return BuildStatusToBrushConverter.Instance.Convert(null);
+            return BuildStatusToBrushConverter.Instance.DefaultBrush;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

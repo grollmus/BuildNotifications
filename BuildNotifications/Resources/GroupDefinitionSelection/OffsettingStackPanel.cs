@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.Resources.GroupDefinitionSelection
 {
@@ -48,17 +49,8 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
             return calculatedSize;
         }
 
-        private IEnumerable<UIElement> EnumerateChildren()
-        {
-            foreach (UIElement child in Children)
-            {
-                yield return child;
-            }
-        }
+        private IEnumerable<UIElement> EnumerateChildren() => Children.Enumerate();
 
-        private double MaxOffset()
-        {
-            return Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
-        }
+        private double MaxOffset() => Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
     }
 }

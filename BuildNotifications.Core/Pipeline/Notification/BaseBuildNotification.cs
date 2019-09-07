@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -29,7 +30,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             };
         }
 
-        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), Parameters.ToArray());
+        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), Parameters.OfType<object>().ToArray());
 
         public string ContentTextId => GetMessageTextId();
 

@@ -22,6 +22,9 @@ namespace BuildNotifications.Resources.Text
             try
             {
                 var name = Enum.GetName(value.GetType(), value);
+                if (name == null)
+                    return "";
+
                 return StringLocalizer.Instance[name];
             }
             catch (Exception)

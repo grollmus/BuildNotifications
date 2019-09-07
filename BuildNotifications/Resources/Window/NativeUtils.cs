@@ -87,15 +87,4 @@ namespace BuildNotifications.Resources.Window
             return new Int32Rect(Left, Top, Width, Height);
         }
     }
-
-    internal struct NCCALCSIZE_PARAMS
-    {
-        internal RECT rect0;
-
-        internal RECT rect1;
-
-        internal RECT rect2;
-
-        internal IntPtr lppos;
-    }
 }

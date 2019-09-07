@@ -50,8 +50,11 @@ namespace BuildNotifications.ViewModel.Settings
             await new SynchronizationContextRemover();
 
             var selectedConnection = _connectionSettings.Configs.FirstOrDefault();
-            var data = selectedConnection.Value as List<ConnectionData>;
-            var selectedBuildData = data.LastOrDefault();
+            var data = selectedConnection?.Value as List<ConnectionData>;
+            var selectedBuildData = data?.LastOrDefault();
+
+            if (selectedBuildData == null)
+                return;
 
             await TestConnection(selectedBuildData);
         }
@@ -62,7 +65,7 @@ namespace BuildNotifications.ViewModel.Settings
             var sourcePlugin = _pluginRepository.FindSourceControlPlugin(connectionData.SourceControlPluginType);
             var failed = false;
 
-            if (buildPlugin != null)
+            if (buildPlugin != null && connectionData.BuildPluginConfiguration != null)
             {
                 var buildResult = await buildPlugin.TestConnection(connectionData.BuildPluginConfiguration);
 
@@ -75,7 +78,7 @@ namespace BuildNotifications.ViewModel.Settings
                 }
             }
 
-            if (sourcePlugin != null)
+            if (sourcePlugin != null && connectionData.SourceControlPluginConfiguration != null)
             {
                 var sourceResult = await sourcePlugin.TestConnection(connectionData.SourceControlPluginConfiguration);
 

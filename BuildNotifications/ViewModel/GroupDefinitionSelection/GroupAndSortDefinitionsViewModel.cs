@@ -33,7 +33,8 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         private void AddNoneAtEnd()
         {
-            if (Definitions.LastOrDefault()?.SelectedDefinition.GroupDefinition == GroupDefinition.None)
+            var selectedGroupDefinition = Definitions.LastOrDefault()?.SelectedDefinition.GroupDefinition;
+            if (selectedGroupDefinition == null || selectedGroupDefinition == GroupDefinition.None)
                 return;
 
             Definitions.Add(new GroupDefinitionsViewModel());
@@ -44,7 +45,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (GroupDefinitionsViewModel item in e.NewItems)
+                    foreach (var item in e.NewItems.OfType<GroupDefinitionsViewModel>())
                     {
                         item.SelectedDefinitionChanged += SingleGroupDefinitionChanged;
                         item.SelectedSortingDefinitionChanged += SingleSortingDefinitionChanged;
@@ -52,7 +53,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (GroupDefinitionsViewModel item in e.OldItems)
+                    foreach (var item in e.OldItems.OfType<GroupDefinitionsViewModel>())
                     {
                         item.SelectedDefinitionChanged -= SingleGroupDefinitionChanged;
                         item.SelectedSortingDefinitionChanged -= SingleSortingDefinitionChanged;
@@ -124,14 +125,15 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        private void SingleGroupDefinitionChanged(object sender, GroupDefinitionsSelectionChangedEventArgs e)
+        private void SingleGroupDefinitionChanged(object? sender, GroupDefinitionsSelectionChangedEventArgs e)
         {
             if (_suppressEvents)
                 return;
 
             _suppressEvents = true;
             RemoveNoneElements();
-            SwapDuplicates((GroupDefinitionsViewModel) sender, e);
+            if (sender is GroupDefinitionsViewModel groupDefinitionsViewModel)
+                SwapDuplicates(groupDefinitionsViewModel, e);
             AddNoneAtEnd();
             SetTexts();
             _suppressEvents = false;
@@ -139,7 +141,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             OnPropertyChanged(nameof(BuildTreeSortingDefinition));
         }
 
-        private void SingleSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        private void SingleSortingDefinitionChanged(object? sender, SortingDefinitionsSelectionChangedEventArgs e)
         {
             if (_suppressEvents)
                 return;

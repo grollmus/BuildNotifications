@@ -1,4 +1,5 @@
-﻿using BuildNotifications.Core.Pipeline.Tree;
+﻿using System;
+using BuildNotifications.Core.Pipeline.Tree;
 
 namespace BuildNotifications.ViewModel.Tree
 {
@@ -7,5 +8,7 @@ namespace BuildNotifications.ViewModel.Tree
         public StatusGroupNodeViewModel(IBuildTreeNode node) : base(node)
         {
         }
+
+        protected override string CalculateDisplayName() => throw new NotImplementedException();
     }
 }

@@ -76,6 +76,7 @@
                                     </Grid>
 
                                     <TextBlock
+                                        d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SortingDefinitionViewModel} }"
                                         Text="{Binding SortingDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
                                         Width="150" Margin="12,0,0,0"
                                         x:Name="NameTextBlock" Foreground="Transparent" />

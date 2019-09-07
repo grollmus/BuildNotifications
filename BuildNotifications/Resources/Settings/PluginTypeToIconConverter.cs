@@ -22,7 +22,7 @@ namespace BuildNotifications.Resources.Settings
             var pluginRepo = values.LastOrDefault() as IPluginRepository;
 
             if (pluginType == null || pluginRepo == null)
-                return null;
+                return Geometry.Empty;
 
             var geometryString = pluginRepo.FindIconGeometry(pluginType);
             if (geometryString == null)
@@ -34,7 +34,7 @@ namespace BuildNotifications.Resources.Settings
             }
             catch (Exception e)
             {
-                LogTo.WarnException($"Failed to parse geometry data from plugin: {pluginType}", e);
+                LogTo.DebugException($"Failed to parse geometry data from plugin: {pluginType}", e);
                 return Geometry.Empty;
             }
         }

@@ -18,6 +18,8 @@ using BuildNotifications.ViewModel.Utils;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
+// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
+#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
 namespace BuildNotifications.ViewModel
 {
     public class MainViewModel : BaseViewModel
@@ -30,7 +32,7 @@ namespace BuildNotifications.ViewModel
             Initialize();
         }
 
-        public BuildTreeViewModel BuildTree
+        public BuildTreeViewModel? BuildTree
         {
             get => _buildTree;
             set
@@ -39,7 +41,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
@@ -68,7 +70,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -184,6 +186,9 @@ namespace BuildNotifications.ViewModel
                 buildNode.IsHighlighted = false;
             }
 
+            if (BuildTree == null)
+                return;
+            
             var buildsVm = BuildTree.AllBuilds().Where(b => e.BuildNodes.Any(bn => b.Node.Build.Id == bn.Build.Id && b.Node.Build.ProjectName == bn.Build.ProjectName));
             foreach (var buildNode in buildsVm)
             {
@@ -341,10 +346,11 @@ namespace BuildNotifications.ViewModel
         private readonly CoreSetup _coreSetup;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
-        private BuildTreeViewModel _buildTree;
+        private BuildTreeViewModel? _buildTree;
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;
-        private BaseViewModel _overlay;
+        private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
     }
 }
+#pragma warning enable CS8618

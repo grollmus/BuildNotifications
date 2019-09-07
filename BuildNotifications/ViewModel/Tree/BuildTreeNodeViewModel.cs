@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -20,15 +19,8 @@ namespace BuildNotifications.ViewModel.Tree
             Children.CollectionChanged += ChildrenOnCollectionChanged;
             SetChildrenSorting(_currentSortingDefinition);
 
-            RemoveOneChildCommand = new DelegateCommand(RemoveOneChild);
-            AddAndRemoveCommand = new DelegateCommand(RemoveOneChild);
-            HighlightCommand = new DelegateCommand(Highlight);
             CurrentTreeLevelDepth = nodeSource.Depth;
         }
-
-        public ICommand AddAndRemoveCommand { get; set; }
-
-        public ICommand AddOneBuildCommand { get; set; }
 
         public BuildStatus BuildStatus => CalculateBuildStatus();
 
@@ -40,16 +32,12 @@ namespace BuildNotifications.ViewModel.Tree
 
         public string DisplayName => CalculateDisplayName();
 
-        public ICommand HighlightCommand { get; set; }
-
         public int MaxTreeDepth { get; set; }
 
         // object this ViewModel originates from
         public IBuildTreeNode NodeSource { get; }
 
-        public ICommand RemoveOneChildCommand { get; set; }
-
-        // only display status for the lowest and third lowest levels
+        // only display status for the lowest and third lowest levels. (By design in mockups)
         public bool ShouldColorByStatus
         {
             get
@@ -127,10 +115,7 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(ChangedDate));
         }
 
-        protected virtual string CalculateDisplayName()
-        {
-            return ToString();
-        }
+        protected abstract string CalculateDisplayName();
 
         protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)
         {
@@ -161,7 +146,7 @@ namespace BuildNotifications.ViewModel.Tree
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (BuildTreeNodeViewModel child in e.NewItems)
+                    foreach (var child in e.NewItems.OfType<BuildTreeNodeViewModel>())
                     {
                         child.PropertyChanged += OnChildPropertyChanged;
                         if (child is BuildNodeViewModel)
@@ -170,7 +155,7 @@ namespace BuildNotifications.ViewModel.Tree
 
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (BuildTreeNodeViewModel child in e.OldItems)
+                    foreach (var child in e.OldItems.OfType<BuildTreeNodeViewModel>())
                     {
                         child.PropertyChanged -= OnChildPropertyChanged;
                     }
@@ -205,18 +190,6 @@ namespace BuildNotifications.ViewModel.Tree
             UpdateChangedDate();
         }
 
-        private void Highlight(object obj)
-        {
-            bool? targetValue = null;
-            foreach (var build in Children.OfType<BuildNodeViewModel>())
-            {
-                if (targetValue == null)
-                    targetValue = !build.IsHighlighted;
-
-                build.IsHighlighted = targetValue.Value;
-            }
-        }
-
         private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(BuildStatus)))
@@ -232,13 +205,6 @@ namespace BuildNotifications.ViewModel.Tree
                 if (_currentSortingDefinition == SortingDefinition.DateAscending || _currentSortingDefinition == SortingDefinition.DateDescending)
                     Children.InvokeSort();
             }
-        }
-
-        private void RemoveOneChild(object parameter)
-        {
-            var someBuild = Children.FirstOrDefault(x => !x.IsRemoving);
-            if (someBuild != null)
-                Children.Remove(someBuild);
         }
 
         private void SetSpecificBuildChildrenProperties()

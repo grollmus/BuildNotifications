@@ -5,10 +5,14 @@ namespace BuildNotifications.ViewModel.Utils
 {
     public class DelegateCommand : ICommand
     {
-        public DelegateCommand(Action<object> execute, Predicate<object> canExecute = null)
+        public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
+        }
+
+        public DelegateCommand(Action<object> execute) : this(execute, x => true)
+        {
         }
 
         public void RaiseCanExecuteChanged()

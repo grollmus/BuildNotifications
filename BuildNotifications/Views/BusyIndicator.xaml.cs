@@ -81,7 +81,7 @@ namespace BuildNotifications.Views
             _tokenSource = new CancellationTokenSource();
         }
 
-        private Task _removeAndAddingTask;
+        private Task? _removeAndAddingTask;
         private CancellationTokenSource _tokenSource;
 
         public static readonly DependencyProperty IsBusyProperty = DependencyProperty.Register(

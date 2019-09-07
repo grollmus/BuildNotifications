@@ -13,8 +13,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             StartProgress();
         }
 
-        public string ProjectName { get; }
-
         public override int GetHashCode()
         {
             // ReSharper disable NonReadonlyMemberInGetHashCode
@@ -22,7 +20,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             // ReSharper restore NonReadonlyMemberInGetHashCode
         }
 
-        private async Task StartProgress()
+        private async void StartProgress()
         {
             while ((Status == BuildStatus.Running || Status == BuildStatus.Pending || Status == BuildStatus.None) && Progress < 100)
             {

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using BuildNotifications.ViewModel.Utils;
 using TweenSharp;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
@@ -14,7 +15,7 @@ namespace BuildNotifications.Resources.Animation
         {
             var origin = new Point(0, 0);
             var globalTweenHandler = App.GlobalTweenHandler;
-            foreach (UIElement child in panel.Children)
+            foreach (var child in panel.Children.Enumerate())
             {
                 if (!positions.ContainsKey(child))
                     continue;
@@ -71,7 +72,7 @@ namespace BuildNotifications.Resources.Animation
         public Dictionary<UIElement, Point> StoreOldPositions(Panel panel)
         {
             var positions = new Dictionary<UIElement, Point>();
-            foreach (UIElement child in panel.Children)
+            foreach (var child in panel.Children.Enumerate())
             {
                 var oldPos = child.TranslatePoint(new Point(0, 0), panel);
                 positions.Add(child, oldPos);

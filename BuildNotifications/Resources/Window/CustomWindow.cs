@@ -8,6 +8,8 @@ using Microsoft.Win32;
 using Button = System.Windows.Controls.Button;
 using MouseEventHandler = System.Windows.Input.MouseEventHandler;
 
+// copied class. If template resolutions fail, the entire application is unusable. So null reference exceptions here are fine.
+#nullable disable
 namespace BuildNotifications.Resources.Window
 {
     // Source https://github.com/NikolayVasilev/wpf-custom-window
@@ -231,3 +233,4 @@ namespace BuildNotifications.Resources.Window
             "LeftToButtonsContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default(object)));
     }
 }
+#nullable enable

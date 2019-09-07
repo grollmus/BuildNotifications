@@ -15,6 +15,10 @@ namespace BuildNotifications.Resources.Text
             PreviewMouseDown += OnPreviewMouseDown;
             PreviewKeyDown += OnKeyDown;
             KeyUp += OnKeyDown;
+
+            // use dummy instances for a quick and easy way to avoid null reference exceptions
+            _scrollViewer = new ScrollViewer();
+            _overlay = new Border();
         }
 
         public IconType Icon
@@ -31,8 +35,8 @@ namespace BuildNotifications.Resources.Text
 
         public override void OnApplyTemplate()
         {
-            _scrollViewer = GetTemplateChild("PART_ContentHost") as ScrollViewer;
-            _overlay = GetTemplateChild("Overlay") as Border;
+            _scrollViewer = GetTemplateChild("PART_ContentHost") as ScrollViewer ?? new ScrollViewer();
+            _overlay = GetTemplateChild("Overlay") as Border ?? new Border();
             base.OnApplyTemplate();
         }
 
@@ -77,7 +81,7 @@ namespace BuildNotifications.Resources.Text
             e.Handled = true;
         }
 
-        private Size RenderSize(FrameworkElement element)
+        private Size RenderSizeOfElement(FrameworkElement element)
         {
             if (element.Visibility == Visibility.Collapsed)
                 return new Size(0, 0);
@@ -93,9 +97,9 @@ namespace BuildNotifications.Resources.Text
 
         private bool ScrollViewerReachesIntoLabelOrIcon()
         {
-            var textSize = RenderSize(_scrollViewer).Width;
-            var sizeOfOverlay = RenderSize(_overlay).Width;
-            var availableSize = RenderSize(this).Width;
+            var textSize = RenderSizeOfElement(_scrollViewer).Width;
+            var sizeOfOverlay = RenderSizeOfElement(_overlay).Width;
+            var availableSize = RenderSizeOfElement(this).Width;
 
             return textSize + sizeOfOverlay > availableSize;
         }
@@ -104,11 +108,11 @@ namespace BuildNotifications.Resources.Text
         {
             var availableHeight = Math.Min(double.MaxValue, MaxHeight);
 
-            var neededMargin = RenderSize(_overlay).Height;
-            if (RenderSize(_scrollViewer).Height + neededMargin > availableHeight)
+            var neededMargin = RenderSizeOfElement(_overlay).Height;
+            if (RenderSizeOfElement(_scrollViewer).Height + neededMargin > availableHeight)
             {
-                var sizeOfOverlay = RenderSize(_overlay).Width;
-                var availableSize = RenderSize(this).Width;
+                var sizeOfOverlay = RenderSizeOfElement(_overlay).Width;
+                var availableSize = RenderSizeOfElement(this).Width;
                 var sizeWithoutOverlay = availableSize - sizeOfOverlay;
                 _scrollViewer.MaxWidth = sizeWithoutOverlay + 1;
                 return;

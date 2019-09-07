@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Notification;
+using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Notification
@@ -9,7 +10,7 @@ namespace BuildNotifications.ViewModel.Notification
     public class NotificationCenterViewModel : BaseViewModel
     {
         private readonly NotificationViewModelFactory _notificationViewModelFactory;
-        private NotificationViewModel _selectedNotification;
+        private NotificationViewModel? _selectedNotification;
         public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; } = new RemoveTrackingObservableCollection<NotificationViewModel>();
 
         public NotificationCenterViewModel()
@@ -17,16 +18,14 @@ namespace BuildNotifications.ViewModel.Notification
             _notificationViewModelFactory = new NotificationViewModelFactory();
         }
 
-        public NotificationViewModel SelectedNotification
+        public NotificationViewModel? SelectedNotification
         {
             get => _selectedNotification;
             set
             {
                 _selectedNotification = value;
                 OnPropertyChanged();
-                if (_selectedNotification == null)
-                    return;
-                HighlightRequested?.Invoke(this, new HighlightRequestedEventArgs(_selectedNotification.BuildNodes));
+                HighlightRequested?.Invoke(this, new HighlightRequestedEventArgs(_selectedNotification?.BuildNodes ?? new List<IBuildNode>()));
             }
         }
 

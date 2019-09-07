@@ -21,6 +21,7 @@ namespace DummyBuildServer.Models
             _parser = new ServerCommandParser(this);
             _buildNotificationsProcessHook = new BuildNotificationsProcessHook();
             _buildNotificationsProcessHook.OnProcessExited += OnBuildNotificationsProcessTerminated;
+            _cancelToken = new CancellationTokenSource();
         }
 
         public List<Build> Builds { get; } = new List<Build>();
@@ -45,10 +46,10 @@ namespace DummyBuildServer.Models
             IsRunning = false;
             _cancelToken?.Cancel();
             _networkThread?.Join();
-            _memoryFile.Dispose();
+            _memoryFile?.Dispose();
         }
 
-        private async void OnBuildNotificationsProcessTerminated(object sender, EventArgs e)
+        private async void OnBuildNotificationsProcessTerminated(object? sender, EventArgs e)
         {
             Debug.WriteLine("BuildNotifications.exe terminated. Auto restarting server...");
             Stop();
@@ -97,7 +98,7 @@ namespace DummyBuildServer.Models
 
         private CancellationTokenSource _cancelToken;
         private Thread? _networkThread;
-        private MemoryMappedFile _memoryFile;
+        private MemoryMappedFile? _memoryFile;
         private int _port;
     }
 
@@ -121,13 +122,14 @@ namespace DummyBuildServer.Models
 
         private async void WaitForProcess()
         {
-            await Task.Run(() => _process.WaitForExit());
+            if (_process != null)
+                await Task.Run(() => _process.WaitForExit());
 
             _process = null;
             OnProcessExited?.Invoke(this, EventArgs.Empty);
         }
 
-        private Process _process;
+        private Process? _process;
     }
 
     internal class ServerCommandParser
@@ -179,7 +181,7 @@ namespace DummyBuildServer.Models
 
                 var json = JsonConvert.SerializeObject(data, Formatting.None, settings);
                 var buffer = Encoding.ASCII.GetBytes(json);
-                
+
                 await response.WriteAsync(buffer, 0, buffer.Length);
                 response.Flush();
             }

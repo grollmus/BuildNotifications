@@ -19,7 +19,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         }
 
         /// <inheritdoc />
-        public IUser User { get; }
+        public IUser User => new User("Me");
 
         /// <inheritdoc />
         public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()

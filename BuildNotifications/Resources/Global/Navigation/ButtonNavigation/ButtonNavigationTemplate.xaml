@@ -41,7 +41,9 @@
 								d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsAndProjectsSettingsViewModel}}">
 								<Button DockPanel.Dock="Bottom" Command="{Binding TestConnectionCommand}"
 								        Content="{Binding TestConnectionTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
-								<ContentPresenter VerticalAlignment="Top"
+                                <!--DataContext cannot be specified-->
+                                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                                <ContentPresenter VerticalAlignment="Top"
 								                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
 							</DockPanel>
 						</Border>

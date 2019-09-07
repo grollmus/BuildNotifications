@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BuildNotifications.Core.Pipeline;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 

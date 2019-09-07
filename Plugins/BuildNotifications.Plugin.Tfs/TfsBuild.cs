@@ -49,6 +49,8 @@ namespace BuildNotifications.Plugin.Tfs
         public DateTime? LastChangedTime { get; }
 
         /// <inheritdoc />
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
+        // TODO: #30
         public int Progress { get; }
 
         /// <inheritdoc />

@@ -16,14 +16,16 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 new GroupDefinitionViewModel(GroupDefinition.Source),
                 new GroupDefinitionViewModel(GroupDefinition.None)
             };
-            SelectedDefinition = Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
+
+            _selectedDefinition = Definitions.First(x => x.GroupDefinition == GroupDefinition.None);
+            SelectedDefinition = _selectedDefinition;
         }
 
         public ObservableCollection<GroupDefinitionViewModel> Definitions { get; set; }
 
         public string GroupByText
         {
-            get => Definitions.FirstOrDefault()?.GroupByText;
+            get => Definitions.FirstOrDefault()?.GroupByText ?? "";
             set
             {
                 foreach (var definition in Definitions)
@@ -38,19 +40,16 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             get => _selectedDefinition;
             set
             {
+                if (value == null)
+                    return;
+
                 var oldValue = _selectedDefinition;
-                if (oldValue != null)
-                {
-                    oldValue.IsSelected = false;
-                    oldValue.SelectedSortingDefinitionChanged -= OnSelectedSortingDefinitionChanged;
-                }
+                oldValue.IsSelected = false;
+                oldValue.SelectedSortingDefinitionChanged -= OnSelectedSortingDefinitionChanged;
 
                 _selectedDefinition = value;
-                if (_selectedDefinition != null)
-                {
-                    _selectedDefinition.IsSelected = true;
-                    _selectedDefinition.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
-                }
+                _selectedDefinition.IsSelected = true;
+                _selectedDefinition.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
 
                 OnPropertyChanged();
                 SelectedDefinitionChanged?.Invoke(this, new GroupDefinitionsSelectionChangedEventArgs(oldValue, value));
@@ -66,7 +65,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
         public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
-        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        private void OnSelectedSortingDefinitionChanged(object? sender, SortingDefinitionsSelectionChangedEventArgs e)
         {
             SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }

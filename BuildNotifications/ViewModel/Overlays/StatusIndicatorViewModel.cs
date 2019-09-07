@@ -9,7 +9,7 @@ namespace BuildNotifications.ViewModel.Overlays
     public class StatusIndicatorViewModel : BaseViewModel
     {
         private UpdateStatus _updateStatus;
-        private IEnumerable<INotification> _errorNotifications;
+        private IEnumerable<INotification>? _errorNotifications;
 
         public UpdateStatus UpdateStatus
         {

@@ -17,7 +17,8 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.StatusDescending),
                 new SortingDefinitionViewModel(forGroupDefinition, SortingDefinition.DateDescending)
             };
-            SelectedViewModel = Sortings.First();
+            _selectedViewModel = Sortings.First();
+            SelectedViewModel = _selectedViewModel;
         }
 
         public GroupDefinition ForGroupDefinition { get; }
@@ -33,6 +34,9 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             get => _selectedViewModel;
             set
             {
+                if (value == null)
+                    return;
+
                 var oldValue = _selectedViewModel;
                 _selectedViewModel = value;
                 OnPropertyChanged();

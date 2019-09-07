@@ -17,7 +17,7 @@ namespace BuildNotifications.Resources.Settings
             return template ?? base.SelectTemplate(item, container);
         }
 
-        private static DataTemplate? DataTemplateByName(object item, FrameworkElement element)
+        private static DataTemplate? DataTemplateByName(object item, FrameworkElement? element)
         {
             var type = item?.GetType();
             var name = type?.Name;
@@ -25,10 +25,10 @@ namespace BuildNotifications.Resources.Settings
                 return null;
             var expectedKey = $"{name}Template";
 
-            return element.TryFindResource(expectedKey) as DataTemplate;
+            return element?.TryFindResource(expectedKey) as DataTemplate;
         }
 
-        private static DataTemplate ResolveTemplate(object item, FrameworkElement element)
+        private static DataTemplate? ResolveTemplate(object item, FrameworkElement? element)
         {
             switch (item)
             {

@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using BuildNotifications.Core;
 
 namespace BuildNotifications.ViewModel.Utils
 {
-    public class RemoveTrackingObservableCollection<T> : IList<T>, INotifyCollectionChanged, INotifyPropertyChanged where T : IRemoveTracking
+    public class RemoveTrackingObservableCollection<T> : IList<T>, INotifyCollectionChanged where T : IRemoveTracking
     {
         public RemoveTrackingObservableCollection() : this(TimeSpan.FromSeconds(0.15), Enumerable.Empty<T>())
         {
@@ -23,12 +23,7 @@ namespace BuildNotifications.ViewModel.Utils
         {
             RemoveDelay = removeDelay;
             _list = new ObservableCollection<T>(initialValues);
-            _list.CollectionChanged += (sender, args) =>
-            {
-                if (_supressEvents)
-                    return;
-                CollectionChanged?.Invoke(sender, args);
-            };
+            _list.CollectionChanged += (sender, args) => { CollectionChanged?.Invoke(sender, args); };
 
             _sortFunction = _list;
         }
@@ -89,7 +84,8 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Add(T item)
         {
-            item.IsRemoving = false;
+            if (item != null)
+                item.IsRemoving = false;
             _list.Add(item);
 
             Sort();
@@ -112,7 +108,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public bool Remove(T item)
         {
-            RemoveWithDelay(item);
+            RemoveWithDelay(item).FireAndForget();
             return true;
         }
 
@@ -155,10 +151,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private readonly ObservableCollection<T> _list;
-
-        private bool _supressEvents;
 
         private IEnumerable<T> _sortFunction;
     }

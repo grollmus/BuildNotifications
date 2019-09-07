@@ -11,6 +11,8 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel.Overlays
 {
+// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
+#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
     internal class InitialSetupOverlayViewModel : BaseViewModel
     {
         public InitialSetupOverlayViewModel(SettingsViewModel settingsViewModel, IPluginRepository pluginRepository)
@@ -21,7 +23,7 @@ namespace BuildNotifications.ViewModel.Overlays
             settingsViewModel.SettingsChanged += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
             App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
-            UpdateText();
+            UpdateText(this, EventArgs.Empty);
 
             StoreCurrentState();
         }
@@ -68,7 +70,7 @@ namespace BuildNotifications.ViewModel.Overlays
             get => _opacity;
             set
             {
-                _opacity = value; 
+                _opacity = value;
                 OnPropertyChanged();
             }
         }
@@ -87,14 +89,14 @@ namespace BuildNotifications.ViewModel.Overlays
 
             CloseRequested?.Invoke(this, new InitialSetupEventArgs(anyChanges));
         }
-        
+
         private void StoreCurrentState()
         {
             _previouslyConfiguredConnections = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Connections);
             _previouslyConfiguredProjects = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Projects);
         }
 
-        private void UpdateText(object sender = null, EventArgs e = null)
+        private void UpdateText(object? sender, EventArgs e)
         {
             if (_settingsViewModel.Configuration.Connections.Count == 0 && _settingsViewModel.Configuration.Projects.Count == 0)
             {
@@ -122,7 +124,7 @@ namespace BuildNotifications.ViewModel.Overlays
         }
 
         private readonly SettingsViewModel _settingsViewModel;
-        private string _displayedTextId;
+        private string _displayedTextId = "";
         private IconType _displayedIconType;
         private bool _animateDisplay;
         private double _opacity;
@@ -135,3 +137,4 @@ namespace BuildNotifications.ViewModel.Overlays
         private const string InitialSetupEmptyProjects = nameof(InitialSetupEmptyProjects);
     }
 }
+#pragma warning enable CS8618

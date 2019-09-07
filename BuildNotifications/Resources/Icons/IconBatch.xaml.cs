@@ -13,7 +13,7 @@ namespace BuildNotifications.Resources.Icons
             InitializeComponent();
         }
 
-        public Brush Foreground
+        public new Brush Foreground
         {
             get => (Brush) GetValue(ForegroundProperty);
             set => SetValue(ForegroundProperty, value);
@@ -25,7 +25,7 @@ namespace BuildNotifications.Resources.Icons
             set => SetValue(TypeProperty, value);
         }
 
-        public static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register(
+        public new static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register(
             "Foreground", typeof(Brush), typeof(IconBatch), new PropertyMetadata(default(Brush)));
 
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(

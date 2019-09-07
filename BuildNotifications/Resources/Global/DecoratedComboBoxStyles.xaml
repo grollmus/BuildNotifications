@@ -117,9 +117,9 @@
                                Placement="Bottom">
                             <Grid Background="{TemplateBinding Background}">
                                 <Border Padding="{StaticResource BlockQuarterThickness}">
-                                <ItemsPresenter x:Name="ItemsPresenter" FocusVisualStyle="{x:Null}"
-                                                KeyboardNavigation.DirectionalNavigation="Contained"
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <ItemsPresenter x:Name="ItemsPresenter" FocusVisualStyle="{x:Null}"
+                                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
                             </Grid>
                         </Popup>
@@ -152,6 +152,8 @@
                                     <text:FontSizeChange TargetSize="{StaticResource Block}"
                                                          Target="{Binding ElementName=Label}" Duration="0.1" />
                                 </ei:DataTrigger>
+                                <!--Combobox is designed to be used with IRemoveTracking objects-->
+                                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
                                 <ei:DataTrigger
                                     Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="True">

@@ -10,6 +10,9 @@ using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
 
 namespace BuildNotifications.ViewModel.Settings
 {
+// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
+#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
+
     public class SettingsViewModel
     {
         public SettingsViewModel(IConfiguration configuration, Action saveMethod)
@@ -77,3 +80,4 @@ namespace BuildNotifications.ViewModel.Settings
         private readonly Action _saveMethod;
     }
 }
+#pragma warning enable CS8618

@@ -7,9 +7,9 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildTreeViewModel : BuildTreeNodeViewModel
     {
-        public BuildTreeViewModel(IBuildTree tree) : base(tree)
+        public BuildTreeViewModel(IBuildTreeNode tree) : base(tree)
         {
-            _tree = tree;
+            _sortingDefinition = new BuildTreeSortingDefinition();
         }
 
         public IBuildTreeSortingDefinition SortingDefinition
@@ -23,7 +23,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private IBuildTree _tree;
         private IBuildTreeSortingDefinition _sortingDefinition;
 
         public IEnumerable<BuildNodeViewModel> AllBuilds()
@@ -35,5 +34,7 @@ namespace BuildNotifications.ViewModel.Tree
         {
             return ofNode.Children.OfType<BuildNodeViewModel>().Concat(ofNode.Children.SelectMany(AllBuilds));
         }
+
+        protected override string CalculateDisplayName() => "";
     }
 }

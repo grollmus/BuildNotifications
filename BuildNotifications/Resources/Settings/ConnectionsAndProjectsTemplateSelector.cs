@@ -15,7 +15,7 @@ namespace BuildNotifications.Resources.Settings
             return template ?? base.SelectTemplate(item, container);
         }
 
-        private static DataTemplate ResolveTemplate(object item, FrameworkElement element)
+        private static DataTemplate? ResolveTemplate(object item, FrameworkElement? element)
         {
             switch (item)
             {

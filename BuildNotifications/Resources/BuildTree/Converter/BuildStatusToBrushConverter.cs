@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using Anotar.NLog;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Tree;
 
@@ -43,12 +44,19 @@ namespace BuildNotifications.Resources.BuildTree.Converter
         {
             if (node != null && node.ShouldColorByStatus)
                 return Convert(node.BuildStatus);
-            return GetBrush(DefaultBrushKey);
+            return DefaultBrush;
         }
+
+        public Brush DefaultBrush => GetBrush(DefaultBrushKey);
 
         private Brush GetBrush(string key)
         {
             var findResource = Application.Current.FindResource(key) as Brush;
+            if (findResource == null)
+            {
+                LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
+                return new SolidColorBrush(Colors.White);
+            }
 
             return findResource;
         }
@@ -62,7 +70,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                 case BuildStatus status:
                     return Convert(status);
                 default:
-                    return GetBrush(DefaultBrushKey);
+                    return DefaultBrush;
             }
         }
 

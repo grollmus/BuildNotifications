@@ -2,6 +2,7 @@
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 {
@@ -15,6 +16,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             SortingDefinitionsViewModel.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
         }
 
+        [UsedImplicitly]
         public bool DisplaySortingSelection => GroupDefinition != GroupDefinition.None && IsSelected;
 
         public string GroupByText
@@ -28,8 +30,6 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         }
 
         public GroupDefinition GroupDefinition { get; }
-
-        public string IconTag { get; set; }
 
         public IconType IconType => GroupDefinition.ToIconType();
 
@@ -47,12 +47,13 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
 
-        private void OnSelectedSortingDefinitionChanged(object sender, SortingDefinitionsSelectionChangedEventArgs e)
+        private void OnSelectedSortingDefinitionChanged(object? sender, SortingDefinitionsSelectionChangedEventArgs e)
         {
             SelectedSortingDefinitionChanged?.Invoke(sender, e);
         }
 
         private string _groupByText;
+
         private bool _isSelected;
     }
 }

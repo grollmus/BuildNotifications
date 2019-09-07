@@ -17,12 +17,11 @@ namespace BuildNotifications.Resources.Settings
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var pluginType = values.FirstOrDefault()?.ToString();
-            var pluginRepo = values.LastOrDefault() as IPluginRepository;
 
-            if (pluginType == null || pluginRepo == null)
-                return null;
+            if (pluginType == null || !(values.LastOrDefault() is IPluginRepository pluginRepo))
+                return "";
 
-            return pluginRepo.FindPluginName(pluginType);
+            return pluginRepo.FindPluginName(pluginType) ?? "";
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

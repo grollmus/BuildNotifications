@@ -18,16 +18,16 @@ namespace BuildNotifications.Resources.BuildTree
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            var element = container as FrameworkElement;
+            if (!(container is FrameworkElement element))
+                return base.SelectTemplate(item, container);
+            
             var buildNode = item as BuildTreeNodeViewModel;
 
             var template = _forLayout
                 ? LayoutTemplate(buildNode, element)
                 : DisplayTemplate(buildNode, element);
 
-            if (template == null)
-                return base.SelectTemplate(item, container);
-            return template;
+            return template ?? base.SelectTemplate(item, container);
         }
 
         private static DataTemplate? DataTemplateByName(object groupNode, FrameworkElement element)
@@ -40,12 +40,15 @@ namespace BuildNotifications.Resources.BuildTree
             return element.TryFindResource(expectedKey) as DataTemplate;
         }
 
-        private DataTemplate? DisplayTemplate(BuildTreeNodeViewModel node, FrameworkElement element)
+        private DataTemplate? DisplayTemplate(BuildTreeNodeViewModel? node, FrameworkElement element)
         {
+            if (node == null)
+                return null;
+
             return DataTemplateByName(node, element);
         }
 
-        private DataTemplate? LayoutTemplate(BuildTreeNodeViewModel buildNode, FrameworkElement element)
+        private DataTemplate? LayoutTemplate(BuildTreeNodeViewModel? buildNode, FrameworkElement element)
         {
             if (buildNode == null)
                 return null;

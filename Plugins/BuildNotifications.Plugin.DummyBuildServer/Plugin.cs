@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
-using JetBrains.Annotations;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {

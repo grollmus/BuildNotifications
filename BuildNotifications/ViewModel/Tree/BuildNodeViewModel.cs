@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -16,7 +17,7 @@ namespace BuildNotifications.ViewModel.Tree
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            BackendPropertiesChanged();
+            BackendPropertiesChangedInternal();
         }
 
         public bool IsHighlighted
@@ -66,7 +67,7 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 _actualProgress = value;
                 // Ensure the TweenHandler is only touched by a single thread.
-                App.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher?.Invoke(() =>
                 {
                     var globalTweenHandler = App.GlobalTweenHandler;
                     if (_progressTween != null && globalTweenHandler.Contains(_progressTween))
@@ -80,7 +81,7 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private Timeline _progressTween;
+        private Timeline? _progressTween;
 
         public bool DisplayAsHollow
         {
@@ -98,7 +99,9 @@ namespace BuildNotifications.ViewModel.Tree
         public ICommand MouseLeaveCommand { get; set; }
         public IBuildNode Node { get; }
 
-        public override void BackendPropertiesChanged()
+        public override void BackendPropertiesChanged() => BackendPropertiesChangedInternal();
+
+        private void BackendPropertiesChangedInternal()
         {
             UpdateBuildStatus();
             UpdateChangedDate();
