@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -70,5 +71,10 @@ namespace BuildNotifications.Core.Pipeline
         /// Fetches all user identities which represent the current user. That is, the user that is actually currently running BuildNotifications.
         /// </summary>
         IEnumerable<IUser> FetchCurrentUserIdentities();
+
+        /// <summary>
+        /// Updates given builds.
+        /// </summary>
+        Task UpdateBuilds(IEnumerable<IBuild> builds);
     }
 }

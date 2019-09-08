@@ -46,6 +46,10 @@ namespace BuildNotifications.Plugin.Tfs
 
                 await connection.ConnectAsync();
 
+                if (!connection.HasAuthenticated
+                    || !IsAuthenticatedId(connection.AuthenticatedIdentity.Id))
+                    return ConnectionTestResult.Failure(ErrorMessages.AuthenticationFailed);
+
                 return ConnectionTestResult.Success;
             }
             catch (Exception ex)
@@ -71,10 +75,17 @@ namespace BuildNotifications.Plugin.Tfs
         {
             if (data.AuthenticationType == AuthenticationType.Windows)
                 return new VssCredentials();
+            if (data.AuthenticationType == AuthenticationType.Token)
+                return new VssBasicCredential("", data.Password);
 
             var username = data.Username;
             var pw = data.Password;
             return new VssCredentials(new VssBasicCredential(username, pw));
+        }
+
+        private bool IsAuthenticatedId(Guid authenticatedIdentityId)
+        {
+            return !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
         }
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);

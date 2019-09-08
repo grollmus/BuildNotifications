@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds
@@ -24,8 +25,10 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Fetches all builds that have been changed since a given date and time.
         /// </summary>
-        /// <remarks>Changed means the build has been newly created or changed one or more
-        /// of its properties (e.g. status or progress).</remarks>
+        /// <remarks>
+        /// Changed means the build has been newly created or changed one or more
+        /// of its properties (e.g. status or progress).
+        /// </remarks>
         /// <param name="date">Date and time since when to fetch builds.</param>
         /// <returns>List of all builds changed since <paramref name="date" />.</returns>
         IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date);
@@ -54,5 +57,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// </summary>
         /// <returns>List of removed builds.</returns>
         IAsyncEnumerable<IBaseBuild> RemovedBuilds();
+
+        /// <summary>
+        /// Updates data (e.g. progress) for the given builds.
+        /// </summary>
+        /// <param name="builds">List of builds to update</param>
+        Task UpdateBuilds(IEnumerable<IBaseBuild> builds);
     }
 }

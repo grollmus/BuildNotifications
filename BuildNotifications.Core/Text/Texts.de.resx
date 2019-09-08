@@ -227,13 +227,13 @@
     <value></value>
   </data>
   <data name="ErrorFetchingBranches" xml:space="preserve">
-    <value></value>
+    <value>Fehler beim Laden der Branches für Projekt "{0}". Fehlermeldung: {1}</value>
   </data>
   <data name="ErrorFetchingBuilds" xml:space="preserve">
-    <value></value>
+    <value>Fehler beim Laden der Builds für Projekt "{0}". Fehlermeldung: {1}</value>
   </data>
   <data name="ErrorFetchingDefinitions" xml:space="preserve">
-    <value></value>
+    <value>Fehler beim Laden der Builddefinitionen für Projekt "{0}". Fehlermeldung: {1}</value>
   </data>
   <data name="DefinitionChangedTextId" xml:space="preserve">
     <value></value>
@@ -287,46 +287,46 @@
     <value></value>
   </data>
   <data name="NDaysAgoTextId" xml:space="preserve">
-    <value></value>
+    <value>vor {0} Tagen</value>
   </data>
   <data name="OneDayAgoTextId" xml:space="preserve">
-    <value></value>
+    <value>vor einem Tag</value>
   </data>
   <data name="NHoursAgoTextId" xml:space="preserve">
-    <value></value>
+    <value>vor {0} Stunden</value>
   </data>
   <data name="NMinutesAgoTextId" xml:space="preserve">
-    <value></value>
+    <value>vor {0} Minuten</value>
   </data>
   <data name="NSecondsAgoTextId" xml:space="preserve">
-    <value></value>
+    <value>vor {0} Sekunden</value>
   </data>
   <data name="JustNowTextId" xml:space="preserve">
-    <value></value>
+    <value>Jetzt.</value>
   </data>
   <data name="AnErrorOccured" xml:space="preserve">
-    <value></value>
+    <value>Ein Fehler ist aufgetreten.</value>
   </data>
   <data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
-    <value></value>
+    <value>Branch Provider für Verbindung '{0}' konnte nicht erstellt werden.</value>
   </data>
   <data name="FailedToConstructBuildProviderForConnection" xml:space="preserve">
-    <value></value>
+    <value>Build Provider für Verbindung '{0}' konnte nicht erstellt werden.</value>
   </data>
   <data name="FailedToConstructBuildProviderFromPlugin" xml:space="preserve">
-    <value></value>
+    <value>Build Provider für Verbindung '{0}' konnte nicht erstellt werden. Fehlermeldung: {1}</value>
   </data>
   <data name="BuildPluginNotFound" xml:space="preserve">
-    <value></value>
+    <value>Build Plugin '{0}' nicht gefunden.</value>
   </data>
   <data name="ConnectionNotFound" xml:space="preserve">
-    <value></value>
+    <value>Keine Verbindung mit dem Namen '{0}' gefunden.</value>
   </data>
   <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
-    <value></value>
+    <value>Branch Provider für Verbindung '{0}' konnte nicht erstellt werden. Fehlermeldung: {1}</value>
   </data>
   <data name=" " xml:space="preserve">
-    <value></value>
+    <value>Source Control Plugin '{0}' nicht gefunden.</value>
   </data>
   <data name="FailedToFindBuildPluginForType" xml:space="preserve">
     <value></value>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -23,9 +24,9 @@ namespace BuildNotifications.Core.Pipeline
         {
         }
 
-        private IBuild Enrich(IBaseBuild build)
+        private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider)
         {
-            return new EnrichedBuild(build, Name);
+            return new EnrichedBuild(build, Name, buildProvider);
         }
 
         public IProjectConfiguration Config { get; set; }
@@ -38,7 +39,7 @@ namespace BuildNotifications.Core.Pipeline
             {
                 await foreach (var build in buildProvider.FetchAllBuilds())
                 {
-                    yield return Enrich(build);
+                    yield return Enrich(build, buildProvider);
                 }
             }
         }
@@ -49,7 +50,7 @@ namespace BuildNotifications.Core.Pipeline
             {
                 await foreach (var build in buildProvider.FetchBuildsChangedSince(lastUpdate))
                 {
-                    yield return Enrich(build);
+                    yield return Enrich(build, buildProvider);
                 }
             }
         }
@@ -82,9 +83,18 @@ namespace BuildNotifications.Core.Pipeline
             {
                 await foreach (var build in buildProvider.RemovedBuilds())
                 {
-                    yield return Enrich(build);
+                    yield return Enrich(build, buildProvider);
                 }
             }
+        }
+
+        public async Task UpdateBuilds(IEnumerable<IBuild> builds)
+        {
+            var enriched = builds.OfType<EnrichedBuild>();
+            var grouped = enriched.GroupBy(x => x.Provider);
+
+            var updateTasks = grouped.Select(g => g.Key.UpdateBuilds(g.Select(x => x.OriginalBuild)));
+            await Task.WhenAll(updateTasks);
         }
 
         public IEnumerable<IUser> FetchCurrentUserIdentities()
@@ -120,38 +130,41 @@ namespace BuildNotifications.Core.Pipeline
 
         private class EnrichedBuild : IBuild
         {
-            public EnrichedBuild(IBaseBuild build, string projectName)
+            public EnrichedBuild(IBaseBuild build, string projectName, IBuildProvider provider)
             {
-                _build = build;
+                OriginalBuild = build;
                 ProjectName = projectName;
+                Provider = provider;
             }
+
+            public IBuildProvider Provider { get; }
+
+            internal IBaseBuild OriginalBuild { get; }
 
             public bool Equals(IBaseBuild other)
             {
-                return _build.Equals(other);
+                return OriginalBuild.Equals(other);
             }
 
             public string ProjectName { get; }
 
-            public string BranchName => _build.BranchName;
+            public string BranchName => OriginalBuild.BranchName;
 
-            public IBuildDefinition Definition => _build.Definition;
+            public IBuildDefinition Definition => OriginalBuild.Definition;
 
-            public string Id => _build.Id;
+            public string Id => OriginalBuild.Id;
 
-            public DateTime? LastChangedTime => _build.LastChangedTime;
+            public DateTime? LastChangedTime => OriginalBuild.LastChangedTime;
 
-            public int Progress => _build.Progress;
+            public int Progress => OriginalBuild.Progress;
 
-            public DateTime? QueueTime => _build.QueueTime;
+            public DateTime? QueueTime => OriginalBuild.QueueTime;
 
-            public IUser RequestedBy => _build.RequestedBy;
+            public IUser RequestedBy => OriginalBuild.RequestedBy;
 
-            public IUser? RequestedFor => _build.RequestedFor;
+            public IUser? RequestedFor => OriginalBuild.RequestedFor;
 
-            public BuildStatus Status => _build.Status;
-
-            private readonly IBaseBuild _build;
+            public BuildStatus Status => OriginalBuild.Status;
         }
     }
 }

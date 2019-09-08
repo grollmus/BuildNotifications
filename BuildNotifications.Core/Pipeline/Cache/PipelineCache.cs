@@ -55,6 +55,11 @@ namespace BuildNotifications.Core.Pipeline.Cache
             }
         }
 
+        public IEnumerable<T> Values(int providerId)
+        {
+            return _items.Where(kvp => kvp.Key.IsProvider(providerId)).Select(kvp => kvp.Value);
+        }
+
         public IEnumerable<T> ContentCopy()
         {
             return new List<T>(_items.Values);

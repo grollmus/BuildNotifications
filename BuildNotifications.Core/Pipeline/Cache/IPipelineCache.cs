@@ -84,5 +84,12 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="value">Value to remove item for.</param>
         void RemoveValue(T value);
+
+        /// <summary>
+        /// Returns all stored values for the given provider.
+        /// </summary>
+        /// <param name="providerId">Id of the provider to fetch data for.</param>
+        /// <returns>List of all values matching the provider.</returns>
+        IEnumerable<T> Values(int providerId);
     }
 }
