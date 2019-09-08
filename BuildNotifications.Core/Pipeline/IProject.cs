@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -64,5 +65,10 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchRemovedBuilds();
+
+        /// <summary>
+        /// Updates given builds.
+        /// </summary>
+        Task UpdateBuilds(IEnumerable<IBuild> builds);
     }
 }

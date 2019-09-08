@@ -138,5 +138,21 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
 
             Assert.Subset(expectedSubset, actualSet);
         }
+
+        [Fact]
+        public void ValuesShouldOnlyReturnMatchingValues()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            sut.AddOrReplace(1, 1, "test");
+            sut.AddOrReplace(2, 1, "wrong");
+            sut.AddOrReplace(1, 2, "test");
+
+            // Act
+            var actual = sut.Values(1);
+
+            // Assert
+            Assert.All(actual, x => Assert.Equal("test", x));
+        }
     }
 }

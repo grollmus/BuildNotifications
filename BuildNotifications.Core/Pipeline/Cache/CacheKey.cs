@@ -30,6 +30,11 @@
             }
         }
 
+        public bool IsProvider(int providerId)
+        {
+            return _providerId == providerId;
+        }
+
         private bool EqualsOtherCacheKey(CacheKey other)
         {
             return _providerId == other._providerId && _itemId == other._itemId;

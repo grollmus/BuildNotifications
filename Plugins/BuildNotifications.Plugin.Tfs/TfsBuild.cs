@@ -11,6 +11,7 @@ namespace BuildNotifications.Plugin.Tfs
         public TfsBuild(Build build)
         {
             _id = build.Url;
+            BuildId = build.Id;
             Id = build.Id.ToString();
 
             QueueTime = build.QueueTime;
@@ -35,6 +36,8 @@ namespace BuildNotifications.Plugin.Tfs
             return _id == (other as TfsBuild)?._id;
         }
 
+        internal int BuildId { get; }
+
         public string BranchName { get; }
 
         public IBuildDefinition Definition { get; }
@@ -43,9 +46,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public DateTime? LastChangedTime { get; }
 
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
-        // TODO: #30
-        public int Progress { get; }
+        public int Progress { get; internal set; }
 
         public DateTime? QueueTime { get; }
 

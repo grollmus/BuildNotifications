@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using Newtonsoft.Json;
@@ -100,10 +101,15 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             }
         }
 
+        public Task UpdateBuilds(IEnumerable<IBaseBuild> builds)
+        {
+            return Task.CompletedTask;
+        }
+
         private readonly HashSet<BuildDefinition> _knownBuildDefinitions = new HashSet<BuildDefinition>(new BuildComparer());
         private readonly HashSet<Build> _knownBuilds = new HashSet<Build>(new BuildComparer());
 
         private readonly Connection _connection;
-        private JsonSerializerSettings _settings;
+        private readonly JsonSerializerSettings _settings;
     }
 }

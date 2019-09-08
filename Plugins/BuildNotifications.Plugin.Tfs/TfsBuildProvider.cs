@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -19,6 +20,22 @@ namespace BuildNotifications.Plugin.Tfs
             _projectId = projectId;
 
             User = new TfsUser(_connection.AuthenticatedIdentity);
+        }
+
+        private int CalculateProgress(Timeline timeLine)
+        {
+            if (!timeLine.Records.Any())
+                return 0;
+
+            var percentagePerStep = 100.0 / timeLine.Records.Count;
+            var completedSteps = timeLine.Records.Count(x => x.State == TimelineRecordState.Completed);
+
+            var currentStepFactor = 0.0;
+            var currentStep = timeLine.Records.FirstOrDefault(x => x.State == TimelineRecordState.InProgress);
+            if (currentStep != null)
+                currentStepFactor = (currentStep.PercentComplete ?? 0) / 100.0;
+
+            return (int) Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
         }
 
         private IBuildDefinition Convert(BuildDefinitionReference definition)
@@ -119,6 +136,26 @@ namespace BuildNotifications.Plugin.Tfs
             await Task.CompletedTask;
 
             yield break;
+        }
+
+        public async Task UpdateBuilds(IEnumerable<IBaseBuild> builds)
+        {
+            var project = await GetProject();
+            var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
+
+            var buildList = builds.OfType<TfsBuild>().ToList();
+
+            var timeLines = await Task.WhenAll(buildList.Select(build =>
+                buildClient.GetBuildTimelineAsync(project.Id, build.BuildId)));
+
+            for (var i = 0; i < buildList.Count; ++i)
+            {
+                var build = buildList[i];
+                var timeLine = timeLines[i];
+
+                var progress = CalculateProgress(timeLine);
+                build.Progress = progress;
+            }
         }
 
         private readonly VssConnection _connection;

@@ -6,6 +6,38 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
     public class CacheKeyTests
     {
         [Fact]
+        public void IsProviderShouldReturnFalseWhenProviderIsDifferent()
+        {
+            // Arrange
+            var p1 = 123;
+            var p2 = 111;
+
+            var sut = new CacheKey(p1, 1);
+
+            // Act
+            var actual = sut.IsProvider(p2);
+
+            // Assert
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void IsProviderShouldReturnTrueWhenProviderIsSame()
+        {
+            // Arrange
+            var p1 = 123;
+            var p2 = 123;
+
+            var sut = new CacheKey(p1, 1);
+
+            // Act
+            var actual = sut.IsProvider(p2);
+
+            // Assert
+            Assert.True(actual);
+        }
+
+        [Fact]
         public void KeysShouldBeDifferentWhenDifferentItemIdIsUsed()
         {
             // Arrange

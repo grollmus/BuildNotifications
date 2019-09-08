@@ -185,10 +185,12 @@ namespace BuildNotifications.Core.Pipeline
 
                 CleanupBuilds();
 
+                await UpdateBuilds();
+
                 var builds = _buildCache.ContentCopy().ToList();
                 var branches = _branchCache.ContentCopy();
                 var definitions = _definitionCache.ContentCopy();
-
+               
                 var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
                 if (_configuration.GroupDefinition.Any())
                     CutTree(tree);
@@ -209,6 +211,18 @@ namespace BuildNotifications.Core.Pipeline
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
 
             _oldTree = treeResult.BuildTree;
+        }
+
+        private async Task UpdateBuilds()
+        {
+            foreach (var project in _projectList)
+            {
+                var projectId = project.GetHashCode();
+                var buildsForProject = _buildCache.Values(projectId);
+
+                var inProgressBuilds = buildsForProject.Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending);
+                await project.UpdateBuilds(inProgressBuilds);
+            }
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
