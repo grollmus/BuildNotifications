@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.Core.Config;
+using BuildNotifications.ViewModel.Settings;
 using ReflectSettings.EditableConfigs;
 
 namespace BuildNotifications.Resources.Settings
@@ -48,6 +49,8 @@ namespace BuildNotifications.Resources.Settings
                         return element?.TryFindResource("EditablePrimitiveCollectionTemplate") as DataTemplate;
                     else
                         return element?.TryFindResource("EditableCollectionTemplate") as DataTemplate;
+                case EditableComplex<TestConnectionViewModel> _:
+                    return element?.TryFindResource("TestConnectionDataTemplate") as DataTemplate;
                 case IEditableComplex editableComplex:
                     if (editableComplex.HasPredefinedValues)
                         return element?.TryFindResource("EditableComplexComboboxTemplate") as DataTemplate;

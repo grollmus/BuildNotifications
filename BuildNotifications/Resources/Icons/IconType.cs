@@ -32,6 +32,13 @@
         Dummy,
         Notification,
         SingleBuild,
-        Pause
+        Pause,
+        NoMessage,
+        NoConnection,
+        Info,
+        Lightning,
+        Checkmark,
+        DownArrow,
+        Project
     }
 }

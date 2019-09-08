@@ -190,6 +190,48 @@
                             Value="Pause">
                             <Setter Property="Image.Source" Value="{StaticResource PauseDrawingImage}" />
                         </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="NoMessage">
+                            <Setter Property="Image.Source" Value="{StaticResource NoMessageDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="NoConnection">
+                            <Setter Property="Image.Source" Value="{StaticResource NoConnectionDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Info">
+                            <Setter Property="Image.Source" Value="{StaticResource InfoDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Lightning">
+                            <Setter Property="Image.Source" Value="{StaticResource LightningDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Checkmark">
+                            <Setter Property="Image.Source" Value="{StaticResource CheckmarkDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="DownArrow">
+                            <Setter Property="Image.Source" Value="{StaticResource DownArrowDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Project">
+                            <Setter Property="Image.Source" Value="{StaticResource ProjectDrawingImage}" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Image.Style>

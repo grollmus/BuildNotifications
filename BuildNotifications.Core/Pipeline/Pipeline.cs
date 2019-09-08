@@ -161,6 +161,18 @@ namespace BuildNotifications.Core.Pipeline
         public void AddProject(IProject project)
         {
             _projectList.Add(project);
+            try
+            {
+                var currentUserIdentities = project.FetchCurrentUserIdentities();
+                foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
+                {
+                    _configuration.IdentitiesOfCurrentUser.Add(currentUserIdentity);
+                }
+            }
+            catch (Exception e)
+            {
+                ReportError("ErrorFetchingUserIdentities", project.Name, e);
+            }
         }
 
         public void ClearProjects()
@@ -170,6 +182,7 @@ namespace BuildNotifications.Core.Pipeline
             _buildCache.Clear();
             _branchCache.Clear();
             _lastUpdate = null;
+            _configuration.IdentitiesOfCurrentUser.Clear();
         }
 
         public async Task Update()

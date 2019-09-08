@@ -29,7 +29,7 @@
             </i:Interaction.Triggers>
         </icons:IconButton>
 
-        <icons:IconButton Icon="Status" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
+        <icons:IconButton Icon="Lightning" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
                           Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
                           Visibility="{Binding ErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Margin="{StaticResource BlockQuarterXOnlyMargin}"

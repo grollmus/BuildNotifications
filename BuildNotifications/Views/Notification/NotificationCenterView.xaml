@@ -7,59 +7,78 @@
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
              xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
+             xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type viewModelNotification:NotificationCenterViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Notifications}"
-             Style="{StaticResource StretchingListBox}" SelectedItem="{Binding SelectedNotification, Mode=TwoWay}" Width="{StaticResource BlockTwentyFive}">
+    <Grid x:Name="Grid">
+        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Notifications}"
+                 Style="{StaticResource StretchingListBox}" SelectedItem="{Binding SelectedNotification, Mode=TwoWay}"
+                 Width="{StaticResource BlockTwentyFive}">
 
-        <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-                <animation:AnimatedStackPanel IsItemsHost="True" />
-            </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-            <DataTemplate DataType="{x:Type viewModelNotification:NotificationViewModel}">
-                <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
-                    <icons:IconBatch Width="{StaticResource BlockDouble}" Height="{StaticResource BlockDouble}"
-                                     Foreground="{DynamicResource Background3}" Type="{Binding IconType}"
-                                     DockPanel.Dock="Left"
-                                     x:Name="Icon" Margin="{StaticResource BlockHalfThickness}" VerticalAlignment="Top" />
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <animation:AnimatedStackPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModelNotification:NotificationViewModel}">
+                    <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
+                        <icons:IconBatch Width="{StaticResource BlockDouble}" Height="{StaticResource BlockDouble}"
+                                         Foreground="{DynamicResource Background3}" Type="{Binding IconType}"
+                                         DockPanel.Dock="Left"
+                                         x:Name="Icon" Margin="{StaticResource BlockHalfThickness}"
+                                         VerticalAlignment="Top" />
 
-                    <DockPanel DockPanel.Dock="Top">
-                        <TextBlock
-                            Text="{Binding TimeUntilNow, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
-                            FontSize="{StaticResource BlockFiveSixths}" Margin="{StaticResource BlockHalfXOnlyMargin}"
-                            Foreground="{DynamicResource Foreground1HalfTransparency}" DockPanel.Dock="Right" />
-                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" x:Name="TitleText"
-                                   TextWrapping="Wrap" FontWeight="Bold"
-                                   Foreground="{DynamicResource Foreground1}" />
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock
+                                Text="{Binding TimeUntilNow, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
+                                FontSize="{StaticResource BlockFiveSixths}"
+                                Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                Visibility="{Binding DataContext.ShowTimeStamp, Converter={x:Static utils:BoolToVisibilityConverter.Instance},
+                                ElementName=Grid}"
+                                Foreground="{DynamicResource Foreground1HalfTransparency}" DockPanel.Dock="Right" />
+                            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" x:Name="TitleText"
+                                       TextWrapping="Wrap" FontWeight="Bold"
+                                       Foreground="{DynamicResource Foreground1}" />
+                        </DockPanel>
+                        <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
                     </DockPanel>
-                    <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap" 
-                               Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
-                </DockPanel>
 
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
-                        <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="TitleText" />
-                        <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="Icon" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding BuildStatus}" Value="Succeeded">
-                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
-                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding BuildStatus}" Value="PartiallySucceeded">
-                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
-                        <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding BuildStatus}" Value="Cancelled">
-                        <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="TitleText" />
-                        <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="Icon" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
+                            <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="TitleText" />
+                            <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="Icon" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding BuildStatus}" Value="Succeeded">
+                            <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
+                            <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding BuildStatus}" Value="PartiallySucceeded">
+                            <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
+                            <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding BuildStatus}" Value="Cancelled">
+                            <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="TitleText" />
+                            <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="Icon" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
 
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <DockPanel
+            Visibility="{Binding NoNotifications, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
+            <icons:IconBatch Type="NoMessage" Width="{StaticResource BlockTriple}"
+                             Height="{StaticResource BlockTriple}" Foreground="{StaticResource Background3}"
+                             DockPanel.Dock="Top" />
+            <TextBlock Text="{text:Localized NoNotifications}" Foreground="{DynamicResource Background3}"
+                       HorizontalAlignment="Center" FontSize="{StaticResource BlockOneAndHalf}" />
+        </DockPanel>
+    </Grid>
 </UserControl>

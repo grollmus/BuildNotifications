@@ -32,7 +32,9 @@ namespace BuildNotifications.ViewModel.Notification
                 NotificationType.Definition => IconType.Definition,
                 NotificationType.DefinitionAndBranch => IconType.SingleBuild,
                 NotificationType.Build => _notification.BuildNodes.Count == 1 ? IconType.SingleBuild : IconType.BuildNotification,
-                NotificationType.Error => IconType.Status,
+                NotificationType.Error => IconType.Lightning,
+                NotificationType.Info => IconType.Info,
+                NotificationType.Success => IconType.Checkmark,
                 _ => IconType.None
             };
         }

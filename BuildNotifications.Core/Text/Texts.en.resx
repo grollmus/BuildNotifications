@@ -158,7 +158,7 @@
     <value>Branch whitelist</value>
   </data>
   <data name="BuildConnectionNames" xml:space="preserve">
-    <value>Connections to fetch builds</value>
+    <value>Build providing connections</value>
   </data>
   <data name="Connections" xml:space="preserve">
     <value>Connections</value>
@@ -185,7 +185,7 @@
     <value>Show pull requests</value>
   </data>
   <data name="SourceControlConnectionNames" xml:space="preserve">
-    <value>Connections to fetch Branches</value>
+    <value>Source control providing connections</value>
   </data>
   <data name="New connection" xml:space="preserve">
     <value>New connection</value>
@@ -220,14 +220,11 @@
   <data name="InitialSetupEmptyConf" xml:space="preserve">
     <value>Welcome to BuildNotifications. To get started create a new connection with provider of your choice.</value>
   </data>
-  <data name="InitialSetupEmptyProjects" xml:space="preserve">
-    <value>When your connection is set up. Create a new project, which actually uses your connection.</value>
-  </data>
   <data name="InitialSetupEmptyConnections" xml:space="preserve">
     <value>A project needs a connection to work off. Create a new one in the "Connections" Tab.</value>
   </data>
-  <data name="InitialSetupCompleteConfig" xml:space="preserve">
-    <value>When you're done configuring the project. You can test your settings by using the test tab.</value>
+  <data name="InitialSetupConnectionNotAsBuildOrSource" xml:space="preserve">
+    <value>Setup your project by adding your connection. Both to the list to fetch builds of, as well as the list of source control providing connections.</value>
   </data>
   <data name="ErrorFetchingBranches" xml:space="preserve">
     <value>An error occurred while fetching Branches for project "{0}". Error: 
@@ -335,5 +332,57 @@
   </data>
   <data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
     <value>Failed to construct branch provider for connection '{0}'.</value>
+  </data>
+  <data name="DateDescending" xml:space="preserve">
+    <value>by date descending</value>
+  </data>
+  <data name="ErrorFetchingUserIdentities" xml:space="preserve">
+    <value>An error occurred while fetching the current user identity of project "{0}". Error:
+{1}</value>
+  </data>
+  <data name="EditConnection" xml:space="preserve">
+    <value>Edit connections</value>
+  </data>
+  <data name="TestConnection" xml:space="preserve">
+    <value>Test connection</value>
+  </data>
+  <data name="TreeIsEmpty" xml:space="preserve">
+    <value>No builds are loaded</value>
+  </data>
+  <data name="Testing" xml:space="preserve">
+    <value>Testing...</value>
+  </data>
+  <data name="NoNotifications" xml:space="preserve">
+    <value>No notifications</value>
+  </data>
+  <data name="BuildConnectionTestFailed" xml:space="preserve">
+    <value>Build plugin failed</value>
+  </data>
+  <data name="SourceConnectionTestFailed" xml:space="preserve">
+    <value>Source control plugin failed</value>
+  </data>
+  <data name="ConnectionTestSuccessful" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="ConnectionTestCaption" xml:space="preserve">
+    <value>A connection was established and the plugin reported no error.</value>
+  </data>
+  <data name="InitialSetupUntested" xml:space="preserve">
+    <value>To check whether your parameters are correct. Press the 'Test connection' button.</value>
+  </data>
+  <data name="InitialSetupTested" xml:space="preserve">
+    <value>Now that your connection is set up. Create a new project which uses this connection.</value>
+  </data>
+  <data name="InitialSetupConnectionNotAsBuild" xml:space="preserve">
+    <value>Also add your connection to the list of build providing connections.</value>
+  </data>
+  <data name="InitialSetupConnectionNotAsSource" xml:space="preserve">
+    <value>Also add your connection to the list of source control providing connections.</value>
+  </data>
+  <data name="CloseConnections" xml:space="preserve">
+    <value>Close and resume</value>
+  </data>
+  <data name="InitialSetupCompleteConfig" xml:space="preserve">
+    <value>BuildNotifications is set up and ready to go. Click "Close and resume" to start.</value>
   </data>
 </root>

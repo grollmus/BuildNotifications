@@ -31,7 +31,7 @@ namespace BuildNotifications.Resources.Settings
         }
 
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
-            "Icon", typeof(IconType), typeof(DecoratedComboBox), new PropertyMetadata(default(IconType)));
+            "Icon", typeof(IconType), typeof(DecoratedComboBox), new PropertyMetadata(IconType.DownArrow));
 
         public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
             "Label", typeof(string), typeof(DecoratedComboBox), new PropertyMetadata(default(string)));

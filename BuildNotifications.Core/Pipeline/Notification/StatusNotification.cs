@@ -5,28 +5,30 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
 {
-    public class ErrorNotification : INotification
+    public class StatusNotification : INotification
     {
         private readonly object[] _parameter;
 
-        public ErrorNotification(string messageTextId, params object[] parameter)
+        public StatusNotification(string messageTextId, string titleTextId, NotificationType notificationType, params object[] parameter)
         {
             _parameter = parameter;
             ContentTextId = messageTextId;
+            TitleTextId = titleTextId;
+            Type = notificationType;
         }
-        
+
         public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), _parameter);
 
         public string ContentTextId { get; }
 
         public string DisplayTitle => StringLocalizer.Instance.GetText(TitleTextId);
 
-        public string TitleTextId { get; set; } = "AnErrorOccured";
+        public string TitleTextId { get; }
 
-        public NotificationType Type => NotificationType.Error;
+        public NotificationType Type { get; }
 
         public IList<IBuildNode> BuildNodes => new List<IBuildNode>();
 
-        public BuildStatus Status => BuildStatus.Failed;
+        public BuildStatus Status => Type == NotificationType.Success ? BuildStatus.Succeeded : BuildStatus.Running;
     }
 }

@@ -87,6 +87,11 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public IEnumerable<IUser> FetchCurrentUserIdentities()
+        {
+            return _buildProviders.Select(b => b.User);
+        }
+
         public async IAsyncEnumerable<IBuildDefinition> FetchRemovedBuildDefinitions()
         {
             foreach (var buildProvider in _buildProviders)

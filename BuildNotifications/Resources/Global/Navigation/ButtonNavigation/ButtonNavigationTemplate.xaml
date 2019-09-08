@@ -5,8 +5,7 @@
                     xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-                    mc:Ignorable="d"
-                    xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings">
+                    mc:Ignorable="d">
 	<Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
 		<Setter Property="Template">
 			<Setter.Value>
@@ -17,18 +16,17 @@
 							         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
-										<DockPanel Height="{StaticResource BlockOneAndHalf}"
+										<DockPanel Margin="{StaticResource BlockHalfThickness}" MaxHeight="{StaticResource BlockTriple}"
 										           d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigationItem}">
 											<icons:IconBatch DockPanel.Dock="Left" Type="{Binding IconType}"
-											                 Margin="{StaticResource BlockQuarterThickness}"
+											                 Margin="{StaticResource BlockQuarterRight}"
 											                 Foreground="{DynamicResource Foreground1HalfTransparency}"
-											                 Width="{StaticResource Block}"
-											                 Height="{StaticResource Block}" />
+											                 Width="{StaticResource BlockOneAndHalf}"
+											                 Height="{StaticResource BlockOneAndHalf}" />
 											<TextBlock
 												Text="{Binding DisplayNameTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-												TextWrapping="Wrap" MaxHeight="{StaticResource BlockFourTimes}"
-												TextTrimming="CharacterEllipsis"
-												FontSize="{StaticResource Block}"
+												TextTrimming="CharacterEllipsis" Margin="{StaticResource BlockQuarterRight}"
+												FontSize="{StaticResource BlockOneAndQuarter}" VerticalAlignment="Center"
 												Foreground="{DynamicResource Foreground1HalfTransparency}" />
 										</DockPanel>
 									</DataTemplate>
@@ -37,13 +35,10 @@
 							</ListBox>
 						</DockPanel>
 						<Border>
-							<DockPanel
-								d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsAndProjectsSettingsViewModel}}">
-								<Button DockPanel.Dock="Bottom" Command="{Binding TestConnectionCommand}"
-								        Content="{Binding TestConnectionTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
+							<DockPanel>
                                 <!--DataContext cannot be specified-->
                                 <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
-                                <ContentPresenter VerticalAlignment="Top"
+                                <ContentPresenter VerticalAlignment="Top" Margin="{StaticResource BlockHalfXOnlyMargin}"
 								                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
 							</DockPanel>
 						</Border>

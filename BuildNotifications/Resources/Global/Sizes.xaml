@@ -10,6 +10,7 @@
     <system:Double x:Key="BlockHalf">6</system:Double>
     <system:Double x:Key="BlockThreeQuarters">9</system:Double>
     <system:Double x:Key="BlockFiveSixths">10</system:Double>
+    <system:Double x:Key="BlockElevenTwelfths">11</system:Double>
     <system:Double x:Key="Block">12</system:Double>
     <system:Double x:Key="BlockOneAndQuarter">15</system:Double>
     <system:Double x:Key="BlockOneAndHalf">18</system:Double>
@@ -61,10 +62,11 @@
     <Thickness Left="0" Right="0" Top="3" Bottom="3" x:Key="BlockQuarterYOnlyMargin"/>
     <Thickness Left="0" Right="0" Top="6" Bottom="6" x:Key="BlockHalfYOnlyMargin"/>
     <Thickness Left="6" Right="6" Top="0" Bottom="0" x:Key="BlockHalfXOnlyMargin"/>
+    <Thickness Left="0" Right="0" Top="12" Bottom="12" x:Key="BlockYOnlyMargin"/>
+    <Thickness Left="12" Right="12" Top="0" Bottom="0" x:Key="BlockXOnlyMargin"/>
     <Thickness Left="3" Right="3" Top="0" Bottom="0" x:Key="BlockQuarterXOnlyMargin"/>
     <Thickness Left="-8" Right="0" Top="0" Bottom="0" x:Key="NegativeTwoThirdsBlockToTheLeftMargin"/>
 
-    <Thickness Left="12" Right="12" Top="0" Bottom="0" x:Key="BlockXOnlyMargin"/>
     <Thickness Left="10" Right="10" Top="{StaticResource BlockSixth}" Bottom="{StaticResource BlockSixth}" x:Key="BlockThreeQuartersPlusOneXSixthBlockOneYMargin"/>
     <Thickness Left="0" Right="-24" Top="0" Bottom="0" x:Key="NegativeBlockDoubleThicknessFromRight"/>
 

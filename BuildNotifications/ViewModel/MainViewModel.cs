@@ -227,7 +227,7 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
             NotificationCenter = new NotificationCenterViewModel();
             NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges());
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges(), _coreSetup.PluginRepository);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel

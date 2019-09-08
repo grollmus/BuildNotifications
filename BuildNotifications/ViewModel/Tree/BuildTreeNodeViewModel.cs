@@ -28,6 +28,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
+        public bool TreeIsEmpty => !Children.Any();
+
         public int CurrentTreeLevelDepth { get; private set; }
 
         public string DisplayName => CalculateDisplayName();
@@ -77,7 +79,7 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(BuildStatus));
         }
 
-        private static IList<BuildStatus> BuildStatusToIgnore { get; } = new List<BuildStatus> {BuildStatus.Cancelled, BuildStatus.Pending};
+        private static IList<BuildStatus> BuildStatusToIgnore { get; } = new List<BuildStatus> {BuildStatus.Cancelled, BuildStatus.Pending, BuildStatus.Running};
 
         private BuildStatus MostCurrentBuildStatus(IEnumerable<BuildNodeViewModel> buildNodes)
         {
@@ -188,6 +190,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             UpdateBuildStatus();
             UpdateChangedDate();
+            OnPropertyChanged(nameof(TreeIsEmpty));
         }
 
         private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -197,6 +200,9 @@ namespace BuildNotifications.ViewModel.Tree
                 UpdateBuildStatus();
                 if (_currentSortingDefinition == SortingDefinition.StatusAscending || _currentSortingDefinition == SortingDefinition.StatusDescending)
                     Children.InvokeSort();
+
+                if (ChildrenAreBuilds)
+                    SetSpecificBuildChildrenProperties();
             }
 
             if (e.PropertyName.Equals(nameof(ChangedDate)))
@@ -260,6 +266,10 @@ namespace BuildNotifications.ViewModel.Tree
                     failedOrInconclusiveBuilds.Add(build);
                     continue;
                 }
+
+                // while pending and running builds do not prevent the hollow status, they should not be displayed hollow themselves
+                if (status == BuildStatus.Pending || status == BuildStatus.Running)
+                    continue;
 
                 break;
             }

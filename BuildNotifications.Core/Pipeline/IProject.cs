@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BuildNotifications.Core.Config;
+using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -64,5 +65,10 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchRemovedBuilds();
+
+        /// <summary>
+        /// Fetches all user identities which represent the current user. That is, the user that is actually currently running BuildNotifications.
+        /// </summary>
+        IEnumerable<IUser> FetchCurrentUserIdentities();
     }
 }

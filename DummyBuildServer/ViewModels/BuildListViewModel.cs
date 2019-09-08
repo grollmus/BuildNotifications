@@ -68,6 +68,7 @@ namespace DummyBuildServer.ViewModels
                 Definition = definition,
                 BranchName = branch.Name,
                 RequestedBy = user,
+                RequestedFor = user,
                 Status = BuildStatus.Pending,
                 Id = (++_idCounter).ToString()
             };

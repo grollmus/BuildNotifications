@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Resources.Icons;
@@ -17,8 +18,10 @@ namespace BuildNotifications.ViewModel.Overlays
         public InitialSetupOverlayViewModel(SettingsViewModel settingsViewModel, IPluginRepository pluginRepository)
         {
             _settingsViewModel = settingsViewModel;
+
             ConnectionsAndProjectsSettingsViewModel = new ConnectionsAndProjectsSettingsViewModel(settingsViewModel.ConnectionsSubSet, settingsViewModel.ProjectsSubSet, pluginRepository);
             settingsViewModel.SettingsChanged += UpdateText;
+            settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
             App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
             UpdateText(this, EventArgs.Empty);
@@ -112,13 +115,43 @@ namespace BuildNotifications.ViewModel.Overlays
 
             if (_settingsViewModel.Configuration.Projects.Count == 0)
             {
-                DisplayedTextId = InitialSetupEmptyProjects;
-                DisplayedIconType = IconType.GroupingEmpty;
-                return;
+                if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
+                {
+                    DisplayedTextId = InitialSetupUntested;
+                    DisplayedIconType = IconType.Dummy;
+                }
+                else
+                {
+                    DisplayedTextId = InitialSetupTested;
+                    DisplayedIconType = IconType.Project;
+                }
             }
+            else
+            {
+                var anyConnectedBuildProviderSetup = _settingsViewModel.Configuration.Projects.Any(x => x.BuildConnectionNames.Any());
+                var anyConnectedSourceControlProviderSetup = _settingsViewModel.Configuration.Projects.Any(x => x.SourceControlConnectionNames.Any());
 
-            DisplayedTextId = InitialSetupCompleteConfig;
-            DisplayedIconType = IconType.Settings;
+                if (!anyConnectedSourceControlProviderSetup && !anyConnectedBuildProviderSetup)
+                {
+                    DisplayedTextId = InitialSetupConnectionNotAsBuildOrSource;
+                    DisplayedIconType = IconType.Status;
+                }
+                else if (!anyConnectedSourceControlProviderSetup)
+                {
+                    DisplayedTextId = InitialSetupConnectionNotAsSource;
+                    DisplayedIconType = IconType.Branch;
+                }
+                else if (!anyConnectedBuildProviderSetup)
+                {
+                    DisplayedTextId = InitialSetupConnectionNotAsBuild;
+                    DisplayedIconType = IconType.Definition;
+                }
+                else
+                {
+                    DisplayedTextId = InitialSetupCompleteConfig;
+                    DisplayedIconType = IconType.Settings;
+                }
+            }
         }
 
         private readonly SettingsViewModel _settingsViewModel;
@@ -132,7 +165,11 @@ namespace BuildNotifications.ViewModel.Overlays
 
         private const string InitialSetupEmptyConf = nameof(InitialSetupEmptyConf);
         private const string InitialSetupEmptyConnections = nameof(InitialSetupEmptyConnections);
-        private const string InitialSetupEmptyProjects = nameof(InitialSetupEmptyProjects);
+        private const string InitialSetupConnectionNotAsBuildOrSource = nameof(InitialSetupConnectionNotAsBuildOrSource);
+        private const string InitialSetupConnectionNotAsBuild = nameof(InitialSetupConnectionNotAsBuild);
+        private const string InitialSetupConnectionNotAsSource = nameof(InitialSetupConnectionNotAsSource);
+        private const string InitialSetupUntested = nameof(InitialSetupUntested);
+        private const string InitialSetupTested = nameof(InitialSetupTested);
     }
 }
 #pragma warning enable CS8618

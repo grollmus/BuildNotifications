@@ -16,7 +16,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Display name of the connection.
         /// </summary>
-        [IsDisplayName]
+        [IgnoredForConfig]
         public string Name { get; set; }
 
         /// <summary>

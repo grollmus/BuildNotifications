@@ -10,13 +10,11 @@
     <UserControl.Resources>
         <ResourceDictionary Source="../../Resources/Settings/EditableConfigResources.xaml" />
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl ItemsSource="{Binding Configs}" ItemTemplateSelector="{Binding DataTemplateSelector}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </ScrollViewer>
+    <ItemsControl ItemsSource="{Binding Configs}" ItemTemplateSelector="{Binding DataTemplateSelector}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <DockPanel/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
 </UserControl>

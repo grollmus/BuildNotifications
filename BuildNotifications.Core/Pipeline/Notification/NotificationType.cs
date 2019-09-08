@@ -7,6 +7,8 @@
         DefinitionAndBranch,
         Build,
         None,
-        Error
+        Error,
+        Info,
+        Success
     }
 }

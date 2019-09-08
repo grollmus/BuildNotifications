@@ -51,6 +51,48 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type icons:IconButton}" BasedOn="{StaticResource {x:Type icons:IconButton}}" x:Key="IconButtonWithDockedContent">
+        <Setter Property="Padding" Value="{StaticResource BlockHalfThickness}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <DockPanel Margin="{TemplateBinding Padding}">
+                            <icons:IconBatch
+                                Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type icons:IconButton}, Mode=FindAncestor}}"
+                                Width="{Binding IconSize, RelativeSource={RelativeSource AncestorType={x:Type icons:IconButton}, Mode=FindAncestor}}"
+                                Height="{Binding IconSize, RelativeSource={RelativeSource AncestorType={x:Type icons:IconButton}, Mode=FindAncestor}}"
+                                Margin="{TemplateBinding Padding}" x:Name="Icon" DockPanel.Dock="Left"
+                                Foreground="{TemplateBinding Foreground}" />
+
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border"
+                                    Value="{DynamicResource Background3}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Opacity" TargetName="Icon" Value="0.25" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="Icon" Value="0.25" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
     <Style x:Key="HiddenIconButton" TargetType="{x:Type Button}">
         <Setter Property="BorderThickness" Value="0" />

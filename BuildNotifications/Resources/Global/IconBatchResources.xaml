@@ -450,4 +450,102 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+
+    <DrawingImage x:Key="NoConnectionDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M59.15,1.85Q58.535546875,1.8564453125,58.1,2.3L3.65,56.8Q3.205078125,57.2375 3.2,57.85 3.205078125,58.46484375 3.65,58.9 4.0861328125,59.3451171875 4.7,59.35 5.314453125,59.343359375 5.75,58.9L60.2,4.4Q60.6447265625,3.9625 60.65,3.35 60.644921875,2.73515625 60.2,2.3 59.7640625,1.8546875 59.15,1.85 M45.7,44.1Q50.25,38.75,50.25,31.95L50.25,17.85 21.25,46.75Q24.9255859375,49.37265625,29.7,50L29.7,64 34.2,64 34.2,50Q41.15,49.1,45.7,44.1 M42.05,13.75L42.05,0 36.5,0 36.5,13.75 27.4,13.75 27.4,0 21.95,0 21.95,13.75 13.85,13.75 13.75,13.75 13.75,31.95Q13.75,33.4 13.85,34.8 14.3431640625,38.0673828125 15.9,40.85L43.05,13.75 42.05,13.75z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="NoMessageDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M61.7,4.4Q61.694921875,3.78515625 61.25,3.35 60.8140625,2.9046875 60.2,2.9 59.585546875,2.9064453125 59.15,3.35L4.7,57.85Q4.255078125,58.2875 4.25,58.9 4.255078125,59.51484375 4.7,59.95 5.1361328125,60.3951171875 5.75,60.4 6.364453125,60.393359375 6.8,59.95L61.25,5.45Q61.6947265625,5.0125,61.7,4.4 M11.3,35.7Q11.3,36.4 11.8,36.9 12.3,37.4 13,37.4L20.25,37.4 23.75,33.95 13,33.95Q12.3,33.95 11.8,34.5 11.3,34.95 11.3,35.7 M11.3,27.5Q11.3,28.25 11.8,28.75 12.3,29.25 13,29.25L28.5,29.25 31.95,25.75 13,25.75Q12.3,25.75 11.8,26.3 11.3,26.75 11.3,27.5 M36.65,21.05L40.15,17.6 13,17.6Q12.3,17.6 11.8,18.15 11.3,18.6 11.3,19.35 11.3,20.05 11.8,20.55 12.3,21.05 13,21.05L36.65,21.05 M50.7,36.9Q51.2,36.4 51.2,35.7 51.2,34.95 50.7,34.5 50.25,33.95 49.5,33.95L38.6,33.95 35.15,37.4 49.5,37.4Q50.25,37.4,50.7,36.9 M50.7,28.75Q51.2,28.25 51.2,27.5 51.2,26.75 50.7,26.3 50.25,25.75 49.5,25.75L46.75,25.75 43.3,29.25 49.5,29.25Q50.25,29.25,50.7,28.75 M60.2,12.4L56.85,15.75 56.85,42.95 47.2,42.95Q46.45,42.95 45.95,43.45 45.45,43.95 45.45,44.75L45.5,53.15 35.8,43.45Q35.25,42.95,34.55,42.95L29.55,42.95 26.1,46.4 33.85,46.4 46.05,58.65Q46.55,59.15 47.25,59.15 48,59.15 48.5,58.6 48.95,58.1 48.95,57.4L48.95,46.4 58.6,46.4Q59.3,46.4 59.85,45.95 60.1,45.65 60.2,45.3L60.2,12.4 M45.3,12.5L48.7,9.05 4.5,9.05Q3.8,9.05 3.35,9.55 2.8,10.05 2.8,10.75L2.8,44.7Q2.8,45.4 3.35,45.95 3.8,46.4 4.5,46.4L11.3,46.4 14.75,42.95 6.25,42.95 6.25,12.5 45.3,12.5z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="InfoDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M64,32Q64,18.8 54.6,9.4 45.2,0 32,0 18.75,0 9.35,9.4 0,18.8 0,32 0,45.2 9.35,54.6 18.75,64 32,64 45.2,64 54.6,54.6 64,45.2 64,32 M32.05,8.95Q33.7,8.95 34.85,10.1 36,11.25 36,12.9 36,14.55 34.85,15.7 33.7,16.9 32.05,16.9 30.4,16.9 29.25,15.7 28.05,14.55 28.05,12.9 28.05,11.25 29.25,10.1 30.4,8.95 32.05,8.95 M32,23.75L32.05,23.75Q33.7,23.75 34.85,24.9 36,26.05 36,27.7L36,54.35Q36,56 34.85,57.15 33.7,58.3 32.05,58.3L32,58.3Q30.35,58.3 29.2,57.15 28.05,56 28.05,54.35L28.05,27.7Q28.05,26.05 29.2,24.9 30.35,23.75 32,23.75z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="LightningDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M24.75,0L14.5,37.65 25.65,35.85 18.9,64 49.5,22.25 29.1,26.8 45.65,0 24.75,0z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="CheckmarkDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M64,32Q64,18.8 54.6,9.4 45.2,0 32,0 18.75,0 9.35,9.4 0,18.8 0,32 0,45.2 9.35,54.6 18.75,64 32,64 45.2,64 54.6,54.6 64,45.2 64,32 M47.95,15.1Q48.7990234375,14.0541015625 50.1,13.85 51.4560546875,13.7013671875 52.5,14.5 53.596875,15.346875 53.75,16.65 53.9462890625,18.0048828125 53.1,19.05L30.05,48.9Q29.2564453125,49.983203125 27.95,50.15 26.6470703125,50.3603515625 25.55,49.55L11.5,39.2Q10.4478515625,38.4234375 10.25,37.1 10.0361328125,35.7673828125 10.8,34.65 11.624609375,33.5962890625 12.95,33.4 14.2810546875,33.1880859375 15.35,33.95L26.85,42.45 47.95,15.1z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="DownArrowDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M53.35,20.15L10.7,20.15 32,50.25 53.35,20.15z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="ProjectDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing
+                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Geometry="F1 M64,64z M0,0z M30.2,4.4L13.85,18.55 13.85,59.85 50.5,59.85 50.5,4.4 30.2,4.4 M44.2,24.05Q44.9,24.65 44.9,25.6 44.9,26.5 44.2,27.15 43.45,27.75 42.4,27.75L21.65,27.75Q20.6,27.75 19.9,27.15 19.15,26.5 19.15,25.6 19.15,24.65 19.9,24.05 20.6,23.4 21.65,23.4L42.4,23.4Q43.45,23.4,44.2,24.05 M42.4,36.3Q43.45,36.3 44.2,36.95 44.9,37.55 44.9,38.45 44.9,39.35 44.2,40 43.45,40.65 42.4,40.65L21.65,40.65Q20.6,40.65 19.9,40 19.15,39.35 19.15,38.45 19.15,37.55 19.9,36.95 20.6,36.3 21.65,36.3L42.4,36.3 M21.65,53.5Q20.6,53.5 19.9,52.9 19.15,52.25 19.15,51.35 19.15,50.4 19.9,49.8 20.6,49.15 21.65,49.15L42.4,49.15Q43.45,49.15 44.2,49.8 44.9,50.4 44.9,51.35 44.9,52.25 44.2,52.9 43.45,53.5 42.4,53.5L21.65,53.5z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces;
@@ -67,5 +68,25 @@ namespace BuildNotifications.Core.Config
         [JsonIgnore]
         [IgnoredForConfig]
         IList<IUser> IdentitiesOfCurrentUser { get; }
+
+        /// <summary>
+        /// Retrieves all possible plugin names which provide build provider.
+        /// </summary>
+        IEnumerable<string?> PossibleBuildPlugins();
+        
+        /// <summary>
+        /// Retrieves all possible plugin names which provide source control.
+        /// </summary>
+        IEnumerable<string?> PossibleSourceControlPlugins();
+
+        /// <summary>
+        /// Retrieves the type of the configuration for the build plugin of the given connection.
+        /// </summary>
+        Type BuildPluginConfigurationType(ConnectionData connectionData);
+
+        /// <summary>
+        /// Retrieves the type of the configuration for the source control plugin of the given connection.
+        /// </summary>
+        Type SourceControlPluginConfigurationType(ConnectionData connectionData);
     }
 }

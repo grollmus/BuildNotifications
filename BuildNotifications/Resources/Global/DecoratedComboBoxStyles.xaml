@@ -189,16 +189,17 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False"
                                     Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                     Height="{StaticResource BlockOneAndHalf}">
-                            <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
-                                             Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
-                                             DockPanel.Dock="Right"
-                                             x:Name="Icon" HorizontalAlignment="Right" />
                             <TextBlock
 
                                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                 Foreground="{DynamicResource Background3}" x:Name="Label" HorizontalAlignment="Right"
-                                Style="{StaticResource TextBoxLabelStyle}" DockPanel.Dock="Right"
-                                VerticalAlignment="Bottom" />
+                                Style="{StaticResource TextBoxLabelStyle}" 
+                                VerticalAlignment="Center" />
+
+                            <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
+                                             Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                                             Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
+                                             x:Name="Icon" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <i:Interaction.Triggers>

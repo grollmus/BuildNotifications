@@ -11,13 +11,37 @@ namespace BuildNotifications.ViewModel.Notification
     {
         private readonly NotificationViewModelFactory _notificationViewModelFactory;
         private NotificationViewModel? _selectedNotification;
+        private bool _showTimeStamp = true;
+        private bool _showEmptyMessage = true;
         public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
+
+        public bool NoNotifications => ShowEmptyMessage && !Notifications.Any();
 
         public NotificationCenterViewModel()
         {
             _notificationViewModelFactory = new NotificationViewModelFactory();
             Notifications = new RemoveTrackingObservableCollection<NotificationViewModel>();
             Notifications.SortDescending(x => x.Timestamp);
+        }
+
+        public bool ShowTimeStamp
+        {
+            get => _showTimeStamp;
+            set
+            {
+                _showTimeStamp = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowEmptyMessage
+        {
+            get => _showEmptyMessage;
+            set
+            {
+                _showEmptyMessage = value;
+                OnPropertyChanged();
+            }
         }
 
         public NotificationViewModel? SelectedNotification
@@ -45,6 +69,8 @@ namespace BuildNotifications.ViewModel.Notification
             {
                 notification.InvokeTimeUntilNowUpdate();
             }
+
+            OnPropertyChanged(nameof(NoNotifications));
         }
 
         public void ClearNotificationsOfType(NotificationType type)
@@ -54,6 +80,8 @@ namespace BuildNotifications.ViewModel.Notification
             {
                 Notifications.Remove(viewModel);
             }
+
+            OnPropertyChanged(nameof(NoNotifications));
         }
     }
 }

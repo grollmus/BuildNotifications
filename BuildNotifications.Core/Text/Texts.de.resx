@@ -220,13 +220,10 @@
   <data name="InitialSetupEmptyConf" xml:space="preserve">
     <value></value>
   </data>
-  <data name="InitialSetupEmptyProjects" xml:space="preserve">
-    <value></value>
-  </data>
   <data name="InitialSetupEmptyConnections" xml:space="preserve">
     <value></value>
   </data>
-  <data name="InitialSetupCompleteConfig" xml:space="preserve">
+  <data name="InitialSetupConnectionNotAsBuildOrSource" xml:space="preserve">
     <value></value>
   </data>
   <data name="ErrorFetchingBranches" xml:space="preserve">
@@ -335,6 +332,57 @@
     <value></value>
   </data>
   <data name="FailedToFindSourceControlPluginForType" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ErrorFetchingUserIdentities" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DateDescending" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="EditConnection" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TestConnection" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TreeIsEmpty" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Testing" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NoNotifications" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="BuildConnectionTestFailed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="SourceConnectionTestFailed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConnectionTestSuccessful" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ConnectionTestCaption" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="InitialSetupUntested" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="InitialSetupTested" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="InitialSetupConnectionNotAsBuild" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="InitialSetupConnectionNotAsSource" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="CloseConnections" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="InitialSetupCompleteConfig" xml:space="preserve">
     <value></value>
   </data>
 </root>

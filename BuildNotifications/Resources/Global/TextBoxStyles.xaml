@@ -6,7 +6,7 @@
 
     <Style TargetType="TextBlock" x:Key="TextBoxLabelStyle">
         <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
-        <Setter Property="FontSize" Value="{StaticResource BlockFiveSixths}" />
+        <Setter Property="FontSize" Value="{StaticResource BlockElevenTwelfths}" />
     </Style>
 
 

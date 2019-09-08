@@ -3,84 +3,22 @@
                     xmlns:local="clr-namespace:BuildNotifications.Resources.Settings"
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
-    <DataTemplate x:Key="ConnectionsAndProjectsEditableCollectionTemplate"
-                  DataType="{x:Type editableConfigs:IEditableCollection}">
-        <DockPanel x:Name="ConnectionsAndProjectsEditableCollectionDockPanel">
-            <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
-                <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="IconBtn"
-                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
-                                  Background="{DynamicResource Background1}"
-                                  Height="{StaticResource BlockThreeQuarters}"
-                                  IconSize="{StaticResource BlockThreeQuarters}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <icons:ButtonInvokedAnimation />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </icons:IconButton>
-
-                <ListBox ItemsSource="{Binding SubEditables}" SelectedIndex="0" Margin="0" Padding="0"
-                         HorizontalContentAlignment="Left" 
-                         x:Name="ListBox">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel>
-                                <TextBlock
-                                    Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-                                    TextWrapping="Wrap" Width="{StaticResource BlockTwelveTimes}"
-                                    MaxHeight="{StaticResource BlockFourTimes}" TextTrimming="CharacterEllipsis"
-                                    Foreground="{DynamicResource Foreground1HalfTransparency}" />
-                                <icons:IconButton Icon="Minus"
-                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=ConnectionsAndProjectsEditableCollectionDockPanel}"
-                                                  CommandParameter="{Binding Value}" x:Name="IconBtn"
-                                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
-                                                  Height="{StaticResource BlockThreeQuarters}"
-                                                  IconSize="{StaticResource BlockThreeQuarters}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <icons:ButtonInvokedAnimation />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </icons:IconButton>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-
-                </ListBox>
-            </DockPanel>
-            <Grid>
-                <ContentPresenter VerticalAlignment="Top"
-                                  ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
-                                  Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
-                <DockPanel Visibility="Collapsed"
-                           x:Name="InfoDockPanel">
-                    <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}"
-                                     DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
-                                     Margin="{StaticResource BlockQuarterThickness}" />
-                    <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
-                </DockPanel>
-            </Grid>
-        </DockPanel>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding ItemCount}" Value="0">
-                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
-            </DataTrigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>
+                    xmlns:settings="clr-namespace:BuildNotifications.Views.Settings">
+    
 
     <DataTemplate x:Key="PluginSelectionTemplate" DataType="{x:Type editableConfigs:EditableString}">
         <DockPanel>
             <TextBlock DockPanel.Dock="Top"
                        Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-                       FontSize="{StaticResource Block}" Foreground="{DynamicResource Background3}" />
-            <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0" HorizontalContentAlignment="Left"
+                       FontSize="{StaticResource BlockOneAndQuarter}" HorizontalAlignment="Center" Foreground="{DynamicResource Foreground1}" 
+                       />
+            <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0"
+                     HorizontalContentAlignment="Center" HorizontalAlignment="Center"
                      SelectedItem="{Binding Value}">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel Background="#01000000">
+                        <DockPanel Background="#01000000" Margin="{StaticResource BlockHalfThickness}">
                             <DockPanel.Resources>
                                 <DrawingImage x:Key="PluginIconNormal">
                                     <DrawingImage.Drawing>
@@ -116,7 +54,7 @@
                                     </DrawingImage.Drawing>
                                 </DrawingImage>
                             </DockPanel.Resources>
-                            <TextBlock DockPanel.Dock="Bottom" x:Name="TextBlock"
+                            <TextBlock DockPanel.Dock="Bottom" x:Name="TextBlock" 
                                        Foreground="{DynamicResource Foreground1HalfTransparency}">
                                 <TextBlock.Text>
                                     <MultiBinding
@@ -157,5 +95,9 @@
 
             </ListBox>
         </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type editableConfigs:IEditableComplex}" x:Key="TestConnectionDataTemplate">
+        <settings:TestConnectionView DataContext="{Binding Value}" />
     </DataTemplate>
 </ResourceDictionary>
