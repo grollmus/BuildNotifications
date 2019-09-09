@@ -182,6 +182,7 @@ namespace BuildNotifications.Core.Pipeline
             _buildCache.Clear();
             _branchCache.Clear();
             _lastUpdate = null;
+            _oldTree = null;
             _configuration.IdentitiesOfCurrentUser.Clear();
         }
 
