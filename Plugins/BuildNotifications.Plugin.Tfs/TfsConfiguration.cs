@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System.Security;
+using JetBrains.Annotations;
+using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -15,9 +17,23 @@ namespace BuildNotifications.Plugin.Tfs
 
         public AuthenticationType AuthenticationType { get; set; }
 
+        [CalculatedVisibility(nameof(UsernameHidden))]
         public string? Username { get; set; }
 
+        [CalculatedVisibility(nameof(PasswordHidden))]
         public string? Password { get; set; }
+
+        [CalculatedVisibility(nameof(TokenHidden))]
+        public string? Token { get; set; }
+
+        [CalculatedVisibility(nameof(PasswordHidden))]
+        public SecureString? SecurePassword { get; set; }
+
+        public bool UsernameHidden() => AuthenticationType != AuthenticationType.Account;
+
+        public bool PasswordHidden() => AuthenticationType != AuthenticationType.Account;
+
+        public bool TokenHidden() => AuthenticationType != AuthenticationType.Token;
     }
 
     public enum AuthenticationType

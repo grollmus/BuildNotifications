@@ -58,6 +58,8 @@ namespace BuildNotifications.Resources.Settings
                         return element?.TryFindResource("EditableComplexTemplate") as DataTemplate;
                 case IEditableEnum _:
                     return element?.TryFindResource("EditableEnumTemplate") as DataTemplate;
+                case EditableSecureString _:
+                    return element?.TryFindResource("EditableSecureStringTemplate") as DataTemplate;
                 default:
                     return DataTemplateByName(item, element);
             }

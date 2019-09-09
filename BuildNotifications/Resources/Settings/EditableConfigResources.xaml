@@ -4,6 +4,7 @@
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -20,11 +21,13 @@
 
     <DataTemplate x:Key="EditableIntTemplate" DataType="{x:Type editableConfigs:EditableInt}">
         <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
+                               Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"
                                Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                                Margin="{StaticResource BlockYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableDoubleTemplate" DataType="{x:Type editableConfigs:EditableDouble}">
         <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
+                               Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"
                                Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                                Margin="{StaticResource BlockYOnlyMargin}" />
     </DataTemplate>
@@ -35,27 +38,35 @@
                                Margin="{StaticResource BlockYOnlyMargin}" />
     </DataTemplate>
     <DataTemplate x:Key="EditableStringComboboxTemplate" DataType="{x:Type editableConfigs:EditableString}">
-        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}">
+        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}"
+                    Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
             <TextBlock
                 Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" Margin="{StaticResource BlockQuarterYOnlyMargin}"/>
+            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}"
+                                     ItemsSource="{Binding PredefinedValues}"
+                                     Margin="{StaticResource BlockQuarterYOnlyMargin}" />
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableEnumTemplate" DataType="{x:Type editableConfigs:IEditableEnum}">
-        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}">
+        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}"
+                    Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
             <TextBlock
                 Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}" Margin="{StaticResource BlockQuarterYOnlyMargin}"/>
+            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding EnumValues}"
+                                     Margin="{StaticResource BlockQuarterYOnlyMargin}" />
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexComboboxTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
-        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}">
+        <StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}"
+                    Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
             <TextBlock
                 Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" ItemsSource="{Binding PredefinedValues}" Margin="{StaticResource BlockQuarterYOnlyMargin}"/>
+            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}"
+                                     ItemsSource="{Binding PredefinedValues}"
+                                     Margin="{StaticResource BlockQuarterYOnlyMargin}" />
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
@@ -123,11 +134,11 @@
 
                 </ListBox>
             </DockPanel>
-            <Grid >
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
-                <ContentPresenter VerticalAlignment="Top" Margin="{StaticResource BlockXOnlyMargin}"
-                                  ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
-                                  Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <ContentPresenter VerticalAlignment="Top" Margin="{StaticResource BlockXOnlyMargin}"
+                                      ContentTemplateSelector="{x:Static local:EditableConfigTemplateSelector.Instance}"
+                                      Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
                 </ScrollViewer>
                 <DockPanel Visibility="Collapsed"
                            x:Name="InfoDockPanel">
@@ -217,4 +228,7 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
+    <DataTemplate x:Key="EditableSecureStringTemplate" DataType="{x:Type editableConfigs:EditableSecureString}">
+        <local:SecureStringEditableView EditableSecureString="{Binding}" Margin="{StaticResource BlockYOnlyMargin}" Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"/>
+    </DataTemplate>
 </ResourceDictionary>
