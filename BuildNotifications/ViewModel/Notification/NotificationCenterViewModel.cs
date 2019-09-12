@@ -13,7 +13,10 @@ namespace BuildNotifications.ViewModel.Notification
         private NotificationViewModel? _selectedNotification;
         private bool _showTimeStamp = true;
         private bool _showEmptyMessage = true;
+
         public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
+
+        public INotificationDistributor NotificationDistributor { get; } = new NotificationDistributor();
 
         public bool NoNotifications => ShowEmptyMessage && !Notifications.Any();
 
@@ -59,7 +62,8 @@ namespace BuildNotifications.ViewModel.Notification
 
         public void ShowNotifications(IEnumerable<INotification> notifications)
         {
-            var viewModels = _notificationViewModelFactory.Produce(notifications);
+            var asList = notifications.ToList();
+            var viewModels = _notificationViewModelFactory.Produce(asList);
             foreach (var notification in viewModels)
             {
                 Notifications.Add(notification);
@@ -71,6 +75,25 @@ namespace BuildNotifications.ViewModel.Notification
             }
 
             OnPropertyChanged(nameof(NoNotifications));
+
+            foreach (var notification in asList.Where(ShouldPublish))
+            {
+                NotificationDistributor.Distribute(notification);
+            }
+        }
+
+        private static bool ShouldPublish(INotification notification)
+        {
+            switch (notification.Type)
+            {
+                case NotificationType.Branch:
+                case NotificationType.Definition:
+                case NotificationType.DefinitionAndBranch:
+                case NotificationType.Build:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public void ClearNotificationsOfType(NotificationType type)

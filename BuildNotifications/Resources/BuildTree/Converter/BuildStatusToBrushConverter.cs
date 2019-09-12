@@ -47,12 +47,11 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return DefaultBrush;
         }
 
-        public Brush DefaultBrush => GetBrush(DefaultBrushKey);
+        public SolidColorBrush DefaultBrush => GetBrush(DefaultBrushKey);
 
-        private Brush GetBrush(string key)
+        private SolidColorBrush GetBrush(string key)
         {
-            var findResource = Application.Current.FindResource(key) as Brush;
-            if (findResource == null)
+            if (!(Application.Current.FindResource(key) is SolidColorBrush findResource))
             {
                 LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
                 return new SolidColorBrush(Colors.White);

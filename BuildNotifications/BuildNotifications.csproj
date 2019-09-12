@@ -50,6 +50,12 @@
     <None Remove="Resources\Global\TextBoxStyles.xaml" />
     <None Remove="Resources\Global\WindowStyle.xaml" />
     <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
+    <None Remove="Resources\Icons\Gray.ico" />
+    <None Remove="Resources\Icons\Green.ico" />
+    <None Remove="Resources\Icons\icon_failed.ico" />
+    <None Remove="Resources\Icons\icon_pending.ico" />
+    <None Remove="Resources\Icons\ToastHeroPlaceholder.png" />
+    <None Remove="Resources\Icons\ToastImagePlaceholder.png" />
     <None Remove="Resources\Window\ScrollBar.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
     <None Remove="Views\GroupDefinitionSelectionView.xaml" />
@@ -63,6 +69,27 @@
 
   <ItemGroup>
     <Page Remove="Resources.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\Gray.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\Green.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\icon_failed.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\icon_pending.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\ToastHeroPlaceholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\ToastImagePlaceholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +112,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
+    <ProjectReference Include="..\ToastNotificationsPlugin\ToastNotificationsPlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

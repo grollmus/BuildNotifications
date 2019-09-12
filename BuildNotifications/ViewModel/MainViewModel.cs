@@ -9,12 +9,14 @@ using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
+using BuildNotifications.PluginInterfacesLegacy.Notification;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
+using ToastNotificationsPlugin;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
@@ -41,7 +43,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
@@ -70,7 +72,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -188,7 +190,7 @@ namespace BuildNotifications.ViewModel
 
             if (BuildTree == null)
                 return;
-            
+
             var buildsVm = BuildTree.AllBuilds().Where(b => e.BuildNodes.Any(bn => b.Node.Build.Id == bn.Build.Id && b.Node.Build.ProjectName == bn.Build.ProjectName));
             foreach (var buildNode in buildsVm)
             {
@@ -226,13 +228,17 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.ResumeRequested += StatusIndicator_OnResumeRequested;
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
             NotificationCenter = new NotificationCenterViewModel();
+            var toastNotificationProcessor = new ToastNotificationProcessor();
+            toastNotificationProcessor.UserFeedback += ToastNotificationProcessorOnUserFeedback;
+            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
+
             NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges(), _coreSetup.PluginRepository);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
             {
-                BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition, 
+                BuildTreeGroupDefinition = _coreSetup.Configuration.GroupDefinition,
                 BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition
             };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
@@ -240,6 +246,25 @@ namespace BuildNotifications.ViewModel
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
+        }
+
+        private void ToastNotificationProcessorOnUserFeedback(object? sender, FeedbackEventArgs e)
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow != null)
+                {
+                    if (mainWindow.WindowState == WindowState.Minimized)
+                        mainWindow.WindowState = WindowState.Normal;
+
+                    mainWindow.Activate();
+                }
+
+                NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification("You clicked on a notification. Arguments: {0}", "Feedback", NotificationType.Info, e.FeedbackArguments)});
+                if (!ShowNotificationCenter)
+                    ToggleShowNotificationCenter(this);
+            });
         }
 
         private void ShowInitialSetupOverlayViewModel()

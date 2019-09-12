@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
     <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
   </ItemGroup>
 
