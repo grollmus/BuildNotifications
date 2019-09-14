@@ -26,7 +26,8 @@ namespace BuildNotifications.Core
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
             var branchNameExtractor = new BranchNameExtractor();
-            var treeBuilder = new TreeBuilder(Configuration, branchNameExtractor);
+            var searcher = new BuildSearcher();
+            var treeBuilder = new TreeBuilder(Configuration, branchNameExtractor, searcher);
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration);
 
             Pipeline.Notifier.Updated += Notifier_Updated;
@@ -40,13 +41,13 @@ namespace BuildNotifications.Core
 
         public IConfiguration Configuration { get; }
 
+        public IDistributedNotificationReceiver? NotificationReceiver { get; }
+
         public IPipeline Pipeline { get; }
 
         public IPluginRepository PluginRepository { get; }
 
         public IProjectProvider ProjectProvider { get; }
-
-        public IDistributedNotificationReceiver? NotificationReceiver { get; }
 
         public event EventHandler<DistributedNotificationReceivedEventArgs> DistributedNotificationReceived;
 

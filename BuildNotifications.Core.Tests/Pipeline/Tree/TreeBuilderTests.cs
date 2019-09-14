@@ -51,7 +51,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
 
             var branchNameExtractor = Substitute.For<IBranchNameExtractor>();
 
-            return new TreeBuilder(config, branchNameExtractor);
+            var searcher = Substitute.For<IBuildSearcher>();
+            searcher.Matches(Arg.Any<IBuild>(), Arg.Any<string>()).Returns(true);
+
+            return new TreeBuilder(config, branchNameExtractor, searcher);
         }
 
         private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)

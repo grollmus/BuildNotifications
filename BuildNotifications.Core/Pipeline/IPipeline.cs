@@ -24,6 +24,15 @@ namespace BuildNotifications.Core.Pipeline
         void ClearProjects();
 
         /// <summary>
+        /// Filters builds in the pipeline to match the term.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// Term to search for.
+        /// Use empty string to clear search filter
+        /// </param>
+        void Search(string searchTerm);
+
+        /// <summary>
         /// Updates the pipeline i.e. fetch data from projects, group builds and
         /// raise notifications.
         /// </summary>

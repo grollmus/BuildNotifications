@@ -6,6 +6,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal interface ITreeBuilder
     {
-        IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null);
+        IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, 
+            IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null, string searchTerm = "");
     }
 }

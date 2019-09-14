@@ -10,10 +10,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class TreeBuilder : ITreeBuilder
     {
-        public TreeBuilder(IConfiguration config, IBranchNameExtractor branchNameExtractor)
+        public TreeBuilder(IConfiguration config, IBranchNameExtractor branchNameExtractor,
+            IBuildSearcher searcher)
         {
             _config = config;
             _branchNameExtractor = branchNameExtractor;
+            _searcher = searcher;
         }
 
         private IBuildTreeGroupDefinition GroupDefinition => _config.GroupDefinition;
@@ -92,7 +94,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches, IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null)
+        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches,
+            IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null,
+            string searchTerm = "")
         {
             var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
@@ -103,7 +107,8 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var taggedNodes = new List<IBuildTreeNode>();
             TagAllNodesForDeletion(tree, taggedNodes);
 
-            foreach (var build in builds)
+            var filteredBuilds = builds.Where(b => _searcher.Matches(b, searchTerm));
+            foreach (var build in filteredBuilds)
             {
                 var path = BuildPath(build, branchList);
                 if (path == null)
@@ -119,5 +124,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         private readonly IConfiguration _config;
         private readonly IBranchNameExtractor _branchNameExtractor;
+        private readonly IBuildSearcher _searcher;
     }
 }
