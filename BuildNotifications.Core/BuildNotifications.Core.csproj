@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="ReflectSettings" Version="1.0.9" />
   </ItemGroup>
@@ -24,12 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Win32.Registry">
-      <HintPath>..\..\..\..\..\..\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.0.0-preview7-27912-14\ref\netcoreapp3.0\Microsoft.Win32.Registry.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
