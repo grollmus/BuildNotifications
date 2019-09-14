@@ -6,16 +6,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
+using Semver;
 using ToastNotificationsPlugin;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
@@ -148,6 +151,8 @@ namespace BuildNotifications.ViewModel
             ShowOverlay();
             if (Overlay == null)
                 StartUpdating();
+
+            UpdateApp().FireAndForget();
         }
 
         private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
@@ -248,25 +253,6 @@ namespace BuildNotifications.ViewModel
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
         }
 
-        private void ToastNotificationProcessorOnUserFeedback(object? sender, FeedbackEventArgs e)
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                var mainWindow = Application.Current.MainWindow;
-                if (mainWindow != null)
-                {
-                    if (mainWindow.WindowState == WindowState.Minimized)
-                        mainWindow.WindowState = WindowState.Normal;
-
-                    mainWindow.Activate();
-                }
-
-                NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification("You clicked on a notification. Arguments: {0}", "Feedback", NotificationType.Info, e.FeedbackArguments)});
-                if (!ShowNotificationCenter)
-                    ToggleShowNotificationCenter(this);
-            });
-        }
-
         private void ShowInitialSetupOverlayViewModel()
         {
             if (Overlay != null)
@@ -315,6 +301,25 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.Pause();
         }
 
+        private void ToastNotificationProcessorOnUserFeedback(object? sender, FeedbackEventArgs e)
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow != null)
+                {
+                    if (mainWindow.WindowState == WindowState.Minimized)
+                        mainWindow.WindowState = WindowState.Normal;
+
+                    mainWindow.Activate();
+                }
+
+                NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification("You clicked on a notification. Arguments: {0}", "Feedback", NotificationType.Info, e.FeedbackArguments)});
+                if (!ShowNotificationCenter)
+                    ToggleShowNotificationCenter(this);
+            });
+        }
+
         private void ToggleGroupDefinitionSelection(object obj)
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
@@ -335,6 +340,40 @@ namespace BuildNotifications.ViewModel
             ShowSettings = !ShowSettings;
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
+        }
+
+        private async Task UpdateApp()
+        {
+            LogTo.Info("Checking for updates...");
+
+            try
+            {
+                var includePreReleases = _coreSetup.Configuration.UsePreReleases;
+                var updater = new AppUpdater();
+
+                var result = await updater.CheckForUpdates();
+                if (result != null)
+                {
+                    if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))
+                        currentVersion = new SemVersion(0);
+
+                    var versions = result.ReleasesToApply.Select(r => SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0));
+                    if (!includePreReleases)
+                        versions = versions.Where(v => string.IsNullOrEmpty(v.Prerelease));
+
+                    var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
+                    if (newestVersion != null && newestVersion > currentVersion)
+                    {
+                        LogTo.Info($"Updating to version {result.FutureVersion}");
+                        await updater.PerformUpdate();
+                        LogTo.Info("Update finished");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogTo.WarnException("Update check failed", ex);
+            }
         }
 
         private void UpdateNow()
