@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 
@@ -19,5 +20,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         IList<IBuildNode> BuildNodes { get; }
 
         BuildStatus Status { get; }
+
+        Guid Guid { get; }
     }
 }

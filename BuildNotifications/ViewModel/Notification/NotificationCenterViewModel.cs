@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Notification;
+using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.ViewModel.Utils;
 
@@ -105,6 +106,18 @@ namespace BuildNotifications.ViewModel.Notification
             }
 
             OnPropertyChanged(nameof(NoNotifications));
+        }
+
+        public bool TryHighlightNotificationByGuid(Guid guidOfNotification)
+        {
+            var notification = Notifications.FirstOrDefault(n => n.NotificationGuid == guidOfNotification);
+            if (notification != null)
+            {
+                SelectedNotification = notification;
+                return true;
+            }
+
+            return false;
         }
     }
 }

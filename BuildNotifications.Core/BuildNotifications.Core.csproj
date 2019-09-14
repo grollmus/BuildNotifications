@@ -26,4 +26,10 @@
     <Folder Include="Extensions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.Win32.Registry">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\3.0.0-preview7-27912-14\ref\netcoreapp3.0\Microsoft.Win32.Registry.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

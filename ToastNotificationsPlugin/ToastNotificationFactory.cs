@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
@@ -9,8 +8,6 @@ namespace ToastNotificationsPlugin
 {
     internal class ToastNotificationFactory
     {
-        public event EventHandler<ToastEventArgs> ToastActivated;
-
         public void Process(IDistributedNotification notification)
         {
             var toast = CreateToast(notification);
@@ -23,7 +20,6 @@ namespace ToastNotificationsPlugin
             xmlDocument.LoadXml(toast.GetContent());
             var toastNotification = new ToastNotification(xmlDocument);
 
-            toastNotification.Activated += (sender, args) => ToastActivated?.Invoke(this, new ToastEventArgs(args.ToString()));
             ToastNotificationManager.CreateToastNotifier(ToastNotificationProcessor.ApplicationId).Show(toastNotification);
         }
 
@@ -44,6 +40,7 @@ namespace ToastNotificationsPlugin
             return new ToastContent()
             {
                 Launch = notification.FeedbackArguments,
+                ActivationType = ToastActivationType.Protocol,
                 Duration = isError ? ToastDuration.Long : ToastDuration.Short,
                 Visual = new ToastVisual
                 {

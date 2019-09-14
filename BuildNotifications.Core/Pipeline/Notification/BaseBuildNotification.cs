@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Text;
@@ -43,6 +44,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
         public IList<IBuildNode> BuildNodes { get; }
 
         public BuildStatus Status { get; }
+
+        public Guid Guid { get; } = Guid.NewGuid();
 
         // {0} builds. E.g. 25 builds
         private const string BuildNotificationContentPluralTextId = nameof(BuildNotificationContentPluralTextId);
