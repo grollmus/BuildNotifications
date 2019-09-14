@@ -9,13 +9,16 @@ using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.Core.Pipeline.Notification.Distribution;
+using BuildNotifications.Core.Protocol;
+using BuildNotifications.Core.Text;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
+using JetBrains.Annotations;
 using ToastNotificationsPlugin;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
@@ -28,8 +31,11 @@ namespace BuildNotifications.ViewModel
     {
         public MainViewModel()
         {
-            _coreSetup = new CoreSetup(new PathResolver());
+            var pathResolver = new PathResolver();
+            _fileWatch = new FileWatchDistributedNotificationReceiver(pathResolver);
+            _coreSetup = new CoreSetup(pathResolver, _fileWatch);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
+            _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             Initialize();
         }
@@ -148,7 +154,27 @@ namespace BuildNotifications.ViewModel
             ShowOverlay();
             if (Overlay == null)
                 StartUpdating();
+            RegisterUriProtocol();
+            HandleExistingDistributedNotificationsOnNextFrame();
         }
+
+        private class Dummy
+        {
+            [UsedImplicitly]
+            public int DummyProp { get; set; }
+        }
+
+        private void HandleExistingDistributedNotificationsOnNextFrame()
+        {
+            // start a tween which will finish as soon as the next frame is rendered (because this is when tweens get updated.)
+            
+            App.GlobalTweenHandler.Add(new Dummy().Tween(x => x.DummyProp).To(0).In(0).OnComplete((sender, parameter) =>
+            {
+                _fileWatch.HandleAllExistingFiles();
+            }));
+        }
+
+        private void RegisterUriProtocol() => UriSchemeRegistration.Register();
 
         private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
         {
@@ -229,7 +255,6 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
             NotificationCenter = new NotificationCenterViewModel();
             var toastNotificationProcessor = new ToastNotificationProcessor();
-            toastNotificationProcessor.UserFeedback += ToastNotificationProcessorOnUserFeedback;
             NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
 
             NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
@@ -248,7 +273,7 @@ namespace BuildNotifications.ViewModel
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
         }
 
-        private void ToastNotificationProcessorOnUserFeedback(object? sender, FeedbackEventArgs e)
+        private void CoreSetup_DistributedNotificationReceived(object? sender, DistributedNotificationReceivedEventArgs e)
         {
             Application.Current.Dispatcher?.Invoke(() =>
             {
@@ -261,9 +286,15 @@ namespace BuildNotifications.ViewModel
                     mainWindow.Activate();
                 }
 
-                NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification("You clicked on a notification. Arguments: {0}", "Feedback", NotificationType.Info, e.FeedbackArguments)});
-                if (!ShowNotificationCenter)
-                    ToggleShowNotificationCenter(this);
+                if (e.DistributedNotification.BasedOnNotification != null)
+                {
+                    var success = NotificationCenter.TryHighlightNotificationByGuid(e.DistributedNotification.BasedOnNotification.Value);
+                    if (!success)
+                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.Instance["NotificationNotFound"], NotificationType.Info)});
+
+                    if (!ShowNotificationCenter)
+                        ToggleShowNotificationCenter(this);
+                }
             });
         }
 
@@ -294,6 +325,7 @@ namespace BuildNotifications.ViewModel
                 return;
             _keepUpdating = true;
             UpdateTimer().FireAndForget();
+            _fileWatch.Start();
 
             StatusIndicator.Resume();
         }
@@ -312,6 +344,7 @@ namespace BuildNotifications.ViewModel
         {
             _keepUpdating = false;
             UpdateNow(); // cancels the wait timer
+            _fileWatch.Stop();
             StatusIndicator.Pause();
         }
 
@@ -376,6 +409,7 @@ namespace BuildNotifications.ViewModel
         private bool _showSettings;
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
+        private readonly FileWatchDistributedNotificationReceiver _fileWatch;
     }
 }
 #pragma warning enable CS8618

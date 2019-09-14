@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfacesLegacy.Notification
 {
@@ -24,10 +23,5 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
         /// Called whenever this instance is disposed. Used to release any resources the processor may hold.
         /// </summary>
         void Shutdown();
-
-        /// <summary>
-        /// Event that may be invoked when the user interacts with the notification. For example clicks on a push notifications.
-        /// </summary>
-        event EventHandler<FeedbackEventArgs> UserFeedback;
     }
 }

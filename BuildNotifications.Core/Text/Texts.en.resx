@@ -385,4 +385,7 @@
   <data name="InitialSetupCompleteConfig" xml:space="preserve">
     <value>BuildNotifications is set up and ready to go. Click "Close and resume" to start.</value>
   </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>Notification was not found.</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
-﻿namespace BuildNotifications.PluginInterfacesLegacy.Notification
+﻿using System;
+
+namespace BuildNotifications.PluginInterfacesLegacy.Notification
 {
     public interface IDistributedNotification
     {
@@ -15,6 +17,8 @@
         string FeedbackArguments { get; }
 
         uint ColorCode { get; }
+
+        Guid? BasedOnNotification { get; }
 
         DistributedNotificationErrorType NotificationErrorType { get; }
 

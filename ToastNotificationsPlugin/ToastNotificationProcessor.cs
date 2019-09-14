@@ -15,32 +15,28 @@ namespace ToastNotificationsPlugin
         public void Initialize()
         {
             TryCreateShortcut();
-            DesktopNotificationManagerCompat.RegisterAumidAndComServer<PluginNotificationActivator>(ApplicationId);
-            ComHelper.RegisterLocalServer(typeof(PluginNotificationActivator));
             _toastNotificationFactory = new ToastNotificationFactory();
-            _toastNotificationFactory.ToastActivated += OnToastActivated;
 
             ToastNotificationManager.History.Clear(ApplicationId);
         }
 
-        private void OnToastActivated(object sender, ToastEventArgs e) => UserFeedback?.Invoke(this, new FeedbackEventArgs(e.Arguments));
-
         // In order to display toasts, a desktop application must have a shortcut on the Start menu.
         // Also, an AppUserModelID must be set on that shortcut.
-        // The shortcut should be created as part of the installer. The following code shows how to create
-        // a shortcut and assign an AppUserModelID using Windows APIs. You must download and include the 
-        // Windows API Code Pack for Microsoft .NET Framework for this code to function
-        //
-        // Included in this project is a wxs file that be used with the WiX toolkit
-        // to make an installer that creates the necessary shortcut. One or the other should be used.
         private static void TryCreateShortcut()
         {
+#if DEBUG
+            return;
+#endif
+#pragma warning disable 162
+            // ReSharper disable HeuristicUnreachableCode
             var shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\Windows\\Start Menu\\Programs\\BuildNotifications.lnk";
             File.Delete(shortcutPath);
             if (File.Exists(shortcutPath))
                 return;
 
             InstallShortcut(shortcutPath);
+            // ReSharper enable HeuristicUnreachableCode
+#pragma warning restore 162
         }
 
         private static void InstallShortcut(string shortcutPath)
@@ -58,7 +54,7 @@ namespace ToastNotificationsPlugin
             var newShortcutProperties = (IPropertyStore) newShortcut;
 
             var activatorGuidAsString = typeof(PluginNotificationActivator).GUID.ToString();
-            var toastId = new PropertyKey(new Guid($"{{{activatorGuidAsString}}}"), 26);
+            var toastId = new PropertyKey(Guid.Parse($"{{{activatorGuidAsString}}}"), 26);
 
             using (PropVariant appId = new PropVariant(ApplicationId))
             {
@@ -83,7 +79,5 @@ namespace ToastNotificationsPlugin
         {
             // nothing to do    
         }
-
-        public event EventHandler<FeedbackEventArgs> UserFeedback;
     }
 }

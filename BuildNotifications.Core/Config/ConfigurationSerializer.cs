@@ -66,7 +66,16 @@ namespace BuildNotifications.Core.Config
                 LogTo.Info($"Creating directory for config \"{directory}\" as it does not exist.");
             }
 
-            File.WriteAllText(fileName, json);
+            LogTo.Info("Saving current configuration.");
+            try
+            {
+                LogTo.Debug($"Writing to path \"{fileName}\".");
+                File.WriteAllText(fileName, json);
+            }
+            catch (Exception e)
+            {
+                LogTo.FatalException("Failed to persist configuration.", e);
+            }
         }
 
         private readonly ISerializer _serializer;

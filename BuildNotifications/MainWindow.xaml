@@ -62,6 +62,7 @@
             <DataTemplate DataType="{x:Type viewModelNotification:NotificationCenterViewModel}">
                 <viewsNotification:NotificationCenterView />
             </DataTemplate>
+
         </ResourceDictionary>
     </window:CustomWindow.Resources>
     <Grid>

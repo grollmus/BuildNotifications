@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Media;
 using BuildNotifications.Core.Pipeline.Notification;
+using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
 using BuildNotifications.Resources.BuildTree.Converter;
@@ -34,13 +35,14 @@ namespace BuildNotifications.ViewModel.Notification
                 NotificationType = ToDistributedNotificationType(notification.Type),
                 NotificationErrorType = ToDistributedErrorType(notification.Status),
                 Source = notification.BuildNodes.Any() ? notification.BuildNodes.First().Build.ProjectName : null,
-                FeedbackArguments = notification.GetType().Name
+                BasedOnNotification = notification.Guid
             };
 
             var statusToColorConverter = BuildStatusToBrushConverter.Instance;
             var brushFromStatus = statusToColorConverter.Convert(notification.Status) as SolidColorBrush ?? statusToColorConverter.DefaultBrush;
-
             distributedNotification.ColorCode = brushFromStatus.Color.ToUintColor();
+
+            distributedNotification.FeedbackArguments = distributedNotification.ToUriProtocol();
 
             return distributedNotification;
         }

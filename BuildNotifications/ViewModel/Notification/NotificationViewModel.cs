@@ -50,5 +50,7 @@ namespace BuildNotifications.ViewModel.Notification
         public TimeSpan TimeUntilNow => Timestamp.TimespanToNow();
 
         public IList<IBuildNode> BuildNodes => _notification.BuildNodes;
+
+        public Guid NotificationGuid => _notification.Guid;
     }
 }

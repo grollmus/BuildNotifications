@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
@@ -10,7 +11,7 @@ namespace BuildNotifications.Core
 {
     public class CoreSetup
     {
-        public CoreSetup(IPathResolver pathResolver)
+        public CoreSetup(IPathResolver pathResolver, IDistributedNotificationReceiver? notificationReceiver)
         {
             _pathResolver = pathResolver;
             var serializer = new Serializer();
@@ -29,6 +30,12 @@ namespace BuildNotifications.Core
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration);
 
             Pipeline.Notifier.Updated += Notifier_Updated;
+
+            if (notificationReceiver != null)
+            {
+                NotificationReceiver = notificationReceiver;
+                NotificationReceiver.DistributedNotificationReceived += (sender, args) => DistributedNotificationReceived?.Invoke(this, args);
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -38,6 +45,10 @@ namespace BuildNotifications.Core
         public IPluginRepository PluginRepository { get; }
 
         public IProjectProvider ProjectProvider { get; }
+
+        public IDistributedNotificationReceiver? NotificationReceiver { get; }
+
+        public event EventHandler<DistributedNotificationReceivedEventArgs> DistributedNotificationReceived;
 
         public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
 

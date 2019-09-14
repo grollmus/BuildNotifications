@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Anotar.NLog;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
 
-namespace BuildNotifications.Core.Pipeline.Notification
+namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public abstract class BaseNotificationDistributor : INotificationDistributor
     {
