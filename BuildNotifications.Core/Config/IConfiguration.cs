@@ -50,6 +50,11 @@ namespace BuildNotifications.Core.Config
         IList<IUser> IdentitiesOfCurrentUser { get; }
 
         /// <summary>
+        /// Language used for localizing the UI.
+        /// </summary>
+        string Language { get; set; }
+
+        /// <summary>
         /// List of all configured projects.
         /// </summary>
         IList<IProjectConfiguration> Projects { get; }

@@ -15,7 +15,7 @@ namespace BuildNotifications.ViewModel
             {
                 Interval = TimeSpan.FromMilliseconds(250)
             };
-            _searchTimer.Tick += _searchTimer_Tick;
+            _searchTimer.Tick += SearchTimerOnTick;
         }
 
         public string SearchTerm
@@ -33,7 +33,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private void _searchTimer_Tick(object? sender, EventArgs e)
+        private void SearchTimerOnTick(object? sender, EventArgs e)
         {
             _pipeline.Search(SearchTerm);
 
