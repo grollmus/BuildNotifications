@@ -548,4 +548,31 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+
+    <DrawingImage x:Key="PersonDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M44.05,12.05Q44.05,7.05 40.5,3.5 37,0 32,0 27,0 23.45,3.5 19.95,7.05 19.95,12.05 19.95,17.05 23.45,20.55 27,24.1 32,24.1 37,24.1 40.5,20.55 44.05,17.05 44.05,12.05 M50.3,45.75Q50.3,38.2 44.95,32.85 39.6,27.5 32.05,27.5 24.5,27.5 19.15,32.85 13.8,38.2 13.8,45.75L13.8,64 50.3,64 50.3,45.75z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="QueuedDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V64 H64 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="0.0019230764592066407" Y="0" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M64,64z M0,0z M41.6,46.4L41.6,24 22.9,13.6 22.9,34.4 41.6,46.4 M45.05,46.4L64,34.4 64,13.6 45.05,24 45.05,46.4 M62.9,10.4L43.45,0 24,10.4 43.45,20.55 62.9,10.4 M17.8,47.8Q5.75,44.35 0.7,31.35 0.7,31.25 0.6,31.2 0.5,31.1 0.35,31.1 0.25,31.1 0.15,31.25 0.05,31.35 0.05,31.45 -0.4,36.85 3.05,42.95 9.5,54.65 27.45,58.4L27.1,64 45.3,53.65 27.25,43.05 27.55,48.8Q23.05,49.3,17.8,47.8z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

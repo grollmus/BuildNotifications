@@ -65,5 +65,10 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Status of this build.
         /// </summary>
         BuildStatus Status { get; }
+
+        /// <summary>
+        /// Links (URLs) associated with this Build.
+        /// </summary>
+        IBuildLinks Links { get; }
     }
 }

@@ -26,6 +26,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public DateTime ChangedDate => CalculateChangedDate();
 
+        public TimeSpan RelativeChangedDate => ChangedDate.TimespanToNow();
+
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
         public bool TreeIsEmpty => !Children.Any();

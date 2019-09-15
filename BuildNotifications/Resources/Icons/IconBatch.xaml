@@ -232,6 +232,18 @@
                             Value="Project">
                             <Setter Property="Image.Source" Value="{StaticResource ProjectDrawingImage}" />
                         </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Person">
+                            <Setter Property="Image.Source" Value="{StaticResource PersonDrawingImage}" />
+                        </DataTrigger>
+
+                        <DataTrigger
+                            Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                            Value="Queued">
+                            <Setter Property="Image.Source" Value="{StaticResource QueuedDrawingImage}" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Image.Style>

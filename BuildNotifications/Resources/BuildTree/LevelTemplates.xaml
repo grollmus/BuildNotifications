@@ -50,7 +50,8 @@
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
-                       HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="{StaticResource NegativeBlockQuarterLeftNegativeBlockRight}"/>
+                       HorizontalAlignment="Stretch" DockPanel.Dock="Top"
+                       Margin="{StaticResource NegativeBlockQuarterLeftNegativeBlockRight}" />
 
             <ItemsControl ItemsSource="{Binding Children}"
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
@@ -144,16 +145,28 @@
         </DockPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
-                                     Width="{StaticResource BlockTwentyEight}">
+    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}" x:Key="ThirdLevelGroupingTemplate">
+        <Grid Background="{DynamicResource Background1}">
             <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
-                     DockPanel.Dock="Left">
+                     x:Name="ThirdLevelGroupingViewBox" MaxWidth="{StaticResource BlockTwelveTimes}">
                 <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                                  x:Name="ThirdLevelGroupingContentPresenter"
                                   MaxWidth="{StaticResource BlockTwelveTimes}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
+        </Grid>
+        <DataTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="ThirdLevelGroupingViewBox" Property="StretchDirection" Value="Both" />
+                <Setter TargetName="ThirdLevelGroupingContentPresenter" Property="MaxWidth" Value="99999" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
 
+    <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
+                                     Width="{StaticResource BlockTwentyEight}">
+            <ContentPresenter DockPanel.Dock="Left" ContentTemplate="{StaticResource ThirdLevelGroupingTemplate}" />
             <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -177,6 +190,8 @@
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
         </animation:AnimatedDockPanel>
+
+
     </DataTemplate>
 
     <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">

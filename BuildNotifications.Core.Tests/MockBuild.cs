@@ -20,6 +20,8 @@ namespace BuildNotifications.Core.Tests
             QueueTime = null;
             LastChangedTime = null;
             Status = BuildStatus.None;
+
+            Links = new MockBuildLinks();
         }
 
         public MockBuild(string id, IBuildDefinition buildDefinition, string branchName)
@@ -45,6 +47,7 @@ namespace BuildNotifications.Core.Tests
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
         public BuildStatus Status { get; }
+        public IBuildLinks Links { get; }
         public string ProjectName { get; }
     }
 }

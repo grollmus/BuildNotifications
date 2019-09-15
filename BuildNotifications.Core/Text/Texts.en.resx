@@ -400,4 +400,37 @@
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="GoToBuild" xml:space="preserve">
+    <value>Go to build</value>
+  </data>
+  <data name="GoToBranch" xml:space="preserve">
+    <value>Go to branch</value>
+  </data>
+  <data name="GoToDefinition" xml:space="preserve">
+    <value>Go to build definition</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Running" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="Succeeded" xml:space="preserve">
+    <value>Succeeded</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="PartiallySucceeded" xml:space="preserve">
+    <value>Partially succeeded</value>
+  </data>
+  <data name="RequestedBy" xml:space="preserve">
+    <value>Requested by</value>
+  </data>
+  <data name="RequestedFor" xml:space="preserve">
+    <value>Requested for</value>
+  </data>
 </root>

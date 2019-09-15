@@ -165,6 +165,8 @@ namespace BuildNotifications.Core.Pipeline
             public IUser? RequestedFor => OriginalBuild.RequestedFor;
 
             public BuildStatus Status => OriginalBuild.Status;
+
+            public IBuildLinks Links => OriginalBuild.Links;
         }
     }
 }

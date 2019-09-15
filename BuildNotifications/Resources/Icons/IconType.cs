@@ -39,6 +39,8 @@
         Lightning,
         Checkmark,
         DownArrow,
-        Project
+        Project,
+        Person,
+        Queued
     }
 }

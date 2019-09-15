@@ -24,6 +24,8 @@ namespace BuildNotifications.Plugin.Tfs
             RequestedBy = new TfsUser(build.RequestedBy);
             RequestedFor = new TfsUser(build.RequestedFor);
             Definition = new TfsBuildDefinition(build.Definition);
+
+            Links = new TfsLinks(build);
         }
 
         public override int GetHashCode()
@@ -90,6 +92,8 @@ namespace BuildNotifications.Plugin.Tfs
                 return BuildStatus.None;
             }
         }
+
+        public IBuildLinks Links { get; }
 
         private readonly string _id;
         private readonly Microsoft.TeamFoundation.Build.WebApi.BuildStatus? _nativeStatus;

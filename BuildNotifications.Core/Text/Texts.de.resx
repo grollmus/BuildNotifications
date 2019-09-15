@@ -400,4 +400,37 @@
   <data name="ShowWindow" xml:space="preserve">
     <value></value>
   </data>
+  <data name="GoToBuild" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="GoToBranch" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="GoToDefinition" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Running" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Succeeded" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PartiallySucceeded" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RequestedBy" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RequestedFor" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

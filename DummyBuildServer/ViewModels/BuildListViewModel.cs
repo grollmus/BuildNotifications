@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using JetBrains.Annotations;
 
@@ -67,7 +68,7 @@ namespace DummyBuildServer.ViewModels
                 QueueTime = DateTime.Now,
                 Definition = definition,
                 BranchName = branch.Name,
-                RequestedBy = user,
+                RequestedBy = RandomUser(),
                 RequestedFor = user,
                 Status = BuildStatus.Pending,
                 Id = (++_idCounter).ToString()
@@ -77,6 +78,13 @@ namespace DummyBuildServer.ViewModels
             var buildViewModel = new BuildViewModel(build);
             buildViewModel.PropertyChanged += BuildViewModel_OnPropertyChanged;
             Builds.Add(buildViewModel);
+        }
+
+        private IUser RandomUser()
+        {
+            var asList = _mainViewModel.Users.Users.ToList();
+            var index = new Random().Next(asList.Count);
+            return asList[index].User;
         }
 
         private void BuildViewModel_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
