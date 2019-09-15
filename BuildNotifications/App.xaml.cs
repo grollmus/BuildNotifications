@@ -38,6 +38,11 @@ namespace BuildNotifications
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (e.Args.Any())
+                GlobalDiagnosticsContext.Set("application", "invokedWithEventArgs");
+            else
+                GlobalDiagnosticsContext.Set("application", "default");
+
             Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()}");
             if (IsInvokedFromDistributedNotification(e))
             {
@@ -54,8 +59,9 @@ namespace BuildNotifications
             }
             else
                 Logger.Log(LogLevel.Info, "Instance was not started from URI protocol. Initializing normally.");
-
-            OtherProcessIsRunning();
+            
+            Logger.Log(LogLevel.Info, "Normal startup. Using MainWindow.xaml");
+            StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
             base.OnStartup(e);
         }
 

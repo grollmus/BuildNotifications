@@ -14,9 +14,13 @@ namespace BuildNotifications.Core.Plugin
     {
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
+            LogTo.Info($"Loading plugin assemblies in folder \"{folder}\".");
             var fullPath = Path.GetFullPath(folder);
             if (!Directory.Exists(fullPath))
+            {
+                LogTo.Warn("Plugin directory does not exist.");
                 yield break;
+            }
 
             var pluginFolders = Directory.GetDirectories(fullPath);
 
@@ -29,8 +33,12 @@ namespace BuildNotifications.Core.Plugin
                 foreach (var dll in files)
                 {
                     if (Path.GetFileName(dll)?.Contains("plugin", StringComparison.OrdinalIgnoreCase) != true)
+                    {
+                        LogTo.Debug($"Found file \"{dll}\" but is skipped, as it does not contain string \"plugin\".");
                         continue;
+                    }
 
+                    LogTo.Debug($"Loading plugin \"{dll}\".");
                     Assembly assembly;
                     try
                     {
@@ -47,6 +55,7 @@ namespace BuildNotifications.Core.Plugin
                         continue;
                     }
 
+                    LogTo.Debug($"Successfully loaded plugin \"{dll}\".");
                     yield return assembly;
                 }
             }
@@ -54,6 +63,7 @@ namespace BuildNotifications.Core.Plugin
 
         private IEnumerable<T> LoadPluginsOfType<T>(IEnumerable<Type> types)
         {
+            LogTo.Debug($"Parsing plugins to type {typeof(T).Name}.");
             var baseType = typeof(T);
 
             foreach (var type in types)
@@ -89,6 +99,8 @@ namespace BuildNotifications.Core.Plugin
             var buildPlugins = LoadPluginsOfType<IBuildPlugin>(exportedTypes).ToList();
             var sourceControlPlugins = LoadPluginsOfType<ISourceControlPlugin>(exportedTypes).ToList();
 
+            LogTo.Info($"Loaded {buildPlugins.Count} build plugins.");
+            LogTo.Info($"Loaded {sourceControlPlugins.Count} source control plugins.");
             return new PluginRepository(buildPlugins, sourceControlPlugins, new TypeMatcher());
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Anotar.NLog;
 using BuildNotifications.Core.Text;
 
 namespace BuildNotifications.Core.Config
@@ -14,6 +16,7 @@ namespace BuildNotifications.Core.Config
 
         public IConfiguration LoadConfiguration()
         {
+            LogTo.Info("Loading configuration");
             var configFilePath = _pathResolver.UserConfigurationFilePath;
             var config = _configurationSerializer.Load(configFilePath);
 
@@ -31,6 +34,9 @@ namespace BuildNotifications.Core.Config
                 var defaultProject = CreateDefaultProject(predefinedConnectionNames);
                 config.Projects.Add(defaultProject);
             }
+
+            LogTo.Info($"Setting language to \"{config.Culture}\"");
+            CultureInfo.CurrentUICulture = config.Culture;
 
             return config;
         }

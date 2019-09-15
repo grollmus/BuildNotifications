@@ -21,9 +21,9 @@ namespace BuildNotifications.ViewModel.Utils
 
         private BuildStatus _buildStatus;
 
-        private string DefaultTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_pending.ico";
+        private string DefaultTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_pending.ico".Replace('/', '\\');
 
-        private string ErrorTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_failed.ico";
+        private string ErrorTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_failed.ico".Replace('/', '\\');
 
         private string ErrorAppIconPath => "pack://siteoforigin:,,,/Resources/Icons/RedIntense.ico";
 
@@ -75,7 +75,11 @@ namespace BuildNotifications.ViewModel.Utils
             }
         }
 
-        private ImageSource GetImageSource(string path) => BitmapFrame.Create(new Uri(path));
+        private ImageSource GetImageSource(string path)
+        {
+            LogTo.Info($"Updating app icon to \"{path}\"");
+            return BitmapFrame.Create(new Uri(path));
+        }
 
         private Icon GetIcon(string path)
         {
@@ -98,11 +102,13 @@ namespace BuildNotifications.ViewModel.Utils
         {
             // clear icon so it disappears from the windows tray
             _notifyIcon.Icon = null;
+            LogTo.Info("Exit requested.");
             ExitRequested?.Invoke(this, EventArgs.Empty);
         }
 
         private void ShowWindow(object? sender, EventArgs e)
         {
+            LogTo.Info("Show window requested.");
             ShowWindowRequested?.Invoke(this, EventArgs.Empty);
         }
 

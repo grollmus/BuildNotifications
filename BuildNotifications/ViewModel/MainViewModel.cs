@@ -361,6 +361,8 @@ namespace BuildNotifications.ViewModel
         {
             if (_keepUpdating)
                 return;
+
+            LogTo.Info("Start updating");
             _keepUpdating = true;
             UpdateTimer().FireAndForget();
             _fileWatch.Start();
@@ -380,6 +382,7 @@ namespace BuildNotifications.ViewModel
 
         private void StopUpdating()
         {
+            LogTo.Info("Stop updating");
             _keepUpdating = false;
             UpdateNow(); // cancels the wait timer
             _fileWatch.Stop();
@@ -388,11 +391,13 @@ namespace BuildNotifications.ViewModel
 
         private void ToggleGroupDefinitionSelection(object obj)
         {
+            LogTo.Info($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}");
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
 
         private void ToggleShowNotificationCenter(object obj)
         {
+            LogTo.Info($"Toggling notification center. Value: {!ShowNotificationCenter}");
             ShowNotificationCenter = !ShowNotificationCenter;
             if (ShowSettings && ShowNotificationCenter)
                 ShowSettings = false;
@@ -400,7 +405,7 @@ namespace BuildNotifications.ViewModel
             if (ShowNotificationCenter)
             {
                 StatusIndicator.ClearStatus();
-            
+
                 // reset error icon when user opens window, as the point of the error icon is to notify the user.
                 _trayIcon.BuildStatus = BuildStatus.None;
             }
@@ -410,6 +415,7 @@ namespace BuildNotifications.ViewModel
 
         private void ToggleShowSettings(object obj)
         {
+            LogTo.Info($"Toggling settings. Value: {!ShowSettings}");
             ShowSettings = !ShowSettings;
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
@@ -470,7 +476,13 @@ namespace BuildNotifications.ViewModel
 
                 try
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(5), _cancellationTokenSource.Token);
+#if DEBUG
+                    var updateInterval = 5;
+#else
+                    var updateInterval = _coreSetup.Configuration.UpdateInterval;
+#endif
+                    LogTo.Debug($"Waiting {updateInterval} seconds until next update.");
+                    await Task.Delay(TimeSpan.FromSeconds(updateInterval), _cancellationTokenSource.Token);
                 }
                 catch (Exception)
                 {

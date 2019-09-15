@@ -12,8 +12,10 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 
         public void Distribute(INotification notification)
         {
+            LogTo.Info($"Distributing notification \"{notification.GetType().Name}\".");
             foreach (var processor in this)
             {
+                LogTo.Debug($"Distributing notification \"{notification.GetType().Name}\" with processor \"{processor.GetType().Name}\".");
                 processor.Process(ToDistributedNotification(notification));
             }
         }

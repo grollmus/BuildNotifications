@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
@@ -10,9 +12,13 @@ namespace BuildNotifications.ViewModel.Tree
     {
         public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel? existingTree)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            LogTo.Debug($"Producing ViewModel for BuildTree.");
             var buildTreeResult = await Task.Run(() =>
             {
                 var groupsAsList = tree.GroupDefinition.ToList();
+                LogTo.Debug($"Grouping by {string.Join(",", tree.GroupDefinition)}.");
                 var buildTree = new BuildTreeViewModel(tree);
                 var children = CreateChildren(tree.Children, groupsAsList);
                 foreach (var childVm in children)
@@ -24,11 +30,17 @@ namespace BuildNotifications.ViewModel.Tree
             });
 
             if (existingTree != null)
+            {
+                LogTo.Debug($"Merging with existing tree.");
                 buildTreeResult = Merge(existingTree, buildTreeResult);
+            }
             
             var treeDepth = GetMaxDepth(buildTreeResult);
+            LogTo.Debug($"Setting max depths, which is {treeDepth}.");
             SetMaxDepths(buildTreeResult, treeDepth);
             
+            stopWatch.Stop();
+            LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms.");
             return buildTreeResult;
         }
 

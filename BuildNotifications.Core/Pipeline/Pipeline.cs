@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
@@ -30,26 +31,39 @@ namespace BuildNotifications.Core.Pipeline
 
         private IBuildTree BuildTree()
         {
+            LogTo.Debug("Creating BuildTree");
             var builds = _buildCache.ContentCopy().ToList();
-            var branches = _branchCache.ContentCopy();
-            var definitions = _definitionCache.ContentCopy();
+            var branches = _branchCache.ContentCopy().ToList();
+            var definitions = _definitionCache.ContentCopy().ToList();
+            LogTo.Debug($"{builds.Count} cached builds, {branches.Count} cached branches, {definitions.Count} cached definitions");
 
             var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree, _searchTerm);
+            LogTo.Debug("Created tree.");
             if (_configuration.GroupDefinition.Any())
+            {
+                LogTo.Debug("Cutting tree.");
                 CutTree(tree);
+            }
+
             return tree;
         }
 
         private void CleanupBuilds()
         {
+            LogTo.Debug("Cleaning up builds");
             var builds = _buildCache.ContentCopy();
-
+            var count = 0;
             foreach (var build in builds)
             {
                 if (!_definitionCache.ContainsValue(build.Definition)
                     || !_branchCache.Contains(b => b.Name.Equals(build.BranchName)))
+                {
                     _buildCache.RemoveValue(build);
+                    count += 1;
+                }
             }
+
+            LogTo.Debug($"Cleaned {count} builds");
         }
 
         private void CutTree(IBuildTreeNode tree)
@@ -75,55 +89,80 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task FetchBranches()
         {
+            LogTo.Debug("Fetching branches");
             foreach (var project in _projectList)
             {
+                LogTo.Debug($"Fetching branches for project \"{project.Name}\"");
                 try
                 {
                     var projectId = project.GetHashCode();
 
                     var branches = project.FetchExistingBranches();
+                    var count = 0;
                     await foreach (var branch in branches)
                     {
                         _branchCache.AddOrReplace(projectId, branch.Name.GetHashCode(), branch);
+                        count += 1;
                     }
+
+                    LogTo.Debug($"Added \"{count}\" branches in project \"{project.Name}\"");
 
                     var removedBranches = project.FetchRemovedBranches();
 
+                    count = 0;
                     await foreach (var branch in removedBranches)
                     {
                         _branchCache.Remove(projectId, branch.Name.GetHashCode());
+                        count += 1;
                     }
+
+                    LogTo.Debug($"Removed \"{count}\" branches in project \"{project.Name}\"");
                 }
                 catch (Exception ex)
                 {
                     ReportError("ErrorFetchingBranches", project.Name, ex);
                 }
             }
+
+            LogTo.Debug("Done fetching branches");
         }
 
         private async Task FetchBuilds()
         {
+            LogTo.Debug("Fetching builds");
             foreach (var project in _projectList)
             {
                 try
                 {
                     var projectId = project.GetHashCode();
+                    LogTo.Debug($"Fetching builds for project \"{project.Name}\". ID: \"{projectId}\"");
+
+                    if (_lastUpdate.HasValue)
+                        LogTo.Debug($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"");
+                    else
+                        LogTo.Debug($"Fetching all builds for project \"{project.Name}\"");
 
                     var builds = _lastUpdate.HasValue
                         ? project.FetchBuildsChangedSince(_lastUpdate.Value)
                         : project.FetchAllBuilds();
 
+                    var count = 0;
                     await foreach (var build in builds)
                     {
                         _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(), build);
+                        count += 1;
                     }
 
+                    LogTo.Debug($"Added \"{count}\" builds in project \"{project.Name}\"");
                     var removedBuilds = project.FetchRemovedBuilds();
-
+                    count = 0;
                     await foreach (var build in removedBuilds)
                     {
                         _buildCache.Remove(projectId, build.Id.GetHashCode());
+                        count += 1;
                     }
+
+                    LogTo.Debug($"Removed \"{count}\" builds in project \"{project.Name}\"");
                 }
                 catch (Exception ex)
                 {
@@ -132,34 +171,47 @@ namespace BuildNotifications.Core.Pipeline
                 }
             }
 
+            LogTo.Debug("Done fetching builds");
             _lastUpdate = DateTime.Now;
         }
 
         private async Task FetchDefinitions()
         {
+            LogTo.Debug("Fetching definitions");
             foreach (var project in _projectList)
             {
+                LogTo.Debug($"Fetching definitions for project \"{project.Name}\"");
                 try
                 {
                     var projectId = project.GetHashCode();
 
                     var definitions = project.FetchBuildDefinitions();
+                    var count = 0;
                     await foreach (var definition in definitions)
                     {
                         _definitionCache.AddOrReplace(projectId, definition.Id.GetHashCode(), definition);
+                        count += 1;
                     }
 
+                    LogTo.Debug($"Added \"{count}\" definitions in project \"{project.Name}\"");
+
                     var removedDefinitions = project.FetchRemovedBuildDefinitions();
+                    count = 0;
                     await foreach (var definition in removedDefinitions)
                     {
                         _definitionCache.Remove(projectId, definition.Id.GetHashCode());
+                        count += 1;
                     }
+
+                    LogTo.Debug($"Added \"{count}\" definitions in project \"{project.Name}\"");
                 }
                 catch (Exception ex)
                 {
                     ReportError("ErrorFetchingDefinitions", project.Name, ex);
                 }
             }
+
+            LogTo.Debug("Done fetching definitions");
         }
 
         private void ReportError(string messageTextId, params object[] parameter)
@@ -174,8 +226,10 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task UpdateBuilds()
         {
+            LogTo.Debug("Updating builds.");
             foreach (var project in _projectList)
             {
+                LogTo.Debug($"Updating builds of project \"{project.Name}\".");
                 var projectId = project.GetHashCode();
                 var buildsForProject = _buildCache.Values(projectId);
 
@@ -186,12 +240,14 @@ namespace BuildNotifications.Core.Pipeline
 
         public void AddProject(IProject project)
         {
+            LogTo.Info($"Adding project \"{project.Name}\"");
             _projectList.Add(project);
             try
             {
                 var currentUserIdentities = project.FetchCurrentUserIdentities();
                 foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
                 {
+                    LogTo.Debug($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"");
                     _configuration.IdentitiesOfCurrentUser.Add(currentUserIdentity);
                 }
             }
@@ -203,6 +259,7 @@ namespace BuildNotifications.Core.Pipeline
 
         public void ClearProjects()
         {
+            LogTo.Info("Clearing projects and all cached data.");
             _projectList.Clear();
             _definitionCache.Clear();
             _buildCache.Clear();
@@ -214,14 +271,19 @@ namespace BuildNotifications.Core.Pipeline
 
         public void Search(string searchTerm)
         {
+            LogTo.Info($"Applying search \"{searchTerm}\".");
             _searchTerm = searchTerm;
 
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
+            LogTo.Debug($"Applied search \"{searchTerm}\".");
         }
 
         public async Task Update()
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            LogTo.Info("Starting update.");
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.ContentCopy().ToDictionary(x => (BuildId: x.Id, Project: x.ProjectName), x => x.Status);
@@ -230,6 +292,8 @@ namespace BuildNotifications.Core.Pipeline
                 var buildsTask = FetchBuilds();
 
                 await Task.WhenAll(branchTask, definitionsTask, buildsTask);
+
+                LogTo.Debug("Everything is fetched.");
 
                 CleanupBuilds();
 
@@ -240,6 +304,7 @@ namespace BuildNotifications.Core.Pipeline
                 var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
                 IBuildTreeBuildsDelta delta;
 
+                LogTo.Debug("BuildTree is done. Producing notifications.");
                 // don't show any notifications for the initial fetch
                 if (_oldTree == null)
                     delta = new BuildTreeBuildsDelta();
@@ -250,9 +315,12 @@ namespace BuildNotifications.Core.Pipeline
                 return (BuildTree: tree, Notifications: notifications);
             });
 
+            LogTo.Debug("Calling notify.");
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
 
             _oldTree = treeResult.BuildTree;
+            stopWatch.Stop();
+            LogTo.Info($"Update done in {stopWatch.ElapsedMilliseconds} ms.");
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;

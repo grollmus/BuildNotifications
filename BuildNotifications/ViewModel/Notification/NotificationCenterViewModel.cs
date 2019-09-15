@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
@@ -72,6 +73,7 @@ namespace BuildNotifications.ViewModel.Notification
             var viewModels = _notificationViewModelFactory.Produce(asList);
             foreach (var notification in viewModels)
             {
+                LogTo.Debug($"Showing notification \"{notification.GetType().Name}\".");
                 Notifications.Add(notification);
             }
 

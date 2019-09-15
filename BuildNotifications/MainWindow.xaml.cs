@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using Anotar.NLog;
 using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
@@ -15,6 +16,7 @@ namespace BuildNotifications
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
+            LogTo.Info("Hiding window.");
             Visibility = Visibility.Collapsed;
             e.Cancel = true;
         }

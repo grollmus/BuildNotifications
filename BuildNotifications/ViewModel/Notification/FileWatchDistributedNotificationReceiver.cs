@@ -59,7 +59,7 @@ namespace BuildNotifications.ViewModel.Notification
 
         private async void OnDirectoryChanged(object sender, FileSystemEventArgs e)
         {
-            LogTo.Info($"New file in watched directory found. Path: \"{e}\"");
+            LogTo.Info($"New file in watched directory found. Path: \"{e.FullPath}\"");
             LogTo.Debug($"Waiting for {e.FullPath} to be ready.");
             await WaitForFileToBeCopied(e);
             LogTo.Debug($"Waiting succeeded parsing file.");
@@ -131,12 +131,11 @@ namespace BuildNotifications.ViewModel.Notification
 
         public static void WriteDistributedNotificationToPath(string base64Notification, IPathResolver pathResolver)
         {
-            LogTo.Info($"Writing distributed message to path \"{pathResolver.ConfigurationFolder}\".");
             Directory.CreateDirectory(pathResolver.ConfigurationFolder);
             var targetPath = Path.Combine(pathResolver.ConfigurationFolder, $"{Guid.NewGuid().ToString()}.{FileExtension}");
             try
             {
-                LogTo.Debug($"Writing distributed message to path \"{targetPath}\".");
+                LogTo.Info($"Writing distributed message to path \"{targetPath}\".");
                 File.WriteAllText(targetPath, base64Notification);
             }
             catch (Exception e)

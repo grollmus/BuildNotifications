@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
@@ -56,6 +57,7 @@ namespace BuildNotifications.Core
         public void PersistConfigurationChanges()
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
+            LogTo.Info($"Persisting configuration to path {configFilePath}");
             _configurationSerializer.Save(Configuration, configFilePath);
         }
 

@@ -47,6 +47,7 @@ namespace BuildNotifications.ViewModel.Notification
             distributedNotification.ContentImageUrl = CreateNotificationImage(distributedNotification);
             distributedNotification.FeedbackArguments = distributedNotification.ToUriProtocol();
 
+            LogTo.Debug($"Created Feedback Argument for notification \"{distributedNotification.FeedbackArguments}\".");
             return distributedNotification;
         }
 
@@ -120,7 +121,7 @@ namespace BuildNotifications.ViewModel.Notification
             {
                 foreach (var file in Directory.EnumerateFiles(path, "*.png").ToList())
                 {
-                    LogTo.Debug($"Deleting \"{file}\".");
+                    LogTo.Info($"Deleting \"{file}\".");
                     File.Delete(file);
                 }
             }
