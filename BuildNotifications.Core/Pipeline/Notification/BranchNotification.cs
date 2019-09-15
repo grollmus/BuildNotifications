@@ -77,5 +77,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 2 => TwoBranchesChangedTextId,
                 _ => ThreeBranchesChangedTextId
             };
+
+        protected override string ResolveIssueSource() => string.Join("\n", _branchNames);
     }
 }

@@ -22,10 +22,10 @@
                            Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True">
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" />
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False"/>
                         </ei:DataTrigger>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" />
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="False"/>
                         </ei:DataTrigger>
                     </i:Interaction.Triggers>
                 </Rectangle>

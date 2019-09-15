@@ -49,7 +49,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
                 .To(initialColor).In(initialTime).Ease(Easing.QuinticEaseIn);
 
             var highlightTween = brush.Tween(x => x.Color, ColorTween.ColorProgressFunction)
-                .To(targetColor).In(0.5).Ease(Easing.QuinticEaseOut).Delay(initialTime + 0.05);
+                .To(targetColor).In(0.5).Ease(Easing.QuinticEaseOut).Delay(initialTime + 0.1);
             var opacityTween = AssociatedObject.Tween(x => x.Opacity).To(1).In(0);
 
             globalTweenHandler.Add(new SequenceOfTarget(AssociatedObject, highlightTween, opacityTween, toInitialColor));

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Notification
@@ -39,5 +40,20 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 1 => BuildChangedTextId,
                 _ => BuildsChangedTextId
             };
+
+        protected override string ResolveIssueSource()
+        {
+            if (BuildNodes.Count == 1)
+                return $"{BuildNodes.First().Build.Definition.Name}\n{BuildNodes.First().Build.BranchName}";
+            else
+            {
+                var branchCount = BuildNodes.Select(x => x.Build.BranchName).Distinct().Count();
+                var definitionCount = BuildNodes.Select(x => x.Build.Definition.Name).Distinct().Count();
+                var branchText = string.Format(StringLocalizer.Instance["BranchesCount"], branchCount);
+                var definitionText = string.Format(StringLocalizer.Instance["DefinitionsCount"], definitionCount);
+
+                return $"{branchText}\n{definitionText}";
+            }
+        }
     }
 }

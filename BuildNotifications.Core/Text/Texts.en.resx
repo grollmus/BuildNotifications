@@ -239,19 +239,19 @@
 {1}</value>
   </data>
   <data name="DefinitionChangedTextId" xml:space="preserve">
-    <value>Definition {1} {0}.</value>
+    <value>Definition {1}.</value>
   </data>
   <data name="TwoDefinitionsChangedTextId" xml:space="preserve">
-    <value>Definitions {1} and {2} {0}.</value>
+    <value>Definitions {1} and {2}.</value>
   </data>
   <data name="ThreeDefinitionsChangedTextId" xml:space="preserve">
-    <value>Definitions {1}, {2} and {3} {0}.</value>
+    <value>Definitions {1}, {2} and {3}.</value>
   </data>
   <data name="BuildChangedTextId" xml:space="preserve">
-    <value>Build {1} on {2} {0}.</value>
+    <value>{1} on {2}.</value>
   </data>
   <data name="BuildsChangedTextId" xml:space="preserve">
-    <value>{1} builds {0}.</value>
+    <value>{1} builds.</value>
   </data>
   <data name="FailedSingular" xml:space="preserve">
     <value>failed</value>
@@ -272,22 +272,22 @@
     <value>were cancelled</value>
   </data>
   <data name="BranchChangedTextId" xml:space="preserve">
-    <value>Branch {1} {0}.</value>
+    <value>Branch {1}.</value>
   </data>
   <data name="TwoBranchesChangedTextId" xml:space="preserve">
-    <value>Branches {1} and {2} {0}.</value>
+    <value>Branches {1} and {2}.</value>
   </data>
   <data name="ThreeBranchesChangedTextId" xml:space="preserve">
-    <value>Branches {1}, {2} {3} {0}.</value>
+    <value>Branches {1}, {2} {3}.</value>
   </data>
   <data name="BranchAndDefinitionFailedTextId" xml:space="preserve">
-    <value>{1} on {2} {0}.</value>
+    <value>{1} on {2}.</value>
   </data>
   <data name="BuildNotificationContentPluralTextId" xml:space="preserve">
     <value>{1} builds {0}.</value>
   </data>
   <data name="BuildNotificationContentSingularTextId" xml:space="preserve">
-    <value>One build {0}.</value>
+    <value>Build {0}.</value>
   </data>
   <data name="NDaysAgoTextId" xml:space="preserve">
     <value>{0} days ago</value>
@@ -387,5 +387,11 @@
   </data>
   <data name="NotificationNotFound" xml:space="preserve">
     <value>Notification was not found.</value>
+  </data>
+  <data name="BranchesCount" xml:space="preserve">
+    <value>{0} branches</value>
+  </data>
+  <data name="DefinitionsCount" xml:space="preserve">
+    <value>{0} definitions</value>
   </data>
 </root>

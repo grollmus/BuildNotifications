@@ -33,6 +33,7 @@
     <GridLength x:Key="BlockTripleRowLength">36</GridLength>
 
     <system:Double x:Key="NegativeBlockThreeQuarters">-9</system:Double>
+    <system:Double x:Key="NegativeBlockQuarter">-3</system:Double>
     <system:Double x:Key="NegativeBlockHalf">-6</system:Double>
     <system:Double x:Key="NegativeBlock">-12</system:Double>
     <system:Double x:Key="NegativeBlockOneAndHalf">-18</system:Double>
@@ -53,7 +54,8 @@
     <Thickness Left="{StaticResource BlockDouble}" Right="{StaticResource BlockDouble}" Top="{StaticResource BlockDouble}" Bottom="{StaticResource BlockDouble}" x:Key="BlockDoubleThickness"/>
     <Thickness Left="{StaticResource BlockOneAndHalf}" Right="{StaticResource BlockOneAndHalf}" Top="{StaticResource BlockOneAndHalf}" Bottom="{StaticResource BlockOneAndHalf}" x:Key="BlockOneAndHalfThickness"/>
 
-    <Thickness Left="{StaticResource BlockOneAndQuarter}" Right="{StaticResource NegativeBlockHalf}" Top="0" Bottom="0" x:Key="BlockOneAndQuarterLeftAndNegativeBlockHalfRight"/>
+    <Thickness Left="{StaticResource Block}" Right="{StaticResource NegativeBlock}" Top="0" Bottom="0" x:Key="BlockLeftNegativeBlockRight"/>
+    <Thickness Left="{StaticResource NegativeBlockQuarter}" Right="{StaticResource NegativeBlock}" Top="0" Bottom="0" x:Key="NegativeBlockQuarterLeftNegativeBlockRight"/>
     <Thickness Left="{StaticResource BlockOneAndQuarter}" Right="{StaticResource BlockThreeQuarters}" Top="0" Bottom="0" x:Key="BlockOneAndQuarterLeftAndThreeQuartersRight"/>
     <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockLeftAndRight"/>
     <Thickness Left="0" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockQuarterRight"/>

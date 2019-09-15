@@ -388,4 +388,10 @@
   <data name="NotificationNotFound" xml:space="preserve">
     <value></value>
   </data>
+  <data name="BranchesCount" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DefinitionsCount" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

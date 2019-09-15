@@ -61,6 +61,11 @@ namespace BuildNotifications.ViewModel.Notification
 
         public event EventHandler<HighlightRequestedEventArgs> HighlightRequested;
 
+        public void ClearSelection()
+        {
+            SelectedNotification = null;
+        }
+
         public void ShowNotifications(IEnumerable<INotification> notifications)
         {
             var asList = notifications.ToList();

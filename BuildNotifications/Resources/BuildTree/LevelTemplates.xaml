@@ -50,7 +50,7 @@
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
-                       HorizontalAlignment="Stretch" DockPanel.Dock="Top" />
+                       HorizontalAlignment="Stretch" DockPanel.Dock="Top" Margin="{StaticResource NegativeBlockQuarterLeftNegativeBlockRight}"/>
 
             <ItemsControl ItemsSource="{Binding Children}"
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
@@ -75,11 +75,11 @@
         <Grid DockPanel.Dock="Top" Width="{StaticResource BlockThirty}">
             <DockPanel>
                 <Rectangle Height="{StaticResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
-                           Margin="{StaticResource BlockOneAndQuarterLeftAndNegativeBlockHalfRight}"
+                           Margin="{StaticResource BlockLeftNegativeBlockRight}"
                            DockPanel.Dock="Top" />
                 <Grid Height="{StaticResource BlockHalf}"
                       VerticalAlignment="Bottom" DockPanel.Dock="Top"
-                      Margin="{StaticResource BlockOneAndQuarterLeftAndNegativeBlockHalfRight}">
+                      Margin="{StaticResource BlockLeftNegativeBlockRight}">
                     <Rectangle>
                         <Rectangle.Fill>
                             <MultiBinding

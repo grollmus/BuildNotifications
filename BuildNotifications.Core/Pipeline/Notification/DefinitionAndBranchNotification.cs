@@ -28,5 +28,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         }
 
         protected override string GetMessageTextId() => BranchAndDefinitionFailedTextId;
+        
+        protected override string ResolveIssueSource() => $"{_definitionName}\n{_branchName}";
     }
 }

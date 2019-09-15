@@ -16,6 +16,11 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
 
         string FeedbackArguments { get; }
 
+        /// <summary>
+        /// Describes the root of the notification. E.g. a branch failed notification, the IssueSource would be the name of the branch.
+        /// </summary>
+        string IssueSource { get; }
+
         uint ColorCode { get; }
 
         Guid? BasedOnNotification { get; }

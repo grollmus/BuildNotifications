@@ -39,6 +39,9 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         public string TitleTextId => BuildNodes.Count == 1 ? BuildNotificationContentSingularTextId : BuildNotificationContentPluralTextId;
 
+        public string IssueSource => ResolveIssueSource();
+        protected abstract string ResolveIssueSource();
+
         public NotificationType Type { get; }
 
         public IList<IBuildNode> BuildNodes { get; }

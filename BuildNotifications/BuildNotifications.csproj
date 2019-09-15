@@ -55,8 +55,7 @@
     <None Remove="Resources\Icons\Green.ico" />
     <None Remove="Resources\Icons\icon_failed.ico" />
     <None Remove="Resources\Icons\icon_pending.ico" />
-    <None Remove="Resources\Icons\ToastHeroPlaceholder.png" />
-    <None Remove="Resources\Icons\ToastImagePlaceholder.png" />
+    <None Remove="Resources\Icons\Red.ico" />
     <None Remove="Resources\Window\ScrollBar.xaml" />
     <None Remove="Views\BusyIndicator.xaml" />
     <None Remove="Views\GroupDefinitionSelectionView.xaml" />
@@ -85,10 +84,7 @@
     <Content Include="Resources\Icons\icon_pending.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icons\ToastHeroPlaceholder.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\ToastImagePlaceholder.png">
+    <Content Include="Resources\Icons\Red.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

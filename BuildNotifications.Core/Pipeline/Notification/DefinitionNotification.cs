@@ -37,5 +37,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             Parameters.Add(StatusTextId(_definitionNames.Count == 1));
             Parameters.AddRange(_definitionNames);
         }
+
+        protected override string ResolveIssueSource() => string.Join("\n", _definitionNames);
     }
 }

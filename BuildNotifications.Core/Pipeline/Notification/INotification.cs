@@ -14,6 +14,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
         string ContentTextId { get; }
 
         string TitleTextId { get; }
+        
+        /// <summary>
+        /// Describes the root of the notification. E.g. a branch failed notification, the IssueSource would be the name of the branch.
+        /// </summary>
+        string IssueSource { get; }
 
         NotificationType Type { get; }
 

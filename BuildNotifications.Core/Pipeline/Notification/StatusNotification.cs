@@ -33,5 +33,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         public BuildStatus Status => Type == NotificationType.Success ? BuildStatus.Succeeded : BuildStatus.Running;
 
         public Guid Guid { get; } = Guid.NewGuid();
+        
+        public string IssueSource { get; } = "BuildNotifications";
     }
 }

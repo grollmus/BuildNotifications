@@ -182,7 +182,7 @@
                         <DataTrigger
                             Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                             Value="SingleBuild">
-                            <Setter Property="Image.Source" Value="{StaticResource SingleBuildDrawingImage}" />
+                            <Setter Property="Image.Source" Value="{StaticResource GroupingSoloDrawingImage}" />
                         </DataTrigger>
 
                         <DataTrigger

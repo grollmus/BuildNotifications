@@ -3,12 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Media;
+using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
 using BuildNotifications.Resources.BuildTree.Converter;
 using BuildNotifications.ViewModel.Utils;
+using BuildNotifications.Views.Notification;
 
 namespace BuildNotifications.ViewModel.Notification
 {
@@ -30,10 +32,10 @@ namespace BuildNotifications.ViewModel.Notification
             {
                 Title = notification.DisplayTitle,
                 Content = notification.DisplayContent,
-                ContentImageUrl = CreateNotificationImage(notification),
                 AppIconUrl = AppIconPath(notification.Status),
                 NotificationType = ToDistributedNotificationType(notification.Type),
                 NotificationErrorType = ToDistributedErrorType(notification.Status),
+                IssueSource = notification.IssueSource,
                 Source = notification.BuildNodes.Any() ? notification.BuildNodes.First().Build.ProjectName : null,
                 BasedOnNotification = notification.Guid
             };
@@ -42,6 +44,7 @@ namespace BuildNotifications.ViewModel.Notification
             var brushFromStatus = statusToColorConverter.Convert(notification.Status) as SolidColorBrush ?? statusToColorConverter.DefaultBrush;
             distributedNotification.ColorCode = brushFromStatus.Color.ToUintColor();
 
+            distributedNotification.ContentImageUrl = CreateNotificationImage(distributedNotification);
             distributedNotification.FeedbackArguments = distributedNotification.ToUriProtocol();
 
             return distributedNotification;
@@ -83,11 +86,48 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        private string? CreateNotificationImage(INotification notification)
+        private string? CreateNotificationImage(IDistributedNotification notification)
         {
-            const string heroPlaceholderPath = "/Resources/Icons/ToastHeroPlaceholder.png";
-            const string badgePlaceholderPath = "/Resources/Icons/ToastImagePlaceholder.png";
-            return notification.Status == BuildStatus.Failed ? ToAbsolute(heroPlaceholderPath) : ToAbsolute(badgePlaceholderPath);
+            var view = new DistributedNotificationView();
+            var viewModel = new DistributedNotificationViewModel(notification);
+
+            view.DataContext = viewModel;
+
+            var pngPath = CreateTempPngPath();
+            view.ExportToPng(pngPath);
+
+            return pngPath;
+        }
+
+        private static string TemporaryPngStorageLocation => $"{Path.GetTempPath()}BuildNotifications";
+
+        private string CreateTempPngPath()
+        {
+            var tmpPath = TemporaryPngStorageLocation;
+            Directory.CreateDirectory(tmpPath);
+
+            return Path.Combine(tmpPath, $"{Guid.NewGuid()}.png");
+        }
+
+        public static void DeleteAllTemporaryImageFiles()
+        {
+            var path = TemporaryPngStorageLocation;
+            LogTo.Info($"Removing old png files from location: \"{path}\".");
+            if (!Directory.Exists(path))
+                return;
+
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.png").ToList())
+                {
+                    LogTo.Debug($"Deleting \"{file}\".");
+                    File.Delete(file);
+                }
+            }
+            catch (Exception e)
+            {
+                LogTo.ErrorException("Failed to delete temporary png files.", e);
+            }
         }
 
         private string? ToAbsolute(string relativePath)

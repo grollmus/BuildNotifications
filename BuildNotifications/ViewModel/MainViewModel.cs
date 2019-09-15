@@ -170,6 +170,8 @@ namespace BuildNotifications.ViewModel
             
             App.GlobalTweenHandler.Add(new Dummy().Tween(x => x.DummyProp).To(0).In(0).OnComplete((sender, parameter) =>
             {
+                // remove any image files that may still exist from last launch
+                NotificationDistributor.DeleteAllTemporaryImageFiles();
                 _fileWatch.HandleAllExistingFiles();
             }));
         }
@@ -361,6 +363,8 @@ namespace BuildNotifications.ViewModel
 
             if (ShowNotificationCenter)
                 StatusIndicator.ClearStatus();
+            else
+                NotificationCenter.ClearSelection();
         }
 
         private void ToggleShowSettings(object obj)

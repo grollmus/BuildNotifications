@@ -21,6 +21,8 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 
         public string FeedbackArguments { get; set; } = "";
 
+        public string IssueSource { get; set; } = "";
+
         public uint ColorCode { get; set; } = 0xffffffff;
 
         public Guid? BasedOnNotification { get; set; }
