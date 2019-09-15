@@ -12,6 +12,15 @@ namespace BuildNotifications.Resources.Animation
             Duration = 0.35;
         }
 
+        public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register(
+            "IsActive", typeof(bool), typeof(WidthChange), new PropertyMetadata(true));
+
+        public bool IsActive
+        {
+            get => (bool) GetValue(IsActiveProperty);
+            set => SetValue(IsActiveProperty, value);
+        }
+
         public double Delay { get; set; }
 
         public double TargetWidth
@@ -22,6 +31,8 @@ namespace BuildNotifications.Resources.Animation
 
         protected override void Invoke(object parameter)
         {
+            if (!IsActive)
+                return;
             var globalTweenHandler = App.GlobalTweenHandler;
 
             globalTweenHandler.ClearTweensOf(TargetElement);

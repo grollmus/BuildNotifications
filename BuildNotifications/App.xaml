@@ -2,8 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:buildNotifications="clr-namespace:BuildNotifications"
-             xmlns:viewModelNotification="clr-namespace:BuildNotifications.ViewModel.Notification"
-             xmlns:viewsNotification="clr-namespace:BuildNotifications.Views.Notification"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,19 +10,15 @@
                 <ResourceDictionary Source="Resources/Global/DarkTheme.xaml" />
                 <ResourceDictionary Source="Resources/Global/WindowStyle.xaml" />
                 <ResourceDictionary Source="Resources/Global/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/IconBatchResources.xaml" />
                 <ResourceDictionary Source="Resources/Global/IconBatchStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/TextBlockStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/DecoratedComboBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ExpanderStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/CheckboxStyles.xaml" />
-                <ResourceDictionary Source="Resources/Global/IconBatchResources.xaml" />
                 <ResourceDictionary Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <DataTemplate DataType="{x:Type viewModelNotification:DistributedNotificationViewModel}">
-                <viewsNotification:DistributedNotificationView />
-            </DataTemplate>
 
             <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}" />
         </ResourceDictionary>

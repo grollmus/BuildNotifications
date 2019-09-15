@@ -10,7 +10,6 @@ using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
 using BuildNotifications.Services;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Protocol;
@@ -156,12 +155,12 @@ namespace BuildNotifications.ViewModel
             SetupViewModel();
             LoadProjects();
             ShowOverlay();
-            if (Overlay == null)
-                StartUpdating();
             RegisterUriProtocol();
             HandleExistingDistributedNotificationsOnNextFrame();
-
             UpdateApp().FireAndForget();
+
+            if (Overlay == null)
+                StartUpdating();
         }
 
         private class Dummy
@@ -355,26 +354,7 @@ namespace BuildNotifications.ViewModel
             _fileWatch.Stop();
             StatusIndicator.Pause();
         }
-
-        private void ToastNotificationProcessorOnUserFeedback(object? sender, FeedbackEventArgs e)
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                var mainWindow = Application.Current.MainWindow;
-                if (mainWindow != null)
-                {
-                    if (mainWindow.WindowState == WindowState.Minimized)
-                        mainWindow.WindowState = WindowState.Normal;
-
-                    mainWindow.Activate();
-                }
-
-                NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification("You clicked on a notification. Arguments: {0}", "Feedback", NotificationType.Info, e.FeedbackArguments)});
-                if (!ShowNotificationCenter)
-                    ToggleShowNotificationCenter(this);
-            });
-        }
-
+        
         private void ToggleGroupDefinitionSelection(object obj)
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;

@@ -18,7 +18,7 @@
 				<animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
 			</i:EventTrigger>
 			<i:EventTrigger EventName="LostKeyboardFocus">
-				<animation:WidthChange TargetWidth="{StaticResource BlockTriple}" />
+				<animation:WidthChange TargetWidth="{StaticResource BlockTriple}" IsActive="{Binding TextIsEmpty}"/>
 			</i:EventTrigger>
 		</i:Interaction.Triggers>
 	</Grid>
