@@ -43,8 +43,9 @@
             <TextBlock
                 Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}"
-                                     ItemsSource="{Binding PredefinedValues}"
+            <local:DecoratedComboBox ItemsSource="{Binding PredefinedValues}"
+                                     SelectedItem="{Binding Value, Mode=TwoWay}"
+                                     IsEnabled="{Binding IsBusy, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
                                      Margin="{StaticResource BlockQuarterYOnlyMargin}" />
         </StackPanel>
     </DataTemplate>
@@ -229,6 +230,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="EditableSecureStringTemplate" DataType="{x:Type editableConfigs:EditableSecureString}">
-        <local:SecureStringEditableView EditableSecureString="{Binding}" Margin="{StaticResource BlockYOnlyMargin}" Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"/>
+        <local:SecureStringEditableView EditableSecureString="{Binding}" Margin="{StaticResource BlockYOnlyMargin}"
+                                        Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
     </DataTemplate>
 </ResourceDictionary>

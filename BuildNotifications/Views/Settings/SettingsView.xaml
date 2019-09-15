@@ -28,13 +28,15 @@
                           Margin="{StaticResource BlockHalfThickness}"
                           Style="{StaticResource IconButtonWithDockedContent}" />
 
-        <ItemsControl ItemsSource="{Binding Configs}" Margin="{StaticResource BlockHalfXOnlyMargin}"
-                      ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <ScrollViewer Margin="{StaticResource BlockHalfXOnlyMargin}">
+            <ItemsControl ItemsSource="{Binding Configs}"
+                          ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>
