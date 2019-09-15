@@ -16,17 +16,17 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             TargetElement.Opacity = 0;
             TargetElement.Visibility = Visibility.Visible;
 
-            var tweens = new List<Timeline>();
-
             if (DoScale)
             {
+                var tweens = new List<Timeline>();
                 var scaleTransform = new ScaleTransform(0.5, 1, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);
                 tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(1.0).In(Duration).Ease(Easing.ExpoEaseOut));
                 TargetElement.RenderTransform = scaleTransform;
+                tweens.Add(TargetElement.Tween(x => x.Opacity).To(1).In(Duration).Delay(0.4));
+                globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement));
             }
-
-            tweens.Add(TargetElement.Tween(x => x.Opacity).To(1).In(Duration));
-            globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement));
+            else
+                globalTweenHandler.Add(TargetElement.Tween(x => x.Opacity).To(1).In(Duration).Delay(0.4));
         }
     }
 }

@@ -38,11 +38,6 @@ namespace BuildNotifications.Resources.Animation
             var deltaX = oldPos.X - newPos.X;
             var deltaY = oldPos.Y - newPos.Y;
 
-            //if (IsOutsideWindowBounds(child))
-            //{
-            //    return;
-            //}
-
             tweenHandler.ClearTweensOf(child);
 
             if (child.RenderTransform is TranslateTransform translateTransform)

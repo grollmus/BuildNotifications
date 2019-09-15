@@ -347,7 +347,7 @@
     <value>Test connection</value>
   </data>
   <data name="TreeIsEmpty" xml:space="preserve">
-    <value>No builds are loaded</value>
+    <value>No builds</value>
   </data>
   <data name="Testing" xml:space="preserve">
     <value>Testing...</value>

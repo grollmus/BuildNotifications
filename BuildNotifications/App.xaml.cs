@@ -111,14 +111,14 @@ namespace BuildNotifications
             var delta = renderEventArgs.RenderingTime - _lastUpdate;
             _lastUpdate = renderEventArgs.RenderingTime;
 
-            // for lag spikes, don't skip frames faster than 20fps (50ms per frame)
-            const int maxTimePerFrame = 50;
+            // for lag spikes, don't skip frames faster than 30fps (~33ms per frame)
+            const int maxTimePerFrame = 33;
             var tooMuchTime = delta.Milliseconds - maxTimePerFrame;
             if (tooMuchTime > 0)
             {
                 // ignore super big spikes
-                if (tooMuchTime > 200)
-                    tooMuchTime = 200;
+                if (tooMuchTime > 100)
+                    tooMuchTime = 100;
 
                 _lastUpdate -= TimeSpan.FromMilliseconds(tooMuchTime);
                 delta = TimeSpan.FromMilliseconds(maxTimePerFrame);
