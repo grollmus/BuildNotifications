@@ -14,6 +14,7 @@ using BuildNotifications.Services;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.Core.Text;
+using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
@@ -36,6 +37,9 @@ namespace BuildNotifications.ViewModel
         {
             var pathResolver = new PathResolver();
             _fileWatch = new FileWatchDistributedNotificationReceiver(pathResolver);
+            _trayIcon = new TrayIconHandle();
+            _trayIcon.ExitRequested += TrayIconOnExitRequested;
+            _trayIcon.ShowWindowRequested += TrayIconOnShowWindowRequested;
             _coreSetup = new CoreSetup(pathResolver, _fileWatch);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
@@ -172,11 +176,13 @@ namespace BuildNotifications.ViewModel
         private void HandleExistingDistributedNotificationsOnNextFrame()
         {
             // start a tween which will finish as soon as the next frame is rendered (because this is when tweens get updated.)
-            
+
             App.GlobalTweenHandler.Add(new Dummy().Tween(x => x.DummyProp).To(0).In(0).OnComplete((sender, parameter) =>
             {
                 // remove any image files that may still exist from last launch
                 NotificationDistributor.DeleteAllTemporaryImageFiles();
+                // set initial tray icon (do this here, so any instance which immediately exits doesn't spawn an icon)
+                _trayIcon.BuildStatus = BuildStatus.None;
                 _fileWatch.HandleAllExistingFiles();
             }));
         }
@@ -260,11 +266,9 @@ namespace BuildNotifications.ViewModel
             StatusIndicator = new StatusIndicatorViewModel();
             StatusIndicator.ResumeRequested += StatusIndicator_OnResumeRequested;
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
-            NotificationCenter = new NotificationCenterViewModel();
-            var toastNotificationProcessor = new ToastNotificationProcessor();
-            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
 
-            NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
+            SetupNotificationCenter();
+
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges(), _coreSetup.PluginRepository);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
@@ -280,18 +284,32 @@ namespace BuildNotifications.ViewModel
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
         }
 
+        private void SetupNotificationCenter()
+        {
+            NotificationCenter = new NotificationCenterViewModel();
+
+            var toastNotificationProcessor = new ToastNotificationProcessor();
+
+            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
+            NotificationCenter.NotificationDistributor.Add(_trayIcon);
+            NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
+        }
+
+        private void TrayIconOnShowWindowRequested(object? sender, EventArgs e)
+        {
+            Application.Current.Dispatcher?.Invoke(BringWindowToFront);
+        }
+
+        private void TrayIconOnExitRequested(object? sender, EventArgs e)
+        {
+            Application.Current.Shutdown(0);
+        }
+
         private void CoreSetup_DistributedNotificationReceived(object? sender, DistributedNotificationReceivedEventArgs e)
         {
             Application.Current.Dispatcher?.Invoke(() =>
             {
-                var mainWindow = Application.Current.MainWindow;
-                if (mainWindow != null)
-                {
-                    if (mainWindow.WindowState == WindowState.Minimized)
-                        mainWindow.WindowState = WindowState.Normal;
-
-                    mainWindow.Activate();
-                }
+                BringWindowToFront();
 
                 if (e.DistributedNotification.BasedOnNotification != null)
                 {
@@ -303,6 +321,19 @@ namespace BuildNotifications.ViewModel
                         ToggleShowNotificationCenter(this);
                 }
             });
+        }
+
+        private void BringWindowToFront()
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                if (mainWindow.WindowState == WindowState.Minimized)
+                    mainWindow.WindowState = WindowState.Normal;
+
+                mainWindow.Visibility = Visibility.Visible;
+                mainWindow.Activate();
+            }
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -354,7 +385,7 @@ namespace BuildNotifications.ViewModel
             _fileWatch.Stop();
             StatusIndicator.Pause();
         }
-        
+
         private void ToggleGroupDefinitionSelection(object obj)
         {
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
@@ -367,7 +398,12 @@ namespace BuildNotifications.ViewModel
                 ShowSettings = false;
 
             if (ShowNotificationCenter)
+            {
                 StatusIndicator.ClearStatus();
+            
+                // reset error icon when user opens window, as the point of the error icon is to notify the user.
+                _trayIcon.BuildStatus = BuildStatus.None;
+            }
             else
                 NotificationCenter.ClearSelection();
         }
@@ -453,6 +489,7 @@ namespace BuildNotifications.ViewModel
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
+        private TrayIconHandle _trayIcon;
     }
 }
 #pragma warning enable CS8618

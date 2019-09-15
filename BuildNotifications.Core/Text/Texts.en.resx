@@ -394,4 +394,10 @@
   <data name="DefinitionsCount" xml:space="preserve">
     <value>{0} definitions</value>
   </data>
+  <data name="ShowWindow" xml:space="preserve">
+    <value>Show window</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
-﻿using BuildNotifications.ViewModel;
+﻿using System.ComponentModel;
+using System.Windows;
+using BuildNotifications.ViewModel;
 
 namespace BuildNotifications
 {
@@ -8,6 +10,13 @@ namespace BuildNotifications
         {
             DataContext = new MainViewModel();
             InitializeComponent();
+            Closing += OnClosing;
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            Visibility = Visibility.Collapsed;
+            e.Cancel = true;
         }
     }
 }
