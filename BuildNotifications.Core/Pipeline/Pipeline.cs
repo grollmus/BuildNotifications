@@ -24,6 +24,20 @@ namespace BuildNotifications.Core.Pipeline
             _definitionCache = new PipelineCache<IBuildDefinition>();
             _notificationFactory = new NotificationFactory(configuration);
             _pipelineNotifier = new PipelineNotifier();
+
+            _searchTerm = string.Empty;
+        }
+
+        private IBuildTree BuildTree()
+        {
+            var builds = _buildCache.ContentCopy().ToList();
+            var branches = _branchCache.ContentCopy();
+            var definitions = _definitionCache.ContentCopy();
+
+            var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree, _searchTerm);
+            if (_configuration.GroupDefinition.Any())
+                CutTree(tree);
+            return tree;
         }
 
         private void CleanupBuilds()
@@ -158,6 +172,18 @@ namespace BuildNotifications.Core.Pipeline
                 LogTo.Error(fullMessage);
         }
 
+        private async Task UpdateBuilds()
+        {
+            foreach (var project in _projectList)
+            {
+                var projectId = project.GetHashCode();
+                var buildsForProject = _buildCache.Values(projectId);
+
+                var inProgressBuilds = buildsForProject.Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending);
+                await project.UpdateBuilds(inProgressBuilds);
+            }
+        }
+
         public void AddProject(IProject project)
         {
             _projectList.Add(project);
@@ -186,6 +212,14 @@ namespace BuildNotifications.Core.Pipeline
             _configuration.IdentitiesOfCurrentUser.Clear();
         }
 
+        public void Search(string searchTerm)
+        {
+            _searchTerm = searchTerm;
+
+            var tree = BuildTree();
+            _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
+        }
+
         public async Task Update()
         {
             var treeResult = await Task.Run(async () =>
@@ -201,13 +235,7 @@ namespace BuildNotifications.Core.Pipeline
 
                 await UpdateBuilds();
 
-                var builds = _buildCache.ContentCopy().ToList();
-                var branches = _branchCache.ContentCopy();
-                var definitions = _definitionCache.ContentCopy();
-               
-                var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree);
-                if (_configuration.GroupDefinition.Any())
-                    CutTree(tree);
+                var tree = BuildTree();
 
                 var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
                 IBuildTreeBuildsDelta delta;
@@ -227,18 +255,6 @@ namespace BuildNotifications.Core.Pipeline
             _oldTree = treeResult.BuildTree;
         }
 
-        private async Task UpdateBuilds()
-        {
-            foreach (var project in _projectList)
-            {
-                var projectId = project.GetHashCode();
-                var buildsForProject = _buildCache.Values(projectId);
-
-                var inProgressBuilds = buildsForProject.Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending);
-                await project.UpdateBuilds(inProgressBuilds);
-            }
-        }
-
         public IPipelineNotifier Notifier => _pipelineNotifier;
 
         private readonly ITreeBuilder _treeBuilder;
@@ -251,5 +267,6 @@ namespace BuildNotifications.Core.Pipeline
         private readonly NotificationFactory _notificationFactory;
         private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
+        private string _searchTerm;
     }
 }

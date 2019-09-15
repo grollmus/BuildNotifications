@@ -19,7 +19,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is int maxTreeDepth)
-                return maxTreeDepth == 0 || maxTreeDepth % 2 == 1 ? Orientation.Horizontal : Orientation.Vertical;
+                return maxTreeDepth == 0 || maxTreeDepth % 2 != 0 ? Orientation.Horizontal : Orientation.Vertical;
 
             return Orientation.Vertical;
         }

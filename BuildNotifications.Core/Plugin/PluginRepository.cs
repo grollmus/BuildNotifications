@@ -17,6 +17,17 @@ namespace BuildNotifications.Core.Plugin
             _typeMatcher = typeMatcher;
         }
 
+        private IPlugin? FindPlugin(string? typeName)
+        {
+            var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName))
+                         ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+
+            if (plugin == null)
+                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
+
+            return plugin;
+        }
+
         public IReadOnlyList<IBuildPlugin> Build { get; }
 
         public IReadOnlyList<ISourceControlPlugin> SourceControl { get; }
@@ -41,34 +52,19 @@ namespace BuildNotifications.Core.Plugin
 
         public string? FindPluginName(string typeName)
         {
-            var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName))
-                         ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
-
-            if (plugin == null)
-                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
-
+            var plugin = FindPlugin(typeName);
             return plugin?.DisplayName;
         }
 
         public string? FindIconGeometry(string typeName)
         {
-            var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName))
-                         ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
-
-            if (plugin == null)
-                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
-
+            var plugin = FindPlugin(typeName);
             return plugin?.IconSvgPath;
         }
 
         public Type? FindConfigurationType(string? typeName)
         {
-            var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName))
-                         ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
-
-            if (plugin == null)
-                LogTo.Warn($"Failed to find source control plugin for type {typeName}");
-
+            var plugin = FindPlugin(typeName);
             return plugin?.GetConfigurationType();
         }
 

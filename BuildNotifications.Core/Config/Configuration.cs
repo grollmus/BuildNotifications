@@ -32,6 +32,33 @@ namespace BuildNotifications.Core.Config
                 Pipeline.Tree.Arrangement.SortingDefinition.AlphabeticalAscending);
         }
 
+        [CalculatedValues(nameof(PossibleLanguages))]
+        public string Language { get; set; }
+
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public IPluginRepository? PluginRepository { get; set; }
+
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public Func<IEnumerable<string?>>? PossibleBuildPluginsFunction { get; set; }
+
+        [IgnoredForConfig]
+        [JsonIgnore]
+        public Func<IEnumerable<string?>>? PossibleSourceControlPluginsFunction { get; set; }
+
+        public IEnumerable<string> ConnectionNames()
+        {
+            return Connections.Select(x => x.Name);
+        }
+
+        [UsedImplicitly]
+        public IEnumerable<string> PossibleLanguages()
+        {
+            yield return "en-US";
+            yield return "de";
+        }
+
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
         public IBuildTreeSortingDefinition SortingDefinition { get; set; }
@@ -45,6 +72,8 @@ namespace BuildNotifications.Core.Config
         [MinMax(30, int.MaxValue)]
         public int UpdateInterval { get; set; } = 30;
 
+        public bool UsePreReleases { get; set; } = false;
+
         public BuildNotificationMode CanceledBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
 
         public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
@@ -54,24 +83,15 @@ namespace BuildNotifications.Core.Config
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
 
-        [CalculatedValues(nameof(PossibleLanguages))]
-        public string Language { get; set; }
+        public IEnumerable<string?> PossibleBuildPlugins()
+        {
+            return PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
+        }
 
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public Func<IEnumerable<string?>>? PossibleBuildPluginsFunction { get; set; }
-
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public Func<IEnumerable<string?>>? PossibleSourceControlPluginsFunction { get; set; }
-
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public IPluginRepository? PluginRepository { get; set; }
-
-        public IEnumerable<string?> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-
-        public IEnumerable<string?> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
+        public IEnumerable<string?> PossibleSourceControlPlugins()
+        {
+            return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
+        }
 
         public Type BuildPluginConfigurationType(ConnectionData connectionData)
         {
@@ -95,15 +115,6 @@ namespace BuildNotifications.Core.Config
         [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
         [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
         public IList<ConnectionData> Connections { get; set; }
-
-        public IEnumerable<string> ConnectionNames() => Connections.Select(x => x.Name);
-
-        [UsedImplicitly]
-        public IEnumerable<string> PossibleLanguages()
-        {
-            yield return "en-US";
-            yield return "de";
-        }
 
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
         [CalculatedValues(nameof(ConnectionNames), nameof(ConnectionNames))]

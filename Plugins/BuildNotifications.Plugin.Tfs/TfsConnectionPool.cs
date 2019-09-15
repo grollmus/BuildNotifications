@@ -19,7 +19,7 @@ namespace BuildNotifications.Plugin.Tfs
                 return null;
             }
 
-            if (!string.IsNullOrWhiteSpace(data.CollectionName))
+            if (NeedsToAppendCollectionName(data) && !string.IsNullOrWhiteSpace(data.CollectionName))
                 url = AppendCollectionName(data.CollectionName, url);
 
             if (_connections.TryGetValue(url, out var cachedConnection))
@@ -76,7 +76,7 @@ namespace BuildNotifications.Plugin.Tfs
             if (data.AuthenticationType == AuthenticationType.Windows)
                 return new VssCredentials();
             if (data.AuthenticationType == AuthenticationType.Token)
-                return new VssBasicCredential("", data.Password);
+                return new VssBasicCredential("", data.Token);
 
             var username = data.Username;
             var pw = data.Password;
@@ -86,6 +86,20 @@ namespace BuildNotifications.Plugin.Tfs
         private bool IsAuthenticatedId(Guid authenticatedIdentityId)
         {
             return !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+        }
+
+        private bool IsOnPremiseServer(string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+            var uri = new Uri(url);
+            return uri.Host != "dev.azure.com";
+        }
+
+        private bool NeedsToAppendCollectionName(TfsConfiguration data)
+        {
+            return IsOnPremiseServer(data.Url);
         }
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);

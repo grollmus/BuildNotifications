@@ -45,15 +45,24 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
+        [JsonIgnore]
+        [IgnoredForConfig]
+        IList<IUser> IdentitiesOfCurrentUser { get; }
+
         /// <summary>
-        /// Defines how builds should be sorted.
+        /// Language used for localizing the UI.
         /// </summary>
-        IBuildTreeSortingDefinition SortingDefinition { get; set; }
+        string Language { get; set; }
 
         /// <summary>
         /// List of all configured projects.
         /// </summary>
         IList<IProjectConfiguration> Projects { get; }
+
+        /// <summary>
+        /// Defines how builds should be sorted.
+        /// </summary>
+        IBuildTreeSortingDefinition SortingDefinition { get; set; }
 
         /// <summary>
         /// For which succeeded builds to receive notifications for
@@ -65,24 +74,26 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         int UpdateInterval { get; }
 
-        [JsonIgnore]
-        [IgnoredForConfig]
-        IList<IUser> IdentitiesOfCurrentUser { get; }
-
         /// <summary>
-        /// Retrieves all possible plugin names which provide build provider.
+        /// Indicates whether to automatically update to releases
+        /// marked as PreReleases.
         /// </summary>
-        IEnumerable<string?> PossibleBuildPlugins();
-        
-        /// <summary>
-        /// Retrieves all possible plugin names which provide source control.
-        /// </summary>
-        IEnumerable<string?> PossibleSourceControlPlugins();
+        bool UsePreReleases { get; }
 
         /// <summary>
         /// Retrieves the type of the configuration for the build plugin of the given connection.
         /// </summary>
         Type BuildPluginConfigurationType(ConnectionData connectionData);
+
+        /// <summary>
+        /// Retrieves all possible plugin names which provide build provider.
+        /// </summary>
+        IEnumerable<string?> PossibleBuildPlugins();
+
+        /// <summary>
+        /// Retrieves all possible plugin names which provide source control.
+        /// </summary>
+        IEnumerable<string?> PossibleSourceControlPlugins();
 
         /// <summary>
         /// Retrieves the type of the configuration for the source control plugin of the given connection.
