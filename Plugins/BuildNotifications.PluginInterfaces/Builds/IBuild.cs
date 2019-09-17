@@ -37,7 +37,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         string Id { get; }
 
         /// <summary>
-        /// Date and time this build was changed the last time.
+        /// Date and time (in UTC) this build was changed the last time.
         /// </summary>
         DateTime? LastChangedTime { get; }
 
@@ -47,7 +47,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         int Progress { get; }
 
         /// <summary>
-        /// Date and time this build was added to the build queue.
+        /// Date and time (in UTC) this build was added to the build queue.
         /// </summary>
         DateTime? QueueTime { get; }
 
