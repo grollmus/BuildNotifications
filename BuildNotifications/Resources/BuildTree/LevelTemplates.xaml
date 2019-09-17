@@ -24,6 +24,20 @@
             </Setter>
         </Style>
 
+        <Style TargetType="{x:Type icons:SimpleIconBatch}">
+            <Setter Property="Width" Value="{StaticResource Block}" />
+            <Setter Property="Height" Value="{StaticResource Block}" />
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                        <Binding Path="BuildStatus" />
+                        <Binding Path="ShouldColorByStatus" />
+                        <Binding />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
             <Setter Property="Background" Value="{DynamicResource Background2}" />
             <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />

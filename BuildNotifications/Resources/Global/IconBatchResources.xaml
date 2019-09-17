@@ -340,7 +340,7 @@
     </DrawingImage>
 
 
-    <Style x:Key="IconBatchStyle" TargetType="Image" po:Freeze="True">
+    <Style x:Key="IconBatchStyle" TargetType="Image">
         <Style.Triggers>
             <DataTrigger
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"

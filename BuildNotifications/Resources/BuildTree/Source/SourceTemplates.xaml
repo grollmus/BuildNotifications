@@ -5,7 +5,7 @@
 
     <DataTemplate x:Key="SourceGroupNodeTemplate" DataType="{x:Type viewModelTree:SourceGroupNodeViewModel}">
         <DockPanel>
-            <icons:IconBatch Type="Connection" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" />
+            <icons:SimpleIconBatch Type="Connection" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" />
             <TextBlock Text="{Binding DisplayName}" FontSize="{DynamicResource BlockFont}"
                        HorizontalAlignment="Left" UseLayoutRounding="True" FontWeight="Regular"
                        TextTrimming="CharacterEllipsis" />
