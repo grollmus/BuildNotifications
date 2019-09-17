@@ -15,11 +15,13 @@ namespace BuildNotifications.Core.Pipeline.Tree
         private void UpdateProperties(IBuild otherBuild)
         {
             LastChangedTime = otherBuild.LastChangedTime;
+            QueueTime = otherBuild.QueueTime;
             Status = otherBuild.Status;
             Progress = otherBuild.Progress;
         }
 
         public DateTime? LastChangedTime { get; private set; }
+        public DateTime? QueueTime { get; private set; }
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
 

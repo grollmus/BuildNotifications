@@ -8,5 +8,10 @@ namespace BuildNotifications.ViewModel.Utils
         {
             return DateTime.Now - date;
         }
+
+        public static TimeSpan TimespanToUtcNow(this DateTime date)
+        {
+            return DateTime.UtcNow - date;
+        }
     }
 }

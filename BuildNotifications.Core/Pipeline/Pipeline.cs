@@ -172,7 +172,7 @@ namespace BuildNotifications.Core.Pipeline
             }
 
             LogTo.Debug("Done fetching builds");
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         }
 
         private async Task FetchDefinitions()

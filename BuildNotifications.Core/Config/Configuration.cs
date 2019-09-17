@@ -87,7 +87,7 @@ namespace BuildNotifications.Core.Config
         {
             return PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
         }
-
+        
         public IEnumerable<string?> PossibleSourceControlPlugins()
         {
             return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();

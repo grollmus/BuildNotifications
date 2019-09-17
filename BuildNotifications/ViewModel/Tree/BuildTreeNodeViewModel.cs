@@ -26,7 +26,9 @@ namespace BuildNotifications.ViewModel.Tree
 
         public DateTime ChangedDate => CalculateChangedDate();
 
-        public TimeSpan RelativeChangedDate => ChangedDate.TimespanToNow();
+        public DateTime QueueTime => CalculateQueueTime();
+
+        public TimeSpan RelativeChangedDate => ChangedDate.ToUniversalTime().TimespanToUtcNow();
 
         public RemoveTrackingObservableCollection<BuildTreeNodeViewModel> Children { get; }
 
@@ -85,7 +87,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private BuildStatus MostCurrentBuildStatus(IEnumerable<BuildNodeViewModel> buildNodes)
         {
-            var byDateDescending = buildNodes.OrderByDescending(x => x.ChangedDate).ToList();
+            var byDateDescending = buildNodes.OrderByDescending(x => x.QueueTime).ToList();
             var status = BuildStatus.None;
 
             foreach (var build in byDateDescending)
@@ -106,8 +108,10 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         protected virtual DateTime CalculateChangedDate() => _changedDate;
+        protected virtual DateTime CalculateQueueTime() => _changedDate;
 
         private DateTime _changedDate;
+        private DateTime _queuedTime;
 
         private void UpdateChangedDate()
         {
@@ -117,6 +121,16 @@ namespace BuildNotifications.ViewModel.Tree
 
             _changedDate = newDate;
             OnPropertyChanged(nameof(ChangedDate));
+        }
+
+        private void UpdateQueuedTime()
+        {
+            var newDate = !Children.Any() ? DateTime.MinValue : Children.ToList().Max(x => x.QueueTime);
+            if (_queuedTime == newDate)
+                return;
+
+            _queuedTime = newDate;
+            OnPropertyChanged(nameof(QueueTime));
         }
 
         protected abstract string CalculateDisplayName();
@@ -192,6 +206,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             UpdateBuildStatus();
             UpdateChangedDate();
+            UpdateQueuedTime();
             OnPropertyChanged(nameof(TreeIsEmpty));
         }
 
@@ -207,9 +222,9 @@ namespace BuildNotifications.ViewModel.Tree
                     SetSpecificBuildChildrenProperties();
             }
 
-            if (e.PropertyName.Equals(nameof(ChangedDate)))
+            if (e.PropertyName.Equals(nameof(QueueTime)))
             {
-                UpdateChangedDate();
+                UpdateQueuedTime();
                 if (_currentSortingDefinition == SortingDefinition.DateAscending || _currentSortingDefinition == SortingDefinition.DateDescending)
                     Children.InvokeSort();
             }
@@ -302,10 +317,10 @@ namespace BuildNotifications.ViewModel.Tree
                     Children.SortDescending(x => x.BuildStatus);
                     break;
                 case SortingDefinition.DateAscending:
-                    Children.Sort(x => x.ChangedDate);
+                    Children.Sort(x => x.QueueTime);
                     break;
                 case SortingDefinition.DateDescending:
-                    Children.SortDescending(x => x.ChangedDate);
+                    Children.SortDescending(x => x.QueueTime);
                     break;
             }
         }

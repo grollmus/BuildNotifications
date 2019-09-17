@@ -124,6 +124,7 @@ namespace BuildNotifications.ViewModel.Tree
         {
             UpdateBuildStatus();
             UpdateChangedDate();
+            UpdateQueuedDate();
 
             ActualProgress = Node.Progress;
         }
@@ -135,7 +136,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             LogTo.Info($"Trying to go to URL: \"{url}\"");
             if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                Process.Start("explorer.exe", url);
+                Process.Start("explorer.exe", $"\"{url}\"");
         }
 
         private void UpdateBuildStatus()
@@ -149,6 +150,7 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         private DateTime _changedDate;
+        private DateTime _queueTime;
 
         private void UpdateChangedDate()
         {
@@ -160,9 +162,21 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(ChangedDate));
         }
 
+        private void UpdateQueuedDate()
+        {
+            var newDate = Node?.QueueTime ?? DateTime.MinValue;
+            if (_queueTime == newDate)
+                return;
+
+            _queueTime = newDate;
+            OnPropertyChanged(nameof(QueueTime));
+        }
+
         protected override BuildStatus CalculateBuildStatus() => _buildStatus;
 
         protected override DateTime CalculateChangedDate() => _changedDate;
+
+        protected override DateTime CalculateQueueTime() => _queueTime;
 
         protected override string CalculateDisplayName()
         {
