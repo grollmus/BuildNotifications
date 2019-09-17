@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.ViewModel.Tree;
@@ -20,7 +21,7 @@ namespace BuildNotifications.Resources.BuildTree
         {
             if (!(container is FrameworkElement element))
                 return base.SelectTemplate(item, container);
-            
+
             var buildNode = item as BuildTreeNodeViewModel;
 
             var template = _forLayout
@@ -30,14 +31,14 @@ namespace BuildNotifications.Resources.BuildTree
             return template ?? base.SelectTemplate(item, container);
         }
 
-        private static DataTemplate? DataTemplateByName(object groupNode, FrameworkElement element)
+        private DataTemplate? DataTemplateByName(object groupNode, FrameworkElement element)
         {
             var type = groupNode.GetType();
             var fullName = type.Name;
             var withoutViewModel = fullName.Replace("ViewModel", "");
             var expectedKey = $"{withoutViewModel}Template";
 
-            return element.TryFindResource(expectedKey) as DataTemplate;
+            return TryFindResource(element, expectedKey);
         }
 
         private DataTemplate? DisplayTemplate(BuildTreeNodeViewModel? node, FrameworkElement element)
@@ -61,14 +62,27 @@ namespace BuildNotifications.Resources.BuildTree
             switch (levelToDisplay)
             {
                 default:
-                    return element.TryFindResource("FirstLevelTemplate") as DataTemplate;
+                    return TryFindResource(element, "FirstLevelTemplate");
                 case 2:
-                    return element.TryFindResource("SecondLevelTemplate") as DataTemplate;
+                    return TryFindResource(element, "SecondLevelTemplate");
                 case 3:
-                    return element.TryFindResource("ThirdLevelTemplate") as DataTemplate;
+                    return TryFindResource(element, "ThirdLevelTemplate");
                 case 4:
-                    return element.TryFindResource("FourthLevelTemplate") as DataTemplate;
+                    return TryFindResource(element, "FourthLevelTemplate");
             }
+        }
+
+        private readonly Dictionary<string, DataTemplate?> _cache = new Dictionary<string, DataTemplate?>();
+
+        private DataTemplate? TryFindResource(FrameworkElement element, string key)
+        {
+            if (_cache.TryGetValue(key, out var existingTemplate))
+                return existingTemplate;
+
+            existingTemplate = element.TryFindResource(key) as DataTemplate;
+            _cache.Add(key, existingTemplate);
+
+            return existingTemplate;
         }
 
         private readonly bool _forLayout;

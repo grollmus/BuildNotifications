@@ -35,6 +35,7 @@
                                         x:Name="Overlay">
                                     <DockPanel Margin="{StaticResource BlockHalfXOnlyMargin}">
                                         <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
+                                                         Width="{StaticResource Block}" Height="{StaticResource Block}"
                                                          Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type text:DecoratedTextBox}, Mode=FindAncestor}}"
                                                          DockPanel.Dock="Right"
                                                          x:Name="Icon" />

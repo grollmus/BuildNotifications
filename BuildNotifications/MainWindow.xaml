@@ -180,7 +180,7 @@
                     <ei:DataTrigger
                         Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
                         Value="true">
-                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2" />
+                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2" Delay="0"/>
                     </ei:DataTrigger>
                     <ei:DataTrigger
                         Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"

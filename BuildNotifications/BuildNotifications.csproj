@@ -42,7 +42,6 @@
     <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
     <None Remove="Resources\Global\DarkTheme.xaml" />
     <None Remove="Resources\Global\DecoratedComboBoxStyles.xaml" />
-    <None Remove="Resources\Global\IconBatchStyles.xaml" />
     <None Remove="Resources\Global\IconButtonStyles.xaml" />
     <None Remove="Resources\Global\LightTheme.xaml" />
     <None Remove="Resources\Global\ListBoxStyles.xaml" />
