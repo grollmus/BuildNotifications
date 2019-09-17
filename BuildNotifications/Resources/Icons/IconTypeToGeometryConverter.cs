@@ -24,7 +24,7 @@ namespace BuildNotifications.Resources.Icons
 
         static IconTypeToGeometryConverter()
         {
-            _cache = SupportedIcons.ToDictionary(x => x, IconTypeToGeometry);
+            Cache = SupportedIcons.ToDictionary(x => x, IconTypeToGeometry);
         }
 
         private IconTypeToGeometryConverter()
@@ -33,13 +33,13 @@ namespace BuildNotifications.Resources.Icons
 
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IconType type && _cache.ContainsKey(type))
-                return _cache[type];
+            if (value is IconType type && Cache.ContainsKey(type))
+                return Cache[type];
 
             return Geometry.Empty;
         }
 
-        private static readonly Dictionary<IconType, Geometry> _cache;
+        private static readonly Dictionary<IconType, Geometry> Cache;
 
         private static Geometry IconTypeToGeometry(IconType type)
         {
