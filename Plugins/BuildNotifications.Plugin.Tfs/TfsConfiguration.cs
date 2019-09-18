@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Threading.Tasks;
 using Anotar.NLog;
+using BuildNotifications.PluginInterfaces;
 using JetBrains.Annotations;
 using ReflectSettings.Attributes;
 
@@ -27,13 +27,10 @@ namespace BuildNotifications.Plugin.Tfs
         public string? Username { get; set; }
 
         [CalculatedVisibility(nameof(PasswordHidden))]
-        public string? Password { get; set; }
+        public PasswordString? Password { get; set; }
 
         [CalculatedVisibility(nameof(TokenHidden))]
-        public string? Token { get; set; }
-
-        [CalculatedVisibility(nameof(PasswordHidden))]
-        public SecureString? SecurePassword { get; set; }
+        public PasswordString? Token { get; set; }
 
         public bool UsernameHidden() => AuthenticationType != AuthenticationType.Account;
 

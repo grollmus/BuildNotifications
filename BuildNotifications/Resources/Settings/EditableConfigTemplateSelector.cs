@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.Core.Config;
+using BuildNotifications.PluginInterfaces;
 using BuildNotifications.ViewModel.Settings;
 using ReflectSettings.EditableConfigs;
 
@@ -33,6 +34,8 @@ namespace BuildNotifications.Resources.Settings
         {
             switch (item)
             {
+                case EditableComplex<PasswordString> _:
+                    return element?.TryFindResource("EditableSecureStringTemplate") as DataTemplate;
                 case EditableString editableString:
                     if (editableString.HasPredefinedValues)
                     {
@@ -58,8 +61,6 @@ namespace BuildNotifications.Resources.Settings
                         return element?.TryFindResource("EditableComplexTemplate") as DataTemplate;
                 case IEditableEnum _:
                     return element?.TryFindResource("EditableEnumTemplate") as DataTemplate;
-                case EditableSecureString _:
-                    return element?.TryFindResource("EditableSecureStringTemplate") as DataTemplate;
                 default:
                     return DataTemplateByName(item, element);
             }

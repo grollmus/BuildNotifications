@@ -11,6 +11,8 @@ namespace BuildNotifications.Core.Utilities
                 TypeNameHandling = TypeNameHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
+
+            _settings.Converters.Add(new PasswordStringConverter());
         }
 
         public string Serialize(object value)

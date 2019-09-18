@@ -229,7 +229,7 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="EditableSecureStringTemplate" DataType="{x:Type editableConfigs:EditableSecureString}">
+    <DataTemplate x:Key="EditableSecureStringTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
         <local:SecureStringEditableView EditableSecureString="{Binding}" Margin="{StaticResource BlockYOnlyMargin}"
                                         Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
     </DataTemplate>

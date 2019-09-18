@@ -76,11 +76,11 @@ namespace BuildNotifications.Plugin.Tfs
             if (data.AuthenticationType == AuthenticationType.Windows)
                 return new VssCredentials();
             if (data.AuthenticationType == AuthenticationType.Token)
-                return new VssBasicCredential("", data.Token);
+                return new VssBasicCredential("", data.Token?.PlainText());
 
             var username = data.Username;
             var pw = data.Password;
-            return new VssCredentials(new VssBasicCredential(username, pw));
+            return new VssCredentials(new VssBasicCredential(username, pw?.PlainText()));
         }
 
         private bool IsAuthenticatedId(Guid authenticatedIdentityId)

@@ -73,7 +73,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         {
             return TestConnection(data);
         }
-      
+
         public IBranchProvider ConstructProvider(object data)
         {
             var connection = GetConnection(data as Configuration);

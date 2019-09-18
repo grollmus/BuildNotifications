@@ -1,8 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using BuildNotifications.PluginInterfaces;
 using ReflectSettings.EditableConfigs;
 
 namespace BuildNotifications.Resources.Settings
@@ -12,7 +10,7 @@ namespace BuildNotifications.Resources.Settings
         public PasswordBox PasswordBox { get; set; }
 
         public static readonly DependencyProperty EditableSecureStringProperty = DependencyProperty.Register(
-            "EditableSecureString", typeof(EditableSecureString), typeof(SecureStringEditableView), new PropertyMetadata(default(EditableSecureString), PropertyChangedCallback));
+            "EditableSecureString", typeof(EditableComplex<PasswordString>), typeof(SecureStringEditableView), new PropertyMetadata(default(EditableSecureString), PropertyChangedCallback));
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -22,29 +20,16 @@ namespace BuildNotifications.Resources.Settings
 
         private void EditableChanged()
         {
-            if (!(EditableSecureString.Value is SecureString existingValue))
+            if (!(EditableSecureString.Value is PasswordString existingValue))
                 return;
 
             PasswordBox.Clear();
-            var valuePtr = IntPtr.Zero;
-            try
-            {
-                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(existingValue);
-                for (var i = 0; i < existingValue.Length; i++)
-                {
-                    var unicodeChar = Marshal.ReadInt16(valuePtr, i * 2);
-                    PasswordBox.Password += (char) unicodeChar;
-                }
-            }
-            finally
-            {
-                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
-            }
+            PasswordBox.Password = existingValue.PlainText();
         }
 
-        public EditableSecureString EditableSecureString
+        public EditableComplex<PasswordString> EditableSecureString
         {
-            get => (EditableSecureString) GetValue(EditableSecureStringProperty);
+            get => (EditableComplex<PasswordString>) GetValue(EditableSecureStringProperty);
             set => SetValue(EditableSecureStringProperty, value);
         }
 
@@ -60,7 +45,7 @@ namespace BuildNotifications.Resources.Settings
             if (EditableSecureString == null)
                 return;
 
-            EditableSecureString.Value = PasswordBox.SecurePassword;
+            EditableSecureString.Value = PasswordString.FromPlainText(PasswordBox.Password);
         }
     }
 }
