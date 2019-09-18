@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using BuildNotifications.Core.Text;
 
 namespace BuildNotifications.Core.Utilities
@@ -8,6 +9,11 @@ namespace BuildNotifications.Core.Utilities
     /// </summary>
     public class TimeSpanToStringConverter
     {
+        public TimeSpanToStringConverter(CultureInfo? culture = null)
+        {
+            _culture = culture;
+        }
+
         public string Convert(TimeSpan value)
         {
             var amount = 1;
@@ -49,8 +55,10 @@ namespace BuildNotifications.Core.Utilities
             else
                 text = JustNowTextId;
 
-            return string.Format(StringLocalizer.Instance.GetText(text), amount);
+            return string.Format(StringLocalizer.Instance.GetText(text, _culture), amount);
         }
+
+        private readonly CultureInfo? _culture;
 
         /// <summary>
         /// Maximum amount of seconds that may be passed, for a timeSpan to be considered "just now"

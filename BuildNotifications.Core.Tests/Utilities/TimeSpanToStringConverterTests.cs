@@ -4,7 +4,6 @@ using System.Globalization;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Core.Utilities;
 using JetBrains.Annotations;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Utilities
@@ -44,8 +43,7 @@ namespace BuildNotifications.Core.Tests.Utilities
         public void CalculateShouldWorkForAllCases(DateTime from, DateTime to, string expected)
         {
             // Arrange
-            Resources.Culture = TestCulture;
-            var converter = new TimeSpanToStringConverter();
+            var converter = new TimeSpanToStringConverter(TestCulture);
             var timeSpan = to - from;
 
             // Act
@@ -64,7 +62,7 @@ namespace BuildNotifications.Core.Tests.Utilities
 
         private static string GetTimeString(string textId)
         {
-            return StringLocalizer.Instance.GetText(textId);
+            return StringLocalizer.Instance.GetText(textId, TestCulture);
         }
 
         private static readonly CultureInfo TestCulture = CultureInfo.InvariantCulture;
