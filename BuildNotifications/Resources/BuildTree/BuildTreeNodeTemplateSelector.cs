@@ -72,8 +72,6 @@ namespace BuildNotifications.Resources.BuildTree
             }
         }
 
-        private readonly Dictionary<string, DataTemplate?> _cache = new Dictionary<string, DataTemplate?>();
-
         private DataTemplate? TryFindResource(FrameworkElement element, string key)
         {
             if (_cache.TryGetValue(key, out var existingTemplate))
@@ -84,6 +82,8 @@ namespace BuildNotifications.Resources.BuildTree
 
             return existingTemplate;
         }
+
+        private readonly Dictionary<string, DataTemplate?> _cache = new Dictionary<string, DataTemplate?>();
 
         private readonly bool _forLayout;
     }

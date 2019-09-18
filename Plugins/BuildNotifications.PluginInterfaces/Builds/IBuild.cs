@@ -42,6 +42,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         DateTime? LastChangedTime { get; }
 
         /// <summary>
+        /// Links (URLs) associated with this Build.
+        /// </summary>
+        IBuildLinks Links { get; }
+
+        /// <summary>
         /// Progress in percent of this build.
         /// </summary>
         int Progress { get; }
@@ -65,10 +70,5 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Status of this build.
         /// </summary>
         BuildStatus Status { get; }
-
-        /// <summary>
-        /// Links (URLs) associated with this Build.
-        /// </summary>
-        IBuildLinks Links { get; }
     }
 }

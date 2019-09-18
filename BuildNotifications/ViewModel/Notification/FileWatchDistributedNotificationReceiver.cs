@@ -10,15 +10,18 @@ namespace BuildNotifications.ViewModel.Notification
 {
     internal class FileWatchDistributedNotificationReceiver : IDistributedNotificationReceiver
     {
-        private FileSystemWatcher? _watcher;
-        private readonly string _targetDirectory;
-
-        private const string FileExtension = "distributedNotification";
-
         public FileWatchDistributedNotificationReceiver(IPathResolver pathResolver)
         {
             Directory.CreateDirectory(pathResolver.ConfigurationFolder);
             _targetDirectory = pathResolver.ConfigurationFolder;
+        }
+
+        public void HandleAllExistingFiles()
+        {
+            foreach (var file in Directory.EnumerateFiles(_targetDirectory, $"*.{FileExtension}", SearchOption.TopDirectoryOnly))
+            {
+                ProcessFile(file);
+            }
         }
 
         public void Start()
@@ -38,14 +41,6 @@ namespace BuildNotifications.ViewModel.Notification
             _watcher.EnableRaisingEvents = true;
         }
 
-        public void HandleAllExistingFiles()
-        {
-            foreach (var file in Directory.EnumerateFiles(_targetDirectory, $"*.{FileExtension}", SearchOption.TopDirectoryOnly))
-            {
-                ProcessFile(file);
-            }
-        }
-
         public void Stop()
         {
             if (_watcher == null)
@@ -57,12 +52,40 @@ namespace BuildNotifications.ViewModel.Notification
             _watcher = null;
         }
 
+        public static void WriteDistributedNotificationToPath(string base64Notification, IPathResolver pathResolver)
+        {
+            Directory.CreateDirectory(pathResolver.ConfigurationFolder);
+            var targetPath = Path.Combine(pathResolver.ConfigurationFolder, $"{Guid.NewGuid().ToString()}.{FileExtension}");
+            try
+            {
+                LogTo.Info($"Writing distributed message to path \"{targetPath}\".");
+                File.WriteAllText(targetPath, base64Notification);
+            }
+            catch (Exception e)
+            {
+                LogTo.ErrorException("Failed to serialize and write DistributedNotification.", e);
+            }
+        }
+
+        private static bool IsFileReady(string filename)
+        {
+            try
+            {
+                using var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None);
+                return inputStream.Length > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         private async void OnDirectoryChanged(object sender, FileSystemEventArgs e)
         {
             LogTo.Info($"New file in watched directory found. Path: \"{e.FullPath}\"");
             LogTo.Debug($"Waiting for {e.FullPath} to be ready.");
             await WaitForFileToBeCopied(e);
-            LogTo.Debug($"Waiting succeeded parsing file.");
+            LogTo.Debug("Waiting succeeded parsing file.");
             ProcessFile(e.FullPath);
         }
 
@@ -72,7 +95,7 @@ namespace BuildNotifications.ViewModel.Notification
             if (notification == null)
                 return;
 
-            LogTo.Debug($"Parsing succeeded distributing event.");
+            LogTo.Debug("Parsing succeeded distributing event.");
             DistributedNotificationReceived?.Invoke(this, new DistributedNotificationReceivedEventArgs(notification));
         }
 
@@ -114,34 +137,10 @@ namespace BuildNotifications.ViewModel.Notification
             });
         }
 
-        private static bool IsFileReady(string filename)
-        {
-            try
-            {
-                using var inputStream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.None);
-                return inputStream.Length > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         public event EventHandler<DistributedNotificationReceivedEventArgs> DistributedNotificationReceived;
+        private readonly string _targetDirectory;
+        private FileSystemWatcher? _watcher;
 
-        public static void WriteDistributedNotificationToPath(string base64Notification, IPathResolver pathResolver)
-        {
-            Directory.CreateDirectory(pathResolver.ConfigurationFolder);
-            var targetPath = Path.Combine(pathResolver.ConfigurationFolder, $"{Guid.NewGuid().ToString()}.{FileExtension}");
-            try
-            {
-                LogTo.Info($"Writing distributed message to path \"{targetPath}\".");
-                File.WriteAllText(targetPath, base64Notification);
-            }
-            catch (Exception e)
-            {
-                LogTo.ErrorException("Failed to serialize and write DistributedNotification.", e);
-            }
-        }
+        private const string FileExtension = "distributedNotification";
     }
 }

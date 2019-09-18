@@ -10,11 +10,11 @@ using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
-using BuildNotifications.Services;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
@@ -114,6 +114,37 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
+        private void BringWindowToFront()
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                if (mainWindow.WindowState == WindowState.Minimized)
+                    mainWindow.WindowState = WindowState.Normal;
+
+                mainWindow.Visibility = Visibility.Visible;
+                mainWindow.Activate();
+            }
+        }
+
+        private void CoreSetup_DistributedNotificationReceived(object? sender, DistributedNotificationReceivedEventArgs e)
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                BringWindowToFront();
+
+                if (e.DistributedNotification.BasedOnNotification != null)
+                {
+                    var success = NotificationCenter.TryHighlightNotificationByGuid(e.DistributedNotification.BasedOnNotification.Value);
+                    if (!success)
+                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.Instance["NotificationNotFound"], NotificationType.Info)});
+
+                    if (!ShowNotificationCenter)
+                        ToggleShowNotificationCenter(this);
+                }
+            });
+        }
+
         private async void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
@@ -132,7 +163,7 @@ namespace BuildNotifications.ViewModel
             StopUpdating();
             StatusIndicator.Error(e.ErrorNotifications);
 
-            // errors may occur on any thread. 
+            // errors may occur on any thread.
             Application.Current.Dispatcher?.Invoke(() => { NotificationCenter.ShowNotifications(e.ErrorNotifications); });
         }
 
@@ -154,25 +185,6 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private void Initialize()
-        {
-            SetupViewModel();
-            LoadProjects();
-            ShowOverlay();
-            RegisterUriProtocol();
-            HandleExistingDistributedNotificationsOnNextFrame();
-            UpdateApp().FireAndForget();
-
-            if (Overlay == null)
-                StartUpdating();
-        }
-
-        private class Dummy
-        {
-            [UsedImplicitly]
-            public int DummyProp { get; set; }
-        }
-
         private void HandleExistingDistributedNotificationsOnNextFrame()
         {
             // start a tween which will finish as soon as the next frame is rendered (because this is when tweens get updated.)
@@ -187,7 +199,18 @@ namespace BuildNotifications.ViewModel
             }));
         }
 
-        private void RegisterUriProtocol() => UriSchemeRegistration.Register();
+        private void Initialize()
+        {
+            SetupViewModel();
+            LoadProjects();
+            ShowOverlay();
+            RegisterUriProtocol();
+            HandleExistingDistributedNotificationsOnNextFrame();
+            UpdateApp().FireAndForget();
+
+            if (Overlay == null)
+                StartUpdating();
+        }
 
         private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
         {
@@ -238,6 +261,11 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        private void RegisterUriProtocol()
+        {
+            UriSchemeRegistration.Register();
+        }
+
         private void ResetAndRestart()
         {
             ResetError();
@@ -258,6 +286,17 @@ namespace BuildNotifications.ViewModel
         {
             ToggleShowSettingsCommand.Execute(null);
             ShowInitialSetupOverlayViewModel();
+        }
+
+        private void SetupNotificationCenter()
+        {
+            NotificationCenter = new NotificationCenterViewModel();
+
+            var toastNotificationProcessor = new ToastNotificationProcessor();
+
+            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
+            NotificationCenter.NotificationDistributor.Add(_trayIcon);
+            NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
         }
 
         private void SetupViewModel()
@@ -282,58 +321,6 @@ namespace BuildNotifications.ViewModel
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
-        }
-
-        private void SetupNotificationCenter()
-        {
-            NotificationCenter = new NotificationCenterViewModel();
-
-            var toastNotificationProcessor = new ToastNotificationProcessor();
-
-            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
-            NotificationCenter.NotificationDistributor.Add(_trayIcon);
-            NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
-        }
-
-        private void TrayIconOnShowWindowRequested(object? sender, EventArgs e)
-        {
-            Application.Current.Dispatcher?.Invoke(BringWindowToFront);
-        }
-
-        private void TrayIconOnExitRequested(object? sender, EventArgs e)
-        {
-            Application.Current.Shutdown(0);
-        }
-
-        private void CoreSetup_DistributedNotificationReceived(object? sender, DistributedNotificationReceivedEventArgs e)
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                BringWindowToFront();
-
-                if (e.DistributedNotification.BasedOnNotification != null)
-                {
-                    var success = NotificationCenter.TryHighlightNotificationByGuid(e.DistributedNotification.BasedOnNotification.Value);
-                    if (!success)
-                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.Instance["NotificationNotFound"], NotificationType.Info)});
-
-                    if (!ShowNotificationCenter)
-                        ToggleShowNotificationCenter(this);
-                }
-            });
-        }
-
-        private void BringWindowToFront()
-        {
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow != null)
-            {
-                if (mainWindow.WindowState == WindowState.Minimized)
-                    mainWindow.WindowState = WindowState.Normal;
-
-                mainWindow.Visibility = Visibility.Visible;
-                mainWindow.Activate();
-            }
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -421,6 +408,16 @@ namespace BuildNotifications.ViewModel
                 ShowNotificationCenter = false;
         }
 
+        private void TrayIconOnExitRequested(object? sender, EventArgs e)
+        {
+            Application.Current.Shutdown(0);
+        }
+
+        private void TrayIconOnShowWindowRequested(object? sender, EventArgs e)
+        {
+            Application.Current.Dispatcher?.Invoke(BringWindowToFront);
+        }
+
         private async Task UpdateApp()
         {
             LogTo.Info("Checking for updates...");
@@ -493,6 +490,8 @@ namespace BuildNotifications.ViewModel
 
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
+        private readonly FileWatchDistributedNotificationReceiver _fileWatch;
+        private readonly TrayIconHandle _trayIcon;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private BuildTreeViewModel? _buildTree;
@@ -500,8 +499,12 @@ namespace BuildNotifications.ViewModel
         private bool _showSettings;
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
-        private readonly FileWatchDistributedNotificationReceiver _fileWatch;
-        private TrayIconHandle _trayIcon;
+
+        private class Dummy
+        {
+            [UsedImplicitly]
+            public int DummyProp { get; set; }
+        }
     }
 }
 #pragma warning enable CS8618

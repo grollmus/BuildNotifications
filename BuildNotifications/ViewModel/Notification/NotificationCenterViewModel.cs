@@ -11,17 +11,6 @@ namespace BuildNotifications.ViewModel.Notification
 {
     public class NotificationCenterViewModel : BaseViewModel
     {
-        private readonly NotificationViewModelFactory _notificationViewModelFactory;
-        private NotificationViewModel? _selectedNotification;
-        private bool _showTimeStamp = true;
-        private bool _showEmptyMessage = true;
-
-        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
-
-        public INotificationDistributor NotificationDistributor { get; } = new NotificationDistributor();
-
-        public bool NoNotifications => ShowEmptyMessage && !Notifications.Any();
-
         public NotificationCenterViewModel()
         {
             _notificationViewModelFactory = new NotificationViewModelFactory();
@@ -29,13 +18,20 @@ namespace BuildNotifications.ViewModel.Notification
             Notifications.SortDescending(x => x.Timestamp);
         }
 
-        public bool ShowTimeStamp
+        public bool NoNotifications => ShowEmptyMessage && !Notifications.Any();
+
+        public INotificationDistributor NotificationDistributor { get; } = new NotificationDistributor();
+
+        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
+
+        public NotificationViewModel? SelectedNotification
         {
-            get => _showTimeStamp;
+            get => _selectedNotification;
             set
             {
-                _showTimeStamp = value;
+                _selectedNotification = value;
                 OnPropertyChanged();
+                HighlightRequested?.Invoke(this, new HighlightRequestedEventArgs(_selectedNotification?.BuildNodes ?? new List<IBuildNode>()));
             }
         }
 
@@ -49,18 +45,28 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        public NotificationViewModel? SelectedNotification
+        public bool ShowTimeStamp
         {
-            get => _selectedNotification;
+            get => _showTimeStamp;
             set
             {
-                _selectedNotification = value;
+                _showTimeStamp = value;
                 OnPropertyChanged();
-                HighlightRequested?.Invoke(this, new HighlightRequestedEventArgs(_selectedNotification?.BuildNodes ?? new List<IBuildNode>()));
             }
         }
 
         public event EventHandler<HighlightRequestedEventArgs> HighlightRequested;
+
+        public void ClearNotificationsOfType(NotificationType type)
+        {
+            var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
+            foreach (var viewModel in toRemove)
+            {
+                Notifications.Remove(viewModel);
+            }
+
+            OnPropertyChanged(nameof(NoNotifications));
+        }
 
         public void ClearSelection()
         {
@@ -90,6 +96,18 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
+        public bool TryHighlightNotificationByGuid(Guid guidOfNotification)
+        {
+            var notification = Notifications.FirstOrDefault(n => n.NotificationGuid == guidOfNotification);
+            if (notification != null)
+            {
+                SelectedNotification = notification;
+                return true;
+            }
+
+            return false;
+        }
+
         private static bool ShouldPublish(INotification notification)
         {
             switch (notification.Type)
@@ -104,27 +122,9 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        public void ClearNotificationsOfType(NotificationType type)
-        {
-            var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
-            foreach (var viewModel in toRemove)
-            {
-                Notifications.Remove(viewModel);
-            }
-
-            OnPropertyChanged(nameof(NoNotifications));
-        }
-
-        public bool TryHighlightNotificationByGuid(Guid guidOfNotification)
-        {
-            var notification = Notifications.FirstOrDefault(n => n.NotificationGuid == guidOfNotification);
-            if (notification != null)
-            {
-                SelectedNotification = notification;
-                return true;
-            }
-
-            return false;
-        }
+        private readonly NotificationViewModelFactory _notificationViewModelFactory;
+        private NotificationViewModel? _selectedNotification;
+        private bool _showTimeStamp = true;
+        private bool _showEmptyMessage = true;
     }
 }

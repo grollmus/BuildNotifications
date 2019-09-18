@@ -7,25 +7,25 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     public interface INotification
     {
+        IList<IBuildNode> BuildNodes { get; }
+
+        string ContentTextId { get; }
         string DisplayContent { get; }
 
         string DisplayTitle { get; }
 
-        string ContentTextId { get; }
+        Guid Guid { get; }
 
-        string TitleTextId { get; }
-        
         /// <summary>
-        /// Describes the root of the notification. E.g. a branch failed notification, the IssueSource would be the name of the branch.
+        /// Describes the root of the notification. E.g. a branch failed notification, the IssueSource would be the name of the
+        /// branch.
         /// </summary>
         string IssueSource { get; }
 
-        NotificationType Type { get; }
-
-        IList<IBuildNode> BuildNodes { get; }
-
         BuildStatus Status { get; }
 
-        Guid Guid { get; }
+        string TitleTextId { get; }
+
+        NotificationType Type { get; }
     }
 }

@@ -59,45 +59,11 @@ namespace BuildNotifications
             }
             else
                 Logger.Log(LogLevel.Info, "Instance was not started from URI protocol. Initializing normally.");
-            
+
             Logger.Log(LogLevel.Info, "Normal startup. Using MainWindow.xaml");
             StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
             base.OnStartup(e);
         }
-
-        private bool OtherProcessIsRunning()
-        {
-            var assemblyName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
-            // 1 is allowed, since 1 means ourselves
-            return Process.GetProcessesByName(assemblyName).Length >= 2;
-        }
-
-        private string CurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return versionInfo.FileVersion;
-        }
-
-        private bool IsInvokedFromDistributedNotification(StartupEventArgs e)
-        {
-            var args = string.Join("", e.Args);
-            return args.Contains(UriSchemeRegistration.StringSeparator, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private void WriteToastArgumentsToSharedToMonitoredDirectory(StartupEventArgs e)
-        {
-            var args = string.Join("", e.Args);
-            Logger.Log(LogLevel.Info, $"Started with protocol arguments. Arguments: {args}");
-            var base64 = args.Split(UriSchemeRegistration.StringSeparator, StringSplitOptions.RemoveEmptyEntries).Last();
-
-            FileWatchDistributedNotificationReceiver.WriteDistributedNotificationToPath(base64, new PathResolver());
-        }
-
-        /// <summary>
-        /// BN may be started from a different path or by URI scheme which will result in the working directory being somewhere else than the .exe itself. This methods sets the working directory to the same path as the .exe
-        /// </summary>
-        private void SetWorkingDirectory() => Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
         private void CompositionTargetOnRendering(object? sender, EventArgs e)
         {
@@ -125,6 +91,44 @@ namespace BuildNotifications
             }
 
             GlobalTweenHandler.Update(delta.Milliseconds);
+        }
+
+        private string CurrentVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return versionInfo.FileVersion;
+        }
+
+        private bool IsInvokedFromDistributedNotification(StartupEventArgs e)
+        {
+            var args = string.Join("", e.Args);
+            return args.Contains(UriSchemeRegistration.StringSeparator, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private bool OtherProcessIsRunning()
+        {
+            var assemblyName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
+            // 1 is allowed, since 1 means ourselves
+            return Process.GetProcessesByName(assemblyName).Length >= 2;
+        }
+
+        /// <summary>
+        /// BN may be started from a different path or by URI scheme which will result in the working directory being somewhere
+        /// else than the .exe itself. This methods sets the working directory to the same path as the .exe
+        /// </summary>
+        private void SetWorkingDirectory()
+        {
+            Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        }
+
+        private void WriteToastArgumentsToSharedToMonitoredDirectory(StartupEventArgs e)
+        {
+            var args = string.Join("", e.Args);
+            Logger.Log(LogLevel.Info, $"Started with protocol arguments. Arguments: {args}");
+            var base64 = args.Split(UriSchemeRegistration.StringSeparator, StringSplitOptions.RemoveEmptyEntries).Last();
+
+            FileWatchDistributedNotificationReceiver.WriteDistributedNotificationToPath(base64, new PathResolver());
         }
 
         private static TimeSpan _lastUpdate;

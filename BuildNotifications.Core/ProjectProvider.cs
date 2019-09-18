@@ -17,6 +17,8 @@ namespace BuildNotifications.Core
             _projectFactory.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
         }
 
+        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
+
         public IEnumerable<IProject> AllProjects()
         {
             if (!_configuration.Projects.Any())
@@ -29,8 +31,6 @@ namespace BuildNotifications.Core
                     yield return project;
             }
         }
-
-        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
 
         private readonly IConfiguration _configuration;
         private readonly ProjectFactory _projectFactory;

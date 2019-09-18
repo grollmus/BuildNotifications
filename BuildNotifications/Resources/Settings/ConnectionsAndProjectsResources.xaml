@@ -4,14 +4,14 @@
                     xmlns:editableConfigs="clr-namespace:ReflectSettings.EditableConfigs;assembly=ReflectSettings"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:settings="clr-namespace:BuildNotifications.Views.Settings">
-    
+
 
     <DataTemplate x:Key="PluginSelectionTemplate" DataType="{x:Type editableConfigs:EditableString}">
         <DockPanel>
             <TextBlock DockPanel.Dock="Top"
                        Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
-                       FontSize="{StaticResource BlockOneAndQuarter}" HorizontalAlignment="Center" Foreground="{DynamicResource Foreground1}" 
-                       />
+                       FontSize="{StaticResource BlockOneAndQuarter}" HorizontalAlignment="Center"
+                       Foreground="{DynamicResource Foreground1}" />
             <ListBox ItemsSource="{Binding PredefinedValues}" x:Name="ListBox" Padding="0"
                      HorizontalContentAlignment="Center" HorizontalAlignment="Center"
                      SelectedItem="{Binding Value}">
@@ -54,7 +54,7 @@
                                     </DrawingImage.Drawing>
                                 </DrawingImage>
                             </DockPanel.Resources>
-                            <TextBlock DockPanel.Dock="Bottom" x:Name="TextBlock" 
+                            <TextBlock DockPanel.Dock="Bottom" x:Name="TextBlock"
                                        Foreground="{DynamicResource Foreground1HalfTransparency}">
                                 <TextBlock.Text>
                                     <MultiBinding

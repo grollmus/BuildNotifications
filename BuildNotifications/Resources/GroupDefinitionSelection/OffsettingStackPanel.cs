@@ -49,8 +49,14 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
             return calculatedSize;
         }
 
-        private IEnumerable<UIElement> EnumerateChildren() => Children.Enumerate();
+        private IEnumerable<UIElement> EnumerateChildren()
+        {
+            return Children.Enumerate();
+        }
 
-        private double MaxOffset() => Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
+        private double MaxOffset()
+        {
+            return Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
+        }
     }
 }

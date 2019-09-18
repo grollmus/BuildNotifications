@@ -10,19 +10,34 @@ namespace BuildNotifications.ViewModel.Notification
 {
     public class NotificationViewModel : BaseViewModel
     {
-        private readonly INotification _notification;
-
         public NotificationViewModel(INotification notification)
         {
             _notification = notification;
             Timestamp = DateTime.Now;
         }
 
-        public string Title => _notification.DisplayTitle;
+        public IList<IBuildNode> BuildNodes => _notification.BuildNodes;
+
+        public BuildStatus BuildStatus => _notification.Status;
 
         public string Content => _notification.DisplayContent;
 
         public IconType IconType => ResolveIconType();
+
+        public Guid NotificationGuid => _notification.Guid;
+
+        public NotificationType NotificationType => _notification.Type;
+
+        public DateTime Timestamp { get; }
+
+        public TimeSpan TimeUntilNow => Timestamp.TimespanToNow();
+
+        public string Title => _notification.DisplayTitle;
+
+        public void InvokeTimeUntilNowUpdate()
+        {
+            OnPropertyChanged(nameof(TimeUntilNow));
+        }
 
         private IconType ResolveIconType()
         {
@@ -39,18 +54,6 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        public NotificationType NotificationType => _notification.Type;
-
-        public void InvokeTimeUntilNowUpdate() => OnPropertyChanged(nameof(TimeUntilNow));
-
-        public BuildStatus BuildStatus => _notification.Status;
-
-        public DateTime Timestamp { get; }
-
-        public TimeSpan TimeUntilNow => Timestamp.TimespanToNow();
-
-        public IList<IBuildNode> BuildNodes => _notification.BuildNodes;
-
-        public Guid NotificationGuid => _notification.Guid;
+        private readonly INotification _notification;
     }
 }

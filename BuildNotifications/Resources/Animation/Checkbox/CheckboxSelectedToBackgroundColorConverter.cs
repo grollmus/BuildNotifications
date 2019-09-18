@@ -8,16 +8,16 @@ namespace BuildNotifications.Resources.Animation.Checkbox
 {
     internal class CheckboxSelectedToBackgroundColorConverter : IValueConverter
     {
-        public static SolidColorBrush UncheckedBrush { get; }
-        public static SolidColorBrush CheckedBrush { get; }
-
-        public static CheckboxSelectedToBackgroundColorConverter Instance { get; } = new CheckboxSelectedToBackgroundColorConverter();
-
         static CheckboxSelectedToBackgroundColorConverter()
         {
             CheckedBrush = (SolidColorBrush) Application.Current.TryFindResource("Green");
             UncheckedBrush = (SolidColorBrush) Application.Current.TryFindResource("Red");
         }
+
+        public static SolidColorBrush CheckedBrush { get; }
+
+        public static CheckboxSelectedToBackgroundColorConverter Instance { get; } = new CheckboxSelectedToBackgroundColorConverter();
+        public static SolidColorBrush UncheckedBrush { get; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

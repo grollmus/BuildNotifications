@@ -26,7 +26,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
         {
         }
 
-        public IEnumerable<IBuildTreeNode> AllChildren() => Children.Concat(Children.SelectMany(c => c.AllChildren()));
+        public IEnumerable<IBuildTreeNode> AllChildren()
+        {
+            return Children.Concat(Children.SelectMany(c => c.AllChildren()));
+        }
 
         public IEnumerable<IBuildTreeNode> Children => _childList;
 

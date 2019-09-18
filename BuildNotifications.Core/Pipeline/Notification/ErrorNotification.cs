@@ -8,14 +8,12 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     public class ErrorNotification : INotification
     {
-        private readonly object[] _parameter;
-
         public ErrorNotification(string messageTextId, params object[] parameter)
         {
             _parameter = parameter;
             ContentTextId = messageTextId;
         }
-        
+
         public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), _parameter);
 
         public string ContentTextId { get; }
@@ -33,5 +31,6 @@ namespace BuildNotifications.Core.Pipeline.Notification
         public BuildStatus Status => BuildStatus.Failed;
 
         public Guid Guid { get; } = Guid.NewGuid();
+        private readonly object[] _parameter;
     }
 }

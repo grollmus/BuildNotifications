@@ -7,14 +7,13 @@ namespace BuildNotifications.Core.Pipeline.Tree
     /// </summary>
     public interface IBuildTreeBuildsDelta
     {
-        IEnumerable<IBuildNode> Failed { get; }
-
         IEnumerable<IBuildNode> Cancelled { get; }
+        IEnumerable<IBuildNode> Failed { get; }
 
         IEnumerable<IBuildNode> Succeeded { get; }
 
-        void RemoveNode(IBuildNode node);
-
         void Clear();
+
+        void RemoveNode(IBuildNode node);
     }
 }

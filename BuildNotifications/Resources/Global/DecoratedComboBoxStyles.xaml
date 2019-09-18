@@ -193,13 +193,13 @@
 
                                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
                                 Foreground="{DynamicResource Background3}" x:Name="Label" HorizontalAlignment="Right"
-                                Style="{StaticResource TextBoxLabelStyle}" 
+                                Style="{StaticResource TextBoxLabelStyle}"
                                 VerticalAlignment="Center" />
 
                             <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
                                              Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                              Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type local:DecoratedComboBox}, Mode=FindAncestor}}"
-                                             x:Name="Icon" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                             x:Name="Icon" HorizontalAlignment="Right" VerticalAlignment="Center" />
                         </StackPanel>
 
                         <i:Interaction.Triggers>

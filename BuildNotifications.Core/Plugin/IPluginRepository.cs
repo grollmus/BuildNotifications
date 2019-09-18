@@ -28,18 +28,11 @@ namespace BuildNotifications.Core.Plugin
         IBuildPlugin? FindBuildPlugin(string? typeName);
 
         /// <summary>
-        /// Searches for a source control plugin that matches the given typename.
+        /// Searches for a build plugin that matches the given typename.
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The source control plugin or <c>null</c> if none matches <paramref name="typeName" />.</returns>
-        ISourceControlPlugin? FindSourceControlPlugin(string? typeName);
-
-        /// <summary>
-        /// Searches for any plugin that matches the given typename.
-        /// </summary>
-        /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The plugin DisplayName or <c>null</c> if none matches <paramref name="typeName" />.</returns>
-        string? FindPluginName(string typeName);
+        /// <returns>The type of the configuration the plugin wants.</returns>
+        Type? FindConfigurationType(string? typeName);
 
         /// <summary>
         /// Searches for any plugin that matches the given typename.
@@ -49,10 +42,17 @@ namespace BuildNotifications.Core.Plugin
         string? FindIconGeometry(string typeName);
 
         /// <summary>
-        /// Searches for a build plugin that matches the given typename.
+        /// Searches for any plugin that matches the given typename.
         /// </summary>
         /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The type of the configuration the plugin wants.</returns>
-        Type? FindConfigurationType(string? typeName);
+        /// <returns>The plugin DisplayName or <c>null</c> if none matches <paramref name="typeName" />.</returns>
+        string? FindPluginName(string typeName);
+
+        /// <summary>
+        /// Searches for a source control plugin that matches the given typename.
+        /// </summary>
+        /// <param name="typeName">Type name to search for.</param>
+        /// <returns>The source control plugin or <c>null</c> if none matches <paramref name="typeName" />.</returns>
+        ISourceControlPlugin? FindSourceControlPlugin(string? typeName);
     }
 }

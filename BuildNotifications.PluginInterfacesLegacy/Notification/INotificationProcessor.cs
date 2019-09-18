@@ -3,7 +3,8 @@
 namespace BuildNotifications.PluginInterfacesLegacy.Notification
 {
     /// <summary>
-    /// Describes an object which takes notifications and processes it in any way. For example presenting it to the user, sending an email or storing it in a database.
+    /// Describes an object which takes notifications and processes it in any way. For example presenting it to the user,
+    /// sending an email or storing it in a database.
     /// </summary>
     [PublicAPI]
     public interface INotificationProcessor
@@ -14,7 +15,8 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
         void Initialize();
 
         /// <summary>
-        /// Processes a notification. This is called whenever BuildNotifications creates a notification. E.g. builds have failed, an error has occured etc.
+        /// Processes a notification. This is called whenever BuildNotifications creates a notification. E.g. builds have failed,
+        /// an error has occured etc.
         /// </summary>
         /// <param name="notification">The created notification.</param>
         void Process(IDistributedNotification notification);

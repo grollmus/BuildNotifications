@@ -13,8 +13,8 @@ namespace BuildNotifications.Core.Pipeline
             Notifications = notifications;
         }
 
-        public IBuildTree Tree { get; }
-
         public IEnumerable<INotification> Notifications { get; }
+
+        public IBuildTree Tree { get; }
     }
 }

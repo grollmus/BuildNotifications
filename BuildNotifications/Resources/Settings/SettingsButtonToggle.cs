@@ -24,9 +24,9 @@ namespace BuildNotifications.Resources.Settings
             var rotateTransform = new RotateTransform(DoHide ? 90 : 0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
             var group = new TransformGroup();
             if (DoRotate)
-                @group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
+                group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
             else
-                @group.Children = new TransformCollection(new Transform[] {scaleTransform});
+                group.Children = new TransformCollection(new Transform[] {scaleTransform});
 
             AssociatedObject.RenderTransform = group;
 

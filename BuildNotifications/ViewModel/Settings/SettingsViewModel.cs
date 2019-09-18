@@ -32,6 +32,8 @@ namespace BuildNotifications.ViewModel.Settings
 
         public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
 
+        public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
+
         public ICommand EditConnectionsCommand { get; set; }
 
         public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
@@ -73,8 +75,6 @@ namespace BuildNotifications.ViewModel.Settings
             changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
             connectionChangeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
         }
-
-        public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
 
         private void OnConfigurationChanged(object? sender, EventArgs args)
         {

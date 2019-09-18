@@ -7,9 +7,7 @@ namespace BuildNotifications.Core.Protocol
 {
     public static class UriSchemeRegistration
     {
-        public const string UriScheme = "buildnotifications";
         public static string StringSeparator => $"{UriScheme}:";
-        private const string FriendlyName = "Protocol for BuildNotifications";
 
         public static void Register()
         {
@@ -39,5 +37,8 @@ namespace BuildNotifications.Core.Protocol
                 throw;
             }
         }
+
+        private const string FriendlyName = "Protocol for BuildNotifications";
+        public const string UriScheme = "buildnotifications";
     }
 }

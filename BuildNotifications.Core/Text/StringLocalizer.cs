@@ -33,12 +33,12 @@ namespace BuildNotifications.Core.Text
             _defaultDictionary = Cache[DefaultCulture];
         }
 
-        internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
-
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();
 
         public string this[string key] => GetText(key);
+
+        internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
 
         public string GetText(string key, CultureInfo? culture = null)
         {

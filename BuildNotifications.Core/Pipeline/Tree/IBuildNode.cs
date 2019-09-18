@@ -7,8 +7,8 @@ namespace BuildNotifications.Core.Pipeline.Tree
     {
         IBuild Build { get; }
         DateTime? LastChangedTime { get; }
-        DateTime? QueueTime { get; }
         int Progress { get; }
+        DateTime? QueueTime { get; }
         BuildStatus Status { get; }
     }
 }

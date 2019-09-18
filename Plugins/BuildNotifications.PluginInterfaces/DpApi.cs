@@ -31,32 +31,6 @@ namespace BuildNotifications.PluginInterfaces
             MachineKey
         }
 
-        /// <summary>
-        /// Calls DPAPI CryptUnprotectData to decrypt ciphertext bytes. This function does not use
-        /// additional entropy and does not return data description.
-        /// </summary>
-        /// <param name="keyType">
-        /// Defines type of encryption key to use. When user key is specified, any application
-        /// running under the same user account as the one making this call, will be able to decrypt
-        /// data. Machine key will allow any application running on the same computer where data
-        /// were encrypted to perform decryption.
-        /// Note: If optional entropy is specifed, it will be required for decryption.
-        /// </param>
-        /// <param name="cipherText"> Encrypted data formatted as a base64-encoded string. </param>
-        /// <returns> Decrypted data returned as a UTF-8 string. </returns>
-        /// <remarks>
-        /// When decrypting data, it is not necessary to specify which type of encryption key to
-        /// use: user-specific or machine-specific; DPAPI will figure it out by looking at the
-        /// signature of encrypted data.
-        /// </remarks>
-        private static string Decrypt(KeyType keyType, string cipherText)
-        {
-            var userData = Convert.FromBase64String(cipherText);
-            var data = ProtectedData.Unprotect(userData, null, keyType == KeyType.MachineKey ? DataProtectionScope.LocalMachine : DataProtectionScope.CurrentUser);
-
-            return Encoding.UTF8.GetString(data);
-        }
-
         public static string Decrypt(string cipherText)
         {
             return Decrypt(DefaultKeyType, cipherText);
@@ -92,6 +66,32 @@ namespace BuildNotifications.PluginInterfaces
             var data = ProtectedData.Protect(userData, null, keyType == KeyType.MachineKey ? DataProtectionScope.LocalMachine : DataProtectionScope.CurrentUser);
 
             return Convert.ToBase64String(data);
+        }
+
+        /// <summary>
+        /// Calls DPAPI CryptUnprotectData to decrypt ciphertext bytes. This function does not use
+        /// additional entropy and does not return data description.
+        /// </summary>
+        /// <param name="keyType">
+        /// Defines type of encryption key to use. When user key is specified, any application
+        /// running under the same user account as the one making this call, will be able to decrypt
+        /// data. Machine key will allow any application running on the same computer where data
+        /// were encrypted to perform decryption.
+        /// Note: If optional entropy is specifed, it will be required for decryption.
+        /// </param>
+        /// <param name="cipherText"> Encrypted data formatted as a base64-encoded string. </param>
+        /// <returns> Decrypted data returned as a UTF-8 string. </returns>
+        /// <remarks>
+        /// When decrypting data, it is not necessary to specify which type of encryption key to
+        /// use: user-specific or machine-specific; DPAPI will figure it out by looking at the
+        /// signature of encrypted data.
+        /// </remarks>
+        private static string Decrypt(KeyType keyType, string cipherText)
+        {
+            var userData = Convert.FromBase64String(cipherText);
+            var data = ProtectedData.Unprotect(userData, null, keyType == KeyType.MachineKey ? DataProtectionScope.LocalMachine : DataProtectionScope.CurrentUser);
+
+            return Encoding.UTF8.GetString(data);
         }
 
         // It is reasonable to set default key type to user key.

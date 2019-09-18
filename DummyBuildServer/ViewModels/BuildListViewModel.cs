@@ -43,20 +43,13 @@ namespace DummyBuildServer.ViewModels
         public int BuildProgress { get; set; }
         public ObservableCollection<BuildViewModel> Builds { get; } = new ObservableCollection<BuildViewModel>();
         public ICommand EnqueueBuildCommand { get; }
+        public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
         public ICommand RemoveBuildCommand { get; }
         public BranchViewModel SelectedBranch { get; set; }
         public BuildStatus SelectedBuildStatus { get; set; }
         public BuildDefinitionViewModel SelectedDefinition { get; set; }
         public UserViewModel SelectedUser { get; set; }
         public ICommand UpdateBuildCommand { get; }
-        public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
-
-        private IEnumerable<BuildViewModel> SelectedBuilds() => Builds.Where(x => x.IsSelected).ToList();
-
-        private void EnqueueBuild(object arg)
-        {
-            EnqueueSpecificBuild(SelectedDefinition.Definition, SelectedBranch.Branch);
-        }
 
         public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
         {
@@ -80,19 +73,17 @@ namespace DummyBuildServer.ViewModels
             Builds.Add(buildViewModel);
         }
 
-        private IUser RandomUser()
-        {
-            var asList = _mainViewModel.Users.Users.ToList();
-            var index = new Random().Next(asList.Count);
-            return asList[index].User;
-        }
-
         private void BuildViewModel_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(BuildViewModel.IsSelected))
                 return;
 
             OnSelectedBuildChanged();
+        }
+
+        private void EnqueueBuild(object arg)
+        {
+            EnqueueSpecificBuild(SelectedDefinition.Definition, SelectedBranch.Branch);
         }
 
         private bool IsBuildDataSelected(object arg)
@@ -117,6 +108,22 @@ namespace DummyBuildServer.ViewModels
             SelectedBuildStatus = firstBuild.Build.Status;
         }
 
+        private void RandomizeStatusOfAllBuilds(object obj)
+        {
+            var rnd = new Random();
+            foreach (var build in Builds)
+            {
+                UpdateSpecificBuild(build.Build, (BuildStatus) rnd.Next(1, 7));
+            }
+        }
+
+        private IUser RandomUser()
+        {
+            var asList = _mainViewModel.Users.Users.ToList();
+            var index = new Random().Next(asList.Count);
+            return asList[index].User;
+        }
+
         private void RemoveBuild(object obj)
         {
             foreach (var selectedBuild in SelectedBuilds())
@@ -125,6 +132,11 @@ namespace DummyBuildServer.ViewModels
                 selectedBuild.PropertyChanged -= BuildViewModel_OnPropertyChanged;
                 Builds.Remove(selectedBuild);
             }
+        }
+
+        private IEnumerable<BuildViewModel> SelectedBuilds()
+        {
+            return Builds.Where(x => x.IsSelected).ToList();
         }
 
         private void UpdateBuild(object arg)
@@ -142,15 +154,6 @@ namespace DummyBuildServer.ViewModels
             build.LastChangedTime = DateTime.Now;
 
             _mainViewModel.UpdateBuild(build);
-        }
-
-        private void RandomizeStatusOfAllBuilds(object obj)
-        {
-            var rnd = new Random();
-            foreach (var build in Builds)
-            {
-                UpdateSpecificBuild(build.Build, (BuildStatus) rnd.Next(1, 7));
-            }
         }
 
         private readonly MainViewModel _mainViewModel;

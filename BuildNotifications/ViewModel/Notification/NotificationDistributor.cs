@@ -16,14 +16,35 @@ namespace BuildNotifications.ViewModel.Notification
 {
     public class NotificationDistributor : BaseNotificationDistributor
     {
-        private readonly string _assemblyPath;
-
         public NotificationDistributor()
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase!);
             var unescapedDataString = Uri.UnescapeDataString(uri.Path!);
             _assemblyPath = Path.GetDirectoryName(unescapedDataString) ?? "";
+        }
+
+        private static string TemporaryPngStorageLocation => $"{Path.GetTempPath()}BuildNotifications";
+
+        public static void DeleteAllTemporaryImageFiles()
+        {
+            var path = TemporaryPngStorageLocation;
+            LogTo.Info($"Removing old png files from location: \"{path}\".");
+            if (!Directory.Exists(path))
+                return;
+
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.png").ToList())
+                {
+                    LogTo.Info($"Deleting \"{file}\".");
+                    File.Delete(file);
+                }
+            }
+            catch (Exception e)
+            {
+                LogTo.ErrorException("Failed to delete temporary png files.", e);
+            }
         }
 
         protected override IDistributedNotification ToDistributedNotification(INotification notification)
@@ -51,6 +72,45 @@ namespace BuildNotifications.ViewModel.Notification
             return distributedNotification;
         }
 
+        private string? AppIconPath(BuildStatus forBuildStatus)
+        {
+            return forBuildStatus switch
+            {
+                BuildStatus.Succeeded => ToAbsolute("/Resources/Icons/Green.ico"),
+                BuildStatus.PartiallySucceeded => ToAbsolute("/Resources/Icons/Green.ico"),
+                BuildStatus.Failed => ToAbsolute("/Resources/Icons/Red.ico"),
+                _ => ToAbsolute("/Resources/Icons/Gray.ico")
+            };
+        }
+
+        private string? CreateNotificationImage(IDistributedNotification notification)
+        {
+            var view = new DistributedNotificationView();
+            var viewModel = new DistributedNotificationViewModel(notification);
+
+            view.DataContext = viewModel;
+
+            var pngPath = CreateTempPngPath();
+            view.ExportToPng(pngPath);
+
+            return pngPath;
+        }
+
+        private string CreateTempPngPath()
+        {
+            var tmpPath = TemporaryPngStorageLocation;
+            Directory.CreateDirectory(tmpPath);
+
+            return Path.Combine(tmpPath, $"{Guid.NewGuid()}.png");
+        }
+
+        private string? ToAbsolute(string relativePath)
+        {
+            relativePath = relativePath.Replace('/', '\\');
+            var absolutePath = $"{_assemblyPath}{relativePath}";
+            return File.Exists(absolutePath) ? absolutePath : null;
+        }
+
         private DistributedNotificationErrorType ToDistributedErrorType(BuildStatus notificationStatus)
         {
             return notificationStatus switch
@@ -76,66 +136,6 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        private string? AppIconPath(BuildStatus forBuildStatus)
-        {
-            return forBuildStatus switch
-            {
-                BuildStatus.Succeeded => ToAbsolute("/Resources/Icons/Green.ico"),
-                BuildStatus.PartiallySucceeded => ToAbsolute("/Resources/Icons/Green.ico"),
-                BuildStatus.Failed => ToAbsolute("/Resources/Icons/Red.ico"),
-                _ => ToAbsolute("/Resources/Icons/Gray.ico")
-            };
-        }
-
-        private string? CreateNotificationImage(IDistributedNotification notification)
-        {
-            var view = new DistributedNotificationView();
-            var viewModel = new DistributedNotificationViewModel(notification);
-
-            view.DataContext = viewModel;
-
-            var pngPath = CreateTempPngPath();
-            view.ExportToPng(pngPath);
-
-            return pngPath;
-        }
-
-        private static string TemporaryPngStorageLocation => $"{Path.GetTempPath()}BuildNotifications";
-
-        private string CreateTempPngPath()
-        {
-            var tmpPath = TemporaryPngStorageLocation;
-            Directory.CreateDirectory(tmpPath);
-
-            return Path.Combine(tmpPath, $"{Guid.NewGuid()}.png");
-        }
-
-        public static void DeleteAllTemporaryImageFiles()
-        {
-            var path = TemporaryPngStorageLocation;
-            LogTo.Info($"Removing old png files from location: \"{path}\".");
-            if (!Directory.Exists(path))
-                return;
-
-            try
-            {
-                foreach (var file in Directory.EnumerateFiles(path, "*.png").ToList())
-                {
-                    LogTo.Info($"Deleting \"{file}\".");
-                    File.Delete(file);
-                }
-            }
-            catch (Exception e)
-            {
-                LogTo.ErrorException("Failed to delete temporary png files.", e);
-            }
-        }
-
-        private string? ToAbsolute(string relativePath)
-        {
-            relativePath = relativePath.Replace('/', '\\');
-            var absolutePath = $"{_assemblyPath}{relativePath}";
-            return File.Exists(absolutePath) ? absolutePath : null;
-        }
+        private readonly string _assemblyPath;
     }
 }

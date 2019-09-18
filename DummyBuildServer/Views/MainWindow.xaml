@@ -97,7 +97,8 @@
                              Height="400">
                         <ListBox.Resources>
                             <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" d:DataContext="{d:DesignInstance viewModels:BuildViewModel}"/>
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"
+                                        d:DataContext="{d:DesignInstance viewModels:BuildViewModel}" />
                             </Style>
                         </ListBox.Resources>
                     </ListBox>

@@ -10,22 +10,6 @@ namespace BuildNotifications.ViewModel.Notification
 {
     public class DistributedNotificationViewModel : BaseViewModel
     {
-        public IconType IconType { get; }
-
-        public BuildStatus BuildStatus { get; }
-
-        public List<string> Messages { get; }
-
-        public int Rows => Math.Min(Messages.Count, 3);
-
-        public double Width { get; }
-
-        public double Height { get; }
-
-        public Visibility BigViewVisibility { get; }
-
-        public Visibility SmallViewVisibility { get; }
-
         public DistributedNotificationViewModel(IDistributedNotification notification)
         {
             IconType = SetIconType(notification);
@@ -38,21 +22,25 @@ namespace BuildNotifications.ViewModel.Notification
             SmallViewVisibility = BigViewVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        public Visibility BigViewVisibility { get; }
+
+        public BuildStatus BuildStatus { get; }
+
+        public double Height { get; }
+        public IconType IconType { get; }
+
+        public List<string> Messages { get; }
+
+        public int Rows => Math.Min(Messages.Count, 3);
+
+        public Visibility SmallViewVisibility { get; }
+
+        public double Width { get; }
+
         private Visibility GetBigViewVisibility(IDistributedNotification notification)
         {
             return notification.NotificationErrorType == DistributedNotificationErrorType.Error ? Visibility.Visible : Visibility.Collapsed;
         }
-
-        private (double Width, double Height) SetWidthAndHeight(IDistributedNotification notification)
-        {
-            // these are the resolutions that Win 10 will display in the action center
-            var width = notification.NotificationErrorType == DistributedNotificationErrorType.Error ? 364 : 334;
-            var height = notification.NotificationErrorType == DistributedNotificationErrorType.Error ? 180 : 43;
-
-            return (width, height);
-        }
-
-        private List<string> SetMessages(IDistributedNotification notification) => notification.IssueSource.Split('\n').Take(3).ToList();
 
         private BuildStatus SetBuildStatus(IDistributedNotification notification)
         {
@@ -81,6 +69,20 @@ namespace BuildNotifications.ViewModel.Notification
                 DistributedNotificationType.DefinitionAndBranch => IconType.GroupingSolo,
                 _ => IconType.Info
             };
+        }
+
+        private List<string> SetMessages(IDistributedNotification notification)
+        {
+            return notification.IssueSource.Split('\n').Take(3).ToList();
+        }
+
+        private (double Width, double Height) SetWidthAndHeight(IDistributedNotification notification)
+        {
+            // these are the resolutions that Win 10 will display in the action center
+            var width = notification.NotificationErrorType == DistributedNotificationErrorType.Error ? 364 : 334;
+            var height = notification.NotificationErrorType == DistributedNotificationErrorType.Error ? 180 : 43;
+
+            return (width, height);
         }
     }
 }

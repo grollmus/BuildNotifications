@@ -14,52 +14,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 {
     public class NotificationFactoryTests
     {
-        private readonly IBuildDefinition _ciDefinition;
-        private const string Ci = nameof(Ci);
-
-        private readonly IBuildDefinition _nightlyDefinition;
-        private const string Nightly = nameof(Nightly);
-
-        private readonly IBuildDefinition _cloudDefinition;
-        private const string Cloud = nameof(Cloud);
-
-        private readonly IBuildDefinition _mobileDefinition;
-        private const string Mobile = nameof(Mobile);
-
-        private readonly IBranch _stageBranch;
-        private const string Stage = nameof(Stage);
-
-        private readonly IBranch _masterBranch;
-        private const string Master = nameof(Master);
-
-        private readonly IBranch _featureBranch;
-        private const string Feature = nameof(Feature);
-
-        private readonly IBranch _longNameFeatureABranch;
-        private const string LongNameFeatureA = LongFeatureNameBase + "FeatureA";
-
-        private readonly IBranch _longNameFeatureBBranch;
-        private const string LongNameFeatureB = LongFeatureNameBase + "FeatureB";
-
-        private readonly IBranch _longNameFeatureCBranch;
-        private const string LongNameFeatureC = LongFeatureNameBase + "Something";
-
-        private const string LongFeatureNameBase = "Feature/Team1";
-
-        private readonly IBranch _bugBranch;
-        private const string Bug = nameof(Bug);
-
-        private readonly IUser _me;
-
-        private readonly IUser _someoneElse;
-
-        private readonly IConfiguration _allowAllConfiguration;
-        private readonly IConfiguration _onlyRequestedByMeConfiguration;
-        private readonly IConfiguration _onlyRequestedForMeConfiguration;
-        private readonly IConfiguration _dontNotifyConfiguration;
-
-        private const string ProjectId = nameof(ProjectId);
-
         public NotificationFactoryTests()
         {
             _ciDefinition = Substitute.For<IBuildDefinition>();
@@ -126,6 +80,102 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.None);
         }
 
+        private readonly IBuildDefinition _ciDefinition;
+        private const string Ci = nameof(Ci);
+
+        private readonly IBuildDefinition _nightlyDefinition;
+        private const string Nightly = nameof(Nightly);
+
+        private readonly IBuildDefinition _cloudDefinition;
+        private const string Cloud = nameof(Cloud);
+
+        private readonly IBuildDefinition _mobileDefinition;
+        private const string Mobile = nameof(Mobile);
+
+        private readonly IBranch _stageBranch;
+        private const string Stage = nameof(Stage);
+
+        private readonly IBranch _masterBranch;
+        private const string Master = nameof(Master);
+
+        private readonly IBranch _featureBranch;
+        private const string Feature = nameof(Feature);
+
+        private readonly IBranch _longNameFeatureABranch;
+        private const string LongNameFeatureA = LongFeatureNameBase + "FeatureA";
+
+        private readonly IBranch _longNameFeatureBBranch;
+        private const string LongNameFeatureB = LongFeatureNameBase + "FeatureB";
+
+        private readonly IBranch _longNameFeatureCBranch;
+        private const string LongNameFeatureC = LongFeatureNameBase + "Something";
+
+        private const string LongFeatureNameBase = "Feature/Team1";
+
+        private readonly IBranch _bugBranch;
+        private const string Bug = nameof(Bug);
+
+        private readonly IUser _me;
+
+        private readonly IUser _someoneElse;
+
+        private readonly IConfiguration _allowAllConfiguration;
+        private readonly IConfiguration _onlyRequestedByMeConfiguration;
+        private readonly IConfiguration _onlyRequestedForMeConfiguration;
+        private readonly IConfiguration _dontNotifyConfiguration;
+
+        private const string ProjectId = nameof(ProjectId);
+
+        private void RequestedByMe(IBuildNode build)
+        {
+            build.Build.RequestedBy.Returns(_me);
+        }
+
+        private void RequestedForMe(IBuildNode build)
+        {
+            build.Build.RequestedFor.Returns(_me);
+        }
+
+        private IBuildNode CreateBuildNode(IBuildDefinition definition, IBranch branch, string id, BuildStatus status)
+        {
+            var build = Substitute.For<IBuild>();
+            build.Definition.Returns(definition);
+            var branchName = branch.Name;
+            build.BranchName.Returns(branchName);
+            build.Id.Returns(id);
+            build.Status.Returns(status);
+            build.RequestedBy.Returns(_someoneElse);
+            build.RequestedFor.Returns(_someoneElse);
+            build.ProjectName.Returns(ProjectId);
+
+            var node = new BuildNode(build);
+
+            return node;
+        }
+
+        [Fact]
+        public void AllBuildsFromFourDefinitionsButSameBranchShouldResultInMessageTellingAboutBranch()
+        {
+            // arrange
+            var build1 = CreateBuildNode(_ciDefinition, _masterBranch, "1", BuildStatus.Failed);
+            var build2 = CreateBuildNode(_mobileDefinition, _masterBranch, "2", BuildStatus.Failed);
+            var build3 = CreateBuildNode(_nightlyDefinition, _masterBranch, "3", BuildStatus.Failed);
+            var build4 = CreateBuildNode(_cloudDefinition, _masterBranch, "4", BuildStatus.Failed);
+            var delta = new BuildTreeBuildsDelta();
+            delta.FailedBuilds.Add(build1);
+            delta.FailedBuilds.Add(build2);
+            delta.FailedBuilds.Add(build3);
+            delta.FailedBuilds.Add(build4);
+
+            // act
+            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+
+            // assert
+            var message = messages.First();
+            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+        }
+
         [Fact]
         public void AllBuildsFromSameDefinitionsAndBranchesShouldResultInMessageTellingAboutDefinitionAndBranch()
         {
@@ -168,13 +218,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void AllBuildsFromTwoDefinitionsShouldResultInMessageTellingAboutDefinition()
+        public void AllBuildsFromThreeBranchesShouldResultInMessageTellingAboutBranch()
         {
             // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
-            var build2 = CreateBuildNode(_ciDefinition, _masterBranch, "2", BuildStatus.Failed);
+            var build1 = CreateBuildNode(_ciDefinition, _masterBranch, "1", BuildStatus.Failed);
+            var build2 = CreateBuildNode(_mobileDefinition, _masterBranch, "2", BuildStatus.Failed);
             var build3 = CreateBuildNode(_nightlyDefinition, _stageBranch, "3", BuildStatus.Failed);
-            var build4 = CreateBuildNode(_nightlyDefinition, _stageBranch, "4", BuildStatus.Failed);
+            var build4 = CreateBuildNode(_cloudDefinition, _featureBranch, "4", BuildStatus.Failed);
             var delta = new BuildTreeBuildsDelta();
             delta.FailedBuilds.Add(build1);
             delta.FailedBuilds.Add(build2);
@@ -186,9 +236,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.ContentTextId, DefinitionNotification.TwoDefinitionsChangedTextId, StringComparer.Ordinal);
-            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_featureBranch.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -217,48 +268,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void AllBuildsFromTwoDefinitionsButSameBranchShouldResultInMessageTellingAboutBranch()
-        {
-            // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
-            var build2 = CreateBuildNode(_nightlyDefinition, _stageBranch, "2", BuildStatus.Failed);
-            var delta = new BuildTreeBuildsDelta();
-            delta.FailedBuilds.Add(build1);
-            delta.FailedBuilds.Add(build2);
-
-            // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
-
-            // assert
-            var message = messages.First();
-            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
-        }
-
-        [Fact]
-        public void AllBuildsFromFourDefinitionsButSameBranchShouldResultInMessageTellingAboutBranch()
-        {
-            // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _masterBranch, "1", BuildStatus.Failed);
-            var build2 = CreateBuildNode(_mobileDefinition, _masterBranch, "2", BuildStatus.Failed);
-            var build3 = CreateBuildNode(_nightlyDefinition, _masterBranch, "3", BuildStatus.Failed);
-            var build4 = CreateBuildNode(_cloudDefinition, _masterBranch, "4", BuildStatus.Failed);
-            var delta = new BuildTreeBuildsDelta();
-            delta.FailedBuilds.Add(build1);
-            delta.FailedBuilds.Add(build2);
-            delta.FailedBuilds.Add(build3);
-            delta.FailedBuilds.Add(build4);
-
-            // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
-
-            // assert
-            var message = messages.First();
-            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-        }
-
-        [Fact]
         public void AllBuildsFromTwoBranchesShouldResultInMessageTellingAboutBranch()
         {
             // arrange
@@ -283,13 +292,32 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void AllBuildsFromThreeBranchesShouldResultInMessageTellingAboutBranch()
+        public void AllBuildsFromTwoDefinitionsButSameBranchShouldResultInMessageTellingAboutBranch()
         {
             // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _masterBranch, "1", BuildStatus.Failed);
-            var build2 = CreateBuildNode(_mobileDefinition, _masterBranch, "2", BuildStatus.Failed);
+            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
+            var build2 = CreateBuildNode(_nightlyDefinition, _stageBranch, "2", BuildStatus.Failed);
+            var delta = new BuildTreeBuildsDelta();
+            delta.FailedBuilds.Add(build1);
+            delta.FailedBuilds.Add(build2);
+
+            // act
+            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+
+            // assert
+            var message = messages.First();
+            Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+        }
+
+        [Fact]
+        public void AllBuildsFromTwoDefinitionsShouldResultInMessageTellingAboutDefinition()
+        {
+            // arrange
+            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
+            var build2 = CreateBuildNode(_ciDefinition, _masterBranch, "2", BuildStatus.Failed);
             var build3 = CreateBuildNode(_nightlyDefinition, _stageBranch, "3", BuildStatus.Failed);
-            var build4 = CreateBuildNode(_cloudDefinition, _featureBranch, "4", BuildStatus.Failed);
+            var build4 = CreateBuildNode(_nightlyDefinition, _stageBranch, "4", BuildStatus.Failed);
             var delta = new BuildTreeBuildsDelta();
             delta.FailedBuilds.Add(build1);
             delta.FailedBuilds.Add(build2);
@@ -301,10 +329,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             var message = messages.First();
-            Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_featureBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(message.ContentTextId, DefinitionNotification.TwoDefinitionsChangedTextId, StringComparer.Ordinal);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_nightlyDefinition.Name, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -331,24 +358,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void SingleBuildFailingShouldResultInMessageTellingAboutBuild()
-        {
-            // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
-            var delta = new BuildTreeBuildsDelta();
-            delta.FailedBuilds.Add(build1);
-
-            // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
-
-            // assert
-            var message = messages.First();
-            Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
-        }
-
-        [Fact]
         public void BuildsFromFourDefinitionsAndFourBranchesShouldResultInMessageTellingAboutBuilds()
         {
             // arrange
@@ -368,50 +377,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildsChangedTextId);
-        }
-
-        [Fact]
-        public void NoBuildChangingShouldResultInNoMessage()
-        {
-            // arrange
-            var delta = new BuildTreeBuildsDelta();
-
-            // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
-
-            // assert
-            Assert.Empty(messages);
-        }
-
-        [Theory]
-        [InlineData(BuildStatus.Failed)]
-        [InlineData(BuildStatus.Succeeded)]
-        [InlineData(BuildStatus.Cancelled)]
-        public void MessageIsProducedForBuildRequestedByMeWhenSettingIsOn(BuildStatus status)
-        {
-            // arrange
-            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", status);
-            RequestedByMe(build);
-            var delta = new BuildTreeBuildsDelta();
-
-            switch (status)
-            {
-                case BuildStatus.Failed:
-                    delta.FailedBuilds.Add(build);
-                    break;
-                case BuildStatus.Succeeded:
-                    delta.SucceededBuilds.Add(build);
-                    break;
-                default:
-                    delta.CancelledBuilds.Add(build);
-                    break;
-            }
-
-            // act
-            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration).ProduceNotifications(delta);
-
-            // assert
-            Assert.True(messages.Any());
         }
 
         [Theory]
@@ -442,38 +407,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             // assert
             Assert.False(messages.Any());
-        }
-
-        [Theory]
-        [InlineData(BuildStatus.Failed)]
-        [InlineData(BuildStatus.Succeeded)]
-        [InlineData(BuildStatus.Cancelled)]
-        public void MessageIsProducedForBuildRequestedForMeWhenSettingIsOn(BuildStatus status)
-        {
-            // arrange
-            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", status);
-            RequestedByMe(build);
-            RequestedForMe(build);
-            var delta = new BuildTreeBuildsDelta();
-
-            switch (status)
-            {
-                case BuildStatus.Failed:
-                    delta.FailedBuilds.Add(build);
-                    break;
-                case BuildStatus.Succeeded:
-                    delta.SucceededBuilds.Add(build);
-                    break;
-                default:
-                    delta.CancelledBuilds.Add(build);
-                    break;
-            }
-
-            // act
-            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration).ProduceNotifications(delta);
-
-            // assert
-            Assert.True(messages.Any());
         }
 
         [Theory]
@@ -542,6 +475,69 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         [InlineData(BuildStatus.Failed)]
         [InlineData(BuildStatus.Succeeded)]
         [InlineData(BuildStatus.Cancelled)]
+        public void MessageIsProducedForBuildRequestedByMeWhenSettingIsOn(BuildStatus status)
+        {
+            // arrange
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", status);
+            RequestedByMe(build);
+            var delta = new BuildTreeBuildsDelta();
+
+            switch (status)
+            {
+                case BuildStatus.Failed:
+                    delta.FailedBuilds.Add(build);
+                    break;
+                case BuildStatus.Succeeded:
+                    delta.SucceededBuilds.Add(build);
+                    break;
+                default:
+                    delta.CancelledBuilds.Add(build);
+                    break;
+            }
+
+            // act
+            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration).ProduceNotifications(delta);
+
+            // assert
+            Assert.True(messages.Any());
+        }
+
+        [Theory]
+        [InlineData(BuildStatus.Failed)]
+        [InlineData(BuildStatus.Succeeded)]
+        [InlineData(BuildStatus.Cancelled)]
+        public void MessageIsProducedForBuildRequestedForMeWhenSettingIsOn(BuildStatus status)
+        {
+            // arrange
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", status);
+            RequestedByMe(build);
+            RequestedForMe(build);
+            var delta = new BuildTreeBuildsDelta();
+
+            switch (status)
+            {
+                case BuildStatus.Failed:
+                    delta.FailedBuilds.Add(build);
+                    break;
+                case BuildStatus.Succeeded:
+                    delta.SucceededBuilds.Add(build);
+                    break;
+                default:
+                    delta.CancelledBuilds.Add(build);
+                    break;
+            }
+
+            // act
+            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration).ProduceNotifications(delta);
+
+            // assert
+            Assert.True(messages.Any());
+        }
+
+        [Theory]
+        [InlineData(BuildStatus.Failed)]
+        [InlineData(BuildStatus.Succeeded)]
+        [InlineData(BuildStatus.Cancelled)]
         public void MessageIsProducedForBuildWhenSettingDictatesAlways(BuildStatus status)
         {
             // arrange
@@ -568,25 +564,35 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             Assert.True(messages.Any());
         }
 
-        private void RequestedByMe(IBuildNode build) => build.Build.RequestedBy.Returns(_me);
-
-        private void RequestedForMe(IBuildNode build) => build.Build.RequestedFor.Returns(_me);
-
-        private IBuildNode CreateBuildNode(IBuildDefinition definition, IBranch branch, string id, BuildStatus status)
+        [Fact]
+        public void NoBuildChangingShouldResultInNoMessage()
         {
-            var build = Substitute.For<IBuild>();
-            build.Definition.Returns(definition);
-            var branchName = branch.Name;
-            build.BranchName.Returns(branchName);
-            build.Id.Returns(id);
-            build.Status.Returns(status);
-            build.RequestedBy.Returns(_someoneElse);
-            build.RequestedFor.Returns(_someoneElse);
-            build.ProjectName.Returns(ProjectId);
+            // arrange
+            var delta = new BuildTreeBuildsDelta();
 
-            var node = new BuildNode(build);
+            // act
+            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
 
-            return node;
+            // assert
+            Assert.Empty(messages);
+        }
+
+        [Fact]
+        public void SingleBuildFailingShouldResultInMessageTellingAboutBuild()
+        {
+            // arrange
+            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
+            var delta = new BuildTreeBuildsDelta();
+            delta.FailedBuilds.Add(build1);
+
+            // act
+            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+
+            // assert
+            var message = messages.First();
+            Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
         }
     }
 }

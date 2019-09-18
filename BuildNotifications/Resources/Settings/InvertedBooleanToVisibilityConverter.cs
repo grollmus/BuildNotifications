@@ -7,11 +7,11 @@ namespace BuildNotifications.Resources.Settings
 {
     public class InvertedBooleanToVisibilityConverter : IValueConverter
     {
-        public static InvertedBooleanToVisibilityConverter Instance { get; } = new InvertedBooleanToVisibilityConverter();
-
         private InvertedBooleanToVisibilityConverter()
         {
         }
+
+        public static InvertedBooleanToVisibilityConverter Instance { get; } = new InvertedBooleanToVisibilityConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

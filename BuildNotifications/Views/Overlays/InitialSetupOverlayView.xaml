@@ -13,25 +13,26 @@
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
              Background="{DynamicResource Background1}" Opacity="{Binding Opacity}">
-<UserControl.Resources>
-    <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml"/>
-</UserControl.Resources>
+    <UserControl.Resources>
+        <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+    </UserControl.Resources>
 
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
-            <icons:IconButton HorizontalAlignment="Right" VerticalAlignment="Top" 
-                              Style="{StaticResource IconButtonWithDockedContent}" Content="{text:Localized CloseConnections}"
-                               DockPanel.Dock="Right" 
-                              IconSize="{StaticResource Block}" Icon="Pause" Command="{Binding RequestCloseCommand}" Foreground="{StaticResource Foreground1}"/>
-            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}" 
+            <icons:IconButton HorizontalAlignment="Right" VerticalAlignment="Top"
+                              Style="{StaticResource IconButtonWithDockedContent}"
+                              Content="{text:Localized CloseConnections}"
+                              DockPanel.Dock="Right"
+                              IconSize="{StaticResource Block}" Icon="Pause" Command="{Binding RequestCloseCommand}"
+                              Foreground="{StaticResource Foreground1}" />
+            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}"
                              Height="{StaticResource BlockDouble}"
                              Foreground="{DynamicResource Yellow}" Margin="{StaticResource BlockXOnlyMargin}" />
             <TextBlock
                 Text="{Binding DisplayedTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource BlockOneAndQuarter}"
-                TextWrapping="Wrap" 
-                Foreground="{DynamicResource Foreground1HalfTransparency}" VerticalAlignment="Center"
-                >
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource Foreground1HalfTransparency}" VerticalAlignment="Center">
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding AnimateDisplay}" Value="true">
@@ -40,7 +41,8 @@
                 </i:Interaction.Triggers>
             </TextBlock>
         </DockPanel>
-        <ContentPresenter Content="{Binding ConnectionsAndProjectsSettingsViewModel}" Margin="{StaticResource BlockQuarterXOnlyMargin}">
+        <ContentPresenter Content="{Binding ConnectionsAndProjectsSettingsViewModel}"
+                          Margin="{StaticResource BlockQuarterXOnlyMargin}">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type viewModelSettings:ConnectionsAndProjectsSettingsViewModel}">
                     <viewsSettings:ConnectionsAndProjectsSettingsView />

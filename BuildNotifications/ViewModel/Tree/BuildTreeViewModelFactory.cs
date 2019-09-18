@@ -14,7 +14,7 @@ namespace BuildNotifications.ViewModel.Tree
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            LogTo.Debug($"Producing ViewModel for BuildTree.");
+            LogTo.Debug("Producing ViewModel for BuildTree.");
             var buildTreeResult = await Task.Run(() =>
             {
                 var groupsAsList = tree.GroupDefinition.ToList();
@@ -31,14 +31,14 @@ namespace BuildNotifications.ViewModel.Tree
 
             if (existingTree != null)
             {
-                LogTo.Debug($"Merging with existing tree.");
+                LogTo.Debug("Merging with existing tree.");
                 buildTreeResult = Merge(existingTree, buildTreeResult);
             }
-            
+
             var treeDepth = GetMaxDepth(buildTreeResult);
             LogTo.Debug($"Setting max depths, which is {treeDepth}.");
             SetMaxDepths(buildTreeResult, treeDepth);
-            
+
             stopWatch.Stop();
             LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms.");
             return buildTreeResult;
@@ -78,6 +78,18 @@ namespace BuildNotifications.ViewModel.Tree
 
                 yield return nodeVm;
             }
+        }
+
+        private static int GetMaxDepth(BuildTreeNodeViewModel node, int currentDepth = 0)
+        {
+            var maxDepth = currentDepth;
+            foreach (var child in node.Children)
+            {
+                var deepestChildDepth = GetMaxDepth(child, currentDepth + 1);
+                maxDepth = deepestChildDepth;
+            }
+
+            return maxDepth;
         }
 
         private BuildTreeViewModel Merge(BuildTreeViewModel tree1, BuildTreeViewModel tree2)
@@ -127,18 +139,6 @@ namespace BuildNotifications.ViewModel.Tree
                 else
                     RemoveTaggedNodes(node, taggedNodes);
             }
-        }
-
-        private static int GetMaxDepth(BuildTreeNodeViewModel node, int currentDepth = 0)
-        {
-            var maxDepth = currentDepth;
-            foreach (var child in node.Children)
-            {
-                var deepestChildDepth = GetMaxDepth(child, currentDepth + 1);
-                maxDepth = deepestChildDepth;
-            }
-
-            return maxDepth;
         }
 
         private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)

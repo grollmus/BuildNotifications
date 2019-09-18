@@ -9,8 +9,6 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     internal class NotificationFactory
     {
-        private readonly IConfiguration _configuration;
-
         /// <summary>
         /// Factory to create Notifications from a BuildTreeDelta.
         /// </summary>
@@ -26,6 +24,16 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 return Enumerable.Empty<INotification>();
 
             return CreateNotifications(fromDelta);
+        }
+
+        private INotification BranchNotification(List<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> branchNames)
+        {
+            return new BranchNotification(buildNodes, status, branchNames);
+        }
+
+        private INotification BuildsNotifications(IList<IBuildNode> buildNodes, BuildStatus status)
+        {
+            return new BuildNotification(buildNodes, status);
         }
 
         private IEnumerable<INotification> CreateNotifications(IBuildTreeBuildsDelta fromDelta)
@@ -75,30 +83,26 @@ namespace BuildNotifications.Core.Pipeline.Notification
             }
         }
 
-        private INotification DefinitionNotification(IList<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> definitionNames)
-            => new DefinitionNotification(buildNodes, status, definitionNames.ToList());
-
-        private INotification BuildsNotifications(IList<IBuildNode> buildNodes, BuildStatus status)
-            => new BuildNotification(buildNodes, status);
-
-        private INotification BranchNotification(List<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> branchNames)
-            => new BranchNotification(buildNodes, status, branchNames);
-
         private INotification DefinitionAndBranchNotification(List<IBuildNode> buildNodes, BuildStatus status, string tupleDefinition, string tupleBranch)
-            => new DefinitionAndBranchNotification(buildNodes, status, tupleDefinition, tupleBranch);
-
-        private IEnumerable<IGrouping<(string definition, string branch), IBuildNode>> GroupByDefinitionAndBranch(IEnumerable<IBuildNode> allBuilds)
-            => allBuilds.GroupBy(x => (definition: x.Build.Definition.Name, branch: x.Build.BranchName));
-
-        private IEnumerable<IGrouping<string, IBuildNode>> GroupByDefinition(IEnumerable<IBuildNode> allBuilds)
-            => allBuilds.GroupBy(x => x.Build.Definition.Name);
-
-        private IEnumerable<IGrouping<string, IBuildNode>> GroupByBranch(IEnumerable<IBuildNode> allBuilds)
-            => allBuilds.GroupBy(x => x.Build.BranchName);
-
-        private IEnumerable<IBuildNode> FilterSucceeded(IBuildTreeBuildsDelta fromDelta)
         {
-            return fromDelta.Succeeded.Where(ShouldNotifyAboutBuild);
+            return new DefinitionAndBranchNotification(buildNodes, status, tupleDefinition, tupleBranch);
+        }
+
+        private INotification DefinitionNotification(IList<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> definitionNames)
+        {
+            return new DefinitionNotification(buildNodes, status, definitionNames.ToList());
+        }
+
+        private IEnumerable<IBuildNode> FilterCancelled(IBuildTreeBuildsDelta fromDelta)
+        {
+            var failed = fromDelta.Failed.Where(ShouldNotifyAboutBuild).ToList();
+            var succeeded = fromDelta.Succeeded.Where(ShouldNotifyAboutBuild);
+            var cancelled = fromDelta.Cancelled.Where(ShouldNotifyAboutBuild);
+
+            if (failed.Any() && !succeeded.Any())
+                return Enumerable.Empty<IBuildNode>();
+
+            return cancelled;
         }
 
         private IEnumerable<IBuildNode> FilterFailed(IBuildTreeBuildsDelta fromDelta)
@@ -113,16 +117,49 @@ namespace BuildNotifications.Core.Pipeline.Notification
             return failed;
         }
 
-        private IEnumerable<IBuildNode> FilterCancelled(IBuildTreeBuildsDelta fromDelta)
+        private IEnumerable<IBuildNode> FilterSucceeded(IBuildTreeBuildsDelta fromDelta)
         {
-            var failed = fromDelta.Failed.Where(ShouldNotifyAboutBuild).ToList();
-            var succeeded = fromDelta.Succeeded.Where(ShouldNotifyAboutBuild);
-            var cancelled = fromDelta.Cancelled.Where(ShouldNotifyAboutBuild);
+            return fromDelta.Succeeded.Where(ShouldNotifyAboutBuild);
+        }
 
-            if (failed.Any() && !succeeded.Any())
-                return Enumerable.Empty<IBuildNode>();
+        private IEnumerable<IGrouping<string, IBuildNode>> GroupByBranch(IEnumerable<IBuildNode> allBuilds)
+        {
+            return allBuilds.GroupBy(x => x.Build.BranchName);
+        }
 
-            return cancelled;
+        private IEnumerable<IGrouping<string, IBuildNode>> GroupByDefinition(IEnumerable<IBuildNode> allBuilds)
+        {
+            return allBuilds.GroupBy(x => x.Build.Definition.Name);
+        }
+
+        private IEnumerable<IGrouping<(string definition, string branch), IBuildNode>> GroupByDefinitionAndBranch(IEnumerable<IBuildNode> allBuilds)
+        {
+            return allBuilds.GroupBy(x => (definition: x.Build.Definition.Name, branch: x.Build.BranchName));
+        }
+
+        private bool IsSameUser(IUser userA, IUser? userB)
+        {
+            return userA.UniqueName == userB?.UniqueName;
+        }
+
+        private bool NothingChanged(IBuildTreeBuildsDelta fromDelta)
+        {
+            return !fromDelta.Cancelled.Any()
+                   && !fromDelta.Failed.Any()
+                   && !fromDelta.Succeeded.Any();
+        }
+
+        private BuildNotificationMode NotifySetting(IBuildNode buildNode)
+        {
+            switch (buildNode.Status)
+            {
+                case BuildStatus.Failed:
+                    return _configuration.FailedBuildNotifyConfig;
+                case BuildStatus.Succeeded:
+                    return _configuration.SucceededBuildNotifyConfig;
+                default:
+                    return _configuration.CanceledBuildNotifyConfig;
+            }
         }
 
         private bool ShouldNotifyAboutBuild(IBuildNode buildNode)
@@ -144,26 +181,6 @@ namespace BuildNotifications.Core.Pipeline.Notification
             }
         }
 
-        private bool IsSameUser(IUser userA, IUser? userB) => userA.UniqueName == userB?.UniqueName;
-
-        private BuildNotificationMode NotifySetting(IBuildNode buildNode)
-        {
-            switch (buildNode.Status)
-            {
-                case BuildStatus.Failed:
-                    return _configuration.FailedBuildNotifyConfig;
-                case BuildStatus.Succeeded:
-                    return _configuration.SucceededBuildNotifyConfig;
-                default:
-                    return _configuration.CanceledBuildNotifyConfig;
-            }
-        }
-
-        private bool NothingChanged(IBuildTreeBuildsDelta fromDelta)
-        {
-            return !fromDelta.Cancelled.Any()
-                   && !fromDelta.Failed.Any()
-                   && !fromDelta.Succeeded.Any();
-        }
+        private readonly IConfiguration _configuration;
     }
 }

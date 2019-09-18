@@ -5,11 +5,11 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public class DistributedNotificationReceivedEventArgs : EventArgs
     {
-        public IDistributedNotification DistributedNotification { get; set; }
-
         public DistributedNotificationReceivedEventArgs(IDistributedNotification distributedNotification)
         {
             DistributedNotification = distributedNotification;
         }
+
+        public IDistributedNotification DistributedNotification { get; set; }
     }
 }

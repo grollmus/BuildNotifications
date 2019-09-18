@@ -26,6 +26,6 @@ namespace BuildNotifications.Plugin.Tfs
 
         public string Name { get; }
 
-        private string _url;
+        private readonly string _url;
     }
 }

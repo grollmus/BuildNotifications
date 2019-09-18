@@ -13,9 +13,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
         int Depth { get; set; }
 
         void AddChild(IBuildTreeNode node);
-        void RemoveChild(IBuildTreeNode node);
-        void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert);
 
         IEnumerable<IBuildTreeNode> AllChildren();
+        void RemoveChild(IBuildTreeNode node);
+        void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert);
     }
 }

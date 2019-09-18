@@ -9,17 +9,6 @@ namespace ToastNotificationsPlugin
 {
     public class ToastNotificationProcessor : INotificationProcessor
     {
-        private ToastNotificationFactory _toastNotificationFactory;
-        internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
-
-        public void Initialize()
-        {
-            TryCreateShortcut();
-            _toastNotificationFactory = new ToastNotificationFactory();
-
-            ToastNotificationManager.History.Clear(ApplicationId);
-        }
-
         // In order to display toasts, a desktop application must have a shortcut on the Start menu.
         // Also, an AppUserModelID must be set on that shortcut.
         private static void TryCreateShortcut()
@@ -39,6 +28,17 @@ namespace ToastNotificationsPlugin
 #pragma warning restore 162
         }
 
+        public void Initialize()
+        {
+            TryCreateShortcut();
+            _toastNotificationFactory = new ToastNotificationFactory();
+
+            ToastNotificationManager.History.Clear(ApplicationId);
+        }
+
+        private ToastNotificationFactory _toastNotificationFactory;
+        internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
+
         private static void InstallShortcut(string shortcutPath)
         {
             // ReSharper disable SuspiciousTypeConversion.Global
@@ -56,7 +56,7 @@ namespace ToastNotificationsPlugin
             var activatorGuidAsString = typeof(PluginNotificationActivator).GUID.ToString();
             var toastId = new PropertyKey(Guid.Parse($"{{{activatorGuidAsString}}}"), 26);
 
-            using (PropVariant appId = new PropVariant(ApplicationId))
+            using (var appId = new PropVariant(ApplicationId))
             {
                 using (var activatorGuid = new PropVariant(activatorGuidAsString))
                 {
@@ -73,11 +73,14 @@ namespace ToastNotificationsPlugin
             // ReSharper enable SuspiciousTypeConversion.Global
         }
 
-        public void Process(IDistributedNotification notification) => _toastNotificationFactory.Process(notification);
+        public void Process(IDistributedNotification notification)
+        {
+            _toastNotificationFactory.Process(notification);
+        }
 
         public void Shutdown()
         {
-            // nothing to do    
+            // nothing to do
         }
     }
 }

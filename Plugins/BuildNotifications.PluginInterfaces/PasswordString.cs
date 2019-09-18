@@ -19,6 +19,15 @@ namespace BuildNotifications.PluginInterfaces
         }
 
         /// <summary>
+        /// Encrypts the password.
+        /// </summary>
+        /// <returns>The encrypted and base64 encoded password</returns>
+        public string Encrypted()
+        {
+            return DpApi.Encrypt(_plainText);
+        }
+
+        /// <summary>
         /// Construct an instance from a plain text.
         /// </summary>
         /// <param name="plainText">The PasswordString.</param>
@@ -26,15 +35,6 @@ namespace BuildNotifications.PluginInterfaces
         {
             var encrypted = DpApi.Encrypt(plainText);
             return new PasswordString(encrypted);
-        }
-
-        /// <summary>
-        /// Encrypts the password.
-        /// </summary>
-        /// <returns>The encrypted and base64 encoded password</returns>
-        public string Encrypted()
-        {
-            return DpApi.Encrypt(_plainText);
         }
 
         /// <summary>

@@ -9,20 +9,11 @@ namespace BuildNotifications.Resources.Icons
 {
     internal class IconToDrawingImageConverter : IValueConverter
     {
-        public static IconToDrawingImageConverter Instance { get; } = new IconToDrawingImageConverter();
-
         private IconToDrawingImageConverter()
         {
         }
 
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var key = $"{value}DrawingImage";
-
-            return TryFindResource(Application.Current.MainWindow, key);
-        }
-
-        private readonly Dictionary<string, DrawingImage?> _cache = new Dictionary<string, DrawingImage?>();
+        public static IconToDrawingImageConverter Instance { get; } = new IconToDrawingImageConverter();
 
         private DrawingImage? TryFindResource(FrameworkElement element, string key)
         {
@@ -35,9 +26,18 @@ namespace BuildNotifications.Resources.Icons
             return existingTemplate;
         }
 
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var key = $"{value}DrawingImage";
+
+            return TryFindResource(Application.Current.MainWindow, key);
+        }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
+        private readonly Dictionary<string, DrawingImage?> _cache = new Dictionary<string, DrawingImage?>();
     }
 }

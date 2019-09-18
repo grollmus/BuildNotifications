@@ -13,6 +13,11 @@ namespace BuildNotifications.Core
         string ConfigurationFolder { get; }
 
         /// <summary>
+        /// List of full paths to directories where to search for plugins.
+        /// </summary>
+        IEnumerable<string> PluginFolders { get; }
+
+        /// <summary>
         /// Name of the file that contains predefined connections.
         /// </summary>
         string PredefinedConfigurationFileName { get; }
@@ -31,10 +36,5 @@ namespace BuildNotifications.Core
         /// Full path to the file that contains user configuration.
         /// </summary>
         string UserConfigurationFilePath { get; }
-
-        /// <summary>
-        /// List of full paths to directories where to search for plugins.
-        /// </summary>
-        IEnumerable<string> PluginFolders { get; }
     }
 }

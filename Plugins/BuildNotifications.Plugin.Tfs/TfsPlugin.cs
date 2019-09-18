@@ -99,6 +99,6 @@ namespace BuildNotifications.Plugin.Tfs
             throw new NotImplementedException();
         }
 
-        private TfsConnectionPool _connectionPool;
+        private readonly TfsConnectionPool _connectionPool;
     }
 }

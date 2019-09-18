@@ -15,6 +15,8 @@ namespace BuildNotifications.Resources.BuildTree.Converter
         {
         }
 
+        public SolidColorBrush DefaultBrush => GetBrush(DefaultBrushKey);
+
         public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
 
         public Brush Convert(BuildStatus status)
@@ -46,8 +48,6 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                 return Convert(node.BuildStatus);
             return DefaultBrush;
         }
-
-        public SolidColorBrush DefaultBrush => GetBrush(DefaultBrushKey);
 
         private SolidColorBrush GetBrush(string key)
         {

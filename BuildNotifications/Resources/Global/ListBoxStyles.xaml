@@ -58,10 +58,11 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Grid>
-                                    <DockPanel x:Name="SizeDummy"/>
-                                    <DockPanel x:Name="DockPanel" MaxWidth="{Binding ActualWidth, ElementName=SizeDummy}">
+                                    <DockPanel x:Name="SizeDummy" />
+                                    <DockPanel x:Name="DockPanel"
+                                               MaxWidth="{Binding ActualWidth, ElementName=SizeDummy}">
                                         <Rectangle Fill="Transparent" Width="2" x:Name="Rectangle" />
-                                        <!--necessary to make the content stretch--> 
+                                        <!--necessary to make the content stretch-->
                                         <Rectangle Fill="Transparent" Width="2" DockPanel.Dock="Right" />
 
                                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}"

@@ -41,6 +41,6 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Build failed with errors.
         /// </summary>
-        Failed,
+        Failed
     }
 }

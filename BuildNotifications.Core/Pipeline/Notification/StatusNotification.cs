@@ -8,8 +8,6 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     public class StatusNotification : INotification
     {
-        private readonly object[] _parameter;
-
         public StatusNotification(string messageTextId, string titleTextId, NotificationType notificationType, params object[] parameter)
         {
             _parameter = parameter;
@@ -33,7 +31,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
         public BuildStatus Status => Type == NotificationType.Success ? BuildStatus.Succeeded : BuildStatus.Running;
 
         public Guid Guid { get; } = Guid.NewGuid();
-        
+
         public string IssueSource { get; } = "BuildNotifications";
+        private readonly object[] _parameter;
     }
 }

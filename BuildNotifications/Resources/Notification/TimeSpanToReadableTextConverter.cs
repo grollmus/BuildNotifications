@@ -7,14 +7,12 @@ namespace BuildNotifications.Resources.Notification
 {
     internal class TimeSpanToReadableTextConverter : IValueConverter
     {
-        public static TimeSpanToReadableTextConverter Instance { get; } = new TimeSpanToReadableTextConverter();
-
-        private readonly TimeSpanToStringConverter _converter;
-
         private TimeSpanToReadableTextConverter()
         {
             _converter = new TimeSpanToStringConverter();
         }
+
+        public static TimeSpanToReadableTextConverter Instance { get; } = new TimeSpanToReadableTextConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,5 +26,7 @@ namespace BuildNotifications.Resources.Notification
         {
             throw new NotImplementedException();
         }
+
+        private readonly TimeSpanToStringConverter _converter;
     }
 }

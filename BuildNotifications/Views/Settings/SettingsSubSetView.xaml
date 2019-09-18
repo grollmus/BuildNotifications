@@ -13,7 +13,7 @@
     <ItemsControl ItemsSource="{Binding Configs}" ItemTemplateSelector="{Binding DataTemplateSelector}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <DockPanel/>
+                <DockPanel />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>

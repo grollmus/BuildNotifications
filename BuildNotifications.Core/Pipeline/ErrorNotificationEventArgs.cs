@@ -6,11 +6,11 @@ namespace BuildNotifications.Core.Pipeline
 {
     public class ErrorNotificationEventArgs : EventArgs
     {
-        public IEnumerable<INotification> ErrorNotifications { get; }
-
         public ErrorNotificationEventArgs(params INotification[] errorNotifications)
         {
             ErrorNotifications = errorNotifications;
         }
+
+        public IEnumerable<INotification> ErrorNotifications { get; }
     }
 }

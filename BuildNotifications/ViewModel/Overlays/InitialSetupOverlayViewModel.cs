@@ -162,14 +162,14 @@ namespace BuildNotifications.ViewModel.Overlays
         private string _previouslyConfiguredConnections;
         private string _previouslyConfiguredProjects;
         private const string InitialSetupCompleteConfig = nameof(InitialSetupCompleteConfig);
+        private const string InitialSetupConnectionNotAsBuild = nameof(InitialSetupConnectionNotAsBuild);
+        private const string InitialSetupConnectionNotAsBuildOrSource = nameof(InitialSetupConnectionNotAsBuildOrSource);
+        private const string InitialSetupConnectionNotAsSource = nameof(InitialSetupConnectionNotAsSource);
 
         private const string InitialSetupEmptyConf = nameof(InitialSetupEmptyConf);
         private const string InitialSetupEmptyConnections = nameof(InitialSetupEmptyConnections);
-        private const string InitialSetupConnectionNotAsBuildOrSource = nameof(InitialSetupConnectionNotAsBuildOrSource);
-        private const string InitialSetupConnectionNotAsBuild = nameof(InitialSetupConnectionNotAsBuild);
-        private const string InitialSetupConnectionNotAsSource = nameof(InitialSetupConnectionNotAsSource);
-        private const string InitialSetupUntested = nameof(InitialSetupUntested);
         private const string InitialSetupTested = nameof(InitialSetupTested);
+        private const string InitialSetupUntested = nameof(InitialSetupUntested);
     }
 }
 #pragma warning enable CS8618

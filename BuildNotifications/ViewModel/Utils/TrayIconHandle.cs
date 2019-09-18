@@ -13,21 +13,17 @@ namespace BuildNotifications.ViewModel.Utils
 {
     internal class TrayIconHandle : INotificationProcessor
     {
-        private readonly NotifyIcon _notifyIcon;
+        public TrayIconHandle()
+        {
+            _notifyIcon = new NotifyIcon
+            {
+                Visible = true,
+                ContextMenu = CreateContextMenu(),
+                Text = "BuildNotifications"
+            };
 
-        public event EventHandler ExitRequested;
-
-        public event EventHandler ShowWindowRequested;
-
-        private BuildStatus _buildStatus;
-
-        private string DefaultTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_pending.ico".Replace('/', '\\');
-
-        private string ErrorTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_failed.ico".Replace('/', '\\');
-
-        private string ErrorAppIconPath => "pack://siteoforigin:,,,/Resources/Icons/RedIntense.ico";
-
-        private string DefaultAppIconPath => "pack://siteoforigin:,,,/Resources/Icons/Green.ico";
+            _notifyIcon.DoubleClick += ShowWindow;
+        }
 
         public BuildStatus BuildStatus
         {
@@ -46,47 +42,17 @@ namespace BuildNotifications.ViewModel.Utils
             }
         }
 
-        public TrayIconHandle()
-        {
-            _notifyIcon = new NotifyIcon
-            {
-                Visible = true,
-                ContextMenu = CreateContextMenu(),
-                Text = "BuildNotifications"
-            };
+        private string DefaultAppIconPath => "pack://siteoforigin:,,,/Resources/Icons/Green.ico";
 
-            _notifyIcon.DoubleClick += ShowWindow;
-        }
+        private string DefaultTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_pending.ico".Replace('/', '\\');
 
-        private void SetIconFromBuildStatus()
-        {
-            switch (BuildStatus)
-            {
-                case BuildStatus.Failed:
-                    _notifyIcon.Icon = GetIcon(ErrorTrayIconPath);
-                    if (Application.Current?.MainWindow != null)
-                        Application.Current.MainWindow.Icon = GetImageSource(ErrorAppIconPath);
-                    break;
-                default:
-                    _notifyIcon.Icon = GetIcon(DefaultTrayIconPath);
-                    if (Application.Current?.MainWindow != null)
-                        Application.Current.MainWindow.Icon = GetImageSource(DefaultAppIconPath);
-                    break;
-            }
-        }
+        private string ErrorAppIconPath => "pack://siteoforigin:,,,/Resources/Icons/RedIntense.ico";
 
-        private ImageSource GetImageSource(string path)
-        {
-            LogTo.Info($"Updating app icon to \"{path}\"");
-            return BitmapFrame.Create(new Uri(path));
-        }
+        private string ErrorTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_failed.ico".Replace('/', '\\');
 
-        private Icon GetIcon(string path)
-        {
-            LogTo.Info($"Updating tray icon to \"{path}\"");
-            var icon = new Icon(path);
-            return icon;
-        }
+        public event EventHandler ExitRequested;
+
+        public event EventHandler ShowWindowRequested;
 
         private ContextMenu CreateContextMenu()
         {
@@ -104,6 +70,36 @@ namespace BuildNotifications.ViewModel.Utils
             _notifyIcon.Icon = null;
             LogTo.Info("Exit requested.");
             ExitRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private Icon GetIcon(string path)
+        {
+            LogTo.Info($"Updating tray icon to \"{path}\"");
+            var icon = new Icon(path);
+            return icon;
+        }
+
+        private ImageSource GetImageSource(string path)
+        {
+            LogTo.Info($"Updating app icon to \"{path}\"");
+            return BitmapFrame.Create(new Uri(path));
+        }
+
+        private void SetIconFromBuildStatus()
+        {
+            switch (BuildStatus)
+            {
+                case BuildStatus.Failed:
+                    _notifyIcon.Icon = GetIcon(ErrorTrayIconPath);
+                    if (Application.Current?.MainWindow != null)
+                        Application.Current.MainWindow.Icon = GetImageSource(ErrorAppIconPath);
+                    break;
+                default:
+                    _notifyIcon.Icon = GetIcon(DefaultTrayIconPath);
+                    if (Application.Current?.MainWindow != null)
+                        Application.Current.MainWindow.Icon = GetImageSource(DefaultAppIconPath);
+                    break;
+            }
         }
 
         private void ShowWindow(object? sender, EventArgs e)
@@ -124,5 +120,9 @@ namespace BuildNotifications.ViewModel.Utils
         public void Shutdown()
         {
         }
+
+        private readonly NotifyIcon _notifyIcon;
+
+        private BuildStatus _buildStatus;
     }
 }

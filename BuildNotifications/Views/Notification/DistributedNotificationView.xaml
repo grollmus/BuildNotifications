@@ -43,7 +43,7 @@
         </DockPanel>
         <DockPanel Visibility="{Binding SmallViewVisibility}" x:Name="SmallViewDockPanel">
             <icons:IconBatch Type="{Binding IconType}" Width="30"
-                             DockPanel.Dock="Left" 
+                             DockPanel.Dock="Left"
                              Height="30"
                              Foreground="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />
             <ItemsControl ItemsSource="{Binding Messages}" Margin="6">

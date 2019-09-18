@@ -40,7 +40,8 @@
             <icons:IconBatch Type="NoConnection" Width="{StaticResource BlockTriple}"
                              Height="{StaticResource BlockTriple}" Foreground="{StaticResource Background3}"
                              DockPanel.Dock="Top" />
-            <TextBlock Text="{text:Localized TreeIsEmpty}" Foreground="{DynamicResource Background3}" HorizontalAlignment="Center" FontSize="{StaticResource BlockOneAndHalf}"/>
+            <TextBlock Text="{text:Localized TreeIsEmpty}" Foreground="{DynamicResource Background3}"
+                       HorizontalAlignment="Center" FontSize="{StaticResource BlockOneAndHalf}" />
         </DockPanel>
     </Grid>
 </UserControl>

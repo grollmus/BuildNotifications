@@ -10,11 +10,11 @@ namespace BuildNotifications.Resources.BuildTree.Converter
     /// </summary>
     internal class MaxTreeDepthToOrientationConverter : IValueConverter
     {
-        public static MaxTreeDepthToOrientationConverter Instance { get; } = new MaxTreeDepthToOrientationConverter();
-
         private MaxTreeDepthToOrientationConverter()
         {
         }
+
+        public static MaxTreeDepthToOrientationConverter Instance { get; } = new MaxTreeDepthToOrientationConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

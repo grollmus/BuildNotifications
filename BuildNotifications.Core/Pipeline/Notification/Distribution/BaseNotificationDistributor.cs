@@ -8,7 +8,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public abstract class BaseNotificationDistributor : INotificationDistributor
     {
-        private readonly IList<INotificationProcessor> _processors = new List<INotificationProcessor>();
+        protected abstract IDistributedNotification ToDistributedNotification(INotification notification);
 
         public void Distribute(INotification notification)
         {
@@ -20,11 +20,15 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             }
         }
 
-        protected abstract IDistributedNotification ToDistributedNotification(INotification notification);
-        
-        public IEnumerator<INotificationProcessor> GetEnumerator() => _processors.GetEnumerator();
+        public IEnumerator<INotificationProcessor> GetEnumerator()
+        {
+            return _processors.GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public void Add(INotificationProcessor processor)
         {
@@ -48,7 +52,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 
         public void Clear()
         {
-            LogTo.Info($"Clearing all NotificationProcessors.");
+            LogTo.Info("Clearing all NotificationProcessors.");
             foreach (var processor in _processors)
             {
                 LogTo.Debug($"Shutting down NotificationProcessor \"{processor}\"");
@@ -62,13 +66,19 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
                 }
             }
 
-            LogTo.Debug($"All NotificationProcessor are shut down. Clearing internal list of processors.");
+            LogTo.Debug("All NotificationProcessor are shut down. Clearing internal list of processors.");
             _processors.Clear();
         }
 
-        public bool Contains(INotificationProcessor item) => _processors.Contains(item);
+        public bool Contains(INotificationProcessor item)
+        {
+            return _processors.Contains(item);
+        }
 
-        public void CopyTo(INotificationProcessor[] array, int arrayIndex) => _processors.CopyTo(array, arrayIndex);
+        public void CopyTo(INotificationProcessor[] array, int arrayIndex)
+        {
+            _processors.CopyTo(array, arrayIndex);
+        }
 
         public bool Remove(INotificationProcessor processor)
         {
@@ -91,5 +101,6 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         public int Count => _processors.Count;
 
         public bool IsReadOnly => false;
+        private readonly IList<INotificationProcessor> _processors = new List<INotificationProcessor>();
     }
 }

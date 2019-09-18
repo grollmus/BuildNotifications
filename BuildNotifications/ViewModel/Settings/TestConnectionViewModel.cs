@@ -15,10 +15,15 @@ namespace BuildNotifications.ViewModel.Settings
 {
     public class TestConnectionViewModel
     {
-        private readonly ConnectionDataViewModel _connectionDataViewModel;
+        public TestConnectionViewModel(ConnectionDataViewModel connectionDataViewModel)
+        {
+            _connectionDataViewModel = connectionDataViewModel;
+            StatusIndicator = new StatusIndicatorViewModel();
+            Notifications = new NotificationCenterViewModel {ShowEmptyMessage = false, ShowTimeStamp = false};
+            TestConnectionCommand = AsyncCommand.Create(TestConnection);
+        }
 
-        [IgnoredForConfig]
-        public ICommand TestConnectionCommand { get; set; }
+        public bool LastTestDidSucceed { get; set; }
 
         [IgnoredForConfig]
         public NotificationCenterViewModel Notifications { get; set; }
@@ -26,16 +31,30 @@ namespace BuildNotifications.ViewModel.Settings
         [IgnoredForConfig]
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
-        public bool LastTestDidSucceed { get; set; }
-        
+        [IgnoredForConfig]
+        public ICommand TestConnectionCommand { get; set; }
+
         public event EventHandler TestFinished;
 
-        public TestConnectionViewModel(ConnectionDataViewModel connectionDataViewModel)
+        private void ReportError(string titleId, string message)
         {
-            _connectionDataViewModel = connectionDataViewModel;
-            StatusIndicator = new StatusIndicatorViewModel();
-            Notifications = new NotificationCenterViewModel {ShowEmptyMessage = false, ShowTimeStamp = false};
-            TestConnectionCommand = AsyncCommand.Create(TestConnection);
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                var notification = new ErrorNotification(message);
+                notification.TitleTextId = titleId;
+                Notifications.ShowNotifications(new List<INotification> {notification});
+            });
+        }
+
+        private void ReportSuccess()
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                var notification = new StatusNotification("ConnectionTestCaption", "ConnectionTestSuccessful", NotificationType.Success);
+                Notifications.ShowNotifications(new List<INotification> {notification});
+            });
+
+            LastTestDidSucceed = true;
         }
 
         private async Task TestConnection()
@@ -96,25 +115,6 @@ namespace BuildNotifications.ViewModel.Settings
             Application.Current.Dispatcher?.Invoke(() => { TestFinished?.Invoke(this, EventArgs.Empty); });
         }
 
-        private void ReportSuccess()
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                var notification = new StatusNotification("ConnectionTestCaption", "ConnectionTestSuccessful", NotificationType.Success);
-                Notifications.ShowNotifications(new List<INotification> {notification});
-            });
-
-            LastTestDidSucceed = true;
-        }
-
-        private void ReportError(string titleId, string message)
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                var notification = new ErrorNotification(message);
-                notification.TitleTextId = titleId;
-                Notifications.ShowNotifications(new List<INotification> {notification});
-            });
-        }
+        private readonly ConnectionDataViewModel _connectionDataViewModel;
     }
 }

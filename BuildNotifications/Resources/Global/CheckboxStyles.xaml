@@ -13,12 +13,16 @@
                                        x:Name="Rectangle"
                                        Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
                                        Fill="{Binding IsChecked, Mode=OneTime, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static checkbox:CheckboxSelectedToBackgroundColorConverter.Instance}}">
-                                
+
                                 <i:Interaction.Triggers>
-                                    <ei:DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" Value="true">
+                                    <ei:DataTrigger
+                                        Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Value="true">
                                         <checkbox:CheckboxBackgroundAnimation IsChecked="true" />
                                     </ei:DataTrigger>
-                                    <ei:DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" Value="false">
+                                    <ei:DataTrigger
+                                        Binding="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Value="false">
                                         <checkbox:CheckboxBackgroundAnimation IsChecked="false" />
                                     </ei:DataTrigger>
                                 </i:Interaction.Triggers>
@@ -46,7 +50,7 @@
 
                             </Ellipse>
                         </Grid>
-                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}" HorizontalAlignment="Right"/>
+                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}" HorizontalAlignment="Right" />
                     </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">

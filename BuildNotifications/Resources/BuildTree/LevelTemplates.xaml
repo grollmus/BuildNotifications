@@ -82,9 +82,9 @@
                     <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
                                                         TargetScaleY="0.8" />
                 </ei:DataTrigger>
-                
+
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False"/>
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DockPanel>
@@ -158,9 +158,9 @@
                     <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
                                                         TargetScaleY="0.8" />
                 </ei:DataTrigger>
-                
+
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False"/>
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
@@ -210,9 +210,9 @@
                     <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
                                                         TargetScaleY="0.8" />
                 </ei:DataTrigger>
-                
+
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False"/>
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </animation:AnimatedDockPanel>

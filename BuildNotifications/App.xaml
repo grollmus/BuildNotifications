@@ -20,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}" />
-         
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

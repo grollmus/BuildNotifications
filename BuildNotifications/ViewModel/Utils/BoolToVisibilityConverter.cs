@@ -7,16 +7,14 @@ namespace BuildNotifications.ViewModel.Utils
 {
     internal class BoolToVisibilityConverter : IValueConverter
     {
-        public static BoolToVisibilityConverter Instance { get; } = new BoolToVisibilityConverter(false);
-
-        public static BoolToVisibilityConverter Inverted { get; } = new BoolToVisibilityConverter(true);
-
-        private readonly bool _isInverted;
-
         private BoolToVisibilityConverter(bool isInverted)
         {
             _isInverted = isInverted;
         }
+
+        public static BoolToVisibilityConverter Instance { get; } = new BoolToVisibilityConverter(false);
+
+        public static BoolToVisibilityConverter Inverted { get; } = new BoolToVisibilityConverter(true);
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -25,13 +23,14 @@ namespace BuildNotifications.ViewModel.Utils
 
             if (_isInverted)
                 return asBool ? Visibility.Collapsed : Visibility.Visible;
-            else
-                return asBool ? Visibility.Visible : Visibility.Collapsed;
+            return asBool ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
+        private readonly bool _isInverted;
     }
 }

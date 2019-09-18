@@ -6,8 +6,6 @@ namespace BuildNotifications.ViewModel
 {
     public class SearchViewModel : BaseViewModel
     {
-        public bool TextIsEmpty => SearchTerm.Length == 0;
-
         public SearchViewModel(IPipeline pipeline)
         {
             _pipeline = pipeline;
@@ -35,6 +33,8 @@ namespace BuildNotifications.ViewModel
                 StartSearchTask();
             }
         }
+
+        public bool TextIsEmpty => SearchTerm.Length == 0;
 
         private void SearchTimerOnTick(object? sender, EventArgs e)
         {

@@ -9,6 +9,9 @@ namespace BuildNotifications.ViewModel.Tree
         {
         }
 
-        protected override string CalculateDisplayName() => throw new NotImplementedException();
+        protected override string CalculateDisplayName()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

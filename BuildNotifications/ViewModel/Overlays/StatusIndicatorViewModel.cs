@@ -8,44 +8,46 @@ namespace BuildNotifications.ViewModel.Overlays
 {
     public class StatusIndicatorViewModel : BaseViewModel
     {
-        private UpdateStatus _updateStatus;
-        private IEnumerable<INotification>? _errorNotifications;
-
-        public UpdateStatus UpdateStatus
+        public StatusIndicatorViewModel()
         {
-            get => _updateStatus;
-            set
-            {
-                _updateStatus = value; 
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(BusyVisible));
-                OnPropertyChanged(nameof(ErrorVisible));
-            }
+            OpenErrorMessageCommand = new DelegateCommand(RequestOpenErrorMessage);
+            RequestResumeCommand = new DelegateCommand(RequestResume);
         }
 
         public bool BusyVisible => UpdateStatus == UpdateStatus.Busy;
 
         public bool ErrorVisible => UpdateStatus == UpdateStatus.Error;
 
-        public bool PauseVisible => _isPaused;
+        public ICommand OpenErrorMessageCommand { get; set; }
 
-        private bool _isPaused;
+        public bool PauseVisible { get; private set; }
 
-        public void Pause()
+        public ICommand RequestResumeCommand { get; set; }
+
+        public UpdateStatus UpdateStatus
         {
-            _isPaused = true;
-            OnPropertyChanged(nameof(PauseVisible));
+            get => _updateStatus;
+            set
+            {
+                _updateStatus = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(BusyVisible));
+                OnPropertyChanged(nameof(ErrorVisible));
+            }
         }
 
-        public void Resume()
-        {
-            _isPaused = false;
-            OnPropertyChanged(nameof(PauseVisible));
-        }
+        public event EventHandler<OpenErrorRequestEventArgs> OpenErrorMessageRequested;
+
+        public event EventHandler ResumeRequested;
 
         public void Busy()
         {
             UpdateStatus = UpdateStatus.Busy;
+        }
+
+        public void ClearStatus()
+        {
+            UpdateStatus = UpdateStatus.None;
         }
 
         public void Error(IEnumerable<INotification> notifications)
@@ -54,25 +56,16 @@ namespace BuildNotifications.ViewModel.Overlays
             _errorNotifications = notifications;
         }
 
-        public void ClearStatus()
+        public void Pause()
         {
-            UpdateStatus = UpdateStatus.None;
+            PauseVisible = true;
+            OnPropertyChanged(nameof(PauseVisible));
         }
 
-        public ICommand OpenErrorMessageCommand { get; set; }
-
-        public ICommand RequestResumeCommand { get; set; }
-
-        public StatusIndicatorViewModel()
+        public void Resume()
         {
-            OpenErrorMessageCommand = new DelegateCommand(RequestOpenErrorMessage);
-            RequestResumeCommand = new DelegateCommand(RequestResume);
-        }
-
-        private void RequestResume(object obj)
-        {
-            ResumeRequested?.Invoke(this, EventArgs.Empty);
-            Resume();
+            PauseVisible = false;
+            OnPropertyChanged(nameof(PauseVisible));
         }
 
         private void RequestOpenErrorMessage(object obj)
@@ -86,8 +79,13 @@ namespace BuildNotifications.ViewModel.Overlays
             ClearStatus();
         }
 
-        public event EventHandler<OpenErrorRequestEventArgs> OpenErrorMessageRequested;
+        private void RequestResume(object obj)
+        {
+            ResumeRequested?.Invoke(this, EventArgs.Empty);
+            Resume();
+        }
 
-        public event EventHandler ResumeRequested;
+        private UpdateStatus _updateStatus;
+        private IEnumerable<INotification>? _errorNotifications;
     }
 }

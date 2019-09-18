@@ -7,17 +7,17 @@ namespace BuildNotifications.Resources.Animation.Checkbox
 {
     internal class CheckboxSelectedToMarginConverter : IValueConverter
     {
-        private static double BlockSize { get; set; }
-
-        public static Thickness UncheckedMargin => new Thickness(BlockSize / 6.0, 0, 0, 0);
-        public static Thickness CheckedMargin => new Thickness(BlockSize * 2.0, 0, 0, 0);
-
-        public static CheckboxSelectedToMarginConverter Instance { get; } = new CheckboxSelectedToMarginConverter();
-
         static CheckboxSelectedToMarginConverter()
         {
             BlockSize = (double) Application.Current.TryFindResource("Block");
         }
+
+        public static Thickness CheckedMargin => new Thickness(BlockSize * 2.0, 0, 0, 0);
+
+        public static CheckboxSelectedToMarginConverter Instance { get; } = new CheckboxSelectedToMarginConverter();
+
+        public static Thickness UncheckedMargin => new Thickness(BlockSize / 6.0, 0, 0, 0);
+        private static double BlockSize { get; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

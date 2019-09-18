@@ -11,10 +11,6 @@ namespace BuildNotifications.ViewModel.Settings
 {
     public class ConnectionsWrapperViewModel
     {
-        private readonly IList<ConnectionData> _originalList;
-        private readonly IConfiguration _configuration;
-        private readonly IPluginRepository _pluginRepository;
-
         public ConnectionsWrapperViewModel(IList<ConnectionData> originalList, IConfiguration configuration, IPluginRepository pluginRepository)
         {
             _originalList = originalList;
@@ -28,6 +24,39 @@ namespace BuildNotifications.ViewModel.Settings
             {
                 connection.TestFinished += InvokeTestFinished;
             }
+        }
+
+        [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
+        [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
+        [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
+        [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
+        public ObservableCollection<ConnectionDataViewModel> Connections { get; set; }
+
+        public event EventHandler TestFinished;
+
+        public Type BuildPluginConfigurationType(ConnectionData connectionData)
+        {
+            return _configuration.BuildPluginConfigurationType(connectionData);
+        }
+
+        public IEnumerable<string?> PossibleBuildPlugins()
+        {
+            return _configuration.PossibleBuildPlugins();
+        }
+
+        public IEnumerable<string?> PossibleSourceControlPlugins()
+        {
+            return _configuration.PossibleSourceControlPlugins();
+        }
+
+        public Type SourceControlPluginConfigurationType(ConnectionData connectionData)
+        {
+            return _configuration.SourceControlPluginConfigurationType(connectionData);
+        }
+
+        private void InvokeTestFinished(object? sender, EventArgs e)
+        {
+            TestFinished?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -57,22 +86,8 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        private void InvokeTestFinished(object? sender, EventArgs e) => TestFinished?.Invoke(this, EventArgs.Empty);
-
-        public event EventHandler TestFinished;
-        
-        [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
-        [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
-        [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
-        [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
-        public ObservableCollection<ConnectionDataViewModel> Connections { get; set; }
-        
-        public IEnumerable<string?> PossibleBuildPlugins() => _configuration.PossibleBuildPlugins();
-
-        public IEnumerable<string?> PossibleSourceControlPlugins() => _configuration.PossibleSourceControlPlugins();
-        
-        public Type BuildPluginConfigurationType(ConnectionData connectionData) => _configuration.BuildPluginConfigurationType(connectionData);
-
-        public Type SourceControlPluginConfigurationType(ConnectionData connectionData) => _configuration.SourceControlPluginConfigurationType(connectionData);
+        private readonly IList<ConnectionData> _originalList;
+        private readonly IConfiguration _configuration;
+        private readonly IPluginRepository _pluginRepository;
     }
 }

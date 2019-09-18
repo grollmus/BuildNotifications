@@ -23,7 +23,8 @@
             <ContentPresenter Content="{Binding StatusIndicator}" />
 
         </DockPanel>
-        <ContentPresenter HorizontalAlignment="Left" Content="{Binding Notifications}" MinHeight="{StaticResource BlockFourteenTimes}"/>
+        <ContentPresenter HorizontalAlignment="Left" Content="{Binding Notifications}"
+                          MinHeight="{StaticResource BlockFourteenTimes}" />
 
     </DockPanel>
 </UserControl>

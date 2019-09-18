@@ -32,11 +32,20 @@ namespace BuildNotifications.Plugin.Tfs
         [CalculatedVisibility(nameof(TokenHidden))]
         public PasswordString? Token { get; set; }
 
-        public bool UsernameHidden() => AuthenticationType != AuthenticationType.Account;
+        public bool UsernameHidden()
+        {
+            return AuthenticationType != AuthenticationType.Account;
+        }
 
-        public bool PasswordHidden() => AuthenticationType != AuthenticationType.Account;
+        public bool PasswordHidden()
+        {
+            return AuthenticationType != AuthenticationType.Account;
+        }
 
-        public bool TokenHidden() => AuthenticationType != AuthenticationType.Token;
+        public bool TokenHidden()
+        {
+            return AuthenticationType != AuthenticationType.Token;
+        }
 
         private string? _lastFetchedUrl;
         private IEnumerable<object> _lastFetchResult = Enumerable.Empty<object>();
@@ -50,8 +59,7 @@ namespace BuildNotifications.Plugin.Tfs
 
                 if (ProjectId != null)
                     return new List<string> {ProjectId};
-                else
-                    return Enumerable.Empty<string>();
+                return Enumerable.Empty<string>();
             }
 
             var urlToFetch = Url;

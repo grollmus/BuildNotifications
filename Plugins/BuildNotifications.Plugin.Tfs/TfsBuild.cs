@@ -28,6 +28,8 @@ namespace BuildNotifications.Plugin.Tfs
             Links = new TfsLinks(build);
         }
 
+        internal int BuildId { get; }
+
         public override int GetHashCode()
         {
             return HashCode.Combine(_id, Id);
@@ -37,8 +39,6 @@ namespace BuildNotifications.Plugin.Tfs
         {
             return _id == (other as TfsBuild)?._id;
         }
-
-        internal int BuildId { get; }
 
         public string BranchName { get; }
 

@@ -9,17 +9,18 @@
              xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:SearchViewModel}}">
 
-	<Grid Width="{StaticResource BlockTriple}">
-		<text:DecoratedTextBox Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Icon="Search"
-		                       MaxHeight="{StaticResource BlockOneAndHalf}"
-		                       Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap" />
-		<i:Interaction.Triggers>
-			<i:EventTrigger EventName="GotKeyboardFocus">
-				<animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
-			</i:EventTrigger>
-			<i:EventTrigger EventName="LostKeyboardFocus">
-				<animation:WidthChange TargetWidth="{StaticResource BlockTriple}" IsActive="{Binding TextIsEmpty}"/>
-			</i:EventTrigger>
-		</i:Interaction.Triggers>
-	</Grid>
+    <Grid Width="{StaticResource BlockTriple}">
+        <text:DecoratedTextBox Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               Icon="Search"
+                               MaxHeight="{StaticResource BlockOneAndHalf}"
+                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap" />
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="GotKeyboardFocus">
+                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
+            </i:EventTrigger>
+            <i:EventTrigger EventName="LostKeyboardFocus">
+                <animation:WidthChange TargetWidth="{StaticResource BlockTriple}" IsActive="{Binding TextIsEmpty}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+    </Grid>
 </UserControl>

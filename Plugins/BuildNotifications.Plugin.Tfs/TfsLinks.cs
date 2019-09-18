@@ -6,18 +6,10 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsLinks : IBuildLinks
     {
-        private readonly Build _fromBuild;
-
         public TfsLinks(Build fromBuild)
         {
             _fromBuild = fromBuild;
         }
-
-        public string? BuildWeb => TryGetLink("web");
-
-        public string? BranchWeb => null;
-
-        public string? DefinitionWeb => null;
 
         private string? TryGetLink(string key)
         {
@@ -25,5 +17,12 @@ namespace BuildNotifications.Plugin.Tfs
                 return ((ReferenceLink) link).Href;
             return null;
         }
+
+        public string? BuildWeb => TryGetLink("web");
+
+        public string? BranchWeb => null;
+
+        public string? DefinitionWeb => null;
+        private readonly Build _fromBuild;
     }
 }

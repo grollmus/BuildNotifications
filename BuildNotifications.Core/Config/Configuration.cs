@@ -12,6 +12,7 @@ using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
+    [NoReorder]
     internal class Configuration : IConfiguration
     {
         public Configuration()
@@ -87,7 +88,7 @@ namespace BuildNotifications.Core.Config
         {
             return PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
         }
-        
+
         public IEnumerable<string?> PossibleSourceControlPlugins()
         {
             return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();

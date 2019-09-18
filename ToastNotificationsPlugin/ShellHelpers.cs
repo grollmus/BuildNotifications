@@ -29,24 +29,24 @@ namespace ToastNotificationsPlugin
         STGM_NOSNAPSHOT = 0x00200000L,
         STGM_SIMPLE = 0x08000000L,
         STGM_DIRECT_SWMR = 0x00400000L,
-        STGM_DELETEONRELEASE = 0x04000000L,
+        STGM_DELETEONRELEASE = 0x04000000L
     }
 
     internal static class ShellIIDGuid
     {
-        internal const string IShellLinkW = "000214F9-0000-0000-C000-000000000046";
         internal const string CShellLink = "00021401-0000-0000-C000-000000000046";
         internal const string IPersistFile = "0000010b-0000-0000-C000-000000000046";
         internal const string IPropertyStore = "886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99";
+        internal const string IShellLinkW = "000214F9-0000-0000-C000-000000000046";
     }
 
-    [ComImport,
-     Guid(ShellIIDGuid.IShellLinkW),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IShellLinkW)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellLinkW
     {
         UInt32 GetPath(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszFile,
             int cchMaxPath,
             //ref _WIN32_FIND_DATAW pfd,
@@ -57,7 +57,7 @@ namespace ToastNotificationsPlugin
         UInt32 SetIDList(IntPtr pidl);
 
         UInt32 GetDescription(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszFile,
             int cchMaxName);
 
@@ -65,7 +65,7 @@ namespace ToastNotificationsPlugin
             [MarshalAs(UnmanagedType.LPWStr)] string pszName);
 
         UInt32 GetWorkingDirectory(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszDir,
             int cchMaxPath
         );
@@ -74,7 +74,7 @@ namespace ToastNotificationsPlugin
             [MarshalAs(UnmanagedType.LPWStr)] string pszDir);
 
         UInt32 GetArguments(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszArgs,
             int cchMaxPath);
 
@@ -87,7 +87,7 @@ namespace ToastNotificationsPlugin
         UInt32 SetShowCmd(uint iShowCmd);
 
         UInt32 GetIconLocation(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             out StringBuilder pszIconPath,
             int cchIconPath,
             out int iIcon);
@@ -106,13 +106,13 @@ namespace ToastNotificationsPlugin
             [MarshalAs(UnmanagedType.LPWStr)] string pszFile);
     }
 
-    [ComImport,
-     Guid(ShellIIDGuid.IPersistFile),
-     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid(ShellIIDGuid.IPersistFile)]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPersistFile
     {
         UInt32 GetCurFile(
-            [Out(), MarshalAs(UnmanagedType.LPWStr)]
+            [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszFile
         );
 
@@ -133,7 +133,7 @@ namespace ToastNotificationsPlugin
     [ComImport]
     [Guid(ShellIIDGuid.IPropertyStore)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IPropertyStore
+    internal interface IPropertyStore
     {
         UInt32 GetCount([Out] out uint propertyCount);
         UInt32 GetAt([In] uint propertyIndex, out PropertyKey key);
@@ -142,9 +142,9 @@ namespace ToastNotificationsPlugin
         UInt32 Commit();
     }
 
-    [ComImport,
-     Guid(ShellIIDGuid.CShellLink),
-     ClassInterface(ClassInterfaceType.None)]
+    [ComImport]
+    [Guid(ShellIIDGuid.CShellLink)]
+    [ClassInterface(ClassInterfaceType.None)]
     internal class CShellLink
     {
     }

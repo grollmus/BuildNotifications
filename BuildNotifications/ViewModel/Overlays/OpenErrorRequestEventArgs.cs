@@ -6,11 +6,11 @@ namespace BuildNotifications.ViewModel.Overlays
 {
     public class OpenErrorRequestEventArgs : EventArgs
     {
-        public IEnumerable<INotification> ErrorNotifications { get; set; }
-
         public OpenErrorRequestEventArgs(IEnumerable<INotification> errorNotifications)
         {
             ErrorNotifications = errorNotifications;
         }
+
+        public IEnumerable<INotification> ErrorNotifications { get; set; }
     }
 }

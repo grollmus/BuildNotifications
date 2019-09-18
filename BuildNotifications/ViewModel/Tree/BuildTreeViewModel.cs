@@ -23,11 +23,14 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private IBuildTreeSortingDefinition _sortingDefinition;
-
         public IEnumerable<BuildNodeViewModel> AllBuilds()
         {
             return AllBuilds(this);
+        }
+
+        protected override string CalculateDisplayName()
+        {
+            return "";
         }
 
         private IEnumerable<BuildNodeViewModel> AllBuilds(BuildTreeNodeViewModel ofNode)
@@ -35,6 +38,6 @@ namespace BuildNotifications.ViewModel.Tree
             return ofNode.Children.OfType<BuildNodeViewModel>().Concat(ofNode.Children.SelectMany(AllBuilds));
         }
 
-        protected override string CalculateDisplayName() => "";
+        private IBuildTreeSortingDefinition _sortingDefinition;
     }
 }

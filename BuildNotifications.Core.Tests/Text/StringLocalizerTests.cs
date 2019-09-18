@@ -38,15 +38,6 @@ namespace BuildNotifications.Core.Tests.Text
         }
 
         [Fact]
-        public void NullValueShouldResultInEmptyString()
-        {
-            var result = StringLocalizer.Instance[null!];
-
-            Assert.NotNull(result);
-            Assert.True(string.IsNullOrEmpty(result));
-        }
-
-        [Fact]
         public void NotTranslatedTextReturnsFallbackLanguageTranslation()
         {
             var localizer = StringLocalizer.Instance;
@@ -58,6 +49,15 @@ namespace BuildNotifications.Core.Tests.Text
             {
                 Assert.Equal(StringLocalizer.Instance.GetText(textOnlyInEnglishId, supportedCulture), textOnlyInEnglish);
             }
+        }
+
+        [Fact]
+        public void NullValueShouldResultInEmptyString()
+        {
+            var result = StringLocalizer.Instance[null!];
+
+            Assert.NotNull(result);
+            Assert.True(string.IsNullOrEmpty(result));
         }
     }
 }

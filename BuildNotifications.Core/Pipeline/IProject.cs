@@ -44,6 +44,12 @@ namespace BuildNotifications.Core.Pipeline
         IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate);
 
         /// <summary>
+        /// Fetches all user identities which represent the current user. That is, the user that is actually currently running
+        /// BuildNotifications.
+        /// </summary>
+        IEnumerable<IUser> FetchCurrentUserIdentities();
+
+        /// <summary>
         /// Fetches all branches that exist for this project.
         /// </summary>
         /// <returns>List of branches.</returns>
@@ -66,11 +72,6 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <returns>List of builds.</returns>
         IAsyncEnumerable<IBuild> FetchRemovedBuilds();
-
-        /// <summary>
-        /// Fetches all user identities which represent the current user. That is, the user that is actually currently running BuildNotifications.
-        /// </summary>
-        IEnumerable<IUser> FetchCurrentUserIdentities();
 
         /// <summary>
         /// Updates given builds.

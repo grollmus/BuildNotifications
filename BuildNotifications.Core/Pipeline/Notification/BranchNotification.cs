@@ -7,21 +7,25 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     internal class BranchNotification : BaseBuildNotification
     {
-        private readonly IList<string> _branchNames;
-
-        // Branch {1} {0}. E.g. Branch stage failed.
-        public const string BranchChangedTextId = nameof(BranchChangedTextId);
-
-        // Branches {1} and {2} {0}. E.g. Branch stage and master failed.
-        public const string TwoBranchesChangedTextId = nameof(TwoBranchesChangedTextId);
-
-        // Branches {1}, {2} {3} {0}. E.g. Branch stage, master and featureA failed.
-        public const string ThreeBranchesChangedTextId = nameof(ThreeBranchesChangedTextId);
-
         public BranchNotification(IList<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> branchNames) : base(NotificationType.Branch, buildNodes, status)
         {
             _branchNames = branchNames.Distinct().ToList();
             SetParameter();
+        }
+
+        protected override string GetMessageTextId()
+        {
+            return _branchNames.Count switch
+            {
+                1 => BranchChangedTextId,
+                2 => TwoBranchesChangedTextId,
+                _ => ThreeBranchesChangedTextId
+            };
+        }
+
+        protected override string ResolveIssueSource()
+        {
+            return string.Join("\n", _branchNames);
         }
 
         private void SetParameter()
@@ -70,14 +74,15 @@ namespace BuildNotifications.Core.Pipeline.Notification
             return branchNames.Select(s => s.Remove(0, truncationLength));
         }
 
-        protected override string GetMessageTextId() =>
-            _branchNames.Count switch
-            {
-                1 => BranchChangedTextId,
-                2 => TwoBranchesChangedTextId,
-                _ => ThreeBranchesChangedTextId
-            };
+        private readonly IList<string> _branchNames;
 
-        protected override string ResolveIssueSource() => string.Join("\n", _branchNames);
+        // Branch {1} {0}. E.g. Branch stage failed.
+        public const string BranchChangedTextId = nameof(BranchChangedTextId);
+
+        // Branches {1}, {2} {3} {0}. E.g. Branch stage, master and featureA failed.
+        public const string ThreeBranchesChangedTextId = nameof(ThreeBranchesChangedTextId);
+
+        // Branches {1} and {2} {0}. E.g. Branch stage and master failed.
+        public const string TwoBranchesChangedTextId = nameof(TwoBranchesChangedTextId);
     }
 }

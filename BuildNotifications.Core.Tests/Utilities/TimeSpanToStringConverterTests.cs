@@ -11,11 +11,6 @@ namespace BuildNotifications.Core.Tests.Utilities
 {
     public class TimeSpanToStringConverterTests
     {
-        private static readonly CultureInfo TestCulture = CultureInfo.InvariantCulture;
-        private static DateTime BaseDateTime { get; } = new DateTime(2000, 1, 1, 0, 0, 0);
-
-        // see https://github.com/xunit/xunit/issues/1897
-#nullable disable
         public static IEnumerable<object[]> TestCases2
         {
             [UsedImplicitly]
@@ -38,7 +33,8 @@ namespace BuildNotifications.Core.Tests.Utilities
                 yield return new object[] {BaseDateTime, new DateTime(2000, 1, 1, 0, 0, TimeSpanToStringConverter.JustNowSeconds + 1), GetTimeString(nameof(TimeSpanToStringConverter.NSecondsAgoTextId), TimeSpanToStringConverter.JustNowSeconds + 1)};
             }
         }
-#nullable enable
+
+        private static DateTime BaseDateTime { get; } = new DateTime(2000, 1, 1, 0, 0, 0);
 
         [Theory]
         [MemberData(nameof(TestCases2))]
@@ -67,5 +63,9 @@ namespace BuildNotifications.Core.Tests.Utilities
         {
             return StringLocalizer.Instance.GetText(textId);
         }
+
+        private static readonly CultureInfo TestCulture = CultureInfo.InvariantCulture;
+
+        // see https://github.com/xunit/xunit/issues/1897
     }
 }

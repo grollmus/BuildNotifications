@@ -9,19 +9,6 @@ namespace BuildNotifications.Resources.Icons
 {
     internal class IconTypeToGeometryConverter : IValueConverter
     {
-        public static IconTypeToGeometryConverter Instance { get; } = new IconTypeToGeometryConverter();
-
-        private static IEnumerable<IconType> SupportedIcons
-        {
-            get
-            {
-                yield return IconType.Connection;
-                yield return IconType.Branch;
-                yield return IconType.Definition; 
-                yield return IconType.Queued; 
-            }
-        }
-
         static IconTypeToGeometryConverter()
         {
             Cache = SupportedIcons.ToDictionary(x => x, IconTypeToGeometry);
@@ -31,15 +18,18 @@ namespace BuildNotifications.Resources.Icons
         {
         }
 
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public static IconTypeToGeometryConverter Instance { get; } = new IconTypeToGeometryConverter();
+
+        private static IEnumerable<IconType> SupportedIcons
         {
-            if (value is IconType type && Cache.ContainsKey(type))
-                return Cache[type];
-
-            return Geometry.Empty;
+            get
+            {
+                yield return IconType.Connection;
+                yield return IconType.Branch;
+                yield return IconType.Definition;
+                yield return IconType.Queued;
+            }
         }
-
-        private static readonly Dictionary<IconType, Geometry> Cache;
 
         private static Geometry IconTypeToGeometry(IconType type)
         {
@@ -58,9 +48,19 @@ namespace BuildNotifications.Resources.Icons
             }
         }
 
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is IconType type && Cache.ContainsKey(type))
+                return Cache[type];
+
+            return Geometry.Empty;
+        }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
+        private static readonly Dictionary<IconType, Geometry> Cache;
     }
 }

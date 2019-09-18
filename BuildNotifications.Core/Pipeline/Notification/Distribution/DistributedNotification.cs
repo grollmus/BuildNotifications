@@ -9,6 +9,43 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public class DistributedNotification : IDistributedNotification
     {
+        public static IDistributedNotification? FromSerialized(string base64)
+        {
+            try
+            {
+                LogTo.Debug("Reading content and deserializing.");
+                var content = FromBase64(base64);
+                LogTo.Debug("Successfully converted back from base64.");
+                return JsonConvert.DeserializeObject<DistributedNotification>(content);
+            }
+            catch (Exception e)
+            {
+                LogTo.ErrorException("Failed to deserialize DistributedNotification.", e);
+                return null;
+            }
+        }
+
+        public string Serialize()
+        {
+            var serialized = JsonConvert.SerializeObject(this);
+            return ToBase64(serialized);
+        }
+
+        public string ToUriProtocol()
+        {
+            return $"{UriSchemeRegistration.UriScheme}:{Serialize()}";
+        }
+
+        private static string FromBase64(string base64)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+        }
+
+        private static string ToBase64(string source)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
+        }
+
         public string Content { get; set; } = "";
 
         public string Title { get; set; } = "";
@@ -30,36 +67,5 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         public DistributedNotificationErrorType NotificationErrorType { get; set; } = DistributedNotificationErrorType.None;
 
         public DistributedNotificationType NotificationType { get; set; } = DistributedNotificationType.General;
-
-        public string Serialize()
-        {
-            var serialized = JsonConvert.SerializeObject(this);
-            return ToBase64(serialized);
-        }
-
-        public string ToUriProtocol()
-        {
-            return $"{UriSchemeRegistration.UriScheme}:{Serialize()}";
-        }
-
-        public static IDistributedNotification? FromSerialized(string base64)
-        {
-            try
-            {
-                LogTo.Debug($"Reading content and deserializing.");
-                var content = FromBase64(base64);
-                LogTo.Debug($"Successfully converted back from base64.");
-                return JsonConvert.DeserializeObject<DistributedNotification>(content);
-            }
-            catch (Exception e)
-            {
-                LogTo.ErrorException("Failed to deserialize DistributedNotification.", e);
-                return null;
-            }
-        }
-
-        private static string ToBase64(string source) => Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
-
-        private static string FromBase64(string base64) => Encoding.UTF8.GetString(Convert.FromBase64String(base64));
     }
 }

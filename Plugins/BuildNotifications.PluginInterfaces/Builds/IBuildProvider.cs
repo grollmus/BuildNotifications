@@ -28,8 +28,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <remarks>
         /// Changed means the build has been newly created or changed one or more
         /// of its properties (e.g. status or progress).
-        ///
-        /// <paramref name="date"/> is given in UTC.
+        /// <paramref name="date" /> is given in UTC.
         /// </remarks>
         /// <param name="date">Date and time since when to fetch builds.</param>
         /// <returns>List of all builds changed since <paramref name="date" />.</returns>
