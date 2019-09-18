@@ -10,7 +10,7 @@ namespace BuildNotifications.Core.Config
     {
         public ConnectionData()
         {
-            Name = StringLocalizer.Instance["New Connection"];
+            Name = StringLocalizer.NewConnection;
         }
 
         /// <summary>

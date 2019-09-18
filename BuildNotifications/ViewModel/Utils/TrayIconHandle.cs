@@ -58,8 +58,8 @@ namespace BuildNotifications.ViewModel.Utils
         {
             var menu = new ContextMenu();
 
-            menu.MenuItems.Add(StringLocalizer.Instance["ShowWindow"], ShowWindow);
-            menu.MenuItems.Add(StringLocalizer.Instance["Exit"], Exit);
+            menu.MenuItems.Add(StringLocalizer.ShowWindow, ShowWindow);
+            menu.MenuItems.Add(StringLocalizer.Exit, Exit);
 
             return menu;
         }

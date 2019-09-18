@@ -137,7 +137,7 @@ namespace BuildNotifications.ViewModel
                 {
                     var success = NotificationCenter.TryHighlightNotificationByGuid(e.DistributedNotification.BasedOnNotification.Value);
                     if (!success)
-                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.Instance["NotificationNotFound"], NotificationType.Info)});
+                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.NotificationNotFound, NotificationType.Info)});
 
                     if (!ShowNotificationCenter)
                         ToggleShowNotificationCenter(this);

@@ -68,6 +68,5 @@ namespace BuildNotifications.Core.Tests.Utilities
         }
 
         private static readonly CultureInfo TestCulture = CultureInfo.InvariantCulture;
-
     }
 }

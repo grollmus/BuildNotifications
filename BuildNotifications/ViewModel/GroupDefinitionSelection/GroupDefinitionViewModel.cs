@@ -11,7 +11,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
         public GroupDefinitionViewModel(GroupDefinition groupDefinition)
         {
             GroupDefinition = groupDefinition;
-            _groupByText = StringLocalizer.Instance["GroupBy"];
+            _groupByText = StringLocalizer.GroupBy;
             SortingDefinitionsViewModel = new SortingDefinitionsViewModel(groupDefinition);
             SortingDefinitionsViewModel.SelectedSortingDefinitionChanged += OnSelectedSortingDefinitionChanged;
         }

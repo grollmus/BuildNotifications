@@ -15,7 +15,7 @@ namespace BuildNotifications.Core.Config
             BuildConnectionNames = new List<string>();
             SourceControlConnectionNames = new List<string>();
 
-            ProjectName = StringLocalizer.Instance["New Project"];
+            ProjectName = StringLocalizer.NewProject;
             DefaultCompareBranch = string.Empty;
 
             ShowPullRequests = true;

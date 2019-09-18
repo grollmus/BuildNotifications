@@ -348,3 +348,4 @@ MigrationBackup/
 /DummyFrontEnd/config.json
 /DummyFrontEnd/plugins/dummy
 /BuildNotifications/plugins
+/BuildNotifications.Core/Text/StringLocalizer.Strings.cs

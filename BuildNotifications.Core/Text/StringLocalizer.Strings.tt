@@ -22,7 +22,8 @@ namespace BuildNotifications.Core.Text
             if( string.IsNullOrWhiteSpace(name))
                 continue;
 
-            WriteLine($"        public static string {name} => Instance[\"name\"];");
+            WriteLine($"        public static string {name} => Instance[\"{name}\"];");
         }
-	#>}
+	#>
+    }
 }

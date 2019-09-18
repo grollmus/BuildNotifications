@@ -51,7 +51,7 @@ namespace BuildNotifications.Core.Config
             var project = new ProjectConfiguration();
             project.BuildConnectionNames.Add(predefinedConnectionNames.First());
             project.SourceControlConnectionNames.Add(predefinedConnectionNames.Last());
-            project.ProjectName = StringLocalizer.Instance["DefaultProjectName"];
+            project.ProjectName = StringLocalizer.NewProject;
 
             return project;
         }

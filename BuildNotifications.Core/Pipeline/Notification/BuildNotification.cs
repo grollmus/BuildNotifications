@@ -28,8 +28,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 return $"{BuildNodes.First().Build.Definition.Name}\n{BuildNodes.First().Build.BranchName}";
             var branchCount = BuildNodes.Select(x => x.Build.BranchName).Distinct().Count();
             var definitionCount = BuildNodes.Select(x => x.Build.Definition.Name).Distinct().Count();
-            var branchText = string.Format(StringLocalizer.Instance["BranchesCount"], branchCount);
-            var definitionText = string.Format(StringLocalizer.Instance["DefinitionsCount"], definitionCount);
+            var branchText = string.Format(StringLocalizer.BranchesCount, branchCount);
+            var definitionText = string.Format(StringLocalizer.DefinitionsCount, definitionCount);
 
             return $"{branchText}\n{definitionText}";
         }
