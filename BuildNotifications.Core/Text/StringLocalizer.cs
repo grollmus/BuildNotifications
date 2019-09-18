@@ -10,7 +10,7 @@ namespace BuildNotifications.Core.Text
     /// <summary>
     /// Retrieves localized strings from the Texts.resx files
     /// </summary>
-    public class StringLocalizer
+    public partial class StringLocalizer
     {
         private StringLocalizer()
         {

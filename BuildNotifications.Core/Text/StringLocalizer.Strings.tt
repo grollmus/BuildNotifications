@@ -1,0 +1,28 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Xml" #>
+<#@ output extension=".cs" #>
+namespace BuildNotifications.Core.Text
+{
+    public partial class StringLocalizer
+    {<#
+		var inputFilePath = this.Host.ResolvePath("Texts.en.resx");
+		var xml = XDocument.Load(inputFilePath);
+
+		WriteLine("");
+        foreach (var data in xml.Descendants("data"))
+        {
+            var name = data.Attribute("name")?.Value;
+            if( string.IsNullOrWhiteSpace(name))
+                continue;
+
+            WriteLine($"        public static string {name} => Instance[\"name\"];");
+        }
+	#>}
+}
