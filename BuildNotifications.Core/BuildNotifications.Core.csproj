@@ -19,31 +19,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
-    <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+    <ProjectReference
+      Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
+    <ProjectReference
+      Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.1.0-*" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Text\StringLocalizer.Strings.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Text\StringLocalizer.Strings.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +39,26 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
     </Compile>
+    <None Update="Text\StringLocalizer.Strings.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <TextTemplate Include="**\*.tt" />
+  </ItemGroup>
+
+  <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+    <Message Text="Transforming Text Templates" Importance="Normal" />
+
+    <ItemGroup>
+      <Compile Remove="Text\StringLocalizer.Strings.cs" />
+    </ItemGroup>
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tt %(TextTemplate.Identity)" />
+    <ItemGroup>
+      <Compile Include="Text\StringLocalizer.Strings.cs" />
+    </ItemGroup>
+  </Target>
 </Project>
