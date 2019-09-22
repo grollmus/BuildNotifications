@@ -8,6 +8,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:views="clr-namespace:BuildNotifications.Views"
                     mc:Ignorable="d">
 
     <DataTemplate x:Key="EditableBoolTemplate" DataType="{x:Type editableConfigs:EditableInt}">
@@ -43,10 +44,15 @@
             <TextBlock
                 Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox ItemsSource="{Binding PredefinedValues}"
-                                     SelectedItem="{Binding Value, Mode=TwoWay}"
-                                     IsEnabled="{Binding IsBusy, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
-                                     Margin="{StaticResource BlockQuarterYOnlyMargin}" />
+            <Grid>
+                <local:DecoratedComboBox ItemsSource="{Binding PredefinedValues}"
+                                         SelectedItem="{Binding Value, Mode=TwoWay}"
+                                         IsEnabled="{Binding IsBusy, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
+                                         Margin="{StaticResource BlockQuarterYOnlyMargin}" />
+                <Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <views:BusyIndicator  IsBusy="{Binding IsBusy}"/>
+                </Viewbox>
+            </Grid>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="EditableEnumTemplate" DataType="{x:Type editableConfigs:IEditableEnum}">

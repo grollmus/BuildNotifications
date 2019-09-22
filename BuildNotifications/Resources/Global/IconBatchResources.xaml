@@ -304,11 +304,14 @@
     <DrawingImage x:Key="DownArrowDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
-                <DrawingGroup Transform="0.1875,0,0,0.1875,0,0">
-                    <DrawingGroup>
-                        <GeometryDrawing
-                            Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
-                            Geometry="F1 M12,12z M0,0z M10.7,20.15L32,50.25 53.35,20.15 10.7,20.15z" />
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="Transparent" Geometry="F1 M12,12z M0,0z M12,0L0,0 0,12 12,12 12,0z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+                <DrawingGroup Opacity="1" Transform="0.1875,0,0,0.1875,0,0">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M12,12z M0,0z M10.7,20.15L32,50.25 53.35,20.15 10.7,20.15z" />
                     </DrawingGroup>
                 </DrawingGroup>
             </DrawingGroup>

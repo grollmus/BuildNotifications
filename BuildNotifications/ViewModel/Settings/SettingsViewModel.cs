@@ -45,7 +45,8 @@ namespace BuildNotifications.ViewModel.Settings
         private void CreateEditables()
         {
             var factory = new SettingsFactory();
-            var editables = factory.Reflect(Configuration, out var changeTrackingManager).ToList();
+            var changeTrackingManager = new ChangeTrackingManager();
+            var editables = factory.Reflect(Configuration, changeTrackingManager).ToList();
 
             var projectsEditables = new List<IEditableConfig>();
 
@@ -67,13 +68,14 @@ namespace BuildNotifications.ViewModel.Settings
             }
 
             ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
-            var connectionsEditable = factory.Reflect(ConnectionsWrapper, out var connectionChangeTrackingManager);
+            var connectionChangeTracker = new ChangeTrackingManager();
+            var connectionsEditable = factory.Reflect(ConnectionsWrapper, connectionChangeTracker);
 
             ConnectionsSubSet = new SettingsSubSetViewModel(connectionsEditable);
             ProjectsSubSet = new SettingsSubSetViewModel(projectsEditables);
 
             changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
-            connectionChangeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
+            connectionChangeTracker.ConfigurationChanged += OnConfigurationChanged;
         }
 
         private void OnConfigurationChanged(object? sender, EventArgs args)
