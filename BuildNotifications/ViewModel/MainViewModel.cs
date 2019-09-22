@@ -237,7 +237,7 @@ namespace BuildNotifications.ViewModel
         {
             _coreSetup.Pipeline.ClearProjects();
             var projectProvider = _coreSetup.ProjectProvider;
-            foreach (var project in projectProvider.AllProjects())
+            foreach (var project in projectProvider.EnabledProjects())
             {
                 _coreSetup.Pipeline.AddProject(project);
             }

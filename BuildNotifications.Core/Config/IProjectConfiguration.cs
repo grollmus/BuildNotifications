@@ -42,6 +42,11 @@ namespace BuildNotifications.Core.Config
         /// Whether to hide Pull-Requests that has been merged.
         /// </summary>
         bool HideCompletedPullRequests { get; set; }
+        
+        /// <summary>
+        /// Whether the project is enabled and should be loaded.
+        /// </summary>
+        bool IsEnabled { get; set; }
 
         /// <summary>
         /// Whether only white listed branches shall be loaded.

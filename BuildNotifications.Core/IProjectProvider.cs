@@ -6,5 +6,7 @@ namespace BuildNotifications.Core
     public interface IProjectProvider
     {
         IEnumerable<IProject> AllProjects();
+
+        IEnumerable<IProject> EnabledProjects();
     }
 }
