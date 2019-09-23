@@ -418,14 +418,14 @@ namespace BuildNotifications.ViewModel
             Application.Current.Dispatcher?.Invoke(BringWindowToFront);
         }
 
-        private async Task UpdateApp()
+        private async Task UpdateApp(IAppUpdater? updater = null)
         {
             LogTo.Info("Checking for updates...");
 
             try
             {
                 var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-                var updater = new AppUpdater();
+                updater ??= new AppUpdater(includePreReleases);
 
                 var result = await updater.CheckForUpdates();
                 if (result != null)
