@@ -71,8 +71,7 @@
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel Orientation="Horizontal"
-                                                     VirtualizingStackPanel.IsVirtualizing="True" IsItemsHost="True" />
+                        <animation:AnimatedWrapPanel Orientation="Horizontal" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>

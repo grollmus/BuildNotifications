@@ -153,7 +153,22 @@ namespace BuildNotifications.ViewModel.Tree
 
             LogTo.Info($"Trying to go to URL: \"{url}\"");
             if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                Process.Start("explorer.exe", $"\"{url}\"");
+            {
+                try
+                {
+                    var processStartInfo = new ProcessStartInfo($"{url}")
+                    {
+                        UseShellExecute = true,
+                        Verb = "open"
+                    };
+
+                    Process.Start(processStartInfo);
+                }
+                catch (Exception e)
+                {
+                    LogTo.WarnException($"Failed to open URL \"{url}\".", e);
+                }
+            }
         }
 
         private void OnMouseEnter(object obj)

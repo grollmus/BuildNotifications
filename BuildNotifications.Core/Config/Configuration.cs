@@ -96,16 +96,24 @@ namespace BuildNotifications.Core.Config
 
         public Type BuildPluginConfigurationType(ConnectionData connectionData)
         {
-            if (PluginRepository == null)
-                LogTo.Warn("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+            if (PluginRepository == null || connectionData.BuildPluginType == null)
+            {
+                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+                return typeof(object);
+            }
+
             var type = PluginRepository?.FindConfigurationType(connectionData.BuildPluginType);
             return type ?? typeof(object);
         }
 
         public Type SourceControlPluginConfigurationType(ConnectionData connectionData)
         {
-            if (PluginRepository == null)
-                LogTo.Warn("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+            if (PluginRepository == null || connectionData.SourceControlPluginType == null)
+            {
+                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+                return typeof(object);
+            }
+
             var type = PluginRepository?.FindConfigurationType(connectionData.SourceControlPluginType);
             return type ?? typeof(object);
         }
