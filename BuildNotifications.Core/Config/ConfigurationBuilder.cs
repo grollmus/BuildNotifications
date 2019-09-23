@@ -16,8 +16,8 @@ namespace BuildNotifications.Core.Config
 
         public IConfiguration LoadConfiguration()
         {
-            LogTo.Info("Loading configuration");
             var configFilePath = _pathResolver.UserConfigurationFilePath;
+            LogTo.Info($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"");
             var config = _configurationSerializer.Load(configFilePath);
 
             var predefinedFilePath = _pathResolver.PredefinedConfigurationFilePath;
