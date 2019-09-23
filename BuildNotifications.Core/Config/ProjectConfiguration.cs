@@ -22,7 +22,10 @@ namespace BuildNotifications.Core.Config
             HideCompletedPullRequests = true;
             LoadWhitelistedBranchesExclusively = false;
             LoadWhitelistedDefinitionsExclusively = false;
+            IsEnabled = true;
         }
+
+        public bool IsEnabled { get; set; }
 
         [IsDisplayName]
         public string ProjectName { get; set; }

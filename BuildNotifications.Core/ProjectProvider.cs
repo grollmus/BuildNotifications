@@ -19,12 +19,16 @@ namespace BuildNotifications.Core
 
         public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
 
-        public IEnumerable<IProject> AllProjects()
+        public IEnumerable<IProject> AllProjects() => Projects(x => true);
+
+        public IEnumerable<IProject> EnabledProjects() => Projects(x => x.IsEnabled);
+
+        private IEnumerable<IProject> Projects(Func<IProjectConfiguration, bool> predicate)
         {
             if (!_configuration.Projects.Any())
                 yield break;
 
-            foreach (var projectConfiguration in _configuration.Projects)
+            foreach (var projectConfiguration in _configuration.Projects.Where(predicate))
             {
                 var project = _projectFactory.Construct(projectConfiguration);
                 if (project != null)

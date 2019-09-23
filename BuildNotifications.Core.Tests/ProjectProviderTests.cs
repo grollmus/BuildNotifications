@@ -46,5 +46,50 @@ namespace BuildNotifications.Core.Tests
                 x => Assert.Equal("p3", x)
             );
         }
+
+        [Fact]
+        public void EnabledProjectsShouldNotContainDisabledProjectsDefinedInConfiguration()
+        {
+            // Arrange
+            var pluginRepository = Substitute.For<IPluginRepository>();
+            var configuration = new Configuration();
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p1", IsEnabled = false});
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p2"});
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p3"});
+
+            var sut = new ProjectProvider(configuration, pluginRepository);
+
+            // Act
+            var actual = sut.EnabledProjects().ToList();
+
+            // Assert
+            Assert.Collection(actual.Select(p => p.Name),
+                x => Assert.Equal("p2", x),
+                x => Assert.Equal("p3", x)
+            );
+        }
+
+        [Fact]
+        public void AllProjectsShouldContainDisabledProjectsDefinedInConfiguration()
+        {
+            // Arrange
+            var pluginRepository = Substitute.For<IPluginRepository>();
+            var configuration = new Configuration();
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p1", IsEnabled = false});
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p2"});
+            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p3", IsEnabled = false});
+
+            var sut = new ProjectProvider(configuration, pluginRepository);
+
+            // Act
+            var actual = sut.AllProjects().ToList();
+
+            // Assert
+            Assert.Collection(actual.Select(p => p.Name),
+                x => Assert.Equal("p1", x),
+                x => Assert.Equal("p2", x),
+                x => Assert.Equal("p3", x)
+            );
+        }
     }
 }

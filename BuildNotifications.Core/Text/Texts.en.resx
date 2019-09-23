@@ -453,4 +453,7 @@
   <data name="RequestedFor" xml:space="preserve">
     <value>Requested for</value>
   </data>
+  <data name="IsEnabled" xml:space="preserve">
+    <value>Is enabled</value>
+  </data>
 </root>
