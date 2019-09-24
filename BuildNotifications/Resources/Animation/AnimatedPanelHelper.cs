@@ -27,7 +27,7 @@ namespace BuildNotifications.Resources.Animation
                     continue;
 
                 if (oldPos.Equals(origin))
-                    oldPos = new Point(newPos.X + 30, newPos.Y);
+                    continue;
 
                 CreateTween(oldPos, newPos, child, animationDuration, globalTweenHandler);
             }
