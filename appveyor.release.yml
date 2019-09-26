@@ -28,6 +28,7 @@ build_script:
     dotnet publish -r win-x64 -c Release
 
     & Scripts/create-release-package.ps1
+test: off
 artifacts:
 - path: packages/*
   name: SquirrelPackage
