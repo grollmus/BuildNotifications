@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>BuildNotifications</id>
+    <version>1.0.0</version>
+    <title></title>
+    <authors>Grollmus München GmbH</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/grollmus/BuildNotifications</projectUrl>
+    <description>My package description.</description>
+  </metadata>
+  <files>
+    <file src="..\Plugins\BuildNotifications.Plugin.Tfs\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45\plugins\tfs" />
+    <file src="..\BuildNotifications.Core\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45" />
+	<file src="..\BuildNotifications\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45" />
+  </files>
+</package>
