@@ -12,7 +12,7 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(NotifyingContentProperty, value);
         }
 
-        public event EventHandler ContentUpdated;
+        public event EventHandler? ContentUpdated;
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

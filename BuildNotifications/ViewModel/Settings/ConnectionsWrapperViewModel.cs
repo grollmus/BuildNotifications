@@ -32,7 +32,7 @@ namespace BuildNotifications.ViewModel.Settings
         [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
         public ObservableCollection<ConnectionDataViewModel> Connections { get; set; }
 
-        public event EventHandler TestFinished;
+        public event EventHandler? TestFinished;
 
         public Type BuildPluginConfigurationType(ConnectionData connectionData)
         {

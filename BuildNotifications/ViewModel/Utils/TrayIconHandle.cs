@@ -50,9 +50,9 @@ namespace BuildNotifications.ViewModel.Utils
 
         private string ErrorTrayIconPath => $"{Environment.CurrentDirectory}/Resources/Icons/icon_failed.ico".Replace('/', '\\');
 
-        public event EventHandler ExitRequested;
+        public event EventHandler? ExitRequested;
 
-        public event EventHandler ShowWindowRequested;
+        public event EventHandler? ShowWindowRequested;
 
         private ContextMenu CreateContextMenu()
         {

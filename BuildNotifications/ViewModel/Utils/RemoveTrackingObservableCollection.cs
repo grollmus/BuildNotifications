@@ -149,7 +149,7 @@ namespace BuildNotifications.ViewModel.Utils
             set => _list[index] = value;
         }
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         private readonly ObservableCollection<T> _list;
 

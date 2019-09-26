@@ -42,6 +42,6 @@ namespace BuildNotifications.ViewModel.Settings
 
         public TestConnectionViewModel TestConnectionViewModel { get; set; }
 
-        public event EventHandler TestFinished;
+        public event EventHandler? TestFinished;
     }
 }

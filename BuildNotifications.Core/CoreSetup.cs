@@ -50,9 +50,9 @@ namespace BuildNotifications.Core
 
         public IProjectProvider ProjectProvider { get; }
 
-        public event EventHandler<DistributedNotificationReceivedEventArgs> DistributedNotificationReceived;
+        public event EventHandler<DistributedNotificationReceivedEventArgs>? DistributedNotificationReceived;
 
-        public event EventHandler<PipelineUpdateEventArgs> PipelineUpdated;
+        public event EventHandler<PipelineUpdateEventArgs>? PipelineUpdated;
 
         public void PersistConfigurationChanges()
         {

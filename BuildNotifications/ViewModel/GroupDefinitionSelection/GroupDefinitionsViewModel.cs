@@ -62,8 +62,8 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             set => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition = value;
         }
 
-        public event EventHandler<GroupDefinitionsSelectionChangedEventArgs> SelectedDefinitionChanged;
-        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+        public event EventHandler<GroupDefinitionsSelectionChangedEventArgs>? SelectedDefinitionChanged;
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs>? SelectedSortingDefinitionChanged;
 
         private void OnSelectedSortingDefinitionChanged(object? sender, SortingDefinitionsSelectionChangedEventArgs e)
         {

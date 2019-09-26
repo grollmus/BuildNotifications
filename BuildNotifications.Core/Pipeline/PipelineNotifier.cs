@@ -12,6 +12,6 @@ namespace BuildNotifications.Core.Pipeline
             Updated?.Invoke(this, new PipelineUpdateEventArgs(tree, delta));
         }
 
-        public event EventHandler<PipelineUpdateEventArgs> Updated;
+        public event EventHandler<PipelineUpdateEventArgs>? Updated;
     }
 }

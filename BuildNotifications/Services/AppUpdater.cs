@@ -182,21 +182,19 @@ namespace BuildNotifications.Services
 
             var baseAddress = new Uri("https://api.github.com/");
 
-            using (var client = new HttpClient {BaseAddress = baseAddress})
-            {
-                client.DefaultRequestHeaders.UserAgent.Add(userAgent);
-                var response = await client.GetAsync(releasesApiBuilder.ToString());
-                response.EnsureSuccessStatusCode();
+            using var client = new HttpClient {BaseAddress = baseAddress};
+            client.DefaultRequestHeaders.UserAgent.Add(userAgent);
+            var response = await client.GetAsync(releasesApiBuilder.ToString());
+            response.EnsureSuccessStatusCode();
 
-                var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
-                var release = releases
-                    .Where(x => _includePreReleases || !x.PreRelease)
-                    .Where(x => string.IsNullOrEmpty(version) || x.HtmlUrl.Contains(version))
-                    .OrderByDescending(x => x.PublishedAt)
-                    .First();
+            var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
+            var release = releases
+                .Where(x => _includePreReleases || !x.PreRelease)
+                .Where(x => string.IsNullOrEmpty(version) || x.HtmlUrl.Contains(version))
+                .OrderByDescending(x => x.PublishedAt)
+                .First();
 
-                return release.HtmlUrl.Replace("/tag/", "/download/");
-            }
+            return release.HtmlUrl.Replace("/tag/", "/download/");
         }
 
         private async Task SanitizePackages()

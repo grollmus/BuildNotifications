@@ -34,7 +34,7 @@ namespace BuildNotifications.ViewModel.Settings
         [IgnoredForConfig]
         public ICommand TestConnectionCommand { get; set; }
 
-        public event EventHandler TestFinished;
+        public event EventHandler? TestFinished;
 
         private void ReportError(string titleId, string message)
         {

@@ -11,11 +11,12 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel.Overlays
 {
-// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
-#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
     internal class InitialSetupOverlayViewModel : BaseViewModel
     {
+// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public InitialSetupOverlayViewModel(SettingsViewModel settingsViewModel, IPluginRepository pluginRepository)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             _settingsViewModel = settingsViewModel;
 
@@ -78,7 +79,7 @@ namespace BuildNotifications.ViewModel.Overlays
 
         public ICommand RequestCloseCommand { get; set; }
 
-        public event EventHandler<InitialSetupEventArgs> CloseRequested;
+        public event EventHandler<InitialSetupEventArgs>? CloseRequested;
 
         private void RequestClose(object obj)
         {
@@ -172,4 +173,3 @@ namespace BuildNotifications.ViewModel.Overlays
         private const string InitialSetupUntested = nameof(InitialSetupUntested);
     }
 }
-#pragma warning enable CS8618

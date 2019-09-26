@@ -11,12 +11,12 @@ using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
 
 namespace BuildNotifications.ViewModel.Settings
 {
-// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
-#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
-
     public class SettingsViewModel
     {
+// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
+#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
         public SettingsViewModel(IConfiguration configuration, Action saveMethod, IPluginRepository pluginRepository)
+#pragma warning restore CS8618
         {
             Configuration = configuration;
             _saveMethod = saveMethod;
@@ -38,9 +38,9 @@ namespace BuildNotifications.ViewModel.Settings
 
         public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
 
-        public event EventHandler EditConnectionsRequested;
+        public event EventHandler? EditConnectionsRequested;
 
-        public event EventHandler SettingsChanged;
+        public event EventHandler? SettingsChanged;
 
         private void CreateEditables()
         {
@@ -93,4 +93,3 @@ namespace BuildNotifications.ViewModel.Settings
         private readonly IPluginRepository _pluginRepository;
     }
 }
-#pragma warning enable CS8618

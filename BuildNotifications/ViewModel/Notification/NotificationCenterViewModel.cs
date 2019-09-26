@@ -55,7 +55,7 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        public event EventHandler<HighlightRequestedEventArgs> HighlightRequested;
+        public event EventHandler<HighlightRequestedEventArgs>? HighlightRequested;
 
         public void ClearNotificationsOfType(NotificationType type)
         {
