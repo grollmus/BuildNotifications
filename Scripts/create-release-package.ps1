@@ -45,7 +45,16 @@ $nupkgFileName = "$applicationName-$versionToBuild.nupkg"
 Write-Output Creating squirrel release
 .\squirrel.exe --releasify $nupkgFileName
 
+Write-Output Dir
 dir
+Write-Output Dir Scripts
+cd Scripts
+dir
+Write-Output Dir Releases
+cd ..
+cd Releases
+dir
+Write-Output Dir Releases 2
 cd Releases
 dir
 
