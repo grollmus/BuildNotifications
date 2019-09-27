@@ -166,8 +166,6 @@ namespace BuildNotifications.Core.Pipeline
 
             public BuildStatus Status => OriginalBuild.Status;
 
-            public TimeSpan? Duration => OriginalBuild.Duration;
-
             public IBuildLinks Links => OriginalBuild.Links;
         }
     }
