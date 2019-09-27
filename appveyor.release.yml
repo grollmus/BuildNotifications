@@ -38,11 +38,17 @@ build_script:
     & Scripts/create-release-package.ps1
 test: off
 artifacts:
-- path: releases/*
-  name: SquirrelPackage
+- path: Releases/RELEASES
+  name: ReleasesFile
+- path: Releases/Setup.exe
+  name: SetupExe
+- path: Releases/*-full.nupkg
+  name: FullNupkg
+- path: Releases/*-delta.nupkg
+  name: DeltaNupkg
 deploy:
 - provider: GitHub
   auth_token:
     secure: TCujf+T4HHnH1w6WCybblkHMILi6HYQaZTYyLPG56w1mruNZ3aaBKtEoC+ubuVEI
-  artifact: SquirrelPackage
+  artifact: ReleasesFile,SetupExe,FullNupkg,DeltaNupkg
   draft: true
