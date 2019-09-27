@@ -121,7 +121,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
-    <ProjectReference Include="..\ToastNotificationsPlugin\ToastNotificationsPlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>

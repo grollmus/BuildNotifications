@@ -5,15 +5,18 @@ using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using BuildNotifications.PluginInterfacesLegacy.Notification;
 
 namespace BuildNotifications.Core.Plugin
 {
     internal class PluginRepository : IPluginRepository
     {
-        public PluginRepository(IReadOnlyList<IBuildPlugin> build, IReadOnlyList<ISourceControlPlugin> sourceControl, ITypeMatcher typeMatcher)
+        public PluginRepository(IReadOnlyList<IBuildPlugin> build, IReadOnlyList<ISourceControlPlugin> sourceControl,
+            IReadOnlyList<INotificationProcessor> notificationProcessors, ITypeMatcher typeMatcher)
         {
             Build = build;
             SourceControl = sourceControl;
+            NotificationProcessors = notificationProcessors;
             _typeMatcher = typeMatcher;
         }
 
@@ -29,7 +32,7 @@ namespace BuildNotifications.Core.Plugin
         }
 
         public IReadOnlyList<IBuildPlugin> Build { get; }
-
+        public IReadOnlyList<INotificationProcessor> NotificationProcessors { get; }
         public IReadOnlyList<ISourceControlPlugin> SourceControl { get; }
 
         public IBuildPlugin? FindBuildPlugin(string? typeName)

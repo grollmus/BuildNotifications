@@ -25,7 +25,11 @@ install:
     & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100-preview9-014004'
 build_script:
 - ps: >-
-    dotnet publish -r win-x64 -c Release
+    dotnet publish BuildNotifications\BuildNotifications.csproj -c Release -r win-x64
+
+    & dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64
+
+    & msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
 
     & Scripts/create-release-package.ps1
 test: off

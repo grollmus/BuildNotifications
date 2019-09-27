@@ -7,6 +7,7 @@ using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using BuildNotifications.PluginInterfacesLegacy.Notification;
 
 namespace BuildNotifications.Core.Plugin
 {
@@ -98,10 +99,11 @@ namespace BuildNotifications.Core.Plugin
 
             var buildPlugins = LoadPluginsOfType<IBuildPlugin>(exportedTypes).ToList();
             var sourceControlPlugins = LoadPluginsOfType<ISourceControlPlugin>(exportedTypes).ToList();
+            var notificationProcessors = LoadPluginsOfType<INotificationProcessor>(exportedTypes).ToList();
 
             LogTo.Info($"Loaded {buildPlugins.Count} build plugins.");
             LogTo.Info($"Loaded {sourceControlPlugins.Count} source control plugins.");
-            return new PluginRepository(buildPlugins, sourceControlPlugins, new TypeMatcher());
+            return new PluginRepository(buildPlugins, sourceControlPlugins, notificationProcessors, new TypeMatcher());
         }
     }
 }

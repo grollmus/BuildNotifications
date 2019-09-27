@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using BuildNotifications.PluginInterfacesLegacy.Notification;
 
 namespace BuildNotifications.Core.Plugin
 {
@@ -14,6 +15,11 @@ namespace BuildNotifications.Core.Plugin
         /// List of all loaded build plugins.
         /// </summary>
         IReadOnlyList<IBuildPlugin> Build { get; }
+
+        /// <summary>
+        /// List of all loaded notification processors.
+        /// </summary>
+        IReadOnlyList<INotificationProcessor> NotificationProcessors { get; }
 
         /// <summary>
         /// List of all loaded source control plugins.

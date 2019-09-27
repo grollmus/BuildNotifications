@@ -15,5 +15,6 @@
     <file src="..\Plugins\BuildNotifications.Plugin.Tfs\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45\plugins\tfs" />
     <file src="..\BuildNotifications.Core\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45" />
 	<file src="..\BuildNotifications\bin\Release\netcoreapp3.0\win-x64\publish\**" target="lib\net45" />
+	<file src="..\ToastNotificationsPlugin\bin\Release\**" target="lib\net45\plugins\toast" />
   </files>
 </package>

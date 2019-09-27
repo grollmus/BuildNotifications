@@ -23,7 +23,6 @@ using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using JetBrains.Annotations;
 using Semver;
-using ToastNotificationsPlugin;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
@@ -293,9 +292,11 @@ namespace BuildNotifications.ViewModel
         {
             NotificationCenter = new NotificationCenterViewModel();
 
-            var toastNotificationProcessor = new ToastNotificationProcessor();
+            foreach (var processor in _coreSetup.PluginRepository.NotificationProcessors)
+            {
+                NotificationCenter.NotificationDistributor.Add(processor);
+            }
 
-            NotificationCenter.NotificationDistributor.Add(toastNotificationProcessor);
             NotificationCenter.NotificationDistributor.Add(_trayIcon);
             NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
         }
