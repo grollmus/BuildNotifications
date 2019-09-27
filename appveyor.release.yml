@@ -27,6 +27,8 @@ build_script:
 - ps: >-
     dotnet publish BuildNotifications\BuildNotifications.csproj -c Release -r win-x64
 
+    & dotnet publish BuildNotifications.Core\BuildNotifications.Core.csproj -c Release -r win-x64
+
     & dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64
 
     & nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
