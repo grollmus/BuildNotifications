@@ -67,7 +67,7 @@ namespace BuildNotifications.Core.Config
         [MinMax(1, int.MaxValue)]
         public int BuildsToLoadCount { get; set; } = 200;
 
-        [MinMax(1, 10)]
+        [MinMax(1, 100)]
         public int BuildsToShow { get; set; } = 5;
 
         [MinMax(30, int.MaxValue)]

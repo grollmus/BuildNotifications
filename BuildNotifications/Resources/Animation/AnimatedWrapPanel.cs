@@ -10,13 +10,23 @@ namespace BuildNotifications.Resources.Animation
             _helper = new AnimatedPanelHelper();
         }
 
-        public double AnimationDuration { get; set; } = 0.4;
+        public double AnimationDuration
+        {
+            get => _helper.AnimationDuration;
+            set => _helper.AnimationDuration = value;
+        }
+
+        public double Delay
+        {
+            get => _helper.Delay;
+            set => _helper.Delay = value;
+        }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             var positions = _helper.StoreOldPositions(this);
             var arrangedSize = base.ArrangeOverride(finalSize);
-            _helper.AnimateToNewPositions(positions, this, AnimationDuration);
+            _helper.AnimateToNewPositions(positions, this);
             return arrangedSize;
         }
 

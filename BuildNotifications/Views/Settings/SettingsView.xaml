@@ -20,7 +20,7 @@
 
     </UserControl.Resources>
     <DockPanel>
-
+        <!--Edit connection button-->
         <icons:IconButton Content="{text:Localized EditConnection}" DockPanel.Dock="Bottom"
                           HorizontalAlignment="Center"
                           Command="{Binding EditConnectionsCommand}" Icon="Connection"
@@ -29,14 +29,37 @@
                           Style="{StaticResource IconButtonWithDockedContent}" />
 
         <ScrollViewer Margin="{StaticResource BlockHalfXOnlyMargin}">
-            <ItemsControl ItemsSource="{Binding Configs}"
-                          ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            <DockPanel>
+                <!--Current User Identities-->
+                <ItemsControl ItemsSource="{Binding CurrentUserIdentities}" DockPanel.Dock="Bottom">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="{DynamicResource Foreground1}" Text="{Binding Name}"
+                                       FontSize="{StaticResource BlockThreeQuarters}" ToolTip="{Binding Description}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <TextBlock Foreground="{DynamicResource Foreground1HalfTransparency}" Text="{text:Localized YourIdentities}"
+                           FontSize="{StaticResource Block}" DockPanel.Dock="Bottom"/>
+
+                <!--Configurable options-->
+                <ItemsControl ItemsSource="{Binding Configs}"
+                              ItemTemplateSelector="{x:Static resourcesSettings:EditableConfigTemplateSelector.Instance}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </DockPanel>
         </ScrollViewer>
     </DockPanel>
 </UserControl>

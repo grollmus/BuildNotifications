@@ -9,6 +9,10 @@
                     xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Build/BuildTemplates.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <ResourceDictionary x:Key="BuildTreeSpecificResources">
         <Style TargetType="{x:Type icons:IconBatch}">
             <Setter Property="Width" Value="{StaticResource Block}" />
@@ -36,11 +40,6 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
-            <Setter Property="Background" Value="{DynamicResource Background2}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />
         </Style>
 
         <Style TargetType="{x:Type TextBlock}">
@@ -71,7 +70,7 @@
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel Orientation="Horizontal" IsItemsHost="True" />
+                        <animation:AnimatedWrapPanel Orientation="Horizontal" IsItemsHost="True" Delay="0.2"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
@@ -143,7 +142,7 @@
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0"
+                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0" Delay="0.1"
                                                           VirtualizingStackPanel.IsVirtualizing="True"
                                                           IsItemsHost="True" />
                         </ItemsPanelTemplate>
@@ -185,21 +184,19 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left"
+        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left" Delay="0"
                                      Width="{StaticResource BlockTwentyEight}">
             <ContentPresenter DockPanel.Dock="Left" ContentTemplate="{StaticResource ThirdLevelGroupingTemplate}" />
             <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True" />
+                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True" Delay="0"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ContentPresenter Content="{Binding}"
-                                          ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}" />
-
+                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource BuildNodeTemplate}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -207,7 +204,7 @@
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
                     <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
-                                                        TargetScaleY="0.8" />
+                                                        TargetScaleY="0.8"/>
                 </ei:DataTrigger>
 
                 <i:EventTrigger EventName="Loaded">
@@ -215,16 +212,12 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </animation:AnimatedDockPanel>
-
-
     </DataTemplate>
-
+    
     <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel>
             <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
                               ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
         </DockPanel>
     </DataTemplate>
-
-
 </ResourceDictionary>

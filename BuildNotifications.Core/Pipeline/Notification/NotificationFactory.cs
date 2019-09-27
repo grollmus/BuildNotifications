@@ -175,7 +175,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 case BuildNotificationMode.RequestedForMe:
                     return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor));
                 case BuildNotificationMode.RequestedByOrForMe:
-                    return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor) || u.Equals(buildNode.Build.RequestedBy));
+                    return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor) || IsSameUser(u, buildNode.Build.RequestedBy));
                 default:
                     return true;
             }
