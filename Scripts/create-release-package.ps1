@@ -44,7 +44,7 @@ $nupkgFileName = "$applicationName-$versionToBuild.nupkg"
 
 Write-Output "Creating squirrel release"
 $arguments = "--releasify",$nupkgFileName,"--no-msi"
-Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
+Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru -WorkingDirectory $($env:APPVEYOR_BUILD_FOLDER) | Wait-Process
 
 Get-Content -Path SquirrelSetup.log
 
