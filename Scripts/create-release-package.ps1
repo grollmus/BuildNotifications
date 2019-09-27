@@ -39,7 +39,7 @@ Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Creating nuget package"
 $nuspecFileName = "Scripts/$applicationName.nuspec" 
-$nupkgFileName = "$applicationName-$versionToBuild.nupkg"
+$nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output "Creating squirrel release"
