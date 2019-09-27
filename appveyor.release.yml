@@ -29,6 +29,8 @@ build_script:
 
     & dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64
 
+    & nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
+
     & msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
 
     & Scripts/create-release-package.ps1
