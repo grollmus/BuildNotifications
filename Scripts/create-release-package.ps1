@@ -7,13 +7,13 @@ $squirrelUrl = "https://github.com/Squirrel/Squirrel.Windows/releases/download/1
 $nugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
 ###############################################################################
-New-Item -ItemType Directory -Force -Path $targetFolder
-
-Write-Output Determining latest release
+Write-Output "Determining latest release"
 $latestReleaseUrl = "https://api.github.com/repos/$repo/releases"
 $tag = (Invoke-WebRequest $latestReleaseUrl | ConvertFrom-Json)[0].tag_name
 if($tag)
 {
+	New-Item -ItemType Directory -Force -Path $targetFolder
+
     $version = $tag.Substring(1)
     Write-Output Latest release is $tag => $version
 
@@ -29,32 +29,26 @@ if($tag)
     Invoke-WebRequest $fullPackageUrl -Out $fullPackageFilePath
 }
 
-Write-Output Downloading squirrel
+Write-Output "Downloading squirrel"
 $squirrelZipFile = "Squirrel.zip"
 Invoke-WebRequest $squirrelUrl -Out $squirrelZipFile
 Expand-Archive $squirrelZipFile -Force -DestinationPath .
 
-Write-Output Downloading nuget.exe
+Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
-Write-Output Creating nuget package
+Write-Output "Creating nuget package"
 $nuspecFileName = "Scripts/$applicationName.nuspec" 
 $nupkgFileName = "$applicationName-$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output Creating squirrel release
-.\squirrel.exe --releasify $nupkgFileName
+$arguments= "--releasify",$nupkgFileName,"--no-msi"
+Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
 
 Write-Output Dir
 dir
-Write-Output Dir Scripts
-cd Scripts
-dir
-Write-Output Dir Releases
-cd ..
-cd Releases
-dir
-Write-Output Dir Releases 2
+Write-Output "Dir Releases"
 cd Releases
 dir
 
