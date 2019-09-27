@@ -14,15 +14,19 @@ if($tag)
 {
 	New-Item -ItemType Directory -Force -Path $targetFolder
 
-    $version = $tag.Substring(1)
-    Write-Output Latest release is $tag => $version
+	$version = $tag
+	if( $version.StartsWith("v") )
+	{
+		$version = $tag.Substring(1)
+	}
+    Write-Output "Latest release is $tag => $version"
 
-    Write-Output Downloading latest RELEASE file
+    Write-Output "Downloading latest RELEASE file"
     $releasesFileUrl = "https://github.com/$repo/releases/download/$tag/RELEASES";
     $releasesFilePath = "$targetFolder/RELEASES"
     Invoke-WebRequest $releasesFileUrl -Out $releasesFilePath
 
-    Write-Output Downloading latest full package
+    Write-Output "Downloading latest full package"
     $fullPackageFileName = "$applicationName-$version-full.nupkg"
     $fullPackageUrl = "https://github.com/$repo/releases/download/$tag/$fullPackageFileName"
     $fullPackageFilePath = "$targetFolder/$fullPackageFileName"
