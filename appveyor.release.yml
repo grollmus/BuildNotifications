@@ -38,7 +38,7 @@ build_script:
     & Scripts/create-release-package.ps1
 test: off
 artifacts:
-- path: packages/*
+- path: releases/*
   name: SquirrelPackage
 deploy:
 - provider: GitHub
