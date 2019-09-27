@@ -137,7 +137,7 @@ namespace BuildNotifications.ViewModel.Notification
             });
         }
 
-        public event EventHandler<DistributedNotificationReceivedEventArgs> DistributedNotificationReceived;
+        public event EventHandler<DistributedNotificationReceivedEventArgs>? DistributedNotificationReceived;
         private readonly string _targetDirectory;
         private FileSystemWatcher? _watcher;
 

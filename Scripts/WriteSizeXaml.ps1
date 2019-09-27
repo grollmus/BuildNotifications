@@ -1,5 +1,5 @@
 param (
-    [string]$targetPath = ".\BuildNotifications\Resources\Global\Sizes.xaml",
+    [string]$targetPath = "..\BuildNotifications\Resources\Global\Sizes.xaml",
     [Parameter(Mandatory=$true)][double]$blockSize
  )
 

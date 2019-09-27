@@ -17,7 +17,7 @@ namespace BuildNotifications.Core
             _projectFactory.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
         }
 
-        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
+        public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;
 
         public IEnumerable<IProject> AllProjects() => Projects(x => true);
 

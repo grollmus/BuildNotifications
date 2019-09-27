@@ -68,6 +68,6 @@ namespace BuildNotifications.ViewModel.Utils
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

@@ -132,7 +132,7 @@ namespace BuildNotifications.Core.Pipeline
             return new Project(buildProviders, branchProviders, config);
         }
 
-        public event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
+        public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;
 
         private readonly IPluginRepository _pluginRepository;
         private readonly IConfiguration _configuration;

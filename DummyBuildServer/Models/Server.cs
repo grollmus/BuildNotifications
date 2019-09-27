@@ -104,7 +104,7 @@ namespace DummyBuildServer.Models
 
     internal class BuildNotificationsProcessHook
     {
-        public event EventHandler OnProcessExited;
+        public event EventHandler? OnProcessExited;
 
         public void SearchForProcess()
         {

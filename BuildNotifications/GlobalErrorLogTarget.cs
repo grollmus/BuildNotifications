@@ -9,7 +9,7 @@ namespace BuildNotifications
     [Target("GlobalErrorLog")]
     public sealed class GlobalErrorLogTarget : TargetWithLayout
     {
-        public static event EventHandler<ErrorNotificationEventArgs> ErrorOccured;
+        public static event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;
 
         protected override void Write(LogEventInfo logEvent)
         {

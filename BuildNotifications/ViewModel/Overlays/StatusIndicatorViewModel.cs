@@ -36,9 +36,9 @@ namespace BuildNotifications.ViewModel.Overlays
             }
         }
 
-        public event EventHandler<OpenErrorRequestEventArgs> OpenErrorMessageRequested;
+        public event EventHandler<OpenErrorRequestEventArgs>? OpenErrorMessageRequested;
 
-        public event EventHandler ResumeRequested;
+        public event EventHandler? ResumeRequested;
 
         public void Busy()
         {

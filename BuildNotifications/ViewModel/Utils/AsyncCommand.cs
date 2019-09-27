@@ -94,7 +94,7 @@ namespace BuildNotifications.ViewModel.Utils
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         private readonly Func<CancellationToken, Task<TResult>> _command;
         private readonly CancelAsyncCommand _cancelCommand;
         private NotifyTaskCompletion<TResult>? _execution;

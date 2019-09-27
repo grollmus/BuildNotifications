@@ -27,7 +27,7 @@ namespace DummyBuildServer.ViewModels
         {
         }
 
-        private event EventHandler CanExecuteChangedInternal;
+        private event EventHandler? CanExecuteChangedInternal;
 
         public void RaiseCanExecuteChanged()
         {

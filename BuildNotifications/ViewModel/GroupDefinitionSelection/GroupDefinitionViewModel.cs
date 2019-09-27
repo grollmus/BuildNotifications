@@ -45,7 +45,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         public SortingDefinitionsViewModel SortingDefinitionsViewModel { get; set; }
 
-        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs> SelectedSortingDefinitionChanged;
+        public event EventHandler<SortingDefinitionsSelectionChangedEventArgs>? SelectedSortingDefinitionChanged;
 
         private void OnSelectedSortingDefinitionChanged(object? sender, SortingDefinitionsSelectionChangedEventArgs e)
         {

@@ -1,0 +1,40 @@
+version: 1.0.{build}
+skip_non_tags: true
+image: Visual Studio 2019
+configuration: Release
+init:
+- ps: Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_TAG_NAME)"
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: $(APPVEYOR_REPO_TAG_NAME)
+  assembly_file_version: $(APPVEYOR_REPO_TAG_NAME)
+  assembly_informational_version: $(APPVEYOR_REPO_TAG_NAME)
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: $(APPVEYOR_REPO_TAG_NAME)
+  package_version: $(APPVEYOR_REPO_TAG_NAME)
+  assembly_version: $(APPVEYOR_REPO_TAG_NAME)
+  file_version: $(APPVEYOR_REPO_TAG_NAME)
+  informational_version: $(APPVEYOR_REPO_TAG_NAME)
+install:
+- ps: >-
+    Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
+
+    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100-preview9-014004'
+build_script:
+- ps: >-
+    dotnet publish -r win-x64 -c Release
+
+    & Scripts/create-release-package.ps1
+test: off
+artifacts:
+- path: packages/*
+  name: SquirrelPackage
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: TCujf+T4HHnH1w6WCybblkHMILi6HYQaZTYyLPG56w1mruNZ3aaBKtEoC+ubuVEI
+  artifact: SquirrelPackage
+  draft: true

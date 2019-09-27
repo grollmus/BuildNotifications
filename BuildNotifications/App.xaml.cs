@@ -15,10 +15,14 @@ namespace BuildNotifications
 {
     public partial class App
     {
+        static App()
+        {
+            GlobalTweenHandler = new TweenHandler();
+        }
+
         public App()
         {
             SetWorkingDirectory();
-            GlobalTweenHandler = new TweenHandler();
             CompositionTarget.Rendering += CompositionTargetOnRendering;
             _lastUpdate = TimeSpan.Zero;
 
