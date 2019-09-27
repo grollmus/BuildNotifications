@@ -10,7 +10,7 @@ namespace BuildNotifications.ViewModel.Tree
 {
     internal class BuildTreeViewModelFactory
     {
-        public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel? existingTree)
+        public async Task<BuildTreeViewModel> ProduceAsync(IBuildTree tree, BuildTreeViewModel? existingTree, IBuildTreeSortingDefinition buildTreeSortingDefinition)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -18,9 +18,14 @@ namespace BuildNotifications.ViewModel.Tree
             var buildTreeResult = await Task.Run(() =>
             {
                 var groupsAsList = tree.GroupDefinition.ToList();
+                var sortingsAsList = buildTreeSortingDefinition.ToList();
                 LogTo.Debug($"Grouping by {string.Join(",", tree.GroupDefinition)}.");
                 var buildTree = new BuildTreeViewModel(tree);
-                var children = CreateChildren(tree.Children, groupsAsList);
+
+                var firstLevelSorting = !buildTreeSortingDefinition.Any() ? SortingDefinition.AlphabeticalDescending :buildTreeSortingDefinition.First();
+                buildTree.SetSorting(firstLevelSorting);
+
+                var children = CreateChildren(tree.Children, groupsAsList, sortingsAsList, 0);
                 foreach (var childVm in children)
                 {
                     buildTree.Children.Add(childVm);
@@ -61,7 +66,7 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private IEnumerable<BuildTreeNodeViewModel> CreateChildren(IEnumerable<IBuildTreeNode> children, IReadOnlyList<GroupDefinition> groups, int groupIndex = 0)
+        private IEnumerable<BuildTreeNodeViewModel> CreateChildren(IEnumerable<IBuildTreeNode> children, IReadOnlyList<GroupDefinition> groups, List<SortingDefinition> sortingsAsList, int groupIndex)
         {
             if (children == null)
                 yield break;
@@ -70,7 +75,14 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 var groupDefinition = groupIndex >= groups.Count ? GroupDefinition.None : groups[groupIndex];
                 var nodeVm = AsViewModel(node, groupDefinition);
-                var childrenVms = CreateChildren(node.Children, groups, groupIndex + 1);
+
+                // the sorting definition means the current level, therefore the parent of the current level has to sort its children (which are the current level)
+                // therefore the sorting of this level, is how the children of the next level shall be sorted. This is why we use index + 1
+                if (groupIndex + 1 < sortingsAsList.Count)
+                    nodeVm.SetSorting(sortingsAsList[groupIndex + 1]);
+                // the last level are always the builds which are always sorted by DateAscending, which is the default. So there is nothing to do in the else case
+                
+                var childrenVms = CreateChildren(node.Children, groups, sortingsAsList, groupIndex + 1);
                 foreach (var childVm in childrenVms)
                 {
                     nodeVm.Children.Add(childVm);

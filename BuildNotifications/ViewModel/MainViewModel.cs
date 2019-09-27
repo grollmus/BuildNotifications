@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
+using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -145,11 +147,16 @@ namespace BuildNotifications.ViewModel
             });
         }
 
-        private async void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
+        private void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
+        {
+            _postPipelineUpdateTask = UpdateTreeTask(e);
+        }
+
+        private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
         {
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
-            var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree);
+            var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
             if (buildTreeViewModel != BuildTree)
                 BuildTree = buildTreeViewModel;
 
@@ -185,18 +192,15 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private void HandleExistingDistributedNotificationsOnNextFrame()
+        private async void HandleExistingDistributedNotificationsOnNextFrame()
         {
-            // start a tween which will finish as soon as the next frame is rendered (because this is when tweens get updated.)
-
-            App.GlobalTweenHandler.Add(new Dummy().Tween(x => x.DummyProp).To(0).In(0).OnComplete((sender, parameter) =>
-            {
-                // remove any image files that may still exist from last launch
-                NotificationDistributor.DeleteAllTemporaryImageFiles();
-                // set initial tray icon (do this here, so any instance which immediately exits doesn't spawn an icon)
-                _trayIcon.BuildStatus = BuildStatus.None;
-                _fileWatch.HandleAllExistingFiles();
-            }));
+            // wait until next frame is rendered
+            await WaitUntilNextFrameIsRenderedAsync();
+            // remove any image files that may still exist from last launch
+            NotificationDistributor.DeleteAllTemporaryImageFiles();
+            // set initial tray icon (do this here, so any instance which immediately exits doesn't spawn an icon)
+            _trayIcon.BuildStatus = BuildStatus.None;
+            _fileWatch.HandleAllExistingFiles();
         }
 
         private void Initialize()
@@ -241,6 +245,8 @@ namespace BuildNotifications.ViewModel
             {
                 _coreSetup.Pipeline.AddProject(project);
             }
+
+            SettingsViewModel.UpdateUser();
         }
 
         private void NotificationCenterOnHighlightRequested(object? sender, HighlightRequestedEventArgs e)
@@ -463,12 +469,17 @@ namespace BuildNotifications.ViewModel
         private async Task UpdateTimer()
         {
             _cancellationTokenSource = new CancellationTokenSource();
+            var stopwatch = new Stopwatch();
+
             while (_keepUpdating)
             {
-                if (StatusIndicator.UpdateStatus == UpdateStatus.None)
-                    StatusIndicator.Busy();
+                stopwatch.Restart();
+                LogTo.Debug($"Starting update at UTC: {DateTime.UtcNow}.");
+                StatusIndicator.Busy();
 
                 await _coreSetup.Update();
+                if (_postPipelineUpdateTask != null)
+                    await _postPipelineUpdateTask;
 
                 if (StatusIndicator.UpdateStatus == UpdateStatus.Busy)
                     StatusIndicator.ClearStatus();
@@ -476,11 +487,16 @@ namespace BuildNotifications.ViewModel
                 try
                 {
 #if DEBUG
-                    var updateInterval = 5;
+                    const int updateInterval = 5;
 #else
                     var updateInterval = _coreSetup.Configuration.UpdateInterval;
 #endif
-                    LogTo.Debug($"Waiting {updateInterval} seconds until next update.");
+                    stopwatch.Stop();
+                    LogTo.Debug($"Update finished in {stopwatch.Elapsed.TotalSeconds:F1} seconds. Waiting {updateInterval} seconds until next update.");
+                    stopwatch.Restart();
+                    await WaitUntilNextFrameIsRenderedAsync();
+                    stopwatch.Stop();
+                    LogTo.Debug($"Took {stopwatch.ElapsedMilliseconds} ms to render new tree.");
                     await Task.Delay(TimeSpan.FromSeconds(updateInterval), _cancellationTokenSource.Token);
                 }
                 catch (Exception)
@@ -496,6 +512,7 @@ namespace BuildNotifications.ViewModel
         private readonly TrayIconHandle _trayIcon;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
+        private Task? _postPipelineUpdateTask;
         private BuildTreeViewModel? _buildTree;
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;

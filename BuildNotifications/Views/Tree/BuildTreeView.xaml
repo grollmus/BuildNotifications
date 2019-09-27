@@ -27,7 +27,7 @@
                           ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel
+                        <animation:AnimatedWrapPanel Delay="0.1"
                             Orientation="{Binding MaxTreeDepth, Converter={x:Static converter:MaxTreeDepthToOrientationConverter.Instance}}"
                             VirtualizingStackPanel.IsVirtualizing="True" />
                     </ItemsPanelTemplate>

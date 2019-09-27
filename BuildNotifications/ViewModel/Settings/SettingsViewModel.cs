@@ -24,7 +24,10 @@ namespace BuildNotifications.ViewModel.Settings
             EditConnectionsCommand = new DelegateCommand(OnEditConnections);
 
             CreateEditables();
+            UpdateUser();
         }
+
+        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
 
         public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
 
@@ -41,6 +44,24 @@ namespace BuildNotifications.ViewModel.Settings
         public event EventHandler? EditConnectionsRequested;
 
         public event EventHandler? SettingsChanged;
+
+        public void UpdateUser()
+        {
+            var newUsers = Configuration.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
+
+            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id));
+            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id));
+
+            foreach (var user in toAdd)
+            {
+                CurrentUserIdentities.Add(user);
+            }
+
+            foreach (var user in toRemove)
+            {
+                CurrentUserIdentities.Remove(user);
+            }
+        }
 
         private void CreateEditables()
         {

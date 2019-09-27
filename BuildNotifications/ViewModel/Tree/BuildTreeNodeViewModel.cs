@@ -95,6 +95,11 @@ namespace BuildNotifications.ViewModel.Tree
 
             var newSorting = sortingDefinitions[index];
 
+            SetSorting(newSorting);
+        }
+
+        public void SetSorting(SortingDefinition newSorting)
+        {
             if (newSorting == _currentSortingDefinition)
                 return;
 

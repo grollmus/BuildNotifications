@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="Resources/Global/ExpanderStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/CheckboxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ContextMenuStyles.xaml" />
+                <ResourceDictionary Source="Resources/Global/ToolTipStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 

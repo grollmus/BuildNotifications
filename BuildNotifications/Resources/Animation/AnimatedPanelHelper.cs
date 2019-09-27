@@ -11,7 +11,11 @@ namespace BuildNotifications.Resources.Animation
 {
     internal class AnimatedPanelHelper
     {
-        public void AnimateToNewPositions(Dictionary<UIElement, Point> positions, Panel panel, double animationDuration)
+        public double AnimationDuration { get; set; } = 0.4;
+
+        public double Delay { get; set; }
+
+        public void AnimateToNewPositions(Dictionary<UIElement, Point> positions, Panel panel)
         {
             var origin = new Point(0, 0);
             var globalTweenHandler = App.GlobalTweenHandler;
@@ -29,11 +33,11 @@ namespace BuildNotifications.Resources.Animation
                 if (oldPos.Equals(origin))
                     continue;
 
-                CreateTween(oldPos, newPos, child, animationDuration, globalTweenHandler);
+                CreateTween(oldPos, newPos, child, globalTweenHandler);
             }
         }
 
-        public void CreateTween(Point oldPos, Point newPos, UIElement child, double animationDuration, TweenHandler tweenHandler)
+        public void CreateTween(Point oldPos, Point newPos, UIElement child, TweenHandler tweenHandler)
         {
             var deltaX = oldPos.X - newPos.X;
             var deltaY = oldPos.Y - newPos.Y;
@@ -53,13 +57,15 @@ namespace BuildNotifications.Resources.Animation
 
             var xTween = translateTransform.Tween(x => x.X)
                 .To(0)
-                .In(animationDuration)
-                .Ease(Easing.ExpoEaseOut);
+                .In(AnimationDuration)
+                .Ease(Easing.ExpoEaseOut)
+                .Delay(Delay);
 
             var yTween = translateTransform.Tween(x => x.Y)
                 .To(0)
-                .In(animationDuration)
-                .Ease(Easing.ExpoEaseOut);
+                .In(AnimationDuration)
+                .Ease(Easing.ExpoEaseOut)
+                .Delay(Delay);
 
             tweenHandler.Add(new SequenceOfTarget(child, xTween, yTween));
         }

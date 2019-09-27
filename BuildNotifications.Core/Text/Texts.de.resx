@@ -456,4 +456,25 @@
   <data name="IsEnabled" xml:space="preserve">
     <value></value>
   </data>
+  <data name="RequestedByMe" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RequestedByOrForMe" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="RequestedForMe" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Always" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="YourIdentities" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UserDescription" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
