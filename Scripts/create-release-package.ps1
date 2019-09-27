@@ -42,14 +42,10 @@ $nuspecFileName = "Scripts/$applicationName.nuspec"
 $nupkgFileName = "$applicationName-$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
-Write-Output Creating squirrel release
-$arguments= "--releasify",$nupkgFileName,"--no-msi"
+Write-Output "Creating squirrel release"
+$arguments = "--releasify",$nupkgFileName,"--no-msi"
 Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
 
-Write-Output Dir
-dir
-Write-Output "Dir Releases"
-cd Releases
-dir
+Get-Content -Path SquirrelSetup.log
 
 Write-Output Done
