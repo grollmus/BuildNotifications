@@ -103,8 +103,11 @@ namespace BuildNotifications.Plugin.Tfs
             {
                 yield return Convert(build);
             }
-
-            builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: BuildStatus.InProgress);
+            
+            // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
+            var statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted;
+            // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
+            builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: statusFilter);
             foreach (var build in builds)
             {
                 yield return Convert(build);
