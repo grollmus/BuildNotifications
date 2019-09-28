@@ -1,62 +1,69 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>8.0</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<LangVersion>8.0</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyVersion>0.0.0</AssemblyVersion>
+		<FileVersion>0.0.0</FileVersion>
+		<Version>0.0.0</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="ReflectSettings" Version="1.0.10.1" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
-    <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
+		<PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+		<PackageReference Include="ReflectSettings" Version="1.0.10.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.1.0-*" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference
+			Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
+		<ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+	<ItemGroup>
+		<DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.1.0-*" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Text\StringLocalizer.Strings.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
-    </Compile>
-    <None Update="Text\StringLocalizer.Strings.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Extensions\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    <TextTemplate Include="**\*.tt" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Text\StringLocalizer.Strings.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
+		</Compile>
+		<None Update="Text\StringLocalizer.Strings.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
 
-  <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
-    <Message Text="Transforming Text Templates" Importance="Normal" />
+	<ItemGroup>
+		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+		<TextTemplate Include="**\*.tt" />
+	</ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Text\StringLocalizer.Strings.cs" />
-    </ItemGroup>
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tt %(TextTemplate.Identity)" />
-    <ItemGroup>
-      <Compile Include="Text\StringLocalizer.Strings.cs" />
-    </ItemGroup>
-  </Target>
+	<Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+		<Message Text="Transforming Text Templates" Importance="Normal" />
+
+		<ItemGroup>
+			<Compile Remove="Text\StringLocalizer.Strings.cs" />
+		</ItemGroup>
+		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tt %(TextTemplate.Identity)" />
+		<ItemGroup>
+			<Compile Include="Text\StringLocalizer.Strings.cs" />
+		</ItemGroup>
+	</Target>
 </Project>
