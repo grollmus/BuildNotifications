@@ -10,11 +10,11 @@ $nugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 Write-Output "Determining latest release"
 $latestReleaseUrl = "https://api.github.com/repos/$repo/releases"
 $tag = (Invoke-WebRequest $latestReleaseUrl | ConvertFrom-Json)[0].tag_name
+$version = $tag
 if($tag)
 {
 	New-Item -ItemType Directory -Force -Path $targetFolder
 
-	$version = $tag
 	if( $version.StartsWith("v") )
 	{
 		$version = $tag.Substring(1)
@@ -26,7 +26,7 @@ if($tag)
     $releasesFilePath = "$targetFolder/RELEASES"
     Invoke-WebRequest $releasesFileUrl -Out $releasesFilePath
 
-    Write-Output "Downloading latest full package"
+    Write-Output "Downloading latest full package"    
     $fullPackageFileName = "$applicationName-$version-full.nupkg"
     $fullPackageUrl = "https://github.com/$repo/releases/download/$tag/$fullPackageFileName"
     $fullPackageFilePath = "$targetFolder/$fullPackageFileName"
@@ -48,8 +48,12 @@ $nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 
 Write-Output "Creating squirrel release"
 $arguments = "--releasify",$nupkgFileName,"--no-msi"
-Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru -WorkingDirectory $($env:APPVEYOR_BUILD_FOLDER) | Wait-Process
+Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
 
 Get-Content -Path SquirrelSetup.log
+
+Write-Output "Cleaning up"
+$latestFullPackageFileName = "$applicationName-$version-full.nupkg"
+Remove-Item -Path "$targetFolder/$latestFullPackageFileName"
 
 Write-Output Done
