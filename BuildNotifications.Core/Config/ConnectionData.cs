@@ -1,4 +1,5 @@
 ﻿using BuildNotifications.Core.Text;
+using JetBrains.Annotations;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
@@ -6,6 +7,7 @@ namespace BuildNotifications.Core.Config
     /// <summary>
     /// Represents the data stored for a single connection.
     /// </summary>
+    [NoReorder]
     public class ConnectionData
     {
         public ConnectionData()
@@ -14,10 +16,10 @@ namespace BuildNotifications.Core.Config
         }
 
         /// <summary>
-        /// Configuration instance for the selected BuildPlugin to use
+        /// Display name of the connection.
         /// </summary>
-        [CalculatedType(nameof(Configuration.BuildPluginConfigurationType))]
-        public object? BuildPluginConfiguration { get; set; }
+        [IgnoredForConfig]
+        public string Name { get; set; }
 
         /// <summary>
         /// Type name of the plugin that is able to construct a build provider
@@ -27,16 +29,10 @@ namespace BuildNotifications.Core.Config
         public string? BuildPluginType { get; set; }
 
         /// <summary>
-        /// Display name of the connection.
+        /// Configuration instance for the selected BuildPlugin to use
         /// </summary>
-        [IgnoredForConfig]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Configuration instance for the selected SourceControlPlugin to use
-        /// </summary>
-        [CalculatedType(nameof(Configuration.SourceControlPluginConfigurationType))]
-        public object? SourceControlPluginConfiguration { get; set; }
+        [CalculatedType(nameof(Configuration.BuildPluginConfigurationType))]
+        public object? BuildPluginConfiguration { get; set; }
 
         /// <summary>
         /// Type name of the plugin that is able to construct a branch provider
@@ -44,5 +40,11 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
         public string? SourceControlPluginType { get; set; }
+        
+        /// <summary>
+        /// Configuration instance for the selected SourceControlPlugin to use
+        /// </summary>
+        [CalculatedType(nameof(Configuration.SourceControlPluginConfigurationType))]
+        public object? SourceControlPluginConfiguration { get; set; }
     }
 }
