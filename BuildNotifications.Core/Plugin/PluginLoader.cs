@@ -47,6 +47,12 @@ namespace BuildNotifications.Core.Plugin
 
                         foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
                         {
+                            if (referencedAssembly.ContentType == AssemblyContentType.WindowsRuntime)
+                            {
+                                LogTo.Debug($"Skip loading referenced assembly {referencedAssembly.Name} because it contains WinRT code");
+                                continue;
+                            }
+
                             assemblyLoadContext.LoadFromAssemblyName(referencedAssembly);
                         }
                     }
