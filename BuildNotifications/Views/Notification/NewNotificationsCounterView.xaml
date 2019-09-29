@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="BuildNotifications.Views.Notification.NewNotificationsCounterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:notification="clr-namespace:BuildNotifications.ViewModel.Notification"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.Notification"
+             xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type notification:NewNotificationsCounterViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Ellipse Fill="{Binding HighestStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" Stretch="Uniform"/>
+        <TextBlock HorizontalAlignment="Center" Foreground="Black" Opacity="0.5" Text="{Binding CountToDisplay}" FontSize="{StaticResource BlockFiveSixths}" FontWeight="Bold"/>
+
+        <!--Start with this being invisible-->
+        <Grid.RenderTransform>
+            <ScaleTransform ScaleX="0" ScaleY="0" />
+        </Grid.RenderTransform>
+       
+        <i:Interaction.Triggers>
+            <ei:DataTrigger Binding="{Binding CountIsZero}" Value="false">
+                <triggerActions:NotificationCounterFade FadeIn="True" />
+            </ei:DataTrigger>
+
+            <ei:DataTrigger Binding="{Binding CountIsZero}" Value="true">
+                <triggerActions:NotificationCounterFade FadeIn="False" />
+            </ei:DataTrigger>
+
+        </i:Interaction.Triggers>
+    </Grid>
+</UserControl>

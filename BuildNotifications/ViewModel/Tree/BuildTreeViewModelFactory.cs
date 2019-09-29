@@ -22,7 +22,7 @@ namespace BuildNotifications.ViewModel.Tree
                 LogTo.Debug($"Grouping by {string.Join(",", tree.GroupDefinition)}.");
                 var buildTree = new BuildTreeViewModel(tree);
 
-                var firstLevelSorting = !buildTreeSortingDefinition.Any() ? SortingDefinition.AlphabeticalDescending :buildTreeSortingDefinition.First();
+                var firstLevelSorting = !buildTreeSortingDefinition.Any() ? SortingDefinition.AlphabeticalDescending : buildTreeSortingDefinition.First();
                 buildTree.SetSorting(firstLevelSorting);
 
                 var children = CreateChildren(tree.Children, groupsAsList, sortingsAsList, 0);
@@ -81,7 +81,7 @@ namespace BuildNotifications.ViewModel.Tree
                 if (groupIndex + 1 < sortingsAsList.Count)
                     nodeVm.SetSorting(sortingsAsList[groupIndex + 1]);
                 // the last level are always the builds which are always sorted by DateAscending, which is the default. So there is nothing to do in the else case
-                
+
                 var childrenVms = CreateChildren(node.Children, groups, sortingsAsList, groupIndex + 1);
                 foreach (var childVm in childrenVms)
                 {

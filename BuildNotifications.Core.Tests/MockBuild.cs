@@ -47,7 +47,6 @@ namespace BuildNotifications.Core.Tests
         public IUser RequestedBy { get; }
         public IUser RequestedFor { get; }
         public BuildStatus Status { get; }
-        public TimeSpan? Duration { get; }
         public IBuildLinks Links { get; }
         public string ProjectName { get; }
     }

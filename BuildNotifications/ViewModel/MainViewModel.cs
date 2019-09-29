@@ -12,7 +12,6 @@ using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
-using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -139,7 +138,7 @@ namespace BuildNotifications.ViewModel
                 {
                     var success = NotificationCenter.TryHighlightNotificationByGuid(e.DistributedNotification.BasedOnNotification.Value);
                     if (!success)
-                        NotificationCenter.ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.NotificationNotFound, NotificationType.Info)});
+                        ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.NotificationNotFound, NotificationType.Info)});
 
                     if (!ShowNotificationCenter)
                         ToggleShowNotificationCenter(this);
@@ -162,7 +161,7 @@ namespace BuildNotifications.ViewModel
 
             BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
 
-            NotificationCenter.ShowNotifications(e.Notifications);
+            ShowNotifications(e.Notifications);
         }
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
@@ -171,7 +170,7 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.Error(e.ErrorNotifications);
 
             // errors may occur on any thread.
-            Application.Current.Dispatcher?.Invoke(() => { NotificationCenter.ShowNotifications(e.ErrorNotifications); });
+            Application.Current.Dispatcher?.Invoke(() => { ShowNotifications(e.ErrorNotifications); });
         }
 
         private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -296,7 +295,10 @@ namespace BuildNotifications.ViewModel
 
         private void SetupNotificationCenter()
         {
-            NotificationCenter = new NotificationCenterViewModel();
+            NotificationCenter = new NotificationCenterViewModel
+            {
+                ShowClearButton = true
+            };
 
             foreach (var processor in _coreSetup.PluginRepository.NotificationProcessors)
             {
@@ -341,6 +343,13 @@ namespace BuildNotifications.ViewModel
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
+        }
+
+        private void ShowNotifications(IEnumerable<INotification> notifications)
+        {
+            NotificationCenter.ShowNotifications(notifications);
+            if (ShowNotificationCenter)
+                NotificationCenter.AllRead();
         }
 
         private void ShowOverlay()
@@ -400,6 +409,7 @@ namespace BuildNotifications.ViewModel
             if (ShowNotificationCenter)
             {
                 StatusIndicator.ClearStatus();
+                NotificationCenter.AllRead();
 
                 // reset error icon when user opens window, as the point of the error icon is to notify the user.
                 _trayIcon.BuildStatus = BuildStatus.None;

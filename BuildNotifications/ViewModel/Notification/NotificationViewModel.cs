@@ -34,6 +34,18 @@ namespace BuildNotifications.ViewModel.Notification
 
         public string Title => _notification.DisplayTitle;
 
+        private bool _isUnread = true;
+
+        public bool IsUnread
+        {
+            get => _isUnread;
+            set
+            {
+                _isUnread = value;
+                OnPropertyChanged();
+            }
+        }
+
         public void InvokeTimeUntilNowUpdate()
         {
             OnPropertyChanged(nameof(TimeUntilNow));

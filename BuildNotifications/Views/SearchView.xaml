@@ -11,7 +11,7 @@
 
     <Grid Width="{StaticResource BlockTriple}">
         <text:DecoratedTextBox Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                               Icon="Search"
+                               Icon="Search" x:Name="SearchTextBox"
                                MaxHeight="{StaticResource BlockOneAndHalf}"
                                Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap" />
         <i:Interaction.Triggers>

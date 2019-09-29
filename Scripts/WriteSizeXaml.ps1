@@ -1,5 +1,5 @@
 param (
-    [string]$targetPath = "..\BuildNotifications\Resources\Global\Sizes.xaml",
+    [string]$targetPath = "BuildNotifications\Resources\Global\Sizes.xaml",
     [Parameter(Mandatory=$true)][double]$blockSize
  )
 
@@ -9,7 +9,7 @@ $sb = [System.Text.StringBuilder]::new()
 [void]$sb.AppendLine("                    xmlns:system=`"clr-namespace:System;assembly=System.Runtime`">")
 [void]$sb.AppendLine("")
 [void]$sb.AppendLine("    <!--AUTO GENERATED FILE-->")
-[void]$sb.AppendLine("    <!--Use `" .\WriteSizeXaml.ps1 -blockSize $($blockSize)`" in Package Manager Console to generate this file-->")
+[void]$sb.AppendLine("    <!--Use `" .\Sizes\WriteSizeXaml.ps1 -blockSize $($blockSize)`" in Package Manager Console to generate this file-->")
 [void]$sb.AppendLine("")
 [void]$sb.AppendLine("    <system:Double x:Key=`"BlockSixth`">$($blockSize/6)</system:Double>")
 [void]$sb.AppendLine("    <system:Double x:Key=`"BlockQuarter`">$($blockSize/4)</system:Double>")
@@ -74,6 +74,8 @@ $sb = [System.Text.StringBuilder]::new()
 [void]$sb.AppendLine("    <Thickness Left=`"$($blockSize)`" Right=`"$($blockSize)`" Top=`"0`" Bottom=`"0`" x:Key=`"BlockXOnlyMargin`"/>")
 [void]$sb.AppendLine("    <Thickness Left=`"$($blockSize*0.25)`" Right=`"$($blockSize*0.25)`" Top=`"0`" Bottom=`"0`" x:Key=`"BlockQuarterXOnlyMargin`"/>")
 [void]$sb.AppendLine("    <Thickness Left=`"$($blockSize/3*-2)`" Right=`"0`" Top=`"0`" Bottom=`"0`" x:Key=`"NegativeTwoThirdsBlockToTheLeftMargin`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"0`" Right=`"$($blockSize/-3)`" Top=`"$($blockSize/6)`" Bottom=`"0`" x:Key=`"NegativeQuarterRightSixthBlockTopMargin`"/>")
+[void]$sb.AppendLine("    <Thickness Left=`"0`" Right=`"0`" Top=`"$($blockSize/-4)`" Bottom=`"0`" x:Key=`"NegativeQuarterTopMargin`"/>")
 [void]$sb.AppendLine("")
 [void]$sb.AppendLine("    <Thickness Left=`"$($blockSize*0.75+1)`" Right=`"$($blockSize*0.75+1)`" Top=`"{StaticResource BlockSixth}`" Bottom=`"{StaticResource BlockSixth}`" x:Key=`"BlockThreeQuartersPlusOneXSixthBlockOneYMargin`"/>")
 [void]$sb.AppendLine("    <Thickness Left=`"0`" Right=`"$($blockSize*-2)`" Top=`"0`" Bottom=`"0`" x:Key=`"NegativeBlockDoubleThicknessFromRight`"/>")

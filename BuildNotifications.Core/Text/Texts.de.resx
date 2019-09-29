@@ -477,4 +477,7 @@
   <data name="UserDescription" xml:space="preserve">
     <value></value>
   </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
