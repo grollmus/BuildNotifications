@@ -139,7 +139,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         private bool IsSameUser(IUser userA, IUser? userB)
         {
-            return userA.UniqueName == userB?.UniqueName;
+            return userA.Id == userB?.Id;
         }
 
         private bool NothingChanged(IBuildTreeBuildsDelta fromDelta)

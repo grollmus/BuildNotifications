@@ -133,7 +133,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\netcoreapp3.0&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyBuildServer\bin\debug\netcoreapp3.0&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)ToastNotificationsPlugin\bin\debug\netcoreapp3.0&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)" />
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\netcoreapp3.0&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyBuildServer\bin\debug\netcoreapp3.0&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)ToastNotificationsPlugin\bin\debug&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)" />
   </Target>
 
 </Project>
