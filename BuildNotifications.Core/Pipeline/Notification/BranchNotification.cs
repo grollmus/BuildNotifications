@@ -23,10 +23,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             };
         }
 
-        protected override string ResolveIssueSource()
-        {
-            return string.Join("\n", _branchNames);
-        }
+        protected override string ResolveIssueSource() => string.Join("\n", _branchNames);
 
         private void SetParameter()
         {

@@ -8,16 +8,35 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public abstract class BaseNotificationDistributor : INotificationDistributor
     {
+        private readonly Dictionary<INotification, IDistributedNotification> _distributedNotifications = new Dictionary<INotification, IDistributedNotification>();
+
         protected abstract IDistributedNotification ToDistributedNotification(INotification notification);
 
         public void Distribute(INotification notification)
         {
             LogTo.Info($"Distributing notification \"{notification.GetType().Name}\".");
+            var distributedNotification = ToDistributedNotification(notification);
             foreach (var processor in this)
             {
                 LogTo.Debug($"Distributing notification \"{notification.GetType().Name}\" with processor \"{processor.GetType().Name}\".");
-                processor.Process(ToDistributedNotification(notification));
+                
+                processor.Process(distributedNotification);
             }
+
+            _distributedNotifications.Add(notification, distributedNotification);
+        }
+
+        public void ClearDistributedMessage(INotification notification)
+        {
+            if (!_distributedNotifications.TryGetValue(notification, out var distributedNotification))
+                return;
+
+            foreach (var processor in _processors)
+            {
+                processor.Clear(distributedNotification);
+            }
+
+            _distributedNotifications.Remove(notification);
         }
 
         public IEnumerator<INotificationProcessor> GetEnumerator()

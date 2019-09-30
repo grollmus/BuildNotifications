@@ -46,6 +46,8 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
         }
 
+        public uint ColorCode { get; set; } = 0xffffffff;
+
         public string Content { get; set; } = "";
 
         public string Title { get; set; } = "";
@@ -59,8 +61,6 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         public string FeedbackArguments { get; set; } = "";
 
         public string IssueSource { get; set; } = "";
-
-        public uint ColorCode { get; set; } = 0xffffffff;
 
         public Guid? BasedOnNotification { get; set; }
 

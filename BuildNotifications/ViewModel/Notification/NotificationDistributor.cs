@@ -57,7 +57,7 @@ namespace BuildNotifications.ViewModel.Notification
                 NotificationType = ToDistributedNotificationType(notification.Type),
                 NotificationErrorType = ToDistributedErrorType(notification.Status),
                 IssueSource = notification.IssueSource,
-                Source = notification.BuildNodes.Any() ? notification.BuildNodes.First().Build.ProjectName : null,
+                Source = notification.Source,
                 BasedOnNotification = notification.Guid
             };
 

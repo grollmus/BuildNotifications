@@ -117,6 +117,12 @@ namespace BuildNotifications.ViewModel.Utils
             BuildStatus = notification.NotificationErrorType == DistributedNotificationErrorType.Error ? BuildStatus.Failed : BuildStatus.None;
         }
 
+        public void Clear(IDistributedNotification notification)
+        {
+            if (BuildStatus != BuildStatus.None)
+                BuildStatus = BuildStatus.None;
+        }
+
         public void Shutdown()
         {
         }

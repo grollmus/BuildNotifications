@@ -19,6 +19,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         protected List<string> Parameters { get; } = new List<string>();
 
         protected abstract string GetMessageTextId();
+
         protected abstract string ResolveIssueSource();
 
         protected string StatusTextId(bool isSingular)
@@ -41,6 +42,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
         public string TitleTextId => BuildNodes.Count == 1 ? BuildNotificationContentSingularTextId : BuildNotificationContentPluralTextId;
 
         public string IssueSource => ResolveIssueSource();
+
+        public string Source => BuildNodes.FirstOrDefault()?.Build?.ProjectName ?? "";
 
         public NotificationType Type { get; }
 

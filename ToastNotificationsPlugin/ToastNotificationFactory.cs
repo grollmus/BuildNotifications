@@ -11,7 +11,7 @@ namespace ToastNotificationsPlugin
         public void Process(IDistributedNotification notification)
         {
             var toast = CreateToast(notification);
-            PublishToast(toast);
+            PublishToast(toast, NotificationTag(notification));
         }
 
         private static void AddAppLogo(IDistributedNotification notification, ToastContent content)
@@ -72,11 +72,11 @@ namespace ToastNotificationsPlugin
             return content;
         }
 
-        private void PublishToast(INotificationContent toast)
+        private void PublishToast(INotificationContent toast, string tag)
         {
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(toast.GetContent());
-            var toastNotification = new ToastNotification(xmlDocument);
+            var toastNotification = new ToastNotification(xmlDocument) {Tag = tag, Group = ToastNotificationProcessor.Group};
 
             ToastNotificationManager.CreateToastNotifier(ToastNotificationProcessor.ApplicationId).Show(toastNotification);
         }
@@ -110,5 +110,7 @@ namespace ToastNotificationsPlugin
                 }
             };
         }
+
+        public string NotificationTag(IDistributedNotification notification) => notification.BasedOnNotification?.ToString() ?? "";
     }
 }

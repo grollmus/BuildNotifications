@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
 using NLog;
@@ -14,7 +15,8 @@ namespace BuildNotifications
         protected override void Write(LogEventInfo logEvent)
         {
             var logMessage = Layout.Render(logEvent);
-            var notification = new ErrorNotification(logMessage);
+            var source = logEvent?.LoggerName?.Split('.').Last() ?? "";
+            var notification = new ErrorNotification(logMessage) {Source = source};
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs(notification));
         }
     }

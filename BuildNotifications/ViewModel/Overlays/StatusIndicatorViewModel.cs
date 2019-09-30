@@ -48,6 +48,7 @@ namespace BuildNotifications.ViewModel.Overlays
         public void ClearStatus()
         {
             UpdateStatus = UpdateStatus.None;
+            _errorNotifications = null;
         }
 
         public void Error(IEnumerable<INotification> notifications)
@@ -74,15 +75,11 @@ namespace BuildNotifications.ViewModel.Overlays
                 return;
 
             OpenErrorMessageRequested?.Invoke(this, new OpenErrorRequestEventArgs(_errorNotifications));
-            _errorNotifications = null;
-
-            ClearStatus();
         }
 
         private void RequestResume(object obj)
         {
             ResumeRequested?.Invoke(this, EventArgs.Empty);
-            Resume();
         }
 
         private UpdateStatus _updateStatus;

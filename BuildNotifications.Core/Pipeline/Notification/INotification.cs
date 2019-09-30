@@ -10,6 +10,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         IList<IBuildNode> BuildNodes { get; }
 
         string ContentTextId { get; }
+
         string DisplayContent { get; }
 
         string DisplayTitle { get; }
@@ -21,6 +22,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
         /// branch.
         /// </summary>
         string IssueSource { get; }
+        
+        /// <summary>
+        /// Source of the notification, e.g. the class for an error or the project name of builds.
+        /// </summary>
+        string Source { get; }
 
         BuildStatus Status { get; }
 

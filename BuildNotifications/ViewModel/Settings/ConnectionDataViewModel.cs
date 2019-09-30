@@ -22,8 +22,6 @@ namespace BuildNotifications.ViewModel.Settings
             TestConnectionViewModel.TestFinished += (sender, args) => TestFinished?.Invoke(this, EventArgs.Empty);
         }
 
-        public ConnectionData? Connection { get; set; }
-
         [IsDisplayName]
         [UsedImplicitly]
         public string Name
@@ -36,6 +34,8 @@ namespace BuildNotifications.ViewModel.Settings
                 Connection.Name = value;
             }
         }
+
+        public ConnectionData? Connection { get; set; }
 
         [IgnoredForConfig]
         public IPluginRepository? PluginRepository { get; set; }

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using JetBrains.Annotations;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using MS.WindowsAPICodePack.Internal;
 
 namespace ToastNotificationsPlugin
 {
+    [UsedImplicitly]
     public class ToastNotificationProcessor : INotificationProcessor
     {
         // In order to display toasts, a desktop application must have a shortcut on the Start menu.
@@ -38,6 +41,7 @@ namespace ToastNotificationsPlugin
 
         private ToastNotificationFactory _toastNotificationFactory;
         internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
+        internal const string Group = "BuildNotifications";
 
         private static void InstallShortcut(string shortcutPath)
         {
@@ -76,6 +80,24 @@ namespace ToastNotificationsPlugin
         public void Process(IDistributedNotification notification)
         {
             _toastNotificationFactory.Process(notification);
+        }
+
+        public void Clear(IDistributedNotification notification)
+        {
+            var tag = _toastNotificationFactory.NotificationTag(notification);
+
+            var notifications = ToastNotificationManager.History.GetHistory(ApplicationId).ToList();
+            if (notifications.Any(n => n.Tag == tag))
+            {
+                try
+                {
+                    ToastNotificationManager.History.Remove(tag, Group, ApplicationId);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
         }
 
         public void Shutdown()

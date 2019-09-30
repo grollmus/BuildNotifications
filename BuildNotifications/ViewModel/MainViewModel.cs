@@ -243,6 +243,7 @@ namespace BuildNotifications.ViewModel
             foreach (var project in projectProvider.EnabledProjects())
             {
                 _coreSetup.Pipeline.AddProject(project);
+                _hasAnyProjects = true;
             }
 
             SettingsViewModel.UpdateUser();
@@ -283,8 +284,6 @@ namespace BuildNotifications.ViewModel
         {
             if (StatusIndicator.ErrorVisible)
                 StatusIndicator.ClearStatus();
-
-            NotificationCenter.ClearNotificationsOfType(NotificationType.Error);
         }
 
         private void SettingsViewModelOnEditConnectionsRequested(object? sender, EventArgs e)
@@ -366,12 +365,17 @@ namespace BuildNotifications.ViewModel
             if (_keepUpdating)
                 return;
 
+            if (!_hasAnyProjects)
+            {
+                LogTo.Info("Not starting to update, as no projects are loaded.");
+                return;
+            }
+
             LogTo.Info("Start updating");
+            StatusIndicator.Resume();
             _keepUpdating = true;
             UpdateTimer().FireAndForget();
             _fileWatch.Start();
-
-            StatusIndicator.Resume();
         }
 
         private void StatusIndicator_OnOpenErrorMessageRequested(object? sender, OpenErrorRequestEventArgs e)
@@ -407,13 +411,7 @@ namespace BuildNotifications.ViewModel
                 ShowSettings = false;
 
             if (ShowNotificationCenter)
-            {
-                StatusIndicator.ClearStatus();
                 NotificationCenter.AllRead();
-
-                // reset error icon when user opens window, as the point of the error icon is to notify the user.
-                _trayIcon.BuildStatus = BuildStatus.None;
-            }
             else
                 NotificationCenter.ClearSelection();
         }
@@ -485,6 +483,8 @@ namespace BuildNotifications.ViewModel
             {
                 stopwatch.Restart();
                 LogTo.Debug($"Starting update at UTC: {DateTime.UtcNow}.");
+
+                ResetError();
                 StatusIndicator.Busy();
 
                 await _coreSetup.Update();
@@ -528,6 +528,7 @@ namespace BuildNotifications.ViewModel
         private bool _showSettings;
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
+        private bool _hasAnyProjects;
 
         private class Dummy
         {
