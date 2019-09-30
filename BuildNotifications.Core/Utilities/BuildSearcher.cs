@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using BuildNotifications.Core.Config;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Utilities
 {
@@ -14,11 +15,12 @@ namespace BuildNotifications.Core.Utilities
             if (string.IsNullOrWhiteSpace(searchTerm))
                 return true;
 
-            var term = searchTerm.ToLowerInvariant();
-            var branchName = build.BranchName.ToLowerInvariant();
-            var definitionName = build.Definition.Name.ToLowerInvariant();
+            var matcher = new StringMatcher(searchTerm);
 
-            return branchName.Contains(term) || definitionName.Contains(term);
+            var branchName = build.BranchName;
+            var definitionName = build.Definition.Name;
+
+            return matcher.IsMatch(branchName) || matcher.IsMatch(definitionName);
         }
     }
 }
