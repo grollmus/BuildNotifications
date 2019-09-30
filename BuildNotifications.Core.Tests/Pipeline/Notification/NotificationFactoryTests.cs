@@ -51,9 +51,11 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             _me = Substitute.For<IUser>();
             _me.UniqueName.Returns("Me");
+            _me.Id.Returns("Me");
 
             _someoneElse = Substitute.For<IUser>();
             _someoneElse.UniqueName.Returns("SomeoneElse");
+            _someoneElse.Id.Returns("SomeoneElse");
 
             _allowAllConfiguration = Substitute.For<IConfiguration>();
             _allowAllConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});

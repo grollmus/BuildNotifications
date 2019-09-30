@@ -13,6 +13,13 @@ namespace BuildNotifications.Core.Plugin
 {
     internal class PluginLoader : IPluginLoader
     {
+        private static IEnumerable<string> PluginsToIgnore { get; } = new List<string>
+        {
+            Path.GetFileName(typeof(IBuildPlugin).Assembly.Location)!,
+            Path.GetFileName(typeof(ISourceControlPlugin).Assembly.Location)!,
+            Path.GetFileName(typeof(INotificationProcessor).Assembly.Location)!
+        }.Distinct();
+
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
             LogTo.Info($"Loading plugin assemblies in folder \"{folder}\".");
@@ -31,7 +38,7 @@ namespace BuildNotifications.Core.Plugin
 
                 var files = Directory.EnumerateFiles(pluginFolder, "*.dll");
 
-                foreach (var dll in files)
+                foreach (var dll in files.Where(NotIgnored))
                 {
                     if (Path.GetFileName(dll)?.Contains("plugin", StringComparison.OrdinalIgnoreCase) != true)
                     {
@@ -47,6 +54,12 @@ namespace BuildNotifications.Core.Plugin
 
                         foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
                         {
+                            if (referencedAssembly.ContentType == AssemblyContentType.WindowsRuntime)
+                            {
+                                LogTo.Debug($"Skip loading referenced assembly {referencedAssembly.Name} because it contains WinRT code");
+                                continue;
+                            }
+
                             assemblyLoadContext.LoadFromAssemblyName(referencedAssembly);
                         }
                     }
@@ -60,6 +73,13 @@ namespace BuildNotifications.Core.Plugin
                     yield return assembly;
                 }
             }
+        }
+
+        private bool NotIgnored(string file)
+        {
+            var fileName = Path.GetFileName(file);
+            var isIgnored = PluginsToIgnore.Any(p => p == fileName);
+            return !isIgnored;
         }
 
         private IEnumerable<T> LoadPluginsOfType<T>(IEnumerable<Type> types)
@@ -103,6 +123,7 @@ namespace BuildNotifications.Core.Plugin
 
             LogTo.Info($"Loaded {buildPlugins.Count} build plugins.");
             LogTo.Info($"Loaded {sourceControlPlugins.Count} source control plugins.");
+            LogTo.Info($"Loaded {notificationProcessors.Count} notification processor plugins.");
             return new PluginRepository(buildPlugins, sourceControlPlugins, notificationProcessors, new TypeMatcher());
         }
     }

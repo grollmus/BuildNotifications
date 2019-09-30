@@ -134,7 +134,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected override DateTime CalculateQueueTime()
         {
-            return _queueTime;
+            return _queuedTime;
         }
 
         private void BackendPropertiesChangedInternal()
@@ -205,10 +205,10 @@ namespace BuildNotifications.ViewModel.Tree
         private void UpdateQueuedDate()
         {
             var newDate = Node?.QueueTime ?? DateTime.MinValue;
-            if (_queueTime == newDate)
+            if (_queuedTime == newDate)
                 return;
 
-            _queueTime = newDate;
+            _queuedTime = newDate;
             OnPropertyChanged(nameof(QueueTime));
         }
 
@@ -217,7 +217,7 @@ namespace BuildNotifications.ViewModel.Tree
         private BuildStatus _buildStatus;
 
         private DateTime _changedDate;
-        private DateTime _queueTime;
+        private DateTime _queuedTime;
 
         private bool _isLargeSize;
         private bool _shouldBeLarge;

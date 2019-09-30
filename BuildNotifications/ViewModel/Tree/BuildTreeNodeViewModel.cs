@@ -77,7 +77,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         protected virtual DateTime CalculateQueueTime()
         {
-            return _changedDate;
+            return _queuedTime;
         }
 
         protected void SetSortings(List<SortingDefinition> sortingDefinitions, int index = 0)

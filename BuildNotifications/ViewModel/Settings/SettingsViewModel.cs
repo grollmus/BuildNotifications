@@ -49,8 +49,8 @@ namespace BuildNotifications.ViewModel.Settings
         {
             var newUsers = Configuration.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
 
-            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id));
-            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id));
+            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
+            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
 
             foreach (var user in toAdd)
             {
