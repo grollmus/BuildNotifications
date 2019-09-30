@@ -14,7 +14,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         private string ExtractDisplayName(string branchName)
         {
-            return branchName.Replace("refs/heads/", "");
+            return branchName.Replace(BranchNamePrefix, "");
         }
 
         public bool Equals(IBranch other)
@@ -27,5 +27,7 @@ namespace BuildNotifications.Plugin.Tfs
         public string Name { get; }
 
         private readonly string _id;
+
+        internal const string BranchNamePrefix = "refs/heads/";
     }
 }

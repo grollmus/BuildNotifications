@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
@@ -15,7 +16,7 @@ namespace BuildNotifications.Plugin.Tfs
             _repositoryId = Guid.Parse(repositoryId);
         }
 
-        private IBranch Convert(GitRef branch)
+        private TfsBranch Convert(GitRef branch)
         {
             return new TfsBranch(branch);
         }
@@ -27,16 +28,35 @@ namespace BuildNotifications.Plugin.Tfs
 
             foreach (var branch in branches)
             {
-                yield return Convert(branch);
+                var converted = Convert(branch);
+                _knownBranches.Add(converted);
+                yield return converted;
             }
         }
 
         public async IAsyncEnumerable<IBranch> RemovedBranches()
         {
-            await Task.CompletedTask;
+            var gitClient = await _connection.GetClientAsync<GitHttpClient>();
+            var branches = await gitClient.GetBranchRefsAsync(_repositoryId);
 
-            yield break;
+            var deletedBranches = _knownBranches.Except(branches.Select(Convert), new TfsBranchComparer());
+
+            foreach (var branch in deletedBranches)
+            {
+                yield return branch;
+            }
         }
+
+        public Task<bool> IsRealBranch(string branchName)
+        {
+            var prefixedName = TfsBranch.BranchNamePrefix + branchName;
+            var isReal = _knownBranches.Any(b => b.Name == branchName)
+                         || _knownBranches.Any(b => b.Name == prefixedName);
+
+            return Task.FromResult(isReal);
+        }
+
+        private readonly HashSet<TfsBranch> _knownBranches = new HashSet<TfsBranch>(new TfsBranchComparer());
 
         private readonly VssConnection _connection;
         private readonly Guid _repositoryId;
