@@ -29,9 +29,9 @@ namespace BuildNotifications.Core.Config
             }
 
             var predefinedConnectionNames = predefinedConnections.Select(p => p.Name).ToList();
-            if (!config.Projects.Any(p => AllConnectionsUsedInProject(p, predefinedConnectionNames)) && predefinedConnectionNames.Any())
+            if (!config.Projects.Any(p => AllConnectionsUsedInProject(p, predefinedConnectionNames)) && predefinedConnections.Any())
             {
-                var defaultProject = CreateDefaultProject(predefinedConnectionNames);
+                var defaultProject = CreateDefaultProject(predefinedConnections.First());
                 config.Projects.Add(defaultProject);
             }
 
@@ -46,12 +46,14 @@ namespace BuildNotifications.Core.Config
             return connectionNames.All(n => project.BuildConnectionNames.Contains(n) || project.SourceControlConnectionNames.Contains(n));
         }
 
-        private IProjectConfiguration CreateDefaultProject(List<string> predefinedConnectionNames)
+        private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
         {
             var project = new ProjectConfiguration();
-            project.BuildConnectionNames.Add(predefinedConnectionNames.First());
-            project.SourceControlConnectionNames.Add(predefinedConnectionNames.Last());
-            project.ProjectName = StringLocalizer.NewProject;
+            var connectionToUse = withConnection;
+
+            project.BuildConnectionNames.Add(withConnection.Name);
+            project.SourceControlConnectionNames.Add(withConnection.Name);
+            project.ProjectName = connectionToUse.Name;
 
             return project;
         }

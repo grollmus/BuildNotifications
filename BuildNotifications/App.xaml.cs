@@ -47,7 +47,7 @@ namespace BuildNotifications
             else
                 GlobalDiagnosticsContext.Set("application", "default");
 
-            Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()}");
+            Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()} Args: {string.Join(" ", e.Args)}");
             if (IsInvokedFromDistributedNotification(e))
             {
                 WriteToastArgumentsToSharedToMonitoredDirectory(e);

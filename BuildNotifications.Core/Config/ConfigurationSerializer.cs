@@ -50,10 +50,18 @@ namespace BuildNotifications.Core.Config
             if (!File.Exists(fileName))
                 return Enumerable.Empty<ConnectionData>();
 
-            var json = File.ReadAllText(fileName);
-            var list = _serializer.Deserialize<List<ConnectionData>>(json);
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                var list = _serializer.Deserialize<List<ConnectionData>>(json);
 
-            return list;
+                return list;
+            }
+            catch (Exception e)
+            {
+                LogTo.ErrorException("Failed to load predefined connections.", e);
+                return Enumerable.Empty<ConnectionData>();
+            }
         }
 
         public void Save(IConfiguration configuration, string fileName)
