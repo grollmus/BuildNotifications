@@ -9,11 +9,7 @@ environment:
     secure: h6bHJ858ESn0aT/lw91WDwp1SLTWvqYipdiJNNoUO5FJYFL0xsexrB6R9++zt8pD
 install:
 - ps: >-
-    Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
-
-    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '3.0.100-preview9-014004'
-
-    & Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
+    Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
     
     & dotnet tool install --global coverlet.console
     
