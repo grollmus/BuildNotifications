@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Config
         /// </summary>
         [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
         public string? SourceControlPluginType { get; set; }
-        
+
         /// <summary>
         /// Configuration instance for the selected SourceControlPlugin to use
         /// </summary>

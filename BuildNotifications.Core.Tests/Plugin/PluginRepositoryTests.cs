@@ -57,7 +57,7 @@ namespace BuildNotifications.Core.Tests.Plugin
             {
                 Substitute.For<IBuildPlugin>()
             };
-         
+
             var typeMatcher = Substitute.For<ITypeMatcher>();
             typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
 

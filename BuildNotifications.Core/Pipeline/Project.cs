@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -11,12 +12,15 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders, IProjectConfiguration config)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders,
+            IProjectConfiguration config)
         {
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
             _branchProviders = branchProviders.ToList();
             Config = config;
+
+            _buildFilter = new ListBuildFilter(config);
         }
 
         public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
@@ -29,28 +33,43 @@ namespace BuildNotifications.Core.Pipeline
             return new EnrichedBuild(build, Name, buildProvider);
         }
 
+        private bool IsAllowed(IBaseBuild build)
+        {
+            return _buildFilter.IsAllowed(build);
+        }
+
         public IProjectConfiguration Config { get; set; }
 
         public string Name { get; set; }
 
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
+            _buildFilter.InitializeStringMatcher();
+
             foreach (var buildProvider in _buildProviders)
             {
                 await foreach (var build in buildProvider.FetchAllBuilds())
                 {
-                    yield return Enrich(build, buildProvider);
+                    if (IsAllowed(build))
+                        yield return Enrich(build, buildProvider);
+                    else
+                        LogTo.Debug($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered");
                 }
             }
         }
 
         public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate)
         {
+            _buildFilter.InitializeStringMatcher();
+
             foreach (var buildProvider in _buildProviders)
             {
                 await foreach (var build in buildProvider.FetchBuildsChangedSince(lastUpdate))
                 {
-                    yield return Enrich(build, buildProvider);
+                    if (IsAllowed(build))
+                        yield return Enrich(build, buildProvider);
+                    else
+                        LogTo.Debug($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered");
                 }
             }
         }
@@ -127,6 +146,7 @@ namespace BuildNotifications.Core.Pipeline
         private readonly List<IBranchProvider> _branchProviders;
 
         private readonly List<IBuildProvider> _buildProviders;
+        private readonly ListBuildFilter _buildFilter;
 
         private class EnrichedBuild : IBuild
         {

@@ -7,7 +7,7 @@ namespace BuildNotifications.Core.Utilities
 {
     internal class BranchNameExtractor : IBranchNameExtractor
     {
-        private static string GuessDisplayName(string fullBranchName)
+        public string ExtractDisplayName(string fullBranchName)
         {
             if (fullBranchName.StartsWith(GitRefHeadPrefix))
                 return fullBranchName.Substring(GitRefHeadPrefix.Length);
@@ -22,7 +22,7 @@ namespace BuildNotifications.Core.Utilities
         public string ExtractDisplayName(string fullBranchName, IEnumerable<IBranch> allBranches)
         {
             var matchingBranch = allBranches.FirstOrDefault(b => b.Name == fullBranchName);
-            return matchingBranch?.DisplayName ?? GuessDisplayName(fullBranchName);
+            return matchingBranch?.DisplayName ?? ExtractDisplayName(fullBranchName);
         }
 
         private const string GitRefHeadPrefix = "refs/heads/";

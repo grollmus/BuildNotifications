@@ -12,5 +12,7 @@ namespace BuildNotifications.Core.Utilities
         /// <param name="allBranches">List of all existing branches.</param>
         /// <returns>A name that can be used to display the branch in the UI.</returns>
         string ExtractDisplayName(string fullBranchName, IEnumerable<IBranch> allBranches);
+
+        string ExtractDisplayName(string fullBranchName);
     }
 }

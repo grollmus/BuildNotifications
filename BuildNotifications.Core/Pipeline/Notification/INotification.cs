@@ -22,7 +22,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         /// branch.
         /// </summary>
         string IssueSource { get; }
-        
+
         /// <summary>
         /// Source of the notification, e.g. the class for an error or the project name of builds.
         /// </summary>
