@@ -26,6 +26,8 @@ namespace BuildNotifications.ViewModel.Utils
         private string AutostartLocation()
         {
             var fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location) ?? "";
+            fileName = Path.ChangeExtension(fileName, "exe");
+
             var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             location = Directory.GetParent(location).FullName;
 
@@ -56,12 +58,12 @@ namespace BuildNotifications.ViewModel.Utils
 
             if (ShouldAutostart())
             {
-                LogTo.Info($"Registering Autostart.");
+                LogTo.Info("Registering Autostart.");
                 RegisterForAutostart(name);
             }
             else
             {
-                LogTo.Info($"Deregistering Autostart.");
+                LogTo.Info("Deregistering Autostart.");
                 DeregisterForAutostart(name);
             }
         }
@@ -76,7 +78,7 @@ namespace BuildNotifications.ViewModel.Utils
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Could not write autostart to registry", e);
+                LogTo.ErrorException("Could not remove autostart from registry", e);
             }
         }
 
