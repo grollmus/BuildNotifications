@@ -32,14 +32,6 @@ namespace BuildNotifications.ViewModel.Utils
             return Path.Combine(location, fileName);
         }
 
-        private bool IsAutostartEnabled(string name)
-        {
-            var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true);
-            var value = key?.GetValue(name);
-
-            return value?.Equals(AutostartCommand()) == true;
-        }
-
         private bool InDebug()
         {
 #if DEBUG
@@ -62,27 +54,15 @@ namespace BuildNotifications.ViewModel.Utils
             var assembly = Assembly.GetExecutingAssembly();
             var name = assembly.GetName().Name ?? "";
 
-            if (IsAutostartEnabled(name))
+            if (ShouldAutostart())
             {
-                if (ShouldAutostart())
-                {
-                    LogTo.Info($"Autostart already registered.");
-                    return;
-                }
-
-                LogTo.Info($"Deregistering Autostart.");
-                DeregisterForAutostart(name);
+                LogTo.Info($"Registering Autostart.");
+                RegisterForAutostart(name);
             }
             else
             {
-                if (!ShouldAutostart())
-                {
-                    LogTo.Info($"Autostart already not registered.");
-                    return;
-                }
-
-                LogTo.Info($"Registering Autostart.");
-                RegisterForAutostart(name);
+                LogTo.Info($"Deregistering Autostart.");
+                DeregisterForAutostart(name);
             }
         }
 
