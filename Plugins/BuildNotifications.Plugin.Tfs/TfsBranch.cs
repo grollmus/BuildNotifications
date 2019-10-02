@@ -12,6 +12,13 @@ namespace BuildNotifications.Plugin.Tfs
             _id = branch.ObjectId;
         }
 
+        public TfsBranch(int pullRequestId)
+        {
+            DisplayName = $"PR {pullRequestId}";
+            Name = PullRequestPrefix + pullRequestId + PullRequestSuffix;
+            _id = pullRequestId.ToString();
+        }
+
         private string ExtractDisplayName(string branchName)
         {
             return branchName.Replace(BranchNamePrefix, "");
@@ -27,7 +34,8 @@ namespace BuildNotifications.Plugin.Tfs
         public string Name { get; }
 
         private readonly string _id;
-
-        internal const string BranchNamePrefix = "refs/heads/";
+        private const string BranchNamePrefix = "refs/heads/";
+        private const string PullRequestPrefix = "refs/pull/";
+        private const string PullRequestSuffix = "/merge";
     }
 }
