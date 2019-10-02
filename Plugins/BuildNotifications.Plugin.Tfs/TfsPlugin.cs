@@ -40,13 +40,13 @@ namespace BuildNotifications.Plugin.Tfs
             if (connection == null)
                 return null;
 
-            if (string.IsNullOrEmpty(configuration.ProjectId))
+            if (configuration.Project == null)
             {
                 LogTo.Error("ProjectId not given in connection data");
                 return null;
             }
 
-            return new TfsBuildProvider(connection, configuration.ProjectId);
+            return new TfsBuildProvider(connection, Guid.Parse(configuration.Project.Id));
         }
 
         Task<ConnectionTestResult> IBuildPlugin.TestConnection(object data)
@@ -71,19 +71,19 @@ namespace BuildNotifications.Plugin.Tfs
             if (connection == null)
                 return null;
 
-            if (string.IsNullOrEmpty(configuration.RepositoryId))
+            if (configuration.Repository == null)
             {
                 LogTo.Error("RepositoryId not given in connection data");
                 return null;
             }
 
-            if (string.IsNullOrEmpty(configuration.ProjectId))
+            if (configuration.Project == null)
             {
                 LogTo.Error("ProjectId not given in connection data");
                 return null;
             }
 
-            return new TfsSourceControlProvider(connection, configuration.RepositoryId, configuration.ProjectId);
+            return new TfsSourceControlProvider(connection, Guid.Parse(configuration.Repository.Id), Guid.Parse(configuration.Project.Id));
         }
 
         public string DisplayName => "Azure DevOps Server";

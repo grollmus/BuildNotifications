@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.PluginInterfaces;
 using JetBrains.Annotations;
+using Microsoft.TeamFoundation.Core.WebApi;
+using Microsoft.TeamFoundation.SourceControl.WebApi;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -16,10 +18,11 @@ namespace BuildNotifications.Plugin.Tfs
 
         public string? CollectionName { get; set; }
 
-        [CalculatedValuesAsync(nameof(FetchProjectIds))]
-        public string? ProjectId { get; set; }
+        [CalculatedValuesAsync(nameof(FetchProjects))]
+        public TfsProject? Project { get; set; }
 
-        public string? RepositoryId { get; set; }
+        [CalculatedValuesAsync(nameof(FetchRepositories))]
+        public TfsRepository? Repository { get; set; }
 
         public AuthenticationType AuthenticationType { get; set; }
 
@@ -48,47 +51,106 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         private string? _lastFetchedUrl;
+        private IEnumerable<object> _lastProjectFetchResult = Enumerable.Empty<object>();
         private IEnumerable<object> _lastFetchResult = Enumerable.Empty<object>();
+        private readonly string _lastFetchProject = string.Empty;
 
-        public async Task<IEnumerable<object>> FetchProjectIds()
+        public async Task<IEnumerable<object>> FetchRepositories()
         {
-            if (_lastFetchedUrl == Url || Url == null)
+            if (_lastFetchedUrl == Url || Url == null ||
+                Project == null || _lastFetchProject == Project?.Id)
             {
                 if (_lastFetchResult != null)
                     return _lastFetchResult;
 
-                if (ProjectId != null)
-                    return new List<string> {ProjectId};
-                return Enumerable.Empty<string>();
+                return DefaultRepositoryReturnValue();
             }
 
             var urlToFetch = Url;
 
-            var result = await FetchProjectIdsInternal(urlToFetch);
+            var result = await FetchRepositoriesInternal(urlToFetch);
             _lastFetchResult = result.ToList();
 
             return _lastFetchResult;
         }
 
-        private async Task<IEnumerable<object>> FetchProjectIdsInternal(string urlToFetch)
+        public async Task<IEnumerable<object>> FetchProjects()
+        {
+            if (_lastFetchedUrl == Url || Url == null)
+            {
+                if (_lastProjectFetchResult != null)
+                    return _lastProjectFetchResult;
+
+                return DefaultProjectReturnValue();
+            }
+
+            var urlToFetch = Url;
+
+            var result = await FetchProjectsInternal(urlToFetch);
+            _lastProjectFetchResult = result.ToList();
+
+            return _lastProjectFetchResult;
+        }
+
+        private IEnumerable<object> DefaultProjectReturnValue()
+        {
+            if (Project != null)
+                return new List<object> {Project};
+
+            return Enumerable.Empty<object>();
+        }
+
+        private IEnumerable<object> DefaultRepositoryReturnValue()
+        {
+            if (Repository != null)
+                return new List<object> {Repository};
+
+            return Enumerable.Empty<object>();
+        }
+
+        private async Task<IEnumerable<object>> FetchProjectsInternal(string urlToFetch)
         {
             try
             {
-                // do some fetch logic
-                await Task.Delay(1000);
-                if (Url == "SomeWorkingUrl")
-                    return new List<string> {"ID1", "ID2", "ID3"};
-                else
-                    throw new Exception("Hmm");
-                //return Enumerable.Empty<string>();
+                var pool = new TfsConnectionPool();
+                var vssConnection = pool.CreateConnection(this);
+                if (vssConnection == null)
+                    return DefaultProjectReturnValue();
+
+                var projectClient = vssConnection.GetClient<ProjectHttpClient>();
+                var projects = await projectClient.GetProjects(ProjectState.WellFormed);
+
+                return projects.Select(p => new TfsProject(p));
             }
             catch (Exception e)
             {
                 LogTo.InfoException("Failed to fetch projectIds", e);
-                if (ProjectId != null)
-                    return new List<object> {ProjectId};
-                else
-                    return Enumerable.Empty<object>();
+                return DefaultProjectReturnValue();
+            }
+            finally
+            {
+                _lastFetchedUrl = urlToFetch;
+            }
+        }
+
+        private async Task<IEnumerable<object>> FetchRepositoriesInternal(string urlToFetch)
+        {
+            try
+            {
+                var pool = new TfsConnectionPool();
+                var vssConnection = pool.CreateConnection(this);
+                if (vssConnection == null)
+                    return DefaultRepositoryReturnValue();
+
+                var gitClient = vssConnection.GetClient<GitHttpClient>();
+                var repositories = await gitClient.GetRepositoriesAsync(Project!.Id);
+
+                return repositories.Select(r => new TfsRepository(r));
+            }
+            catch (Exception e)
+            {
+                LogTo.InfoException("Failed to fetch projectIds", e);
+                return DefaultRepositoryReturnValue();
             }
             finally
             {

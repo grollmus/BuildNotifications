@@ -14,7 +14,7 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsBuildProvider : IBuildProvider
     {
-        public TfsBuildProvider(VssConnection connection, string projectId)
+        public TfsBuildProvider(VssConnection connection, Guid projectId)
         {
             _connection = connection;
             _projectId = projectId;
@@ -58,7 +58,7 @@ namespace BuildNotifications.Plugin.Tfs
             if (_project == null)
             {
                 var projectClient = await _connection.GetClientAsync<ProjectHttpClient>();
-                var project = await projectClient.GetProject(_projectId);
+                var project = await projectClient.GetProject(_projectId.ToString());
                 _project = project;
             }
 
@@ -114,7 +114,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
 
             // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
-            var statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted;
+            const BuildStatus statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted;
             // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: statusFilter);
             foreach (var build in builds)
@@ -194,7 +194,7 @@ namespace BuildNotifications.Plugin.Tfs
         private readonly HashSet<TfsBuild> _knownBuilds = new HashSet<TfsBuild>(new TfsBuildComparer());
 
         private readonly VssConnection _connection;
-        private readonly string _projectId;
+        private readonly Guid _projectId;
         private TeamProject? _project;
     }
 }

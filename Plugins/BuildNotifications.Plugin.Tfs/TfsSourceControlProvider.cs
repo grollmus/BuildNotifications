@@ -10,11 +10,11 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsSourceControlProvider : IBranchProvider
     {
-        public TfsSourceControlProvider(VssConnection connection, string repositoryId, string projectId)
+        public TfsSourceControlProvider(VssConnection connection, Guid repositoryId, Guid projectId)
         {
             _connection = connection;
             _projectId = projectId;
-            _repositoryId = Guid.Parse(repositoryId);
+            _repositoryId = repositoryId;
         }
 
         private TfsBranch Convert(GitRef branch)
@@ -79,7 +79,7 @@ namespace BuildNotifications.Plugin.Tfs
         private readonly HashSet<TfsBranch> _knownBranches = new HashSet<TfsBranch>(new TfsBranchComparer());
 
         private readonly VssConnection _connection;
-        private readonly string _projectId;
+        private readonly Guid _projectId;
         private readonly Guid _repositoryId;
     }
 }
