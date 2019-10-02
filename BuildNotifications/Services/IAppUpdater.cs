@@ -9,7 +9,7 @@ namespace BuildNotifications.Services
         Task<UpdateCheckResult?> CheckForUpdates(CancellationToken cancellationToken = default);
         Task PerformUpdate(CancellationToken cancellationToken = default);
     }
-   
+
     [UsedImplicitly]
     internal class UpdateCheckResult
     {

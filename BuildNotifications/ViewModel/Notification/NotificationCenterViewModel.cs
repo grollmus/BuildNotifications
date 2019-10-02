@@ -95,10 +95,7 @@ namespace BuildNotifications.ViewModel.Notification
             ClearSelection();
             // smoothly clear list by removing each element instead of calling .clear (which would remove each item immediately not leaving any time to animate)
             var toRemove = Notifications.ToList();
-            foreach (var viewModel in toRemove)
-            {
-                Notifications.Remove(viewModel);
-            }
+            RemoveNotifications(toRemove);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
@@ -108,14 +105,20 @@ namespace BuildNotifications.ViewModel.Notification
         public void ClearNotificationsOfType(NotificationType type)
         {
             var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
-            foreach (var viewModel in toRemove)
-            {
-                Notifications.Remove(viewModel);
-            }
+            RemoveNotifications(toRemove);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
             UpdateUnreadCount();
+        }
+
+        private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications)
+        {
+            foreach (var notification in notifications)
+            {
+                Notifications.Remove(notification);
+                NotificationDistributor.ClearDistributedMessage(notification.Notification);
+            }
         }
 
         public void ClearSelection()

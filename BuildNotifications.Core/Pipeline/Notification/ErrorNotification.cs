@@ -24,6 +24,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         public string IssueSource { get; } = "BuildNotifications";
 
+        public string Source { get; set; } = "";
+
         public NotificationType Type => NotificationType.Error;
 
         public IList<IBuildNode> BuildNodes => new List<IBuildNode>();

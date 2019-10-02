@@ -480,4 +480,10 @@
   <data name="ClearAll" xml:space="preserve">
     <value>Clear all</value>
   </data>
+  <data name="OneOrMoreErrors" xml:space="preserve">
+    <value>One or more errors occured</value>
+  </data>
+  <data name="BuildsPaused" xml:space="preserve">
+    <value>Build fetching is paused</value>
+  </data>
 </root>

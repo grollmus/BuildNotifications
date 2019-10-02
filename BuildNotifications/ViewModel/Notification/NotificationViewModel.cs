@@ -12,27 +12,29 @@ namespace BuildNotifications.ViewModel.Notification
     {
         public NotificationViewModel(INotification notification)
         {
-            _notification = notification;
+            Notification = notification;
             Timestamp = DateTime.Now;
         }
 
-        public IList<IBuildNode> BuildNodes => _notification.BuildNodes;
+        public IList<IBuildNode> BuildNodes => Notification.BuildNodes;
 
-        public BuildStatus BuildStatus => _notification.Status;
+        public BuildStatus BuildStatus => Notification.Status;
 
-        public string Content => _notification.DisplayContent;
+        public string Content => Notification.DisplayContent;
 
         public IconType IconType => ResolveIconType();
 
-        public Guid NotificationGuid => _notification.Guid;
+        public Guid NotificationGuid => Notification.Guid;
 
-        public NotificationType NotificationType => _notification.Type;
+        public NotificationType NotificationType => Notification.Type;
 
         public DateTime Timestamp { get; }
 
         public TimeSpan TimeUntilNow => Timestamp.TimespanToNow();
 
-        public string Title => _notification.DisplayTitle;
+        public string Title => Notification.DisplayTitle;
+
+        public string Source => Notification.Source;
 
         private bool _isUnread = true;
 
@@ -53,12 +55,12 @@ namespace BuildNotifications.ViewModel.Notification
 
         private IconType ResolveIconType()
         {
-            return _notification.Type switch
+            return Notification.Type switch
             {
                 NotificationType.Branch => IconType.Branch,
                 NotificationType.Definition => IconType.Definition,
                 NotificationType.DefinitionAndBranch => IconType.SingleBuild,
-                NotificationType.Build => _notification.BuildNodes.Count == 1 ? IconType.SingleBuild : IconType.BuildNotification,
+                NotificationType.Build => Notification.BuildNodes.Count == 1 ? IconType.SingleBuild : IconType.BuildNotification,
                 NotificationType.Error => IconType.Lightning,
                 NotificationType.Info => IconType.Info,
                 NotificationType.Success => IconType.Checkmark,
@@ -66,6 +68,6 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        private readonly INotification _notification;
+        public INotification Notification { get; }
     }
 }

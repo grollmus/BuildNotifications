@@ -56,16 +56,28 @@
                                 ElementName=Grid}"
                                     Foreground="{DynamicResource Foreground1HalfTransparency}"
                                     DockPanel.Dock="Right" />
-                                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" x:Name="TitleText"
-                                           TextWrapping="Wrap" FontWeight="Bold"
-                                           Foreground="{DynamicResource Foreground1}" />
+
+                                <DockPanel LastChildFill="False">
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Top" x:Name="TitleText"
+                                               TextWrapping="Wrap" FontWeight="Bold" DockPanel.Dock="Left"
+                                               Foreground="{DynamicResource Foreground1}" />
+
+                                    <TextBlock Text="{Binding Source}" VerticalAlignment="Bottom"
+                                               MaxHeight="{StaticResource BlockDouble}" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding Source}"
+                                               Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                                               FontSize="{StaticResource BlockFiveSixths}"
+                                               Foreground="{DynamicResource Background3}" />
+                                </DockPanel>
+
                             </DockPanel>
                             <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap"
                                        Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
 
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8" TargetScaleY="0.8" />
+                                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center"
+                                                                        TargetScaleX="0.8" TargetScaleY="0.8" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
 

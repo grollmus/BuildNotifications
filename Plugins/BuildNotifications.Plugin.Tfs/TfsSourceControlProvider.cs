@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
@@ -9,15 +10,32 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsSourceControlProvider : IBranchProvider
     {
-        public TfsSourceControlProvider(VssConnection connection, string repositoryId)
+        public TfsSourceControlProvider(VssConnection connection, string repositoryId, string projectId)
         {
             _connection = connection;
+            _projectId = projectId;
             _repositoryId = Guid.Parse(repositoryId);
         }
 
-        private IBranch Convert(GitRef branch)
+        private TfsBranch Convert(GitRef branch)
         {
             return new TfsBranch(branch);
+        }
+
+        private TfsBranch Convert(GitPullRequest branch)
+        {
+            return new TfsBranch(branch.PullRequestId);
+        }
+
+        private async Task<List<GitPullRequest>> FetchPullRequests(GitHttpClient gitClient)
+        {
+            var searchCriteria = new GitPullRequestSearchCriteria
+            {
+                RepositoryId = _repositoryId,
+                Status = PullRequestStatus.Active
+            };
+            var prs = await gitClient.GetPullRequestsByProjectAsync(_projectId, searchCriteria);
+            return prs;
         }
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
@@ -27,18 +45,41 @@ namespace BuildNotifications.Plugin.Tfs
 
             foreach (var branch in branches)
             {
-                yield return Convert(branch);
+                var converted = Convert(branch);
+                _knownBranches.Add(converted);
+                yield return converted;
+            }
+
+            var pullRequests = await FetchPullRequests(gitClient);
+
+            foreach (var pullRequest in pullRequests)
+            {
+                var converted = Convert(pullRequest);
+                _knownBranches.Add(converted);
+                yield return converted;
             }
         }
 
         public async IAsyncEnumerable<IBranch> RemovedBranches()
         {
-            await Task.CompletedTask;
+            var gitClient = await _connection.GetClientAsync<GitHttpClient>();
+            var branches = await gitClient.GetBranchRefsAsync(_repositoryId);
+            var pullRequests = await FetchPullRequests(gitClient);
 
-            yield break;
+            var existing = branches.Select(Convert).Concat(pullRequests.Select(Convert));
+
+            var deletedBranches = _knownBranches.Except(existing, new TfsBranchComparer());
+
+            foreach (var branch in deletedBranches)
+            {
+                yield return branch;
+            }
         }
 
+        private readonly HashSet<TfsBranch> _knownBranches = new HashSet<TfsBranch>(new TfsBranchComparer());
+
         private readonly VssConnection _connection;
+        private readonly string _projectId;
         private readonly Guid _repositoryId;
     }
 }

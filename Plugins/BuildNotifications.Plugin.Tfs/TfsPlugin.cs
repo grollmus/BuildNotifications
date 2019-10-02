@@ -77,7 +77,13 @@ namespace BuildNotifications.Plugin.Tfs
                 return null;
             }
 
-            return new TfsSourceControlProvider(connection, configuration.RepositoryId);
+            if (string.IsNullOrEmpty(configuration.ProjectId))
+            {
+                LogTo.Error("ProjectId not given in connection data");
+                return null;
+            }
+
+            return new TfsSourceControlProvider(connection, configuration.RepositoryId, configuration.ProjectId);
         }
 
         public string DisplayName => "Azure DevOps Server";

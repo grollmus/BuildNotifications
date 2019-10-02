@@ -110,7 +110,7 @@
 
   <ItemGroup>
     <PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
-    <PackageReference Include="ReflectSettings" Version="1.0.10.4" />
+    <PackageReference Include="ReflectSettings" Version="1.0.10.8" />
     <PackageReference Include="semver" Version="2.0.4" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     <PackageReference Include="System.Windows.Forms" Version="4.0.0">

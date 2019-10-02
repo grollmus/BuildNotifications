@@ -116,7 +116,7 @@ namespace BuildNotifications.Services
                 File.Delete(targetFilePath);
 
             var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-            
+
             using var client = new HttpClient {BaseAddress = baseAddress};
             var stream = await client.GetStreamAsync(url.AbsolutePath.TrimStart('/'));
 
@@ -132,7 +132,7 @@ namespace BuildNotifications.Services
                 File.Delete(targetFilePath);
 
             var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-            
+
             using var client = new HttpClient {BaseAddress = baseAddress};
             var stream = await client.GetStreamAsync(url.AbsolutePath.TrimStart('/'));
 

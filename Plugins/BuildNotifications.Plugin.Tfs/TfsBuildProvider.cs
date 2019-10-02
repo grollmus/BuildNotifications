@@ -35,15 +35,20 @@ namespace BuildNotifications.Plugin.Tfs
             if (currentStep != null)
                 currentStepFactor = (currentStep.PercentComplete ?? 0) / 100.0;
 
+            if (currentStepFactor < 0)
+                currentStepFactor = 0;
+            if (currentStepFactor > 1)
+                currentStepFactor = 1;
+
             return (int) Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
         }
 
-        private IBuildDefinition Convert(BuildDefinitionReference definition)
+        private TfsBuildDefinition Convert(BuildDefinitionReference definition)
         {
             return new TfsBuildDefinition(definition);
         }
 
-        private IBaseBuild Convert(Build build)
+        private TfsBuild Convert(Build build)
         {
             return new TfsBuild(build);
         }
@@ -71,7 +76,9 @@ namespace BuildNotifications.Plugin.Tfs
 
             foreach (var build in builds)
             {
-                yield return Convert(build);
+                var converted = Convert(build);
+                _knownBuilds.Add(converted);
+                yield return converted;
             }
         }
 
@@ -101,16 +108,20 @@ namespace BuildNotifications.Plugin.Tfs
             var builds = await buildClient.GetBuildsAsync2(project.Id, minFinishTime: date, queryOrder: BuildQueryOrder.QueueTimeAscending);
             foreach (var build in builds)
             {
-                yield return Convert(build);
+                var converted = Convert(build);
+                _knownBuilds.Add(converted);
+                yield return converted;
             }
-            
+
             // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
             var statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted;
             // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: statusFilter);
             foreach (var build in builds)
             {
-                yield return Convert(build);
+                var converted = Convert(build);
+                _knownBuilds.Add(converted);
+                yield return converted;
             }
         }
 
@@ -123,22 +134,40 @@ namespace BuildNotifications.Plugin.Tfs
 
             foreach (var definition in definitions)
             {
-                yield return Convert(definition);
+                var converted = Convert(definition);
+                _knownDefinitions.Add(converted);
+                yield return converted;
             }
         }
 
         public async IAsyncEnumerable<IBuildDefinition> RemovedBuildDefinitions()
         {
-            await Task.CompletedTask;
+            var project = await GetProject();
+            var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            yield break;
+            var definitions = await buildClient.GetDefinitionsAsync(project.Id);
+
+            var deletedDefinitions = _knownDefinitions.Except(definitions.Select(Convert), new TfsBuildDefinitionComparer());
+
+            foreach (var definition in deletedDefinitions)
+            {
+                yield return definition;
+            }
         }
 
         public async IAsyncEnumerable<IBaseBuild> RemovedBuilds()
         {
-            await Task.CompletedTask;
+            var project = await GetProject();
+            var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            yield break;
+            var builds = await buildClient.GetBuildsAsync(project.Id);
+
+            var deletedBuilds = _knownBuilds.Except(builds.Select(Convert), new TfsBuildComparer());
+
+            foreach (var build in deletedBuilds)
+            {
+                yield return build;
+            }
         }
 
         public async Task UpdateBuilds(IEnumerable<IBaseBuild> builds)
@@ -160,6 +189,9 @@ namespace BuildNotifications.Plugin.Tfs
                 build.Progress = progress;
             }
         }
+
+        private readonly HashSet<TfsBuildDefinition> _knownDefinitions = new HashSet<TfsBuildDefinition>(new TfsBuildDefinitionComparer());
+        private readonly HashSet<TfsBuild> _knownBuilds = new HashSet<TfsBuild>(new TfsBuildComparer());
 
         private readonly VssConnection _connection;
         private readonly string _projectId;

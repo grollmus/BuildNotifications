@@ -22,6 +22,12 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
         void Process(IDistributedNotification notification);
 
         /// <summary>
+        /// Ideally clears everything that was associated to that notification. E.g. an icon which was displayed for an error gets reset to default.
+        /// </summary>
+        /// <param name="notification">The notification which was cleared.</param>
+        void Clear(IDistributedNotification notification);
+
+        /// <summary>
         /// Called whenever this instance is disposed. Used to release any resources the processor may hold.
         /// </summary>
         void Shutdown();

@@ -28,11 +28,14 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         public IList<IBuildNode> BuildNodes => new List<IBuildNode>();
 
+        public string Source { get; } = "";
+
         public BuildStatus Status => Type == NotificationType.Success ? BuildStatus.Succeeded : BuildStatus.Running;
 
         public Guid Guid { get; } = Guid.NewGuid();
 
         public string IssueSource { get; } = "BuildNotifications";
+
         private readonly object[] _parameter;
     }
 }

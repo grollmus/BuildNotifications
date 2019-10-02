@@ -1,44 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using JetBrains.Annotations;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using MS.WindowsAPICodePack.Internal;
 
 namespace ToastNotificationsPlugin
 {
+    [UsedImplicitly]
     public class ToastNotificationProcessor : INotificationProcessor
     {
-        // In order to display toasts, a desktop application must have a shortcut on the Start menu.
-        // Also, an AppUserModelID must be set on that shortcut.
-        private static void TryCreateShortcut()
-        {
-#if DEBUG
-            return;
-#endif
-#pragma warning disable 162
-            // ReSharper disable HeuristicUnreachableCode
-            var shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\Windows\\Start Menu\\Programs\\BuildNotifications.lnk";
-            File.Delete(shortcutPath);
-            if (File.Exists(shortcutPath))
-                return;
-
-            InstallShortcut(shortcutPath);
-            // ReSharper enable HeuristicUnreachableCode
-#pragma warning restore 162
-        }
-
-        public void Initialize()
-        {
-            TryCreateShortcut();
-            _toastNotificationFactory = new ToastNotificationFactory();
-
-            ToastNotificationManager.History.Clear(ApplicationId);
-        }
-
-        private ToastNotificationFactory _toastNotificationFactory;
-        internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
-
         private static void InstallShortcut(string shortcutPath)
         {
             // ReSharper disable SuspiciousTypeConversion.Global
@@ -73,9 +46,53 @@ namespace ToastNotificationsPlugin
             // ReSharper enable SuspiciousTypeConversion.Global
         }
 
+        // In order to display toasts, a desktop application must have a shortcut on the Start menu.
+        // Also, an AppUserModelID must be set on that shortcut.
+        private static void TryCreateShortcut()
+        {
+#if DEBUG
+            var shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\Windows\\Start Menu\\Programs\\BuildNotifications.lnk";
+            File.Delete(shortcutPath);
+            if (File.Exists(shortcutPath))
+                return;
+
+            InstallShortcut(shortcutPath);
+#endif
+        }
+
+        public void Initialize()
+        {
+            TryCreateShortcut();
+            _toastNotificationFactory = new ToastNotificationFactory();
+
+            ToastNotificationManager.History.Clear(ApplicationId);
+        }
+
+        private ToastNotificationFactory _toastNotificationFactory;
+        internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
+        internal const string Group = "BuildNotifications";
+
         public void Process(IDistributedNotification notification)
         {
             _toastNotificationFactory.Process(notification);
+        }
+
+        public void Clear(IDistributedNotification notification)
+        {
+            var tag = _toastNotificationFactory.NotificationTag(notification);
+
+            var notifications = ToastNotificationManager.History.GetHistory(ApplicationId).ToList();
+            if (notifications.Any(n => n.Tag == tag))
+            {
+                try
+                {
+                    ToastNotificationManager.History.Remove(tag, Group, ApplicationId);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
         }
 
         public void Shutdown()
