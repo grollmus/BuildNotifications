@@ -109,43 +109,5 @@ namespace BuildNotifications.Core.Tests.Config
             Assert.Contains(config.Connections.Select(c => c.Name), x => x == "c1");
             Assert.Contains(config.Connections.Select(c => c.Name), x => x == "c2");
         }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void ShouldCreateDefaultProjectWhenNoneWithConnectionsExists(int existingConnections)
-        {
-            // Arrange
-            var userConfiguration = new Configuration();
-            var connectionList = new List<ConnectionData>
-            {
-                new ConnectionData {Name = "c1"},
-                new ConnectionData {Name = "c2"}
-            };
-
-            var project = new ProjectConfiguration();
-            if (existingConnections > 0)
-            {
-                project.BuildConnectionNames.Add(connectionList[0].Name);
-                if (existingConnections > 1)
-                    project.SourceControlConnectionNames.Add(connectionList[1].Name);
-            }
-
-            userConfiguration.Projects.Add(project);
-
-            var pathResolver = MockResolver();
-            var configurationSerializer = MockSerializer(userConfiguration, connectionList);
-
-            var sut = new ConfigurationBuilder(pathResolver, configurationSerializer);
-
-            // Act
-            var config = sut.LoadConfiguration();
-
-            // Assert
-            Assert.NotNull(config);
-
-            Assert.Contains(config.Projects, p => p.BuildConnectionNames.Contains("c1") && p.SourceControlConnectionNames.Contains("c2"));
-        }
     }
 }

@@ -47,3 +47,4 @@ deploy:
     secure: TCujf+T4HHnH1w6WCybblkHMILi6HYQaZTYyLPG56w1mruNZ3aaBKtEoC+ubuVEI
   artifact: ReleasesFile,SetupExe,FullNupkg,DeltaNupkg
   draft: true
+  prerelease: true
