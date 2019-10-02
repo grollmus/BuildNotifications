@@ -11,11 +11,6 @@ namespace BuildNotifications.Core.Config
     public interface IConfiguration
     {
         /// <summary>
-        /// How many builds initially shall be loaded.
-        /// </summary>
-        int BuildsToLoadCount { get; }
-
-        /// <summary>
         /// How many builds shall be shown in one group.
         /// </summary>
         int BuildsToShow { get; }
@@ -79,6 +74,11 @@ namespace BuildNotifications.Core.Config
         /// marked as PreReleases.
         /// </summary>
         bool UsePreReleases { get; }
+
+        /// <summary>
+        /// Whether BuildNotifications shall start with Windows
+        /// </summary>
+        AutostartMode Autostart { get; set; }
 
         /// <summary>
         /// Retrieves the type of the configuration for the build plugin of the given connection.

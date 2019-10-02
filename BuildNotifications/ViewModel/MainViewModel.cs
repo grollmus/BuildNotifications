@@ -44,6 +44,8 @@ namespace BuildNotifications.ViewModel
             _coreSetup = new CoreSetup(pathResolver, _fileWatch);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
+            _configurationDoer = new ConfigurationDoer(_coreSetup.Configuration);
+            _configurationDoer.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             Initialize();
         }
@@ -317,7 +319,11 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () => _coreSetup.PersistConfigurationChanges(), _coreSetup.PluginRepository);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () =>
+            {
+                _coreSetup.PersistConfigurationChanges();
+                _configurationDoer.ApplyChanges();
+            }, _coreSetup.PluginRepository);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
@@ -529,6 +535,7 @@ namespace BuildNotifications.ViewModel
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
+        private ConfigurationDoer _configurationDoer;
 
         private class Dummy
         {

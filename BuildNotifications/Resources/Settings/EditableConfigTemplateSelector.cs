@@ -45,6 +45,7 @@ namespace BuildNotifications.Resources.Settings
                     }
                     else
                         return DataTemplateByName(editableString, element);
+
                 case IReadOnlyEditableCollection _:
                     return element?.TryFindResource("ReadOnlyEditableCollectionTemplate") as DataTemplate;
                 case IEditableCollection editableCollection:

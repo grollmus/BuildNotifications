@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using Anotar.NLog;
-using BuildNotifications.Core.Text;
 
 namespace BuildNotifications.Core.Config
 {

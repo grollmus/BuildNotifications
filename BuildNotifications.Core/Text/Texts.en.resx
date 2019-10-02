@@ -486,4 +486,16 @@
   <data name="BuildsPaused" xml:space="preserve">
     <value>Build fetching is paused</value>
   </data>
+  <data name="Autostart" xml:space="preserve">
+    <value>Autostart</value>
+  </data>
+  <data name="DontAutostart" xml:space="preserve">
+    <value>Dont autostart</value>
+  </data>
+  <data name="StartWithWindows" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="StartWithWindowsMinimized" xml:space="preserve">
+    <value>Start with Windows minimized</value>
+  </data>
 </root>

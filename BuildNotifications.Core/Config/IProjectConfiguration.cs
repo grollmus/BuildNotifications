@@ -49,16 +49,6 @@ namespace BuildNotifications.Core.Config
         bool IsEnabled { get; set; }
 
         /// <summary>
-        /// Whether only white listed branches shall be loaded.
-        /// </summary>
-        bool LoadWhitelistedBranchesExclusively { get; set; }
-
-        /// <summary>
-        /// Whether only white listed build definitions shall be loaded.
-        /// </summary>
-        bool LoadWhitelistedDefinitionsExclusively { get; set; }
-
-        /// <summary>
         /// Name of the project.
         /// </summary>
         string ProjectName { get; set; }

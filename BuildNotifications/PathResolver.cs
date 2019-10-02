@@ -13,7 +13,7 @@ namespace BuildNotifications
 #if DEBUG
                 return ".";
 #else
-                return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "BuildNotifications", "data");
+                return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "BuildNotifications", "data");
 #endif
             }
         }

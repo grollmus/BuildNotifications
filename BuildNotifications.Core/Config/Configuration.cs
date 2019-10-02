@@ -64,9 +64,6 @@ namespace BuildNotifications.Core.Config
 
         public IBuildTreeSortingDefinition SortingDefinition { get; set; }
 
-        [MinMax(1, int.MaxValue)]
-        public int BuildsToLoadCount { get; set; } = 200;
-
         [MinMax(1, 100)]
         public int BuildsToShow { get; set; } = 5;
 
@@ -77,9 +74,11 @@ namespace BuildNotifications.Core.Config
 
         public BuildNotificationMode CanceledBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
 
-        public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+        public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByOrForMe;
 
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+
+        public AutostartMode Autostart { get; set; } = AutostartMode.StartWithWindowsMinimized;
 
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);

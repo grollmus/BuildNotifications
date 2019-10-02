@@ -20,8 +20,6 @@ namespace BuildNotifications.Core.Config
 
             ShowPullRequests = true;
             HideCompletedPullRequests = true;
-            LoadWhitelistedBranchesExclusively = false;
-            LoadWhitelistedDefinitionsExclusively = false;
             IsEnabled = true;
         }
 
@@ -50,10 +48,6 @@ namespace BuildNotifications.Core.Config
         public string DefaultCompareBranch { get; set; }
 
         public bool HideCompletedPullRequests { get; set; }
-
-        public bool LoadWhitelistedBranchesExclusively { get; set; }
-
-        public bool LoadWhitelistedDefinitionsExclusively { get; set; }
 
         public bool ShowPullRequests { get; set; }
     }

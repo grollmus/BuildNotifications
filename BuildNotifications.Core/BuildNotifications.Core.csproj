@@ -34,11 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Text\StringLocalizer.Strings.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
-		</Compile>
 		<None Update="Text\StringLocalizer.Strings.tt">
 			<Generator>TextTemplatingFileGenerator</Generator>
 			<LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
@@ -48,6 +43,14 @@
 	<ItemGroup>
 		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
 		<TextTemplate Include="**\*.tt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Text\StringLocalizer.Strings.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">

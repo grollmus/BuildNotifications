@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
@@ -12,6 +11,8 @@ namespace ToastNotificationsPlugin
     [UsedImplicitly]
     public class ToastNotificationProcessor : INotificationProcessor
     {
+        // Only used in DEBUG
+        // ReSharper disable once UnusedMember.Local
         private static void InstallShortcut(string shortcutPath)
         {
             // ReSharper disable SuspiciousTypeConversion.Global
@@ -50,10 +51,11 @@ namespace ToastNotificationsPlugin
         // Also, an AppUserModelID must be set on that shortcut.
         private static void TryCreateShortcut()
         {
+            // for releases, the installer creates the shortcut. So this is only for debug purposes.
 #if DEBUG
             var shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\Windows\\Start Menu\\Programs\\BuildNotifications.lnk";
-            File.Delete(shortcutPath);
-            if (File.Exists(shortcutPath))
+            System.IO.File.Delete(shortcutPath);
+            if (System.IO.File.Exists(shortcutPath))
                 return;
 
             InstallShortcut(shortcutPath);

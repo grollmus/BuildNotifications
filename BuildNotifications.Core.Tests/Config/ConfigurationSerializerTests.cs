@@ -84,7 +84,6 @@ namespace BuildNotifications.Core.Tests.Config
 
             var expected = new Configuration
             {
-                BuildsToLoadCount = 1,
                 BuildsToShow = 2,
                 CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe,
                 Connections = new List<ConnectionData>
@@ -136,9 +135,7 @@ namespace BuildNotifications.Core.Tests.Config
                         {
                             "WhiteDef1"
                         },
-                        HideCompletedPullRequests = true,
-                        LoadWhitelistedBranchesExclusively = true,
-                        LoadWhitelistedDefinitionsExclusively = true
+                        HideCompletedPullRequests = true
                     }
                 }
             };
@@ -148,7 +145,6 @@ namespace BuildNotifications.Core.Tests.Config
             var actual = sut.Load(fileName);
 
             // Assert
-            Assert.Equal(expected.BuildsToLoadCount, actual.BuildsToLoadCount);
             Assert.Equal(expected.BuildsToShow, actual.BuildsToShow);
             Assert.Equal(expected.UpdateInterval, actual.UpdateInterval);
             Assert.Equal(expected.Language, actual.Language);
@@ -177,8 +173,6 @@ namespace BuildNotifications.Core.Tests.Config
             Assert.Equal(expected.Projects[0].BranchWhitelist, actual.Projects[0].BranchWhitelist);
             Assert.Equal(expected.Projects[0].BuildDefinitionWhitelist, actual.Projects[0].BuildDefinitionWhitelist);
             Assert.Equal(expected.Projects[0].HideCompletedPullRequests, actual.Projects[0].HideCompletedPullRequests);
-            Assert.Equal(expected.Projects[0].LoadWhitelistedBranchesExclusively, actual.Projects[0].LoadWhitelistedBranchesExclusively);
-            Assert.Equal(expected.Projects[0].LoadWhitelistedDefinitionsExclusively, actual.Projects[0].LoadWhitelistedDefinitionsExclusively);
         }
 
         [Fact]
