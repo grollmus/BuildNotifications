@@ -51,6 +51,7 @@ namespace BuildNotifications.Plugin.Tfs
         }
 
         private string? _lastFetchedUrl;
+        private string? _lastFetchedProjectUrl;
         private IEnumerable<object> _lastProjectFetchResult = Enumerable.Empty<object>();
         private IEnumerable<object> _lastFetchResult = Enumerable.Empty<object>();
         private readonly string _lastFetchProject = string.Empty;
@@ -58,7 +59,7 @@ namespace BuildNotifications.Plugin.Tfs
         public async Task<IEnumerable<object>> FetchRepositories()
         {
             if (_lastFetchedUrl == Url || Url == null ||
-                Project == null || _lastFetchProject == Project?.Id)
+                Project == null && _lastFetchProject == Project?.Id)
             {
                 if (_lastFetchResult != null)
                     return _lastFetchResult;
@@ -76,7 +77,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public async Task<IEnumerable<object>> FetchProjects()
         {
-            if (_lastFetchedUrl == Url || Url == null)
+            if (_lastFetchedProjectUrl == Url || Url == null)
             {
                 if (_lastProjectFetchResult != null)
                     return _lastProjectFetchResult;
@@ -94,7 +95,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         private IEnumerable<object> DefaultProjectReturnValue()
         {
-            if (Project != null)
+            if (Project != null && !string.IsNullOrEmpty(Project.Id))
                 return new List<object> {Project};
 
             return Enumerable.Empty<object>();
@@ -102,7 +103,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         private IEnumerable<object> DefaultRepositoryReturnValue()
         {
-            if (Repository != null)
+            if (Repository != null && !string.IsNullOrEmpty(Repository.Id))
                 return new List<object> {Repository};
 
             return Enumerable.Empty<object>();
@@ -116,7 +117,7 @@ namespace BuildNotifications.Plugin.Tfs
                 var vssConnection = pool.CreateConnection(this);
                 if (vssConnection == null)
                     return DefaultProjectReturnValue();
-
+                await Task.Delay(2000);
                 var projectClient = vssConnection.GetClient<ProjectHttpClient>();
                 var projects = await projectClient.GetProjects(ProjectState.WellFormed);
 
@@ -129,7 +130,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
             finally
             {
-                _lastFetchedUrl = urlToFetch;
+                _lastFetchedProjectUrl = urlToFetch;
             }
         }
 

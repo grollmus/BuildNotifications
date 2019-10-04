@@ -49,8 +49,9 @@
                                          SelectedItem="{Binding Value, Mode=TwoWay}"
                                          IsEnabled="{Binding IsBusy, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
                                          Margin="{StaticResource BlockQuarterYOnlyMargin}" />
-                <Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <views:BusyIndicator  IsBusy="{Binding IsBusy}"/>
+                <Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <views:BusyIndicator IsBusy="{Binding IsBusy}" />
                 </Viewbox>
             </Grid>
         </StackPanel>
@@ -71,10 +72,35 @@
             <TextBlock
                 Text="{Binding PropertyInfo.Name, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
-            <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}"
-                                     ItemsSource="{Binding PredefinedValues}"
-                                     Margin="{StaticResource BlockQuarterYOnlyMargin}" />
+            <Grid>
+                <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" x:Name="MultipleValuesComboBox"
+                                         ItemsSource="{Binding PredefinedValues}"
+                                         Margin="{StaticResource BlockQuarterYOnlyMargin}" />
+                <TextBlock x:Name="ReadOnlyTextBlock"
+                           Text="{Binding Value}" Visibility="Hidden"
+                           Margin="{StaticResource BlockQuarterYOnlyMargin}"
+                           FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                <TextBlock x:Name="NoValuesTextBlock"
+                           Text="[No value]" Visibility="Hidden"
+                           Margin="{StaticResource BlockQuarterYOnlyMargin}"
+                           FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                <Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <views:BusyIndicator IsBusy="{Binding IsBusy}" />
+                </Viewbox>
+            </Grid>
         </StackPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding PredefinedValues.Count}" Value="1">
+                <Setter TargetName="MultipleValuesComboBox" Property="Visibility" Value="Hidden" />
+                <Setter TargetName="ReadOnlyTextBlock" Property="Visibility" Value="Visible" />
+                <Setter TargetName="NoValuesTextBlock" Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding PredefinedValues.Count}" Value="0">
+                <Setter TargetName="MultipleValuesComboBox" Property="Visibility" Value="Hidden" />
+                <Setter TargetName="NoValuesTextBlock" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
     <DataTemplate x:Key="EditableComplexTemplate" DataType="{x:Type editableConfigs:IEditableComplex}">
         <ItemsControl ItemsSource="{Binding SubEditables}" IsTabStop="False">
