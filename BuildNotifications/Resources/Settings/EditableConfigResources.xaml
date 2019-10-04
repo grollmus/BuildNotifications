@@ -73,13 +73,13 @@
                 Text="{Binding PropertyInfo.Name, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
             <Grid>
-                <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay}" x:Name="MultipleValuesComboBox"
+                <local:DecoratedComboBox SelectedItem="{Binding Value, Mode=TwoWay, Delay=20}" x:Name="MultipleValuesComboBox"
                                          ItemsSource="{Binding PredefinedValues}"
                                          Margin="{StaticResource BlockQuarterYOnlyMargin}" />
                 <TextBlock x:Name="ReadOnlyTextBlock"
-                           Text="{Binding Value}" Visibility="Hidden"
+                           Text="{Binding Value, Delay=20}" Visibility="Hidden"
                            Margin="{StaticResource BlockQuarterYOnlyMargin}"
-                           FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                           FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1}" />
                 <TextBlock x:Name="NoValuesTextBlock"
                            Text="[No value]" Visibility="Hidden"
                            Margin="{StaticResource BlockQuarterYOnlyMargin}"

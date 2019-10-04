@@ -50,6 +50,7 @@ namespace BuildNotifications.Plugin.Tfs
             return AuthenticationType != AuthenticationType.Token;
         }
 
+        private AuthenticationType? _lastFetchedAuthenticationType;
         private string? _lastFetchedUrl;
         private string? _lastFetchedProjectUrl;
         private IEnumerable<object> _lastProjectFetchResult = Enumerable.Empty<object>();
@@ -58,7 +59,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public async Task<IEnumerable<object>> FetchRepositories()
         {
-            if (_lastFetchedUrl == Url || Url == null ||
+            if (_lastFetchedUrl == Url && _lastFetchedAuthenticationType == AuthenticationType || Url == null ||
                 Project == null && _lastFetchProject == Project?.Id)
             {
                 if (_lastFetchResult != null)
@@ -71,13 +72,14 @@ namespace BuildNotifications.Plugin.Tfs
 
             var result = await FetchRepositoriesInternal(urlToFetch);
             _lastFetchResult = result.ToList();
+            _lastFetchedAuthenticationType = AuthenticationType;
 
             return _lastFetchResult;
         }
 
         public async Task<IEnumerable<object>> FetchProjects()
         {
-            if (_lastFetchedProjectUrl == Url || Url == null)
+            if (_lastFetchedProjectUrl == Url && _lastFetchedAuthenticationType == AuthenticationType || Url == null)
             {
                 if (_lastProjectFetchResult != null)
                     return _lastProjectFetchResult;
@@ -117,7 +119,6 @@ namespace BuildNotifications.Plugin.Tfs
                 var vssConnection = pool.CreateConnection(this);
                 if (vssConnection == null)
                     return DefaultProjectReturnValue();
-                await Task.Delay(2000);
                 var projectClient = vssConnection.GetClient<ProjectHttpClient>();
                 var projects = await projectClient.GetProjects(ProjectState.WellFormed);
 

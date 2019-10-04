@@ -88,8 +88,6 @@ namespace BuildNotifications.ViewModel.Settings
                 Configs.Add(config);
             }
 
-            // remove editables for wrapped properties
-            RemoveChangeTrackingForWrappedInstances(changeTrackingManager, Configuration);
             ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
             var connectionsEditable = factory.Reflect(ConnectionsWrapper, changeTrackingManager);
 
@@ -97,23 +95,6 @@ namespace BuildNotifications.ViewModel.Settings
             ProjectsSubSet = new SettingsSubSetViewModel(projectsEditables);
 
             changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
-        }
-
-        private void RemoveChangeTrackingForWrappedInstances(ChangeTrackingManager changeTrackingManager, IConfiguration configuration)
-        {
-            var editablesToRemove = changeTrackingManager.Where(x => ReferenceEquals(x.ForInstance, configuration.Connections));
-            foreach (var connection in configuration.Connections)
-            {
-                editablesToRemove = editablesToRemove.Concat(changeTrackingManager.Where(x => ReferenceEquals(x.ForInstance, connection)));
-                editablesToRemove = editablesToRemove.Concat(changeTrackingManager.Where(x => ReferenceEquals(x.ForInstance, connection.BuildPluginConfiguration)));
-                editablesToRemove = editablesToRemove.Concat(changeTrackingManager.Where(x => ReferenceEquals(x.ForInstance, connection.SourceControlPluginConfiguration)));
-            }
-
-            var asList = editablesToRemove.ToList();
-            foreach (var config in asList)
-            {
-                changeTrackingManager.Remove(config);
-            }
         }
 
         private void OnConfigurationChanged(object? sender, EventArgs args)
