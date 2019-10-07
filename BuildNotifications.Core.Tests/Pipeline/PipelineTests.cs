@@ -7,6 +7,7 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
+using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
@@ -35,7 +36,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var buildProvider = Substitute.For<IBuildProvider>();
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
             sut.AddProject(project);
 
             // Act
@@ -55,7 +56,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
             sut.AddProject(project);
 
             // Act
@@ -102,7 +103,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             configuration.BuildsToShow.Returns(int.MaxValue);
             var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration);
 
-            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
             pipeline.AddProject(project);
 
             IBuildTree? tree = null;

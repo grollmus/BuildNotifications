@@ -74,6 +74,11 @@ namespace BuildNotifications.Core.Pipeline
         IAsyncEnumerable<IBuild> FetchRemovedBuilds();
 
         /// <summary>
+        /// Updates the display name of the branches for the given builds.
+        /// </summary>
+        Task UpdateBuildBranches(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches);
+
+        /// <summary>
         /// Updates given builds.
         /// </summary>
         Task UpdateBuilds(IEnumerable<IBuild> builds);

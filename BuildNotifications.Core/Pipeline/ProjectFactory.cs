@@ -5,6 +5,7 @@ using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
+using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -129,7 +130,8 @@ namespace BuildNotifications.Core.Pipeline
                 branchProviders.Add(branchProvider);
             }
 
-            return new Project(buildProviders, branchProviders, config);
+            var branchNameExtractor = new BranchNameExtractor();
+            return new Project(buildProviders, branchProviders, config, branchNameExtractor);
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;

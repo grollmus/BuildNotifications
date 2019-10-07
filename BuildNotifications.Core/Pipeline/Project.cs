@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -12,9 +13,12 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
+        private readonly IBranchNameExtractor _branchNameExtractor;
+
         public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders,
-            IProjectConfiguration config)
+            IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
         {
+            _branchNameExtractor = branchNameExtractor;
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
             _branchProviders = branchProviders.ToList();
@@ -23,8 +27,8 @@ namespace BuildNotifications.Core.Pipeline
             _buildFilter = new ListBuildFilter(config);
         }
 
-        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
-            : this(buildProvider.Yield(), branchProvider.Yield(), config)
+        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
+            : this(buildProvider.Yield(), branchProvider.Yield(), config, branchNameExtractor)
         {
         }
 
@@ -107,6 +111,45 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public Task UpdateBuildBranches(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches)
+        {
+            var branchList = branches.ToList();
+            var enrichedBuilds = builds.OfType<EnrichedBuild>().ToList();
+
+            foreach (var build in enrichedBuilds)
+            {
+                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName);
+                if (branch == null)
+                {
+                    LogTo.Debug($"Did not find branch with name '{build.BranchName}' in branches for project");
+                    continue;
+                }
+
+                build.Branch = branch;
+
+                if (branch is IPullRequest pr)
+                    build.BranchName = ExtractBranchName(pr);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private string ExtractBranchName(IPullRequest pr)
+        {
+            switch (Config.PullRequestDisplay)
+            {
+                case PullRequestDisplayMode.Name:
+                    return pr.Description;
+                case PullRequestDisplayMode.Path:
+                    var sourceName = _branchNameExtractor.ExtractDisplayName(pr.SourceBranch);
+                    var targetName = _branchNameExtractor.ExtractDisplayName(pr.TargetBranch);
+                    return $"{sourceName} into {targetName}";
+
+                default:
+                    return $"PR {pr.Id}";
+            }
+        }
+
         public async Task UpdateBuilds(IEnumerable<IBuild> builds)
         {
             var enriched = builds.OfType<EnrichedBuild>();
@@ -147,46 +190,5 @@ namespace BuildNotifications.Core.Pipeline
 
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
-
-        private class EnrichedBuild : IBuild
-        {
-            public EnrichedBuild(IBaseBuild build, string projectName, IBuildProvider provider)
-            {
-                OriginalBuild = build;
-                ProjectName = projectName;
-                Provider = provider;
-            }
-
-            public IBuildProvider Provider { get; }
-
-            internal IBaseBuild OriginalBuild { get; }
-
-            public bool Equals(IBaseBuild other)
-            {
-                return OriginalBuild.Equals(other);
-            }
-
-            public string ProjectName { get; }
-
-            public string BranchName => OriginalBuild.BranchName;
-
-            public IBuildDefinition Definition => OriginalBuild.Definition;
-
-            public string Id => OriginalBuild.Id;
-
-            public DateTime? LastChangedTime => OriginalBuild.LastChangedTime;
-
-            public int Progress => OriginalBuild.Progress;
-
-            public DateTime? QueueTime => OriginalBuild.QueueTime;
-
-            public IUser RequestedBy => OriginalBuild.RequestedBy;
-
-            public IUser? RequestedFor => OriginalBuild.RequestedFor;
-
-            public BuildStatus Status => OriginalBuild.Status;
-
-            public IBuildLinks Links => OriginalBuild.Links;
-        }
     }
 }

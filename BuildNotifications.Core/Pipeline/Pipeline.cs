@@ -53,10 +53,10 @@ namespace BuildNotifications.Core.Pipeline
             LogTo.Debug("Cleaning up builds");
             var builds = _buildCache.ContentCopy();
             var count = 0;
-            foreach (var build in builds)
+            foreach (var build in builds.Cast<EnrichedBuild>())
             {
                 if (!_definitionCache.ContainsValue(build.Definition)
-                    || !_branchCache.Contains(b => b.Name.Equals(build.BranchName)))
+                    || (build.Branch != null && !_branchCache.Contains(b => b.Equals(build.Branch))))
                 {
                     _buildCache.RemoveValue(build);
                     count += 1;
@@ -231,10 +231,15 @@ namespace BuildNotifications.Core.Pipeline
             {
                 LogTo.Debug($"Updating builds of project \"{project.Name}\".");
                 var projectId = project.GetHashCode();
-                var buildsForProject = _buildCache.Values(projectId);
+                var buildsForProject = _buildCache.Values(projectId).ToList();
+                var branchesForProject = _branchCache.Values(projectId);
 
                 var inProgressBuilds = buildsForProject.Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending);
-                await project.UpdateBuilds(inProgressBuilds);
+
+                await Task.WhenAll(
+                    project.UpdateBuilds(inProgressBuilds),
+                    project.UpdateBuildBranches(buildsForProject, branchesForProject)
+                );
             }
         }
 
