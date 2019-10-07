@@ -13,8 +13,6 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        private readonly IBranchNameExtractor _branchNameExtractor;
-
         public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders,
             IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
         {
@@ -35,6 +33,22 @@ namespace BuildNotifications.Core.Pipeline
         private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider)
         {
             return new EnrichedBuild(build, Name, buildProvider);
+        }
+
+        private string ExtractBranchName(IPullRequest pr)
+        {
+            switch (Config.PullRequestDisplay)
+            {
+                case PullRequestDisplayMode.Name:
+                    return pr.Description;
+                case PullRequestDisplayMode.Path:
+                    var sourceName = _branchNameExtractor.ExtractDisplayName(pr.SourceBranch);
+                    var targetName = _branchNameExtractor.ExtractDisplayName(pr.TargetBranch);
+                    return $"{sourceName} into {targetName}";
+
+                default:
+                    return $"PR {pr.Id}";
+            }
         }
 
         private bool IsAllowed(IBaseBuild build)
@@ -84,7 +98,8 @@ namespace BuildNotifications.Core.Pipeline
             {
                 await foreach (var branch in branchProvider.FetchExistingBranches())
                 {
-                    yield return branch;
+                    if (Config.PullRequestDisplay != PullRequestDisplayMode.None || !(branch is IPullRequest))
+                        yield return branch;
                 }
             }
         }
@@ -119,35 +134,13 @@ namespace BuildNotifications.Core.Pipeline
             foreach (var build in enrichedBuilds)
             {
                 var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName);
-                if (branch == null)
-                {
-                    LogTo.Debug($"Did not find branch with name '{build.BranchName}' in branches for project");
-                    continue;
-                }
-
-                build.Branch = branch;
+                build.Branch = branch ?? new NullBranch();
 
                 if (branch is IPullRequest pr)
                     build.BranchName = ExtractBranchName(pr);
             }
 
             return Task.CompletedTask;
-        }
-
-        private string ExtractBranchName(IPullRequest pr)
-        {
-            switch (Config.PullRequestDisplay)
-            {
-                case PullRequestDisplayMode.Name:
-                    return pr.Description;
-                case PullRequestDisplayMode.Path:
-                    var sourceName = _branchNameExtractor.ExtractDisplayName(pr.SourceBranch);
-                    var targetName = _branchNameExtractor.ExtractDisplayName(pr.TargetBranch);
-                    return $"{sourceName} into {targetName}";
-
-                default:
-                    return $"PR {pr.Id}";
-            }
         }
 
         public async Task UpdateBuilds(IEnumerable<IBuild> builds)
@@ -186,9 +179,26 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        private readonly IBranchNameExtractor _branchNameExtractor;
         private readonly List<IBranchProvider> _branchProviders;
-
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
+
+        private class NullBranch : IBranch
+        {
+            public NullBranch()
+            {
+                Name = string.Empty;
+                DisplayName = string.Empty;
+            }
+
+            public bool Equals(IBranch other)
+            {
+                return false;
+            }
+
+            public string DisplayName { get; }
+            public string Name { get; }
+        }
     }
 }

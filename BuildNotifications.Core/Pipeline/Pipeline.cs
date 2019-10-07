@@ -56,7 +56,7 @@ namespace BuildNotifications.Core.Pipeline
             foreach (var build in builds.Cast<EnrichedBuild>())
             {
                 if (!_definitionCache.ContainsValue(build.Definition)
-                    || (build.Branch != null && !_branchCache.Contains(b => b.Equals(build.Branch))))
+                    || !_branchCache.Contains(b => b.Equals(build.Branch)))
                 {
                     _buildCache.RemoveValue(build);
                     count += 1;
@@ -300,9 +300,9 @@ namespace BuildNotifications.Core.Pipeline
 
                 LogTo.Debug("Everything is fetched.");
 
-                CleanupBuilds();
-
                 await UpdateBuilds();
+
+                CleanupBuilds();
 
                 var tree = BuildTree();
 
