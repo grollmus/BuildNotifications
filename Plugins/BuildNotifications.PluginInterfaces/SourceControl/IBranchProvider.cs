@@ -10,15 +10,15 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
     public interface IBranchProvider
     {
         /// <summary>
-        /// Fetches all branches that are available.
+        /// Fetches all branches and PullRequests that are available.
         /// </summary>
-        /// <returns>List of all available branches</returns>
+        /// <returns>List of all available branches and PullRequests</returns>
         IAsyncEnumerable<IBranch> FetchExistingBranches();
 
         /// <summary>
-        /// Returns a list of branches that no longer exist in the source.
+        /// Returns a list of branches and PullRequests that no longer exist in the source.
         /// </summary>
-        /// <returns>List of removed branches.</returns>
+        /// <returns>List of removed branches and PullRequests.</returns>
         IAsyncEnumerable<IBranch> RemovedBranches();
     }
 }

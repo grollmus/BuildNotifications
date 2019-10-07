@@ -54,9 +54,9 @@ namespace BuildNotifications.Core.Config
         string ProjectName { get; set; }
 
         /// <summary>
-        /// Whether Pull-Request "Branches" shall be displayed.
+        /// Defines if and how PullRequests are displayed.
         /// </summary>
-        bool ShowPullRequests { get; set; }
+        PullRequestDisplayMode PullRequestDisplay { get; set; }
 
         /// <summary>
         /// Name of the <see cref="ConnectionData" /> that are used to

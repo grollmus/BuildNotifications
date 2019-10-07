@@ -110,7 +110,7 @@ namespace BuildNotifications.Core.Tests.Config
                     {
                         ProjectName = "Project",
                         DefaultCompareBranch = "compare",
-                        ShowPullRequests = true,
+                        PullRequestDisplay = PullRequestDisplayMode.Number,
                         BuildConnectionNames = new List<string>
                         {
                             "BCN1"
@@ -165,7 +165,7 @@ namespace BuildNotifications.Core.Tests.Config
             Assert.Single(actual.Projects);
             Assert.Equal(expected.Projects[0].ProjectName, actual.Projects[0].ProjectName);
             Assert.Equal(expected.Projects[0].DefaultCompareBranch, actual.Projects[0].DefaultCompareBranch);
-            Assert.Equal(expected.Projects[0].ShowPullRequests, actual.Projects[0].ShowPullRequests);
+            Assert.Equal(expected.Projects[0].PullRequestDisplay, actual.Projects[0].PullRequestDisplay);
             Assert.Equal(expected.Projects[0].BuildConnectionNames, actual.Projects[0].BuildConnectionNames);
             Assert.Equal(expected.Projects[0].SourceControlConnectionNames, actual.Projects[0].SourceControlConnectionNames);
             Assert.Equal(expected.Projects[0].BranchBlacklist, actual.Projects[0].BranchBlacklist);

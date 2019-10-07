@@ -22,7 +22,9 @@ namespace BuildNotifications.Core.Utilities
         public string ExtractDisplayName(string fullBranchName, IEnumerable<IBranch> allBranches)
         {
             var matchingBranch = allBranches.FirstOrDefault(b => b.Name == fullBranchName);
+#pragma warning disable 618
             return matchingBranch?.DisplayName ?? ExtractDisplayName(fullBranchName);
+#pragma warning restore 618
         }
 
         private const string GitRefHeadPrefix = "refs/heads/";

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuildNotifications.Core.Text;
 using ReflectSettings.Attributes;
 
@@ -18,7 +19,7 @@ namespace BuildNotifications.Core.Config
             ProjectName = StringLocalizer.NewProject;
             DefaultCompareBranch = string.Empty;
 
-            ShowPullRequests = true;
+            PullRequestDisplay = PullRequestDisplayMode.Number;
             HideCompletedPullRequests = true;
             IsEnabled = true;
         }
@@ -27,7 +28,7 @@ namespace BuildNotifications.Core.Config
 
         [IsDisplayName]
         public string ProjectName { get; set; }
-
+      
         [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
         public IList<string> BuildConnectionNames { get; set; }
 
@@ -49,6 +50,10 @@ namespace BuildNotifications.Core.Config
 
         public bool HideCompletedPullRequests { get; set; }
 
+        [IsHidden]
+        [Obsolete]
         public bool ShowPullRequests { get; set; }
+
+        public PullRequestDisplayMode PullRequestDisplay { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace BuildNotifications.Plugin.Tfs
             _id = branch.ObjectId;
         }
 
-        public TfsBranch(int pullRequestId)
+        protected TfsBranch(int pullRequestId)
         {
             DisplayName = $"PR {pullRequestId}";
             Name = PullRequestPrefix + pullRequestId + PullRequestSuffix;

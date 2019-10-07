@@ -22,9 +22,9 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsBranch(branch);
         }
 
-        private TfsBranch Convert(GitPullRequest branch)
+        private TfsPullRequests Convert(GitPullRequest branch)
         {
-            return new TfsBranch(branch.PullRequestId);
+            return new TfsPullRequests(branch);
         }
 
         private async Task<List<GitPullRequest>> FetchPullRequests(GitHttpClient gitClient)
