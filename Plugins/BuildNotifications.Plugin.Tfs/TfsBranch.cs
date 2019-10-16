@@ -15,8 +15,13 @@ namespace BuildNotifications.Plugin.Tfs
         protected TfsBranch(int pullRequestId)
         {
             DisplayName = $"PR {pullRequestId}";
-            Name = PullRequestPrefix + pullRequestId + PullRequestSuffix;
+            Name = ComputePullRequestBranchName(pullRequestId);
             _id = pullRequestId.ToString();
+        }
+
+        internal static string ComputePullRequestBranchName(int pullRequestId)
+        {
+            return PullRequestPrefix + pullRequestId + PullRequestSuffix;
         }
 
         private string ExtractDisplayName(string branchName)

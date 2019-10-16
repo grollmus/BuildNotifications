@@ -66,9 +66,8 @@ namespace BuildNotifications.Plugin.Tfs
             var branches = await gitClient.GetBranchRefsAsync(_repositoryId);
             var pullRequests = await FetchPullRequests(gitClient);
 
-            var existing = branches.Select(Convert).Concat(pullRequests.Select(Convert));
-
-            var deletedBranches = _knownBranches.Except(existing, new TfsBranchComparer());
+            var names = branches.Select(b => b.Name).Concat(pullRequests.Select(p => TfsBranch.ComputePullRequestBranchName(p.PullRequestId)));
+            var deletedBranches = _knownBranches.Where(known => names.All(n => known.Name != n));
 
             foreach (var branch in deletedBranches)
             {

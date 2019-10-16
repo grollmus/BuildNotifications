@@ -160,10 +160,9 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-
             var definitions = await buildClient.GetDefinitionsAsync(project.Id);
 
-            var deletedDefinitions = _knownDefinitions.Except(definitions.Select(Convert), new TfsBuildDefinitionComparer());
+            var deletedDefinitions = _knownDefinitions.Where(known => definitions.All(d => d.Id != known.NativeId));
 
             foreach (var definition in deletedDefinitions)
             {
@@ -175,10 +174,9 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-
             var builds = await buildClient.GetBuildsAsync(project.Id);
 
-            var deletedBuilds = _knownBuilds.Except(builds.Select(Convert), new TfsBuildComparer());
+            var deletedBuilds = _knownBuilds.Where(known => builds.All(build => build.Id != known.BuildId));
 
             foreach (var build in deletedBuilds)
             {
