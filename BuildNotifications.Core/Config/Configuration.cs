@@ -78,6 +78,8 @@ namespace BuildNotifications.Core.Config
 
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
 
+        public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; } = PartialSucceededTreatmentMode.TreatAsSucceeded;
+
         public AutostartMode Autostart { get; set; } = AutostartMode.StartWithWindowsMinimized;
 
         [JsonIgnore]

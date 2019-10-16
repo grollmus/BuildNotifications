@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Utils;

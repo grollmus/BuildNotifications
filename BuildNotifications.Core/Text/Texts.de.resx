@@ -498,4 +498,19 @@
   <data name="StartWithWindowsMinimized" xml:space="preserve">
     <value></value>
   </data>
+  <data name="Ignore" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TreatAsFailed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="TreatAsSucceeded" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PartialSucceededTreatmentMode" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UsePreReleases" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

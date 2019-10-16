@@ -65,6 +65,11 @@ namespace BuildNotifications.Core.Config
         BuildNotificationMode SucceededBuildNotifyConfig { get; }
 
         /// <summary>
+        /// How to treat builds with warnings (or partially succeeded builds)
+        /// </summary>
+        PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; }
+
+        /// <summary>
         /// Seconds between each update cycle.
         /// </summary>
         int UpdateInterval { get; }
