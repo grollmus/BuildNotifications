@@ -124,10 +124,10 @@ namespace BuildNotifications.Plugin.Tfs
                 yield return converted;
             }
 
-            var strangeBuilds = _knownBuilds.Where(b => b.Status == PluginInterfaces.Builds.BuildStatus.None
-                                                        || b.Status == PluginInterfaces.Builds.BuildStatus.Pending
-                                                        || b.Status == PluginInterfaces.Builds.BuildStatus.Running).ToList();
-            foreach (var strangeBuild in strangeBuilds)
+            var inProgressBuilds = _knownBuilds.Where(b => b.Status == PluginInterfaces.Builds.BuildStatus.None
+                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Pending
+                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Running).ToList();
+            foreach (var strangeBuild in inProgressBuilds)
             {
                 var build = await buildClient.GetBuildAsync(project.Id, strangeBuild.BuildId);
                 var converted = Convert(build);
