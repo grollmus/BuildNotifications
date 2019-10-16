@@ -30,8 +30,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         private static PngBitmapEncoder CreateBitmap(FrameworkElement element, Size size)
         {
-            var dpi = VisualTreeHelper.GetDpi(element);
-            var renderTarget = new RenderTargetBitmap((int) size.Width, (int) size.Height, dpi.PixelsPerInchX, dpi.PixelsPerInchY, PixelFormats.Pbgra32);
+            var renderTarget = new RenderTargetBitmap((int) size.Width, (int) size.Height, 96, 96, PixelFormats.Pbgra32);
             renderTarget.Render(element);
             element.InvalidateMeasure();
 
