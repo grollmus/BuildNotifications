@@ -46,7 +46,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
             foreach (var buildNodes in allGroups.Where(x => x.Count > 0))
             {
-                var status = buildNodes.Max(x => x.Status);
+                var status = buildNodes.Max(x => ParseStatus(x.Status));
 
                 // try to group by definition/branch etc.
                 var groupedByDefinitionAndBranch = GroupByDefinitionAndBranch(buildNodes).ToList();
@@ -80,6 +80,26 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 }
 
                 yield return BranchNotification(buildNodes, status, groupedByBranch.Select(x => x.Key));
+            }
+        }
+
+        private BuildStatus ParseStatus(BuildStatus buildStatus)
+        {
+            switch (buildStatus)
+            {
+                case BuildStatus.PartiallySucceeded:
+                    switch (_configuration.PartialSucceededTreatmentMode)
+                    {
+                        case PartialSucceededTreatmentMode.TreatAsSucceeded:
+                            return BuildStatus.Succeeded;
+                        case PartialSucceededTreatmentMode.TreatAsFailed:
+                            return BuildStatus.Failed;
+                        default:
+                            return buildStatus;
+                    }
+
+                default:
+                    return buildStatus;
             }
         }
 

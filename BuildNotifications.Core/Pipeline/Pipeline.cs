@@ -314,7 +314,7 @@ namespace BuildNotifications.Core.Pipeline
                 if (_oldTree == null)
                     delta = new BuildTreeBuildsDelta();
                 else
-                    delta = new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus);
+                    delta = new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus, _configuration.PartialSucceededTreatmentMode);
 
                 var notifications = _notificationFactory.ProduceNotifications(delta).ToList();
                 return (BuildTree: tree, Notifications: notifications);

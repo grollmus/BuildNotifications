@@ -80,6 +80,20 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.None);
             _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.None);
             _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.None);
+
+            _treatPartialsAsSucceededConfiguration = Substitute.For<IConfiguration>();
+            _treatPartialsAsSucceededConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
+            _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsSucceededConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsSucceeded);
+
+            _treatPartialsAsFailedConfiguration = Substitute.For<IConfiguration>();
+            _treatPartialsAsFailedConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
+            _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsFailedConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsFailed);
         }
 
         private readonly IBuildDefinition _ciDefinition;
@@ -125,6 +139,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         private readonly IConfiguration _onlyRequestedByMeConfiguration;
         private readonly IConfiguration _onlyRequestedForMeConfiguration;
         private readonly IConfiguration _dontNotifyConfiguration;
+        private readonly IConfiguration _treatPartialsAsSucceededConfiguration;
+        private readonly IConfiguration _treatPartialsAsFailedConfiguration;
 
         private const string ProjectId = nameof(ProjectId);
 
@@ -583,9 +599,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         public void SingleBuildFailingShouldResultInMessageTellingAboutBuild()
         {
             // arrange
-            var build1 = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
             var delta = new BuildTreeBuildsDelta();
-            delta.FailedBuilds.Add(build1);
+            delta.FailedBuilds.Add(build);
 
             // act
             var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
@@ -595,6 +611,44 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
             Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+        }
+
+        [Fact]
+        public void PartiallySucceededBuildWithSettingOnTreatAsSucceededShouldResultInSuccessMessage()
+        {
+            // arrange
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.PartiallySucceeded);
+            var delta = new BuildTreeBuildsDelta();
+            delta.SucceededBuilds.Add(build);
+
+            // act
+            var messages = new NotificationFactory(_treatPartialsAsSucceededConfiguration).ProduceNotifications(delta);
+
+            // assert
+            var message = messages.First();
+            Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(BuildStatus.Succeeded, message.Status);
+        }
+
+        [Fact]
+        public void PartiallySucceededBuildWithSettingOnTreatAsFailedShouldResultInFailMessage()
+        {
+            // arrange
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.PartiallySucceeded);
+            var delta = new BuildTreeBuildsDelta();
+            delta.FailedBuilds.Add(build);
+
+            // act
+            var messages = new NotificationFactory(_treatPartialsAsFailedConfiguration).ProduceNotifications(delta);
+
+            // assert
+            var message = messages.First();
+            Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
+            Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.Equal(BuildStatus.Failed, message.Status);
         }
     }
 }

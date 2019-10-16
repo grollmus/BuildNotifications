@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class BuildTreeBuildsDelta : IBuildTreeBuildsDelta
     {
-        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, Dictionary<(string BuildId, string Project), BuildStatus> previousStatesOfBuildIds)
+        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, Dictionary<(string BuildId, string Project), BuildStatus> previousStatesOfBuildIds, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
         {
             // without information of the previous state, a delta is not possible to calculate
             if (previousStatesOfBuildIds == null)
@@ -33,8 +34,19 @@ namespace BuildNotifications.Core.Pipeline.Tree
                         FailedBuilds.Add(buildNode);
                         break;
                     case BuildStatus.Succeeded:
-                    case BuildStatus.PartiallySucceeded:
                         SucceededBuilds.Add(buildNode);
+                        break;
+                    case BuildStatus.PartiallySucceeded:
+                        switch (partialSucceededTreatmentMode)
+                        {
+                            case PartialSucceededTreatmentMode.TreatAsSucceeded:
+                                SucceededBuilds.Add(buildNode);
+                                break;
+                            case PartialSucceededTreatmentMode.TreatAsFailed:
+                                FailedBuilds.Add(buildNode);
+                                break;
+                        }
+
                         break;
                 }
             }
@@ -45,6 +57,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         public IList<IBuildNode> CancelledBuilds { get; set; } = new List<IBuildNode>();
+
         public IList<IBuildNode> FailedBuilds { get; set; } = new List<IBuildNode>();
 
         public IList<IBuildNode> SucceededBuilds { get; set; } = new List<IBuildNode>();
