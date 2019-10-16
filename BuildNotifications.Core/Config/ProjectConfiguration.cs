@@ -28,7 +28,7 @@ namespace BuildNotifications.Core.Config
 
         [IsDisplayName]
         public string ProjectName { get; set; }
-      
+
         [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
         public IList<string> BuildConnectionNames { get; set; }
 
