@@ -127,6 +127,7 @@ namespace BuildNotifications.ViewModel
 
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.Activate();
+                mainWindow.Show();
             }
         }
 

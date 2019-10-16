@@ -17,7 +17,9 @@ namespace BuildNotifications.ViewModel.Utils
             _configuration = configuration;
         }
 
-        private string StartupMode() => _configuration.Autostart == AutostartMode.StartWithWindowsMinimized ? "--minimize" : "";
+        public const string MinimizeArgument = "--minimize";
+
+        private string StartupMode() => _configuration.Autostart == AutostartMode.StartWithWindowsMinimized ? MinimizeArgument : "";
 
         private bool ShouldAutostart() => _configuration.Autostart == AutostartMode.StartWithWindows || _configuration.Autostart == AutostartMode.StartWithWindowsMinimized;
 
