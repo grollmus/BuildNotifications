@@ -86,6 +86,16 @@ namespace BuildNotifications.Core.Config
         AutostartMode Autostart { get; set; }
 
         /// <summary>
+        /// Determines the speed of animations within the app
+        /// </summary>
+        AnimationMode AnimationSpeed { get; set; }
+
+        /// <summary>
+        /// Whether to show the busy indicator when fetching delta updates
+        /// </summary>
+        bool ShowBusyIndicatorOnDeltaUpdates { get; set; }
+
+        /// <summary>
         /// Retrieves the type of the configuration for the build plugin of the given connection.
         /// </summary>
         Type BuildPluginConfigurationType(ConnectionData connectionData);

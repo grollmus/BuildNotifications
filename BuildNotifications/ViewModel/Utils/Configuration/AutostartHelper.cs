@@ -6,7 +6,7 @@ using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using Microsoft.Win32;
 
-namespace BuildNotifications.ViewModel.Utils
+namespace BuildNotifications.ViewModel.Utils.Configuration
 {
     public class AutostartHelper
     {

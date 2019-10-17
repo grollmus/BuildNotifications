@@ -3,7 +3,7 @@
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <!--AUTO GENERATED FILE-->
-    <!--Use " .\Sizes\WriteSizeXaml.ps1 -blockSize 12" in Package Manager Console to generate this file-->
+    <!--Use " .\Scripts\WriteSizeXaml.ps1 -blockSize 12" in Package Manager Console to generate this file-->
 
     <system:Double x:Key="BlockSixth">2</system:Double>
     <system:Double x:Key="BlockQuarter">3</system:Double>
@@ -64,6 +64,7 @@
     <Thickness Left="0" Right="0" Top="3" Bottom="3" x:Key="BlockQuarterYOnlyMargin"/>
     <Thickness Left="0" Right="0" Top="6" Bottom="6" x:Key="BlockHalfYOnlyMargin"/>
     <Thickness Left="6" Right="6" Top="0" Bottom="0" x:Key="BlockHalfXOnlyMargin"/>
+    <Thickness Left="24" Right="24" Top="0" Bottom="0" x:Key="BlockDoubleXOnlyMargin"/>
     <Thickness Left="0" Right="0" Top="12" Bottom="12" x:Key="BlockYOnlyMargin"/>
     <Thickness Left="12" Right="12" Top="0" Bottom="0" x:Key="BlockXOnlyMargin"/>
     <Thickness Left="3" Right="3" Top="0" Bottom="0" x:Key="BlockQuarterXOnlyMargin"/>

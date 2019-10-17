@@ -513,4 +513,34 @@
   <data name="UsePreReleases" xml:space="preserve">
     <value></value>
   </data>
+  <data name="AnimationSpeed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="DoubleSpeed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ShowBusyIndicatorOnDeltaUpdates" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NoValue" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HalfSpeed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ThreeQuartersSpeed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OneAndHalfSpeed" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="OneAndQuarterSpeed" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

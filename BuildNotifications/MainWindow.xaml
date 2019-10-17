@@ -56,7 +56,7 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModelOverlays:StatusIndicatorViewModel}">
-                <viewsOverlays:StatusIndicator />
+                <viewsOverlays:StatusIndicator Margin="{StaticResource BlockDoubleXOnlyMargin}"/>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModelNotification:NotificationCenterViewModel}">
