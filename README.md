@@ -7,7 +7,15 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/grollmus/BuildNotifications/total)
 ![GitHub](https://img.shields.io/github/license/grollmus/BuildNotifications)
 
-Get a grip on all your CI pipelines. BuildNotifications displays all your builds and notifies you about issues of your code.
+BuildNotifications displays all your builds and notifies you about issues of your code. 
+Whenever you want to get 
+- notified only about certain branches, 
+- only when you broke a CI, 
+- when someone cancelled your manual build, 
+- you have a different platforms for source control and builds or 
+- have multiple projects to take care of, 
+
+BuildNotifications got you covered.
 
 # [Download](https://github.com/grollmus/BuildNotifications/releases)
 
