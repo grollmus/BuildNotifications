@@ -7,11 +7,11 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/grollmus/BuildNotifications/total)
 ![GitHub](https://img.shields.io/github/license/grollmus/BuildNotifications)
 
-# Still under development, watchout for the releases page for the first version
+Get a grip on all your CI pipelines. BuildNotifications displays all your builds and notifies you about issues of your code.
 
+# [Download](https://github.com/grollmus/BuildNotifications/releases)
 
-# Download
-[Visit the Releases page](https://github.com/grollmus/BuildNotifications/releases)
+Beta! Right now only Azure DevOps is supported! More plugins are on their way. See [issues](https://github.com/grollmus/BuildNotifications/issues) for more details.
 
 ### Group
 ![alt text](https://i.imgur.com/rgNxwP8.gif "Group by whatever you want")
