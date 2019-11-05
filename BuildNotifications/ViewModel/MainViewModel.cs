@@ -22,6 +22,7 @@ using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
+using BuildNotifications.ViewModel.Utils.Configuration;
 using JetBrains.Annotations;
 using Semver;
 using TweenSharp.Animation;
@@ -44,8 +45,8 @@ namespace BuildNotifications.ViewModel
             _coreSetup = new CoreSetup(pathResolver, _fileWatch);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
-            _configurationDoer = new ConfigurationDoer(_coreSetup.Configuration);
-            _configurationDoer.ApplyChanges();
+            _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
+            _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             Initialize();
         }
@@ -127,6 +128,7 @@ namespace BuildNotifications.ViewModel
 
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.Activate();
+                mainWindow.Show();
             }
         }
 
@@ -322,7 +324,7 @@ namespace BuildNotifications.ViewModel
             SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () =>
             {
                 _coreSetup.PersistConfigurationChanges();
-                _configurationDoer.ApplyChanges();
+                _configurationApplication.ApplyChanges();
             }, _coreSetup.PluginRepository);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
@@ -398,6 +400,7 @@ namespace BuildNotifications.ViewModel
         {
             LogTo.Info("Stop updating");
             _keepUpdating = false;
+            _isInitialFetch = true;
             UpdateNow(); // cancels the wait timer
             _fileWatch.Stop();
             StatusIndicator.Pause();
@@ -491,7 +494,11 @@ namespace BuildNotifications.ViewModel
                 LogTo.Debug($"Starting update at UTC: {DateTime.UtcNow}.");
 
                 ResetError();
-                StatusIndicator.Busy();
+
+                if (_coreSetup.Configuration.ShowBusyIndicatorOnDeltaUpdates || _isInitialFetch)
+                    StatusIndicator.Busy();
+
+                _isInitialFetch = false;
 
                 await _coreSetup.Update();
                 if (_postPipelineUpdateTask != null)
@@ -535,7 +542,8 @@ namespace BuildNotifications.ViewModel
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
-        private ConfigurationDoer _configurationDoer;
+        private ConfigurationApplication _configurationApplication;
+        private bool _isInitialFetch = true;
 
         private class Dummy
         {

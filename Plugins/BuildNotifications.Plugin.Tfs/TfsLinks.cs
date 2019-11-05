@@ -8,21 +8,20 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public TfsLinks(Build fromBuild)
         {
-            _fromBuild = fromBuild;
+            BuildWeb = TryGetLink(fromBuild, "web");
         }
 
-        private string? TryGetLink(string key)
+        private string? TryGetLink(Build fromBuild, string key)
         {
-            if (_fromBuild.Links.Links.TryGetValue(key, out var link))
+            if (fromBuild.Links.Links.TryGetValue(key, out var link))
                 return ((ReferenceLink) link).Href;
             return null;
         }
 
-        public string? BuildWeb => TryGetLink("web");
+        public string? BuildWeb { get; }
 
         public string? BranchWeb => null;
 
         public string? DefinitionWeb => null;
-        private readonly Build _fromBuild;
     }
 }

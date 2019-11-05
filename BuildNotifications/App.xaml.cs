@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.ViewModel.Notification;
+using BuildNotifications.ViewModel.Utils.Configuration;
 using NLog;
 using NLog.Config;
 using TweenSharp;
@@ -42,10 +44,16 @@ namespace BuildNotifications
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (e.Args.Any())
-                GlobalDiagnosticsContext.Set("application", "invokedWithEventArgs");
+            if (e.Args.Any(a => a.Contains(UriSchemeRegistration.UriScheme)))
+                GlobalDiagnosticsContext.Set("application", "invokedFromProtocol");
             else
                 GlobalDiagnosticsContext.Set("application", "default");
+
+            if (ShouldBeMinimized(e.Args))
+            {
+                StartMinimized = true;
+                Logger.Log(LogLevel.Info, $"Minimized start requested.");
+            }
 
             Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()} Args: {string.Join(" ", e.Args)}");
             if (IsInvokedFromDistributedNotification(e))
@@ -68,6 +76,10 @@ namespace BuildNotifications
             StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
             base.OnStartup(e);
         }
+
+        private bool ShouldBeMinimized(IEnumerable<string> args) => args.Any(a => a.Contains(AutostartHelper.MinimizeArgument));
+
+        public static bool StartMinimized;
 
         private void CompositionTargetOnRendering(object? sender, EventArgs e)
         {

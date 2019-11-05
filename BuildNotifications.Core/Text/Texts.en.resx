@@ -498,4 +498,49 @@
   <data name="StartWithWindowsMinimized" xml:space="preserve">
     <value>Start with Windows minimized</value>
   </data>
+  <data name="PartialSucceededTreatmentMode" xml:space="preserve">
+    <value>Treatment of builds with warnings</value>
+  </data>
+  <data name="TreatAsSucceeded" xml:space="preserve">
+    <value>Treat as succeeded</value>
+  </data>
+  <data name="Ignore" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="TreatAsFailed" xml:space="preserve">
+    <value>Treat as failed</value>
+  </data>
+  <data name="UsePreReleases" xml:space="preserve">
+    <value>Update to pre-release versions</value>
+  </data>
+  <data name="DoubleSpeed" xml:space="preserve">
+    <value>2X speed</value>
+  </data>
+  <data name="AnimationSpeed" xml:space="preserve">
+    <value>Animations</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="ShowBusyIndicatorOnDeltaUpdates" xml:space="preserve">
+    <value>Show busy indicator on delta updates</value>
+  </data>
+  <data name="NoValue" xml:space="preserve">
+    <value>[No value]</value>
+  </data>
+  <data name="OneAndHalfSpeed" xml:space="preserve">
+    <value>1.5X speed</value>
+  </data>
+  <data name="ThreeQuartersSpeed" xml:space="preserve">
+    <value>0.75X speed</value>
+  </data>
+  <data name="HalfSpeed" xml:space="preserve">
+    <value>0.5X speed</value>
+  </data>
+  <data name="OneAndQuarterSpeed" xml:space="preserve">
+    <value>1.25X speed</value>
+  </data>
 </root>

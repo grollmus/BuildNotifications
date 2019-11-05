@@ -209,7 +209,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
             Assert.Single(delta.Failed);
@@ -261,7 +261,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
             Assert.Empty(delta.Failed);
@@ -308,7 +308,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
             switch (expectedResult)
@@ -329,11 +329,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
         }
 
         [Theory]
-        [InlineData(BuildStatus.Succeeded)]
-        [InlineData(BuildStatus.PartiallySucceeded)]
-        [InlineData(BuildStatus.Failed)]
-        [InlineData(BuildStatus.Cancelled)]
-        public void BuildTreeWithUpdatesStatusShouldNotProduceDeltaForDifferentStatus(BuildStatus expectedResult)
+        [InlineData(BuildStatus.Succeeded, PartialSucceededTreatmentMode.Ignore)]
+        [InlineData(BuildStatus.PartiallySucceeded, PartialSucceededTreatmentMode.TreatAsSucceeded)]
+        [InlineData(BuildStatus.PartiallySucceeded, PartialSucceededTreatmentMode.TreatAsFailed)]
+        [InlineData(BuildStatus.PartiallySucceeded, PartialSucceededTreatmentMode.Ignore)]
+        [InlineData(BuildStatus.Failed, PartialSucceededTreatmentMode.Ignore)]
+        [InlineData(BuildStatus.Cancelled, PartialSucceededTreatmentMode.Ignore)]
+        public void BuildTreeWithUpdatesStatusShouldNotProduceDeltaForDifferentStatus(BuildStatus expectedResult, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
         {
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
@@ -367,7 +369,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
-            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus);
+            var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, partialSucceededTreatmentMode);
 
             // Assert
             switch (expectedResult)
@@ -377,9 +379,27 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
                     Assert.Empty(delta.Failed);
                     break;
                 case BuildStatus.Succeeded:
-                case BuildStatus.PartiallySucceeded:
                     Assert.Empty(delta.Failed);
                     Assert.Empty(delta.Cancelled);
+                    break;
+                case BuildStatus.PartiallySucceeded:
+                    if (partialSucceededTreatmentMode == PartialSucceededTreatmentMode.TreatAsSucceeded)
+                    {
+                        Assert.Empty(delta.Failed);
+                        Assert.Empty(delta.Cancelled);
+                    }
+                    else if (partialSucceededTreatmentMode == PartialSucceededTreatmentMode.TreatAsFailed)
+                    {
+                        Assert.Empty(delta.Succeeded);
+                        Assert.Empty(delta.Cancelled);
+                    }
+                    else
+                    {
+                        Assert.Empty(delta.Succeeded);
+                        Assert.Empty(delta.Failed);
+                        Assert.Empty(delta.Cancelled);
+                    }
+
                     break;
                 case BuildStatus.Failed:
                     Assert.Empty(delta.Succeeded);

@@ -114,13 +114,29 @@ namespace BuildNotifications.Plugin.Tfs
             }
 
             // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
-            const BuildStatus statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted;
+            const BuildStatus statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted | BuildStatus.None;
             // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: statusFilter);
             foreach (var build in builds)
             {
                 var converted = Convert(build);
                 _knownBuilds.Add(converted);
+                yield return converted;
+            }
+
+            var inProgressBuilds = _knownBuilds.Where(b => b.Status == PluginInterfaces.Builds.BuildStatus.None
+                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Pending
+                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Running).ToList();
+            foreach (var strangeBuild in inProgressBuilds)
+            {
+                var build = await buildClient.GetBuildAsync(project.Id, strangeBuild.BuildId);
+                var converted = Convert(build);
+
+                // Replace entry in HashSet so this build won't be updated in the next run
+                // if it just completed.
+                _knownBuilds.Remove(converted);
+                _knownBuilds.Add(converted);
+
                 yield return converted;
             }
         }
@@ -144,10 +160,9 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-
             var definitions = await buildClient.GetDefinitionsAsync(project.Id);
 
-            var deletedDefinitions = _knownDefinitions.Except(definitions.Select(Convert), new TfsBuildDefinitionComparer());
+            var deletedDefinitions = _knownDefinitions.Where(known => definitions.All(d => d.Id != known.NativeId));
 
             foreach (var definition in deletedDefinitions)
             {
@@ -159,10 +174,9 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-
             var builds = await buildClient.GetBuildsAsync(project.Id);
 
-            var deletedBuilds = _knownBuilds.Except(builds.Select(Convert), new TfsBuildComparer());
+            var deletedBuilds = _knownBuilds.Where(known => builds.All(build => build.Id != known.BuildId));
 
             foreach (var build in deletedBuilds)
             {
@@ -184,6 +198,9 @@ namespace BuildNotifications.Plugin.Tfs
             {
                 var build = buildList[i];
                 var timeLine = timeLines[i];
+
+                if (timeLine == null || build == null)
+                    continue;
 
                 var progress = CalculateProgress(timeLine);
                 build.Progress = progress;

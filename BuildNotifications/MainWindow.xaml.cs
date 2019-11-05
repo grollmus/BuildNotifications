@@ -11,6 +11,7 @@ namespace BuildNotifications
         {
             DataContext = new MainViewModel();
             InitializeComponent();
+            Visibility = App.StartMinimized ? Visibility.Hidden : Visibility.Visible;
             Closing += OnClosing;
         }
 

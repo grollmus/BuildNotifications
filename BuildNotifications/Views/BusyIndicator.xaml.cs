@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BuildNotifications.ViewModel;
 using BuildNotifications.ViewModel.Utils;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.Views
 {
-    public partial class BusyIndicator
+    public partial class BusyIndicator : INotifyPropertyChanged
     {
         public BusyIndicator()
         {
@@ -26,6 +29,18 @@ namespace BuildNotifications.Views
         {
             get => (bool) GetValue(IsBusyProperty);
             set => SetValue(IsBusyProperty, value);
+        }
+
+        private bool _showLoadingText;
+
+        public bool ShowLoadingText
+        {
+            get => _showLoadingText;
+            set
+            {
+                _showLoadingText = value;
+                OnPropertyChanged();
+            }
         }
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -50,13 +65,14 @@ namespace BuildNotifications.Views
                 {
                     try
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(1), _tokenSource.Token);
+                        await Task.Delay(TimeSpan.FromSeconds(Math.Max(0.5, 1.0 / App.GlobalTweenHandler.TimeModifier)), _tokenSource.Token);
                     }
                     catch (Exception)
                     {
                         break;
                     }
 
+                    ShowLoadingText = App.GlobalTweenHandler.TimeModifier > 2;
                     var firstItem = DummyItems.FirstOrDefault(x => !x.IsRemoving);
                     if (!_tokenSource.IsCancellationRequested)
                     {
@@ -67,6 +83,8 @@ namespace BuildNotifications.Views
                         });
                     }
                 }
+
+                ShowLoadingText = false;
             }, _tokenSource.Token);
         }
 
@@ -79,6 +97,7 @@ namespace BuildNotifications.Views
             _removeAndAddingTask.Wait();
             _removeAndAddingTask = null;
             _tokenSource = new CancellationTokenSource();
+            ShowLoadingText = false;
         }
 
         private Task? _removeAndAddingTask;
@@ -89,6 +108,14 @@ namespace BuildNotifications.Views
 
         public class DummyItem : BaseViewModel
         {
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

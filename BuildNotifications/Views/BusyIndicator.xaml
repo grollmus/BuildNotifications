@@ -8,16 +8,18 @@
              xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+             xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="{DynamicResource Background1}">
 
-        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center"
+        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center" 
                       Margin="{DynamicResource NegativeBlockDoubleThicknessFromRight}"
                       ItemsSource="{Binding DummyItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Visibility="{Binding ShowLoadingText, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}">
                         <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}"
                                    Margin="{DynamicResource BlockHalfThickness}"
                                    Fill="{DynamicResource Foreground2}">
@@ -36,6 +38,7 @@
                         <Grid.RenderTransform>
                             <SkewTransform AngleX="-30" />
                         </Grid.RenderTransform>
+
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -61,6 +64,7 @@
             </i:Interaction.Triggers>
         </ItemsControl>
 
+        <TextBlock Text="{text:Localized Loading}" Foreground="{DynamicResource Foreground1}" HorizontalAlignment="Right" Visibility="{Binding ShowLoadingText, Converter={x:Static utils:BoolToVisibilityConverter.Instance}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}"/>
         <i:Interaction.Triggers>
             <ei:DataTrigger
                 Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"

@@ -78,7 +78,13 @@ namespace BuildNotifications.Core.Config
 
         public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
 
+        public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; } = PartialSucceededTreatmentMode.TreatAsSucceeded;
+
         public AutostartMode Autostart { get; set; } = AutostartMode.StartWithWindowsMinimized;
+
+        public AnimationMode AnimationSpeed { get; set; } = AnimationMode.Enabled;
+
+        public bool ShowBusyIndicatorOnDeltaUpdates { get; set; } = true;
 
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
