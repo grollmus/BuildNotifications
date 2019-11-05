@@ -27,4 +27,4 @@ test_script:
 - ps: >-
     dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln
 
-    & if (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) { java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t $env:CODACY_PROJECT_TOKEN }
+    & If (-not $env:APPVEYOR_PULL_REQUEST_NUMBER) { java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t $env:CODACY_PROJECT_TOKEN }
