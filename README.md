@@ -7,7 +7,7 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/grollmus/BuildNotifications/total)
 ![GitHub](https://img.shields.io/github/license/grollmus/BuildNotifications)
 
-BuildNotifications displays all your builds and notifies you about issues of your code. 
+Build Notifications displays all your builds and notifies you about issues of your code. 
 Whenever you want to get 
 - notified only about certain branches, 
 - only when you broke a CI, 
