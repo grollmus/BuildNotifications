@@ -50,36 +50,39 @@ namespace BuildNotifications.Plugin.Tfs
             return AuthenticationType != AuthenticationType.Token;
         }
 
-        private AuthenticationType? _lastFetchedAuthenticationType;
-        private string? _lastFetchedUrl;
-        private string? _lastFetchedProjectUrl;
         private IEnumerable<object> _lastProjectFetchResult = Enumerable.Empty<object>();
-        private IEnumerable<object> _lastFetchResult = Enumerable.Empty<object>();
-        private readonly string _lastFetchProject = string.Empty;
+        private IEnumerable<object> _lastRepoFetchResult = Enumerable.Empty<object>();
+
+        private string? _lastFetchedRepoKey;
+
+        private string? _lastFetchedProjectKey;
+
+        private string CurrentConfigAsKey(bool withProject)
+        {
+            return $"{Username}{Password?.GetHashCode()}{Token?.GetHashCode()}{AuthenticationType}{Url}{CollectionName}{(withProject ? Project?.Id + _lastProjectFetchResult.Count() : string.Empty)}";
+        }
+
+        private bool IsCurrentConfigTheSameAsKey(string? key, bool withProject) => CurrentConfigAsKey(withProject).Equals(key, StringComparison.OrdinalIgnoreCase);
 
         public async Task<IEnumerable<object>> FetchRepositories()
         {
-            if (_lastFetchedUrl == Url && _lastFetchedAuthenticationType == AuthenticationType || Url == null ||
-                Project == null && _lastFetchProject == Project?.Id)
+            if (IsCurrentConfigTheSameAsKey(_lastFetchedRepoKey, true))
             {
-                if (_lastFetchResult != null)
-                    return _lastFetchResult;
+                if (_lastRepoFetchResult != null)
+                    return _lastRepoFetchResult;
 
                 return DefaultRepositoryReturnValue();
             }
 
-            var urlToFetch = Url;
+            var result = await FetchRepositoriesInternal();
+            _lastRepoFetchResult = result.ToList();
 
-            var result = await FetchRepositoriesInternal(urlToFetch);
-            _lastFetchResult = result.ToList();
-            _lastFetchedAuthenticationType = AuthenticationType;
-
-            return _lastFetchResult;
+            return _lastRepoFetchResult;
         }
 
         public async Task<IEnumerable<object>> FetchProjects()
         {
-            if (_lastFetchedProjectUrl == Url && _lastFetchedAuthenticationType == AuthenticationType || Url == null)
+            if (IsCurrentConfigTheSameAsKey(_lastFetchedProjectKey, false))
             {
                 if (_lastProjectFetchResult != null)
                     return _lastProjectFetchResult;
@@ -87,9 +90,7 @@ namespace BuildNotifications.Plugin.Tfs
                 return DefaultProjectReturnValue();
             }
 
-            var urlToFetch = Url;
-
-            var result = await FetchProjectsInternal(urlToFetch);
+            var result = await FetchProjectsInternal();
             _lastProjectFetchResult = result.ToList();
 
             return _lastProjectFetchResult;
@@ -111,7 +112,7 @@ namespace BuildNotifications.Plugin.Tfs
             return Enumerable.Empty<object>();
         }
 
-        private async Task<IEnumerable<object>> FetchProjectsInternal(string urlToFetch)
+        private async Task<IEnumerable<object>> FetchProjectsInternal()
         {
             try
             {
@@ -131,11 +132,11 @@ namespace BuildNotifications.Plugin.Tfs
             }
             finally
             {
-                _lastFetchedProjectUrl = urlToFetch;
+                _lastFetchedProjectKey = CurrentConfigAsKey(false);
             }
         }
 
-        private async Task<IEnumerable<object>> FetchRepositoriesInternal(string urlToFetch)
+        private async Task<IEnumerable<object>> FetchRepositoriesInternal()
         {
             try
             {
@@ -156,7 +157,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
             finally
             {
-                _lastFetchedUrl = urlToFetch;
+                _lastFetchedRepoKey = CurrentConfigAsKey(true);
             }
         }
     }

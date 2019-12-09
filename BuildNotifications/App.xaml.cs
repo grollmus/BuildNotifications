@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.ViewModel.Notification;
-using BuildNotifications.ViewModel.Utils;
+using BuildNotifications.ViewModel.Utils.Configuration;
 using NLog;
 using NLog.Config;
 using TweenSharp;
