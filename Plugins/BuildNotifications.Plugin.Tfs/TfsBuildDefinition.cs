@@ -10,8 +10,6 @@ namespace BuildNotifications.Plugin.Tfs
             Name = definition.Name;
             NativeId = definition.Id;
             Id = NativeId.ToString();
-
-            _url = definition.Url;
         }
 
         internal int NativeId { get; }
@@ -19,13 +17,11 @@ namespace BuildNotifications.Plugin.Tfs
         public bool Equals(IBuildDefinition definition)
         {
             var other = definition as TfsBuildDefinition;
-            return _url == other?._url;
+            return NativeId == other?.NativeId;
         }
 
         public string Id { get; }
 
         public string Name { get; }
-
-        private readonly string _url;
     }
 }
