@@ -32,6 +32,9 @@ jobs:
       
     - name: Add coverage tool to test project
       run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
+      
+    - name: dotnet restore
+      run: dotnet restore
 
     - name: Build
       run: dotnet build --configuration Release
