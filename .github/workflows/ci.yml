@@ -22,9 +22,7 @@ jobs:
         java-version: 1.8
       
     - name: Download Coverage reporter
-      uses: wei/wget@v1
-      with:
-        args: -o ./codacy-test-reporter.jar https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar
+      run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 
     - name: Install coverage tools
       run: dotnet tool install --global coverlet.console
