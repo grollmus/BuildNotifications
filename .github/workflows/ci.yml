@@ -41,4 +41,4 @@ jobs:
     
     - name: Upload code coverage results
       run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
-      if: github.head_ref != 0
+      if: github.head_ref == 0
