@@ -20,6 +20,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+        
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
       
     - name: Download Coverage reporter
       run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
@@ -33,8 +36,8 @@ jobs:
     - name: Add coverage tool to test project
       run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
       
-    - name: dotnet restore
-      run: dotnet restore
+    - name: Build .NET Framework projects
+      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
 
     - name: Build
       run: dotnet build --configuration Release
