@@ -1,4 +1,4 @@
-name: .NET Core
+name: CI Build
 
 on: [push]
 
@@ -18,6 +18,8 @@ jobs:
 
     - name: Setup Java for CodeCoverage results
       uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
       
     - name: Download Coverage reporter
       uses: wei/wget@v1
