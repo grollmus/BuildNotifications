@@ -1,0 +1,44 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+    - uses: actions/checkout@v1
+    
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.0.100
+
+    - name: Setup Java for CodeCoverage results
+      uses: actions/setup-java@v1
+      
+    - name: Download Coverage reporter
+      uses: wei/wget@v1
+      with:
+        args: -o ./codacy-test-reporter.jar https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar
+
+    - name: Install coverage tools
+      run: dotnet tool install --global coverlet.console
+      
+    - name: Add coverage tool to core test project
+      run: dotnet add BuildNotifications.Core.Tests/BuildNotifications.Core.Tests.csproj package coverlet.msbuild
+      
+    - name: Add coverage tool to test project
+      run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
+
+    - name: Build
+      run: dotnet build --configuration Release
+    
+    - name: Run tests
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln
+    
+    - name: Upload code coverage results
+      if: github.head_ref != 0
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
