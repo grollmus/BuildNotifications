@@ -23,6 +23,7 @@ using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
+using BuildNotifications.Views;
 using JetBrains.Annotations;
 using Semver;
 using TweenSharp.Animation;
@@ -116,6 +117,7 @@ namespace BuildNotifications.ViewModel
 
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
+        public ICommand ShowInfoPopupCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
         private void BringWindowToFront()
@@ -338,6 +340,7 @@ namespace BuildNotifications.ViewModel
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
+            ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -410,6 +413,15 @@ namespace BuildNotifications.ViewModel
         {
             LogTo.Info($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}");
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
+        }
+
+        private void ShowInfoPopup(object obj)
+        {
+            var popup = new InfoPopupDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
+            popup.ShowDialog();
         }
 
         private void ToggleShowNotificationCenter(object obj)
