@@ -18,7 +18,7 @@ namespace BuildNotifications.ViewModel.Utils
             _notifyIcon = new NotifyIcon
             {
                 Visible = true,
-                ContextMenu = CreateContextMenu(),
+                ContextMenuStrip = CreateContextMenu(),
                 Text = "BuildNotifications"
             };
 
@@ -54,12 +54,17 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event EventHandler? ShowWindowRequested;
 
-        private ContextMenu CreateContextMenu()
+        private ContextMenuStrip CreateContextMenu()
         {
-            var menu = new ContextMenu();
+            var menu = new ContextMenuStrip();
 
-            menu.MenuItems.Add(StringLocalizer.ShowWindow, ShowWindow);
-            menu.MenuItems.Add(StringLocalizer.Exit, Exit);
+            var showWindowItem = new ToolStripMenuItem(StringLocalizer.ShowWindow);
+            showWindowItem.Click += ShowWindow;
+            menu.Items.Add(showWindowItem);
+
+            var exitItem = new ToolStripMenuItem(StringLocalizer.Exit);
+            exitItem.Click += Exit;
+            menu.Items.Add(exitItem);
 
             return menu;
         }
