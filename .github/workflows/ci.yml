@@ -47,12 +47,9 @@ jobs:
 
     - name: Build
       run: dotnet build --configuration Release
-      
-    - name: Cleanup before tests
-      run: Remove-Item -Recurse -Force ToastNotificationsPlugin
     
     - name: Run tests
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude="[xunit.*]*%2cToastNotificationsPlugin*" BuildNotifications.sln
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*] BuildNotifications.sln --no-build
     
     - name: Upload code coverage results
       run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
