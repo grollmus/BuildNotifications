@@ -90,7 +90,8 @@ namespace BuildNotifications.Resources.Window
             Close();
         }
 
-        private T GetRequiredTemplateChild<T>(string childName) where T : DependencyObject
+        private T GetRequiredTemplateChild<T>(string childName)
+            where T : DependencyObject
         {
             return (T) GetTemplateChild(childName);
         }

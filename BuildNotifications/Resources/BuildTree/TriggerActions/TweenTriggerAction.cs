@@ -3,7 +3,8 @@ using System.Windows.Interactivity;
 
 namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
-    internal abstract class TweenTriggerAction<T> : TriggerAction<T> where T : DependencyObject
+    internal abstract class TweenTriggerAction<T> : TriggerAction<T>
+        where T : DependencyObject
     {
         public Anchor Anchor { get; set; } = Anchor.Center;
 

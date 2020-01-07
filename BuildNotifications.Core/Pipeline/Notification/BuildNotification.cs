@@ -8,7 +8,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     public class BuildNotification : BaseBuildNotification
     {
-        public BuildNotification(IList<IBuildNode> buildNodes, BuildStatus status) : base(NotificationType.Build, buildNodes, status)
+        public BuildNotification(IList<IBuildNode> buildNodes, BuildStatus status)
+            : base(NotificationType.Build, buildNodes, status)
         {
             SetParameters();
         }

@@ -6,7 +6,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     internal class DefinitionAndBranchNotification : BaseBuildNotification
     {
-        public DefinitionAndBranchNotification(IList<IBuildNode> buildNodes, BuildStatus status, string definitionName, string branchName) : base(NotificationType.DefinitionAndBranch, buildNodes, status)
+        public DefinitionAndBranchNotification(IList<IBuildNode> buildNodes, BuildStatus status, string definitionName, string branchName)
+            : base(NotificationType.DefinitionAndBranch, buildNodes, status)
         {
             _definitionName = definitionName;
             _branchName = branchName;

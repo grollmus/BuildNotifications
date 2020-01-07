@@ -4,7 +4,8 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BranchGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        public BranchGroupNodeViewModel(IBranchGroupNode node) : base(node)
+        public BranchGroupNodeViewModel(IBranchGroupNode node)
+            : base(node)
         {
             _node = node;
         }

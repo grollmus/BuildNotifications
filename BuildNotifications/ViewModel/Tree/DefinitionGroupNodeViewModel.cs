@@ -4,7 +4,8 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class DefinitionGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        public DefinitionGroupNodeViewModel(IDefinitionGroupNode node) : base(node)
+        public DefinitionGroupNodeViewModel(IDefinitionGroupNode node)
+            : base(node)
         {
             DefinitionName = node?.Definition?.Name ?? string.Empty;
         }

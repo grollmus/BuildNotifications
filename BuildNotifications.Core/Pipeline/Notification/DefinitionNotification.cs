@@ -6,7 +6,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     internal class DefinitionNotification : BaseBuildNotification
     {
-        public DefinitionNotification(IList<IBuildNode> buildNodes, BuildStatus status, IList<string> definitionNames) : base(NotificationType.Definition, buildNodes, status)
+        public DefinitionNotification(IList<IBuildNode> buildNodes, BuildStatus status, IList<string> definitionNames)
+            : base(NotificationType.Definition, buildNodes, status)
         {
             _definitionNames = definitionNames;
             SetParameters();

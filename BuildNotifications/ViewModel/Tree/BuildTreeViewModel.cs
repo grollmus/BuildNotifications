@@ -7,7 +7,8 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildTreeViewModel : BuildTreeNodeViewModel
     {
-        public BuildTreeViewModel(IBuildTreeNode tree) : base(tree)
+        public BuildTreeViewModel(IBuildTreeNode tree)
+            : base(tree)
         {
             _sortingDefinition = new BuildTreeSortingDefinition();
         }

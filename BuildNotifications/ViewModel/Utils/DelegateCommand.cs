@@ -11,7 +11,8 @@ namespace BuildNotifications.ViewModel.Utils
             _canExecute = canExecute;
         }
 
-        public DelegateCommand(Action<object> execute) : this(execute, x => true)
+        public DelegateCommand(Action<object> execute)
+            : this(execute, x => true)
         {
         }
 

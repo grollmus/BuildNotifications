@@ -7,7 +7,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
 {
     internal class BranchNotification : BaseBuildNotification
     {
-        public BranchNotification(IList<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> branchNames) : base(NotificationType.Branch, buildNodes, status)
+        public BranchNotification(IList<IBuildNode> buildNodes, BuildStatus status, IEnumerable<string> branchNames)
+            : base(NotificationType.Branch, buildNodes, status)
         {
             _branchNames = branchNames.Distinct().ToList();
             SetParameter();

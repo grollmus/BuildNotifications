@@ -5,7 +5,8 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class StatusGroupNodeViewModel : BuildTreeNodeViewModel
     {
-        public StatusGroupNodeViewModel(IBuildTreeNode node) : base(node)
+        public StatusGroupNodeViewModel(IBuildTreeNode node)
+            : base(node)
         {
         }
 

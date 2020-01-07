@@ -14,7 +14,8 @@ namespace BuildNotifications.ViewModel.Tree
 {
     public class BuildNodeViewModel : BuildTreeNodeViewModel
     {
-        public BuildNodeViewModel(IBuildNode node) : base(node)
+        public BuildNodeViewModel(IBuildNode node)
+            : base(node)
         {
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);

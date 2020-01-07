@@ -5,11 +5,13 @@ namespace DummyBuildServer.ViewModels
 {
     internal class DelegateCommand : DelegateCommand<object>
     {
-        public DelegateCommand(Action<object> executeAction, Func<object, bool> canExecuteFunc) : base(executeAction, canExecuteFunc)
+        public DelegateCommand(Action<object> executeAction, Func<object, bool> canExecuteFunc)
+            : base(executeAction, canExecuteFunc)
         {
         }
 
-        public DelegateCommand(Action<object> executeAction) : base(executeAction)
+        public DelegateCommand(Action<object> executeAction)
+            : base(executeAction)
         {
         }
     }

@@ -9,13 +9,16 @@ using BuildNotifications.Core;
 
 namespace BuildNotifications.ViewModel.Utils
 {
-    public class RemoveTrackingObservableCollection<T> : IList<T>, INotifyCollectionChanged where T : IRemoveTracking
+    public class RemoveTrackingObservableCollection<T> : IList<T>, INotifyCollectionChanged
+        where T : IRemoveTracking
     {
-        public RemoveTrackingObservableCollection() : this(TimeSpan.FromSeconds(0.15), Enumerable.Empty<T>())
+        public RemoveTrackingObservableCollection()
+            : this(TimeSpan.FromSeconds(0.15), Enumerable.Empty<T>())
         {
         }
 
-        public RemoveTrackingObservableCollection(TimeSpan removeDelay) : this(removeDelay, Enumerable.Empty<T>())
+        public RemoveTrackingObservableCollection(TimeSpan removeDelay)
+            : this(removeDelay, Enumerable.Empty<T>())
         {
         }
 
