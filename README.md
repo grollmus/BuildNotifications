@@ -34,7 +34,7 @@ Write or use plugins for whatever platform you use. GitHub for sources, Jenkins 
 
 # Build
 * Visual Studio 2019 required
-* .NET Core 3.0 SDK required
+* .NET Core 3.1 SDK required
 * ReSharper recommended
 * Open BuildNotifications.sln from root folder
 * Build solution
