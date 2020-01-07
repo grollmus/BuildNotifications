@@ -84,6 +84,120 @@ namespace BuildNotifications.Core.Tests.Plugin
         }
 
         [Fact]
+        public void FindConfigurationTypeShouldReturnNameOfMatchedBuildPlugin()
+        {
+            // Arrange
+            var buildPlugin = Substitute.For<IBuildPlugin>();
+            var expected = typeof(string);
+            buildPlugin.GetConfigurationType().Returns(expected);
+
+            var buildPlugins = new[]
+            {
+                buildPlugin
+            };
+
+            var typeMatcher = Substitute.For<ITypeMatcher>();
+            typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
+
+            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+
+            // Act
+            var actual = sut.FindConfigurationType("typeName");
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FindConfigurationTypeShouldReturnNullWhenPluginWasNotFound()
+        {
+            // Arrange
+            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], new TypeMatcher());
+
+            // Act
+            var actual = sut.FindConfigurationType("typeName");
+
+            // Assert
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void FindIconGeometryShouldReturnNameOfMatchedBuildPlugin()
+        {
+            // Arrange
+            var buildPlugin = Substitute.For<IBuildPlugin>();
+            const string expected = "hello world";
+            buildPlugin.IconSvgPath.Returns(expected);
+
+            var buildPlugins = new[]
+            {
+                buildPlugin
+            };
+
+            var typeMatcher = Substitute.For<ITypeMatcher>();
+            typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
+
+            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+
+            // Act
+            var actual = sut.FindIconGeometry("typeName");
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FindIconGeometryShouldReturnNullWhenPluginWasNotFound()
+        {
+            // Arrange
+            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], new TypeMatcher());
+
+            // Act
+            var actual = sut.FindIconGeometry("typeName");
+
+            // Assert
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public void FindPluginNameShouldReturnNameOfMatchedBuildPlugin()
+        {
+            // Arrange
+            var buildPlugin = Substitute.For<IBuildPlugin>();
+            const string expected = "hello world";
+            buildPlugin.DisplayName.Returns(expected);
+
+            var buildPlugins = new[]
+            {
+                buildPlugin
+            };
+
+            var typeMatcher = Substitute.For<ITypeMatcher>();
+            typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
+
+            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+
+            // Act
+            var actual = sut.FindPluginName("typeName");
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FindPluginNameShouldReturnNullWhenPluginWasNotFound()
+        {
+            // Arrange
+            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], new TypeMatcher());
+
+            // Act
+            var actual = sut.FindPluginName("typeName");
+
+            // Assert
+            Assert.Null(actual);
+        }
+
+        [Fact]
         public void FindSourceControlPluginShouldFindPluginWhenExisting()
         {
             // Arrange
