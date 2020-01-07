@@ -49,7 +49,7 @@ jobs:
       run: dotnet build --configuration Release
     
     - name: Run tests
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]*;ToastNotificationsPlugin* BuildNotifications.sln
     
     - name: Upload code coverage results
       run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
