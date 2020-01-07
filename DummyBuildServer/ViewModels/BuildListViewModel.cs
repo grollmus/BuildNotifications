@@ -7,7 +7,6 @@ using System.Windows.Input;
 using BuildNotifications.Plugin.DummyBuildServer;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
-using JetBrains.Annotations;
 
 namespace DummyBuildServer.ViewModels
 {
@@ -17,9 +16,9 @@ namespace DummyBuildServer.ViewModels
         {
             _mainViewModel = mainViewModel;
 
-            SelectedBranch = mainViewModel.Branches.Branches.FirstOrDefault();
-            SelectedUser = mainViewModel.Users.Users.FirstOrDefault();
-            SelectedDefinition = mainViewModel.BuildDefinitions.Definitions.FirstOrDefault();
+            _selectedBranch = mainViewModel.Branches.Branches.FirstOrDefault();
+            _selectedUser = mainViewModel.Users.Users.FirstOrDefault();
+            _selectedDefinition = mainViewModel.BuildDefinitions.Definitions.FirstOrDefault();
 
             UpdateBuildCommand = new DelegateCommand(UpdateBuild, IsBuildSelected);
             EnqueueBuildCommand = new DelegateCommand(EnqueueBuild, IsBuildDataSelected);
@@ -40,15 +39,71 @@ namespace DummyBuildServer.ViewModels
             }
         }
 
-        public int BuildProgress { get; set; }
+        public int BuildProgress
+        {
+            get => _buildProgress;
+            set
+            {
+                if (value == _buildProgress)
+                    return;
+                _buildProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<BuildViewModel> Builds { get; } = new ObservableCollection<BuildViewModel>();
         public ICommand EnqueueBuildCommand { get; }
         public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
         public ICommand RemoveBuildCommand { get; }
-        public BranchViewModel SelectedBranch { get; set; }
-        public BuildStatus SelectedBuildStatus { get; set; }
-        public BuildDefinitionViewModel SelectedDefinition { get; set; }
-        public UserViewModel SelectedUser { get; set; }
+
+        public BranchViewModel SelectedBranch
+        {
+            get => _selectedBranch;
+            set
+            {
+                if (Equals(value, _selectedBranch))
+                    return;
+                _selectedBranch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BuildStatus SelectedBuildStatus
+        {
+            get => _selectedBuildStatus;
+            set
+            {
+                if (value == _selectedBuildStatus)
+                    return;
+                _selectedBuildStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BuildDefinitionViewModel SelectedDefinition
+        {
+            get => _selectedDefinition;
+            set
+            {
+                if (Equals(value, _selectedDefinition))
+                    return;
+                _selectedDefinition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public UserViewModel SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if (Equals(value, _selectedUser))
+                    return;
+                _selectedUser = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand UpdateBuildCommand { get; }
 
         public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
@@ -96,7 +151,6 @@ namespace DummyBuildServer.ViewModels
             return SelectedBuilds().Any();
         }
 
-        [UsedImplicitly]
         private void OnSelectedBuildChanged()
         {
             var firstBuild = SelectedBuilds().FirstOrDefault();
@@ -157,6 +211,11 @@ namespace DummyBuildServer.ViewModels
         }
 
         private readonly MainViewModel _mainViewModel;
+        private UserViewModel _selectedUser;
+        private BuildDefinitionViewModel _selectedDefinition;
+        private BuildStatus _selectedBuildStatus;
+        private BranchViewModel _selectedBranch;
+        private int _buildProgress;
 
         private static int _idCounter;
     }

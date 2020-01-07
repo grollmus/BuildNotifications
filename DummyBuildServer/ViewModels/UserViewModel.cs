@@ -7,15 +7,28 @@ namespace DummyBuildServer.ViewModels
         public UserViewModel(User user)
         {
             User = user;
-            Name = user.DisplayName;
+            _name = user.DisplayName;
         }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (value == _name)
+                    return;
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
         public User User { get; }
 
         public override string ToString()
         {
             return Name;
         }
+
+        private string _name;
     }
 }

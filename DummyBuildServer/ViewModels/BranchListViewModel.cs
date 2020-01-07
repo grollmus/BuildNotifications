@@ -22,9 +22,32 @@ namespace DummyBuildServer.ViewModels
 
         public ICommand AddBranchCommand { get; }
         public ObservableCollection<BranchViewModel> Branches { get; } = new ObservableCollection<BranchViewModel>();
-        public string? BranchName { get; set; }
+
+        public string? BranchName
+        {
+            get => _branchName;
+            set
+            {
+                if (value == _branchName)
+                    return;
+                _branchName = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand RemoveBranchCommand { get; }
-        public BranchViewModel? SelectedBranch { get; set; }
+
+        public BranchViewModel? SelectedBranch
+        {
+            get => _selectedBranch;
+            set
+            {
+                if (Equals(value, _selectedBranch))
+                    return;
+                _selectedBranch = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void AddBranch(object arg)
         {
@@ -57,5 +80,7 @@ namespace DummyBuildServer.ViewModels
         }
 
         private readonly MainViewModel _mainViewModel;
+        private string? _branchName;
+        private BranchViewModel? _selectedBranch;
     }
 }

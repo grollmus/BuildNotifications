@@ -21,11 +21,33 @@ namespace DummyBuildServer.ViewModels
         }
 
         public ICommand AddDefinitionCommand { get; }
-        public string? DefinitionName { get; set; }
+
+        public string? DefinitionName
+        {
+            get => _definitionName;
+            set
+            {
+                if (value == _definitionName)
+                    return;
+                _definitionName = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<BuildDefinitionViewModel> Definitions { get; } = new ObservableCollection<BuildDefinitionViewModel>();
         public ICommand RemoveDefinitionCommand { get; }
-        public BuildDefinitionViewModel? SelectedDefinition { get; set; }
+
+        public BuildDefinitionViewModel? SelectedDefinition
+        {
+            get => _selectedDefinition;
+            set
+            {
+                if (Equals(value, _selectedDefinition))
+                    return;
+                _selectedDefinition = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void AddDefinition(object obj)
         {
@@ -57,5 +79,7 @@ namespace DummyBuildServer.ViewModels
         }
 
         private readonly MainViewModel _mainViewModel;
+        private string? _definitionName;
+        private BuildDefinitionViewModel? _selectedDefinition;
     }
 }

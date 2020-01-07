@@ -22,8 +22,30 @@ namespace DummyBuildServer.ViewModels
         public ICommand AddUserCommand { get; }
         public ICommand RemoveUserCommand { get; }
 
-        public UserViewModel? SelectedUser { get; set; }
-        public string? UserName { get; set; }
+        public UserViewModel? SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if (Equals(value, _selectedUser))
+                    return;
+                _selectedUser = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? UserName
+        {
+            get => _userName;
+            set
+            {
+                if (value == _userName)
+                    return;
+                _userName = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<UserViewModel> Users { get; } = new ObservableCollection<UserViewModel>();
 
         private void AddUser(object obj)
@@ -56,5 +78,7 @@ namespace DummyBuildServer.ViewModels
         }
 
         private readonly MainViewModel _mainViewModel;
+        private UserViewModel? _selectedUser;
+        private string? _userName;
     }
 }
