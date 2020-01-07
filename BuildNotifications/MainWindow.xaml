@@ -116,6 +116,13 @@
     <window:CustomWindow.LeftToButtonsContent>
         <DockPanel Visibility="{Binding TitleBarToolsVisibility}">
             <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
+                <icons:IconButton Icon="Info"
+                                  Width="{StaticResource BlockDouble}"
+                                  Height="{StaticResource BlockDouble}"
+                                  Foreground="{StaticResource Background3}"
+                                  Command="{Binding ShowInfoPopupCommand}" />
+            </Grid>
+	        <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
                 <icons:IconButton Icon="Notification"
                                   Width="{StaticResource BlockDouble}"
                                   Height="{StaticResource BlockDouble}"
