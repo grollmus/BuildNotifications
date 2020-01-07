@@ -50,6 +50,9 @@ namespace BuildNotifications.Core.Config
 
             foreach (var split in _splitBySpecialCharacter)
             {
+                if (split == null)
+                    continue;
+
                 switch (split)
                 {
                     case "\"":

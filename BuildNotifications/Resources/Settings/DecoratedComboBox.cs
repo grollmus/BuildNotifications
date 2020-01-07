@@ -26,7 +26,7 @@ namespace BuildNotifications.Resources.Settings
             }
         }
 
-        private bool _itemsSourceCountIsSet = false;
+        private bool _itemsSourceCountIsSet;
 
         public bool IsEmpty => _itemsSourceCountIsSet && ItemsSourceCount == 0;
 

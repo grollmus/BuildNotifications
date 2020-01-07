@@ -11,7 +11,7 @@ namespace BuildNotifications.Core.Utilities
         {
             try
             {
-                var encrypted = (string) reader.Value;
+                var encrypted = (string) (reader.Value ?? string.Empty);
                 if (string.IsNullOrEmpty(encrypted))
                     return new PasswordString(string.Empty);
 
