@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+    
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+      
+    - name: Publish BuildNotificiations
+      run: dotnet publish BuildNotifications\BuildNotifications.csproj -c Release -r win-x64
+    
+    - name: Publish BuildNotificiations.Core
+      run: dotnet publish BuildNotifications.Core\BuildNotifications.Core.csproj -c Release -r win-x64
+      
+    - name: Publish TFS Plugin
+      run: dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64
+      
+    - name: nuget restore
+      run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
+      
+    - name: Build ToastNotificationsPlugin
+      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
+      
+    - name: Create package
+      run: Scripts/create-release-package.ps1
+      
+    - name: Upload release
+      uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: "Releases/RELEASES,Releases/Setup.exe,Releases/*-full.nupkg,Releases/*-delta.nupkg"
+        draft: true
