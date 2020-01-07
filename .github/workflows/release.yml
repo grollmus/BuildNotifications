@@ -25,6 +25,18 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
       
+    - name: Extract version from tag name
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+    
+    - name: Set version in projects
+      uses: roryprimrose/set-vs-sdk-project-version@v1
+      with:
+        version: ${{ steps.get_version.outputs.VERSION }}
+        assemblyVersion: ${{ steps.get_version.outputs.VERSION }}
+        fileVersion: ${{ steps.get_version.outputs.VERSION }}
+        informationalVersion: ${{ steps.get_version.outputs.VERSION }}
+              
     - name: Publish BuildNotificiations
       run: dotnet publish BuildNotifications\BuildNotifications.csproj -c Release -r win-x64
     
