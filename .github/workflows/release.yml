@@ -45,7 +45,7 @@ jobs:
       run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
       
     - name: Create package
-      run: Scripts/create-release-package.ps1
+      run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }}
       
     - name: Upload release
       uses: ncipollo/release-action@v1

@@ -1,7 +1,10 @@
+param( 
+    [String]$versionToBuild="0.0.0"
+)
+
 $applicationName = "BuildNotifications"
 $repo = "grollmus/$applicationName"
 $targetFolder = "Releases"
-$versionToBuild = "$($env:APPVEYOR_REPO_TAG_NAME)"
 
 $squirrelUrl = "https://github.com/Squirrel/Squirrel.Windows/releases/download/1.9.1/Squirrel.Windows-1.9.1.zip"
 $nugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
