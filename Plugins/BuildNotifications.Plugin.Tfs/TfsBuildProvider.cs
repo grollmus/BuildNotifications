@@ -8,7 +8,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
-using BuildStatus = Microsoft.TeamFoundation.Build.WebApi.BuildStatus;
+using BuildStatus = BuildNotifications.PluginInterfaces.Builds.BuildStatus;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -43,7 +43,7 @@ namespace BuildNotifications.Plugin.Tfs
             return (int) Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
         }
 
-        private TfsBuildDefinition Convert(BuildDefinitionReference definition)
+        private TfsBuildDefinition Convert(BuildDefinition definition)
         {
             return new TfsBuildDefinition(definition);
         }
@@ -63,6 +63,41 @@ namespace BuildNotifications.Plugin.Tfs
             }
 
             return _project;
+        }
+
+        private void UpdateBuildLinks(IList<TfsBuild> builds)
+        {
+            foreach (var tfsBuild in builds)
+            {
+                var links = tfsBuild.Links as TfsLinks;
+                if (links == null)
+                    continue;
+
+                var definition = _knownDefinitions.FirstOrDefault(d => d.Id == tfsBuild.Definition.Id);
+                links.UpdateLinks(definition);
+            }
+        }
+
+        private async Task UpdateBuildTimeLines(List<TfsBuild> builds, BuildHttpClient buildClient, TeamProjectReference project)
+        {
+            var buildList = builds
+                .Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending)
+                .ToList();
+
+            var timeLines = await Task.WhenAll(buildList.Select(build =>
+                buildClient.GetBuildTimelineAsync(project.Id, build.BuildId)));
+
+            for (var i = 0; i < buildList.Count; ++i)
+            {
+                var build = buildList[i];
+                var timeLine = timeLines[i];
+
+                if (timeLine == null || build == null)
+                    continue;
+
+                var progress = CalculateProgress(timeLine);
+                build.Progress = progress;
+            }
         }
 
         public IUser User { get; }
@@ -114,7 +149,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
 
             // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
-            const BuildStatus statusFilter = BuildStatus.InProgress | BuildStatus.Postponed | BuildStatus.NotStarted | BuildStatus.None;
+            const Microsoft.TeamFoundation.Build.WebApi.BuildStatus statusFilter = Microsoft.TeamFoundation.Build.WebApi.BuildStatus.InProgress | Microsoft.TeamFoundation.Build.WebApi.BuildStatus.Postponed | Microsoft.TeamFoundation.Build.WebApi.BuildStatus.NotStarted | Microsoft.TeamFoundation.Build.WebApi.BuildStatus.None;
             // ReSharper restore BitwiseOperatorOnEnumWithoutFlags
             builds = await buildClient.GetBuildsAsync2(project.Id, statusFilter: statusFilter);
             foreach (var build in builds)
@@ -124,9 +159,9 @@ namespace BuildNotifications.Plugin.Tfs
                 yield return converted;
             }
 
-            var inProgressBuilds = _knownBuilds.Where(b => b.Status == PluginInterfaces.Builds.BuildStatus.None
-                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Pending
-                                                           || b.Status == PluginInterfaces.Builds.BuildStatus.Running).ToList();
+            var inProgressBuilds = _knownBuilds.Where(b => b.Status == BuildStatus.None
+                                                           || b.Status == BuildStatus.Pending
+                                                           || b.Status == BuildStatus.Running).ToList();
             foreach (var strangeBuild in inProgressBuilds)
             {
                 var build = await buildClient.GetBuildAsync(project.Id, strangeBuild.BuildId);
@@ -146,7 +181,7 @@ namespace BuildNotifications.Plugin.Tfs
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var definitions = await buildClient.GetDefinitionsAsync(project.Id);
+            var definitions = await buildClient.GetFullDefinitionsAsync(project.Id);
 
             foreach (var definition in definitions)
             {
@@ -186,25 +221,13 @@ namespace BuildNotifications.Plugin.Tfs
 
         public async Task UpdateBuilds(IEnumerable<IBaseBuild> builds)
         {
+            var buildList = builds.OfType<TfsBuild>().ToList();
+
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var buildList = builds.OfType<TfsBuild>().ToList();
-
-            var timeLines = await Task.WhenAll(buildList.Select(build =>
-                buildClient.GetBuildTimelineAsync(project.Id, build.BuildId)));
-
-            for (var i = 0; i < buildList.Count; ++i)
-            {
-                var build = buildList[i];
-                var timeLine = timeLines[i];
-
-                if (timeLine == null || build == null)
-                    continue;
-
-                var progress = CalculateProgress(timeLine);
-                build.Progress = progress;
-            }
+            await UpdateBuildTimeLines(buildList, buildClient, project);
+            UpdateBuildLinks(buildList);
         }
 
         private readonly HashSet<TfsBuildDefinition> _knownDefinitions = new HashSet<TfsBuildDefinition>(new TfsBuildDefinitionComparer());

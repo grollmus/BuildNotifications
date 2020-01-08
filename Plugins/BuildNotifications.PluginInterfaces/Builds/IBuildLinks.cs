@@ -1,4 +1,6 @@
-﻿namespace BuildNotifications.PluginInterfaces.Builds
+﻿using BuildNotifications.PluginInterfaces.SourceControl;
+
+namespace BuildNotifications.PluginInterfaces.Builds
 {
     /// <summary>
     /// Describes various related Links/URLs for a build.
@@ -19,5 +21,11 @@
         /// Website URL for a build definition.
         /// </summary>
         string? DefinitionWeb { get; }
+
+        /// <summary>
+        /// Update the URL for the branch with the specified branch.
+        /// </summary>
+        /// <param name="branch">Branch to use to update the URL.</param>
+        void UpdateWith(IBranch branch);
     }
 }

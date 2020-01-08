@@ -5,8 +5,8 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsPullRequests : TfsBranch, IPullRequest
     {
-        public TfsPullRequests(GitPullRequest native)
-            : base(native.PullRequestId)
+        public TfsPullRequests(GitPullRequest native, TfsUrlBuilder urlBuilder)
+            : base(native.PullRequestId, urlBuilder)
         {
             Description = native.Description;
             SourceBranch = native.SourceRefName;

@@ -5,19 +5,25 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsBranch : IBranch
     {
-        public TfsBranch(GitRef branch)
+        public TfsBranch(GitRef branch, TfsUrlBuilder urlBuilder)
         {
             DisplayName = ExtractDisplayName(branch.Name);
             Name = branch.Name;
             _id = branch.ObjectId;
+
+            WebUrl = urlBuilder.BuildBranchUrl(DisplayName);
         }
 
-        protected TfsBranch(int pullRequestId)
+        protected TfsBranch(int pullRequestId, TfsUrlBuilder urlBuilder)
         {
             DisplayName = $"PR {pullRequestId}";
             Name = ComputePullRequestBranchName(pullRequestId);
             _id = pullRequestId.ToString();
+
+            WebUrl = urlBuilder.BuildPullRequestUrl(pullRequestId);
         }
+
+        public string WebUrl { get; }
 
         internal static string ComputePullRequestBranchName(int pullRequestId)
         {

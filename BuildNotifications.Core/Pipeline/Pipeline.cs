@@ -234,10 +234,8 @@ namespace BuildNotifications.Core.Pipeline
                 var buildsForProject = _buildCache.Values(projectId).ToList();
                 var branchesForProject = _branchCache.Values(projectId);
 
-                var inProgressBuilds = buildsForProject.Where(b => b.Status == BuildStatus.Running || b.Status == BuildStatus.Pending);
-
                 await Task.WhenAll(
-                    project.UpdateBuilds(inProgressBuilds),
+                    project.UpdateBuilds(buildsForProject),
                     project.UpdateBuildBranches(buildsForProject, branchesForProject)
                 );
             }

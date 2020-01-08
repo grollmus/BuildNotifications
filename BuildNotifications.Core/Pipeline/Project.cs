@@ -133,11 +133,13 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var build in enrichedBuilds)
             {
-                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName);
-                build.Branch = branch ?? new NullBranch();
+                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName) ?? new NullBranch();
+                build.Branch = branch;
 
                 if (branch is IPullRequest pr)
                     build.BranchName = ExtractBranchName(pr);
+
+                build.Links.UpdateWith(branch);
             }
 
             return Task.CompletedTask;

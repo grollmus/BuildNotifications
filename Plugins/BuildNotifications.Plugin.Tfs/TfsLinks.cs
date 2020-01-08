@@ -1,4 +1,5 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 
@@ -8,20 +9,33 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public TfsLinks(Build fromBuild)
         {
-            BuildWeb = TryGetLink(fromBuild, "web");
+            BuildWeb = TryGetLink(fromBuild.Links, "web");
         }
 
-        private string? TryGetLink(Build fromBuild, string key)
+        public void UpdateLinks(TfsBuildDefinition definition)
         {
-            if (fromBuild.Links.Links.TryGetValue(key, out var link))
-                return ((ReferenceLink) link).Href;
-            return null;
+            DefinitionWeb = TryGetLink(definition.Links, "web");
+        }
+
+        private string? TryGetLink(ReferenceLinks referenceLinks, string key)
+        {
+            return referenceLinks.Links.TryGetValue(key, out var link)
+                ? ((ReferenceLink) link).Href
+                : null;
         }
 
         public string? BuildWeb { get; }
 
-        public string? BranchWeb => null;
+        public string? BranchWeb { get; private set; }
 
-        public string? DefinitionWeb => null;
+        public string? DefinitionWeb { get; private set; }
+
+        public void UpdateWith(IBranch branch)
+        {
+            if (!(branch is TfsBranch tfsBranch))
+                return;
+
+            BranchWeb = tfsBranch.WebUrl;
+        }
     }
 }

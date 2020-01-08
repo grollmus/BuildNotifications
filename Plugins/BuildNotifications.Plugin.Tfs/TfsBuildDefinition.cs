@@ -1,5 +1,6 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
+using Microsoft.VisualStudio.Services.WebApi;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -10,7 +11,16 @@ namespace BuildNotifications.Plugin.Tfs
             Name = definition.Name;
             NativeId = definition.Id;
             Id = NativeId.ToString();
+            Links = new ReferenceLinks();
         }
+
+        public TfsBuildDefinition(BuildDefinition definition)
+            : this((DefinitionReference) definition)
+        {
+            Links = definition.Links;
+        }
+
+        public ReferenceLinks Links { get; }
 
         internal int NativeId { get; }
 
