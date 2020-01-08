@@ -418,7 +418,7 @@ namespace BuildNotifications.ViewModel
         private void ShowInfoPopup(object obj)
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-            var appUpdater = new AppUpdater(includePreReleases);
+            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
 
             var popup = new InfoPopupDialog
             {
@@ -466,8 +466,9 @@ namespace BuildNotifications.ViewModel
             try
             {
                 var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-                updater ??= new AppUpdater(includePreReleases);
+                updater ??= new AppUpdater(includePreReleases, NotificationCenter);
 
+                NotificationCenter.ShowNotifications(new[] {new UpdateNotification()});
                 var result = await updater.CheckForUpdates();
                 if (result != null)
                 {

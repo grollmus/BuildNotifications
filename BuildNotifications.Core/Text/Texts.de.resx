@@ -555,4 +555,10 @@
   <data name="CheckingForUpdates" xml:space="preserve">
     <value>Suche nach Updates...</value>
   </data>
+  <data name="AnUpdateHasBeenInstalled" xml:space="preserve">
+    <value>Ein Update wurde installiert.</value>
+  </data>
+  <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
+    <value>Starten Sie die Anwendung neu, um das Update zu verwenden.</value>
+  </data>
 </root>

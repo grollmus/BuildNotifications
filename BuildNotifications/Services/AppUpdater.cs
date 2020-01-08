@@ -17,9 +17,10 @@ namespace BuildNotifications.Services
 {
     internal class AppUpdater : IAppUpdater
     {
-        public AppUpdater(bool includePreReleases)
+        public AppUpdater(bool includePreReleases, INotifier notifier)
         {
             _includePreReleases = includePreReleases;
+            _notifier = notifier;
             _updateExePath = FindUpdateExe();
             _packagesFolder = FindPackagesFolder();
             LogTo.Info($"Update.exe should be located at {_updateExePath}");
@@ -249,10 +250,13 @@ namespace BuildNotifications.Services
                 p.BeginOutputReadLine();
                 p.WaitForExit();
             }, cancellationToken);
+
+            _notifier.ShowNotifications(new[] {new UpdateNotification()});
         }
 
         private readonly Dictionary<string, string> _updateUrlCache = new Dictionary<string, string>();
         private readonly bool _includePreReleases;
+        private readonly INotifier _notifier;
         private readonly string _packagesFolder;
         private readonly string _updateExePath;
         private const string AppName = "BuildNotifications";

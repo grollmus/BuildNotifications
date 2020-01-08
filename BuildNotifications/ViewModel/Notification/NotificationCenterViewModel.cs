@@ -7,11 +7,12 @@ using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Notification
 {
-    public class NotificationCenterViewModel : BaseViewModel
+    public class NotificationCenterViewModel : BaseViewModel, INotifier
     {
         public NotificationCenterViewModel()
         {
