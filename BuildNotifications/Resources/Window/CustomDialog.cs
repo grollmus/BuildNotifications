@@ -1,6 +1,7 @@
 ﻿namespace BuildNotifications.Resources.Window
 {
-    public partial class CustomDialog : CustomWindow
+    public class CustomDialog : CustomWindow
     {
+        protected override bool AllowSystemContextMenu => false;
     }
 }

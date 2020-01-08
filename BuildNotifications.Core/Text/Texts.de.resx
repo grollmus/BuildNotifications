@@ -543,4 +543,16 @@
   <data name="OneAndQuarterSpeed" xml:space="preserve">
     <value></value>
   </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Nach Updates suchen</value>
+  </data>
+  <data name="NoUpdatesAvailable" xml:space="preserve">
+    <value>Keine Updates verfügbar.</value>
+  </data>
+  <data name="UpdatesAvailable" xml:space="preserve">
+    <value>Update verfügbar. Hier klicken um Update zu installieren.</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>Suche nach Updates...</value>
+  </data>
 </root>

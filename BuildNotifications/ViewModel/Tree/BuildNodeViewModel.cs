@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -20,9 +18,9 @@ namespace BuildNotifications.ViewModel.Tree
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            GoToBuildCommand = new DelegateCommand(x => GoTo(Node.Build.Links.BuildWeb), x => Node.Build.Links.BuildWeb != null);
-            GoToBranchCommand = new DelegateCommand(x => GoTo(Node.Build.Links.BranchWeb), x => Node.Build.Links.BranchWeb != null);
-            GoToDefinitionCommand = new DelegateCommand(x => GoTo(Node.Build.Links.DefinitionWeb), x => Node.Build.Links.DefinitionWeb != null);
+            GoToBuildCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.BuildWeb), x => Node.Build.Links.BuildWeb != null);
+            GoToBranchCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.BranchWeb), x => Node.Build.Links.BranchWeb != null);
+            GoToDefinitionCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.DefinitionWeb), x => Node.Build.Links.DefinitionWeb != null);
             BackendPropertiesChangedInternal();
         }
 
@@ -145,31 +143,6 @@ namespace BuildNotifications.ViewModel.Tree
             UpdateQueuedDate();
 
             ActualProgress = Node.Progress;
-        }
-
-        private void GoTo(string? url)
-        {
-            if (url == null)
-                return;
-
-            LogTo.Info($"Trying to go to URL: \"{url}\"");
-            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                try
-                {
-                    var processStartInfo = new ProcessStartInfo($"{url}")
-                    {
-                        UseShellExecute = true,
-                        Verb = "open"
-                    };
-
-                    Process.Start(processStartInfo);
-                }
-                catch (Exception e)
-                {
-                    LogTo.WarnException($"Failed to open URL \"{url}\".", e);
-                }
-            }
         }
 
         private void OnMouseEnter(object obj)

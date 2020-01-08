@@ -5,21 +5,59 @@
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
                      xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
-                     mc:Ignorable="d" WindowStartupLocation="CenterOwner"
-                     Title="BuildNotifications" Height="450" Width="800"
+                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                     mc:Ignorable="d" WindowStartupLocation="CenterOwner" Width="300" Height="300"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:InfoPopupViewModel}}">
 
-	<window:CustomWindow.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../Resources/BuildTree/BuildTreeResources.xaml" />
-				<ResourceDictionary Source="../Resources/Icons/IconButtonStyles.xaml" />
-				<ResourceDictionary Source="../Resources/Window/ScrollBar.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</window:CustomWindow.Resources>
+    <window:CustomWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/BuildTree/BuildTreeResources.xaml" />
+                <ResourceDictionary Source="../Resources/Icons/IconButtonStyles.xaml" />
+                <ResourceDictionary Source="../Resources/Window/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-	<Grid>
-		<TextBlock Text="TODO: Add text" Foreground="{DynamicResource Foreground1}"></TextBlock>
-	</Grid>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
+            </Style>
+
+            <Style TargetType="text:ClickableTextBlock" BasedOn="{StaticResource {x:Type text:ClickableTextBlock}}">
+                <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
+            </Style>
+        </ResourceDictionary>
+    </window:CustomWindow.Resources>
+
+    <StackPanel HorizontalAlignment="Center" Margin="{StaticResource BlockOneAndHalfThickness}">
+        <TextBlock Text="BuildNotifications" HorizontalAlignment="Center" />
+        <TextBlock Text="{Binding AppVersion}" HorizontalAlignment="Center" />
+
+        <TextBlock />
+
+        <text:ClickableTextBlock Text="{text:Localized CheckForUpdates}" HorizontalAlignment="Center"
+                                 Visibility="{Binding CheckForUpdatesCommand.Execution, Converter={x:Static utils:NullToVisibilityConverter.Inverted}}"
+                                 Command="{Binding CheckForUpdatesCommand}" />
+        <Grid
+            Visibility="{Binding CheckForUpdatesCommand.Execution, Converter={x:Static utils:NullToVisibilityConverter.Instance}}">
+            <TextBlock Text="{text:Localized CheckingForUpdates}" HorizontalAlignment="Center"
+                       Visibility="{Binding CheckForUpdatesCommand.Execution.IsNotCompleted, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+
+            <Grid Visibility="{Binding CheckForUpdatesCommand.Execution.IsSuccessfullyCompleted, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+                <TextBlock Text="{text:Localized NoUpdatesAvailable}" HorizontalAlignment="Center"
+                           Visibility="{Binding CheckForUpdatesCommand.Execution.Result, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
+
+                <text:ClickableTextBlock Text="{text:Localized UpdateAvailable}" Command="{Binding UpdateCommand}" HorizontalAlignment="Center"
+                                         Visibility="{Binding CheckForUpdatesCommand.Execution.Result, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+            </Grid>
+        </Grid>
+
+        <TextBlock />
+
+        <TextBlock Text="Copyright © 2019-2020" HorizontalAlignment="Center" />
+        <text:ClickableTextBlock Text="Grollmus München GmbH" Command="{Binding OpenUrlCommand}"
+                                 HorizontalAlignment="Center" CommandParameter="https://grollmus.de" />
+        <text:ClickableTextBlock Text="{text:Localized Contributors}" HorizontalAlignment="Center"
+                                 CommandParameter="https://github.com/grollmus/BuildNotifications/graphs/contributors"
+                                 Command="{Binding OpenUrlCommand}" />
+    </StackPanel>
 </window:CustomDialog>

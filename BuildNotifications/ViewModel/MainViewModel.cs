@@ -417,9 +417,13 @@ namespace BuildNotifications.ViewModel
 
         private void ShowInfoPopup(object obj)
         {
+            var includePreReleases = _coreSetup.Configuration.UsePreReleases;
+            var appUpdater = new AppUpdater(includePreReleases);
+
             var popup = new InfoPopupDialog
             {
-                Owner = Application.Current.MainWindow
+                Owner = Application.Current.MainWindow,
+                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
             };
             popup.ShowDialog();
         }

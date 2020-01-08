@@ -1,8 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
 
     <Style TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{StaticResource BlockFont}" />
+    </Style>
+
+    <Style TargetType="{x:Type text:ClickableTextBlock}">
+        <Setter Property="FontSize" Value="{StaticResource BlockFont}" />
+        <Setter Property="TextDecorations" Value="Underline" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
 </ResourceDictionary>

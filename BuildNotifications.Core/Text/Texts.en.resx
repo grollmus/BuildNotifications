@@ -543,4 +543,16 @@
   <data name="OneAndQuarterSpeed" xml:space="preserve">
     <value>1.25X speed</value>
   </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="NoUpdatesAvailable" xml:space="preserve">
+    <value>No updates available.</value>
+  </data>
+  <data name="UpdatesAvailable" xml:space="preserve">
+    <value>Update available. Click here to install the update.</value>
+  </data>
+  <data name="CheckingForUpdates" xml:space="preserve">
+    <value>Checking for updates...</value>
+  </data>
 </root>

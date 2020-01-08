@@ -35,6 +35,18 @@ namespace BuildNotifications.Resources.Window
             AddHandler(MouseMoveEvent, new MouseEventHandler(OnMouseMove));
         }
 
+        public bool DisplayIcon
+        {
+            get => (bool) GetValue(DisplayIconProperty);
+            set => SetValue(DisplayIconProperty, value);
+        }
+
+        public bool DisplaySystemButtons
+        {
+            get => (bool) GetValue(DisplaySystemButtonsProperty);
+            set => SetValue(DisplaySystemButtonsProperty, value);
+        }
+
         public object LeftToButtonsContent
         {
             get => GetValue(LeftToButtonsContentProperty);
@@ -46,6 +58,8 @@ namespace BuildNotifications.Resources.Window
             get => GetValue(RightToTitleContentProperty);
             set => SetValue(RightToTitleContentProperty, value);
         }
+
+        protected virtual bool AllowSystemContextMenu => true;
 
         public override void OnApplyTemplate()
         {
@@ -115,7 +129,7 @@ namespace BuildNotifications.Resources.Window
             const int headerBarHeight = 36;
             const int leftmostClickableOffset = 50;
 
-            if (position.X - _layoutRoot.Margin.Left <= leftmostClickableOffset && position.Y <= headerBarHeight)
+            if (position.X - _layoutRoot.Margin.Left <= leftmostClickableOffset && position.Y <= headerBarHeight && AllowSystemContextMenu)
             {
                 if (e.ClickCount != 2)
                     OpenSystemContextMenu(e);
@@ -196,13 +210,13 @@ namespace BuildNotifications.Resources.Window
             ToggleWindowState();
         }
 
-        private void SetMaximizeButtonsVisibility(Visibility maximizeButtonVisibility, Visibility reverseMaximizeButtonVisiility)
+        private void SetMaximizeButtonsVisibility(Visibility maximizeButtonVisibility, Visibility reverseMaximizeButtonVisibility)
         {
             if (_maximizeButton != null)
                 _maximizeButton.Visibility = maximizeButtonVisibility;
 
             if (_restoreButton != null)
-                _restoreButton.Visibility = reverseMaximizeButtonVisiility;
+                _restoreButton.Visibility = reverseMaximizeButtonVisibility;
         }
 
         private void ToggleWindowState()
@@ -226,6 +240,12 @@ namespace BuildNotifications.Resources.Window
         private WindowState _previousState;
         private ContentPresenter _rightToTitleContentPresenter;
         private ContentPresenter _leftToButtonsContentPresenter;
+
+        public static readonly DependencyProperty DisplayIconProperty = DependencyProperty.Register(
+            "DisplayIcon", typeof(bool), typeof(CustomWindow), new PropertyMetadata(true));
+
+        public static readonly DependencyProperty DisplaySystemButtonsProperty = DependencyProperty.Register(
+            "DisplaySystemButtons", typeof(bool), typeof(CustomWindow), new PropertyMetadata(true));
 
         public static readonly DependencyProperty RightToTitleContentProperty = DependencyProperty.Register(
             "RightToTitleContent", typeof(object), typeof(CustomWindow), new PropertyMetadata(default, PropertyChangedCallback));
