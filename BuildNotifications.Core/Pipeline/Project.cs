@@ -133,7 +133,9 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var build in enrichedBuilds)
             {
-                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName) ?? new NullBranch();
+                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName) 
+                             ?? branchList.FirstOrDefault(b => b.Name == build.Branch?.Name) 
+                             ?? new NullBranch();
                 build.Branch = branch;
 
                 if (branch is IPullRequest pr)

@@ -55,8 +55,9 @@ namespace BuildNotifications.Core.Pipeline
             var count = 0;
             foreach (var build in builds.Cast<EnrichedBuild>())
             {
-                if (!_definitionCache.ContainsValue(build.Definition)
-                    || !_branchCache.Contains(b => b.Equals(build.Branch)))
+                var definitionExists = _definitionCache.ContainsValue(build.Definition);
+                var branchExists = _branchCache.Contains(b => b.Equals(build.Branch));
+                if (!definitionExists || !branchExists)
                 {
                     _buildCache.RemoveValue(build);
                     count += 1;
