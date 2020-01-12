@@ -38,6 +38,7 @@
         DownArrow,
         Project,
         Person,
-        Queued
+        Queued,
+        PullRequest
     }
 }

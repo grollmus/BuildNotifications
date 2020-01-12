@@ -5,6 +5,8 @@ namespace BuildNotifications.Core.Utilities
 {
     public interface IBranchNameExtractor
     {
+        bool IsPullRequest(string? fullBranchName);
+
         /// <summary>
         /// Extract name from branch that can be used for display in the UI.
         /// </summary>

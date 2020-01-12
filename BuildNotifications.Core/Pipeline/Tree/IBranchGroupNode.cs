@@ -3,5 +3,6 @@
     public interface IBranchGroupNode : IGroupNode
     {
         string BranchName { get; }
+        bool IsPullRequest { get; }
     }
 }

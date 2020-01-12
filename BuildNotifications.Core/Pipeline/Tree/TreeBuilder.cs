@@ -43,7 +43,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
             switch (group)
             {
                 case Arrangement.GroupDefinition.Branch:
-                    return new BranchGroupNode(_branchNameExtractor.ExtractDisplayName(build.BranchName, branches));
+                {
+                    var enrichedBuild = build as EnrichedBuild;
+                    var isPullRequest = _branchNameExtractor.IsPullRequest(enrichedBuild?.Branch?.Name);
+                    var displayName = _branchNameExtractor.ExtractDisplayName(build.BranchName, branches);
+                    return new BranchGroupNode(displayName, isPullRequest);
+                }
                 case Arrangement.GroupDefinition.BuildDefinition:
                     return new DefinitionGroupNode(build.Definition);
                 case Arrangement.GroupDefinition.Source:

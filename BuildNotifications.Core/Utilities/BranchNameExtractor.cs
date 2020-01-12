@@ -19,6 +19,12 @@ namespace BuildNotifications.Core.Utilities
             return fullBranchName;
         }
 
+        public bool IsPullRequest(string? fullBranchName)
+        {
+            var match = PullRequestPattern.Match(fullBranchName);
+            return match.Success;
+        }
+
         public string ExtractDisplayName(string fullBranchName, IEnumerable<IBranch> allBranches)
         {
             var matchingBranch = allBranches.FirstOrDefault(b => b.Name == fullBranchName);

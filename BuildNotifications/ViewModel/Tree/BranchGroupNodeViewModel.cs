@@ -11,6 +11,7 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         public string BranchName => _node.BranchName;
+        public bool IsPullRequest => _node.IsPullRequest;
 
         protected override string CalculateDisplayName()
         {
