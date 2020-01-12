@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 using Anotar.NLog;
@@ -19,18 +20,21 @@ namespace BuildNotifications.ViewModel.Notification
             _notificationViewModelFactory = new NotificationViewModelFactory();
             Notifications = new RemoveTrackingObservableCollection<NotificationViewModel>();
             Notifications.SortDescending(x => x.Timestamp);
+            Notifications.CollectionChanged += Notifications_CollectionChanged;
 
             NewNotificationsCounter = new NewNotificationsCounterViewModel();
             ClearAllCommand = new DelegateCommand(x => ClearAll());
         }
+
+        public ICommand ClearAllCommand { get; set; }
+
+        public bool ClearButtonVisible => !Notifications.All(x => x.IsRemoving) && ShowClearButton;
 
         public NewNotificationsCounterViewModel NewNotificationsCounter { get; set; }
 
         public bool NoNotifications => ShowEmptyMessage && Notifications.All(x => x.IsRemoving);
 
         public INotificationDistributor NotificationDistributor { get; } = new NotificationDistributor();
-
-        public ICommand ClearAllCommand { get; set; }
 
         public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
 
@@ -44,8 +48,6 @@ namespace BuildNotifications.ViewModel.Notification
                 HighlightRequested?.Invoke(this, new HighlightRequestedEventArgs(_selectedNotification?.BuildNodes ?? new List<IBuildNode>()));
             }
         }
-
-        public bool ClearButtonVisible => !Notifications.All(x => x.IsRemoving) && ShowClearButton;
 
         public bool ShowClearButton
         {
@@ -78,6 +80,7 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
+        public event EventHandler? CloseRequested;
         public event EventHandler<HighlightRequestedEventArgs>? HighlightRequested;
 
         public void AllRead()
@@ -91,18 +94,6 @@ namespace BuildNotifications.ViewModel.Notification
             UpdateUnreadCount();
         }
 
-        private void ClearAll()
-        {
-            ClearSelection();
-            // smoothly clear list by removing each element instead of calling .clear (which would remove each item immediately not leaving any time to animate)
-            var toRemove = Notifications.ToList();
-            RemoveNotifications(toRemove);
-
-            OnPropertyChanged(nameof(NoNotifications));
-            OnPropertyChanged(nameof(ClearButtonVisible));
-            UpdateUnreadCount();
-        }
-
         public void ClearNotificationsOfType(NotificationType type)
         {
             var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
@@ -113,8 +104,43 @@ namespace BuildNotifications.ViewModel.Notification
             UpdateUnreadCount();
         }
 
+        public void ClearSelection()
+        {
+            SelectedNotification = null;
+        }
+
+        public bool TryHighlightNotificationByGuid(Guid guidOfNotification)
+        {
+            var notification = Notifications.FirstOrDefault(n => n.NotificationGuid == guidOfNotification);
+            if (notification != null)
+            {
+                SelectedNotification = notification;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ClearAll()
+        {
+            ClearSelection();
+            RemoveNotifications(Notifications.ToList());
+
+            OnPropertyChanged(nameof(NoNotifications));
+            OnPropertyChanged(nameof(ClearButtonVisible));
+            UpdateUnreadCount();
+        }
+
+        private void Notifications_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Notifications.Count == 0)
+                CloseRequested?.Invoke(this, EventArgs.Empty);
+        }
+
         private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications)
         {
+            // smoothly clear list by removing each element instead of calling .clear
+            // (which would remove each item immediately not leaving any time to animate)
             foreach (var notification in notifications)
             {
                 Notifications.Remove(notification);
@@ -122,9 +148,27 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        public void ClearSelection()
+        private static bool ShouldPublish(INotification notification)
         {
-            SelectedNotification = null;
+            switch (notification.Type)
+            {
+                case NotificationType.Branch:
+                case NotificationType.Definition:
+                case NotificationType.DefinitionAndBranch:
+                case NotificationType.Build:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private void UpdateUnreadCount()
+        {
+            var unread = Notifications.Where(x => x.IsUnread).ToList();
+            NewNotificationsCounter.Count = unread.Count;
+
+            var highestStatus = unread.Count != 0 ? unread.Max(n => n.BuildStatus) : BuildStatus.None;
+            NewNotificationsCounter.HighestStatus = highestStatus;
         }
 
         public void ShowNotifications(IEnumerable<INotification> notifications)
@@ -152,41 +196,6 @@ namespace BuildNotifications.ViewModel.Notification
             }
 
             UpdateUnreadCount();
-        }
-
-        private static bool ShouldPublish(INotification notification)
-        {
-            switch (notification.Type)
-            {
-                case NotificationType.Branch:
-                case NotificationType.Definition:
-                case NotificationType.DefinitionAndBranch:
-                case NotificationType.Build:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public bool TryHighlightNotificationByGuid(Guid guidOfNotification)
-        {
-            var notification = Notifications.FirstOrDefault(n => n.NotificationGuid == guidOfNotification);
-            if (notification != null)
-            {
-                SelectedNotification = notification;
-                return true;
-            }
-
-            return false;
-        }
-
-        private void UpdateUnreadCount()
-        {
-            var unread = Notifications.Where(x => x.IsUnread).ToList();
-            NewNotificationsCounter.Count = unread.Count;
-
-            var highestStatus = unread.Count != 0 ? unread.Max(n => n.BuildStatus) : BuildStatus.None;
-            NewNotificationsCounter.HighestStatus = highestStatus;
         }
 
         private readonly NotificationViewModelFactory _notificationViewModelFactory;

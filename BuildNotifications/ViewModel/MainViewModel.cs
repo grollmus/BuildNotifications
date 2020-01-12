@@ -91,6 +91,8 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public ICommand ShowInfoPopupCommand { get; set; }
+
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -117,7 +119,6 @@ namespace BuildNotifications.ViewModel
 
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
-        public ICommand ShowInfoPopupCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
 
         private void BringWindowToFront()
@@ -147,7 +148,7 @@ namespace BuildNotifications.ViewModel
                         ShowNotifications(new List<INotification> {new StatusNotification(e.DistributedNotification.BasedOnNotification.Value.ToString(), StringLocalizer.NotificationNotFound, NotificationType.Info)});
 
                     if (!ShowNotificationCenter)
-                        ToggleShowNotificationCenter(this);
+                        ToggleShowNotificationCenter();
                 }
             });
         }
@@ -155,19 +156,6 @@ namespace BuildNotifications.ViewModel
         private void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             _postPipelineUpdateTask = UpdateTreeTask(e);
-        }
-
-        private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
-        {
-            var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
-
-            var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
-            if (buildTreeViewModel != BuildTree)
-                BuildTree = buildTreeViewModel;
-
-            BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
-
-            ShowNotifications(e.Notifications);
         }
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
@@ -255,6 +243,16 @@ namespace BuildNotifications.ViewModel
             SettingsViewModel.UpdateUser();
         }
 
+        private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)
+        {
+            ToggleShowNotificationCenter();
+            if (NotificationCenter.NoNotifications)
+            {
+                StatusIndicator.ClearStatus();
+                StatusIndicator.Resume();
+            }
+        }
+
         private void NotificationCenterOnHighlightRequested(object? sender, HighlightRequestedEventArgs e)
         {
             foreach (var buildNode in _highlightedBuilds)
@@ -312,6 +310,7 @@ namespace BuildNotifications.ViewModel
 
             NotificationCenter.NotificationDistributor.Add(_trayIcon);
             NotificationCenter.HighlightRequested += NotificationCenterOnHighlightRequested;
+            NotificationCenter.CloseRequested += NotificationCenterOnCloseRequested;
         }
 
         private void SetupViewModel()
@@ -341,6 +340,19 @@ namespace BuildNotifications.ViewModel
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
             ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
+        }
+
+        private void ShowInfoPopup()
+        {
+            var includePreReleases = _coreSetup.Configuration.UsePreReleases;
+            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
+
+            var popup = new InfoPopupDialog
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
+            };
+            popup.ShowDialog();
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -409,26 +421,13 @@ namespace BuildNotifications.ViewModel
             StatusIndicator.Pause();
         }
 
-        private void ToggleGroupDefinitionSelection(object obj)
+        private void ToggleGroupDefinitionSelection()
         {
             LogTo.Info($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}");
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
 
-        private void ShowInfoPopup(object obj)
-        {
-            var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
-
-            var popup = new InfoPopupDialog
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
-            };
-            popup.ShowDialog();
-        }
-
-        private void ToggleShowNotificationCenter(object obj)
+        private void ToggleShowNotificationCenter()
         {
             LogTo.Info($"Toggling notification center. Value: {!ShowNotificationCenter}");
             ShowNotificationCenter = !ShowNotificationCenter;
@@ -441,7 +440,7 @@ namespace BuildNotifications.ViewModel
                 NotificationCenter.ClearSelection();
         }
 
-        private void ToggleShowSettings(object obj)
+        private void ToggleShowSettings()
         {
             LogTo.Info($"Toggling settings. Value: {!ShowSettings}");
             ShowSettings = !ShowSettings;
@@ -468,7 +467,6 @@ namespace BuildNotifications.ViewModel
                 var includePreReleases = _coreSetup.Configuration.UsePreReleases;
                 updater ??= new AppUpdater(includePreReleases, NotificationCenter);
 
-                NotificationCenter.ShowNotifications(new[] {new UpdateNotification()});
                 var result = await updater.CheckForUpdates();
                 if (result != null)
                 {
@@ -546,6 +544,19 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
+        {
+            var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
+
+            var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
+            if (buildTreeViewModel != BuildTree)
+                BuildTree = buildTreeViewModel;
+
+            BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
+
+            ShowNotifications(e.Notifications);
+        }
+
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
@@ -559,7 +570,7 @@ namespace BuildNotifications.ViewModel
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
-        private ConfigurationApplication _configurationApplication;
+        private readonly ConfigurationApplication _configurationApplication;
         private bool _isInitialFetch = true;
 
         private class Dummy

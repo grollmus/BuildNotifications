@@ -16,6 +16,11 @@ namespace BuildNotifications.ViewModel.Utils
         {
         }
 
+        public DelegateCommand(Action execute)
+            : this(obj => execute(), x => true)
+        {
+        }
+
         public void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
@@ -23,10 +28,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
+        public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) == true;
 
         public void Execute(object parameter)
         {
