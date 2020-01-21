@@ -28,7 +28,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                 case BuildStatus.Cancelled:
                     return GetBrush("Gray");
                 case BuildStatus.Pending:
-                    return GetBrush("Blue");
+                    return GetBrush("DarkBlue");
                 case BuildStatus.Succeeded:
                     return GetBrush("Green");
                 case BuildStatus.PartiallySucceeded:

@@ -34,7 +34,7 @@
     </DataTemplate>
     <DataTemplate x:Key="EditableStringTemplate" DataType="{x:Type editableConfigs:EditableString}">
         <text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
-                               Visibility="{Binding IsHidden, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
+                               Visibility="{Binding IsHidden, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"
                                Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                                Margin="{StaticResource BlockYOnlyMargin}" />
     </DataTemplate>
@@ -47,7 +47,7 @@
             <Grid>
                 <local:DecoratedComboBox ItemsSource="{Binding PredefinedValues}"
                                          SelectedItem="{Binding Value, Mode=TwoWay}"
-                                         IsEnabled="{Binding IsBusy, Converter={x:Static local:InvertedBooleanToVisibilityConverter.Instance}}"
+                                         IsEnabled="{Binding IsBusy, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"
                                          Margin="{StaticResource BlockQuarterYOnlyMargin}" />
                 <Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
                          HorizontalAlignment="Center" VerticalAlignment="Center">

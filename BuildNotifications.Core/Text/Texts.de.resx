@@ -561,4 +561,7 @@
   <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
     <value>Starten Sie die Anwendung neu, um das Update zu verwenden.</value>
   </data>
+  <data name="GoToPullRequest" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -41,6 +41,7 @@
     <system:Double x:Key="BlockFont">12</system:Double>
     <system:Double x:Key="BlockTripleFont">24</system:Double>
 
+    <Thickness Left="{StaticResource BlockSixth}" Right="{StaticResource BlockSixth}" Top="{StaticResource BlockSixth}" Bottom="{StaticResource BlockSixth}" x:Key="BlockSixthThickness"/>
     <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="{StaticResource BlockQuarter}" Bottom="{StaticResource BlockQuarter}" x:Key="BlockQuarterThickness"/>
     <Thickness Left="{StaticResource BlockHalf}" Right="{StaticResource BlockHalf}" Top="{StaticResource BlockHalf}" Bottom="{StaticResource BlockHalf}" x:Key="BlockHalfThickness"/>
     <Thickness Left="{StaticResource BlockThreeQuarters}" Right="{StaticResource BlockThreeQuarters}" Top="{StaticResource BlockThreeQuarters}" Bottom="{StaticResource BlockThreeQuarters}" x:Key="BlockThreeQuartersThickness"/>
@@ -54,6 +55,7 @@
     <Thickness Left="{StaticResource BlockDouble}" Right="{StaticResource BlockDouble}" Top="{StaticResource BlockDouble}" Bottom="{StaticResource BlockDouble}" x:Key="BlockDoubleThickness"/>
     <Thickness Left="{StaticResource BlockOneAndHalf}" Right="{StaticResource BlockOneAndHalf}" Top="{StaticResource BlockOneAndHalf}" Bottom="{StaticResource BlockOneAndHalf}" x:Key="BlockOneAndHalfThickness"/>
 
+    <Thickness Left="{StaticResource Block}" Right="0" Top="0" Bottom="0" x:Key="BlockLeft"/>
     <Thickness Left="{StaticResource Block}" Right="{StaticResource NegativeBlock}" Top="0" Bottom="0" x:Key="BlockLeftNegativeBlockRight"/>
     <Thickness Left="{StaticResource NegativeBlockQuarter}" Right="{StaticResource NegativeBlock}" Top="0" Bottom="0" x:Key="NegativeBlockQuarterLeftNegativeBlockRight"/>
     <Thickness Left="{StaticResource BlockOneAndQuarter}" Right="{StaticResource BlockThreeQuarters}" Top="0" Bottom="0" x:Key="BlockOneAndQuarterLeftAndThreeQuartersRight"/>

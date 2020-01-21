@@ -43,6 +43,7 @@ namespace BuildNotifications.ViewModel.Tree
             var treeDepth = GetMaxDepth(buildTreeResult);
             LogTo.Debug($"Setting max depths, which is {treeDepth}.");
             SetMaxDepths(buildTreeResult, treeDepth);
+            SetBuildIsFromPullRequest(buildTreeResult);
 
             stopWatch.Stop();
             LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms.");
@@ -159,6 +160,22 @@ namespace BuildNotifications.ViewModel.Tree
             foreach (var child in node.Children)
             {
                 SetMaxDepths(child, maxDepth);
+            }
+        }
+
+        private static void SetBuildIsFromPullRequest(BuildTreeNodeViewModel node, bool parentIsPullRequest = false)
+        {
+            if (node is BranchGroupNodeViewModel asBranch && asBranch.IsPullRequest)
+                parentIsPullRequest = true;
+
+            foreach (var child in node.Children)
+            {
+                SetBuildIsFromPullRequest(child, parentIsPullRequest);
+            }
+
+            if(node is BuildNodeViewModel asBuild)
+            {
+                asBuild.IsFromPullRequest = parentIsPullRequest;
             }
         }
 

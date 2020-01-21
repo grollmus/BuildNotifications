@@ -21,6 +21,8 @@ namespace BuildNotifications.Core.Tests
             LastChangedTime = null;
             Status = BuildStatus.None;
 
+            IsRequestedByCurrentUser = false;
+
             Links = new MockBuildLinks();
         }
 
@@ -49,5 +51,6 @@ namespace BuildNotifications.Core.Tests
         public BuildStatus Status { get; }
         public IBuildLinks Links { get; }
         public string ProjectName { get; }
+        public bool IsRequestedByCurrentUser { get; }
     }
 }

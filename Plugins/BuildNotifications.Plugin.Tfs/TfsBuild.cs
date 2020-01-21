@@ -69,6 +69,7 @@ namespace BuildNotifications.Plugin.Tfs
                         return BuildStatus.Cancelled;
 
                     case Microsoft.TeamFoundation.Build.WebApi.BuildStatus.InProgress:
+                        return BuildStatus.Running;
                     case Microsoft.TeamFoundation.Build.WebApi.BuildStatus.NotStarted:
                     case Microsoft.TeamFoundation.Build.WebApi.BuildStatus.Postponed:
                         return BuildStatus.Pending;

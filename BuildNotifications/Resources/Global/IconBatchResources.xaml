@@ -342,6 +342,14 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
+    <DrawingImage po:Freeze="True" x:Key="PullRequestDrawingImage">
+        <DrawingImage.Drawing>
+            <GeometryDrawing po:Freeze="True"
+                             Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                             Geometry="F1 M12,12z M0,0z M6.55,3.25L8.7,5.45 8.7,3.25 5.45,0 2.2,3.25 2.2,5.45 4.35,3.25 4.35,12 6.55,12 6.55,8.7Q7.7,9.8,9.8,9.8L9.8,7.6Q8.7,7.6 7.7,7 6.55,6.4 6.55,5.45L6.55,3.25z" />
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
 
     <Style x:Key="IconBatchStyle" TargetType="Image">
         <Style.Triggers>
@@ -559,6 +567,12 @@
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                 Value="Queued">
                 <Setter Property="Image.Source" Value="{StaticResource QueuedDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="PullRequest">
+                <Setter Property="Image.Source" Value="{StaticResource PullRequestDrawingImage}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

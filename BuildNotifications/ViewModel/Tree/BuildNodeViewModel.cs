@@ -55,6 +55,29 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
+        public bool IsFromPullRequest
+        {
+            get => _isFromPullRequest;
+            set
+            {
+                _isFromPullRequest = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Toggle bool to tell the UI to shortly highlight this build.
+        /// </summary>
+        public bool DoShortHighlight
+        {
+            get => _doShortHighlight;
+            set
+            {
+                _doShortHighlight = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand GoToBranchCommand { get; set; }
         public ICommand GoToBuildCommand { get; set; }
         public ICommand GoToDefinitionCommand { get; set; }
@@ -106,6 +129,8 @@ namespace BuildNotifications.ViewModel.Tree
         public bool RequestedByIsSameAsFor => RequestedFor == RequestedBy;
 
         public string RequestedFor => Node.Build.RequestedFor?.DisplayName ?? RequestedBy;
+
+        public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
 
         public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
 
@@ -164,6 +189,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             _buildStatus = newStatus;
             OnPropertyChanged(nameof(BuildStatus));
+            ShortlyHighlightThisBuild();
         }
 
         private void UpdateChangedDate()
@@ -186,6 +212,12 @@ namespace BuildNotifications.ViewModel.Tree
             OnPropertyChanged(nameof(QueueTime));
         }
 
+        private void ShortlyHighlightThisBuild()
+        {
+            DoShortHighlight = false;
+            DoShortHighlight = true;
+        }
+
         private Timeline? _progressTween;
 
         private BuildStatus _buildStatus;
@@ -199,6 +231,8 @@ namespace BuildNotifications.ViewModel.Tree
         private double _progressToDisplay = 0.2;
         private bool _displayAsHollow;
         private double _actualProgress;
+        private bool _doShortHighlight;
+        private bool _isFromPullRequest;
 
         private const double DoubleTolerance = 0.0000000001;
     }

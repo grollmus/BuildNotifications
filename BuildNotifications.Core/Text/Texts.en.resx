@@ -561,4 +561,7 @@
   <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
     <value>Restart application to apply the update.</value>
   </data>
+  <data name="GoToPullRequest" xml:space="preserve">
+    <value>Go to Pull request</value>
+  </data>
 </root>

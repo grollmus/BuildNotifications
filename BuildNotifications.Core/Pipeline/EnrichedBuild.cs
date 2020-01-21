@@ -13,6 +13,7 @@ namespace BuildNotifications.Core.Pipeline
             ProjectName = projectName;
             Provider = provider;
             BranchName = OriginalBuild.BranchName;
+            IsRequestedByCurrentUser = provider.User.Id == build.RequestedBy.Id;
         }
 
         internal IBranch? Branch { get; set; }
@@ -27,6 +28,8 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         public string ProjectName { get; }
+
+        public bool IsRequestedByCurrentUser { get; }
 
         public string BranchName { get; set; }
 
