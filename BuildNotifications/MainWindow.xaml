@@ -71,6 +71,15 @@
     </window:CustomWindow.Resources>
 
     <Grid>
+        <i:Interaction.Triggers>
+            <ei:DataTrigger Binding="{Binding BlurMainView}" Value="false">
+                <animation:Blur Amount="0" Duration="0.5"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding BlurMainView}" Value="true">
+                <animation:Blur Amount="15" Duration="1"/>
+            </ei:DataTrigger>
+        </i:Interaction.Triggers>
+
         <DockPanel x:Name="DockPanel">
             <!--Settings panel-->
             <ContentPresenter Content="{Binding SettingsViewModel}" Width="0" DockPanel.Dock="Left">

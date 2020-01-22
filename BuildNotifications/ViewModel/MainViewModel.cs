@@ -103,6 +103,18 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        private bool _blurMainView;
+
+        public bool BlurMainView
+        {
+            get => _blurMainView;
+            set
+            {
+                _blurMainView = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool ShowSettings
         {
             get => _showSettings;
@@ -346,13 +358,16 @@ namespace BuildNotifications.ViewModel
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
-
+            
             var popup = new InfoPopupDialog
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
             };
+
+            BlurMainView = true;
             popup.ShowDialog();
+            BlurMainView = false;
         }
 
         private void ShowInitialSetupOverlayViewModel()
