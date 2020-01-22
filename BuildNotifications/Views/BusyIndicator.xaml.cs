@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -6,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BuildNotifications.ViewModel;
-using BuildNotifications.ViewModel.Utils;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.Views
@@ -16,14 +16,15 @@ namespace BuildNotifications.Views
         public BusyIndicator()
         {
             InitializeComponent();
-            DummyItems = new RemoveTrackingObservableCollection<DummyItem>(TimeSpan.FromSeconds(1), new[]
+            DummyItems = new ObservableCollection<DummyItem>
             {
-                new DummyItem()
-            });
+                new DummyItem(),
+                new DummyItem(),
+            };
             _tokenSource = new CancellationTokenSource();
         }
 
-        public RemoveTrackingObservableCollection<DummyItem> DummyItems { get; set; }
+        public ObservableCollection<DummyItem> DummyItems { get; set; }
 
         public bool IsBusy
         {
@@ -63,6 +64,12 @@ namespace BuildNotifications.Views
             {
                 while (!_tokenSource.IsCancellationRequested)
                 {
+                    ShowLoadingText = App.GlobalTweenHandler.TimeModifier > 2;
+                    var firstItem = DummyItems.FirstOrDefault(x => !(x?.IsRemoving ?? false));
+
+                    if (firstItem != null)
+                        firstItem.IsRemoving = true;
+
                     try
                     {
                         await Task.Delay(TimeSpan.FromSeconds(Math.Max(0.5, 1.0 / App.GlobalTweenHandler.TimeModifier)), _tokenSource.Token);
@@ -72,9 +79,7 @@ namespace BuildNotifications.Views
                         break;
                     }
 
-                    ShowLoadingText = App.GlobalTweenHandler.TimeModifier > 2;
-                    var firstItem = DummyItems.FirstOrDefault(x => !(x?.IsRemoving ?? false));
-                    if (!_tokenSource.IsCancellationRequested)
+                    if (!_tokenSource.IsCancellationRequested && firstItem != null)
                     {
                         Application.Current?.Dispatcher?.Invoke(() =>
                         {

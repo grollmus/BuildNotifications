@@ -23,10 +23,10 @@
 
                         <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
                             <icons:SimpleIconBatch Type="Settings" Width="{StaticResource Block}"
-                                             Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                             Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                             VerticalAlignment="Center"
-                                             Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                                   Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                   Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
                             <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
                                        VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"
@@ -40,10 +40,10 @@
                         <UniformGrid Columns="{Binding UserColumns}">
                             <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
                                 <icons:SimpleIconBatch Type="Queued" Width="{StaticResource Block}"
-                                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                 Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                                 VerticalAlignment="Center"
-                                                 Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                                       Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                       Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource Foreground1HalfTransparency}" />
                                 <TextBlock Text="{text:Localized RequestedBy}"
                                            Foreground="{DynamicResource Foreground1HalfTransparency}"
                                            Background="Transparent" DockPanel.Dock="Top"
@@ -54,10 +54,10 @@
                             <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}"
                                        Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
                                 <icons:SimpleIconBatch Type="Person" Width="{StaticResource Block}"
-                                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                 Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                                 VerticalAlignment="Center"
-                                                 Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                                       Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                       Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource Foreground1HalfTransparency}" />
                                 <TextBlock Text="{text:Localized RequestedFor}"
                                            Foreground="{DynamicResource Foreground1HalfTransparency}"
                                            Background="Transparent" DockPanel.Dock="Top"
@@ -82,23 +82,29 @@
                             <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="False" />
                         </ei:DataTrigger>
                         <ei:DataTrigger Binding="{Binding DoShortHighlight}" Value="true">
-                            <resourcesBuildTreeBuild:ShortHighlight  />
+                            <resourcesBuildTreeBuild:ShortHighlight />
                         </ei:DataTrigger>
                     </i:Interaction.Triggers>
                 </Rectangle>
+
+                <Rectangle Opacity="0.15" x:Name="BackgroundFillRectangle"
+                           Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
+                           Visibility="{Binding DisplayAsHollow, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
+
+
+                <Rectangle Opacity="0.15"
+                           Fill="Black"
+                           Visibility="{Binding DisplayAsHollow, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
 
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                     x:Name="FillRectangle" />
 
                 <Rectangle
-                    Fill="{DynamicResource Background1}" Width="3" HorizontalAlignment="Left" Margin="{StaticResource BlockSixthThickness}"
-                    StrokeThickness="2" Visibility="{Binding IsManuallyRequestedByUser, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"/>
-
-                <Rectangle
                     Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                     StrokeThickness="1" x:Name="StrokeRectangle" />
-                
+
+
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
                         <resourcesBuildTreeBuild:BuildGrow />
@@ -131,9 +137,12 @@
                     <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
                                             IconType="SingleBuild" />
                     <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
-                                            IconType="Branch" Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}"/>
-                    <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}" Command="{Binding GoToBranchCommand}"
-                                            IconType="PullRequest" Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"/>
+                                            IconType="Branch"
+                                            Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
+                    <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}"
+                                            Command="{Binding GoToBranchCommand}"
+                                            IconType="PullRequest"
+                                            Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
                     <menu:DecoratedMenuItem Header="{text:Localized GoToDefinition}"
                                             Command="{Binding GoToDefinitionCommand}" IconType="Definition" />
                 </ContextMenu>
@@ -150,6 +159,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Fill" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
                 <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="StrokeRectangle" />
+                <Setter Property="Opacity" Value="0.5" TargetName="BackgroundFillRectangle" />
             </Trigger>
 
             <DataTrigger Binding="{Binding BuildStatus}" Value="Running">

@@ -173,10 +173,8 @@ namespace BuildNotifications.ViewModel.Tree
                 SetBuildIsFromPullRequest(child, parentIsPullRequest);
             }
 
-            if(node is BuildNodeViewModel asBuild)
-            {
+            if (node is BuildNodeViewModel asBuild)
                 asBuild.IsFromPullRequest = parentIsPullRequest;
-            }
         }
 
         private void TagAllNodesForDeletion(BuildTreeNodeViewModel tree, List<BuildTreeNodeViewModel> taggedNodes)
