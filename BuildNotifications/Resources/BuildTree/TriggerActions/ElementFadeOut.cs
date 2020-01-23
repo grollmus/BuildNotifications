@@ -6,8 +6,10 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.TriggerActions
 {
-    internal class ElementFadeOut : TweenTriggerAction<UIElement>
+    internal class ElementFadeOut : TweenTriggerAction<FrameworkElement>
     {
+        public bool DoCollapsingLayoutTransform { get; set; }
+
         public ElementFadeOut()
         {
             Anchor = Anchor.MiddleLeft;
@@ -26,6 +28,13 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
                 var scaleTransform = new ScaleTransform(1.0, 1.0, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);
                 tweens.Add(scaleTransform.Tween(x => x.ScaleX).And(x => x.ScaleY).To(0.5).In(Duration).Ease(Easing.ExpoEaseIn));
                 TargetElement.RenderTransform = scaleTransform;
+            }
+
+            if (DoCollapsingLayoutTransform)
+            {
+                var scaleTransform = new ScaleTransform(1.0, 1.0, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);
+                tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(0).In(Duration).Ease(Easing.ExpoEaseIn));
+                TargetElement.LayoutTransform = scaleTransform;
             }
 
             tweens.Add(TargetElement.Tween(x => x.Opacity).To(0).In(Duration));

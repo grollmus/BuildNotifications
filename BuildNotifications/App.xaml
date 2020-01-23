@@ -19,6 +19,8 @@
                 <ResourceDictionary Source="Resources/Global/ContextMenuStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ToolTipStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
+                <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
+                <ResourceDictionary Source="Resources/Icons/IconToggleButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}" />

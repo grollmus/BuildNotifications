@@ -20,6 +20,7 @@ using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
+using BuildNotifications.ViewModel.Sight;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
@@ -59,10 +60,13 @@ namespace BuildNotifications.ViewModel
             {
                 _buildTree = value;
                 OnPropertyChanged();
+                SightSelection.BuildTree = value;
             }
         }
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
+
+        public SightSelectionViewModel SightSelection { get; set; }
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
 
@@ -91,8 +95,18 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        public ICommand ShowInfoPopupCommand { get; set; }
+        private bool _showSights;
 
+        public bool ShowSights
+        {
+            get => _showSights;
+            set
+            {
+                _showSights = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -132,6 +146,8 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
+        public ICommand ToggleShowSightsCommand { get; set; }
+        public ICommand ShowInfoPopupCommand { get; set; }
 
         private void BringWindowToFront()
         {
@@ -348,9 +364,12 @@ namespace BuildNotifications.ViewModel
             };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
+            SightSelection = new SightSelectionViewModel();
+
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
+            ToggleShowSightsCommand = new DelegateCommand(ToggleShowSights);
             ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
         }
 
@@ -453,6 +472,11 @@ namespace BuildNotifications.ViewModel
                 NotificationCenter.AllRead();
             else
                 NotificationCenter.ClearSelection();
+        }
+
+        private void ToggleShowSights()
+        {
+            ShowSights = !ShowSights;
         }
 
         private void ToggleShowSettings()

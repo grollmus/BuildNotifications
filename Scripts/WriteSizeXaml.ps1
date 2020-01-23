@@ -82,6 +82,7 @@ $sb = [System.Text.StringBuilder]::new()
 [void]$sb.AppendLine("")
 [void]$sb.AppendLine("    <Thickness Left=`"$($blockSize*0.75+1)`" Right=`"$($blockSize*0.75+1)`" Top=`"{StaticResource BlockSixth}`" Bottom=`"{StaticResource BlockSixth}`" x:Key=`"BlockThreeQuartersPlusOneXSixthBlockOneYMargin`"/>")
 [void]$sb.AppendLine("    <Thickness Left=`"0`" Right=`"$($blockSize*-2)`" Top=`"0`" Bottom=`"0`" x:Key=`"NegativeBlockDoubleThicknessFromRight`"/>")
+[void]$sb.AppendLine("    <Rect Location=`"$($blockSize*-1), $($blockSize*1.5)`" x:Key=`"NegativeBlockLeftOneAndHalfBlockTopRectangle`"/>")
 [void]$sb.AppendLine("")
 [void]$sb.AppendLine("</ResourceDictionary>")
 

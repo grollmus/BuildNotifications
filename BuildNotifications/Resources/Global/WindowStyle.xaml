@@ -21,11 +21,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type window:CustomWindow}">
-
-                    <ControlTemplate.Resources>
-                        <ResourceDictionary Source="../Icons/IconButtonStyles.xaml" />
-                    </ControlTemplate.Resources>
-
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid Background="{DynamicResource Background1}" x:Name="WindowRoot">

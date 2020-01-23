@@ -22,7 +22,7 @@
                     <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}">
 
                         <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-                            <icons:SimpleIconBatch Type="Settings" Width="{StaticResource Block}"
+                            <icons:IconBatch Type="Settings" Width="{StaticResource Block}"
                                                    Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                    Height="{StaticResource Block}" DockPanel.Dock="Left"
                                                    VerticalAlignment="Center"
@@ -39,7 +39,7 @@
                         </DockPanel>
                         <UniformGrid Columns="{Binding UserColumns}">
                             <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-                                <icons:SimpleIconBatch Type="Queued" Width="{StaticResource Block}"
+                                <icons:IconBatch Type="Queued" Width="{StaticResource Block}"
                                                        Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                        Height="{StaticResource Block}" DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"
@@ -53,7 +53,7 @@
                             </DockPanel>
                             <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}"
                                        Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
-                                <icons:SimpleIconBatch Type="Person" Width="{StaticResource Block}"
+                                <icons:IconBatch Type="Person" Width="{StaticResource Block}"
                                                        Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                        Height="{StaticResource Block}" DockPanel.Dock="Left"
                                                        VerticalAlignment="Center"

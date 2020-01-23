@@ -44,7 +44,7 @@
 
         <ComboBox.ItemsPanel>
             <ItemsPanelTemplate>
-                <groupDefinitionSelection1:OffsettingStackPanel Offset="-15" />
+                <groupDefinitionSelection1:OffsettingStackPanel Offset="0" />
             </ItemsPanelTemplate>
         </ComboBox.ItemsPanel>
 
@@ -55,31 +55,25 @@
                     <Setter.Value>
 
                         <ControlTemplate TargetType="ListBoxItem">
-                            <Grid x:Name="Grid">
+                            <Grid x:Name="Grid" Margin="{StaticResource BlockQuarterRight}">
                                 <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
                                             Margin="{StaticResource BlockQuarterThickness}">
-                                    <TextBlock Text="{text:Localized Sort}" x:Name="GroupByTextBlock"
-                                               TextAlignment="Right"
-                                               HorizontalAlignment="Right" Margin="0,0,8,0"
-                                               Foreground="Transparent" Width="62" />
                                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
-                                          Width="{DynamicResource BlockOneAndHalf}" Margin="0,0,0,0"
+                                          Width="{DynamicResource BlockOneAndHalf}" Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                           Height="{DynamicResource BlockOneAndHalf}">
-                                        <ContentPresenter Margin="0,0,-6,0" />
-                                        <Rectangle Width="{StaticResource BlockOneAndHalf}" StrokeThickness="1"
-                                                   x:Name="OverlayRectangle"
-                                                   Height="{DynamicResource BlockOneAndHalf}" Margin="0,0,-18,0">
-                                            <Rectangle.RenderTransform>
-                                                <SkewTransform AngleX="-35" />
-                                            </Rectangle.RenderTransform>
-                                        </Rectangle>
+                                        <ContentPresenter />
                                     </Grid>
+
+                                    <Rectangle Width="1" Fill="Black" Opacity="0.1" Margin="{StaticResource BlockQuarterRight}" />
+
+                                    <TextBlock Text="{text:Localized Sort}" x:Name="GroupByTextBlock"
+                                               Foreground="{DynamicResource Foreground1HalfTransparency}" MinWidth="20" />
 
                                     <TextBlock
                                         d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:SortingDefinitionViewModel} }"
                                         Text="{Binding SortingDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
-                                        Width="150" Margin="12,0,0,0"
-                                        x:Name="NameTextBlock" Foreground="Transparent" />
+                                        Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                                        x:Name="NameTextBlock" Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
                                 </StackPanel>
 
@@ -95,12 +89,8 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
                                             TargetName="GroupByTextBlock" />
-                                    <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                    <Setter Property="Foreground" Value="{DynamicResource Foreground2}"
                                             TargetName="NameTextBlock" />
-                                    <Setter Property="Stroke" Value="{DynamicResource Foreground1}"
-                                            TargetName="OverlayRectangle" />
-                                    <Setter Property="Background" Value="{DynamicResource Background1}"
-                                            TargetName="Grid" />
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="true">
                                     <Setter TargetName="DockPanel" Property="Visibility" Value="Collapsed" />

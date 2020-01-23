@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Effects;
 using BuildNotifications.Resources.BuildTree.TriggerActions;
 using TweenSharp.Animation;

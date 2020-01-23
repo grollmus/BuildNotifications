@@ -76,6 +76,7 @@
 
     <Thickness Left="10" Right="10" Top="{StaticResource BlockSixth}" Bottom="{StaticResource BlockSixth}" x:Key="BlockThreeQuartersPlusOneXSixthBlockOneYMargin"/>
     <Thickness Left="0" Right="-24" Top="0" Bottom="0" x:Key="NegativeBlockDoubleThicknessFromRight"/>
+    <Rect Location="-12, 18" x:Key="NegativeBlockLeftOneAndHalfBlockTopRectangle"/>
 
 </ResourceDictionary>
 

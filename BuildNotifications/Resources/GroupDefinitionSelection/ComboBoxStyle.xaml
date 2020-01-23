@@ -60,17 +60,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid x:Name="MainGrid" SnapsToDevicePixels="true">
-                        <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2"
+                        <Popup x:Name="PART_Popup" Grid.ColumnSpan="2"
                                IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                               PlacementRectangle="-142,21,0,0"
                                PopupAnimation="Fade"
+                               PlacementRectangle="{StaticResource NegativeBlockLeftOneAndHalfBlockTopRectangle}"
                                PlacementTarget="{Binding ElementName=ToggleButton}"
-                               Placement="Relative">
-                            <Grid>
+                               Placement="Bottom">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                                 <ItemsPresenter x:Name="ItemsPresenter"
                                                 KeyboardNavigation.DirectionalNavigation="Contained"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </Grid>
+                            </Border>
                         </Popup>
                         <settings:NotifyingContentPresenter
                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"

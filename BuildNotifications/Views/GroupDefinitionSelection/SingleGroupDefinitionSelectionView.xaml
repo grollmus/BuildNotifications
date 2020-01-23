@@ -48,7 +48,7 @@
 
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <groupDefinitionSelectionResources:OffsettingStackPanel Offset="-15" />
+                    <groupDefinitionSelectionResources:OffsettingStackPanel Offset="0" />
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
 
@@ -59,33 +59,26 @@
                         <Setter.Value>
 
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Grid x:Name="Grid">
+                                <Grid x:Name="Grid" Margin="{StaticResource BlockQuarterRight}">
                                     <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
                                                 Margin="{StaticResource BlockQuarterThickness}">
-                                        <TextBlock Text="{Binding GroupByText}" x:Name="GroupByTextBlock"
-                                                   TextAlignment="Right"
-                                                   HorizontalAlignment="Right" Margin="0,0,13,0"
-                                                   Foreground="Transparent" Width="50" />
                                         <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              Width="{DynamicResource BlockDouble}"
+                                              Width="{DynamicResource BlockDouble}" 
                                               Height="{DynamicResource BlockOneAndHalf}">
-                                            <Rectangle x:Name="BackgroundRectangle"
-                                                       Fill="{DynamicResource Background1}"
-                                                       Stroke="{DynamicResource Background3}" StrokeThickness="1"
-                                                       Width="{DynamicResource BlockDouble}"
-                                                       Height="{DynamicResource BlockOneAndHalf}">
-                                                <Rectangle.RenderTransform>
-                                                    <SkewTransform AngleX="-35" />
-                                                </Rectangle.RenderTransform>
-                                            </Rectangle>
-                                            <ContentPresenter Margin="-13,0,0,0" />
+                                            <ContentPresenter  />
                                         </Grid>
 
+                                        <Rectangle Width="1" Fill="Black" Opacity="0.1" Margin="{StaticResource BlockQuarterRight}" />
+
+                                        <TextBlock Text="{Binding GroupByText}" x:Name="GroupByTextBlock"
+                                                   TextAlignment="Right"
+                                                   HorizontalAlignment="Right"
+                                                   Foreground="{DynamicResource Foreground1HalfTransparency}" MinWidth="50" />
                                         <TextBlock
                                             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionViewModel} }"
                                             Text="{Binding GroupDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
-                                            Width="80" Margin="3,0,0,0"
-                                            x:Name="NameTextBlock" Foreground="Transparent" />
+                                            Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                                            x:Name="NameTextBlock" Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
                                     </StackPanel>
 
@@ -101,12 +94,8 @@
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
                                                 TargetName="GroupByTextBlock" />
-                                        <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                        <Setter Property="Foreground" Value="{DynamicResource Foreground2}"
                                                 TargetName="NameTextBlock" />
-                                        <Setter Property="Stroke" Value="{DynamicResource Foreground1}"
-                                                TargetName="BackgroundRectangle" />
-                                        <Setter Property="Background" Value="{DynamicResource Background1}"
-                                                TargetName="Grid" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="true">
                                         <Setter TargetName="DockPanel" Property="Visibility" Value="Collapsed" />

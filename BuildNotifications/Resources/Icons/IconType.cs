@@ -39,6 +39,8 @@
         Project,
         Person,
         Queued,
-        PullRequest
+        PullRequest,
+        EyeIris,
+        EyeLid
     }
 }
