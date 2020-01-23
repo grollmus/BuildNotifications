@@ -112,10 +112,6 @@
                     <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="false">
                         <resourcesBuildTreeBuild:BuildShrink />
                     </ei:DataTrigger>
-                    <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                        <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="MiddleRight" TargetScaleX="0"
-                                                            TargetScaleY="1" />
-                    </ei:DataTrigger>
                     <i:EventTrigger EventName="MouseEnter">
                         <i:InvokeCommandAction Command="{Binding MouseEnterCommand}" />
                     </i:EventTrigger>
@@ -152,6 +148,10 @@
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                     <i:InvokeCommandAction Command="{Binding GoToBuildCommand}" />
                 </i:EventTrigger>
+                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                    <triggerActions:ElementFadeOutScale Duration="0.8" Anchor="MiddleRight" TargetScaleX="0"
+                                                        TargetScaleY="1" DoLayoutTransform="True"/>
+                </ei:DataTrigger>
             </i:Interaction.Triggers>
         </Grid>
 

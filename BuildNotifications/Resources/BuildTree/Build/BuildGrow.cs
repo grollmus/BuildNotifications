@@ -13,7 +13,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
             globalTweenHandler.ClearTweensOf(AssociatedObject);
 
             var targetWidth = (double) AssociatedObject.FindResource("BlockTriple");
-            globalTweenHandler.Add(AssociatedObject.Tween(x => x.Width).To(targetWidth).In(0.15).Ease(Easing.QuadraticEaseInOut));
+            globalTweenHandler.Add(AssociatedObject.Tween(x => x.Width).To(targetWidth).In(0.25).Ease(Easing.QuadraticEaseInOut));
         }
     }
 }

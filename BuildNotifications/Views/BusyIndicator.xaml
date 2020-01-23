@@ -45,7 +45,7 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedWrapPanel />
+                    <animation:AnimatedWrapPanel AnimationDuration="1"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 

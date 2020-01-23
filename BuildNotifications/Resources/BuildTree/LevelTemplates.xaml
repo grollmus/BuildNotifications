@@ -184,13 +184,13 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
-        <animation:AnimatedDockPanel AnimationDuration="0.8" HorizontalAlignment="Left" Delay="0"
+        <animation:AnimatedDockPanel AnimationDuration="2.8" HorizontalAlignment="Left" Delay="0"
                                      Width="{StaticResource BlockTwentyEight}">
             <ContentPresenter DockPanel.Dock="Left" ContentTemplate="{StaticResource ThirdLevelGroupingTemplate}" />
             <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel AnimationDuration="0.8" IsItemsHost="True" Delay="0"/>
+                       <WrapPanel IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
