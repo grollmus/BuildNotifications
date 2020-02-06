@@ -29,7 +29,12 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.ClearTweensOf(blurEffect);
 
-            globalTweenHandler.Add(blurEffect.Tween(e => e.Radius).To(Amount).In(Duration).Ease(Easing.ExpoEaseOut));
+            globalTweenHandler.Add(blurEffect.Tween(e => e.Radius).To(Amount).In(Duration).Ease(Easing.ExpoEaseOut).OnComplete((sender, objects) =>
+            {
+                // remove the effect, as even an amount of zero causes a big performance hit even though the effect is invisible
+                if (Amount <= 0)
+                    AssociatedObject.Effect = null;
+            }));
         }
     }
 }
