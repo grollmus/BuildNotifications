@@ -103,7 +103,12 @@ namespace BuildNotifications.Core.Plugin
                         continue;
                     }
 
+                    LogTo.Debug($"Successfully constructed instance of type {typeof(T).FullName}");
                     yield return value;
+                }
+                else
+                {
+                    LogTo.Debug($"Type {baseType.FullName} is not assignable from {type.FullName}");
                 }
             }
         }
