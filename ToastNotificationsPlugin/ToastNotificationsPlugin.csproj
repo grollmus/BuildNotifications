@@ -69,6 +69,7 @@
     <ProjectReference Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj">
       <Project>{3df6b2d1-284a-4341-a148-aa397327b254}</Project>
       <Name>BuildNotifications.PluginInterfacesLegacy</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
