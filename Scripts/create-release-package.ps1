@@ -44,6 +44,9 @@ Expand-Archive $squirrelZipFile -Force -DestinationPath .
 Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
+Write-Output "Preparing files for nuget package"
+Move-Item -Path "ToastNotificationsPlugin\bin\Release\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\netcoreapp3.1\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+
 Write-Output "Creating nuget package"
 $nuspecFileName = "Scripts/$applicationName.nuspec" 
 $nupkgFileName = "$applicationName.$versionToBuild.nupkg"
