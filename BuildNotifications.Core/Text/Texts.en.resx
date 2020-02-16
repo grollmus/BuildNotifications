@@ -564,4 +564,31 @@
   <data name="GoToPullRequest" xml:space="preserve">
     <value>Go to Pull request</value>
   </data>
+  <data name="InfoButtonTooltip" xml:space="preserve">
+	  <value>Info</value>
+  </data>
+  <data name="NotificationsCenterButtonTooltip" xml:space="preserve">
+	  <value>Notifications</value>
+  </data>
+  <data name="SettingsButtonTooltip" xml:space="preserve">
+	  <value>Settings</value>
+  </data>
+  <data name="GroupDefinitionsTooltip" xml:space="preserve">
+	  <value>Grouping and sorting</value>
+  </data>
+  <data name="CloseButtonTooltip" xml:space="preserve">
+	  <value>Close</value>
+  </data>
+  <data name="MaximizeButtonTooltip" xml:space="preserve">
+	  <value>Maximize</value>
+  </data>
+  <data name="MinimizeButtonTooltip" xml:space="preserve">
+	  <value>Minimize</value>
+  </data>
+  <data name="RestoreButtonTooltip" xml:space="preserve">
+	  <value>Restore</value>
+  </data>
+  <data name="SearchTooltip" xml:space="preserve">
+	  <value>Search</value>
+  </data>
 </root>

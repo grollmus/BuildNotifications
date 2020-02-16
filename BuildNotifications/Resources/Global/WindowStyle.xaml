@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
 
     <Style TargetType="window:CustomWindow" x:Key="CustomWindowStyle">
         <Setter Property="Background" Value="{DynamicResource Background1}" />
@@ -69,15 +70,15 @@
                                             </Grid.ColumnDefinitions>
                                             <icons:IconButton x:Name="MinimizeButton" Grid.Column="0"
                                                               IconSize="{DynamicResource Block}"
-                                                              Icon="Minimize"
+                                                              Icon="Minimize" ToolTip="{text:Localized MinimizeButtonTooltip}"
                                                               Foreground="{DynamicResource Foreground2}" />
                                             <icons:IconButton x:Name="MaximizeButton"
-                                                              Icon="Maximize"
+                                                              Icon="Maximize" ToolTip="{text:Localized MaximizeButtonTooltip}"
                                                               Foreground="{DynamicResource Foreground2}"
                                                               IconSize="{DynamicResource Block}"
                                                               Grid.Column="1" />
 
-                                            <icons:IconButton x:Name="RestoreButton"
+                                            <icons:IconButton x:Name="RestoreButton" ToolTip="{text:Localized RestoreButtonTooltip}"
                                                               IconSize="{DynamicResource Block}"
                                                               Icon="Restore" Foreground="{DynamicResource Foreground2}"
                                                               Visibility="Collapsed"
@@ -86,7 +87,7 @@
                                         </Grid>
 
                                         <icons:IconButton x:Name="CloseButton"
-                                                          IconSize="{DynamicResource Block}"
+                                                          IconSize="{DynamicResource Block}" ToolTip="{text:Localized CloseButtonTooltip}"
                                                           Icon="Close" Foreground="{DynamicResource Foreground2}"
                                                           Grid.Column="1" />
                                     </Grid>

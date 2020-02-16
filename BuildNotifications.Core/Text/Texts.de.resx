@@ -564,4 +564,31 @@
   <data name="GoToPullRequest" xml:space="preserve">
     <value />
   </data>
+  <data name="InfoButtonTooltip" xml:space="preserve">
+	  <value>Info</value>
+  </data>
+  <data name="NotificationsCenterButtonTooltip" xml:space="preserve">
+	  <value>Benachrichtigungen</value>
+  </data>
+  <data name="SettingsButtonTooltip" xml:space="preserve">
+	  <value>Einstellungen</value>
+  </data>
+  <data name="GroupDefinitionsTooltip" xml:space="preserve">
+	  <value>Gruppieren und sortieren</value>
+  </data>
+  <data name="CloseButtonTooltip" xml:space="preserve">
+	  <value>Schließen</value>
+  </data>
+  <data name="MaximizeButtonTooltip" xml:space="preserve">
+	  <value>Maximieren</value>
+  </data>
+  <data name="MinimizeButtonTooltip" xml:space="preserve">
+	  <value>Minimieren</value>
+  </data>
+  <data name="RestoreButtonTooltip" xml:space="preserve">
+	  <value>Wiederherstellen</value>
+  </data>
+  <data name="SearchTooltip" xml:space="preserve">
+	  <value>Suche</value>
+  </data>
 </root>
