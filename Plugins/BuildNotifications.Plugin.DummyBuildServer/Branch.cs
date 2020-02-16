@@ -13,18 +13,13 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             DisplayName = FullName = name;
         }
 
-        public override string ToString()
-        {
-            return DisplayName;
-        }
+        public override string ToString() => DisplayName;
 
-        public bool Equals(IBranch other)
-        {
-            return FullName == (other as Branch)?.FullName;
-        }
+        public bool Equals(IBranch other) => FullName == (other as Branch)?.FullName;
 
         public string DisplayName { get; set; }
 
         public string FullName { get; set; }
+        public bool IsPullRequest => false;
     }
 }

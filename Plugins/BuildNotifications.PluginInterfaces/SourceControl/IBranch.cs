@@ -18,5 +18,11 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
         /// The name of the branch.
         /// </summary>
         string FullName { get; }
+
+        /// <summary>
+        /// Indicates whether this branch is a real branch (false) or one that was
+        /// created during/for a pull request (true);
+        /// </summary>
+        bool IsPullRequest { get; }
     }
 }

@@ -16,12 +16,6 @@ namespace BuildNotifications.Core.Utilities
             return fullBranchName;
         }
 
-        public bool IsPullRequest(string? fullBranchName)
-        {
-            var match = PullRequestPattern.Match(fullBranchName);
-            return match.Success;
-        }
-
         private const string GitRefHeadPrefix = "refs/heads/";
         private static readonly Regex PullRequestPattern = new Regex("refs\\/pull\\/([\\d]+)\\/merge", RegexOptions.Compiled);
     }

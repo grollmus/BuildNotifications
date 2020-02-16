@@ -17,5 +17,6 @@ namespace BuildNotifications.Core.Tests
 
         public string DisplayName { get; }
         public string FullName { get; }
+        public bool IsPullRequest => false;
     }
 }
