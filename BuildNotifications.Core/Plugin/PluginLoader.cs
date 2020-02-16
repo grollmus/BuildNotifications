@@ -107,9 +107,7 @@ namespace BuildNotifications.Core.Plugin
                     yield return value;
                 }
                 else
-                {
                     LogTo.Debug($"Type {baseType.FullName} is not assignable from {type.FullName}");
-                }
             }
         }
 
