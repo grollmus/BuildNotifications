@@ -182,11 +182,11 @@ namespace BuildNotifications.Core.Pipeline
                 DisplayName = string.Empty;
             }
 
-            public bool Equals(IBranch other) => false;
-
             public string DisplayName { get; }
             public string FullName { get; }
             public bool IsPullRequest => false;
+
+            bool IEquatable<IBranch>.Equals(IBranch other) => false;
         }
     }
 }
