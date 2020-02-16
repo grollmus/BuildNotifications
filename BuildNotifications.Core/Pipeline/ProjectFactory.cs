@@ -88,6 +88,11 @@ namespace BuildNotifications.Core.Pipeline
             return _configuration.Connections.FirstOrDefault(c => c.Name == connectionName);
         }
 
+        private static string JoinStringList(IEnumerable<string> strings)
+        {
+            return string.Join(",", strings.Select(s => $"'{s}'"));
+        }
+
         private void ReportError(string messageTextId, params object[] parameter)
         {
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
@@ -102,7 +107,9 @@ namespace BuildNotifications.Core.Pipeline
 
         public IProject? Construct(IProjectConfiguration config)
         {
-            LogTo.Debug($"Trying to construct project from {config.BuildConnectionNames} and {config.SourceControlConnectionNames}");
+            LogTo.Debug($"Trying to construct project from {JoinStringList(config.BuildConnectionNames)} and {JoinStringList(config.SourceControlConnectionNames)}");
+            if (config.SourceControlConnectionNames.Count > 1)
+                LogTo.Warn("Multiple SourceControlConnections per project are no longer supported. Using first one in list.");
 
             var buildProviders = new List<IBuildProvider>();
             foreach (var connectionName in config.BuildConnectionNames)
@@ -118,7 +125,7 @@ namespace BuildNotifications.Core.Pipeline
             }
 
             var branchProviders = new List<IBranchProvider>();
-            foreach (var connectionName in config.SourceControlConnectionNames)
+            foreach (var connectionName in config.SourceControlConnectionNames.Take(1))
             {
                 var branchProvider = BranchProvider(connectionName);
                 if (branchProvider == null)
@@ -131,7 +138,7 @@ namespace BuildNotifications.Core.Pipeline
             }
 
             var branchNameExtractor = new BranchNameExtractor();
-            return new Project(buildProviders, branchProviders, config, branchNameExtractor);
+            return new Project(buildProviders, branchProviders.FirstOrDefault(), config, branchNameExtractor);
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;
