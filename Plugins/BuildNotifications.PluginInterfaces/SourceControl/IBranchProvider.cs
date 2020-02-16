@@ -10,6 +10,11 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
     public interface IBranchProvider
     {
         /// <summary>
+        /// Extractor that can be used on branches from this provider.
+        /// </summary>
+        IBranchNameExtractor NameExtractor { get; }
+
+        /// <summary>
         /// Fetches all branches and PullRequests that are available.
         /// </summary>
         /// <returns>List of all available branches and PullRequests</returns>

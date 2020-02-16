@@ -1,9 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
-namespace BuildNotifications.Core.Utilities
+namespace BuildNotifications.Plugin.Tfs
 {
-    internal class BranchNameExtractor : IBranchNameExtractor
+    internal class GitBranchNameExtractor : IBranchNameExtractor
     {
         public string ExtractDisplayName(string fullBranchName)
         {

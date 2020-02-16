@@ -10,11 +10,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class TreeBuilder : ITreeBuilder
     {
-        public TreeBuilder(IConfiguration config, IBranchNameExtractor branchNameExtractor,
-            IBuildSearcher searcher)
+        public TreeBuilder(IConfiguration config, IBuildSearcher searcher)
         {
             _config = config;
-            _branchNameExtractor = branchNameExtractor;
             _searcher = searcher;
         }
 
@@ -46,7 +44,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 {
                     var enrichedBuild = build as EnrichedBuild;
                     var isPullRequest = enrichedBuild?.Branch?.IsPullRequest ?? false;
-                    var displayName = _branchNameExtractor.ExtractDisplayName(build.BranchName);
+                    var displayName = enrichedBuild?.Branch?.DisplayName ?? build.BranchName;
                     return new BranchGroupNode(displayName, isPullRequest);
                 }
                 case Arrangement.GroupDefinition.BuildDefinition:
@@ -127,7 +125,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         private readonly IConfiguration _config;
-        private readonly IBranchNameExtractor _branchNameExtractor;
         private readonly IBuildSearcher _searcher;
     }
 }
