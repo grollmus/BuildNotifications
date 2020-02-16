@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -13,22 +12,22 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider branchProvider,
-            IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider branchProvider, IProjectConfiguration config)
         {
-            _branchNameExtractor = branchNameExtractor;
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
             _branchProvider = branchProvider;
             Config = config;
 
-            _buildFilter = new ListBuildFilter(config);
+            _buildFilter = new ListBuildFilter(config, BranchNameExtractor);
         }
 
-        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
-            : this(buildProvider.Yield(), branchProvider, config, branchNameExtractor)
+        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
+            : this(buildProvider.Yield(), branchProvider, config)
         {
         }
+
+        private IBranchNameExtractor BranchNameExtractor => _branchProvider?.NameExtractor ?? new NullBranchNameExtractor();
 
         private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, buildProvider);
 
@@ -39,8 +38,8 @@ namespace BuildNotifications.Core.Pipeline
                 case PullRequestDisplayMode.Name:
                     return pr.Description;
                 case PullRequestDisplayMode.Path:
-                    var sourceName = _branchNameExtractor.ExtractDisplayName(pr.SourceBranch);
-                    var targetName = _branchNameExtractor.ExtractDisplayName(pr.TargetBranch);
+                    var sourceName = BranchNameExtractor.ExtractDisplayName(pr.SourceBranch);
+                    var targetName = BranchNameExtractor.ExtractDisplayName(pr.TargetBranch);
                     return $"{sourceName} into {targetName}";
 
                 default:
@@ -56,7 +55,7 @@ namespace BuildNotifications.Core.Pipeline
 
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
-            _buildFilter.InitializeStringMatcher();
+            _buildFilter.InitializeStringMatcher(BranchNameExtractor);
 
             foreach (var buildProvider in _buildProviders)
             {
@@ -72,7 +71,7 @@ namespace BuildNotifications.Core.Pipeline
 
         public async IAsyncEnumerable<IBuild> FetchBuildsChangedSince(DateTime lastUpdate)
         {
-            _buildFilter.InitializeStringMatcher();
+            _buildFilter.InitializeStringMatcher(BranchNameExtractor);
 
             foreach (var buildProvider in _buildProviders)
             {
@@ -171,7 +170,6 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private readonly IBranchNameExtractor _branchNameExtractor;
         private readonly IBranchProvider _branchProvider;
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;

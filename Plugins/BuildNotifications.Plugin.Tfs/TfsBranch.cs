@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -41,6 +40,5 @@ namespace BuildNotifications.Plugin.Tfs
         private const string BranchNamePrefix = "refs/heads/";
         private const string PullRequestPrefix = "refs/pull/";
         private const string PullRequestSuffix = "/merge";
-        private static readonly Regex PullRequestPattern = new Regex("refs\\/pull\\/([\\d]+)\\/merge", RegexOptions.Compiled);
     }
 }

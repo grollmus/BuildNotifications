@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline
 {
     internal class ListBuildFilter : IBuildFilter
     {
-        public ListBuildFilter(IProjectConfiguration projectConfiguration)
+        public ListBuildFilter(IProjectConfiguration projectConfiguration, IBranchNameExtractor branchNameExtractor)
         {
             _projectConfiguration = projectConfiguration;
-            InitializeStringMatcher();
+            InitializeStringMatcher(branchNameExtractor);
         }
 
-        public void InitializeStringMatcher()
+        public void InitializeStringMatcher(IBranchNameExtractor nameExtractor)
         {
             var list = string.Join('.', new[]
             {
@@ -29,18 +29,21 @@ namespace BuildNotifications.Core.Pipeline
 
             _lastLoadedLists = list;
 
-            IBranchNameExtractor branchNameExtractor = new BranchNameExtractor();
-
             _allowingMatchers = new List<IBuildMatcher>
             {
                 new DefinitionMatcher(Matchers(_projectConfiguration.BuildDefinitionWhitelist)),
-                new BranchMatcher(branchNameExtractor, Matchers(_projectConfiguration.BranchWhitelist))
+                new BranchMatcher(nameExtractor, Matchers(_projectConfiguration.BranchWhitelist))
             };
             _forbiddingMatchers = new List<IBuildMatcher>
             {
                 new DefinitionMatcher(Matchers(_projectConfiguration.BuildDefinitionBlacklist)),
-                new BranchMatcher(branchNameExtractor, Matchers(_projectConfiguration.BranchBlacklist))
+                new BranchMatcher(nameExtractor, Matchers(_projectConfiguration.BranchBlacklist))
             };
+        }
+
+        private IEnumerable<StringMatcher> Matchers(IEnumerable<string> stringList)
+        {
+            return stringList.Select(x => new StringMatcher(x));
         }
 
         public bool IsAllowed(IBaseBuild build)
@@ -49,11 +52,6 @@ namespace BuildNotifications.Core.Pipeline
                 return _allowingMatchers.Any(m => m.IsMatch(build));
 
             return true;
-        }
-
-        private IEnumerable<StringMatcher> Matchers(IEnumerable<string> stringList)
-        {
-            return stringList.Select(x => new StringMatcher(x));
         }
 
         private readonly IProjectConfiguration _projectConfiguration;

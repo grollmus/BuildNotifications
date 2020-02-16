@@ -1,5 +1,8 @@
-﻿namespace BuildNotifications.Core.Utilities
+﻿namespace BuildNotifications.PluginInterfaces.SourceControl
 {
+    /// <summary>
+    /// Extracts parts of branch names from full names.
+    /// </summary>
     public interface IBranchNameExtractor
     {
         /// <summary>
