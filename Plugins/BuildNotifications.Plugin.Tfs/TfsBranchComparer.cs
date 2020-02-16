@@ -6,12 +6,12 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public bool Equals(TfsBranch x, TfsBranch y)
         {
-            return x?.Name.Equals(y?.Name) == true;
+            return x?.FullName.Equals(y?.FullName) == true;
         }
 
         public int GetHashCode(TfsBranch obj)
         {
-            return obj.Name.GetHashCode();
+            return obj.FullName.GetHashCode();
         }
     }
 }

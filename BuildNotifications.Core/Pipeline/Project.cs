@@ -121,8 +121,8 @@ namespace BuildNotifications.Core.Pipeline
 
             foreach (var build in enrichedBuilds)
             {
-                var branch = branchList.FirstOrDefault(b => b.Name == build.BranchName)
-                             ?? branchList.FirstOrDefault(b => b.Name == build.Branch?.Name)
+                var branch = branchList.FirstOrDefault(b => b.FullName == build.BranchName)
+                             ?? branchList.FirstOrDefault(b => b.FullName == build.Branch?.FullName)
                              ?? new NullBranch();
                 build.Branch = branch;
 
@@ -180,14 +180,14 @@ namespace BuildNotifications.Core.Pipeline
         {
             public NullBranch()
             {
-                Name = string.Empty;
+                FullName = string.Empty;
                 DisplayName = string.Empty;
             }
 
             public bool Equals(IBranch other) => false;
 
             public string DisplayName { get; }
-            public string Name { get; }
+            public string FullName { get; }
         }
     }
 }

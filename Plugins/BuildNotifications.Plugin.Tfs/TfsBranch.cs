@@ -8,7 +8,7 @@ namespace BuildNotifications.Plugin.Tfs
         public TfsBranch(GitRef branch, TfsUrlBuilder urlBuilder)
         {
             DisplayName = ExtractDisplayName(branch.Name);
-            Name = branch.Name;
+            FullName = branch.Name;
             _id = branch.ObjectId;
 
             WebUrl = urlBuilder.BuildBranchUrl(DisplayName);
@@ -17,7 +17,7 @@ namespace BuildNotifications.Plugin.Tfs
         protected TfsBranch(int pullRequestId, TfsUrlBuilder urlBuilder)
         {
             DisplayName = $"PR {pullRequestId}";
-            Name = ComputePullRequestBranchName(pullRequestId);
+            FullName = ComputePullRequestBranchName(pullRequestId);
             _id = pullRequestId.ToString();
 
             WebUrl = urlBuilder.BuildPullRequestUrl(pullRequestId);
@@ -42,7 +42,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public string DisplayName { get; }
 
-        public string Name { get; }
+        public string FullName { get; }
 
         private readonly string _id;
         private const string BranchNamePrefix = "refs/heads/";

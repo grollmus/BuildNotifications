@@ -7,7 +7,7 @@ namespace DummyBuildServer.ViewModels
         public BranchViewModel(Branch branch)
         {
             Branch = branch;
-            Name = branch.Name;
+            Name = branch.FullName;
         }
 
         public Branch Branch { get; }

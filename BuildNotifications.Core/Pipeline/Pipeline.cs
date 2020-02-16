@@ -102,7 +102,7 @@ namespace BuildNotifications.Core.Pipeline
                     var count = 0;
                     await foreach (var branch in branches)
                     {
-                        _branchCache.AddOrReplace(projectId, branch.Name.GetHashCode(), branch);
+                        _branchCache.AddOrReplace(projectId, branch.FullName.GetHashCode(), branch);
                         count += 1;
                     }
 
@@ -113,7 +113,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var branch in removedBranches)
                     {
-                        _branchCache.Remove(projectId, branch.Name.GetHashCode());
+                        _branchCache.Remove(projectId, branch.FullName.GetHashCode());
                         count += 1;
                     }
 

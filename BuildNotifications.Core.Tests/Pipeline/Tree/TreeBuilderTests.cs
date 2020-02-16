@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
         {
             var build = Substitute.For<IBuild>();
             build.Definition.Returns(definition);
-            build.BranchName.Returns(branch.Name);
+            build.BranchName.Returns(branch.FullName);
             build.Id.Returns(id);
 
             return build;
