@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 case Arrangement.GroupDefinition.Branch:
                 {
                     var enrichedBuild = build as EnrichedBuild;
-                    var isPullRequest = _branchNameExtractor.IsPullRequest(enrichedBuild?.Branch?.Name);
+                    var isPullRequest = _branchNameExtractor.IsPullRequest(enrichedBuild?.Branch?.FullName);
                     var displayName = _branchNameExtractor.ExtractDisplayName(build.BranchName);
                     return new BranchGroupNode(displayName, isPullRequest);
                 }

@@ -10,7 +10,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public Branch(string name)
         {
-            DisplayName = Name = name;
+            DisplayName = FullName = name;
         }
 
         public override string ToString()
@@ -20,11 +20,11 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public bool Equals(IBranch other)
         {
-            return Name == (other as Branch)?.Name;
+            return FullName == (other as Branch)?.FullName;
         }
 
         public string DisplayName { get; set; }
 
-        public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

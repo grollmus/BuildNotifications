@@ -18,6 +18,6 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
         /// <summary>
         /// The name of the branch.
         /// </summary>
-        string Name { get; }
+        string FullName { get; }
     }
 }
