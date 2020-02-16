@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using BuildNotifications.Core.Utilities;
-using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using BuildNotifications.Core.Utilities;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Utilities
@@ -18,7 +16,7 @@ namespace BuildNotifications.Core.Tests.Utilities
             var sut = new BranchNameExtractor();
 
             // Act
-            var actual = sut.ExtractDisplayName(input, Enumerable.Empty<IBranch>());
+            var actual = sut.ExtractDisplayName(input);
 
             // Assert
             Assert.Equal(expected, actual);

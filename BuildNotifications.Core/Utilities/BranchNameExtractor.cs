@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using System.Text.RegularExpressions;
 
 namespace BuildNotifications.Core.Utilities
 {
@@ -23,14 +20,6 @@ namespace BuildNotifications.Core.Utilities
         {
             var match = PullRequestPattern.Match(fullBranchName);
             return match.Success;
-        }
-
-        public string ExtractDisplayName(string fullBranchName, IEnumerable<IBranch> allBranches)
-        {
-            var matchingBranch = allBranches.FirstOrDefault(b => b.Name == fullBranchName);
-#pragma warning disable 618
-            return matchingBranch?.DisplayName ?? ExtractDisplayName(fullBranchName);
-#pragma warning restore 618
         }
 
         private const string GitRefHeadPrefix = "refs/heads/";
