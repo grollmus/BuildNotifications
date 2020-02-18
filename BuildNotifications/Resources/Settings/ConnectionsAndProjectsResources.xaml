@@ -22,7 +22,7 @@
                             <DockPanel.Resources>
                                 <DrawingImage x:Key="PluginIconNormal">
                                     <DrawingImage.Drawing>
-                                        <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource Foreground1HalfTransparency}">
                                                 <GeometryDrawing.Geometry>
                                                     <MultiBinding
@@ -39,7 +39,7 @@
 
                                 <DrawingImage x:Key="PluginIconHover">
                                     <DrawingImage.Drawing>
-                                        <DrawingGroup ClipGeometry="M0,0 V150 H150 V0 H0 Z">
+                                        <DrawingGroup>
                                             <GeometryDrawing Brush="{DynamicResource Foreground1}">
                                                 <GeometryDrawing.Geometry>
                                                     <MultiBinding

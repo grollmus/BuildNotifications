@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <LangVersion>8.0</LangVersion>
+	  <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
+		<PackageReference Include="Octokit" Version="0.40.0" />
+		<PackageReference Include="ReflectSettings" Version="1.1.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+	</ItemGroup>
+</Project>
