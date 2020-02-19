@@ -28,16 +28,9 @@ namespace BuildNotifications.ViewModel.Settings
 
         [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
         [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
-        [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
-        [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
         public ObservableCollection<ConnectionDataViewModel> Connections { get; set; }
 
         public event EventHandler? TestFinished;
-
-        public Type BuildPluginConfigurationType(ConnectionData connectionData)
-        {
-            return _configuration.BuildPluginConfigurationType(connectionData);
-        }
 
         public IEnumerable<string?> PossibleBuildPlugins()
         {
@@ -47,11 +40,6 @@ namespace BuildNotifications.ViewModel.Settings
         public IEnumerable<string?> PossibleSourceControlPlugins()
         {
             return _configuration.PossibleSourceControlPlugins();
-        }
-
-        public Type SourceControlPluginConfigurationType(ConnectionData connectionData)
-        {
-            return _configuration.SourceControlPluginConfigurationType(connectionData);
         }
 
         private void InvokeTestFinished(object? sender, EventArgs e)

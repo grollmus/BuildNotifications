@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces;
@@ -99,35 +98,9 @@ namespace BuildNotifications.Core.Config
             return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
         }
 
-        public Type BuildPluginConfigurationType(ConnectionData connectionData)
-        {
-            if (PluginRepository == null || connectionData.BuildPluginType == null)
-            {
-                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
-                return typeof(object);
-            }
-
-            var type = PluginRepository?.FindConfigurationType(connectionData.BuildPluginType);
-            return type ?? typeof(object);
-        }
-
-        public Type SourceControlPluginConfigurationType(ConnectionData connectionData)
-        {
-            if (PluginRepository == null || connectionData.SourceControlPluginType == null)
-            {
-                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
-                return typeof(object);
-            }
-
-            var type = PluginRepository?.FindConfigurationType(connectionData.SourceControlPluginType);
-            return type ?? typeof(object);
-        }
-
         [TypesForInstantiation(typeof(List<ConnectionData>))]
         [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
         [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
-        [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
-        [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
         public IList<ConnectionData> Connections { get; set; }
 
         [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]

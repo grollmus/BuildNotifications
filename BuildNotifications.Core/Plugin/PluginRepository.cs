@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
@@ -63,12 +62,6 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = FindPlugin(typeName);
             return plugin?.IconSvgPath;
-        }
-
-        public Type? FindConfigurationType(string? typeName)
-        {
-            var plugin = FindPlugin(typeName);
-            return plugin?.GetConfigurationType();
         }
 
         private readonly ITypeMatcher _typeMatcher;

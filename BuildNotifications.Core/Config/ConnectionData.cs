@@ -29,10 +29,9 @@ namespace BuildNotifications.Core.Config
         public string? BuildPluginType { get; set; }
 
         /// <summary>
-        /// Configuration instance for the selected BuildPlugin to use
+        /// Serialized RawConfiguration for the selected BuildPlugin to use
         /// </summary>
-        [CalculatedType(nameof(Configuration.BuildPluginConfigurationType))]
-        public object? BuildPluginConfiguration { get; set; }
+        public string? BuildPluginConfiguration { get; set; }
 
         /// <summary>
         /// Type name of the plugin that is able to construct a branch provider
@@ -42,9 +41,8 @@ namespace BuildNotifications.Core.Config
         public string? SourceControlPluginType { get; set; }
 
         /// <summary>
-        /// Configuration instance for the selected SourceControlPlugin to use
+        /// Serialized RawConfiguration for the selected SourceControlPlugin to use
         /// </summary>
-        [CalculatedType(nameof(Configuration.SourceControlPluginConfigurationType))]
-        public object? SourceControlPluginConfiguration { get; set; }
+        public string? SourceControlPluginConfiguration { get; set; }
     }
 }

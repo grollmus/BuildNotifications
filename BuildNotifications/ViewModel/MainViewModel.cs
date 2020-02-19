@@ -106,7 +106,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -377,7 +377,7 @@ namespace BuildNotifications.ViewModel
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
-            
+
             var popup = new InfoPopupDialog
             {
                 Owner = Application.Current.MainWindow,

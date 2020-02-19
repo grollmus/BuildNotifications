@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Pipeline
             try
             {
                 var options = connectionData.SourceControlPluginConfiguration;
-                branchProvider = sourceControlPlugin.ConstructProvider(options);
+                branchProvider = sourceControlPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)
             {
@@ -72,7 +72,7 @@ namespace BuildNotifications.Core.Pipeline
             try
             {
                 var options = connectionData.BuildPluginConfiguration;
-                buildProvider = buildPlugin.ConstructProvider(options);
+                buildProvider = buildPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)
             {

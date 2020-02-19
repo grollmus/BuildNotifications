@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Anotar.NLog;
+using BuildNotifications.Plugin.Tfs.Configuration;
 using BuildNotifications.PluginInterfaces;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
@@ -10,7 +11,7 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsConnectionPool
     {
-        internal VssConnection? CreateConnection(TfsConfiguration data)
+        internal VssConnection? CreateConnection(TfsConfigurationRawData data)
         {
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
@@ -34,7 +35,7 @@ namespace BuildNotifications.Plugin.Tfs
             return connection;
         }
 
-        internal async Task<ConnectionTestResult> TestConnection(TfsConfiguration data)
+        internal async Task<ConnectionTestResult> TestConnection(TfsConfigurationRawData data)
         {
             if (string.IsNullOrWhiteSpace(data.Url))
                 return ConnectionTestResult.Failure(ErrorMessages.UrlWasEmpty);
@@ -71,7 +72,7 @@ namespace BuildNotifications.Plugin.Tfs
             return url;
         }
 
-        private VssCredentials CreateCredentials(TfsConfiguration data)
+        private VssCredentials CreateCredentials(TfsConfigurationRawData data)
         {
             if (data.AuthenticationType == AuthenticationType.Windows)
                 return new VssCredentials();
@@ -97,7 +98,7 @@ namespace BuildNotifications.Plugin.Tfs
             return uri.Host != "dev.azure.com";
         }
 
-        private bool NeedsToAppendCollectionName(TfsConfiguration data)
+        private bool NeedsToAppendCollectionName(TfsConfigurationRawData data)
         {
             return IsOnPremiseServer(data.Url);
         }

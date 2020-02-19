@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces;
@@ -10,6 +9,16 @@ namespace BuildNotifications.Core.Config
 {
     public interface IConfiguration
     {
+        /// <summary>
+        /// Determines the speed of animations within the app
+        /// </summary>
+        AnimationMode AnimationSpeed { get; set; }
+
+        /// <summary>
+        /// Whether BuildNotifications shall start with Windows
+        /// </summary>
+        AutostartMode Autostart { get; set; }
+
         /// <summary>
         /// How many builds shall be shown in one group.
         /// </summary>
@@ -50,9 +59,19 @@ namespace BuildNotifications.Core.Config
         string Language { get; set; }
 
         /// <summary>
+        /// How to treat builds with warnings (or partially succeeded builds)
+        /// </summary>
+        PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; }
+
+        /// <summary>
         /// List of all configured projects.
         /// </summary>
         IList<IProjectConfiguration> Projects { get; }
+
+        /// <summary>
+        /// Whether to show the busy indicator when fetching delta updates
+        /// </summary>
+        bool ShowBusyIndicatorOnDeltaUpdates { get; set; }
 
         /// <summary>
         /// Defines how builds should be sorted.
@@ -63,11 +82,6 @@ namespace BuildNotifications.Core.Config
         /// For which succeeded builds to receive notifications for
         /// </summary>
         BuildNotificationMode SucceededBuildNotifyConfig { get; }
-
-        /// <summary>
-        /// How to treat builds with warnings (or partially succeeded builds)
-        /// </summary>
-        PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; }
 
         /// <summary>
         /// Seconds between each update cycle.
@@ -81,26 +95,6 @@ namespace BuildNotifications.Core.Config
         bool UsePreReleases { get; }
 
         /// <summary>
-        /// Whether BuildNotifications shall start with Windows
-        /// </summary>
-        AutostartMode Autostart { get; set; }
-
-        /// <summary>
-        /// Determines the speed of animations within the app
-        /// </summary>
-        AnimationMode AnimationSpeed { get; set; }
-
-        /// <summary>
-        /// Whether to show the busy indicator when fetching delta updates
-        /// </summary>
-        bool ShowBusyIndicatorOnDeltaUpdates { get; set; }
-
-        /// <summary>
-        /// Retrieves the type of the configuration for the build plugin of the given connection.
-        /// </summary>
-        Type BuildPluginConfigurationType(ConnectionData connectionData);
-
-        /// <summary>
         /// Retrieves all possible plugin names which provide build provider.
         /// </summary>
         IEnumerable<string?> PossibleBuildPlugins();
@@ -109,10 +103,5 @@ namespace BuildNotifications.Core.Config
         /// Retrieves all possible plugin names which provide source control.
         /// </summary>
         IEnumerable<string?> PossibleSourceControlPlugins();
-
-        /// <summary>
-        /// Retrieves the type of the configuration for the source control plugin of the given connection.
-        /// </summary>
-        Type SourceControlPluginConfigurationType(ConnectionData connectionData);
     }
 }
