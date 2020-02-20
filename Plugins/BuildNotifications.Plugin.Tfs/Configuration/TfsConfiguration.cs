@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
 {
-    internal class TfsConfiguration : IConfiguration
+    internal class TfsConfiguration : IPluginConfiguration
     {
         public TfsConfiguration()
         {

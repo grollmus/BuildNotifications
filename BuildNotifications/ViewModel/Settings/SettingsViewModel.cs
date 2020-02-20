@@ -1,114 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
-using ReflectSettings;
-using ReflectSettings.EditableConfigs;
-using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
+using BuildNotifications.Core.Text;
+using BuildNotifications.ViewModel.Settings.Options;
+using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : BaseViewModel
     {
-// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
-#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
         public SettingsViewModel(IConfiguration configuration, Action saveMethod, IPluginRepository pluginRepository)
-#pragma warning restore CS8618
         {
-            Configuration = configuration;
             _saveMethod = saveMethod;
-            _pluginRepository = pluginRepository;
-            EditConnectionsCommand = new DelegateCommand(OnEditConnections);
+            Configuration = configuration;
+            EditConnectionsCommand = new DelegateCommand(EditConnections);
 
-            CreateEditables();
-            UpdateUser();
+            Language = new LanguageOptionViewModel(configuration.Language);
+            AnimationsMode = new AnimationsOptionViewModel(configuration.AnimationSpeed);
+            AutoStartMode = new AutoStartModeViewModel(configuration.Autostart);
+            CanceledBuildNotify = new BuildNotificationModeViewModel(configuration.CanceledBuildNotifyConfig, StringLocalizer.Keys.CanceledBuildNotifyConfig);
+            FailedBuildNotify = new BuildNotificationModeViewModel(configuration.FailedBuildNotifyConfig, StringLocalizer.Keys.FailedBuildNotifyConfig);
+            SucceededBuildNotify = new BuildNotificationModeViewModel(configuration.SucceededBuildNotifyConfig, StringLocalizer.Keys.SucceededBuildNotifyConfig);
+            PartialSucceededTreatmentMode = new PartialSucceededTreatmentModeOptionViewModel(configuration.PartialSucceededTreatmentMode);
+            BuildsPerGroup = new NumberOptionViewModel(configuration.BuildsToShow, StringLocalizer.Keys.BuildsToShow);
+            ShowBusyIndicatorDuringUpdate = new BooleanOptionViewModel(configuration.ShowBusyIndicatorOnDeltaUpdates, StringLocalizer.Keys.ShowBusyIndicatorOnDeltaUpdates);
+            UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, StringLocalizer.Keys.UpdateInterval);
+            UpdateToPreReleases = new BooleanOptionViewModel(configuration.UsePreReleases, StringLocalizer.Keys.UsePreReleases);
+
+            foreach (var option in Options)
+            {
+                option.ValueChanged += Option_ValueChanged;
+            }
         }
 
-        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
-
-        public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
-
+        // TODO: Why is this in the ViewModel?
         public IConfiguration Configuration { get; }
+        public ICommand EditConnectionsCommand { get; }
 
-        public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
+        public IEnumerable<OptionViewModelBase> Options
+        {
+            get
+            {
+                yield return Language;
+                yield return BuildsPerGroup;
+                yield return UpdateInterval;
+                yield return UpdateToPreReleases;
+                yield return CanceledBuildNotify;
+                yield return FailedBuildNotify;
+                yield return SucceededBuildNotify;
+                yield return PartialSucceededTreatmentMode;
+                yield return AutoStartMode;
+                yield return AnimationsMode;
+                yield return ShowBusyIndicatorDuringUpdate;
+            }
+        }
 
-        public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
-
-        public ICommand EditConnectionsCommand { get; set; }
-
-        public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
+        private AnimationsOptionViewModel AnimationsMode { get; }
+        private AutoStartModeViewModel AutoStartMode { get; }
+        private NumberOptionViewModel BuildsPerGroup { get; }
+        private BuildNotificationModeViewModel CanceledBuildNotify { get; }
+        private BuildNotificationModeViewModel FailedBuildNotify { get; }
+        private LanguageOptionViewModel Language { get; }
+        private PartialSucceededTreatmentModeOptionViewModel PartialSucceededTreatmentMode { get; }
+        private BooleanOptionViewModel ShowBusyIndicatorDuringUpdate { get; }
+        private BuildNotificationModeViewModel SucceededBuildNotify { get; }
+        private NumberOptionViewModel UpdateInterval { get; }
+        private BooleanOptionViewModel UpdateToPreReleases { get; }
 
         public event EventHandler? EditConnectionsRequested;
 
-        public event EventHandler? SettingsChanged;
-
         public void UpdateUser()
         {
-            var newUsers = Configuration.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
-
-            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
-            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
-
-            foreach (var user in toAdd)
-            {
-                CurrentUserIdentities.Add(user);
-            }
-
-            foreach (var user in toRemove)
-            {
-                CurrentUserIdentities.Remove(user);
-            }
+            // TODO: Implement
+            // TODO: Why is this here?
         }
 
-        private void CreateEditables()
-        {
-            var factory = new SettingsFactory();
-            var changeTrackingManager = new ChangeTrackingManager();
-            var editables = factory.Reflect(Configuration, changeTrackingManager).ToList();
-
-            var projectsEditables = new List<IEditableConfig>();
-
-            foreach (var config in editables)
-            {
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Connections))
-                {
-                    // ignored, as connections are wrapped later
-                    continue;
-                }
-
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Projects))
-                {
-                    projectsEditables.Add(config);
-                    continue;
-                }
-
-                Configs.Add(config);
-            }
-
-            ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
-            var connectionsEditable = factory.Reflect(ConnectionsWrapper, changeTrackingManager);
-
-            ConnectionsSubSet = new SettingsSubSetViewModel(connectionsEditable);
-            ProjectsSubSet = new SettingsSubSetViewModel(projectsEditables);
-
-            changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
-        }
-
-        private void OnConfigurationChanged(object? sender, EventArgs args)
-        {
-            _saveMethod.Invoke();
-            SettingsChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnEditConnections(object parameter)
+        private void EditConnections()
         {
             EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
         }
 
+        private void Option_ValueChanged(object? sender, EventArgs e)
+        {
+            Configuration.AnimationSpeed = AnimationsMode.Value;
+            Configuration.Autostart = AutoStartMode.Value;
+            Configuration.BuildsToShow = BuildsPerGroup.Value;
+            Configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
+            Configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
+            Configuration.Language = Language.Value.IetfLanguageTag;
+            Configuration.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
+            Configuration.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
+            Configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
+            Configuration.UpdateInterval = UpdateInterval.Value;
+            Configuration.UsePreReleases = UpdateToPreReleases.Value;
+
+            _saveMethod.Invoke();
+        }
+
         private readonly Action _saveMethod;
-        private readonly IPluginRepository _pluginRepository;
     }
 }

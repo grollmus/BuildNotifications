@@ -22,12 +22,12 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// How many builds shall be shown in one group.
         /// </summary>
-        int BuildsToShow { get; }
+        int BuildsToShow { get; set; }
 
         /// <summary>
         /// For which canceled builds to receive notifications for
         /// </summary>
-        BuildNotificationMode CanceledBuildNotifyConfig { get; }
+        BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// List of all saved connections.
@@ -42,13 +42,14 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which failed builds to receive notifications for
         /// </summary>
-        BuildNotificationMode FailedBuildNotifyConfig { get; }
+        BuildNotificationMode FailedBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// Defines how builds should be grouped.
         /// </summary>
         IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
+        // TODO: Why is this here?
         [JsonIgnore]
         [IgnoredForConfig]
         IList<IUser> IdentitiesOfCurrentUser { get; }
@@ -81,18 +82,18 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which succeeded builds to receive notifications for
         /// </summary>
-        BuildNotificationMode SucceededBuildNotifyConfig { get; }
+        BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// Seconds between each update cycle.
         /// </summary>
-        int UpdateInterval { get; }
+        int UpdateInterval { get; set; }
 
         /// <summary>
         /// Indicates whether to automatically update to releases
         /// marked as PreReleases.
         /// </summary>
-        bool UsePreReleases { get; }
+        bool UsePreReleases { get; set; }
 
         /// <summary>
         /// Retrieves all possible plugin names which provide build provider.

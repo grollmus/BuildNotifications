@@ -10,7 +10,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 {
     internal class ProjectOption : ListOption<TfsProject?>
     {
-        public ProjectOption() : base(null, TextIds.ProjectName, TextIds.ProjectDescription)
+        public ProjectOption()
+            : base(null, TextIds.ProjectName, TextIds.ProjectDescription)
         {
         }
 

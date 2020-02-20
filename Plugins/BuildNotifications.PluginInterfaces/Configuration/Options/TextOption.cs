@@ -9,7 +9,8 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
     public class TextOption : ValueOption<string?>
     {
         /// <inheritdoc cref="ValueOption{TValue}" />
-        public TextOption(string value, string nameTextId, string descriptionTextId) : base(value, nameTextId, descriptionTextId)
+        public TextOption(string value, string nameTextId, string descriptionTextId)
+            : base(value, nameTextId, descriptionTextId)
         {
         }
 

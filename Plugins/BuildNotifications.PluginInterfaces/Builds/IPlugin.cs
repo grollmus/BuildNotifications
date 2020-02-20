@@ -12,7 +12,7 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Configuration instance that can be used to configure the plugin.
         /// </summary>
-        IConfiguration Configuration { get; }
+        IPluginConfiguration Configuration { get; }
 
         /// <summary>
         /// Name for the plugin to display. Not localized.

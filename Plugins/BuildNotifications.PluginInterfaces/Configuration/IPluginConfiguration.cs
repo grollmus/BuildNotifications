@@ -8,7 +8,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration
     /// Provides access to the configuration of a plugin.
     /// </summary>
     [PublicAPI]
-    public interface IConfiguration
+    public interface IPluginConfiguration
     {
         /// <summary>
         /// The localizer that can be used to retrieve localized texts for this option.
@@ -16,7 +16,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration
         ILocalizer Localizer { get; }
 
         /// <summary>
-        /// Called when configuration is loaded from persistance.
+        /// Called when configuration is loaded from persistence.
         /// </summary>
         /// <param name="serialized">Previously serialized content to read configuration from.</param>
         /// <returns><c>true</c> when deserialization was successful; otherwise <c>false</c>.</returns>

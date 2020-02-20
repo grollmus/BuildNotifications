@@ -102,7 +102,7 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsSourceControlProvider(connection, Guid.Parse(config.Repository.Id), Guid.Parse(config.Project.Id));
         }
 
-        public IConfiguration Configuration { get; }
+        public IPluginConfiguration Configuration { get; }
 
         public string DisplayName => "Azure DevOps Server";
 

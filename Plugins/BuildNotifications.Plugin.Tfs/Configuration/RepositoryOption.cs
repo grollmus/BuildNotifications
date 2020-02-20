@@ -10,7 +10,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 {
     internal class RepositoryOption : ListOption<TfsRepository?>
     {
-        public RepositoryOption() : base(null, TextIds.RepositoryName, TextIds.RepositoryDescription)
+        public RepositoryOption()
+            : base(null, TextIds.RepositoryName, TextIds.RepositoryDescription)
         {
         }
 

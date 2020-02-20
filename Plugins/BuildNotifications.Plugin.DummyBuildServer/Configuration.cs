@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    public class Configuration : IConfiguration
+    public class Configuration : IPluginConfiguration
     {
         public Configuration()
         {

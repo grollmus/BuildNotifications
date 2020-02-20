@@ -19,7 +19,7 @@ namespace BuildNotifications.Core.Config
             Connections = new List<ConnectionData>();
             Projects = new List<IProjectConfiguration>();
 
-            Language = PossibleLanguages().First();
+            Language = "en-US";
 
             GroupDefinition = new BuildTreeGroupDefinition(
                 Pipeline.Tree.Arrangement.GroupDefinition.Source,
@@ -32,7 +32,6 @@ namespace BuildNotifications.Core.Config
                 Pipeline.Tree.Arrangement.SortingDefinition.AlphabeticalAscending);
         }
 
-        [CalculatedValues(nameof(PossibleLanguages))]
         public string Language { get; set; }
 
         [IgnoredForConfig]
@@ -50,13 +49,6 @@ namespace BuildNotifications.Core.Config
         public IEnumerable<string> ConnectionNames()
         {
             return Connections.Select(x => x.Name);
-        }
-
-        [UsedImplicitly]
-        public IEnumerable<string> PossibleLanguages()
-        {
-            yield return "en-US";
-            yield return "de";
         }
 
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
@@ -88,15 +80,9 @@ namespace BuildNotifications.Core.Config
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
 
-        public IEnumerable<string?> PossibleBuildPlugins()
-        {
-            return PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-        }
+        public IEnumerable<string?> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
-        public IEnumerable<string?> PossibleSourceControlPlugins()
-        {
-            return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-        }
+        public IEnumerable<string?> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
         [TypesForInstantiation(typeof(List<ConnectionData>))]
         [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]

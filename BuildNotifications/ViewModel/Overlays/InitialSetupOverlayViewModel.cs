@@ -20,9 +20,10 @@ namespace BuildNotifications.ViewModel.Overlays
         {
             _settingsViewModel = settingsViewModel;
 
-            ConnectionsAndProjectsSettingsViewModel = new ConnectionsAndProjectsSettingsViewModel(settingsViewModel.ConnectionsSubSet, settingsViewModel.ProjectsSubSet, pluginRepository);
-            settingsViewModel.SettingsChanged += UpdateText;
-            settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
+            // TODO: Implement
+            //ConnectionsAndProjectsSettingsViewModel = new ConnectionsAndProjectsSettingsViewModel(settingsViewModel.ConnectionsSubSet, settingsViewModel.ProjectsSubSet, pluginRepository);
+            //settingsViewModel.SettingsChanged += UpdateText;
+            //settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
             App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
             UpdateText(this, EventArgs.Empty);
@@ -116,16 +117,17 @@ namespace BuildNotifications.ViewModel.Overlays
 
             if (_settingsViewModel.Configuration.Projects.Count == 0)
             {
-                if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
-                {
-                    DisplayedTextId = InitialSetupUntested;
-                    DisplayedIconType = IconType.Dummy;
-                }
-                else
-                {
-                    DisplayedTextId = InitialSetupTested;
-                    DisplayedIconType = IconType.Project;
-                }
+                // TODO: Why is this in the ViewModel?
+                //if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
+                //{
+                //    DisplayedTextId = InitialSetupUntested;
+                //    DisplayedIconType = IconType.Dummy;
+                //}
+                //else
+                //{
+                //    DisplayedTextId = InitialSetupTested;
+                //    DisplayedIconType = IconType.Project;
+                //}
             }
             else
             {
