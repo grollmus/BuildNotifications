@@ -28,7 +28,7 @@
 		      Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
 			<PasswordBox CaretBrush="{DynamicResource Foreground1}" Foreground="{DynamicResource Foreground1}"
 			             Background="Transparent" BorderThickness="0" settings:PasswordHelper.Attach="True"
-			             settings:PasswordHelper.Password="{Binding Value,Mode=TwoWay}" />
+			             settings:PasswordHelper.Password="{Binding RawValue,Mode=TwoWay}" />
 
 			<Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Background3}" SnapsToDevicePixels="True" />
 			<TextBlock

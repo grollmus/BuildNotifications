@@ -21,7 +21,6 @@ namespace BuildNotifications.ViewModel.Settings
             _pluginRepository = pluginRepository;
             EditConnectionsCommand = new DelegateCommand(OnEditConnections);
 
-            CreateEditables();
             UpdateUser();
         }
 
@@ -29,7 +28,6 @@ namespace BuildNotifications.ViewModel.Settings
 
         public BaseViewModel ConnectionsSubSet { get; private set; }
 
-        public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
 
         public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
 
@@ -59,17 +57,6 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        private void CreateEditables()
-        {
-            var changeTrackingManager = new ChangeTrackingManager();
-
-            ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
-
-            ConnectionsSubSet = new BaseViewModel();
-            ProjectsSubSet = new BaseViewModel();
-
-            changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
-        }
 
         private void OnConfigurationChanged(object? sender, EventArgs args)
         {

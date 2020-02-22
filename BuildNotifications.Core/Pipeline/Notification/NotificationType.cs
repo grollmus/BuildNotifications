@@ -9,6 +9,7 @@
         None,
         Error,
         Info,
-        Success
+        Success,
+        Progress
     }
 }

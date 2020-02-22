@@ -6,18 +6,20 @@ using System.Windows.Input;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Notification;
+using BuildNotifications.Core.Plugin;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Utils;
-using ReflectSettings.Attributes;
 
 namespace BuildNotifications.ViewModel.Settings
 {
-    public class TestConnectionViewModel
+    internal class TestConnectionViewModel
     {
-        public TestConnectionViewModel(ConnectionDataViewModel connectionDataViewModel)
+        public TestConnectionViewModel(ConnectionData connection, IPluginRepository pluginRepository)
         {
-            _connectionDataViewModel = connectionDataViewModel;
+            _connection = connection;
+            _pluginRepository = pluginRepository;
+
             StatusIndicator = new StatusIndicatorViewModel();
             Notifications = new NotificationCenterViewModel {ShowEmptyMessage = false, ShowTimeStamp = false};
             TestConnectionCommand = AsyncCommand.Create(TestConnection);
@@ -25,13 +27,10 @@ namespace BuildNotifications.ViewModel.Settings
 
         public bool LastTestDidSucceed { get; set; }
 
-        [IgnoredForConfig]
         public NotificationCenterViewModel Notifications { get; set; }
 
-        [IgnoredForConfig]
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
-        [IgnoredForConfig]
         public ICommand TestConnectionCommand { get; set; }
 
         public event EventHandler? TestFinished;
@@ -63,27 +62,26 @@ namespace BuildNotifications.ViewModel.Settings
             Notifications.ClearNotificationsOfType(NotificationType.Success);
             Notifications.ClearNotificationsOfType(NotificationType.Info);
             StatusIndicator.Busy();
-            Notifications.ShowNotifications(new List<INotification> {new StatusNotification("", "Testing", NotificationType.Info)});
+            Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
             await new SynchronizationContextRemover();
 
-            var selectedBuildData = _connectionDataViewModel.Connection;
+            await TestConnection(_connection);
 
-            if (selectedBuildData == null)
-                return;
-
-            await TestConnection(selectedBuildData);
             StatusIndicator.ClearStatus();
+            Notifications.ClearNotificationsOfType(NotificationType.Progress);
         }
 
         private async Task TestConnection(ConnectionData connectionData)
         {
-            var pluginRepository = _connectionDataViewModel.PluginRepository;
-            if (pluginRepository == null)
-                return;
-
-            var buildPlugin = pluginRepository.FindBuildPlugin(connectionData.BuildPluginType);
-            var sourcePlugin = pluginRepository.FindSourceControlPlugin(connectionData.SourceControlPluginType);
+            var buildPlugin = _pluginRepository.FindBuildPlugin(connectionData.BuildPluginType);
+            var sourcePlugin = _pluginRepository.FindSourceControlPlugin(connectionData.SourceControlPluginType);
             var failed = false;
+
+            if (buildPlugin == null && sourcePlugin == null)
+            {
+                ReportError("ConnectionTestFailed", "NoConnectionSetup");
+                failed = true;
+            }
 
             if (buildPlugin != null && connectionData.BuildPluginConfiguration != null)
             {
@@ -115,6 +113,7 @@ namespace BuildNotifications.ViewModel.Settings
             Application.Current.Dispatcher?.Invoke(() => { TestFinished?.Invoke(this, EventArgs.Empty); });
         }
 
-        private readonly ConnectionDataViewModel _connectionDataViewModel;
+        private readonly ConnectionData _connection;
+        private readonly IPluginRepository _pluginRepository;
     }
 }

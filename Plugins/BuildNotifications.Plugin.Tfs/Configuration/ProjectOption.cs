@@ -22,6 +22,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 
         public async Task FetchAvailableProjects(TfsConfigurationRawData rawData)
         {
+            IsLoading = true;
             try
             {
                 var pool = new TfsConnectionPool();
@@ -43,6 +44,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
             finally
             {
+                IsLoading = false;
                 RaiseAvailableValuesChanged();
             }
         }

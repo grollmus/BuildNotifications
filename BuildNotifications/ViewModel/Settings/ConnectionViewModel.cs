@@ -3,6 +3,7 @@ using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
+using BuildNotifications.Resources.Settings;
 
 namespace BuildNotifications.ViewModel.Settings
 {
@@ -12,6 +13,7 @@ namespace BuildNotifications.ViewModel.Settings
         {
             Model = model;
             PluginRepository = pluginRepository;
+            TestConnection = new TestConnectionViewModel(Model, PluginRepository);
         }
 
         public override string DisplayNameTextId => Name;
@@ -28,6 +30,7 @@ namespace BuildNotifications.ViewModel.Settings
 
                 Model.Name = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayNameTextId));
             }
         }
 
@@ -61,10 +64,13 @@ namespace BuildNotifications.ViewModel.Settings
                 {
                     var config = _selectedBuildPlugin.Configuration;
                     config.Deserialize(Model.BuildPluginConfiguration ?? string.Empty);
-                    PluginConfiguration = new PluginConfigurationViewModel(config);
+                    Model.BuildPluginType = _selectedBuildPlugin.GetType().FullName;
+                    PluginConfiguration = new PluginConfigurationViewModel(config, Model, PluginType.Build);
                 }
             }
         }
+
+        public TestConnectionViewModel TestConnection { get; }
 
         private IPlugin? _selectedBuildPlugin;
         private PluginConfigurationViewModel? _pluginConfiguration;

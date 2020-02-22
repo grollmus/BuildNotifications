@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using BuildNotifications.Core;
 
 namespace BuildNotifications.ViewModel.Utils
@@ -26,7 +27,11 @@ namespace BuildNotifications.ViewModel.Utils
         {
             RemoveDelay = removeDelay;
             _list = new ObservableCollection<T>(initialValues);
-            _list.CollectionChanged += (sender, args) => { CollectionChanged?.Invoke(sender, args); };
+            _list.CollectionChanged += (sender, args) =>
+            {
+                Application.Current.Dispatcher?.Invoke(() =>
+                    CollectionChanged?.Invoke(sender, args));
+            };
 
             _sortFunction = _list;
         }
@@ -99,10 +104,7 @@ namespace BuildNotifications.ViewModel.Utils
             _list.Clear();
         }
 
-        public bool Contains(T item)
-        {
-            return _list.Contains(item);
-        }
+        public bool Contains(T item) => _list.Contains(item);
 
         public void CopyTo(T[] array, int arrayIndex)
         {
@@ -119,20 +121,11 @@ namespace BuildNotifications.ViewModel.Utils
 
         public bool IsReadOnly => false;
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _list.ToList().GetEnumerator();
-        }
+        public IEnumerator<T> GetEnumerator() => _list.ToList().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public int IndexOf(T item)
-        {
-            return _list.IndexOf(item);
-        }
+        public int IndexOf(T item) => _list.IndexOf(item);
 
         public void Insert(int index, T item)
         {

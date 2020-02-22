@@ -9,15 +9,18 @@ namespace BuildNotifications.Resources.Settings
     {
         public static PluginOptionTemplateSelector Instance { get; } = new PluginOptionTemplateSelector();
 
-        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object? item, DependencyObject container)
         {
-            var element = container as FrameworkElement;
-            var itemType = item.GetType();
+            if (item != null)
+            {
+                var element = container as FrameworkElement;
+                var itemType = item.GetType();
 
-            var listOptionBaseType = typeof(PluginListOptionViewModel<>);
+                var listOptionBaseType = typeof(PluginListOptionViewModel<>);
 
-            if (itemType.IsAssignableToGenericType(listOptionBaseType))
-                return element?.TryFindResource("PluginListOptionTemplate") as DataTemplate;
+                if (itemType.IsAssignableToGenericType(listOptionBaseType))
+                    return element?.TryFindResource("PluginListOptionTemplate") as DataTemplate;
+            }
 
             return base.SelectTemplate(item, container);
         }

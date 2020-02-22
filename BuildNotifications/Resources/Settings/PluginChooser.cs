@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -23,16 +22,16 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(PluginRepositoryProperty, value);
         }
 
-        public PluginType PluginType
-        {
-            get => (PluginType) GetValue(PluginTypeProperty);
-            set => SetValue(PluginTypeProperty, value);
-        }
-
         public IEnumerable<IPlugin> Plugins
         {
             get => (IEnumerable<IPlugin>) GetValue(PluginsProperty);
             private set => SetValue(PluginsKey, value);
+        }
+
+        public PluginType PluginType
+        {
+            get => (PluginType) GetValue(PluginTypeProperty);
+            set => SetValue(PluginTypeProperty, value);
         }
 
         public IPlugin SelectedPlugin
@@ -61,14 +60,19 @@ namespace BuildNotifications.Resources.Settings
 
         private void RefreshItems()
         {
-            var plugins = PluginType switch
+            if (PluginRepository != null)
             {
-                PluginType.Build => PluginRepository.Build,
-                PluginType.SourceControl => PluginRepository.SourceControl,
-                _ => Enumerable.Empty<IPlugin>()
-            };
+                var plugins = PluginType switch
+                {
+                    PluginType.Build => PluginRepository.Build,
+                    PluginType.SourceControl => PluginRepository.SourceControl,
+                    _ => Enumerable.Empty<IPlugin>()
+                };
 
-            Plugins = new ObservableCollection<IPlugin>(plugins);
+                Plugins = new ObservableCollection<IPlugin>(plugins);
+            }
+            else
+                Plugins = new ObservableCollection<IPlugin>();
         }
 
         public static readonly DependencyProperty PluginRepositoryProperty = DependencyProperty.Register(
