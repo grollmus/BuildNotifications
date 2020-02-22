@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
 {
@@ -19,6 +20,22 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             DescriptionTextId = descriptionTextId;
         }
 
+        /// <summary>
+        /// Raises the <see cref="IsEnabledChanged" /> event.
+        /// </summary>
+        protected void RaiseIsEnabledChanged()
+        {
+            IsEnabledChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="IsVisibleChanged" /> event.
+        /// </summary>
+        protected void RaiseIsVisibleChanged()
+        {
+            IsVisibleChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         /// <inheritdoc />
         public bool IsLoading { get; protected set; }
 
@@ -26,16 +43,47 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public string NameTextId { get; }
 
         /// <inheritdoc />
+        public event EventHandler? IsEnabledChanged;
+
+        /// <inheritdoc />
+        public event EventHandler? IsVisibleChanged;
+
+        /// <inheritdoc />
         public string DescriptionTextId { get; }
 
         /// <summary>
         /// Determine whether this option should be editable by the user.
         /// </summary>
-        public virtual bool IsEnabled { get; set; }
+        public virtual bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled == value)
+                    return;
+
+                _isEnabled = value;
+                RaiseIsEnabledChanged();
+            }
+        }
 
         /// <summary>
         /// Determine whether this option should be visible in the UI.
         /// </summary>
-        public virtual bool IsVisible { get; set; }
+        public virtual bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                if (_isVisible == value)
+                    return;
+
+                _isVisible = value;
+                RaiseIsVisibleChanged();
+            }
+        }
+
+        private bool _isEnabled = true;
+        private bool _isVisible = true;
     }
 }

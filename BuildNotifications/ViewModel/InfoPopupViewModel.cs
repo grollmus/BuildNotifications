@@ -16,7 +16,7 @@ namespace BuildNotifications.ViewModel
         {
             _appUpdater = appUpdater;
             _configuration = configuration;
-            OpenUrlCommand = new DelegateCommand(OpenAboutUrl);
+            OpenUrlCommand = new DelegateCommand<string>(OpenAboutUrl);
             CheckForUpdatesCommand = AsyncCommand.Create(CheckForUpdatesAsync);
             UpdateCommand = AsyncCommand.Create(UpdateAppAsync);
         }

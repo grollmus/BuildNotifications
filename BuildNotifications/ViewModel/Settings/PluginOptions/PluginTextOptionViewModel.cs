@@ -4,8 +4,8 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 {
     internal class PluginTextOptionViewModel : PluginValueOptionViewModel<string?>
     {
-        public PluginTextOptionViewModel(TextOption valueOption)
-            : base(valueOption)
+        public PluginTextOptionViewModel(TextOption valueOption, ILocalizationProvider localizationProvider)
+            : base(valueOption, localizationProvider)
         {
         }
     }

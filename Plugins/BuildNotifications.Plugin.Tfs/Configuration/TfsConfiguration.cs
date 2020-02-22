@@ -24,6 +24,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             Url.ValueChanged += OptionChanged;
             CollectionName.ValueChanged += OptionChanged;
 
+            UpdateAuthenticationFieldsVisibility(AuthenticationType.Value);
             AuthenticationType.ValueChanged += AuthenticationType_ValueChanged;
         }
 
@@ -36,26 +37,21 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
         public TextOption Url { get; }
         public TextOption UserName { get; }
 
-        public TfsConfigurationRawData AsRawData()
+        public TfsConfigurationRawData AsRawData() => new TfsConfigurationRawData
         {
-            return new TfsConfigurationRawData
-            {
-                Url = Url.Value,
-                CollectionName = CollectionName.Value ?? string.Empty,
-                Project = Project.Value,
-                Repository = Repository.Value,
-                AuthenticationType = AuthenticationType.Value,
-                Username = UserName.Value,
-                Password = Password.Value,
-                Token = Token.Value
-            };
-        }
+            Url = Url.Value,
+            CollectionName = CollectionName.Value ?? string.Empty,
+            Project = Project.Value,
+            Repository = Repository.Value,
+            AuthenticationType = AuthenticationType.Value,
+            Username = UserName.Value,
+            Password = Password.Value,
+            Token = Token.Value
+        };
 
         private void AuthenticationType_ValueChanged(object? sender, ValueChangedEventArgs<AuthenticationType> e)
         {
-            Token.IsVisible = e.NewValue == Tfs.AuthenticationType.Token;
-            UserName.IsVisible = e.NewValue == Tfs.AuthenticationType.Account;
-            Password.IsVisible = e.NewValue == Tfs.AuthenticationType.Account;
+            UpdateAuthenticationFieldsVisibility(e.NewValue);
         }
 
         private async void OptionChanged(object? sender, ValueChangedEventArgs<string?> e)
@@ -66,6 +62,13 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             var repositoryTask = Repository.FetchAvailableRepositories(raw);
 
             await Task.WhenAll(projectTask, repositoryTask);
+        }
+
+        private void UpdateAuthenticationFieldsVisibility(AuthenticationType authenticationType)
+        {
+            Token.IsVisible = authenticationType == Tfs.AuthenticationType.Token;
+            UserName.IsVisible = authenticationType == Tfs.AuthenticationType.Account;
+            Password.IsVisible = authenticationType == Tfs.AuthenticationType.Account;
         }
 
         public ILocalizer Localizer { get; }

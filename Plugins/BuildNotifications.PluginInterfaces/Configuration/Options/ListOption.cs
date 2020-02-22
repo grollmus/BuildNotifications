@@ -6,10 +6,31 @@ using JetBrains.Annotations;
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
 {
     /// <summary>
+    /// </summary>
+    [PublicAPI]
+    public interface IListOption : IOption
+    {
+        /// <summary>
+        /// List of all available values for this option.
+        /// </summary>
+        IEnumerable<IListOptionItem> AvailableValues { get; }
+
+        /// <summary>
+        /// Current value of this option.
+        /// </summary>
+        object? Value { get; set; }
+
+        /// <summary>
+        /// Is fired when <see cref="IListOption.AvailableValues" /> was changed.
+        /// </summary>
+        event EventHandler? AvailableValuesChanged;
+    }
+
+    /// <summary>
     /// An option containing a list of items to chose from.
     /// </summary>
     [PublicAPI]
-    public abstract class ListOption<TValue> : ValueOption<TValue>
+    public abstract class ListOption<TValue> : ValueOption<TValue>, IListOption
     {
         /// <inheritdoc />
         protected ListOption(TValue value, string nameTextId, string descriptionTextId)
@@ -22,6 +43,19 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// </summary>
         public abstract IEnumerable<ListOptionItem<TValue>> AvailableValues { get; }
 
+        /// <summary>
+        /// Is fired when <see cref="AvailableValues" /> was changed.
+        /// </summary>
+        public event EventHandler? AvailableValuesChanged;
+
+        /// <summary>
+        /// Raises the <see cref="AvailableValuesChanged" /> event.
+        /// </summary>
+        protected void RaiseAvailableValuesChanged()
+        {
+            AvailableValuesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         /// <inheritdoc />
         protected override bool ValidateValue(TValue value)
         {
@@ -31,24 +65,42 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             return AvailableValues.Any(v => Equals(v.Value, value));
         }
 
-        /// <summary>
-        /// Is fired when <see cref="AvailableValues"/> was changed.
-        /// </summary>
-        public event EventHandler? AvailableValuesChanged;
-
-        /// <summary>
-        /// Raises the <see cref="AvailableValuesChanged"/> event.
-        /// </summary>
-        protected void RaiseAvailableValuesChanged()
+        event EventHandler? IListOption.AvailableValuesChanged
         {
-            AvailableValuesChanged?.Invoke(this, EventArgs.Empty);
+            add => AvailableValuesChanged += value;
+            remove => AvailableValuesChanged -= value;
+        }
+
+        IEnumerable<IListOptionItem> IListOption.AvailableValues => AvailableValues;
+
+        object? IListOption.Value
+        {
+            get => Value;
+            set => Value = value != null ? (TValue) value : default;
         }
     }
 
     /// <summary>
     /// </summary>
     [PublicAPI]
+    public interface IListOptionItem
+    {
+        /// <summary>
+        /// Text used used for displaying this item
+        /// </summary>
+        string DisplayName { get; }
+
+        /// <summary>
+        /// Value of this item
+        /// </summary>
+        object? Value { get; }
+    }
+
+    /// <summary>
+    /// </summary>
+    [PublicAPI]
     public class ListOptionItem<TValue>
+        : IListOptionItem
     {
         /// <summary>
         /// Constructor.
@@ -70,5 +122,9 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// Value of this item
         /// </summary>
         public TValue Value { get; }
+
+        string IListOptionItem.DisplayName => DisplayName;
+
+        object? IListOptionItem.Value => Value;
     }
 }

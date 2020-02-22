@@ -4,6 +4,27 @@ namespace BuildNotifications.Core
 {
     public static class TypeExtensions
     {
+        public static bool CompareWithoutGenericTypes(this Type type, Type otherType)
+        {
+            var typeToCompare = type;
+
+            if (type.IsGenericType)
+                typeToCompare = type.GetGenericTypeDefinition();
+
+            return typeToCompare == otherType;
+        }
+
+        public static Type? FindBaseType(this Type type, Type baseType)
+        {
+            Type? result = type;
+            while (result?.CompareWithoutGenericTypes(baseType) == false)
+            {
+                result = result.BaseType;
+            }
+
+            return result;
+        }
+
         public static bool IsAssignableToGenericType(this Type givenType, Type genericType) => IsAssignableToGenericTypeInternal(givenType, genericType);
 
         public static bool IsGenericAssignableFrom(this Type genericType, Type givenType) => IsAssignableToGenericTypeInternal(givenType, genericType);

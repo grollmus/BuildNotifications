@@ -4,8 +4,8 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 {
     internal class PluginBooleanOptionViewModel : PluginValueOptionViewModel<bool>
     {
-        public PluginBooleanOptionViewModel(BooleanOption valueOption)
-            : base(valueOption)
+        public PluginBooleanOptionViewModel(BooleanOption valueOption, ILocalizationProvider localizationProvider)
+            : base(valueOption, localizationProvider)
         {
         }
     }

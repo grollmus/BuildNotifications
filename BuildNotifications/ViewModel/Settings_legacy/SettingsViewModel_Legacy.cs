@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.ViewModel.Utils;
 using ReflectSettings;
-using ReflectSettings.EditableConfigs;
-using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
 
 namespace BuildNotifications.ViewModel.Settings
 {
@@ -27,19 +25,17 @@ namespace BuildNotifications.ViewModel.Settings
             UpdateUser();
         }
 
-        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
-
-        public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
-
         public IConfiguration Configuration { get; }
 
-        public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
+        public BaseViewModel ConnectionsSubSet { get; private set; }
 
         public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
 
+        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
+
         public ICommand EditConnectionsCommand { get; set; }
 
-        public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
+        public BaseViewModel ProjectsSubSet { get; private set; }
 
         public event EventHandler? EditConnectionsRequested;
 
@@ -65,34 +61,12 @@ namespace BuildNotifications.ViewModel.Settings
 
         private void CreateEditables()
         {
-            var factory = new SettingsFactory();
             var changeTrackingManager = new ChangeTrackingManager();
-            var editables = factory.Reflect(Configuration, changeTrackingManager).ToList();
-
-            var projectsEditables = new List<IEditableConfig>();
-
-            foreach (var config in editables)
-            {
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Connections))
-                {
-                    // ignored, as connections are wrapped later
-                    continue;
-                }
-
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Projects))
-                {
-                    projectsEditables.Add(config);
-                    continue;
-                }
-
-                Configs.Add(config);
-            }
 
             ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
-            var connectionsEditable = factory.Reflect(ConnectionsWrapper, changeTrackingManager);
 
-            ConnectionsSubSet = new SettingsSubSetViewModel(connectionsEditable);
-            ProjectsSubSet = new SettingsSubSetViewModel(projectsEditables);
+            ConnectionsSubSet = new BaseViewModel();
+            ProjectsSubSet = new BaseViewModel();
 
             changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
         }
@@ -103,7 +77,7 @@ namespace BuildNotifications.ViewModel.Settings
             SettingsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnEditConnections(object parameter)
+        private void OnEditConnections()
         {
             EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
         }

@@ -82,7 +82,7 @@ namespace BuildNotifications.ViewModel.Overlays
 
         public event EventHandler<InitialSetupEventArgs>? CloseRequested;
 
-        private void RequestClose(object obj)
+        private void RequestClose()
         {
             var currentlyConfiguredConnections = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Connections);
             var currentlyConfiguredProjects = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Projects);

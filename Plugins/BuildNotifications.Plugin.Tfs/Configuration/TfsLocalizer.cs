@@ -8,7 +8,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
     {
         public string Localized(string id, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return $"[{id}]";
         }
     }
 }

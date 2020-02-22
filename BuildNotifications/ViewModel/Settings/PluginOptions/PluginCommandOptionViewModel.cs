@@ -6,10 +6,10 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 {
     internal class PluginCommandOptionViewModel : PluginOptionViewModel
     {
-        public PluginCommandOptionViewModel(ICommandOption model)
-            : base(model)
+        public PluginCommandOptionViewModel(ICommandOption model, ILocalizationProvider localizationProvider)
+            : base(model, localizationProvider)
         {
-            Command = new DelegateCommand(x => model.Execute(), x => model.CanExecute());
+            Command = new DelegateCommand(model.Execute, model.CanExecute);
         }
 
         public ICommand Command { get; }

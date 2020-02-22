@@ -39,7 +39,9 @@
                                                              Margin="{StaticResource BlockQuarterRight}"
                                                              Foreground="{DynamicResource Foreground1HalfTransparency}"
                                                              Width="{StaticResource BlockOneAndHalf}"
-                                                             Height="{StaticResource BlockOneAndHalf}" />
+                                                             Height="{StaticResource BlockOneAndHalf}"
+                                                             Visibility="{Binding IconType, Converter={x:Static utils:IconTypeToVisibilityConverter.Instance}}"
+                                                             />
 
                                             <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                               Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type buttonNavigation:ButtonNavigation}}, Path=RemoveItemCommand}"

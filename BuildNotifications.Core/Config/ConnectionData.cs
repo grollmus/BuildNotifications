@@ -18,14 +18,12 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Display name of the connection.
         /// </summary>
-        [IgnoredForConfig]
         public string Name { get; set; }
 
         /// <summary>
         /// Type name of the plugin that is able to construct a build provider
         /// for this connection.
         /// </summary>
-        [CalculatedValues(nameof(Configuration.PossibleBuildPlugins))]
         public string? BuildPluginType { get; set; }
 
         /// <summary>
@@ -37,7 +35,6 @@ namespace BuildNotifications.Core.Config
         /// Type name of the plugin that is able to construct a branch provider
         /// for this connection.
         /// </summary>
-        [CalculatedValues(nameof(Configuration.PossibleSourceControlPlugins))]
         public string? SourceControlPluginType { get; set; }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace BuildNotifications.ViewModel.Settings
 
         private IEnumerable<PluginOptionViewModel> ConstructOptionViewModels(IPluginConfiguration configuration)
         {
-            var factory = new PluginOptionViewModelFactory();
+            var factory = new PluginOptionViewModelFactory(configuration.Localizer);
             return configuration.ListAvailableOptions().Select(o => factory.Construct(o));
         }
     }

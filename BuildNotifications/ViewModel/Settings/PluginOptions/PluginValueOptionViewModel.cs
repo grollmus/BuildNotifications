@@ -5,8 +5,8 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 {
     internal class PluginValueOptionViewModel<TValue> : PluginOptionViewModel
     {
-        public PluginValueOptionViewModel(ValueOption<TValue> valueOption)
-            : base(valueOption)
+        public PluginValueOptionViewModel(ValueOption<TValue> valueOption, ILocalizationProvider localizationProvider)
+            : base(valueOption, localizationProvider)
         {
             ValueOption = valueOption;
             ValueOption.ValueChanged += ValueOption_ValueChanged;

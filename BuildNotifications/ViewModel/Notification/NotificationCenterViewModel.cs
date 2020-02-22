@@ -23,7 +23,7 @@ namespace BuildNotifications.ViewModel.Notification
             Notifications.CollectionChanged += Notifications_CollectionChanged;
 
             NewNotificationsCounter = new NewNotificationsCounterViewModel();
-            ClearAllCommand = new DelegateCommand(x => ClearAll());
+            ClearAllCommand = new DelegateCommand(ClearAll);
         }
 
         public ICommand ClearAllCommand { get; set; }

@@ -18,9 +18,9 @@ namespace BuildNotifications.ViewModel.Tree
             Node = node;
             MouseEnterCommand = new DelegateCommand(OnMouseEnter);
             MouseLeaveCommand = new DelegateCommand(OnMouseLeave);
-            GoToBuildCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.BuildWeb), x => Node.Build.Links.BuildWeb != null);
-            GoToBranchCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.BranchWeb), x => Node.Build.Links.BranchWeb != null);
-            GoToDefinitionCommand = new DelegateCommand(x => Url.GoTo(Node.Build.Links.DefinitionWeb), x => Node.Build.Links.DefinitionWeb != null);
+            GoToBuildCommand = new DelegateCommand(() => Url.GoTo(Node.Build.Links.BuildWeb), () => Node.Build.Links.BuildWeb != null);
+            GoToBranchCommand = new DelegateCommand(() => Url.GoTo(Node.Build.Links.BranchWeb), () => Node.Build.Links.BranchWeb != null);
+            GoToDefinitionCommand = new DelegateCommand(() => Url.GoTo(Node.Build.Links.DefinitionWeb), () => Node.Build.Links.DefinitionWeb != null);
             BackendPropertiesChangedInternal();
         }
 
@@ -55,16 +55,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        public bool IsFromPullRequest
-        {
-            get => _isFromPullRequest;
-            set
-            {
-                _isFromPullRequest = value;
-                OnPropertyChanged();
-            }
-        }
-
         /// <summary>
         /// Toggle bool to tell the UI to shortly highlight this build.
         /// </summary>
@@ -81,6 +71,16 @@ namespace BuildNotifications.ViewModel.Tree
         public ICommand GoToBranchCommand { get; set; }
         public ICommand GoToBuildCommand { get; set; }
         public ICommand GoToDefinitionCommand { get; set; }
+
+        public bool IsFromPullRequest
+        {
+            get => _isFromPullRequest;
+            set
+            {
+                _isFromPullRequest = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsHighlighted
         {
@@ -101,6 +101,8 @@ namespace BuildNotifications.ViewModel.Tree
                 OnPropertyChanged();
             }
         }
+
+        public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
 
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
@@ -130,8 +132,6 @@ namespace BuildNotifications.ViewModel.Tree
 
         public string RequestedFor => Node.Build.RequestedFor?.DisplayName ?? RequestedBy;
 
-        public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
-
         public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
 
         public int UserColumns => RequestedByIsSameAsFor ? 1 : 2;
@@ -141,25 +141,13 @@ namespace BuildNotifications.ViewModel.Tree
             BackendPropertiesChangedInternal();
         }
 
-        protected override BuildStatus CalculateBuildStatus()
-        {
-            return _buildStatus;
-        }
+        protected override BuildStatus CalculateBuildStatus() => _buildStatus;
 
-        protected override DateTime CalculateChangedDate()
-        {
-            return _changedDate;
-        }
+        protected override DateTime CalculateChangedDate() => _changedDate;
 
-        protected override string CalculateDisplayName()
-        {
-            return "Build. Status: " + BuildStatus;
-        }
+        protected override string CalculateDisplayName() => "Build. Status: " + BuildStatus;
 
-        protected override DateTime CalculateQueueTime()
-        {
-            return _queuedTime;
-        }
+        protected override DateTime CalculateQueueTime() => _queuedTime;
 
         private void BackendPropertiesChangedInternal()
         {
@@ -170,15 +158,21 @@ namespace BuildNotifications.ViewModel.Tree
             ActualProgress = Node.Progress;
         }
 
-        private void OnMouseEnter(object obj)
+        private void OnMouseEnter()
         {
             _shouldBeLarge = IsLargeSize;
             IsLargeSize = true;
         }
 
-        private void OnMouseLeave(object obj)
+        private void OnMouseLeave()
         {
             IsLargeSize = _shouldBeLarge;
+        }
+
+        private void ShortlyHighlightThisBuild()
+        {
+            DoShortHighlight = false;
+            DoShortHighlight = true;
         }
 
         private void UpdateBuildStatus()
@@ -210,12 +204,6 @@ namespace BuildNotifications.ViewModel.Tree
 
             _queuedTime = newDate;
             OnPropertyChanged(nameof(QueueTime));
-        }
-
-        private void ShortlyHighlightThisBuild()
-        {
-            DoShortHighlight = false;
-            DoShortHighlight = true;
         }
 
         private Timeline? _progressTween;

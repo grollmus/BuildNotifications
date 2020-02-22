@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,22 +44,53 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             if (AddItemCommand == null)
                 return false;
 
+            var items = Items;
+            if (items == null)
+                return false;
+
             return !Items.Any();
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateAddMessage();
+        }
+
+        private void OnAddItemCommandChanged()
+        {
+            UpdateAddMessage();
+        }
+
+        private static void OnAddItemCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ButtonNavigation ctrl)
+                ctrl.OnAddItemCommandChanged();
         }
 
         private static void OnItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ButtonNavigation ctrl)
-                ctrl.OnItemsChanged();
+                ctrl.OnItemsChanged(e.OldValue as INotifyCollectionChanged);
         }
 
-        private void OnItemsChanged()
+        private void OnItemsChanged(INotifyCollectionChanged? oldValue)
+        {
+            if (oldValue != null)
+                oldValue.CollectionChanged -= Items_CollectionChanged;
+
+            if (Items is INotifyCollectionChanged collectionChanged)
+                collectionChanged.CollectionChanged += Items_CollectionChanged;
+
+            UpdateAddMessage();
+        }
+
+        private void UpdateAddMessage()
         {
             DisplayAddMessage = CalculateAddMessageVisibility();
         }
 
         public static readonly DependencyProperty AddItemCommandProperty = DependencyProperty.Register(
-            "AddItemCommand", typeof(ICommand), typeof(ButtonNavigation), new PropertyMetadata(default(ICommand)));
+            "AddItemCommand", typeof(ICommand), typeof(ButtonNavigation), new PropertyMetadata(default(ICommand), OnAddItemCommandChanged));
 
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
             "Items", typeof(IEnumerable<IButtonNavigationItem>), typeof(ButtonNavigation), new PropertyMetadata(default(IEnumerable<IButtonNavigationItem>), OnItemsChanged));

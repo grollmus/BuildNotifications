@@ -3,21 +3,29 @@ using System.Windows.Input;
 
 namespace BuildNotifications.ViewModel.Utils
 {
-    public class DelegateCommand : ICommand
+    public class DelegateCommand : DelegateCommand<object>
     {
-        public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
+        public DelegateCommand(Action execute)
+            : this(execute, () => true)
+        {
+        }
+
+        public DelegateCommand(Action execute, Func<bool> canExecute)
+            : base(_ => execute(), _ => canExecute())
+        {
+        }
+    }
+
+    public class DelegateCommand<TParameter> : ICommand
+    {
+        public DelegateCommand(Action<TParameter> execute, Predicate<TParameter> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
         }
 
-        public DelegateCommand(Action<object> execute)
+        public DelegateCommand(Action<TParameter> execute)
             : this(execute, x => true)
-        {
-        }
-
-        public DelegateCommand(Action execute)
-            : this(obj => execute(), x => true)
         {
         }
 
@@ -28,14 +36,14 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object parameter) => _canExecute.Invoke(parameter);
+        public bool CanExecute(object parameter) => _canExecute.Invoke((TParameter) parameter);
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            _execute((TParameter) parameter);
         }
 
-        private readonly Predicate<object> _canExecute;
-        private readonly Action<object> _execute;
+        private readonly Predicate<TParameter> _canExecute;
+        private readonly Action<TParameter> _execute;
     }
 }
