@@ -3,9 +3,9 @@
     /// <summary>
     /// Interaction logic for ConnectionAndProjectSettingsView.xaml
     /// </summary>
-    public partial class ConnectionsAndProjectsSettingsView
+    public partial class SetupView
     {
-        public ConnectionsAndProjectsSettingsView()
+        public SetupView()
         {
             InitializeComponent();
         }

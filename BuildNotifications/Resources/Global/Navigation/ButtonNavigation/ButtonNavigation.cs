@@ -1,20 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
 {
     internal class ButtonNavigation : Control
     {
-        public ButtonNavigation()
+        public ICommand? AddItemCommand
         {
-            Items = new ObservableCollection<IButtonNavigationItem>();
+            get => (ICommand) GetValue(AddItemCommandProperty);
+            set => SetValue(AddItemCommandProperty, value);
         }
 
-        public ObservableCollection<IButtonNavigationItem> Items
+        public bool DisplayAddMessage
         {
-            get => (ObservableCollection<IButtonNavigationItem>) GetValue(ItemsProperty);
+            get => (bool) GetValue(DisplayAddMessageProperty);
+            private set => SetValue(DisplayAddMessagePropertyKey, value);
+        }
+
+        public IEnumerable<IButtonNavigationItem> Items
+        {
+            get => (IEnumerable<IButtonNavigationItem>) GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
+        }
+
+        public ICommand? RemoveItemCommand
+        {
+            get => (ICommand) GetValue(RemoveItemCommandProperty);
+            set => SetValue(RemoveItemCommandProperty, value);
         }
 
         public IButtonNavigationItem SelectedItem
@@ -23,8 +38,40 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             set => SetValue(SelectedItemProperty, value);
         }
 
+        private bool CalculateAddMessageVisibility()
+        {
+            if (AddItemCommand == null)
+                return false;
+
+            return !Items.Any();
+        }
+
+        private static void OnItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ButtonNavigation ctrl)
+                ctrl.OnItemsChanged();
+        }
+
+        private void OnItemsChanged()
+        {
+            DisplayAddMessage = CalculateAddMessageVisibility();
+        }
+
+        public static readonly DependencyProperty AddItemCommandProperty = DependencyProperty.Register(
+            "AddItemCommand", typeof(ICommand), typeof(ButtonNavigation), new PropertyMetadata(default(ICommand)));
+
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
-            "Items", typeof(ObservableCollection<IButtonNavigationItem>), typeof(ButtonNavigation), new PropertyMetadata(default(ObservableCollection<IButtonNavigationItem>)));
+            "Items", typeof(IEnumerable<IButtonNavigationItem>), typeof(ButtonNavigation), new PropertyMetadata(default(IEnumerable<IButtonNavigationItem>), OnItemsChanged));
+
+        private static readonly DependencyPropertyKey DisplayAddMessagePropertyKey
+            = DependencyProperty.RegisterReadOnly("DisplayAddMessage", typeof(bool), typeof(ButtonNavigation),
+                new FrameworkPropertyMetadata(false,
+                    FrameworkPropertyMetadataOptions.None));
+
+        public static readonly DependencyProperty DisplayAddMessageProperty = DisplayAddMessagePropertyKey.DependencyProperty;
+
+        public static readonly DependencyProperty RemoveItemCommandProperty = DependencyProperty.Register(
+            "RemoveItemCommand", typeof(ICommand), typeof(ButtonNavigation), new PropertyMetadata(default(ICommand)));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
             "SelectedItem", typeof(IButtonNavigationItem), typeof(ButtonNavigation), new PropertyMetadata(default(IButtonNavigationItem)));

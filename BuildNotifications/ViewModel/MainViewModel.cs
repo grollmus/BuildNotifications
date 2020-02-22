@@ -354,7 +354,7 @@ namespace BuildNotifications.ViewModel
             {
                 _coreSetup.PersistConfigurationChanges();
                 _configurationApplication.ApplyChanges();
-            }, _coreSetup.PluginRepository);
+            });
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel

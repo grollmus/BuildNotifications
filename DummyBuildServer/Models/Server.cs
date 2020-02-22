@@ -44,7 +44,7 @@ namespace DummyBuildServer.Models
         public void Stop()
         {
             IsRunning = false;
-            _cancelToken?.Cancel();
+            _cancelToken.Cancel();
             _networkThread?.Join();
             _memoryFile?.Dispose();
         }

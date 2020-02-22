@@ -42,9 +42,6 @@ namespace BuildNotifications.Resources.Text
 
         private void CheckForScrollViewerCollision()
         {
-            if (_scrollViewer == null || _overlay == null)
-                return;
-
             if (ScrollViewerReachesIntoLabelOrIcon())
                 SetScrollViewerMarginToAvoidLabelOrIcon();
             else

@@ -1,20 +1,11 @@
 ﻿using BuildNotifications.Resources.Icons;
+using BuildNotifications.ViewModel;
 
 namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
 {
-    internal class ButtonNavigationItem : IButtonNavigationItem
+    internal abstract class ButtonNavigationItem : BaseViewModel, IButtonNavigationItem
     {
-        public ButtonNavigationItem(object content, string displayNameTextId, IconType iconType = IconType.None)
-        {
-            Content = content;
-            DisplayNameTextId = displayNameTextId;
-            IconType = iconType;
-        }
-
-        public string DisplayNameTextId { get; }
-
-        public IconType IconType { get; }
-
-        public object Content { get; }
+        public abstract string DisplayNameTextId { get; }
+        public abstract IconType IconType { get; }
     }
 }

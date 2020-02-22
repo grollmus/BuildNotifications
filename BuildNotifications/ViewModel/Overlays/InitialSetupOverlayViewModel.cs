@@ -21,7 +21,7 @@ namespace BuildNotifications.ViewModel.Overlays
             _settingsViewModel = settingsViewModel;
 
             // TODO: Implement
-            //ConnectionsAndProjectsSettingsViewModel = new ConnectionsAndProjectsSettingsViewModel(settingsViewModel.ConnectionsSubSet, settingsViewModel.ProjectsSubSet, pluginRepository);
+            SetupViewModel = new SetupViewModel(settingsViewModel.Configuration, pluginRepository);
             //settingsViewModel.SettingsChanged += UpdateText;
             //settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
@@ -41,7 +41,7 @@ namespace BuildNotifications.ViewModel.Overlays
             }
         }
 
-        public ConnectionsAndProjectsSettingsViewModel ConnectionsAndProjectsSettingsViewModel { get; set; }
+        public SetupViewModel SetupViewModel { get; set; }
 
         public IconType DisplayedIconType
         {

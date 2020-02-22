@@ -41,11 +41,11 @@
                 </i:Interaction.Triggers>
             </TextBlock>
         </DockPanel>
-        <ContentPresenter Content="{Binding ConnectionsAndProjectsSettingsViewModel}"
+        <ContentPresenter Content="{Binding SetupViewModel}"
                           Margin="{StaticResource BlockQuarterXOnlyMargin}">
             <ContentPresenter.Resources>
-                <DataTemplate DataType="{x:Type viewModelSettings:ConnectionsAndProjectsSettingsViewModel}">
-                    <viewsSettings:ConnectionsAndProjectsSettingsView />
+                <DataTemplate DataType="{x:Type viewModelSettings:SetupViewModel}">
+                    <viewsSettings:SetupView />
                 </DataTemplate>
             </ContentPresenter.Resources>
         </ContentPresenter>

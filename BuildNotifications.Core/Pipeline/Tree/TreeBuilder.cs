@@ -116,9 +116,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             foreach (var build in filteredBuilds)
             {
                 var path = BuildPath(build, branchList);
-                if (path == null)
-                    continue;
-
                 Merge(tree, path, taggedNodes);
             }
 

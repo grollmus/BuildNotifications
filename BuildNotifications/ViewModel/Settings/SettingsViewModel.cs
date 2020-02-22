@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.ViewModel.Settings.Options;
 using BuildNotifications.ViewModel.Utils;
@@ -11,7 +10,7 @@ namespace BuildNotifications.ViewModel.Settings
 {
     public class SettingsViewModel : BaseViewModel
     {
-        public SettingsViewModel(IConfiguration configuration, Action saveMethod, IPluginRepository pluginRepository)
+        public SettingsViewModel(IConfiguration configuration, Action saveMethod)
         {
             _saveMethod = saveMethod;
             Configuration = configuration;

@@ -1,8 +1,8 @@
 ﻿namespace BuildNotifications.Views.Settings
 {
-    public partial class SettingsSubSetView
+    public partial class ConnectionsSectionView
     {
-        public SettingsSubSetView()
+        public ConnectionsSectionView()
         {
             InitializeComponent();
         }
