@@ -13,7 +13,7 @@ namespace BuildNotifications.ViewModel.Settings
         public SettingsViewModel(IConfiguration configuration, Action saveMethod)
         {
             _saveMethod = saveMethod;
-            Configuration = configuration;
+            _configuration = configuration;
             EditConnectionsCommand = new DelegateCommand(EditConnections);
 
             Language = new LanguageOptionViewModel(configuration.Language);
@@ -34,8 +34,6 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        // TODO: Why is this in the ViewModel?
-        public IConfiguration Configuration { get; }
         public ICommand EditConnectionsCommand { get; }
 
         public IEnumerable<OptionViewModelBase> Options
@@ -83,20 +81,22 @@ namespace BuildNotifications.ViewModel.Settings
 
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
-            Configuration.AnimationSpeed = AnimationsMode.Value;
-            Configuration.Autostart = AutoStartMode.Value;
-            Configuration.BuildsToShow = BuildsPerGroup.Value;
-            Configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
-            Configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
-            Configuration.Language = Language.Value.IetfLanguageTag;
-            Configuration.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
-            Configuration.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
-            Configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
-            Configuration.UpdateInterval = UpdateInterval.Value;
-            Configuration.UsePreReleases = UpdateToPreReleases.Value;
+            _configuration.AnimationSpeed = AnimationsMode.Value;
+            _configuration.Autostart = AutoStartMode.Value;
+            _configuration.BuildsToShow = BuildsPerGroup.Value;
+            _configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
+            _configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
+            _configuration.Language = Language.Value.IetfLanguageTag;
+            _configuration.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
+            _configuration.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
+            _configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
+            _configuration.UpdateInterval = UpdateInterval.Value;
+            _configuration.UsePreReleases = UpdateToPreReleases.Value;
 
             _saveMethod.Invoke();
         }
+
+        private readonly IConfiguration _configuration;
 
         private readonly Action _saveMethod;
     }

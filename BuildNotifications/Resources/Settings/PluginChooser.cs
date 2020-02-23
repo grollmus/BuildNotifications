@@ -3,16 +3,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Resources.Settings
 {
-    internal enum PluginType
-    {
-        Build,
-        SourceControl
-    }
 
     internal class PluginChooser : Control
     {
@@ -28,9 +24,9 @@ namespace BuildNotifications.Resources.Settings
             private set => SetValue(PluginsKey, value);
         }
 
-        public PluginType PluginType
+        public ConnectionPluginType ConnectionPluginType
         {
-            get => (PluginType) GetValue(PluginTypeProperty);
+            get => (ConnectionPluginType) GetValue(PluginTypeProperty);
             set => SetValue(PluginTypeProperty, value);
         }
 
@@ -62,10 +58,10 @@ namespace BuildNotifications.Resources.Settings
         {
             if (PluginRepository != null)
             {
-                var plugins = PluginType switch
+                var plugins = ConnectionPluginType switch
                 {
-                    PluginType.Build => PluginRepository.Build,
-                    PluginType.SourceControl => PluginRepository.SourceControl,
+                    ConnectionPluginType.Build => PluginRepository.Build,
+                    ConnectionPluginType.SourceControl => PluginRepository.SourceControl,
                     _ => Enumerable.Empty<IPlugin>()
                 };
 
@@ -79,7 +75,7 @@ namespace BuildNotifications.Resources.Settings
             "PluginRepository", typeof(IPluginRepository), typeof(PluginChooser), new PropertyMetadata(default(IPluginRepository), OnPluginRepositoryChanged));
 
         public static readonly DependencyProperty PluginTypeProperty = DependencyProperty.Register(
-            "PluginType", typeof(PluginType), typeof(PluginChooser), new PropertyMetadata(default(PluginType), OnPluginTypeChanged));
+            "PluginType", typeof(ConnectionPluginType), typeof(PluginChooser), new PropertyMetadata(default(ConnectionPluginType), OnPluginTypeChanged));
 
         private static readonly DependencyPropertyKey PluginsKey
             = DependencyProperty.RegisterReadOnly("Plugins", typeof(IEnumerable<IPlugin>), typeof(PluginChooser),

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BuildNotifications.PluginInterfaces.Configuration;
+using Newtonsoft.Json;
 
 namespace BuildNotifications.Core.Utilities
 {

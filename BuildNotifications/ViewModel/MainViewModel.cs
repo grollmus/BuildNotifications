@@ -53,6 +53,16 @@ namespace BuildNotifications.ViewModel
             Initialize();
         }
 
+        public bool BlurMainView
+        {
+            get => _blurMainView;
+            set
+            {
+                _blurMainView = value;
+                OnPropertyChanged();
+            }
+        }
+
         public BuildTreeViewModel? BuildTree
         {
             get => _buildTree;
@@ -65,8 +75,6 @@ namespace BuildNotifications.ViewModel
         }
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
-
-        public SightSelectionViewModel SightSelection { get; set; }
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
 
@@ -95,17 +103,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private bool _showSights;
-
-        public bool ShowSights
-        {
-            get => _showSights;
-            set
-            {
-                _showSights = value;
-                OnPropertyChanged();
-            }
-        }
+        public ICommand ShowInfoPopupCommand { get; set; }
 
         public bool ShowNotificationCenter
         {
@@ -113,18 +111,6 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _showNotificationCenter = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _blurMainView;
-
-        public bool BlurMainView
-        {
-            get => _blurMainView;
-            set
-            {
-                _blurMainView = value;
                 OnPropertyChanged();
             }
         }
@@ -139,6 +125,18 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        public bool ShowSights
+        {
+            get => _showSights;
+            set
+            {
+                _showSights = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public SightSelectionViewModel SightSelection { get; set; }
+
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
         public Visibility TitleBarToolsVisibility => Overlay == null ? Visibility.Visible : Visibility.Collapsed;
@@ -147,7 +145,6 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
         public ICommand ToggleShowSightsCommand { get; set; }
-        public ICommand ShowInfoPopupCommand { get; set; }
 
         private void BringWindowToFront()
         {
@@ -299,6 +296,12 @@ namespace BuildNotifications.ViewModel
             }
         }
 
+        private void PersistChanges()
+        {
+            _coreSetup.PersistConfigurationChanges();
+            _configurationApplication.ApplyChanges();
+        }
+
         private void RegisterUriProtocol()
         {
             UriSchemeRegistration.Register();
@@ -350,11 +353,7 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () =>
-            {
-                _coreSetup.PersistConfigurationChanges();
-                _configurationApplication.ApplyChanges();
-            });
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
@@ -395,7 +394,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StopUpdating();
-            var vm = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, PersistChanges);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
@@ -474,17 +473,17 @@ namespace BuildNotifications.ViewModel
                 NotificationCenter.ClearSelection();
         }
 
-        private void ToggleShowSights()
-        {
-            ShowSights = !ShowSights;
-        }
-
         private void ToggleShowSettings()
         {
             LogTo.Info($"Toggling settings. Value: {!ShowSettings}");
             ShowSettings = !ShowSettings;
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
+        }
+
+        private void ToggleShowSights()
+        {
+            ShowSights = !ShowSights;
         }
 
         private void TrayIconOnExitRequested(object? sender, EventArgs e)
@@ -600,6 +599,11 @@ namespace BuildNotifications.ViewModel
         private readonly CoreSetup _coreSetup;
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
         private readonly TrayIconHandle _trayIcon;
+        private readonly ConfigurationApplication _configurationApplication;
+
+        private bool _showSights;
+
+        private bool _blurMainView;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private Task? _postPipelineUpdateTask;
@@ -609,7 +613,6 @@ namespace BuildNotifications.ViewModel
         private BaseViewModel? _overlay;
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
-        private readonly ConfigurationApplication _configurationApplication;
         private bool _isInitialFetch = true;
 
         private class Dummy

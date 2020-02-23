@@ -7,6 +7,8 @@ using BuildNotifications.Core;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Utils;
@@ -15,9 +17,8 @@ namespace BuildNotifications.ViewModel.Settings
 {
     internal class TestConnectionViewModel
     {
-        public TestConnectionViewModel(ConnectionData connection, IPluginRepository pluginRepository)
+        public TestConnectionViewModel(IPluginRepository pluginRepository)
         {
-            _connection = connection;
             _pluginRepository = pluginRepository;
 
             StatusIndicator = new StatusIndicatorViewModel();
@@ -34,6 +35,25 @@ namespace BuildNotifications.ViewModel.Settings
         public ICommand TestConnectionCommand { get; set; }
 
         public event EventHandler? TestFinished;
+
+        public void SetConfiguration(IPlugin plugin, IPluginConfiguration config, ConnectionPluginType connectionPluginType)
+        {
+            _plugin = plugin;
+            _configuration = config;
+            _connectionPluginType = connectionPluginType;
+        }
+
+        private ConnectionData BuildConnectionData()
+        {
+            var data = new ConnectionData
+            {
+                ConnectionType = _connectionPluginType,
+                PluginConfiguration = _configuration?.Serialize(),
+                PluginType = _plugin?.GetType().FullName
+            };
+
+            return data;
+        }
 
         private void ReportError(string titleId, string message)
         {
@@ -65,7 +85,7 @@ namespace BuildNotifications.ViewModel.Settings
             Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
             await new SynchronizationContextRemover();
 
-            await TestConnection(_connection);
+            await TestConnection(BuildConnectionData());
 
             StatusIndicator.ClearStatus();
             Notifications.ClearNotificationsOfType(NotificationType.Progress);
@@ -73,37 +93,49 @@ namespace BuildNotifications.ViewModel.Settings
 
         private async Task TestConnection(ConnectionData connectionData)
         {
-            var buildPlugin = _pluginRepository.FindBuildPlugin(connectionData.BuildPluginType);
-            var sourcePlugin = _pluginRepository.FindSourceControlPlugin(connectionData.SourceControlPluginType);
             var failed = false;
 
-            if (buildPlugin == null && sourcePlugin == null)
+            if (connectionData.ConnectionType == ConnectionPluginType.Build)
             {
-                ReportError("ConnectionTestFailed", "NoConnectionSetup");
-                failed = true;
-            }
-
-            if (buildPlugin != null && connectionData.BuildPluginConfiguration != null)
-            {
-                var buildResult = await buildPlugin.TestConnection(connectionData.BuildPluginConfiguration);
-
-                if (!buildResult.IsSuccess)
+                var buildPlugin = _pluginRepository.FindBuildPlugin(connectionData.PluginType);
+                if (buildPlugin == null)
                 {
+                    ReportError("ConnectionTestFailed", "NoConnectionSetup");
                     failed = true;
+                }
 
-                    ReportError("BuildConnectionTestFailed", buildResult.ErrorMessage);
+                if (buildPlugin != null && connectionData.PluginConfiguration != null)
+                {
+                    var buildResult = await buildPlugin.TestConnection(connectionData.PluginConfiguration);
+
+                    if (!buildResult.IsSuccess)
+                    {
+                        failed = true;
+
+                        ReportError("BuildConnectionTestFailed", buildResult.ErrorMessage);
+                    }
                 }
             }
-
-            if (sourcePlugin != null && connectionData.SourceControlPluginConfiguration != null)
+            else if (connectionData.ConnectionType == ConnectionPluginType.SourceControl)
             {
-                var sourceResult = await sourcePlugin.TestConnection(connectionData.SourceControlPluginConfiguration);
+                var sourcePlugin = _pluginRepository.FindSourceControlPlugin(connectionData.PluginType);
 
-                if (!sourceResult.IsSuccess)
+                if (sourcePlugin == null)
                 {
+                    ReportError("ConnectionTestFailed", "NoConnectionSetup");
                     failed = true;
+                }
 
-                    ReportError("SourceConnectionTestFailed", sourceResult.ErrorMessage);
+                if (sourcePlugin != null && connectionData.PluginConfiguration != null)
+                {
+                    var sourceResult = await sourcePlugin.TestConnection(connectionData.PluginConfiguration);
+
+                    if (!sourceResult.IsSuccess)
+                    {
+                        failed = true;
+
+                        ReportError("SourceConnectionTestFailed", sourceResult.ErrorMessage);
+                    }
                 }
             }
 
@@ -113,7 +145,9 @@ namespace BuildNotifications.ViewModel.Settings
             Application.Current.Dispatcher?.Invoke(() => { TestFinished?.Invoke(this, EventArgs.Empty); });
         }
 
-        private readonly ConnectionData _connection;
         private readonly IPluginRepository _pluginRepository;
+        private IPluginConfiguration? _configuration;
+        private ConnectionPluginType _connectionPluginType;
+        private IPlugin? _plugin;
     }
 }

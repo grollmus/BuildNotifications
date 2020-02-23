@@ -1,12 +1,17 @@
 ﻿using System;
-using Anotar.NLog;
-using BuildNotifications.PluginInterfaces;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace BuildNotifications.Core.Utilities
+namespace BuildNotifications.PluginInterfaces.Configuration
 {
-    internal class PasswordStringConverter : JsonConverter<PasswordString>
+    /// <summary>
+    /// Converter that can be used to read and write <see cref="PasswordString" />
+    /// using Newtonsft.Json.
+    /// </summary>
+    [PublicAPI]
+    public class PasswordStringConverter : JsonConverter<PasswordString>
     {
+        /// <inheritdoc />
         public override PasswordString ReadJson(JsonReader reader, Type objectType, PasswordString existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             try
@@ -17,13 +22,13 @@ namespace BuildNotifications.Core.Utilities
 
                 return new PasswordString(encrypted);
             }
-            catch (Exception ex)
+            catch
             {
-                LogTo.WarnException("Failed to read encrypted password from configuration.", ex);
                 return new PasswordString(string.Empty);
             }
         }
 
+        /// <inheritdoc />
         public override void WriteJson(JsonWriter writer, PasswordString value, JsonSerializer serializer)
         {
             writer.WriteValue(value.Encrypted());

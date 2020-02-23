@@ -11,7 +11,7 @@ namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsConnectionPool
     {
-        internal VssConnection? CreateConnection(TfsConfigurationRawData data)
+        internal VssConnection? CreateConnection(TfsConfigurationRawData data, bool useCache = true)
         {
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
@@ -20,17 +20,18 @@ namespace BuildNotifications.Plugin.Tfs
                 return null;
             }
 
-            if (NeedsToAppendCollectionName(data) && !string.IsNullOrWhiteSpace(data.CollectionName))
+            if (!string.IsNullOrWhiteSpace(data.CollectionName))
                 url = AppendCollectionName(data.CollectionName, url);
 
-            if (_connections.TryGetValue(url, out var cachedConnection))
+            if (useCache && _connections.TryGetValue(url, out var cachedConnection))
                 return cachedConnection;
 
             var credentials = CreateCredentials(data);
 
             var connection = new VssConnection(new Uri(url), credentials);
 
-            _connections.Add(url, connection);
+            if (useCache)
+                _connections.Add(url, connection);
 
             return connection;
         }
@@ -42,8 +43,9 @@ namespace BuildNotifications.Plugin.Tfs
 
             try
             {
-                var credentials = CreateCredentials(data);
-                using var connection = new VssConnection(new Uri(data.Url), credentials);
+                using var connection = CreateConnection(data, false);
+                if (connection == null)
+                    return ConnectionTestResult.Failure(ErrorMessages.MissingData);
 
                 await connection.ConnectAsync();
 
@@ -84,10 +86,7 @@ namespace BuildNotifications.Plugin.Tfs
             return new VssCredentials(new VssBasicCredential(username, pw?.PlainText()));
         }
 
-        private bool IsAuthenticatedId(Guid authenticatedIdentityId)
-        {
-            return !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
-        }
+        private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
 
         private bool IsOnPremiseServer(string? url)
         {
@@ -98,10 +97,7 @@ namespace BuildNotifications.Plugin.Tfs
             return uri.Host != "dev.azure.com";
         }
 
-        private bool NeedsToAppendCollectionName(TfsConfigurationRawData data)
-        {
-            return IsOnPremiseServer(data.Url);
-        }
+        private bool NeedsToAppendCollectionName(TfsConfigurationRawData data) => IsOnPremiseServer(data.Url);
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
     }

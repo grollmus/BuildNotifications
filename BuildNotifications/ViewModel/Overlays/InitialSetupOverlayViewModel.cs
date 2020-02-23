@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Input;
+using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Settings;
@@ -15,13 +16,13 @@ namespace BuildNotifications.ViewModel.Overlays
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-        public InitialSetupOverlayViewModel(SettingsViewModel settingsViewModel, IPluginRepository pluginRepository)
+        public InitialSetupOverlayViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
-            _settingsViewModel = settingsViewModel;
+            _configuration = configuration;
 
             // TODO: Implement
-            SetupViewModel = new SetupViewModel(settingsViewModel.Configuration, pluginRepository);
+            SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction);
             //settingsViewModel.SettingsChanged += UpdateText;
             //settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
@@ -30,6 +31,8 @@ namespace BuildNotifications.ViewModel.Overlays
 
             StoreCurrentState();
         }
+
+        private readonly IConfiguration _configuration;
 
         public bool AnimateDisplay
         {
@@ -84,8 +87,8 @@ namespace BuildNotifications.ViewModel.Overlays
 
         private void RequestClose()
         {
-            var currentlyConfiguredConnections = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Connections);
-            var currentlyConfiguredProjects = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Projects);
+            var currentlyConfiguredConnections = JsonConvert.SerializeObject(_configuration.Connections);
+            var currentlyConfiguredProjects = JsonConvert.SerializeObject(_configuration.Projects);
 
             var anyChanges = !currentlyConfiguredConnections.Equals(_previouslyConfiguredConnections, StringComparison.OrdinalIgnoreCase)
                              || !currentlyConfiguredProjects.Equals(_previouslyConfiguredProjects, StringComparison.OrdinalIgnoreCase);
@@ -95,27 +98,27 @@ namespace BuildNotifications.ViewModel.Overlays
 
         private void StoreCurrentState()
         {
-            _previouslyConfiguredConnections = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Connections);
-            _previouslyConfiguredProjects = JsonConvert.SerializeObject(_settingsViewModel.Configuration.Projects);
+            _previouslyConfiguredConnections = JsonConvert.SerializeObject(_configuration.Connections);
+            _previouslyConfiguredProjects = JsonConvert.SerializeObject(_configuration.Projects);
         }
 
         private void UpdateText(object? sender, EventArgs e)
         {
-            if (_settingsViewModel.Configuration.Connections.Count == 0 && _settingsViewModel.Configuration.Projects.Count == 0)
+            if (_configuration.Connections.Count == 0 && _configuration.Projects.Count == 0)
             {
                 DisplayedTextId = InitialSetupEmptyConf;
                 DisplayedIconType = IconType.Status;
                 return;
             }
 
-            if (_settingsViewModel.Configuration.Connections.Count == 0)
+            if (_configuration.Connections.Count == 0)
             {
                 DisplayedTextId = InitialSetupEmptyConnections;
                 DisplayedIconType = IconType.Connection;
                 return;
             }
 
-            if (_settingsViewModel.Configuration.Projects.Count == 0)
+            if (_configuration.Projects.Count == 0)
             {
                 // TODO: Why is this in the ViewModel?
                 //if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
@@ -131,8 +134,8 @@ namespace BuildNotifications.ViewModel.Overlays
             }
             else
             {
-                var anyConnectedBuildProviderSetup = _settingsViewModel.Configuration.Projects.Any(x => x.BuildConnectionNames.Any());
-                var anyConnectedSourceControlProviderSetup = _settingsViewModel.Configuration.Projects.Any(x => x.SourceControlConnectionNames.Any());
+                var anyConnectedBuildProviderSetup = _configuration.Projects.Any(x => x.BuildConnectionNames.Any());
+                var anyConnectedSourceControlProviderSetup = _configuration.Projects.Any(x => x.SourceControlConnectionNames.Any());
 
                 if (!anyConnectedSourceControlProviderSetup && !anyConnectedBuildProviderSetup)
                 {
@@ -157,7 +160,6 @@ namespace BuildNotifications.ViewModel.Overlays
             }
         }
 
-        private readonly SettingsViewModel _settingsViewModel;
         private string _displayedTextId = "";
         private IconType _displayedIconType;
         private bool _animateDisplay;

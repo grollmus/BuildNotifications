@@ -1,9 +1,11 @@
-﻿using BuildNotifications.Core.Config;
+﻿using System;
+using System.Windows.Input;
+using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
-using BuildNotifications.Resources.Settings;
+using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings
 {
@@ -13,7 +15,21 @@ namespace BuildNotifications.ViewModel.Settings
         {
             Model = model;
             PluginRepository = pluginRepository;
-            TestConnection = new TestConnectionViewModel(Model, PluginRepository);
+            TestConnection = new TestConnectionViewModel(PluginRepository);
+            SaveConnectionCommand = new DelegateCommand(SaveConnection);
+        }
+
+        public ConnectionPluginType ConnectionPluginType
+        {
+            get => _connectionPluginType;
+            set
+            {
+                if (_connectionPluginType == value)
+                    return;
+
+                _connectionPluginType = value;
+                OnPropertyChanged();
+            }
         }
 
         public override string DisplayNameTextId => Name;
@@ -49,30 +65,54 @@ namespace BuildNotifications.ViewModel.Settings
 
         public IPluginRepository PluginRepository { get; }
 
-        public IPlugin? SelectedBuildPlugin
+        public ICommand SaveConnectionCommand { get; }
+
+        public IPlugin? SelectedPlugin
         {
-            get => _selectedBuildPlugin;
+            get => _selectedPlugin;
             set
             {
-                if (_selectedBuildPlugin == value)
+                if (_selectedPlugin == value)
                     return;
 
-                _selectedBuildPlugin = value;
+                _selectedPlugin = value;
                 OnPropertyChanged();
 
-                if (_selectedBuildPlugin != null)
+                if (_selectedPlugin != null)
                 {
-                    var config = _selectedBuildPlugin.Configuration;
-                    config.Deserialize(Model.BuildPluginConfiguration ?? string.Empty);
-                    Model.BuildPluginType = _selectedBuildPlugin.GetType().FullName;
-                    PluginConfiguration = new PluginConfigurationViewModel(config, Model, PluginType.Build);
+                    var config = _selectedPlugin.Configuration;
+                    config.Deserialize(Model.PluginConfiguration ?? string.Empty);
+                    PluginConfiguration = new PluginConfigurationViewModel(config);
+                    TestConnection.SetConfiguration(_selectedPlugin, config, ConnectionPluginType);
                 }
             }
         }
 
         public TestConnectionViewModel TestConnection { get; }
+        public event EventHandler? SaveRequested;
 
-        private IPlugin? _selectedBuildPlugin;
+        private void RaiseSaveRequested()
+        {
+            SaveRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SaveConnection()
+        {
+            if (_selectedPlugin != null)
+            {
+                var config = _selectedPlugin.Configuration;
+                var serialized = config.Serialize();
+
+                Model.ConnectionType = ConnectionPluginType;
+                Model.PluginType = _selectedPlugin.GetType().FullName;
+                Model.PluginConfiguration = serialized;
+
+                RaiseSaveRequested();
+            }
+        }
+
+        private IPlugin? _selectedPlugin;
         private PluginConfigurationViewModel? _pluginConfiguration;
+        private ConnectionPluginType _connectionPluginType;
     }
 }

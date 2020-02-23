@@ -42,7 +42,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "non.existing",
+                    PluginType = "non.existing",
                     Name = "connection"
                 }
             });
@@ -69,7 +69,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "buildPluginType",
+                    PluginType = "buildPluginType",
                     Name = "connection"
                 }
             });
@@ -99,8 +99,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "buildPluginType",
-                    SourceControlPluginType = "non.existing",
+                    PluginType = "non.existing",
                     Name = "connection"
                 }
             });

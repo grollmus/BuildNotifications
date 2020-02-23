@@ -90,11 +90,9 @@ namespace BuildNotifications.Core.Tests.Config
                 {
                     new ConnectionData
                     {
-                        BuildPluginConfiguration = "Test123",
-                        BuildPluginType = "BuildPlugin",
-                        Name = "ConnectionName",
-                        SourceControlPluginConfiguration = "Test234",
-                        SourceControlPluginType = "SourcePlugin"
+                        PluginConfiguration = "Test123",
+                        PluginType = "BuildPlugin",
+                        Name = "ConnectionName"
                     }
                 },
                 FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe,
@@ -157,10 +155,8 @@ namespace BuildNotifications.Core.Tests.Config
 
             Assert.Single(actual.Connections);
             Assert.Equal(expected.Connections[0].Name, actual.Connections[0].Name);
-            Assert.Equal(expected.Connections[0].BuildPluginConfiguration, actual.Connections[0].BuildPluginConfiguration);
-            Assert.Equal(expected.Connections[0].BuildPluginType, actual.Connections[0].BuildPluginType);
-            Assert.Equal(expected.Connections[0].SourceControlPluginConfiguration, actual.Connections[0].SourceControlPluginConfiguration);
-            Assert.Equal(expected.Connections[0].SourceControlPluginType, actual.Connections[0].SourceControlPluginType);
+            Assert.Equal(expected.Connections[0].PluginConfiguration, actual.Connections[0].PluginConfiguration);
+            Assert.Equal(expected.Connections[0].PluginType, actual.Connections[0].PluginType);
 
             Assert.Single(actual.Projects);
             Assert.Equal(expected.Projects[0].ProjectName, actual.Projects[0].ProjectName);

@@ -28,7 +28,7 @@ namespace BuildNotifications.Core.Pipeline
                 return null;
             }
 
-            var pluginType = connectionData.SourceControlPluginType ?? string.Empty;
+            var pluginType = connectionData.PluginType ?? string.Empty;
             var sourceControlPlugin = _pluginRepository.FindSourceControlPlugin(pluginType);
             if (sourceControlPlugin == null)
             {
@@ -39,7 +39,7 @@ namespace BuildNotifications.Core.Pipeline
             IBranchProvider? branchProvider;
             try
             {
-                var options = connectionData.SourceControlPluginConfiguration;
+                var options = connectionData.PluginConfiguration;
                 branchProvider = sourceControlPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)
@@ -60,7 +60,7 @@ namespace BuildNotifications.Core.Pipeline
                 return null;
             }
 
-            var pluginType = connectionData.BuildPluginType ?? string.Empty;
+            var pluginType = connectionData.PluginType ?? string.Empty;
             var buildPlugin = _pluginRepository.FindBuildPlugin(pluginType);
             if (buildPlugin == null)
             {
@@ -71,7 +71,7 @@ namespace BuildNotifications.Core.Pipeline
             IBuildProvider? buildProvider;
             try
             {
-                var options = connectionData.BuildPluginConfiguration;
+                var options = connectionData.PluginConfiguration;
                 buildProvider = buildPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)

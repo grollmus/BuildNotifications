@@ -27,8 +27,8 @@
 		                       Label="{x:Static text1:StringLocalizer.Name}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 
-		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}" PluginType="Build"
-		                           SelectedPlugin="{Binding SelectedBuildPlugin, Mode=TwoWay}" />
+		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}" ConnectionPluginType="Build"
+		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
 
 		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
 		              ItemTemplateSelector="{x:Static settingsRes:PluginOptionTemplateSelector.Instance}" />
