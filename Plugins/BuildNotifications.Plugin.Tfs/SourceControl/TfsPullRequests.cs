@@ -1,7 +1,7 @@
 ﻿using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.SourceControl
 {
     internal class TfsPullRequests : TfsBranch, IPullRequest
     {

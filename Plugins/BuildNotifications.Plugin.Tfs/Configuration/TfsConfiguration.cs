@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Newtonsoft.Json;
@@ -8,7 +7,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 {
     internal class TfsConfiguration : IPluginConfiguration
     {
-        public TfsConfiguration()
+        public TfsConfiguration(ConfigurationFlags flags = ConfigurationFlags.None)
         {
             Localizer = new TfsLocalizer();
 
@@ -28,6 +27,9 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
             _authenticationType.ValueChanged += AuthenticationType_ValueChanged;
             _authenticationType.ValueChanged += OptionChanged;
+
+            if (flags.HasFlag(ConfigurationFlags.HideRepository))
+                _repository.IsVisible = false;
         }
 
         public TfsConfigurationRawData AsRawData() => new TfsConfigurationRawData
@@ -47,14 +49,17 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             UpdateAuthenticationFieldsVisibility(e.NewValue);
         }
 
-        private async void OptionChanged<T>(object? sender, ValueChangedEventArgs<T> e)
+        private void FetchAvailableValues(TfsConfigurationRawData raw)
+        {
+            _project.FetchAvailableProjects(raw).FireAndForget();
+            _repository.FetchAvailableRepositories(raw).FireAndForget();
+        }
+
+        private void OptionChanged<T>(object? sender, ValueChangedEventArgs<T> e)
         {
             var raw = AsRawData();
 
-            var projectTask = _project.FetchAvailableProjects(raw);
-            var repositoryTask = _repository.FetchAvailableRepositories(raw);
-
-            await Task.WhenAll(projectTask, repositoryTask);
+            FetchAvailableValues(raw);
         }
 
         private async void Project_ValueChanged(object? sender, ValueChangedEventArgs<TfsProject?> e)
@@ -89,6 +94,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
                     _userName.Value = rawData.Username;
                     _password.Value = rawData.Password;
                     _token.Value = rawData.Token;
+
+                    FetchAvailableValues(rawData);
 
                     return true;
                 }

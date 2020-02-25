@@ -29,6 +29,14 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         }
 
         /// <summary>
+        /// Raises the <see cref="IsLoadingChanged" /> event.
+        /// </summary>
+        protected void RaiseIsLoadingChanged()
+        {
+            IsLoadingChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
         /// Raises the <see cref="IsVisibleChanged" /> event.
         /// </summary>
         protected void RaiseIsVisibleChanged()
@@ -37,7 +45,18 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         }
 
         /// <inheritdoc />
-        public bool IsLoading { get; protected set; }
+        public bool IsLoading
+        {
+            get => _isLoading;
+            protected set
+            {
+                if (_isLoading == value)
+                    return;
+
+                _isLoading = value;
+                RaiseIsLoadingChanged();
+            }
+        }
 
         /// <inheritdoc />
         public string NameTextId { get; }
@@ -47,6 +66,9 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
 
         /// <inheritdoc />
         public event EventHandler? IsVisibleChanged;
+
+        /// <inheritdoc />
+        public event EventHandler? IsLoadingChanged;
 
         /// <inheritdoc />
         public string DescriptionTextId { get; }
@@ -85,5 +107,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
 
         private bool _isEnabled = true;
         private bool _isVisible = true;
+        private bool _isLoading;
     }
 }

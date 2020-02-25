@@ -10,7 +10,7 @@ using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 using BuildStatus = BuildNotifications.PluginInterfaces.Builds.BuildStatus;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.Build
 {
     internal class TfsBuildProvider : IBuildProvider
     {
@@ -48,7 +48,7 @@ namespace BuildNotifications.Plugin.Tfs
             return new TfsBuildDefinition(definition);
         }
 
-        private TfsBuild Convert(Build build)
+        private TfsBuild Convert(Microsoft.TeamFoundation.Build.WebApi.Build build)
         {
             return new TfsBuild(build);
         }

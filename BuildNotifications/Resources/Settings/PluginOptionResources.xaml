@@ -3,7 +3,8 @@
                     xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
                     xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.PluginOptions"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:views="clr-namespace:BuildNotifications.Views">
 	<DataTemplate DataType="{x:Type pluginOptions:PluginDisplayOptionViewModel}">
 		<TextBlock Text="{Binding Value}" ToolTip="{Binding Description}"
 		           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
@@ -49,17 +50,23 @@
 				Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
 				FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
+			<Grid>
+				<settings:DecoratedComboBox ItemsSource="{Binding AvailableValues}"
+				                            SelectedValue="{Binding Value, Mode=TwoWay}"
+				                            Margin="{StaticResource BlockQuarterYOnlyMargin}"
+				                            SelectedValuePath="Value">
+					<settings:DecoratedComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}" />
+						</DataTemplate>
+					</settings:DecoratedComboBox.ItemTemplate>
+				</settings:DecoratedComboBox>
 
-			<settings:DecoratedComboBox ItemsSource="{Binding AvailableValues}"
-			                            SelectedValue="{Binding Value, Mode=TwoWay}"
-			                            Margin="{StaticResource BlockQuarterYOnlyMargin}"
-			                            SelectedValuePath="Value">
-				<settings:DecoratedComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Name}" />
-					</DataTemplate>
-				</settings:DecoratedComboBox.ItemTemplate>
-			</settings:DecoratedComboBox>
+				<Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+				         HorizontalAlignment="Center" VerticalAlignment="Center">
+					<views:BusyIndicator IsBusy="{Binding IsLoading}" />
+				</Viewbox>
+			</Grid>
 		</StackPanel>
 	</DataTemplate>
 	<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->

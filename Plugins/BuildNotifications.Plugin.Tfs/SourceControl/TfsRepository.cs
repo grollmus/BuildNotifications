@@ -1,6 +1,6 @@
 ﻿using Microsoft.TeamFoundation.SourceControl.WebApi;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.SourceControl
 {
     public class TfsRepository
     {

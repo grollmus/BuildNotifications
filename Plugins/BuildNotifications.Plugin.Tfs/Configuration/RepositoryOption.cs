@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
+using BuildNotifications.Plugin.Tfs.SourceControl;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 

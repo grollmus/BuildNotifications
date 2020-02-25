@@ -7,7 +7,7 @@ using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.SourceControl
 {
     internal class TfsSourceControlProvider : IBranchProvider
     {

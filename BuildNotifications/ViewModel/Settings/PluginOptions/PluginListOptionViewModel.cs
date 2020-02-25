@@ -16,7 +16,7 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
             ListOption.AvailableValuesChanged += ListOption_AvailableValuesChanged;
         }
 
-        public IEnumerable<PluginListOptionItemViewModel<TValue>> AvailableValues => ListOption.AvailableValues.Select(x => new PluginListOptionItemViewModel<TValue>(x, _localizationProvider));
+        public IEnumerable<PluginListOptionItemViewModel<TValue>> AvailableValues => ListOption.AvailableValues.Select(x => new PluginListOptionItemViewModel<TValue>(x));
 
         private void ListOption_AvailableValuesChanged(object? sender, EventArgs e)
         {

@@ -591,4 +591,13 @@
   <data name="SearchTooltip" xml:space="preserve">
 	  <value>Search</value>
   </data>
+  <data name="ConnectionType" xml:space="preserve">
+	  <value>Connection type</value>
+  </data>
+  <data name="ConnectionNameDescription" xml:space="preserve">
+	  <value>Name that is used to indentify this connection.</value>
+  </data>
+  <data name="ConnectionTypeDescription" xml:space="preserve">
+	  <value>Type of this connection.</value>
+  </data>
 </root>

@@ -2,7 +2,7 @@
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.Build
 {
     internal class TfsBuildDefinition : IBuildDefinition
     {

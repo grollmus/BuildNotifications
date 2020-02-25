@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces;
+﻿using BuildNotifications.Plugin.Tfs.SourceControl;
+using BuildNotifications.PluginInterfaces;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
 {

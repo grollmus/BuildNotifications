@@ -25,9 +25,16 @@
 	<StackPanel Orientation="Vertical">
 		<text:DecoratedTextBox Text="{Binding Name, Mode=TwoWay}"
 		                       Label="{x:Static text1:StringLocalizer.Name}"
-		                       Margin="{StaticResource BlockYOnlyMargin}" />
+		                       Margin="{StaticResource BlockYOnlyMargin}"
+		                       ToolTip="{x:Static text1:StringLocalizer.ConnectionNameDescription}"/>
 
-		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}" ConnectionPluginType="Build"
+		<settingsRes:DecoratedComboBox ItemsSource="{Binding AvailableConnectionTypes}"
+		                               SelectedValue="{Binding ConnectionPluginType}"
+		                               Margin="{StaticResource BlockYOnlyMargin}"
+		                               Text="{x:Static text1:StringLocalizer.ConnectionType}"
+		                               ToolTip="{x:Static text1:StringLocalizer.ConnectionTypeDescription}" />
+
+		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}" ConnectionPluginType="{Binding ConnectionPluginType}"
 		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
 
 		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"

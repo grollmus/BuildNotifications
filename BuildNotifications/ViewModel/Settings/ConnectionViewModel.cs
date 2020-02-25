@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
@@ -17,6 +18,23 @@ namespace BuildNotifications.ViewModel.Settings
             PluginRepository = pluginRepository;
             TestConnection = new TestConnectionViewModel(PluginRepository);
             SaveConnectionCommand = new DelegateCommand(SaveConnection);
+
+            ConnectionPluginType = model.ConnectionType;
+            SelectedPlugin = ConnectionPluginType switch
+            {
+                ConnectionPluginType.SourceControl => pluginRepository.FindSourceControlPlugin(model.PluginType),
+                ConnectionPluginType.Build => pluginRepository.FindBuildPlugin(model.PluginType),
+                _ => null
+            };
+        }
+
+        public IEnumerable<ConnectionPluginType> AvailableConnectionTypes
+        {
+            get
+            {
+                yield return ConnectionPluginType.Build;
+                yield return ConnectionPluginType.SourceControl;
+            }
         }
 
         public ConnectionPluginType ConnectionPluginType

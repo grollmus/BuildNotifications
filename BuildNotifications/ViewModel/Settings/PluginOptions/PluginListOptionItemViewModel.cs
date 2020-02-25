@@ -4,15 +4,13 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 {
     internal class PluginListOptionItemViewModel<TValue> : BaseViewModel
     {
-        public PluginListOptionItemViewModel(ListOptionItem<TValue> item, ILocalizationProvider localizationProvider)
+        public PluginListOptionItemViewModel(ListOptionItem<TValue> item)
         {
             _item = item;
-            _localizationProvider = localizationProvider;
         }
 
-        public string Name => _localizationProvider.Localize(_item.DisplayName);
+        public string Name => _item.DisplayName;
         public TValue Value => _item.Value;
         private readonly ListOptionItem<TValue> _item;
-        private readonly ILocalizationProvider _localizationProvider;
     }
 }

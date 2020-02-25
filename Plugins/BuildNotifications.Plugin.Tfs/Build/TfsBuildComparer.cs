@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.Build
 {
     internal class TfsBuildComparer : IEqualityComparer<TfsBuild>
     {

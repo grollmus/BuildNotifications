@@ -43,5 +43,10 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// Occurs when the value of the <see cref="IsVisible" /> property changed.
         /// </summary>
         event EventHandler? IsVisibleChanged;
+
+        /// <summary>
+        /// Occurs when the value of the <see cref="IsLoading" /> property changed.
+        /// </summary>
+        event EventHandler? IsLoadingChanged;
     }
 }

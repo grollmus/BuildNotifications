@@ -4,11 +4,11 @@ using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
 using BuildStatus = BuildNotifications.PluginInterfaces.Builds.BuildStatus;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs.Build
 {
     internal class TfsBuild : IBaseBuild
     {
-        public TfsBuild(Build build)
+        public TfsBuild(Microsoft.TeamFoundation.Build.WebApi.Build build)
         {
             _id = build.Url;
             BuildId = build.Id;

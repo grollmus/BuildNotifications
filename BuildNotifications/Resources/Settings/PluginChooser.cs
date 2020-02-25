@@ -75,7 +75,7 @@ namespace BuildNotifications.Resources.Settings
             "PluginRepository", typeof(IPluginRepository), typeof(PluginChooser), new PropertyMetadata(default(IPluginRepository), OnPluginRepositoryChanged));
 
         public static readonly DependencyProperty PluginTypeProperty = DependencyProperty.Register(
-            "PluginType", typeof(ConnectionPluginType), typeof(PluginChooser), new PropertyMetadata(default(ConnectionPluginType), OnPluginTypeChanged));
+            "ConnectionPluginType", typeof(ConnectionPluginType), typeof(PluginChooser), new PropertyMetadata(default(ConnectionPluginType), OnPluginTypeChanged));
 
         private static readonly DependencyPropertyKey PluginsKey
             = DependencyProperty.RegisterReadOnly("Plugins", typeof(IEnumerable<IPlugin>), typeof(PluginChooser),

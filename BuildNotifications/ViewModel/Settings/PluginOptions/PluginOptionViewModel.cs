@@ -12,14 +12,21 @@ namespace BuildNotifications.ViewModel.Settings.PluginOptions
 
             Option.IsEnabledChanged += Option_IsEnabledChanged;
             Option.IsVisibleChanged += Option_IsVisibleChanged;
+            Option.IsLoadingChanged += Option_IsLoadingChanged;
         }
 
         public string Description => Option.DescriptionTextId;
         public string DisplayName => _localizationProvider.Localize(Option.NameTextId);
         public bool IsEnabled => Option.IsEnabled;
         public bool IsVisible => Option.IsVisible;
+        public bool IsLoading => Option.IsLoading;
 
         protected IOption Option { get; }
+
+        private void Option_IsLoadingChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(IsLoading));
+        }
 
         private void Option_IsEnabledChanged(object? sender, EventArgs e)
         {
