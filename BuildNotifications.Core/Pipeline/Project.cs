@@ -13,13 +13,13 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider branchProvider,
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider,
             IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
         {
             _branchNameExtractor = branchNameExtractor;
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
-            _branchProvider = branchProvider;
+            _branchProvider = branchProvider ?? new NullBranchProvider();
             Config = config;
 
             _buildFilter = new ListBuildFilter(config);

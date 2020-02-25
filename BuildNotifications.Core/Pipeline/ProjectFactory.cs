@@ -117,11 +117,15 @@ namespace BuildNotifications.Core.Pipeline
                 buildProviders.Add(buildProvider);
             }
 
-            var branchProvider = BranchProvider(config.SourceControlConnectionName);
-            if (branchProvider == null)
+            IBranchProvider? branchProvider = null;
+            if (!string.IsNullOrEmpty(config.SourceControlConnectionName))
             {
-                ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
-                return null;
+                branchProvider = BranchProvider(config.SourceControlConnectionName);
+                if (branchProvider == null)
+                {
+                    ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
+                    return null;
+                }
             }
 
             var branchNameExtractor = new BranchNameExtractor();
