@@ -18,14 +18,14 @@ namespace BuildNotifications.ViewModel.Settings
 
             Language = new LanguageOptionViewModel(configuration.Language);
             AnimationsMode = new AnimationsOptionViewModel(configuration.AnimationSpeed);
-            AutoStartMode = new AutoStartModeViewModel(configuration.Autostart);
+            AutoStartMode = new AutoStartModeViewModel(configuration.AutoStart);
             CanceledBuildNotify = new BuildNotificationModeViewModel(configuration.CanceledBuildNotifyConfig, StringLocalizer.Keys.CanceledBuildNotifyConfig);
             FailedBuildNotify = new BuildNotificationModeViewModel(configuration.FailedBuildNotifyConfig, StringLocalizer.Keys.FailedBuildNotifyConfig);
             SucceededBuildNotify = new BuildNotificationModeViewModel(configuration.SucceededBuildNotifyConfig, StringLocalizer.Keys.SucceededBuildNotifyConfig);
             PartialSucceededTreatmentMode = new PartialSucceededTreatmentModeOptionViewModel(configuration.PartialSucceededTreatmentMode);
-            BuildsPerGroup = new NumberOptionViewModel(configuration.BuildsToShow, StringLocalizer.Keys.BuildsToShow);
+            BuildsPerGroup = new NumberOptionViewModel(configuration.BuildsToShow, 1, 100, StringLocalizer.Keys.BuildsToShow);
             ShowBusyIndicatorDuringUpdate = new BooleanOptionViewModel(configuration.ShowBusyIndicatorOnDeltaUpdates, StringLocalizer.Keys.ShowBusyIndicatorOnDeltaUpdates);
-            UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, StringLocalizer.Keys.UpdateInterval);
+            UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, 30, int.MaxValue, StringLocalizer.Keys.UpdateInterval);
             UpdateToPreReleases = new BooleanOptionViewModel(configuration.UsePreReleases, StringLocalizer.Keys.UsePreReleases);
 
             foreach (var option in Options)
@@ -82,7 +82,7 @@ namespace BuildNotifications.ViewModel.Settings
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
             _configuration.AnimationSpeed = AnimationsMode.Value;
-            _configuration.Autostart = AutoStartMode.Value;
+            _configuration.AutoStart = AutoStartMode.Value;
             _configuration.BuildsToShow = BuildsPerGroup.Value;
             _configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
             _configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;

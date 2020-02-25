@@ -5,7 +5,6 @@ using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.ViewModel.Utils;
-using ReflectSettings;
 
 namespace BuildNotifications.ViewModel.Settings
 {

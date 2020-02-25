@@ -13,7 +13,7 @@ using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Utils;
 
-namespace BuildNotifications.ViewModel.Settings
+namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class TestConnectionViewModel
     {

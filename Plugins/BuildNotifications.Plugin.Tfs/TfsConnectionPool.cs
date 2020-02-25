@@ -88,17 +88,6 @@ namespace BuildNotifications.Plugin.Tfs
 
         private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
 
-        private bool IsOnPremiseServer(string? url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return false;
-
-            var uri = new Uri(url);
-            return uri.Host != "dev.azure.com";
-        }
-
-        private bool NeedsToAppendCollectionName(TfsConfigurationRawData data) => IsOnPremiseServer(data.Url);
-
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
     }
 }

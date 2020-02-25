@@ -20,9 +20,9 @@ namespace BuildNotifications.Core
             var pluginLoader = new PluginLoader();
             PluginRepository = pluginLoader.LoadPlugins(pathResolver.PluginFolders);
 
-            _configurationSerializer = new ConfigurationSerializer(serializer, PluginRepository);
-            var configurationBuilder = new ConfigurationBuilder(_pathResolver, _configurationSerializer);
-            Configuration = configurationBuilder.LoadConfiguration();
+            _configurationSerializer = new ConfigurationSerializer(serializer);
+            ConfigurationBuilder = new ConfigurationBuilder(_pathResolver, _configurationSerializer);
+            Configuration = ConfigurationBuilder.LoadConfiguration();
 
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
@@ -41,6 +41,8 @@ namespace BuildNotifications.Core
         }
 
         public IConfiguration Configuration { get; }
+
+        public ConfigurationBuilder ConfigurationBuilder { get; }
 
         public IDistributedNotificationReceiver? NotificationReceiver { get; }
 
@@ -61,10 +63,7 @@ namespace BuildNotifications.Core
             _configurationSerializer.Save(Configuration, configFilePath);
         }
 
-        public Task Update()
-        {
-            return Pipeline.Update();
-        }
+        public Task Update() => Pipeline.Update();
 
         private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
         {

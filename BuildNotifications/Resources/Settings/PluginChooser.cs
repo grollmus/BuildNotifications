@@ -9,9 +9,14 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Resources.Settings
 {
-
     internal class PluginChooser : Control
     {
+        public ConnectionPluginType ConnectionPluginType
+        {
+            get => (ConnectionPluginType) GetValue(PluginTypeProperty);
+            set => SetValue(PluginTypeProperty, value);
+        }
+
         public IPluginRepository PluginRepository
         {
             get => (IPluginRepository) GetValue(PluginRepositoryProperty);
@@ -22,12 +27,6 @@ namespace BuildNotifications.Resources.Settings
         {
             get => (IEnumerable<IPlugin>) GetValue(PluginsProperty);
             private set => SetValue(PluginsKey, value);
-        }
-
-        public ConnectionPluginType ConnectionPluginType
-        {
-            get => (ConnectionPluginType) GetValue(PluginTypeProperty);
-            set => SetValue(PluginTypeProperty, value);
         }
 
         public IPlugin SelectedPlugin

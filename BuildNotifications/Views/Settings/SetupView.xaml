@@ -6,8 +6,9 @@
              xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
              xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
              xmlns:settings="clr-namespace:BuildNotifications.Views.Settings"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type={x:Type viewModelSettings:SetupViewModel}}"
+             d:DataContext="{d:DesignInstance Type={x:Type setup:SetupViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<buttonNavigation:ButtonNavigation Items="{Binding Sections}" SelectedItem="{Binding SelectedItem}">
 		<buttonNavigation:ButtonNavigation.Resources>
@@ -16,11 +17,11 @@
 					<ResourceDictionary Source="../../Resources/Settings/ConnectionsAndProjectsResources.xaml" />
 				</ResourceDictionary.MergedDictionaries>
 
-				<DataTemplate DataType="{x:Type viewModelSettings:ConnectionsSectionViewModel}">
+				<DataTemplate DataType="{x:Type setup:ConnectionsSectionViewModel}">
 					<settings:ConnectionsSectionView />
 				</DataTemplate>
 
-				<DataTemplate DataType="{x:Type viewModelSettings:ProjectsSectionViewModel}">
+				<DataTemplate DataType="{x:Type setup:ProjectsSectionViewModel}">
 					<settings:ProjectsSectionView />
 				</DataTemplate>
 			</ResourceDictionary>

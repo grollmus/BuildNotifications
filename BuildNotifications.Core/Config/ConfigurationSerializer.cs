@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Anotar.NLog;
-using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
 
 namespace BuildNotifications.Core.Config
 {
     public class ConfigurationSerializer : IConfigurationSerializer
     {
-        public ConfigurationSerializer(ISerializer serializer, IPluginRepository pluginRepository)
+        public ConfigurationSerializer(ISerializer serializer)
         {
             _serializer = serializer;
-            _pluginRepository = pluginRepository;
         }
 
         public IConfiguration Load(string fileName)
@@ -37,10 +35,6 @@ namespace BuildNotifications.Core.Config
                 LogTo.Info($"File {fileName} does not exist. Using default configuration");
                 configuration = new Configuration();
             }
-
-            configuration.PossibleBuildPluginsFunction = () => _pluginRepository.Build.Select(x => x.GetType().FullName);
-            configuration.PossibleSourceControlPluginsFunction = () => _pluginRepository.SourceControl.Select(x => x.GetType().FullName);
-            configuration.PluginRepository = _pluginRepository;
 
             return configuration;
         }
@@ -87,6 +81,5 @@ namespace BuildNotifications.Core.Config
         }
 
         private readonly ISerializer _serializer;
-        private readonly IPluginRepository _pluginRepository;
     }
 }

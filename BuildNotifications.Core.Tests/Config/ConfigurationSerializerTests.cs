@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
-using BuildNotifications.PluginInterfaces.Builds;
 using NSubstitute;
 using Xunit;
 
@@ -19,11 +16,10 @@ namespace BuildNotifications.Core.Tests.Config
             // Arrange
             const string fileName = "non.existing";
             var serializer = Substitute.For<ISerializer>();
-            var pluginRepo = Substitute.For<IPluginRepository>();
 
             if (File.Exists(fileName))
                 File.Delete(fileName);
-            var sut = new ConfigurationSerializer(serializer, pluginRepo);
+            var sut = new ConfigurationSerializer(serializer);
 
             // Act
             var actual = sut.LoadPredefinedConnections(fileName);
@@ -39,11 +35,10 @@ namespace BuildNotifications.Core.Tests.Config
             // Arrange
             const string fileName = "non.existing";
             var serializer = Substitute.For<ISerializer>();
-            var pluginRepo = Substitute.For<IPluginRepository>();
 
             if (File.Exists(fileName))
                 File.Delete(fileName);
-            var sut = new ConfigurationSerializer(serializer, pluginRepo);
+            var sut = new ConfigurationSerializer(serializer);
 
             // Act
             var config = sut.Load(fileName);
@@ -58,12 +53,11 @@ namespace BuildNotifications.Core.Tests.Config
             // Arrange
             const string fileName = "non.existing";
             var serializer = Substitute.For<ISerializer>();
-            var pluginRepo = Substitute.For<IPluginRepository>();
 
             if (File.Exists(fileName))
                 File.Delete(fileName);
 
-            var sut = new ConfigurationSerializer(serializer, pluginRepo);
+            var sut = new ConfigurationSerializer(serializer);
 
             // Act
             var _ = sut.Load(fileName);
@@ -78,9 +72,8 @@ namespace BuildNotifications.Core.Tests.Config
             // Arrange
             const string fileName = nameof(LoadShouldReadSameValuesAsSaveWrote) + ".json";
             var serializer = new Serializer();
-            var pluginRepo = Substitute.For<IPluginRepository>();
 
-            var sut = new ConfigurationSerializer(serializer, pluginRepo);
+            var sut = new ConfigurationSerializer(serializer);
 
             var expected = new Configuration
             {
@@ -109,14 +102,11 @@ namespace BuildNotifications.Core.Tests.Config
                         ProjectName = "Project",
                         DefaultCompareBranch = "compare",
                         PullRequestDisplay = PullRequestDisplayMode.Number,
-                        BuildConnectionNames = new List<string>
+                        BuildConnectionName = new List<string>
                         {
                             "BCN1"
                         },
-                        SourceControlConnectionNames = new List<string>
-                        {
-                            "SCN1"
-                        },
+                        SourceControlConnectionName = "SCN1",
                         BranchBlacklist = new List<string>
                         {
                             "Black1"
@@ -162,34 +152,13 @@ namespace BuildNotifications.Core.Tests.Config
             Assert.Equal(expected.Projects[0].ProjectName, actual.Projects[0].ProjectName);
             Assert.Equal(expected.Projects[0].DefaultCompareBranch, actual.Projects[0].DefaultCompareBranch);
             Assert.Equal(expected.Projects[0].PullRequestDisplay, actual.Projects[0].PullRequestDisplay);
-            Assert.Equal(expected.Projects[0].BuildConnectionNames, actual.Projects[0].BuildConnectionNames);
-            Assert.Equal(expected.Projects[0].SourceControlConnectionNames, actual.Projects[0].SourceControlConnectionNames);
+            Assert.Equal(expected.Projects[0].BuildConnectionName, actual.Projects[0].BuildConnectionName);
+            Assert.Equal(expected.Projects[0].SourceControlConnectionName, actual.Projects[0].SourceControlConnectionName);
             Assert.Equal(expected.Projects[0].BranchBlacklist, actual.Projects[0].BranchBlacklist);
             Assert.Equal(expected.Projects[0].BuildDefinitionBlacklist, actual.Projects[0].BuildDefinitionBlacklist);
             Assert.Equal(expected.Projects[0].BranchWhitelist, actual.Projects[0].BranchWhitelist);
             Assert.Equal(expected.Projects[0].BuildDefinitionWhitelist, actual.Projects[0].BuildDefinitionWhitelist);
             Assert.Equal(expected.Projects[0].HideCompletedPullRequests, actual.Projects[0].HideCompletedPullRequests);
-        }
-
-        [Fact]
-        public void LoadShouldSetBuildAndSourceControlFunctionsOfPluginRepo()
-        {
-            // Arrange
-            const string fileName = "non.existing";
-            var serializer = Substitute.For<ISerializer>();
-            var pluginRepo = Substitute.For<IPluginRepository>();
-            pluginRepo.Build.Returns(new List<IBuildPlugin> {Substitute.For<IBuildPlugin>()});
-
-            if (File.Exists(fileName))
-                File.Delete(fileName);
-
-            var sut = new ConfigurationSerializer(serializer, pluginRepo);
-
-            // Act
-            var config = sut.Load(fileName);
-
-            // Assert
-            Assert.True(((Configuration) config).PossibleBuildPlugins().Any());
         }
     }
 }

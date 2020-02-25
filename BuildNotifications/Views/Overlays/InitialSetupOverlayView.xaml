@@ -11,6 +11,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
              Background="{DynamicResource Background1}" Opacity="{Binding Opacity}">
     <UserControl.Resources>
@@ -44,7 +45,7 @@
         <ContentPresenter Content="{Binding SetupViewModel}"
                           Margin="{StaticResource BlockQuarterXOnlyMargin}">
             <ContentPresenter.Resources>
-                <DataTemplate DataType="{x:Type viewModelSettings:SetupViewModel}">
+                <DataTemplate DataType="{x:Type setup:SetupViewModel}">
                     <viewsSettings:SetupView />
                 </DataTemplate>
             </ContentPresenter.Resources>

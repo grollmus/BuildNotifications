@@ -1,5 +1,4 @@
 ﻿using System;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Configuration;
 using Newtonsoft.Json;

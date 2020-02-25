@@ -1,22 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
-    [NoReorder]
     internal class Configuration : IConfiguration
     {
         public Configuration()
         {
             Connections = new List<ConnectionData>();
+            BuildsToShow = 5;
+            UpdateInterval = 30;
+            CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
+            FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe;
+            SucceededBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
+            PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.TreatAsSucceeded;
+            AutoStart = AutostartMode.StartWithWindowsMinimized;
+            AnimationSpeed = AnimationMode.Enabled;
+            ShowBusyIndicatorOnDeltaUpdates = true;
+            IdentitiesOfCurrentUser = new List<IUser>();
             Projects = new List<IProjectConfiguration>();
 
             Language = "en-US";
@@ -34,67 +39,39 @@ namespace BuildNotifications.Core.Config
 
         public string Language { get; set; }
 
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public IPluginRepository? PluginRepository { get; set; }
-
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public Func<IEnumerable<string?>>? PossibleBuildPluginsFunction { get; set; }
-
-        [IgnoredForConfig]
-        [JsonIgnore]
-        public Func<IEnumerable<string?>>? PossibleSourceControlPluginsFunction { get; set; }
-
-        public IEnumerable<string> ConnectionNames()
-        {
-            return Connections.Select(x => x.Name);
-        }
-
         public IBuildTreeGroupDefinition GroupDefinition { get; set; }
 
         public IBuildTreeSortingDefinition SortingDefinition { get; set; }
 
-        [MinMax(1, 100)]
-        public int BuildsToShow { get; set; } = 5;
+        public int BuildsToShow { get; set; }
 
-        [MinMax(30, int.MaxValue)]
-        public int UpdateInterval { get; set; } = 30;
+        public int UpdateInterval { get; set; }
 
-        public bool UsePreReleases { get; set; } = false;
+        public bool UsePreReleases { get; set; }
 
-        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
 
-        public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByOrForMe;
+        public BuildNotificationMode FailedBuildNotifyConfig { get; set; }
 
-        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
 
-        public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; } = PartialSucceededTreatmentMode.TreatAsSucceeded;
+        public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; }
 
-        public AutostartMode Autostart { get; set; } = AutostartMode.StartWithWindowsMinimized;
+        public AutostartMode AutoStart { get; set; }
 
-        public AnimationMode AnimationSpeed { get; set; } = AnimationMode.Enabled;
+        public AnimationMode AnimationSpeed { get; set; }
 
-        public bool ShowBusyIndicatorOnDeltaUpdates { get; set; } = true;
+        public bool ShowBusyIndicatorOnDeltaUpdates { get; set; }
 
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
 
-        public IEnumerable<string?> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-
-        public IEnumerable<string?> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-
-        [TypesForInstantiation(typeof(List<ConnectionData>))]
-        [CalculatedValues(nameof(PossibleBuildPlugins), nameof(PossibleBuildPlugins))]
-        [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
         public IList<ConnectionData> Connections { get; set; }
 
-        [TypesForInstantiation(typeof(List<IProjectConfiguration>), typeof(ProjectConfiguration))]
-        [CalculatedValues(nameof(ConnectionNames), nameof(ConnectionNames))]
         public IList<IProjectConfiguration> Projects { get; set; }
 
         [JsonIgnore]
         [IgnoredForConfig]
-        public IList<IUser> IdentitiesOfCurrentUser { get; } = new List<IUser>();
+        public IList<IUser> IdentitiesOfCurrentUser { get; }
     }
 }

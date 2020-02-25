@@ -9,7 +9,8 @@
              xmlns:text1="clr-namespace:BuildNotifications.Core.Text;assembly=BuildNotifications.Core"
              xmlns:settingsRes="clr-namespace:BuildNotifications.Resources.Settings"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type settings:ConnectionViewModel}}"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 
 	<UserControl.Resources>

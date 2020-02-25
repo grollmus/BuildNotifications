@@ -17,7 +17,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Whether BuildNotifications shall start with Windows
         /// </summary>
-        AutostartMode Autostart { get; set; }
+        AutostartMode AutoStart { get; set; }
 
         /// <summary>
         /// How many builds shall be shown in one group.
@@ -94,15 +94,5 @@ namespace BuildNotifications.Core.Config
         /// marked as PreReleases.
         /// </summary>
         bool UsePreReleases { get; set; }
-
-        /// <summary>
-        /// Retrieves all possible plugin names which provide build provider.
-        /// </summary>
-        IEnumerable<string?> PossibleBuildPlugins();
-
-        /// <summary>
-        /// Retrieves all possible plugin names which provide source control.
-        /// </summary>
-        IEnumerable<string?> PossibleSourceControlPlugins();
     }
 }

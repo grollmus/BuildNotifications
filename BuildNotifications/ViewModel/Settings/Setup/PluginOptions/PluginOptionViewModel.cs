@@ -1,7 +1,7 @@
 ﻿using System;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 
-namespace BuildNotifications.ViewModel.Settings.PluginOptions
+namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
 {
     internal abstract class PluginOptionViewModel : BaseViewModel
     {

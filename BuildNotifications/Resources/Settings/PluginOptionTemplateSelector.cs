@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.Core;
-using BuildNotifications.ViewModel.Settings.PluginOptions;
+using BuildNotifications.ViewModel.Settings.Setup.PluginOptions;
 
 namespace BuildNotifications.Resources.Settings
 {

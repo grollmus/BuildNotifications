@@ -6,7 +6,8 @@
              xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings"
              xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
              xmlns:settings1="clr-namespace:BuildNotifications.Views.Settings"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type settings:ConnectionsSectionViewModel}}"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionsSectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<buttonNavigation:ButtonNavigation Items="{Binding Connections}" SelectedItem="{Binding SelectedConnection}"
 	                                   AddItemCommand="{Binding AddConnectionCommand}" RemoveItemCommand="{Binding RemoveConnectionCommand}">
@@ -16,7 +17,7 @@
 					<ResourceDictionary Source="../../Resources/Settings/ConnectionsAndProjectsResources.xaml" />
 				</ResourceDictionary.MergedDictionaries>
 
-				<DataTemplate DataType="{x:Type settings:ConnectionViewModel}">
+				<DataTemplate DataType="{x:Type setup:ConnectionViewModel}">
 					<settings1:ConnectionView />
 				</DataTemplate>
 			</ResourceDictionary>

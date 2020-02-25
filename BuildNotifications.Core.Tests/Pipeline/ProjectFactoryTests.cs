@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
+            project.BuildConnectionName.Returns(new List<string> {"connection"});
 
             // Act
             var actual = sut.Construct(project);
@@ -50,7 +50,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
+            project.BuildConnectionName.Returns(new List<string> {"connection"});
 
             // Act
             var actual = sut.Construct(project);
@@ -77,8 +77,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionNames.Returns(new List<string> {"connection2"});
+            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.SourceControlConnectionName.Returns("connection2");
 
             // Act
             var actual = sut.Construct(project);
@@ -107,8 +107,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionNames.Returns(new List<string> {"connection"});
+            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.SourceControlConnectionName.Returns("connection");
 
             // Act
             var actual = sut.Construct(project);

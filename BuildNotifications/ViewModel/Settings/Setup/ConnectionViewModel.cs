@@ -8,7 +8,7 @@ using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Utils;
 
-namespace BuildNotifications.ViewModel.Settings
+namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class ConnectionViewModel : ButtonNavigationItem
     {

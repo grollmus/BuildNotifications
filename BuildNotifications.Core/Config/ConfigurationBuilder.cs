@@ -5,7 +5,13 @@ using Anotar.NLog;
 
 namespace BuildNotifications.Core.Config
 {
+    public interface IConfigurationBuilder
+    {
+        IProjectConfiguration CreateEmptyConfiguration(string name);
+    }
+
     public class ConfigurationBuilder
+        : IConfigurationBuilder
     {
         public ConfigurationBuilder(IPathResolver pathResolver, IConfigurationSerializer configurationSerializer)
         {
@@ -42,19 +48,25 @@ namespace BuildNotifications.Core.Config
 
         private bool AllConnectionsUsedInProject(IProjectConfiguration project, List<string> connectionNames)
         {
-            return connectionNames.All(n => project.BuildConnectionNames.Contains(n) || project.SourceControlConnectionNames.Contains(n));
+            return connectionNames.All(n => project.BuildConnectionName.Contains(n) || project.SourceControlConnectionName.Contains(n));
         }
 
         private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
         {
-            var project = new ProjectConfiguration();
-            var connectionToUse = withConnection;
+            var project = CreateEmptyConfiguration(withConnection.Name);
 
-            project.BuildConnectionNames.Add(withConnection.Name);
-            project.SourceControlConnectionNames.Add(withConnection.Name);
-            project.ProjectName = connectionToUse.Name;
+            project.BuildConnectionName.Add(withConnection.Name);
+            project.SourceControlConnectionName = withConnection.Name;
 
             return project;
+        }
+
+        public IProjectConfiguration CreateEmptyConfiguration(string name)
+        {
+            return new ProjectConfiguration
+            {
+                ProjectName = name
+            };
         }
 
         private readonly IPathResolver _pathResolver;

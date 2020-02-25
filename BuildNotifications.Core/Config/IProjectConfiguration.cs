@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Config
         /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        IList<string> BuildConnectionNames { get; set; }
+        IList<string> BuildConnectionName { get; set; }
 
         /// <summary>
         /// List of build definitions to never load information for.
@@ -59,9 +59,9 @@ namespace BuildNotifications.Core.Config
         PullRequestDisplayMode PullRequestDisplay { get; set; }
 
         /// <summary>
-        /// Name of the <see cref="ConnectionData" /> that are used to
+        /// Name of the <see cref="ConnectionData" /> that is used to
         /// fetch branch information for this project.
         /// </summary>
-        IList<string> SourceControlConnectionNames { get; }
+        string SourceControlConnectionName { get; set; }
     }
 }

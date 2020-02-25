@@ -4,7 +4,7 @@ using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Resources.Icons;
-using BuildNotifications.ViewModel.Settings;
+using BuildNotifications.ViewModel.Settings.Setup;
 using BuildNotifications.ViewModel.Utils;
 using Newtonsoft.Json;
 using TweenSharp.Animation;
@@ -16,13 +16,13 @@ namespace BuildNotifications.ViewModel.Overlays
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-        public InitialSetupOverlayViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction)
+        public InitialSetupOverlayViewModel(IConfiguration configuration, IPluginRepository pluginRepository, IConfigurationBuilder configurationBuilder, Action saveAction)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             _configuration = configuration;
 
             // TODO: Implement
-            SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction);
+            SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction, configurationBuilder);
             //settingsViewModel.SettingsChanged += UpdateText;
             //settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
@@ -31,8 +31,6 @@ namespace BuildNotifications.ViewModel.Overlays
 
             StoreCurrentState();
         }
-
-        private readonly IConfiguration _configuration;
 
         public bool AnimateDisplay
         {
@@ -43,8 +41,6 @@ namespace BuildNotifications.ViewModel.Overlays
                 OnPropertyChanged();
             }
         }
-
-        public SetupViewModel SetupViewModel { get; set; }
 
         public IconType DisplayedIconType
         {
@@ -82,6 +78,8 @@ namespace BuildNotifications.ViewModel.Overlays
         }
 
         public ICommand RequestCloseCommand { get; set; }
+
+        public SetupViewModel SetupViewModel { get; set; }
 
         public event EventHandler<InitialSetupEventArgs>? CloseRequested;
 
@@ -134,8 +132,8 @@ namespace BuildNotifications.ViewModel.Overlays
             }
             else
             {
-                var anyConnectedBuildProviderSetup = _configuration.Projects.Any(x => x.BuildConnectionNames.Any());
-                var anyConnectedSourceControlProviderSetup = _configuration.Projects.Any(x => x.SourceControlConnectionNames.Any());
+                var anyConnectedBuildProviderSetup = _configuration.Projects.Any(x => x.BuildConnectionName.Any());
+                var anyConnectedSourceControlProviderSetup = _configuration.Projects.Any(x => x.SourceControlConnectionName.Any());
 
                 if (!anyConnectedSourceControlProviderSetup && !anyConnectedBuildProviderSetup)
                 {
@@ -159,6 +157,8 @@ namespace BuildNotifications.ViewModel.Overlays
                 }
             }
         }
+
+        private readonly IConfiguration _configuration;
 
         private string _displayedTextId = "";
         private IconType _displayedIconType;

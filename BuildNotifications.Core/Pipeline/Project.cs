@@ -13,27 +13,24 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IEnumerable<IBranchProvider> branchProviders,
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider branchProvider,
             IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
         {
             _branchNameExtractor = branchNameExtractor;
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
-            _branchProviders = branchProviders.ToList();
+            _branchProvider = branchProvider;
             Config = config;
 
             _buildFilter = new ListBuildFilter(config);
         }
 
         public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config, IBranchNameExtractor branchNameExtractor)
-            : this(buildProvider.Yield(), branchProvider.Yield(), config, branchNameExtractor)
+            : this(buildProvider.Yield(), branchProvider, config, branchNameExtractor)
         {
         }
 
-        private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider)
-        {
-            return new EnrichedBuild(build, Name, buildProvider);
-        }
+        private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, buildProvider);
 
         private string ExtractBranchName(IPullRequest pr)
         {
@@ -51,10 +48,7 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private bool IsAllowed(IBaseBuild build)
-        {
-            return _buildFilter.IsAllowed(build);
-        }
+        private bool IsAllowed(IBaseBuild build) => _buildFilter.IsAllowed(build);
 
         public IProjectConfiguration Config { get; set; }
 
@@ -94,24 +88,18 @@ namespace BuildNotifications.Core.Pipeline
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
         {
-            foreach (var branchProvider in _branchProviders)
+            await foreach (var branch in _branchProvider.FetchExistingBranches())
             {
-                await foreach (var branch in branchProvider.FetchExistingBranches())
-                {
-                    if (Config.PullRequestDisplay != PullRequestDisplayMode.None || !(branch is IPullRequest))
-                        yield return branch;
-                }
+                if (Config.PullRequestDisplay != PullRequestDisplayMode.None || !(branch is IPullRequest))
+                    yield return branch;
             }
         }
 
         public async IAsyncEnumerable<IBranch> FetchRemovedBranches()
         {
-            foreach (var branchProvider in _branchProviders)
+            await foreach (var branch in _branchProvider.RemovedBranches())
             {
-                await foreach (var branch in branchProvider.RemovedBranches())
-                {
-                    yield return branch;
-                }
+                yield return branch;
             }
         }
 
@@ -184,7 +172,7 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         private readonly IBranchNameExtractor _branchNameExtractor;
-        private readonly List<IBranchProvider> _branchProviders;
+        private readonly IBranchProvider _branchProvider;
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
 
@@ -196,10 +184,7 @@ namespace BuildNotifications.Core.Pipeline
                 DisplayName = string.Empty;
             }
 
-            public bool Equals(IBranch other)
-            {
-                return false;
-            }
+            public bool Equals(IBranch other) => false;
 
             public string DisplayName { get; }
             public string Name { get; }

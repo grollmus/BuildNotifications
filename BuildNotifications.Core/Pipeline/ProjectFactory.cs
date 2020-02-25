@@ -102,10 +102,10 @@ namespace BuildNotifications.Core.Pipeline
 
         public IProject? Construct(IProjectConfiguration config)
         {
-            LogTo.Debug($"Trying to construct project from {config.BuildConnectionNames} and {config.SourceControlConnectionNames}");
+            LogTo.Debug($"Trying to construct project from {config.BuildConnectionName} and {config.SourceControlConnectionName}");
 
             var buildProviders = new List<IBuildProvider>();
-            foreach (var connectionName in config.BuildConnectionNames)
+            foreach (var connectionName in config.BuildConnectionName)
             {
                 var buildProvider = BuildProvider(connectionName);
                 if (buildProvider == null)
@@ -117,21 +117,15 @@ namespace BuildNotifications.Core.Pipeline
                 buildProviders.Add(buildProvider);
             }
 
-            var branchProviders = new List<IBranchProvider>();
-            foreach (var connectionName in config.SourceControlConnectionNames)
+            var branchProvider = BranchProvider(config.SourceControlConnectionName);
+            if (branchProvider == null)
             {
-                var branchProvider = BranchProvider(connectionName);
-                if (branchProvider == null)
-                {
-                    ReportError("FailedToConstructBranchProviderForConnection", connectionName);
-                    return null;
-                }
-
-                branchProviders.Add(branchProvider);
+                ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
+                return null;
             }
 
             var branchNameExtractor = new BranchNameExtractor();
-            return new Project(buildProviders, branchProviders, config, branchNameExtractor);
+            return new Project(buildProviders, branchProvider, config, branchNameExtractor);
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;

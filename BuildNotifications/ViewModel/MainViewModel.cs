@@ -394,7 +394,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StopUpdating();
-            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, PersistChanges);
+            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;

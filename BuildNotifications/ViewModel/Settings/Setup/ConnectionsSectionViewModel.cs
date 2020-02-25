@@ -9,12 +9,12 @@ using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Utils;
 
-namespace BuildNotifications.ViewModel.Settings
+namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class ConnectionsSectionViewModel : SetupSectionViewModel
     {
         public ConnectionsSectionViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction)
-            : base(configuration, pluginRepository, saveAction)
+            : base(configuration, saveAction)
         {
             _configuration = configuration;
             _pluginRepository = pluginRepository;

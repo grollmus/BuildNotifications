@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using BuildNotifications.PluginInterfaces.Configuration;
-using BuildNotifications.ViewModel.Settings.PluginOptions;
+using BuildNotifications.ViewModel.Settings.Setup.PluginOptions;
 
-namespace BuildNotifications.ViewModel.Settings
+namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class PluginConfigurationViewModel : BaseViewModel
     {

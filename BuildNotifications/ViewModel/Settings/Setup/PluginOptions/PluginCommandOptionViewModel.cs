@@ -2,7 +2,7 @@
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using BuildNotifications.ViewModel.Utils;
 
-namespace BuildNotifications.ViewModel.Settings.PluginOptions
+namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
 {
     internal class PluginCommandOptionViewModel : PluginOptionViewModel
     {
