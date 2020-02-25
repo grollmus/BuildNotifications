@@ -3,7 +3,6 @@ using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.PluginInterfaces;
 using Newtonsoft.Json;
-using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
@@ -71,7 +70,6 @@ namespace BuildNotifications.Core.Config
         public IList<IProjectConfiguration> Projects { get; set; }
 
         [JsonIgnore]
-        [IgnoredForConfig]
         public IList<IUser> IdentitiesOfCurrentUser { get; }
     }
 }

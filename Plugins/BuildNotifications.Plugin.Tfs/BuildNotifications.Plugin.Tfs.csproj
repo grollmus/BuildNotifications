@@ -15,7 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
-    <PackageReference Include="ReflectSettings" Version="1.1.4" />
   </ItemGroup>
 
   <ItemGroup>

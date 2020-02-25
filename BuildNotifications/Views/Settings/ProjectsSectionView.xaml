@@ -12,10 +12,6 @@
 	                                   AddItemCommand="{Binding AddProjectCommand}" RemoveItemCommand="{Binding RemoveProjectCommand}">
 		<buttonNavigation:ButtonNavigation.Resources>
 			<ResourceDictionary>
-				<ResourceDictionary.MergedDictionaries>
-					<ResourceDictionary Source="../../Resources/Settings/ConnectionsAndProjectsResources.xaml" />
-				</ResourceDictionary.MergedDictionaries>
-
 				<DataTemplate DataType="{x:Type setup:ProjectViewModel}">
 					<settings:ProjectView />
 				</DataTemplate>
