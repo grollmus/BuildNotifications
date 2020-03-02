@@ -45,7 +45,7 @@
 			<icons:IconButton Content="Save" DockPanel.Dock="Right" Command="{Binding SaveConnectionCommand}"
 			                  Foreground="{DynamicResource Foreground1}" VerticalAlignment="Top"
 			                  Margin="{StaticResource BlockHalfThickness}" HorizontalAlignment="Center"
-			                  Style="{StaticResource IconButtonWithDockedContent}" Icon="Status" />
+			                  Style="{StaticResource IconButtonWithDockedContent}" Icon="Save" />
 
 			<local:TestConnectionView DockPanel.Dock="Left" DataContext="{Binding TestConnection}" />
 		</DockPanel>

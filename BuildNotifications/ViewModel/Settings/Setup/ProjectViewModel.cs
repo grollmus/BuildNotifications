@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Settings.Options;
+using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
@@ -14,6 +16,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public ProjectViewModel(IProjectConfiguration model, IConfiguration configuration)
         {
             Model = model;
+            SaveCommand = new DelegateCommand(Save);
 
             Name = new TextOptionViewModel(model.ProjectName, StringLocalizer.ProjectName);
             IsEnabled = new BooleanOptionViewModel(model.IsEnabled, StringLocalizer.IsEnabled);
@@ -67,12 +70,31 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public PullRequestDisplayModeOptionViewModel PullRequestDisplayMode { get; }
+
+        public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
         public event EventHandler? SaveRequested;
 
         private void RaiseSaveRequested()
         {
             SaveRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Save()
+        {
+            Model.ProjectName = Name.Value ?? string.Empty;
+            Model.BuildConnectionName.Clear();
+            Model.BuildConnectionName.Add(BuildConnection.Value.Name);
+            Model.SourceControlConnectionName = SourceControlConnection.Value.Name;
+            Model.IsEnabled = IsEnabled.Value;
+            Model.HideCompletedPullRequests = HideCompletedPullRequests.Value;
+            Model.DefaultCompareBranch = DefaultCompareBranch.Value??string.Empty;
+            Model.BranchWhitelist = BranchWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
+            Model.BranchBlacklist = BranchBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
+            Model.BuildDefinitionWhitelist = BuildDefinitionWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
+            Model.BuildDefinitionBlacklist = BuildDefinitionBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
+
+            RaiseSaveRequested();
         }
     }
 }

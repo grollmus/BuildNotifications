@@ -5,6 +5,8 @@
                     xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     mc:Ignorable="d">
 	<DataTemplate x:Key="BooleanOptionTemplate" DataType="{x:Type options:BooleanOptionViewModel}">
 		<CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
@@ -19,6 +21,83 @@
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
 		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
+	</DataTemplate>
+
+	<DataTemplate DataType="{x:Type options:TextOptionViewModel}">
+		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
+		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+		                       Margin="{StaticResource BlockYOnlyMargin}" />
+	</DataTemplate>
+
+	<DataTemplate DataType="{x:Type options:StringCollectionOptionViewModel}">
+		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel">
+            <Grid DockPanel.Dock="Top">
+                <DockPanel>
+                    <Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
+                               DockPanel.Dock="Top" />
+                    <Rectangle Height="{StaticResource BlockQuarter}"
+                               VerticalAlignment="Bottom" DockPanel.Dock="Top"
+                               Fill="{DynamicResource Blue}" />
+                </DockPanel>
+                <DockPanel VerticalAlignment="Center">
+
+                    <TextBlock
+                        Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+                        Foreground="{DynamicResource Foreground1HalfTransparency}" FontSize="14" />
+                </DockPanel>
+
+            </Grid>
+            <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
+                <DockPanel DockPanel.Dock="Bottom">
+                    <icons:IconButton Icon="Plus" Command="{Binding AddNewItemCommand}" x:Name="AddButton"
+                                      Foreground="{DynamicResource Background2}" DockPanel.Dock="Left"
+                                      Background="{DynamicResource Background1}"
+                                      Height="{StaticResource BlockThreeQuarters}"
+                                      IconSize="{StaticResource BlockThreeQuarters}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <icons:ButtonInvokedAnimation />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </icons:IconButton>
+                    <DockPanel Visibility="Collapsed"
+                               x:Name="InfoDockPanel">
+                        <icons:IconBatch Type="Arrow" Width="{StaticResource Block}"
+                                         Height="{StaticResource Block}"
+                                         DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
+                                         Margin="{StaticResource BlockQuarterThickness}" />
+                        <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
+                    </DockPanel>
+                </DockPanel>
+                <ItemsControl ItemsSource="{Binding Values}" x:Name="ListBox">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                  Command="{Binding DataContext.RemoveItemCommand, ElementName=DockPanel}"
+                                                  CommandParameter="{Binding Value}" x:Name="RemoveButton"
+                                                  Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                                  Height="{StaticResource BlockThreeQuarters}"
+                                                  IconSize="{StaticResource BlockThreeQuarters}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Click">
+                                            <icons:ButtonInvokedAnimation />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </icons:IconButton>
+                                <ContentPresenter Content="{Binding}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </DockPanel>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Values.Count}" Value="0">
+                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
 	</DataTemplate>
 
 	<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->

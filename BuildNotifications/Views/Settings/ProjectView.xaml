@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ProjectViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
@@ -17,11 +18,19 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<ItemsControl ItemsSource="{Binding Options}" ItemTemplateSelector="{x:Static settings:OptionTemplateSelector.Instance}">
-		<ItemsControl.ItemsPanel>
-			<ItemsPanelTemplate>
-				<StackPanel Orientation="Vertical" IsItemsHost="True" />
-			</ItemsPanelTemplate>
-		</ItemsControl.ItemsPanel>
-	</ItemsControl>
+	<StackPanel Orientation="Vertical">
+		<ItemsControl ItemsSource="{Binding Options}"
+		              ItemTemplateSelector="{x:Static settings:OptionTemplateSelector.Instance}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Vertical" IsItemsHost="True" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+
+		<icons:IconButton Content="Save" DockPanel.Dock="Right" Command="{Binding SaveCommand}"
+		                  Foreground="{DynamicResource Foreground1}" VerticalAlignment="Top"
+		                  Margin="{StaticResource BlockHalfThickness}" HorizontalAlignment="Center"
+		                  Style="{StaticResource IconButtonWithDockedContent}" Icon="Save" />
+	</StackPanel>
 </UserControl>

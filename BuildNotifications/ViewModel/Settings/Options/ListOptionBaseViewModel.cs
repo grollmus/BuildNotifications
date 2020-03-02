@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BuildNotifications.Core.Config;
 
 namespace BuildNotifications.ViewModel.Settings.Options
 {
@@ -21,9 +20,23 @@ namespace BuildNotifications.ViewModel.Settings.Options
             }
         }
 
-        public ListOptionItemViewModel<TItem>? SelectedValue { get; set; }
+        public ListOptionItemViewModel<TItem>? SelectedValue
+        {
+            get => _selectedValue;
+            set
+            {
+                if (Equals(_selectedValue, value))
+                    return;
+
+                _selectedValue = value;
+                if (_selectedValue != null)
+                    Value = _selectedValue.Value;
+            }
+        }
 
         protected abstract IEnumerable<TItem> ModelValues { get; }
+
+        protected virtual string? DisplayNameFor(TItem item) => item?.ToString();
 
         private void Init()
         {
@@ -31,7 +44,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
                 return;
 
             _availableValues = new List<ListOptionItemViewModel<TItem>>(
-                ModelValues.Select(v => new ListOptionItemViewModel<TItem>(v, v?.ToString()))
+                ModelValues.Select(v => new ListOptionItemViewModel<TItem>(v, DisplayNameFor(v)))
             );
 
             _valuesFetched = true;
@@ -42,16 +55,6 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         private bool _valuesFetched;
         private List<ListOptionItemViewModel<TItem>>? _availableValues;
-    }
-
-    public class ConnectionOptionViewModel : ListOptionBaseViewModel<ConnectionData>
-    {
-        public ConnectionOptionViewModel(string displayName, IEnumerable<ConnectionData> connections, ConnectionData value)
-            : base(displayName, value)
-        {
-            ModelValues = connections.ToList();
-        }
-
-        protected override IEnumerable<ConnectionData> ModelValues { get; }
+        private ListOptionItemViewModel<TItem>? _selectedValue;
     }
 }
