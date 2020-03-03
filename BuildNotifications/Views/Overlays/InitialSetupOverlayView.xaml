@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:overlays="clr-namespace:BuildNotifications.ViewModel.Overlays"
-             xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
              xmlns:viewsSettings="clr-namespace:BuildNotifications.Views.Settings"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"

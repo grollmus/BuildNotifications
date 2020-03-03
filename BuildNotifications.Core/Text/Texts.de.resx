@@ -322,7 +322,7 @@
     <value>vor {0} Sekunden</value>
   </data>
   <data name="JustNowTextId" xml:space="preserve">
-    <value>Jetzt.</value>
+    <value>Jetzt</value>
   </data>
   <data name="AnErrorOccured" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten.</value>

@@ -43,15 +43,9 @@ namespace BuildNotifications.Plugin.Tfs.Build
             return (int) Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
         }
 
-        private TfsBuildDefinition Convert(BuildDefinition definition)
-        {
-            return new TfsBuildDefinition(definition);
-        }
+        private TfsBuildDefinition Convert(BuildDefinition definition) => new TfsBuildDefinition(definition);
 
-        private TfsBuild Convert(Microsoft.TeamFoundation.Build.WebApi.Build build)
-        {
-            return new TfsBuild(build);
-        }
+        private TfsBuild Convert(Microsoft.TeamFoundation.Build.WebApi.Build build) => new TfsBuild(build);
 
         private async Task<TeamProjectReference> GetProject()
         {
@@ -69,8 +63,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
         {
             foreach (var tfsBuild in builds)
             {
-                var links = tfsBuild.Links as TfsLinks;
-                if (links == null)
+                if (!(tfsBuild.Links is TfsLinks links))
                     continue;
 
                 var definition = _knownDefinitions.FirstOrDefault(d => d.Id == tfsBuild.Definition.Id);

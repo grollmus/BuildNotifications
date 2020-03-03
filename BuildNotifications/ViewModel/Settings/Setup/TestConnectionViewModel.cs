@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -85,7 +84,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlags.Immediately);
             Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlags.Immediately);
             Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
-            
+
             await TestConnection(BuildConnectionData());
 
             StatusIndicator.ClearStatus();

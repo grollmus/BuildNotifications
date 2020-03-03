@@ -10,20 +10,20 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
         public PluginListOptionViewModel(ListOption<TValue> valueOption, ILocalizationProvider localizationProvider)
             : base(valueOption, localizationProvider)
         {
-            ListOption = valueOption;
+            _listOption = valueOption;
             _localizationProvider = localizationProvider;
 
-            ListOption.AvailableValuesChanged += ListOption_AvailableValuesChanged;
+            _listOption.AvailableValuesChanged += ListOption_AvailableValuesChanged;
         }
 
-        public IEnumerable<PluginListOptionItemViewModel<TValue>> AvailableValues => ListOption.AvailableValues.Select(x => new PluginListOptionItemViewModel<TValue>(x));
+        public IEnumerable<PluginListOptionItemViewModel<TValue>> AvailableValues => _listOption.AvailableValues.Select(x => new PluginListOptionItemViewModel<TValue>(x));
 
         private void ListOption_AvailableValuesChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(AvailableValues));
         }
 
-        private readonly ListOption<TValue> ListOption;
+        private readonly ListOption<TValue> _listOption;
         private readonly ILocalizationProvider _localizationProvider;
     }
 }

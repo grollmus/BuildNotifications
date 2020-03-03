@@ -88,7 +88,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Model.SourceControlConnectionName = SourceControlConnection.Value.Name;
             Model.IsEnabled = IsEnabled.Value;
             Model.HideCompletedPullRequests = HideCompletedPullRequests.Value;
-            Model.DefaultCompareBranch = DefaultCompareBranch.Value??string.Empty;
+            Model.DefaultCompareBranch = DefaultCompareBranch.Value ?? string.Empty;
             Model.BranchWhitelist = BranchWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
             Model.BranchBlacklist = BranchBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
             Model.BuildDefinitionWhitelist = BuildDefinitionWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
