@@ -51,7 +51,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public override string DisplayNameTextId => Name;
-        public override IconType IconType => IconType.None;
+        public override IconType Icon => IconType.None;
         public ConnectionData Model { get; }
 
         public string Name

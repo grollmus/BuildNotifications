@@ -34,7 +34,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public ObservableCollection<ConnectionViewModel> Connections { get; }
 
         public override string DisplayNameTextId => StringLocalizer.Keys.Connections;
-        public override IconType IconType => IconType.Connection;
+        public override IconType Icon => IconType.Connection;
 
         public ICommand RemoveConnectionCommand { get; }
 

@@ -35,12 +35,12 @@
                                         <DockPanel Margin="{StaticResource BlockHalfThickness}"
                                                    MaxHeight="{StaticResource BlockTriple}"
                                                    d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigationItem}">
-                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding IconType}"
+                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding Icon}"
                                                              Margin="{StaticResource BlockQuarterRight}"
                                                              Foreground="{DynamicResource Foreground1HalfTransparency}"
                                                              Width="{StaticResource BlockOneAndHalf}"
                                                              Height="{StaticResource BlockOneAndHalf}"
-                                                             Visibility="{Binding IconType, Converter={x:Static utils:IconTypeToVisibilityConverter.Instance}}"
+                                                             Visibility="{Binding Icon, Converter={x:Static utils:IconTypeToVisibilityConverter.Instance}}"
                                                              />
 
                                             <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"

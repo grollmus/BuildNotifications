@@ -31,7 +31,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public ICommand AddProjectCommand { get; }
 
         public override string DisplayNameTextId => StringLocalizer.Keys.Projects;
-        public override IconType IconType => IconType.Project;
+        public override IconType Icon => IconType.Project;
 
         public ObservableCollection<ProjectViewModel> Projects { get; }
         public ICommand RemoveProjectCommand { get; }

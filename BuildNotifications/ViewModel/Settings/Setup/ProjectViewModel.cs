@@ -46,7 +46,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public TextOptionViewModel DefaultCompareBranch { get; }
         public override string DisplayNameTextId => Model.ProjectName;
         public BooleanOptionViewModel HideCompletedPullRequests { get; }
-        public override IconType IconType => IconType.None;
+        public override IconType Icon => IconType.None;
         public BooleanOptionViewModel IsEnabled { get; }
         public IProjectConfiguration Model { get; }
         public TextOptionViewModel Name { get; }
