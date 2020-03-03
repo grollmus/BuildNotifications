@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -78,17 +79,17 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private async Task TestConnection()
         {
-            Notifications.ClearNotificationsOfType(NotificationType.Error);
-            Notifications.ClearNotificationsOfType(NotificationType.Success);
-            Notifications.ClearNotificationsOfType(NotificationType.Info);
-            StatusIndicator.Busy();
-            Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
             await new SynchronizationContextRemover();
-
+            StatusIndicator.Busy();
+            Notifications.ClearNotificationsOfType(NotificationType.Error, RemoveFlags.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlags.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlags.Immediately);
+            Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
+            
             await TestConnection(BuildConnectionData());
 
             StatusIndicator.ClearStatus();
-            Notifications.ClearNotificationsOfType(NotificationType.Progress);
+            Notifications.ClearNotificationsOfType(NotificationType.Progress, RemoveFlags.Immediately);
         }
 
         private async Task TestConnection(ConnectionData connectionData)

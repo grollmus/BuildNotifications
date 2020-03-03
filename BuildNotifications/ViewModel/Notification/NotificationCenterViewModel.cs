@@ -23,7 +23,7 @@ namespace BuildNotifications.ViewModel.Notification
             Notifications.CollectionChanged += Notifications_CollectionChanged;
 
             NewNotificationsCounter = new NewNotificationsCounterViewModel();
-            ClearAllCommand = new DelegateCommand(ClearAll);
+            ClearAllCommand = new DelegateCommand(() => ClearAll());
         }
 
         public ICommand ClearAllCommand { get; set; }
@@ -94,10 +94,10 @@ namespace BuildNotifications.ViewModel.Notification
             UpdateUnreadCount();
         }
 
-        public void ClearNotificationsOfType(NotificationType type)
+        public void ClearNotificationsOfType(NotificationType type, RemoveFlags flags)
         {
             var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
-            RemoveNotifications(toRemove);
+            RemoveNotifications(toRemove, flags);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
@@ -121,10 +121,10 @@ namespace BuildNotifications.ViewModel.Notification
             return false;
         }
 
-        private void ClearAll()
+        private void ClearAll(RemoveFlags flags = RemoveFlags.None)
         {
             ClearSelection();
-            RemoveNotifications(Notifications.ToList());
+            RemoveNotifications(Notifications.ToList(), flags);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
@@ -137,8 +137,15 @@ namespace BuildNotifications.ViewModel.Notification
                 CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications)
+        private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications, RemoveFlags flags)
         {
+            if (flags.HasFlag(RemoveFlags.Immediately))
+            {
+                Notifications.Clear();
+                NotificationDistributor.ClearAllMessages();
+                return;
+            }
+
             // smoothly clear list by removing each element instead of calling .clear
             // (which would remove each item immediately not leaving any time to animate)
             foreach (var notification in notifications)

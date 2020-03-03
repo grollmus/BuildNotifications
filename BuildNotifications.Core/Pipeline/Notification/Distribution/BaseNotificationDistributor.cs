@@ -8,8 +8,6 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public abstract class BaseNotificationDistributor : INotificationDistributor
     {
-        private readonly Dictionary<INotification, IDistributedNotification> _distributedNotifications = new Dictionary<INotification, IDistributedNotification>();
-
         protected abstract IDistributedNotification ToDistributedNotification(INotification notification);
 
         public void Distribute(INotification notification)
@@ -25,6 +23,19 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             _distributedNotifications.Add(notification, distributedNotification);
         }
 
+        public void ClearAllMessages()
+        {
+            foreach (var notification in _distributedNotifications)
+            {
+                foreach (var processor in _processors)
+                {
+                    processor.Clear(notification.Value);
+                }
+            }
+
+            _distributedNotifications.Clear();
+        }
+
         public void ClearDistributedMessage(INotification notification)
         {
             if (!_distributedNotifications.TryGetValue(notification, out var distributedNotification))
@@ -38,15 +49,9 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             _distributedNotifications.Remove(notification);
         }
 
-        public IEnumerator<INotificationProcessor> GetEnumerator()
-        {
-            return _processors.GetEnumerator();
-        }
+        public IEnumerator<INotificationProcessor> GetEnumerator() => _processors.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(INotificationProcessor processor)
         {
@@ -88,10 +93,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             _processors.Clear();
         }
 
-        public bool Contains(INotificationProcessor item)
-        {
-            return _processors.Contains(item);
-        }
+        public bool Contains(INotificationProcessor item) => _processors.Contains(item);
 
         public void CopyTo(INotificationProcessor[] array, int arrayIndex)
         {
@@ -119,6 +121,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         public int Count => _processors.Count;
 
         public bool IsReadOnly => false;
+        private readonly Dictionary<INotification, IDistributedNotification> _distributedNotifications = new Dictionary<INotification, IDistributedNotification>();
         private readonly IList<INotificationProcessor> _processors = new List<INotificationProcessor>();
     }
 }
