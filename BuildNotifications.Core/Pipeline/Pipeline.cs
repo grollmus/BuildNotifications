@@ -16,14 +16,15 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Pipeline : IPipeline
     {
-        public Pipeline(ITreeBuilder treeBuilder, IConfiguration configuration)
+        public Pipeline(ITreeBuilder treeBuilder, IConfiguration configuration, IUserIdentityList userIdentityList)
         {
             _treeBuilder = treeBuilder;
             _configuration = configuration;
+            _userIdentityList = userIdentityList;
             _buildCache = new PipelineCache<IBuild>();
             _branchCache = new PipelineCache<IBranch>();
             _definitionCache = new PipelineCache<IBuildDefinition>();
-            _notificationFactory = new NotificationFactory(configuration);
+            _notificationFactory = new NotificationFactory(configuration, userIdentityList);
             _pipelineNotifier = new PipelineNotifier();
 
             _searchTerm = string.Empty;
@@ -252,7 +253,7 @@ namespace BuildNotifications.Core.Pipeline
                 foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
                 {
                     LogTo.Debug($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"");
-                    _configuration.IdentitiesOfCurrentUser.Add(currentUserIdentity);
+                    _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);
                 }
             }
             catch (Exception e)
@@ -270,7 +271,7 @@ namespace BuildNotifications.Core.Pipeline
             _branchCache.Clear();
             _lastUpdate = null;
             _oldTree = null;
-            _configuration.IdentitiesOfCurrentUser.Clear();
+            _userIdentityList.IdentitiesOfCurrentUser.Clear();
         }
 
         public void Search(string searchTerm)
@@ -306,14 +307,12 @@ namespace BuildNotifications.Core.Pipeline
                 var tree = BuildTree();
 
                 var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
-                IBuildTreeBuildsDelta delta;
 
                 LogTo.Debug("BuildTree is done. Producing notifications.");
                 // don't show any notifications for the initial fetch
-                if (_oldTree == null)
-                    delta = new BuildTreeBuildsDelta();
-                else
-                    delta = new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus, _configuration.PartialSucceededTreatmentMode);
+                IBuildTreeBuildsDelta delta = _oldTree == null 
+                    ? new BuildTreeBuildsDelta() 
+                    : new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus, _configuration.PartialSucceededTreatmentMode);
 
                 var notifications = _notificationFactory.ProduceNotifications(delta).ToList();
                 return (BuildTree: tree, Notifications: notifications);
@@ -331,6 +330,7 @@ namespace BuildNotifications.Core.Pipeline
 
         private readonly ITreeBuilder _treeBuilder;
         private readonly IConfiguration _configuration;
+        private readonly IUserIdentityList _userIdentityList;
         private readonly IPipelineCache<IBuild> _buildCache;
         private readonly IPipelineCache<IBranch> _branchCache;
         private readonly IPipelineCache<IBuildDefinition> _definitionCache;

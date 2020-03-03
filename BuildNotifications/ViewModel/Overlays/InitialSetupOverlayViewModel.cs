@@ -21,10 +21,10 @@ namespace BuildNotifications.ViewModel.Overlays
         {
             _configuration = configuration;
 
-            // TODO: Implement
             SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction, configurationBuilder);
-            //settingsViewModel.SettingsChanged += UpdateText;
-            //settingsViewModel.ConnectionsWrapper.TestFinished += UpdateText;
+            SetupViewModel.Projects.Changed += UpdateText;
+            SetupViewModel.Connections.Changed += UpdateText;
+            SetupViewModel.Connections.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
             App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
             UpdateText(this, EventArgs.Empty);
@@ -118,17 +118,16 @@ namespace BuildNotifications.ViewModel.Overlays
 
             if (_configuration.Projects.Count == 0)
             {
-                // TODO: Why is this in the ViewModel?
-                //if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
-                //{
-                //    DisplayedTextId = InitialSetupUntested;
-                //    DisplayedIconType = IconType.Dummy;
-                //}
-                //else
-                //{
-                //    DisplayedTextId = InitialSetupTested;
-                //    DisplayedIconType = IconType.Project;
-                //}
+                if (SetupViewModel.Connections.Connections.Any(x => x.TestConnection.LastTestDidSucceed == false))
+                {
+                    DisplayedTextId = InitialSetupUntested;
+                    DisplayedIconType = IconType.Dummy;
+                }
+                else
+                {
+                    DisplayedTextId = InitialSetupTested;
+                    DisplayedIconType = IconType.Project;
+                }
             }
             else
             {

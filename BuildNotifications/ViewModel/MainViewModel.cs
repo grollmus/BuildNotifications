@@ -353,7 +353,7 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges, _coreSetup.UserIdentityList);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel

@@ -14,5 +14,12 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         protected IConfiguration Configuration { get; }
         protected Action SaveAction { get; }
+
+        public event EventHandler? Changed;
+
+        protected void RaiseChanged()
+        {
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

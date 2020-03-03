@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using BuildNotifications.PluginInterfaces;
-using Newtonsoft.Json;
 
 namespace BuildNotifications.Core.Config
 {
@@ -47,10 +45,6 @@ namespace BuildNotifications.Core.Config
         /// Defines how builds should be grouped.
         /// </summary>
         IBuildTreeGroupDefinition GroupDefinition { get; set; }
-
-        // TODO: Why is this here?
-        [JsonIgnore]
-        IList<IUser> IdentitiesOfCurrentUser { get; }
 
         /// <summary>
         /// Language used for localizing the UI.

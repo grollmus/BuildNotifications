@@ -33,7 +33,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
             var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration, userIdentityList);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
@@ -52,7 +53,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
             var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration, userIdentityList);
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
@@ -101,7 +103,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var configuration = Substitute.For<IConfiguration>();
             configuration.BuildsToShow.Returns(int.MaxValue);
-            var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);
 
             var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
             pipeline.AddProject(project);

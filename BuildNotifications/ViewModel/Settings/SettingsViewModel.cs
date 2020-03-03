@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Text;
 using BuildNotifications.ViewModel.Settings.Options;
 using BuildNotifications.ViewModel.Utils;
@@ -10,9 +13,10 @@ namespace BuildNotifications.ViewModel.Settings
 {
     public class SettingsViewModel : BaseViewModel
     {
-        public SettingsViewModel(IConfiguration configuration, Action saveMethod)
+        public SettingsViewModel(IConfiguration configuration, Action saveMethod, IUserIdentityList userIdentityList)
         {
             _saveMethod = saveMethod;
+            _userIdentityList = userIdentityList;
             _configuration = configuration;
             EditConnectionsCommand = new DelegateCommand(EditConnections);
 
@@ -32,7 +36,11 @@ namespace BuildNotifications.ViewModel.Settings
             {
                 option.ValueChanged += Option_ValueChanged;
             }
+
+            UpdateUser();
         }
+
+        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
 
         public ICommand EditConnectionsCommand { get; }
 
@@ -70,8 +78,20 @@ namespace BuildNotifications.ViewModel.Settings
 
         public void UpdateUser()
         {
-            // TODO: Implement
-            // TODO: Why is this here?
+            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
+
+            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
+            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
+
+            foreach (var user in toAdd)
+            {
+                CurrentUserIdentities.Add(user);
+            }
+
+            foreach (var user in toRemove)
+            {
+                CurrentUserIdentities.Remove(user);
+            }
         }
 
         private void EditConnections()
@@ -99,5 +119,6 @@ namespace BuildNotifications.ViewModel.Settings
         private readonly IConfiguration _configuration;
 
         private readonly Action _saveMethod;
+        private readonly IUserIdentityList _userIdentityList;
     }
 }

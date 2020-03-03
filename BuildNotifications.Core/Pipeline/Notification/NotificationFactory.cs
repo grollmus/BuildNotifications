@@ -13,9 +13,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
         /// Factory to create Notifications from a BuildTreeDelta.
         /// </summary>
         /// <param name="configuration">Configuration needed to filter which notifications should be created.</param>
-        public NotificationFactory(IConfiguration configuration)
+        /// <param name="userIdentityList">List of identities for the current user.</param>
+        public NotificationFactory(IConfiguration configuration, IUserIdentityList userIdentityList)
         {
             _configuration = configuration;
+            _userIdentityList = userIdentityList;
         }
 
         public IEnumerable<INotification> ProduceNotifications(IBuildTreeBuildsDelta fromDelta)
@@ -185,7 +187,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         private bool ShouldNotifyAboutBuild(IBuildNode buildNode)
         {
             var notifySetting = NotifySetting(buildNode);
-            var currentUserIdentities = _configuration.IdentitiesOfCurrentUser;
+            var currentUserIdentities = _userIdentityList.IdentitiesOfCurrentUser;
             switch (notifySetting)
             {
                 case BuildNotificationMode.None:
@@ -202,5 +204,6 @@ namespace BuildNotifications.Core.Pipeline.Notification
         }
 
         private readonly IConfiguration _configuration;
+        private readonly IUserIdentityList _userIdentityList;
     }
 }

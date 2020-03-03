@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces;
@@ -58,42 +59,39 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _someoneElse.Id.Returns("SomeoneElse");
 
             _allowAllConfiguration = Substitute.For<IConfiguration>();
-            _allowAllConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _allowAllConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _allowAllConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _allowAllConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
 
             _onlyRequestedByMeConfiguration = Substitute.For<IConfiguration>();
-            _onlyRequestedByMeConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _onlyRequestedByMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
             _onlyRequestedByMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
             _onlyRequestedByMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
 
             _onlyRequestedForMeConfiguration = Substitute.For<IConfiguration>();
-            _onlyRequestedForMeConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _onlyRequestedForMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
             _onlyRequestedForMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
             _onlyRequestedForMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
 
             _dontNotifyConfiguration = Substitute.For<IConfiguration>();
-            _dontNotifyConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.None);
             _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.None);
             _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.None);
 
             _treatPartialsAsSucceededConfiguration = Substitute.For<IConfiguration>();
-            _treatPartialsAsSucceededConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsSucceededConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             _treatPartialsAsFailedConfiguration = Substitute.For<IConfiguration>();
-            _treatPartialsAsFailedConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
             _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
             _treatPartialsAsFailedConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsFailed);
+
+            _userIdentityList = Substitute.For<IUserIdentityList>();
+            _userIdentityList.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
         }
 
         private readonly IBuildDefinition _ciDefinition;
@@ -134,6 +132,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         private readonly IUser _me;
 
         private readonly IUser _someoneElse;
+
+        private readonly IUserIdentityList _userIdentityList;
 
         private readonly IConfiguration _allowAllConfiguration;
         private readonly IConfiguration _onlyRequestedByMeConfiguration;
@@ -186,7 +186,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -207,7 +207,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build3);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -227,7 +227,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build2);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -250,7 +250,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -275,7 +275,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -300,7 +300,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -320,7 +320,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build2);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -343,7 +343,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -367,7 +367,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -390,7 +390,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build4);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -421,7 +421,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.False(messages.Any());
@@ -451,7 +451,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.False(messages.Any());
@@ -483,7 +483,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_dontNotifyConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_dontNotifyConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.False(messages.Any());
@@ -514,7 +514,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_onlyRequestedByMeConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.True(messages.Any());
@@ -546,7 +546,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_onlyRequestedForMeConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.True(messages.Any());
@@ -576,7 +576,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             }
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.True(messages.Any());
@@ -589,7 +589,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var delta = new BuildTreeBuildsDelta();
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             Assert.Empty(messages);
@@ -604,7 +604,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -622,7 +622,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.SucceededBuilds.Add(build);
 
             // act
-            var messages = new NotificationFactory(_treatPartialsAsSucceededConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_treatPartialsAsSucceededConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
@@ -641,7 +641,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             delta.FailedBuilds.Add(build);
 
             // act
-            var messages = new NotificationFactory(_treatPartialsAsFailedConfiguration).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_treatPartialsAsFailedConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();

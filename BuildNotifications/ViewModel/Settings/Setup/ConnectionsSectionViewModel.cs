@@ -46,10 +46,18 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 if (_selectedConnection == value)
                     return;
 
+                if (_selectedConnection != null)
+                    _selectedConnection.TestConnection.TestFinished -= TestConnection_TestFinished;
+
                 _selectedConnection = value;
                 OnPropertyChanged();
+
+                if (_selectedConnection != null)
+                    _selectedConnection.TestConnection.TestFinished += TestConnection_TestFinished;
             }
         }
+
+        public event EventHandler? TestFinished;
 
         private void AddConnection()
         {
@@ -82,12 +90,22 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
+        private void RaiseTestFinished()
+        {
+            TestFinished?.Invoke(this, EventArgs.Empty);
+        }
+
         private void RemoveConnection(ConnectionViewModel viewModel)
         {
             viewModel.SaveRequested -= ConnectionViewModel_SaveRequested;
             _configuration.Connections.Remove(viewModel.Model);
             Connections.Remove(viewModel);
             SelectedConnection = Connections.FirstOrDefault();
+        }
+
+        private void TestConnection_TestFinished(object? sender, EventArgs e)
+        {
+            RaiseTestFinished();
         }
 
         private readonly IConfiguration _configuration;

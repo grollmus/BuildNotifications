@@ -10,12 +10,18 @@ namespace BuildNotifications.ViewModel.Settings.Setup
     {
         public SetupViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction, IConfigurationBuilder configurationBuilder)
         {
+            Connections = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            Projects = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+
             Sections = new SetupSectionViewModel[]
             {
-                new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction),
-                new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction)
+                Connections,
+                Projects
             };
         }
+
+        public ConnectionsSectionViewModel Connections { get; }
+        public ProjectsSectionViewModel Projects { get; }
 
         public IEnumerable<SetupSectionViewModel> Sections { get; }
 
