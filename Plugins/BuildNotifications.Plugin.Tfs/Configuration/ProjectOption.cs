@@ -49,6 +49,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
         }
 
+        protected override bool ValidateValue(TfsProject? value) => value != null && !string.IsNullOrEmpty(value.Id);
+
         private List<TfsProject> _availableProjects = new List<TfsProject>();
     }
 }

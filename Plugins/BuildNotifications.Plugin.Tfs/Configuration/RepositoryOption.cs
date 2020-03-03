@@ -56,6 +56,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
         }
 
+        protected override bool ValidateValue(TfsRepository? value) => value != null && !string.IsNullOrEmpty(value.Id);
+
         private List<TfsRepository> _availableRepositories = new List<TfsRepository>();
     }
 }
