@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using BuildNotifications.Plugin.Tfs.Resources;
 using BuildNotifications.PluginInterfaces.Configuration;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
@@ -7,7 +8,8 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
     {
         public string Localized(string id, CultureInfo culture)
         {
-            return $"[{id}]";
+            //return $"[{id}]";
+            return Strings.ResourceManager.GetString(id, culture) ?? id;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
             Option.IsLoadingChanged += Option_IsLoadingChanged;
         }
 
-        public string Description => Option.DescriptionTextId;
+        public string Description => _localizationProvider.Localize(Option.DescriptionTextId);
         public string DisplayName => _localizationProvider.Localize(Option.NameTextId);
         public bool IsEnabled => Option.IsEnabled;
         public bool IsVisible => Option.IsVisible;

@@ -21,4 +21,19 @@
     <ProjectReference Include="..\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\Strings.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
