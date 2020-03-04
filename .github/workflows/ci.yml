@@ -11,11 +11,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v1
     
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.100
-    
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
