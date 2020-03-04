@@ -157,6 +157,9 @@ namespace BuildNotifications.ViewModel
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.Activate();
                 mainWindow.Show();
+                mainWindow.Topmost = true;
+                mainWindow.Topmost = false;
+                mainWindow.Focus();
             }
         }
 

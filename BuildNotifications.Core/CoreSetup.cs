@@ -28,9 +28,8 @@ namespace BuildNotifications.Core
 
             UserIdentityList = new UserIdentityList();
 
-            var branchNameExtractor = new BranchNameExtractor();
             var searcher = new BuildSearcher();
-            var treeBuilder = new TreeBuilder(Configuration, branchNameExtractor, searcher);
+            var treeBuilder = new TreeBuilder(Configuration, searcher);
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration, UserIdentityList);
 
             Pipeline.Notifier.Updated += Notifier_Updated;

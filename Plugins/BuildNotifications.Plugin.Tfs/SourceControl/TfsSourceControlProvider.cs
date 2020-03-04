@@ -18,15 +18,9 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
             _repositoryId = repositoryId;
         }
 
-        private TfsBranch Convert(GitRef branch, TfsUrlBuilder urlBuilder)
-        {
-            return new TfsBranch(branch, urlBuilder);
-        }
+        private TfsBranch Convert(GitRef branch, TfsUrlBuilder urlBuilder) => new TfsBranch(branch, urlBuilder);
 
-        private TfsPullRequests Convert(GitPullRequest branch, TfsUrlBuilder urlBuilder)
-        {
-            return new TfsPullRequests(branch, urlBuilder);
-        }
+        private TfsPullRequests Convert(GitPullRequest branch, TfsUrlBuilder urlBuilder) => new TfsPullRequests(branch, urlBuilder);
 
         private async Task<List<GitPullRequest>> FetchPullRequests(GitHttpClient gitClient)
         {
@@ -46,6 +40,8 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
 
             return new TfsUrlBuilder(projectClient.BaseAddress, project.Name);
         }
+
+        public IBranchNameExtractor NameExtractor { get; } = new GitBranchNameExtractor();
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
         {
@@ -78,7 +74,7 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
             var pullRequests = await FetchPullRequests(gitClient);
 
             var names = branches.Select(b => b.Name).Concat(pullRequests.Select(p => TfsBranch.ComputePullRequestBranchName(p.PullRequestId)));
-            var deletedBranches = _knownBranches.Where(known => names.All(n => known.Name != n));
+            var deletedBranches = _knownBranches.Where(known => names.All(n => known.FullName != n));
 
             foreach (var branch in deletedBranches)
             {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline
 {

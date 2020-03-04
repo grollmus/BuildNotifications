@@ -10,25 +10,23 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class TreeBuilder : ITreeBuilder
     {
-        public TreeBuilder(IConfiguration config, IBranchNameExtractor branchNameExtractor,
-            IBuildSearcher searcher)
+        public TreeBuilder(IConfiguration config, IBuildSearcher searcher)
         {
             _config = config;
-            _branchNameExtractor = branchNameExtractor;
             _searcher = searcher;
         }
 
         private IBuildTreeGroupDefinition GroupDefinition => _config.GroupDefinition;
 
-        private IBuildTreeNode BuildPath(IBuild build, IList<IBranch> branches)
+        private IBuildTreeNode BuildPath(IBuild build)
         {
-            var node = ConstructNode(Arrangement.GroupDefinition.None, build, branches);
+            var node = ConstructNode(Arrangement.GroupDefinition.None, build);
             var currentDepth = GroupDefinition.Count();
             node.Depth = currentDepth + 1;
 
             foreach (var group in GroupDefinition.Reverse())
             {
-                var parent = ConstructNode(group, build, branches);
+                var parent = ConstructNode(group, build);
                 parent.AddChild(node);
                 node = parent;
                 node.Depth = currentDepth;
@@ -38,15 +36,15 @@ namespace BuildNotifications.Core.Pipeline.Tree
             return node;
         }
 
-        private IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build, IEnumerable<IBranch> branches)
+        private IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build)
         {
             switch (group)
             {
                 case Arrangement.GroupDefinition.Branch:
                 {
                     var enrichedBuild = build as EnrichedBuild;
-                    var isPullRequest = _branchNameExtractor.IsPullRequest(enrichedBuild?.Branch?.Name);
-                    var displayName = _branchNameExtractor.ExtractDisplayName(build.BranchName, branches);
+                    var isPullRequest = enrichedBuild?.Branch?.IsPullRequest ?? false;
+                    var displayName = enrichedBuild?.Branch?.DisplayName ?? build.BranchName;
                     return new BranchGroupNode(displayName, isPullRequest);
                 }
                 case Arrangement.GroupDefinition.BuildDefinition:
@@ -103,7 +101,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null,
             string searchTerm = "")
         {
-            var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
 
             if (tree.GroupDefinition != GroupDefinition)
@@ -115,7 +112,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var filteredBuilds = builds.Where(b => _searcher.Matches(b, searchTerm));
             foreach (var build in filteredBuilds)
             {
-                var path = BuildPath(build, branchList);
+                var path = BuildPath(build);
                 Merge(tree, path, taggedNodes);
             }
 
@@ -125,7 +122,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         private readonly IConfiguration _config;
-        private readonly IBranchNameExtractor _branchNameExtractor;
         private readonly IBuildSearcher _searcher;
     }
 }

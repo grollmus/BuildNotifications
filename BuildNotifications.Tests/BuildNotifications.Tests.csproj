@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications\BuildNotifications.csproj" />
+    <ProjectReference Include="..\Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj" />
   </ItemGroup>
 
 </Project>

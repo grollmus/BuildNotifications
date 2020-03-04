@@ -6,12 +6,12 @@ namespace BuildNotifications.Plugin.DummyBuildServer
     {
         public bool Equals(Branch x, Branch y)
         {
-            return x?.Name.Equals(y?.Name) == true;
+            return x?.FullName.Equals(y?.FullName) == true;
         }
 
         public int GetHashCode(Branch obj)
         {
-            return obj.Name.GetHashCode();
+            return obj.FullName.GetHashCode();
         }
     }
 }

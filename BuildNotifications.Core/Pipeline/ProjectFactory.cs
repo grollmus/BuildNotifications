@@ -5,7 +5,6 @@ using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
@@ -119,17 +118,13 @@ namespace BuildNotifications.Core.Pipeline
 
             IBranchProvider? branchProvider = null;
             if (!string.IsNullOrEmpty(config.SourceControlConnectionName))
-            {
                 branchProvider = BranchProvider(config.SourceControlConnectionName);
-                if (branchProvider == null)
-                {
-                    ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
-                    return null;
-                }
-            }
 
-            var branchNameExtractor = new BranchNameExtractor();
-            return new Project(buildProviders, branchProvider, config, branchNameExtractor);
+            if (branchProvider != null)
+                return new Project(buildProviders, branchProvider, config);
+
+            ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
+            return null;
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;

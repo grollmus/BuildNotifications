@@ -8,6 +8,35 @@ namespace BuildNotifications.Core.Tests
 {
     public class ProjectProviderTests
     {
+        public ProjectProviderTests()
+        {
+            _sourceConnection = new ConnectionData {Name = "source"};
+
+            _buildConnection = new ConnectionData {Name = "build"};
+        }
+
+        private readonly ConnectionData _sourceConnection;
+        private readonly ConnectionData _buildConnection;
+
+        private ProjectConfiguration CreateProjectConfiguration(string name, bool enabled = true)
+        {
+            return new ProjectConfiguration
+            {
+                ProjectName = name,
+                IsEnabled = enabled,
+                SourceControlConnectionName = "source",
+                BuildConnectionName = new[] {"build"}
+            };
+        }
+
+        private Configuration CreateConfiguration()
+        {
+            var configuration = new Configuration();
+            configuration.Connections.Add(_sourceConnection);
+            configuration.Connections.Add(_buildConnection);
+            return configuration;
+        }
+
         [Fact]
         public void AllProjectsShouldBeEmptyWhenNoProjectIsConfigured()
         {
@@ -25,14 +54,37 @@ namespace BuildNotifications.Core.Tests
         }
 
         [Fact]
+        public void AllProjectsShouldContainDisabledProjectsDefinedInConfiguration()
+        {
+            // Arrange
+            var pluginRepository = Substitute.For<IPluginRepository>();
+            var configuration = CreateConfiguration();
+            configuration.Projects.Add(CreateProjectConfiguration("p1", false));
+            configuration.Projects.Add(CreateProjectConfiguration("p2"));
+            configuration.Projects.Add(CreateProjectConfiguration("p3", false));
+
+            var sut = new ProjectProvider(configuration, pluginRepository);
+
+            // Act
+            var actual = sut.AllProjects().ToList();
+
+            // Assert
+            Assert.Collection(actual.Select(p => p.Name),
+                x => Assert.Equal("p1", x),
+                x => Assert.Equal("p2", x),
+                x => Assert.Equal("p3", x)
+            );
+        }
+
+        [Fact]
         public void AllProjectsShouldContainEveryProjectDefinedInConfiguration()
         {
             // Arrange
             var pluginRepository = Substitute.For<IPluginRepository>();
-            var configuration = new Configuration();
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p1"});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p2"});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p3"});
+            var configuration = CreateConfiguration();
+            configuration.Projects.Add(CreateProjectConfiguration("p1"));
+            configuration.Projects.Add(CreateProjectConfiguration("p2"));
+            configuration.Projects.Add(CreateProjectConfiguration("p3"));
 
             var sut = new ProjectProvider(configuration, pluginRepository);
 
@@ -52,10 +104,10 @@ namespace BuildNotifications.Core.Tests
         {
             // Arrange
             var pluginRepository = Substitute.For<IPluginRepository>();
-            var configuration = new Configuration();
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p1", IsEnabled = false});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p2"});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p3"});
+            var configuration = CreateConfiguration();
+            configuration.Projects.Add(CreateProjectConfiguration("p1", false));
+            configuration.Projects.Add(CreateProjectConfiguration("p2"));
+            configuration.Projects.Add(CreateProjectConfiguration("p3"));
 
             var sut = new ProjectProvider(configuration, pluginRepository);
 
@@ -64,29 +116,6 @@ namespace BuildNotifications.Core.Tests
 
             // Assert
             Assert.Collection(actual.Select(p => p.Name),
-                x => Assert.Equal("p2", x),
-                x => Assert.Equal("p3", x)
-            );
-        }
-
-        [Fact]
-        public void AllProjectsShouldContainDisabledProjectsDefinedInConfiguration()
-        {
-            // Arrange
-            var pluginRepository = Substitute.For<IPluginRepository>();
-            var configuration = new Configuration();
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p1", IsEnabled = false});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p2"});
-            configuration.Projects.Add(new ProjectConfiguration {ProjectName = "p3", IsEnabled = false});
-
-            var sut = new ProjectProvider(configuration, pluginRepository);
-
-            // Act
-            var actual = sut.AllProjects().ToList();
-
-            // Assert
-            Assert.Collection(actual.Select(p => p.Name),
-                x => Assert.Equal("p1", x),
                 x => Assert.Equal("p2", x),
                 x => Assert.Equal("p3", x)
             );

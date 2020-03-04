@@ -8,7 +8,7 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
         public TfsBranch(GitRef branch, TfsUrlBuilder urlBuilder)
         {
             DisplayName = ExtractDisplayName(branch.Name);
-            Name = branch.Name;
+            FullName = branch.Name;
             _id = branch.ObjectId;
 
             WebUrl = urlBuilder.BuildBranchUrl(DisplayName);
@@ -17,7 +17,7 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
         protected TfsBranch(int pullRequestId, TfsUrlBuilder urlBuilder)
         {
             DisplayName = $"PR {pullRequestId}";
-            Name = ComputePullRequestBranchName(pullRequestId);
+            FullName = ComputePullRequestBranchName(pullRequestId);
             _id = pullRequestId.ToString();
 
             WebUrl = urlBuilder.BuildPullRequestUrl(pullRequestId);
@@ -25,24 +25,16 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
 
         public string WebUrl { get; }
 
-        internal static string ComputePullRequestBranchName(int pullRequestId)
-        {
-            return PullRequestPrefix + pullRequestId + PullRequestSuffix;
-        }
+        internal static string ComputePullRequestBranchName(int pullRequestId) => PullRequestPrefix + pullRequestId + PullRequestSuffix;
 
-        private string ExtractDisplayName(string branchName)
-        {
-            return branchName.Replace(BranchNamePrefix, "");
-        }
+        private string ExtractDisplayName(string branchName) => branchName.Replace(BranchNamePrefix, "");
 
-        public bool Equals(IBranch other)
-        {
-            return _id == (other as TfsBranch)?._id;
-        }
+        public bool Equals(IBranch other) => _id == (other as TfsBranch)?._id;
 
         public string DisplayName { get; }
 
-        public string Name { get; }
+        public string FullName { get; }
+        public virtual bool IsPullRequest => false;
 
         private readonly string _id;
         private const string BranchNamePrefix = "refs/heads/";
