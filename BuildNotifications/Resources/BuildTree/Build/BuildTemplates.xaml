@@ -103,6 +103,19 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
+                <Rectangle Fill="{DynamicResource Background3}"
+                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
+                           Visibility="{Binding IsHighlightedBySight, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" UseLayoutRounding="True">
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="true">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="True" />
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="false">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="True" />
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                     Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
