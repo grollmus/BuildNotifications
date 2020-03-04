@@ -8,7 +8,6 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
     {
         public string Localized(string id, CultureInfo culture)
         {
-            //return $"[{id}]";
             return Strings.ResourceManager.GetString(id, culture) ?? id;
         }
     }

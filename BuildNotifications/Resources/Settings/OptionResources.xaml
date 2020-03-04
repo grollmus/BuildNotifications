@@ -17,19 +17,19 @@
 		</CheckBox>
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type options:NumberOptionViewModel}">
+	<DataTemplate x:Key="NumberOptionTemplate" DataType="{x:Type options:NumberOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
 		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type options:TextOptionViewModel}">
+	<DataTemplate x:Key="TextOptionTemplate" DataType="{x:Type options:TextOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
 		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type options:StringCollectionOptionViewModel}">
+	<DataTemplate x:Key="StringCollectionOptionTemplate" DataType="{x:Type options:StringCollectionOptionViewModel}">
 		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel">
             <Grid DockPanel.Dock="Top">
                 <DockPanel>
@@ -85,7 +85,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </icons:IconButton>
-                                <ContentPresenter Content="{Binding}" />
+                                <ContentPresenter Content="{Binding}" ContentTemplateSelector="{x:Static settings:OptionTemplateSelector.Instance}" />
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

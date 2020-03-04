@@ -35,6 +35,9 @@ namespace BuildNotifications.Resources.Settings
             return item switch
             {
                 BooleanOptionViewModel _ => (element?.TryFindResource("BooleanOptionTemplate") as DataTemplate),
+                NumberOptionViewModel _ => (element?.TryFindResource("NumberOptionTemplate") as DataTemplate),
+                TextOptionViewModel _ => (element?.TryFindResource("TextOptionTemplate") as DataTemplate),
+                StringCollectionOptionViewModel _ => (element?.TryFindResource("StringCollectionOptionTemplate") as DataTemplate),
                 _ => null
             };
         }
