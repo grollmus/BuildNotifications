@@ -12,68 +12,84 @@
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification">
 
+    <ContextMenu x:Key="BuildContextMenu">
+        <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
+                                IconType="SingleBuild" />
+        <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
+                                IconType="Branch"
+                                Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
+        <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}"
+                                Command="{Binding GoToBranchCommand}"
+                                IconType="PullRequest"
+                                Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+        <menu:DecoratedMenuItem Header="{text:Localized GoToDefinition}"
+                                Command="{Binding GoToDefinitionCommand}" IconType="Definition" />
+    </ContextMenu>
+
+
+    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}" x:Key="ToolTip">
+
+        <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
+            <icons:IconBatch Type="Settings" Width="{StaticResource Block}"
+                             Margin="{StaticResource BlockHalfXOnlyMargin}"
+                             Height="{StaticResource Block}" DockPanel.Dock="Left"
+                             VerticalAlignment="Center"
+                             Foreground="{DynamicResource Foreground1HalfTransparency}" />
+
+            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                       VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"
+                       Text="{Binding RelativeChangedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
+                       FontSize="{StaticResource BlockThreeQuarters}"
+                       Foreground="{DynamicResource Foreground1}" />
+            <TextBlock Text="{Binding StatusDisplayName}" VerticalAlignment="Center"
+                       Foreground="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
+                       Background="Transparent" FontWeight="Bold" />
+        </DockPanel>
+        <UniformGrid Columns="{Binding UserColumns}">
+            <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
+                <icons:IconBatch Type="Queued" Width="{StaticResource Block}"
+                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                 Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                 VerticalAlignment="Center"
+                                 Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                <TextBlock Text="{text:Localized RequestedBy}"
+                           Foreground="{DynamicResource Foreground1HalfTransparency}"
+                           Background="Transparent" DockPanel.Dock="Top"
+                           FontSize="{StaticResource BlockThreeQuarters}" />
+                <TextBlock Text="{Binding RequestedBy}" Foreground="{DynamicResource Foreground1}"
+                           Background="Transparent" />
+            </DockPanel>
+            <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}"
+                       Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
+                <icons:IconBatch Type="Person" Width="{StaticResource Block}"
+                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                 Height="{StaticResource Block}" DockPanel.Dock="Left"
+                                 VerticalAlignment="Center"
+                                 Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                <TextBlock Text="{text:Localized RequestedFor}"
+                           Foreground="{DynamicResource Foreground1HalfTransparency}"
+                           Background="Transparent" DockPanel.Dock="Top"
+                           FontSize="{StaticResource BlockThreeQuarters}" />
+                <TextBlock Text="{Binding RequestedFor}" Foreground="{DynamicResource Foreground1}"
+                           Background="Transparent" />
+            </DockPanel>
+
+        </UniformGrid>
+    </StackPanel>
+
+
     <DataTemplate x:Key="BuildNodeTemplate" DataType="{x:Type viewModelTree:BuildNodeViewModel}">
+        <!--Be careful when editing this file, as this template is displayed hundreds of times. Therefore changes easily affect performance.-->
         <Grid>
-            <Grid Cursor="Hand"
+            <Grid Cursor="Hand" ContextMenu="{StaticResource BuildContextMenu}"
+                  Background="{StaticResource BlueLowTransparency}"
                   Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
-                  Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}">
-
-                <Grid.ToolTip>
-                    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}">
-
-                        <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-                            <icons:IconBatch Type="Settings" Width="{StaticResource Block}"
-                                                   Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                   Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource Foreground1HalfTransparency}" />
-
-                            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                       VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"
-                                       Text="{Binding RelativeChangedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
-                                       FontSize="{StaticResource BlockThreeQuarters}"
-                                       Foreground="{DynamicResource Foreground1}" />
-                            <TextBlock Text="{Binding StatusDisplayName}" VerticalAlignment="Center"
-                                       Foreground="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
-                                       Background="Transparent" FontWeight="Bold" />
-                        </DockPanel>
-                        <UniformGrid Columns="{Binding UserColumns}">
-                            <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-                                <icons:IconBatch Type="Queued" Width="{StaticResource Block}"
-                                                       Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                       Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{DynamicResource Foreground1HalfTransparency}" />
-                                <TextBlock Text="{text:Localized RequestedBy}"
-                                           Foreground="{DynamicResource Foreground1HalfTransparency}"
-                                           Background="Transparent" DockPanel.Dock="Top"
-                                           FontSize="{StaticResource BlockThreeQuarters}" />
-                                <TextBlock Text="{Binding RequestedBy}" Foreground="{DynamicResource Foreground1}"
-                                           Background="Transparent" />
-                            </DockPanel>
-                            <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}"
-                                       Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
-                                <icons:IconBatch Type="Person" Width="{StaticResource Block}"
-                                                       Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                       Height="{StaticResource Block}" DockPanel.Dock="Left"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{DynamicResource Foreground1HalfTransparency}" />
-                                <TextBlock Text="{text:Localized RequestedFor}"
-                                           Foreground="{DynamicResource Foreground1HalfTransparency}"
-                                           Background="Transparent" DockPanel.Dock="Top"
-                                           FontSize="{StaticResource BlockThreeQuarters}" />
-                                <TextBlock Text="{Binding RequestedFor}" Foreground="{DynamicResource Foreground1}"
-                                           Background="Transparent" />
-                            </DockPanel>
-
-                        </UniformGrid>
-                    </StackPanel>
-
-                </Grid.ToolTip>
+                  Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}"
+                  ToolTip="{StaticResource ToolTip}">
 
                 <Rectangle Fill="{DynamicResource Background3}"
                            Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
-                           Opacity="{Binding IsHighlighted, Mode=OneTime}" UseLayoutRounding="True">
+                           Visibility="{Binding IsHighlighted, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" UseLayoutRounding="True">
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
                             <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False" />
@@ -87,36 +103,10 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
-                <Rectangle Fill="{DynamicResource Background3}"
-                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
-                           Opacity="{Binding IsHighlightedBySight, Mode=OneTime}" UseLayoutRounding="True">
-                    <i:Interaction.Triggers>
-                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="true">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="True" />
-                        </ei:DataTrigger>
-                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="false">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="True" />
-                        </ei:DataTrigger>
-                    </i:Interaction.Triggers>
-                </Rectangle>
-
-                <Rectangle Opacity="0.15" x:Name="BackgroundFillRectangle"
-                           Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
-                           Visibility="{Binding DisplayAsHollow, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
-
-
-                <Rectangle Opacity="0.15"
-                           Fill="Black"
-                           Visibility="{Binding DisplayAsHollow, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
-
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
-                    x:Name="FillRectangle" />
-
-                <Rectangle
                     Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
-                    StrokeThickness="1" x:Name="StrokeRectangle" />
-
+                    x:Name="FillRectangle" />
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding IsLargeSize}" Value="true">
@@ -140,30 +130,13 @@
                 <SkewTransform AngleX="-30" />
             </Grid.RenderTransform>
 
-
-            <Grid.ContextMenu>
-                <ContextMenu>
-                    <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
-                                            IconType="SingleBuild" />
-                    <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
-                                            IconType="Branch"
-                                            Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
-                    <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}"
-                                            Command="{Binding GoToBranchCommand}"
-                                            IconType="PullRequest"
-                                            Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
-                    <menu:DecoratedMenuItem Header="{text:Localized GoToDefinition}"
-                                            Command="{Binding GoToDefinitionCommand}" IconType="Definition" />
-                </ContextMenu>
-            </Grid.ContextMenu>
-
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                     <i:InvokeCommandAction Command="{Binding GoToBuildCommand}" />
                 </i:EventTrigger>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
                     <triggerActions:ElementFadeOutScale Duration="0.8" Anchor="MiddleRight" TargetScaleX="0"
-                                                        TargetScaleY="1" DoLayoutTransform="True"/>
+                                                        TargetScaleY="1" DoLayoutTransform="True" />
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
         </Grid>
@@ -171,12 +144,14 @@
         <DataTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Fill" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
-                <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="StrokeRectangle" />
-                <Setter Property="Opacity" Value="0.5" TargetName="BackgroundFillRectangle" />
+                <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
             </Trigger>
 
+            <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
+                <Setter Property="Fill" Value="{DynamicResource Background1Dark}" TargetName="FillRectangle" />
+            </DataTrigger>
+
             <DataTrigger Binding="{Binding BuildStatus}" Value="Running">
-                <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
                 <Setter Property="RenderTransform" TargetName="FillRectangle">
                     <Setter.Value>
                         <ScaleTransform ScaleX="{Binding ProgressToDisplay}" ScaleY="1" />
@@ -185,17 +160,13 @@
             </DataTrigger>
 
             <DataTrigger Binding="{Binding BuildStatus}" Value="Pending">
-                <Setter Property="StrokeThickness" Value="0" TargetName="StrokeRectangle" />
                 <Setter Property="RenderTransform" TargetName="FillRectangle">
                     <Setter.Value>
                         <ScaleTransform ScaleX="{Binding ProgressToDisplay}" ScaleY="1" />
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
-
-            <DataTrigger Binding="{Binding DisplayAsHollow}" Value="True">
-                <Setter Property="Visibility" Value="Collapsed" TargetName="FillRectangle" />
-            </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
+
 </ResourceDictionary>
