@@ -1,11 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Interactivity;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.Build
 {
-    internal class BuildGrow : TriggerAction<Grid>
+    internal class BuildGrow : TriggerAction<FrameworkElement>
     {
         protected override void Invoke(object parameter)
         {

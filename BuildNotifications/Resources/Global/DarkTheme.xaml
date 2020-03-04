@@ -4,9 +4,11 @@
     <SolidColorBrush x:Key="Yellow" Color="#D08770" />
     <SolidColorBrush x:Key="Green" Color="#A3BE8C" />
     <SolidColorBrush x:Key="Blue" Color="#8CBBC0" />
+    <SolidColorBrush x:Key="BlueLowTransparency" Color="#3C4853" />
     <SolidColorBrush x:Key="DarkBlue" Color="#566575" />
     <SolidColorBrush x:Key="Gray" Color="#8A8A8A" />
     <SolidColorBrush x:Key="Background1" Color="#2E3440" />
+    <SolidColorBrush x:Key="Background1Dark" Color="#272C36" />
     <SolidColorBrush x:Key="Background2" Color="#3B4252" />
     <SolidColorBrush x:Key="Background3" Color="#4C566A" />
     <SolidColorBrush x:Key="Foreground1" Color="#D8DEE9" />
