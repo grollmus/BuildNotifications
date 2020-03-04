@@ -87,6 +87,22 @@
                   Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}"
                   ToolTip="{StaticResource ToolTip}">
 
+                <Rectangle Fill="{DynamicResource Background3}"
+                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
+                           Visibility="{Binding IsHighlighted, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" UseLayoutRounding="True">
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False" />
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="False" />
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding DoShortHighlight}" Value="true">
+                            <resourcesBuildTreeBuild:ShortHighlight />
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+
                 <Rectangle
                     Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                     Stroke="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
