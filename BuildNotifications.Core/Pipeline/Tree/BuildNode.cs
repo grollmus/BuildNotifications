@@ -24,16 +24,17 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public DateTime? QueueTime { get; private set; }
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
+        public bool IsHighlightedBySight { get; set; }
 
         public IBuild Build { get; }
 
         public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
         {
-            var otherBuild = (nodeToInsert as IBuildNode)?.Build;
-            if (otherBuild == null)
+            if (!(nodeToInsert is IBuildNode otherBuild))
                 return;
 
-            UpdateProperties(otherBuild);
+            IsHighlightedBySight = otherBuild.IsHighlightedBySight;
+            UpdateProperties(otherBuild.Build);
         }
 
         public override bool Equals(IBuildTreeNode other)

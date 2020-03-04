@@ -87,6 +87,19 @@
                     </i:Interaction.Triggers>
                 </Rectangle>
 
+                <Rectangle Fill="{DynamicResource Background3}"
+                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
+                           Opacity="{Binding IsHighlightedBySight, Mode=OneTime}" UseLayoutRounding="True">
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="true">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="True" />
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="false">
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="True" />
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                </Rectangle>
+
                 <Rectangle Opacity="0.15" x:Name="BackgroundFillRectangle"
                            Fill="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                            Visibility="{Binding DisplayAsHollow, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />

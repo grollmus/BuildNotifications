@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BuildNotifications.PluginInterfaces.Builds.Sight;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -17,6 +18,17 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <param name="project">Project to add.</param>
         void AddProject(IProject project);
+        
+        /// <summary>
+        /// Adds a sight for filtering and highlighting data.
+        /// </summary>
+        /// <param name="sight">The sight to add.</param>
+        void AddSight(ISight sight);
+        
+        /// <summary>
+        /// Refreshes the build tree and causes all effects by changed sights to be in effect immediately.
+        /// </summary>
+        void ApplySightChanges();
 
         /// <summary>
         /// Clears all projects and cached data.

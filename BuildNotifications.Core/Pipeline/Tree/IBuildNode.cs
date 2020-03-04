@@ -10,5 +10,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         int Progress { get; }
         DateTime? QueueTime { get; }
         BuildStatus Status { get; }
+        bool IsHighlightedBySight { get; set; }
     }
 }

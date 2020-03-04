@@ -4,6 +4,7 @@ using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Builds.Sight;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline.Tree
@@ -20,15 +21,15 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         private IBuildTreeGroupDefinition GroupDefinition => _config.GroupDefinition;
 
-        private IBuildTreeNode BuildPath(IBuild build, IList<IBranch> branches)
+        private IBuildTreeNode BuildPath(IBuild build, IList<IBranch> branches, bool isBuildHighlightedBySight)
         {
-            var node = ConstructNode(Arrangement.GroupDefinition.None, build, branches);
+            var node = ConstructNode(Arrangement.GroupDefinition.None, build, branches, isBuildHighlightedBySight);
             var currentDepth = GroupDefinition.Count();
             node.Depth = currentDepth + 1;
 
             foreach (var group in GroupDefinition.Reverse())
             {
-                var parent = ConstructNode(group, build, branches);
+                var parent = ConstructNode(group, build, branches, isBuildHighlightedBySight);
                 parent.AddChild(node);
                 node = parent;
                 node.Depth = currentDepth;
@@ -38,7 +39,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
             return node;
         }
 
-        private IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build, IEnumerable<IBranch> branches)
+        private IBuildTreeNode ConstructNode(GroupDefinition group, IBuild build, IEnumerable<IBranch> branches, bool isBuildHighlightedBySight)
         {
             switch (group)
             {
@@ -54,7 +55,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
                 case Arrangement.GroupDefinition.Source:
                     return new SourceGroupNode(build.ProjectName);
                 default:
-                    return new BuildNode(build);
+                    return new BuildNode(build) {IsHighlightedBySight = isBuildHighlightedBySight};
             }
         }
 
@@ -101,8 +102,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches,
             IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null,
-            string searchTerm = "")
+            string searchTerm = "", IList<ISight>? sights = null)
         {
+            sights ??= new List<ISight>();
             var branchList = branches.ToList();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
 
@@ -112,10 +114,12 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var taggedNodes = new List<IBuildTreeNode>();
             TagAllNodesForDeletion(tree, taggedNodes);
 
-            var filteredBuilds = builds.Where(b => _searcher.Matches(b, searchTerm));
+            bool IsFilteredBySight(IBuild b) => sights.Any(s => s.IsEnabled && !s.IsBuildShown(b));
+            var filteredBuilds = builds.Where(b => _searcher.Matches(b, searchTerm) && !IsFilteredBySight(b));
+
             foreach (var build in filteredBuilds)
             {
-                var path = BuildPath(build, branchList);
+                var path = BuildPath(build, branchList, sights.Any(s => s.IsEnabled && s.IsHighlighted(build)));
                 if (path == null)
                     continue;
 

@@ -4,22 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel.Sight"
-             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             xmlns:local="clr-namespace:BuildNotifications.Views.Sight"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:SightSelectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
-        <icons:IconToggleButton
-            Width="{StaticResource BlockDouble}"
-            Height="{StaticResource BlockDouble}" HorizontalAlignment="Center"
-            VerticalAlignment="Center" IsChecked="{Binding HighlightManualBuilds}"
-            Foreground="{DynamicResource Background3}"
-            Icon="Person" />
-        
-        <icons:IconToggleButton
-            Width="{StaticResource BlockDouble}"
-            Height="{StaticResource BlockDouble}" HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Foreground="{DynamicResource Background3}"
-            Icon="Branch" />
-    </StackPanel>
+    <ItemsControl ItemsSource="{Binding Sights}">
+        <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type viewModel:BaseSightViewModel}">
+                <local:BaseSightView />
+            </DataTemplate>
+        </ItemsControl.Resources>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel IsItemsHost="True" Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
 </UserControl>

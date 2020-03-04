@@ -26,6 +26,7 @@
                      xmlns:viewsNotification="clr-namespace:BuildNotifications.Views.Notification"
                      xmlns:viewsSight="clr-namespace:BuildNotifications.Views.Sight"
                      xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                     xmlns:sight="clr-namespace:BuildNotifications.Resources.Sight"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
@@ -212,7 +213,7 @@
                                  Type="GroupingSolo" />
             </icons:IconButton>
 
-            <!--<icons:IconButton DockPanel.Dock="Left"
+            <icons:IconButton DockPanel.Dock="Left"
                               Icon="EyeLid"
                               Margin="{StaticResource BlockQuarterThickness}"
                               Width="{StaticResource BlockDouble}"
@@ -236,7 +237,7 @@
                                  VerticalAlignment="Center"
                                  Foreground="{Binding ElementName=SightsButton, Path=Foreground}"
                                  Type="EyeIris" />
-            </icons:IconButton>-->
+            </icons:IconButton>
 
             <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Opacity="0"
                               Margin="{StaticResource BlockLeftAndRight}">

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Anotar.NLog;
 using BuildNotifications.ViewModel.Utils;
 using TweenSharp;
 using TweenSharp.Animation;

@@ -41,6 +41,9 @@
         Queued,
         PullRequest,
         EyeIris,
-        EyeLid
+        EyeLid,
+        Pinned,
+        ManualBuild,
+        MyBuild
     }
 }

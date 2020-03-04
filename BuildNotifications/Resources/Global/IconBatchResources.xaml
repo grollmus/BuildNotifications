@@ -375,6 +375,44 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
+    <DrawingImage x:Key="PinnedDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
+                <DrawingGroup po:Freeze="True">
+                    <GeometryDrawing
+                        Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Geometry="F1 M12,12z M0,0z M2.45,5.65L1.65,4.85 0.85,5.65 3.25,8.05 0.05,11.2 0.85,12.05 4,8.85 6.4,11.2 7.2,10.4 6.4,9.6 11.95,4.05 8,0.1 2.45,5.65 M8,1.7L9.55,3.3 5.6,7.25 4,5.65 8,1.7z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="MyBuildDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
+                <DrawingGroup po:Freeze="True">
+                    <GeometryDrawing
+                        Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Geometry="F1 M12,12z M0,0z M12,10Q12,9.15 11.4,8.55 10.85,8 10,8 9.15,8 8.6,8.55 8,9.15 8,10L8,12 12,12 12,10 M10.95,7.25Q11.3,6.85 11.3,6.3 11.3,5.75 10.95,5.35 10.55,5 10,5 9.45,5 9.05,5.35 8.65,5.75 8.65,6.3 8.65,6.85 9.05,7.25 9.45,7.6 10,7.6 10.55,7.6 10.95,7.25 M8,6.65L8.05,6.65 8.05,2.65 4.35,4.65 4.35,9 8,6.65 M3.75,4.65L0.1,2.65 0.1,6.65 3.75,9 3.75,4.65 M0.35,2.05L4.1,3.95 7.95,2.05 4.1,0 0.35,2.05z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="ManualBuildDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
+                <DrawingGroup po:Freeze="True">
+                    <GeometryDrawing
+                        Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Geometry="F1 M12,12z M0,0z M11.05,11.65L10.25,9.9 12,9.9 8.25,6.4 8.25,11.45 9.4,10.2 10.2,12 11.05,11.65z" />
+                    <GeometryDrawing
+                        Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                        Geometry="F1 M12,12z M0,0z M8,6.65L8.05,6.65 8.05,2.65 4.35,4.65 4.35,9 8,6.65 M4.1,0L0.35,2.05 4.1,3.95 7.95,2.05 4.1,0 M3.75,4.65L0.1,2.65 0.1,6.65 3.75,9 3.75,4.65z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
     <Style x:Key="IconBatchStyle" TargetType="Image">
         <Style.Triggers>
@@ -610,6 +648,24 @@
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                 Value="EyeLid">
                 <Setter Property="Image.Source" Value="{StaticResource EyeLidDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="Pinned">
+                <Setter Property="Image.Source" Value="{StaticResource PinnedDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="MyBuild">
+                <Setter Property="Image.Source" Value="{StaticResource MyBuildDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="ManualBuild">
+                <Setter Property="Image.Source" Value="{StaticResource ManualBuildDrawingImage}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

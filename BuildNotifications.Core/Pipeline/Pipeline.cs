@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Builds.Sight;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline
@@ -37,7 +39,7 @@ namespace BuildNotifications.Core.Pipeline
             var definitions = _definitionCache.ContentCopy().ToList();
             LogTo.Debug($"{builds.Count} cached builds, {branches.Count} cached branches, {definitions.Count} cached definitions");
 
-            var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree, _searchTerm);
+            var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree, _searchTerm, _sights);
             LogTo.Debug("Created tree.");
             if (_configuration.GroupDefinition.Any())
             {
@@ -261,6 +263,12 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
+        public void AddSight(ISight sight)
+        {
+            LogTo.Debug($"Adding sight {sight.GetType().FullName}.");
+            _sights.Add(sight);
+        }
+
         public void ClearProjects()
         {
             LogTo.Info("Clearing projects and all cached data.");
@@ -281,6 +289,13 @@ namespace BuildNotifications.Core.Pipeline
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
             LogTo.Debug($"Applied search \"{searchTerm}\".");
+        }
+
+        public void ApplySightChanges()
+        {
+            LogTo.Debug($"{nameof(ApplySightChanges)} called.");
+            var tree = BuildTree();
+            _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
         }
 
         public async Task Update()
@@ -337,6 +352,7 @@ namespace BuildNotifications.Core.Pipeline
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private readonly NotificationFactory _notificationFactory;
+        private readonly IList<ISight> _sights = new List<ISight>();
         private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
         private string _searchTerm;

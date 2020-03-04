@@ -591,4 +591,10 @@
   <data name="SearchTooltip" xml:space="preserve">
 	  <value>Suche</value>
   </data>
+  <data name="MyBuildsSightToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManualBuildsSightToolTip" xml:space="preserve">
+    <value />
+  </data>
 </root>

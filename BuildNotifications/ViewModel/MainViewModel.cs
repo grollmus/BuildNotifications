@@ -60,7 +60,6 @@ namespace BuildNotifications.ViewModel
             {
                 _buildTree = value;
                 OnPropertyChanged();
-                SightSelection.BuildTree = value;
             }
         }
 
@@ -106,7 +105,7 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         public bool ShowNotificationCenter
         {
             get => _showNotificationCenter;
@@ -368,6 +367,12 @@ namespace BuildNotifications.ViewModel
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
             SightSelection = new SightSelectionViewModel();
+            foreach (var sightViewModel in SightSelection.Sights)
+            {
+                _coreSetup.Pipeline.AddSight(sightViewModel.Sight);
+            }
+
+            SightSelection.SightSelectionChanged += (sender, args) => _coreSetup.Pipeline.ApplySightChanges();
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
@@ -380,7 +385,7 @@ namespace BuildNotifications.ViewModel
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
-            
+
             var popup = new InfoPopupDialog
             {
                 Owner = Application.Current.MainWindow,

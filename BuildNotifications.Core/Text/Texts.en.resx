@@ -591,4 +591,10 @@
   <data name="SearchTooltip" xml:space="preserve">
 	  <value>Search</value>
   </data>
+  <data name="MyBuildsSightToolTip" xml:space="preserve">
+    <value>Show only builds requested by me</value>
+  </data>
+  <data name="ManualBuildsSightToolTip" xml:space="preserve">
+    <value>Show only manually requested builds</value>
+  </data>
 </root>
