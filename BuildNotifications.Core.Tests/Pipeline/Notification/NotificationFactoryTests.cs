@@ -29,25 +29,25 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _mobileDefinition.Name.Returns(Mobile);
 
             _stageBranch = Substitute.For<IBranch>();
-            _stageBranch.Name.Returns(Stage);
+            _stageBranch.FullName.Returns(Stage);
 
             _masterBranch = Substitute.For<IBranch>();
-            _masterBranch.Name.Returns(Master);
+            _masterBranch.FullName.Returns(Master);
 
             _featureBranch = Substitute.For<IBranch>();
-            _featureBranch.Name.Returns(Feature);
+            _featureBranch.FullName.Returns(Feature);
 
             _bugBranch = Substitute.For<IBranch>();
-            _bugBranch.Name.Returns(Bug);
+            _bugBranch.FullName.Returns(Bug);
 
             _longNameFeatureABranch = Substitute.For<IBranch>();
-            _longNameFeatureABranch.Name.Returns(LongNameFeatureA);
+            _longNameFeatureABranch.FullName.Returns(LongNameFeatureA);
 
             _longNameFeatureBBranch = Substitute.For<IBranch>();
-            _longNameFeatureBBranch.Name.Returns(LongNameFeatureB);
+            _longNameFeatureBBranch.FullName.Returns(LongNameFeatureB);
 
             _longNameFeatureCBranch = Substitute.For<IBranch>();
-            _longNameFeatureCBranch.Name.Returns(LongNameFeatureC);
+            _longNameFeatureCBranch.FullName.Returns(LongNameFeatureC);
 
             _me = Substitute.For<IUser>();
             _me.UniqueName.Returns("Me");
@@ -158,7 +158,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         {
             var build = Substitute.For<IBuild>();
             build.Definition.Returns(definition);
-            var branchName = branch.Name;
+            var branchName = branch.FullName;
             build.BranchName.Returns(branchName);
             build.Id.Returns(id);
             build.Status.Returns(status);
@@ -191,7 +191,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, DefinitionAndBranchNotification.BranchAndDefinitionFailedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -255,9 +255,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_featureBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_featureBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -305,8 +305,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.TwoBranchesChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -325,7 +325,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -610,7 +610,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -628,7 +628,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
             Assert.Equal(BuildStatus.Succeeded, message.Status);
         }
 
@@ -647,7 +647,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
             Assert.Equal(BuildStatus.Failed, message.Status);
         }
     }

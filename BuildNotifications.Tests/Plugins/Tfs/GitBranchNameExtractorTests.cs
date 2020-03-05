@@ -1,11 +1,9 @@
-﻿using System.Linq;
-using BuildNotifications.Core.Utilities;
-using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using BuildNotifications.Plugin.Tfs;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.Utilities
+namespace BuildNotifications.Tests.Plugins.Tfs
 {
-    public class BranchNameExtractorTests
+    public class GitBranchNameExtractorTests
     {
         [Theory]
         [InlineData("refs/heads/master", "master")]
@@ -15,10 +13,10 @@ namespace BuildNotifications.Core.Tests.Utilities
         public void ExtractDisplayNameShouldRemoveGitPrefixes(string input, string expected)
         {
             // Arrange
-            var sut = new BranchNameExtractor();
+            var sut = new GitBranchNameExtractor();
 
             // Act
-            var actual = sut.ExtractDisplayName(input, Enumerable.Empty<IBranch>());
+            var actual = sut.ExtractDisplayName(input);
 
             // Assert
             Assert.Equal(expected, actual);

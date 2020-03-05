@@ -115,7 +115,7 @@ namespace DummyBuildServer.ViewModels
                 LastChangedTime = DateTime.Now,
                 QueueTime = DateTime.Now,
                 Definition = definition,
-                BranchName = branch.Name,
+                BranchName = branch.FullName,
                 RequestedBy = RandomUser(),
                 RequestedFor = user,
                 Status = BuildStatus.Pending,

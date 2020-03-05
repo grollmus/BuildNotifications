@@ -12,34 +12,6 @@ using Xunit;
 
 namespace BuildNotifications.Core.Tests.Pipeline.Tree
 {
-    internal class BuildTreeParser
-    {
-        public BuildTreeParser(IBuildTreeNode tree)
-        {
-            _tree = tree;
-        }
-
-        public IEnumerable<IBuildTreeNode> ChildrenAtLevel(int level)
-        {
-            if (level == 0)
-                return _tree.Yield();
-
-            var currentLevel = 1;
-
-            var currentChildren = _tree.Children.ToList();
-
-            while (currentLevel < level && currentChildren.Any())
-            {
-                currentChildren = currentChildren.SelectMany(x => x.Children).ToList();
-                ++currentLevel;
-            }
-
-            return currentChildren;
-        }
-
-        private readonly IBuildTreeNode _tree;
-    }
-
     public class TreeBuilderTests
     {
         internal static TreeBuilder Construct(params GroupDefinition[] definitions)
@@ -49,19 +21,17 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var config = Substitute.For<IConfiguration>();
             config.GroupDefinition.Returns(groupDefinition);
 
-            var branchNameExtractor = Substitute.For<IBranchNameExtractor>();
-
             var searcher = Substitute.For<IBuildSearcher>();
             searcher.Matches(Arg.Any<IBuild>(), Arg.Any<string>()).Returns(true);
 
-            return new TreeBuilder(config, branchNameExtractor, searcher);
+            return new TreeBuilder(config, searcher);
         }
 
         private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)
         {
             var build = Substitute.For<IBuild>();
             build.Definition.Returns(definition);
-            build.BranchName.Returns(branch.Name);
+            build.BranchName.Returns(branch.FullName);
             build.Id.Returns(id);
 
             return build;

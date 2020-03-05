@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -18,6 +19,8 @@ namespace BuildNotifications.Resources.BuildTree.Converter
         public SolidColorBrush DefaultBrush => GetBrush(DefaultBrushKey);
 
         public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
+
+        private readonly Dictionary<string, SolidColorBrush> _cache = new Dictionary<string, SolidColorBrush>();
 
         public Brush Convert(BuildStatus status)
         {
@@ -51,13 +54,17 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         private SolidColorBrush GetBrush(string key)
         {
-            if (!(Application.Current.FindResource(key) is SolidColorBrush findResource))
+            if (_cache.TryGetValue(key, out var cachedBrush))
+                return cachedBrush;
+
+            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
             {
                 LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
                 return new SolidColorBrush(Colors.White);
             }
-
-            return findResource;
+            
+            _cache.Add(key, resolvedBrush);
+            return resolvedBrush;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

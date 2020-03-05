@@ -58,7 +58,7 @@ namespace BuildNotifications
             Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()} Args: {string.Join(" ", e.Args)}");
             if (IsInvokedFromDistributedNotification(e))
             {
-                WriteToastArgumentsToSharedToMonitoredDirectory(e);
+                WriteToastArgumentsToSharedMonitoredDirectory(e);
 
                 if (OtherProcessIsRunning())
                 {
@@ -138,7 +138,7 @@ namespace BuildNotifications
             Environment.CurrentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         }
 
-        private void WriteToastArgumentsToSharedToMonitoredDirectory(StartupEventArgs e)
+        private void WriteToastArgumentsToSharedMonitoredDirectory(StartupEventArgs e)
         {
             var args = string.Join("", e.Args);
             Logger.Log(LogLevel.Info, $"Started with protocol arguments. Arguments: {args}");

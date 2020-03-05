@@ -6,16 +6,17 @@ namespace BuildNotifications.Core.Tests
     {
         public MockBranch(string name)
         {
-            Name = DisplayName = name;
+            FullName = DisplayName = name;
         }
 
         public bool Equals(IBranch other)
         {
             var mock = other as MockBranch;
-            return mock?.Name.Equals(Name) == true;
+            return mock?.FullName.Equals(FullName) == true;
         }
 
         public string DisplayName { get; }
-        public string Name { get; }
+        public string FullName { get; }
+        public bool IsPullRequest => false;
     }
 }

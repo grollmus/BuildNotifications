@@ -14,6 +14,7 @@ namespace BuildNotifications.Plugin.Tfs
             Id = native.PullRequestId.ToString();
         }
 
+        public override bool IsPullRequest => true;
         public string Description { get; }
         public string Id { get; }
         public string SourceBranch { get; }
