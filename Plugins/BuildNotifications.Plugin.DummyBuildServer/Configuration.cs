@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Newtonsoft.Json;
@@ -15,9 +17,29 @@ namespace BuildNotifications.Plugin.DummyBuildServer
                 MinValue = 1,
                 MaxValue = 65536
             };
+
+            TestCommandOption = new CommandOption(ExecuteTest, CanExecuteTest, "Test", "Performs a test");
+        }
+
+        private async Task ExecuteTest()
+        {
+            Debug.WriteLine("Starting test command");
+            for (int i = 0; i < 3; i++)
+            {
+                await Task.Delay(1000);
+                Debug.WriteLine("Testing...");
+            }
+
+            Debug.WriteLine("Done");
+        }
+
+        private bool CanExecuteTest()
+        {
+            return Port.Value > 1000;
         }
 
         public NumberOption Port { get; }
+        public ICommandOption TestCommandOption { get; }
 
         public ConfigurationRawData AsRawData()
         {
@@ -47,6 +69,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public IEnumerable<IOption> ListAvailableOptions()
         {
             yield return Port;
+            yield return TestCommandOption;
         }
 
         public string Serialize()

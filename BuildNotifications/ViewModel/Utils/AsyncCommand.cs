@@ -9,13 +9,18 @@ namespace BuildNotifications.ViewModel.Utils
 {
     public static class AsyncCommand
     {
-        public static AsyncCommand<object?> Create(Func<Task> command)
+        public static AsyncCommand<object?> Create(Func<Task> command, Func<bool> canExecute)
         {
             return new AsyncCommand<object?>(async _ =>
             {
                 await command();
                 return null;
-            });
+            }, canExecute);
+        }
+
+        public static AsyncCommand<object?> Create(Func<Task> command)
+        {
+            return Create(command, () => true);
         }
 
         public static AsyncCommand<TResult> Create<TResult>(Func<Task<TResult>> command)
@@ -32,17 +37,20 @@ namespace BuildNotifications.ViewModel.Utils
             });
         }
 
-        public static AsyncCommand<TResult> Create<TResult>(Func<CancellationToken, Task<TResult>> command)
-        {
-            return new AsyncCommand<TResult>(command);
-        }
+        public static AsyncCommand<TResult> Create<TResult>(Func<CancellationToken, Task<TResult>> command) => new AsyncCommand<TResult>(command);
     }
 
     public class AsyncCommand<TResult> : IAsyncCommand, INotifyPropertyChanged
     {
         public AsyncCommand(Func<CancellationToken, Task<TResult>> command)
+            : this(command, () => true)
+        {
+        }
+
+        public AsyncCommand(Func<CancellationToken, Task<TResult>> command, Func<bool> canExecute)
         {
             _command = command;
+            _canExecute = canExecute;
             _cancelCommand = new CancelAsyncCommand();
         }
 
@@ -68,10 +76,7 @@ namespace BuildNotifications.ViewModel.Utils
             CommandManager.InvalidateRequerySuggested();
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return Execution == null || Execution.IsCompleted;
-        }
+        public bool CanExecute(object parameter) => Execution == null && _canExecute() || Execution == null || Execution.IsCompleted;
 
         public async Task ExecuteAsync(object parameter)
         {
@@ -96,6 +101,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private readonly Func<CancellationToken, Task<TResult>> _command;
+        private readonly Func<bool> _canExecute;
         private readonly CancelAsyncCommand _cancelCommand;
         private NotifyTaskCompletion<TResult>? _execution;
 
@@ -123,10 +129,7 @@ namespace BuildNotifications.ViewModel.Utils
                 CommandManager.InvalidateRequerySuggested();
             }
 
-            bool ICommand.CanExecute(object parameter)
-            {
-                return _commandExecuting && !_cts.IsCancellationRequested;
-            }
+            bool ICommand.CanExecute(object parameter) => _commandExecuting && !_cts.IsCancellationRequested;
 
             void ICommand.Execute(object parameter)
             {

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
 {
@@ -17,6 +18,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Executes the associated command.
         /// </summary>
-        void Execute();
+        Task Execute();
     }
 }

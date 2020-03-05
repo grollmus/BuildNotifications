@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
@@ -14,7 +15,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <param name="descriptionTextId">Text id used for localizing the description of this option.</param>
         /// <param name="action">Action to execute using this command.</param>
         /// <param name="predicate">Predicate to determine if this command can be executed.</param>
-        public CommandOption(Action action, Func<bool> predicate, string nameTextId, string descriptionTextId)
+        public CommandOption(Func<Task> action, Func<bool> predicate, string nameTextId, string descriptionTextId)
             : base(nameTextId, descriptionTextId)
         {
             _action = action;
@@ -25,25 +26,22 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <param name="nameTextId">Text id used for localizing the name of this option.</param>
         /// <param name="descriptionTextId">Text id used for localizing the description of this option.</param>
         /// <param name="action">Action to execute using this command.</param>
-        public CommandOption(Action action, string nameTextId, string descriptionTextId)
+        public CommandOption(Func<Task> action, string nameTextId, string descriptionTextId)
             : this(action, () => true, nameTextId, descriptionTextId)
         {
         }
 
         /// <inheritdoc />
-        public bool CanExecute()
-        {
-            return _predicate();
-        }
+        public bool CanExecute() => _predicate();
 
         /// <inheritdoc />
-        public void Execute()
+        public async Task Execute()
         {
             IsLoading = true;
             try
             {
                 if (CanExecute())
-                    _action();
+                    await _action();
             }
             finally
             {
@@ -51,7 +49,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             }
         }
 
-        private readonly Action _action;
+        private readonly Func<Task> _action;
         private readonly Func<bool> _predicate;
     }
 }

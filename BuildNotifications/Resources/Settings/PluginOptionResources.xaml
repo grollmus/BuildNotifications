@@ -4,27 +4,34 @@
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:views="clr-namespace:BuildNotifications.Views"
-                    xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.Setup.PluginOptions">
-	<DataTemplate DataType="{x:Type pluginOptions:PluginDisplayOptionViewModel}">
+                    xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.Setup.PluginOptions"
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
+	<DataTemplate x:Key="PluginDisplayOptionTemplate" DataType="{x:Type pluginOptions:PluginDisplayOptionViewModel}">
 		<TextBlock Text="{Binding Value}" ToolTip="{Binding Description}"
 		           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type pluginOptions:PluginTextOptionViewModel}">
+	<DataTemplate x:Key="PluginTextOptionTemplate" DataType="{x:Type pluginOptions:PluginTextOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
 		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
 		                       Label="{Binding DisplayName}" ToolTip="{Binding Description}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type pluginOptions:PluginNumberOptionViewModel}">
+	<DataTemplate x:Key="PluginNumberOptionTemplate" DataType="{x:Type pluginOptions:PluginNumberOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
 		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
 		                       Label="{Binding DisplayName}" ToolTip="{Binding Description}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
-	<DataTemplate DataType="{x:Type pluginOptions:PluginEncryptedTextOptionViewModel}">
+	<DataTemplate x:Key="PluginEncryptedTextOptionTemplate"
+	              DataType="{x:Type pluginOptions:PluginEncryptedTextOptionViewModel}">
 		<Grid Margin="{StaticResource BlockYOnlyMargin}" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Description}"
 		      Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
 			<PasswordBox CaretBrush="{DynamicResource Foreground1}" Foreground="{DynamicResource Foreground1}"
@@ -37,6 +44,19 @@
 				Foreground="{DynamicResource Background3}" Margin="{StaticResource BlockHalfXOnlyMargin}"
 				Style="{StaticResource TextBoxLabelStyle}" HorizontalAlignment="Right"
 				VerticalAlignment="Center" />
+		</Grid>
+	</DataTemplate>
+
+	<DataTemplate x:Key="PluginCommandOptionTemplate" DataType="{x:Type pluginOptions:PluginCommandOptionViewModel}">
+		<Grid>
+			<icons:IconButton Command="{Binding Command}" Style="{StaticResource IconButtonWithDockedContent}"
+			                  Foreground="{DynamicResource Foreground1}" Content="{Binding DisplayName}"
+			                  ToolTip="{Binding Description}" />
+
+			<Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+			         HorizontalAlignment="Center" VerticalAlignment="Center">
+				<views:BusyIndicator IsBusy="{Binding Command.Execution.IsNotCompleted}" />
+			</Viewbox>
 		</Grid>
 	</DataTemplate>
 

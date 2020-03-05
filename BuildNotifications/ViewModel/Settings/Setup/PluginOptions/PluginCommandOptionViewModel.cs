@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using BuildNotifications.PluginInterfaces.Configuration.Options;
+﻿using BuildNotifications.PluginInterfaces.Configuration.Options;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
@@ -9,9 +8,9 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
         public PluginCommandOptionViewModel(ICommandOption model, ILocalizationProvider localizationProvider)
             : base(model, localizationProvider)
         {
-            Command = new DelegateCommand(model.Execute, model.CanExecute);
+            Command = AsyncCommand.Create(model.Execute, model.CanExecute);
         }
 
-        public ICommand Command { get; }
+        public AsyncCommand<object?> Command { get; }
     }
 }
