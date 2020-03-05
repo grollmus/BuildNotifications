@@ -17,12 +17,12 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Maximum allowed length of the text.
         /// </summary>
-        public virtual int MaximumLength => int.MaxValue;
+        public virtual int MaximumLength { get; set; } = int.MaxValue;
 
         /// <summary>
         /// Minimum required length of the text.
         /// </summary>
-        public virtual int MinimumLength => 0;
+        public virtual int MinimumLength { get; set; }
 
         /// <inheritdoc />
         protected override bool ValidateValue(string? value)

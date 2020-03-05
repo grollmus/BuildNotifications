@@ -22,6 +22,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Is fired when <see cref="IListOption.AvailableValues" /> was changed.
         /// </summary>
-        event EventHandler? AvailableValuesChanged;
+        event EventHandler<EventArgs>? AvailableValuesChanged;
     }
 }

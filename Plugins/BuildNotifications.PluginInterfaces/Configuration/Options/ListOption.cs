@@ -25,7 +25,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Is fired when <see cref="AvailableValues" /> was changed.
         /// </summary>
-        public event EventHandler? AvailableValuesChanged;
+        public event EventHandler<EventArgs>? AvailableValuesChanged;
 
         /// <summary>
         /// Raises the <see cref="AvailableValuesChanged" /> event.
@@ -44,7 +44,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             return AvailableValues.Any(v => Equals(v.Value, value));
         }
 
-        event EventHandler? IListOption.AvailableValuesChanged
+        event EventHandler<EventArgs>? IListOption.AvailableValuesChanged
         {
             add => AvailableValuesChanged += value;
             remove => AvailableValuesChanged -= value;

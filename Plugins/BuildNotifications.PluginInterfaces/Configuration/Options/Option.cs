@@ -62,13 +62,13 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public string NameTextId { get; }
 
         /// <inheritdoc />
-        public event EventHandler? IsEnabledChanged;
+        public event EventHandler<EventArgs>? IsEnabledChanged;
 
         /// <inheritdoc />
-        public event EventHandler? IsVisibleChanged;
+        public event EventHandler<EventArgs>? IsVisibleChanged;
 
         /// <inheritdoc />
-        public event EventHandler? IsLoadingChanged;
+        public event EventHandler<EventArgs>? IsLoadingChanged;
 
         /// <inheritdoc />
         public string DescriptionTextId { get; }
