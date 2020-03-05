@@ -17,6 +17,11 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             {
                 IsLoading = isLoading;
             }
+
+            public void SetIsVisible(bool isVisible)
+            {
+                IsVisible = isVisible;
+            }
         }
 
         [Fact]
@@ -100,7 +105,7 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             sut.IsVisibleChanged += (s, e) => received = true;
 
             // Act
-            sut.IsVisible = sut.IsVisible;
+            sut.SetIsVisible(sut.IsVisible);
 
             // Assert
             Assert.False(received);
@@ -113,7 +118,6 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             var sut = new TestOption();
 
             // Act
-            ;
             var evt = Assert.RaisesAny<EventArgs>(
                 e => sut.IsVisibleChanged += e,
                 e => sut.IsVisibleChanged -= e,

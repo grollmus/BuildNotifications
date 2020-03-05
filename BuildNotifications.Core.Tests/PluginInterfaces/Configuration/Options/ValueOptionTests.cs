@@ -16,6 +16,11 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
 
             public bool Validated { get; private set; }
 
+            public void SetValue(object value)
+            {
+                Value = value;
+            }
+
             protected override bool ValidateValue(object value)
             {
                 Validated = true;
@@ -53,7 +58,7 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             sut.ValueChanged += (s, e) => received = true;
 
             // Act
-            sut.Value = sut.Value;
+            sut.SetValue(sut.Value);
 
             // Assert
             Assert.False(received);
