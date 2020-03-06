@@ -26,7 +26,7 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
         public async Task ExecuteShouldResetLoadingFlagWhenTaskThrowsException()
         {
             // Arrange
-            Func<Task> action = () => throw new Exception("test");
+            Func<Task> action = () => Task.FromException(new Exception("test"));
             var sut = new CommandOption(action, string.Empty, string.Empty);
 
             // Act
