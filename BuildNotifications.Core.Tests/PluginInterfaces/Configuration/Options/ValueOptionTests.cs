@@ -84,6 +84,22 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
         }
 
         [Fact]
+        public void SettingValueShouldSetValueWhenCalledByInterface()
+        {
+            // Arrange
+            var sut = new TestValueOption<string>();
+            var iSut = (IValueOption) sut;
+
+            const string expected = "test";
+
+            // Act
+            iSut.Value = expected;
+
+            // Assert
+            Assert.Equal(expected, iSut.Value);
+        }
+
+        [Fact]
         public void SettingValueShouldThrowWhenGenericTypeDoesNotMatch()
         {
             // Arrange

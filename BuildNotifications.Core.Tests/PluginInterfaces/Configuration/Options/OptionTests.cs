@@ -13,6 +13,11 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             {
             }
 
+            public void SetIsEnabled(bool isEnabled)
+            {
+                IsEnabled = isEnabled;
+            }
+
             public void SetIsLoading(bool isLoading)
             {
                 IsLoading = isLoading;
@@ -64,6 +69,40 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
         }
 
         [Fact]
+        public void SettingIsEnabledShouldNotRaiseEventWhenIsEnabledIsNotChanged()
+        {
+            // Arrange
+            var received = false;
+            var sut = new TestOption();
+            sut.IsEnabledChanged += (s, e) => received = true;
+
+            // Act
+            sut.SetIsEnabled(sut.IsEnabled);
+
+            // Assert
+            Assert.False(received);
+        }
+
+        [Fact]
+        public void SettingIsEnabledShouldRaiseEvent()
+        {
+            // Arrange
+            var sut = new TestOption();
+
+            // Act
+            var evt = Assert.RaisesAny<EventArgs>(
+                e => sut.IsEnabledChanged += e,
+                e => sut.IsEnabledChanged -= e,
+                () => sut.IsEnabled = !sut.IsEnabled
+            );
+
+            // Assert
+            Assert.NotNull(evt);
+            Assert.Same(sut, evt.Sender);
+            Assert.Equal(EventArgs.Empty, evt.Arguments);
+        }
+
+        [Fact]
         public void SettingIsLoadingShouldRaiseEvent()
         {
             // Arrange
@@ -82,7 +121,7 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
         }
 
         [Fact]
-        public void SettingIsVisibleShouldShouldNotRaiseEventWhenIsLoadingIsNotChanged()
+        public void SettingIsVisibleShouldNotRaiseEventWhenIsLoadingIsNotChanged()
         {
             // Arrange
             var received = false;
@@ -97,7 +136,7 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
         }
 
         [Fact]
-        public void SettingIsVisibleShouldShouldNotRaiseEventWhenIsVisibleIsNotChanged()
+        public void SettingIsVisibleShouldNotRaiseEventWhenIsVisibleIsNotChanged()
         {
             // Arrange
             var received = false;
