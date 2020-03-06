@@ -1,4 +1,5 @@
-﻿using System.Windows.Interactivity;
+﻿using System.Windows;
+using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using BuildNotifications.Resources.Animation;
@@ -7,13 +8,16 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.Build
 {
-    class ShortHighlight : TriggerAction<Rectangle>
+    internal class ShortHighlight : TriggerAction<Rectangle>
     {
         protected override void Invoke(object parameter)
         {
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(AssociatedObject);
-
+            
+            if (AssociatedObject.Visibility != Visibility.Visible)
+                AssociatedObject.Visibility = Visibility.Visible;
+            
             var brush = new SolidColorBrush();
             var targetBrush = new SolidColorBrush(Colors.Transparent);
             var background = AssociatedObject.FindResource("Background1") as SolidColorBrush;
