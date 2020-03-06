@@ -1,8 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.SourceControl;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.TestMocks
 {
-    internal class MockBranch : IBranch
+    public class MockBranch : IBranch
     {
         public MockBranch(string name)
         {

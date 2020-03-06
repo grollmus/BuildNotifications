@@ -9,6 +9,7 @@ using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using BuildNotifications.TestMocks;
 using NSubstitute;
 using Xunit;
 

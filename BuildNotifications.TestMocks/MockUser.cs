@@ -1,8 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.TestMocks
 {
-    internal class MockUser : IUser
+    public class MockUser : IUser
     {
         public MockUser()
         {

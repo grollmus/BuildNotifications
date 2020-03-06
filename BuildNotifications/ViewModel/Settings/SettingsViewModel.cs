@@ -62,19 +62,19 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        private AnimationsOptionViewModel AnimationsMode { get; }
-        private AutoStartModeViewModel AutoStartMode { get; }
-        private NumberOptionViewModel BuildsPerGroup { get; }
-        private BuildNotificationModeViewModel CanceledBuildNotify { get; }
-        private BuildNotificationModeViewModel FailedBuildNotify { get; }
-        private LanguageOptionViewModel Language { get; }
-        private PartialSucceededTreatmentModeOptionViewModel PartialSucceededTreatmentMode { get; }
-        private BooleanOptionViewModel ShowBusyIndicatorDuringUpdate { get; }
-        private BuildNotificationModeViewModel SucceededBuildNotify { get; }
-        private NumberOptionViewModel UpdateInterval { get; }
-        private BooleanOptionViewModel UpdateToPreReleases { get; }
+        internal AnimationsOptionViewModel AnimationsMode { get; }
+        internal AutoStartModeViewModel AutoStartMode { get; }
+        internal NumberOptionViewModel BuildsPerGroup { get; }
+        internal BuildNotificationModeViewModel CanceledBuildNotify { get; }
+        internal BuildNotificationModeViewModel FailedBuildNotify { get; }
+        internal LanguageOptionViewModel Language { get; }
+        internal PartialSucceededTreatmentModeOptionViewModel PartialSucceededTreatmentMode { get; }
+        internal BooleanOptionViewModel ShowBusyIndicatorDuringUpdate { get; }
+        internal BuildNotificationModeViewModel SucceededBuildNotify { get; }
+        internal NumberOptionViewModel UpdateInterval { get; }
+        internal BooleanOptionViewModel UpdateToPreReleases { get; }
 
-        public event EventHandler? EditConnectionsRequested;
+        public event EventHandler<EventArgs>? EditConnectionsRequested;
 
         public void UpdateUser()
         {

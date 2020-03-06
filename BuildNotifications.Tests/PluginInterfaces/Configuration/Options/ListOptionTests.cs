@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
+namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 {
     public class ListOptionTests
     {

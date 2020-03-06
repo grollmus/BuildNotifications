@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
+namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 {
     public class EnumOptionTests
     {
@@ -25,15 +24,10 @@ namespace BuildNotifications.Core.Tests.PluginInterfaces.Configuration.Options
             var actual = sut.AvailableValues.ToList();
 
             // Assert
-            var inspectors = new Action<ListOptionItem<TestEnum>>[]
-            {
-                it => Assert.Equal(TestEnum.None, it.Value),
-                it => Assert.Equal(TestEnum.One, it.Value),
+            Assert.Collection(actual,
+                it => Assert.Equal(TestEnum.None, it.Value), it => Assert.Equal(TestEnum.One, it.Value),
                 it => Assert.Equal(TestEnum.Two, it.Value),
-                it => Assert.Equal(TestEnum.Three, it.Value)
-            };
-
-            Assert.Collection(actual, inspectors);
+                it => Assert.Equal(TestEnum.Three, it.Value));
         }
 
         [Fact]

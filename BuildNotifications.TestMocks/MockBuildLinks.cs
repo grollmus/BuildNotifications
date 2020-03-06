@@ -1,9 +1,9 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.TestMocks
 {
-    internal class MockBuildLinks : IBuildLinks
+    public class MockBuildLinks : IBuildLinks
     {
         public string? BuildWeb { get; } = null;
         public string? BranchWeb { get; } = null;

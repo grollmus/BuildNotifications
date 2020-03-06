@@ -108,7 +108,7 @@ namespace DummyBuildServer.ViewModels
 
         public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
         {
-            var user = SelectedUser.User;
+            var user = SelectedUser?.User;
 
             var build = new Build
             {
@@ -138,7 +138,7 @@ namespace DummyBuildServer.ViewModels
 
         private void EnqueueBuild(object arg)
         {
-            EnqueueSpecificBuild(SelectedDefinition.Definition, SelectedBranch.Branch);
+            EnqueueSpecificBuild(SelectedDefinition!.Definition, SelectedBranch!.Branch);
         }
 
         private bool IsBuildDataSelected(object arg)

@@ -2,9 +2,9 @@
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.TestMocks
 {
-    internal class MockBuild : IBuild
+    public class MockBuild : IBuild
     {
         public MockBuild()
         {

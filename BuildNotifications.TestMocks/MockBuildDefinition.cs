@@ -1,8 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.TestMocks
 {
-    internal class MockBuildDefinition : IBuildDefinition
+    public class MockBuildDefinition : IBuildDefinition
     {
         public MockBuildDefinition()
         {
