@@ -10,8 +10,8 @@ namespace BuildNotifications.ViewModel.Settings.Options
         where TOption : OptionViewModelBase<TValue>
     {
         protected CollectionOptionBaseViewModel(IEnumerable<TValue> value, string displayName)
+            : base(displayName, string.Empty)
         {
-            DisplayName = displayName;
             Values = new ObservableCollection<TOption>(value.Select(CreateNewValue));
 
             AddNewItemCommand = new DelegateCommand(AddNewItem, CanAddNewItem);
@@ -19,7 +19,6 @@ namespace BuildNotifications.ViewModel.Settings.Options
         }
 
         public ICommand AddNewItemCommand { get; }
-        public string DisplayName { get; }
         public ICommand RemoveItemCommand { get; }
 
         public ObservableCollection<TOption> Values { get; }

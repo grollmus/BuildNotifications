@@ -1,4 +1,4 @@
-﻿namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
+﻿namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 {
     internal interface ILocalizationProvider
     {

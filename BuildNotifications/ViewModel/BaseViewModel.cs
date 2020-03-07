@@ -8,10 +8,16 @@ using JetBrains.Annotations;
 
 namespace BuildNotifications.ViewModel
 {
-    public class BaseViewModel : INotifyPropertyChanged, IRemoveTracking
+    public interface IViewModel
+    {
+        void OnPropertyChanged([CallerMemberName] string propertyName = "");
+        event PropertyChangedEventHandler? PropertyChanged;
+    }
+
+    public class BaseViewModel : INotifyPropertyChanged, IRemoveTracking, IViewModel
     {
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

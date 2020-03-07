@@ -5,7 +5,7 @@ using BuildNotifications.Core;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 
-namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
+namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 {
     internal class PluginOptionViewModelFactory
     {
@@ -17,7 +17,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
             _localizationProvider = new LocalizationProvider(localizer);
         }
 
-        public PluginOptionViewModel Construct(IOption option)
+        public IPluginOptionViewModel Construct(IOption option)
         {
             if (option is IListOption)
             {
@@ -29,7 +29,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
 
                     var opt = generic.Invoke(this, new object?[] {option});
                     if (opt != null)
-                        return (PluginOptionViewModel) opt;
+                        return (IPluginOptionViewModel) opt;
                 }
             }
 
@@ -46,7 +46,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup.PluginOptions
         }
 
         private PluginEncryptedTextOptionViewModel ConstructOption(EncryptedTextOption option) => new PluginEncryptedTextOptionViewModel(option, _localizationProvider);
-        private PluginOptionViewModel ConstructDisplayOption(IOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
+        private IPluginOptionViewModel ConstructDisplayOption(IOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
         private PluginListOptionViewModel<TValue> ConstructListOption<TValue>(ListOption<TValue> option) => new PluginListOptionViewModel<TValue>(option, _localizationProvider);
         private PluginNumberOptionViewModel ConstructOption(NumberOption option) => new PluginNumberOptionViewModel(option, _localizationProvider);
         private PluginTextOptionViewModel ConstructOption(TextOption option) => new PluginTextOptionViewModel(option, _localizationProvider);

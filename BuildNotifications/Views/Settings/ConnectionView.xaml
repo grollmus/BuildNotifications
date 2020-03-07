@@ -16,7 +16,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Resources/Settings/PluginChooserTemplate.xaml" />
-				<ResourceDictionary Source="../../Resources/Settings/PluginOptionResources.xaml" />
+				<ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
 				<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -38,7 +38,7 @@
 		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
 
 		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
-		              ItemTemplateSelector="{x:Static settingsRes:PluginOptionTemplateSelector.Instance}" />
+		              ItemTemplateSelector="{x:Static settingsRes:OptionTemplateSelector.Instance}" />
 
 		<DockPanel LastChildFill="False">
 			<icons:IconButton Content="Save" DockPanel.Dock="Right" Command="{Binding SaveConnectionCommand}"

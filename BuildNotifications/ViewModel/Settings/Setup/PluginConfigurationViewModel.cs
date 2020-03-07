@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using BuildNotifications.PluginInterfaces.Configuration;
-using BuildNotifications.ViewModel.Settings.Setup.PluginOptions;
+using BuildNotifications.ViewModel.Settings.Options.PluginOptions;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
@@ -10,12 +10,12 @@ namespace BuildNotifications.ViewModel.Settings.Setup
     {
         public PluginConfigurationViewModel(IPluginConfiguration configuration)
         {
-            Options = new ObservableCollection<PluginOptionViewModel>(ConstructOptionViewModels(configuration));
+            Options = new ObservableCollection<IPluginOptionViewModel>(ConstructOptionViewModels(configuration));
         }
 
-        public ObservableCollection<PluginOptionViewModel> Options { get; }
+        public ObservableCollection<IPluginOptionViewModel> Options { get; }
 
-        private IEnumerable<PluginOptionViewModel> ConstructOptionViewModels(IPluginConfiguration configuration)
+        private IEnumerable<IPluginOptionViewModel> ConstructOptionViewModels(IPluginConfiguration configuration)
         {
             var factory = new PluginOptionViewModelFactory(configuration.Localizer);
             return configuration.ListAvailableOptions().Select(o => factory.Construct(o));

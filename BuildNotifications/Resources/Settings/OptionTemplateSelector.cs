@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using BuildNotifications.Core;
 using BuildNotifications.ViewModel.Settings.Options;
+using BuildNotifications.ViewModel.Settings.Options.PluginOptions;
 
 namespace BuildNotifications.Resources.Settings
 {
@@ -37,7 +38,9 @@ namespace BuildNotifications.Resources.Settings
                 BooleanOptionViewModel _ => (element?.TryFindResource("BooleanOptionTemplate") as DataTemplate),
                 NumberOptionViewModel _ => (element?.TryFindResource("NumberOptionTemplate") as DataTemplate),
                 TextOptionViewModel _ => (element?.TryFindResource("TextOptionTemplate") as DataTemplate),
+                PluginEncryptedTextOptionViewModel _ => (element?.TryFindResource("PluginEncryptedTextOptionTemplate") as DataTemplate),
                 StringCollectionOptionViewModel _ => (element?.TryFindResource("StringCollectionOptionTemplate") as DataTemplate),
+                PluginCommandOptionViewModel _ => (element?.TryFindResource("PluginCommandOptionTemplate") as DataTemplate),
                 _ => null
             };
         }

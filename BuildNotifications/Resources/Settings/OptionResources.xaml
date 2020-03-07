@@ -7,25 +7,35 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.Options.PluginOptions"
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:views="clr-namespace:BuildNotifications.Views"
                     mc:Ignorable="d">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
 	<DataTemplate x:Key="BooleanOptionTemplate" DataType="{x:Type options:BooleanOptionViewModel}">
 		<CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
 		          Margin="{StaticResource BlockHalfYOnlyMargin}">
 			<TextBlock
-				Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+				Text="{Binding DisplayName}"
 				Foreground="{DynamicResource Background3}" />
 		</CheckBox>
 	</DataTemplate>
 
 	<DataTemplate x:Key="NumberOptionTemplate" DataType="{x:Type options:NumberOptionViewModel}">
-		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
-		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
+		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+		                       Label="{Binding DisplayName}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
 	<DataTemplate x:Key="TextOptionTemplate" DataType="{x:Type options:TextOptionViewModel}">
-		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}"
-		                       Label="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
+		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
+		                       Label="{Binding DisplayName}" ToolTip="{Binding Description}"
+		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
@@ -100,9 +110,47 @@
         </DataTemplate.Triggers>
 	</DataTemplate>
 
+    
+	<DataTemplate x:Key="PluginEncryptedTextOptionTemplate"
+	              DataType="{x:Type pluginOptions:PluginEncryptedTextOptionViewModel}">
+		<Grid Margin="{StaticResource BlockYOnlyMargin}" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Description}"
+		      Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+			<PasswordBox CaretBrush="{DynamicResource Foreground1}" Foreground="{DynamicResource Foreground1}"
+			             Background="Transparent" BorderThickness="0" settings:PasswordHelper.Attach="True"
+			             settings:PasswordHelper.Password="{Binding RawValue,Mode=TwoWay}" />
+
+			<Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Background3}" SnapsToDevicePixels="True" />
+			<TextBlock
+				Text="{Binding DisplayName}"
+				Foreground="{DynamicResource Background3}" Margin="{StaticResource BlockHalfXOnlyMargin}"
+				Style="{StaticResource TextBoxLabelStyle}" HorizontalAlignment="Right"
+				VerticalAlignment="Center" />
+		</Grid>
+	</DataTemplate>
+
+	<DataTemplate x:Key="PluginDisplayOptionTemplate" DataType="{x:Type pluginOptions:PluginDisplayOptionViewModel}">
+		<TextBlock Text="{Binding Value}" ToolTip="{Binding Description}"
+		           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+	</DataTemplate>
+
+    
+	<DataTemplate x:Key="PluginCommandOptionTemplate" DataType="{x:Type pluginOptions:PluginCommandOptionViewModel}">
+		<Grid>
+			<icons:IconButton Command="{Binding Command}" Style="{StaticResource IconButtonWithDockedContent}"
+			                  Foreground="{DynamicResource Foreground1}" Content="{Binding DisplayName}"
+			                  ToolTip="{Binding Description}" />
+
+			<Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+			         HorizontalAlignment="Center" VerticalAlignment="Center">
+				<views:BusyIndicator IsBusy="{Binding Command.Execution.IsNotCompleted}" />
+			</Viewbox>
+		</Grid>
+	</DataTemplate>
+
 	<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
 	<DataTemplate x:Key="ListOptionTemplate">
-		<StackPanel Orientation="Vertical" Margin="{StaticResource BlockHalfYOnlyMargin}">
+		<StackPanel Orientation="Vertical"  ToolTip="{Binding Description}" IsEnabled="{Binding IsEnabled}" Margin="{StaticResource BlockHalfYOnlyMargin}"
+		            Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
 
 			<TextBlock
 				Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
@@ -114,7 +162,7 @@
 			                            Margin="{StaticResource BlockQuarterYOnlyMargin}">
 				<settings:DecoratedComboBox.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}" />
+						<TextBlock Text="{Binding DisplayName}" />
 					</DataTemplate>
 				</settings:DecoratedComboBox.ItemTemplate>
 			</settings:DecoratedComboBox>
