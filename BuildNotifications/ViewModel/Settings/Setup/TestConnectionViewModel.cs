@@ -34,7 +34,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public ICommand TestConnectionCommand { get; set; }
 
-        public event EventHandler? TestFinished;
+        public virtual event EventHandler? TestFinished;
 
         public void SetConfiguration(IPlugin plugin, IPluginConfiguration config, ConnectionPluginType connectionPluginType)
         {

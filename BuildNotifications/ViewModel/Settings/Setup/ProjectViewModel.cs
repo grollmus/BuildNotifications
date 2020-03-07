@@ -73,7 +73,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
-        public event EventHandler? SaveRequested;
+        public virtual event EventHandler<EventArgs>? SaveRequested;
 
         private void RaiseSaveRequested()
         {

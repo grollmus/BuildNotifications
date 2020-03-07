@@ -57,7 +57,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
-        public event EventHandler? TestFinished;
+        public event EventHandler<EventArgs>? TestFinished;
 
         private void AddConnection()
         {
@@ -69,6 +69,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             _configuration.Connections.Add(connection);
 
             var vm = new ConnectionViewModel(connection, _pluginRepository);
+            AddConnectionViewModel(vm);
+        }
+
+        internal void AddConnectionViewModel(ConnectionViewModel vm)
+        {
             vm.SaveRequested += ConnectionViewModel_SaveRequested;
             Connections.Add(vm);
 
@@ -101,6 +106,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             _configuration.Connections.Remove(viewModel.Model);
             Connections.Remove(viewModel);
             SelectedConnection = Connections.FirstOrDefault();
+            SaveAction();
         }
 
         private void TestConnection_TestFinished(object? sender, EventArgs e)

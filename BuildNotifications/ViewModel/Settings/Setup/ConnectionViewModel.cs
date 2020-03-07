@@ -28,6 +28,12 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             };
         }
 
+        internal ConnectionViewModel(ConnectionData model, IPluginRepository pluginRepository, TestConnectionViewModel testConnection)
+            : this(model, pluginRepository)
+        {
+            TestConnection = testConnection;
+        }
+
         public IEnumerable<ConnectionPluginType> AvailableConnectionTypes
         {
             get
@@ -107,7 +113,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public TestConnectionViewModel TestConnection { get; }
-        public event EventHandler? SaveRequested;
+        public virtual event EventHandler<EventArgs>? SaveRequested;
 
         private void RaiseSaveRequested()
         {

@@ -56,6 +56,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             _configuration.Projects.Add(project);
 
             var vm = new ProjectViewModel(project, _configuration);
+            AddProjectViewModel(vm);
+        }
+
+        internal void AddProjectViewModel(ProjectViewModel vm)
+        {
             vm.SaveRequested += ProjectViewModel_SaveRequested;
             Projects.Add(vm);
 
