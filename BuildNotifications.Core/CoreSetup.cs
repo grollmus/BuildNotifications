@@ -5,6 +5,7 @@ using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
 
@@ -33,12 +34,16 @@ namespace BuildNotifications.Core
 
             Pipeline.Notifier.Updated += Notifier_Updated;
 
+            SearchEngine = new SearchEngine();
+
             if (notificationReceiver != null)
             {
                 NotificationReceiver = notificationReceiver;
                 NotificationReceiver.DistributedNotificationReceived += (sender, args) => DistributedNotificationReceived?.Invoke(this, args);
             }
         }
+
+        public ISearchEngine SearchEngine { get; }
 
         public IConfiguration Configuration { get; }
 
