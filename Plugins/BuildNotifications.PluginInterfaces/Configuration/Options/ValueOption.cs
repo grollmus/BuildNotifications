@@ -56,7 +56,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Raised when the value of this option has changed.
         /// </summary>
-        public event EventHandler<ValueChangedEventArgs<TValue>>? ValueChanged;
+        public virtual event EventHandler<ValueChangedEventArgs<TValue>>? ValueChanged;
 
         /// <summary>
         /// Raises the ValueChanged event.

@@ -4,10 +4,6 @@ using BuildNotifications.PluginInterfaces.Configuration.Options;
 
 namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 {
-    internal interface IPluginOptionViewModel
-    {
-    }
-
     internal class PluginOptionViewModelImplementation : IPluginOptionViewModel
     {
         public PluginOptionViewModelImplementation(IOption option,

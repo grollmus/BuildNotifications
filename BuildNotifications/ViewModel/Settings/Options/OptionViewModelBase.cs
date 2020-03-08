@@ -5,10 +5,15 @@ namespace BuildNotifications.ViewModel.Settings.Options
 {
     public abstract class OptionViewModelBase : BaseViewModel
     {
-        public OptionViewModelBase(string displayName, string description)
+        protected OptionViewModelBase(string displayName, string description)
+            : this(displayName, description, StringLocalizer.Instance)
         {
-            DisplayName = StringLocalizer.Instance.GetText(displayName);
-            Description = StringLocalizer.Instance.GetText(description);
+        }
+
+        protected OptionViewModelBase(string displayName, string description, IStringLocalizer stringLocalizer)
+        {
+            DisplayName = stringLocalizer.GetText(displayName);
+            Description = stringLocalizer.GetText(description);
         }
 
         public virtual string Description { get; }
@@ -53,7 +58,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
             }
         }
 
-        public event EventHandler? ValueChanged;
+        public event EventHandler<EventArgs>? ValueChanged;
 
         protected void RaiseValueChanged()
         {
