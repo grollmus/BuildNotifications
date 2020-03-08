@@ -53,13 +53,13 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options.PluginOptions
             var localizationProvider = Substitute.For<ILocalizationProvider>();
             var option = Substitute.For<IOption>();
             var viewModel = Substitute.For<IViewModel>();
-            var unused = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
+            var sut = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
 
             // Act
             option.IsEnabledChanged += Raise.Event();
 
             // Assert
-            viewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsEnabled));
+            sut.ViewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsEnabled));
         }
 
         [Fact]
@@ -69,13 +69,13 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options.PluginOptions
             var localizationProvider = Substitute.For<ILocalizationProvider>();
             var option = Substitute.For<IOption>();
             var viewModel = Substitute.For<IViewModel>();
-            var unused = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
+            var sut = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
 
             // Act
             option.IsLoadingChanged += Raise.Event();
 
             // Assert
-            viewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsLoading));
+            sut.ViewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsLoading));
         }
 
         [Fact]
@@ -85,13 +85,13 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options.PluginOptions
             var localizationProvider = Substitute.For<ILocalizationProvider>();
             var option = Substitute.For<IOption>();
             var viewModel = Substitute.For<IViewModel>();
-            var unused = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
+            var sut = new PluginOptionViewModelImplementation(option, localizationProvider, viewModel);
 
             // Act
             option.IsVisibleChanged += Raise.Event();
 
             // Assert
-            viewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsVisible));
+            sut.ViewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase.IsVisible));
         }
 
         [Fact]
@@ -101,13 +101,13 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options.PluginOptions
             var localizationProvider = Substitute.For<ILocalizationProvider>();
             var option = Substitute.For<ValueOption<int>>(0, string.Empty, string.Empty);
             var viewModel = Substitute.For<IViewModel>();
-            var unused = new PluginOptionViewModelImplementation<int>(option, localizationProvider, viewModel);
+            var sut = new PluginOptionViewModelImplementation<int>(option, localizationProvider, viewModel);
 
             // Act
             option.ValueChanged += Raise.EventWith(new ValueChangedEventArgs<int>(0, 1));
 
             // Assert
-            viewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase<int>.Value));
+            sut.ViewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase<int>.Value));
         }
     }
 }

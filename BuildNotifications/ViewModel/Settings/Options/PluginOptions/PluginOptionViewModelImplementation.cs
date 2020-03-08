@@ -39,7 +39,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             ViewModel.OnPropertyChanged(nameof(OptionViewModelBase.IsVisible));
         }
 
-        protected readonly IViewModel ViewModel;
+        protected internal readonly IViewModel ViewModel;
 
         private readonly ILocalizationProvider _localizationProvider;
     }
