@@ -28,7 +28,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event EventHandler? CanExecuteChanged;
 
-        public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) == true;
+        public bool CanExecute(object parameter) => _canExecute.Invoke(parameter);
 
         public void Execute(object parameter)
         {

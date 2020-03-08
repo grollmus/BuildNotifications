@@ -13,7 +13,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public override bool Equals(IBuildTreeNode other)
         {
-            return base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition?.Id);
+            return base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition.Id);
         }
     }
 }
