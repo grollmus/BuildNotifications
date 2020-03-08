@@ -9,6 +9,6 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         string SearchedText { get; }
 
-        bool IsBuildIncluded(IBuild build, string input);
+        bool IsBuildIncluded(IBuild build);
     }
 }

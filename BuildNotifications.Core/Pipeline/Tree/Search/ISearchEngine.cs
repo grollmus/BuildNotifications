@@ -5,10 +5,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 {
     public interface ISearchEngine
     {
-        IReadOnlyList<ISearchCriteria> SearchCriteria { get; }
+        IReadOnlyList<ISearchCriteria> SearchCriterions { get; }
 
         void AddCriteria(ISearchCriteria criteria);
 
-        ISearch Parse(string textInput);
+        ISpecificSearch Parse(string textInput);
     }
 }

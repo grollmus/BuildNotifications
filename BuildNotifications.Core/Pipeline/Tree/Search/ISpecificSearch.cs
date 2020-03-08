@@ -3,7 +3,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search
 {
-    public interface ISearch
+    public interface ISpecificSearch
     {
         IReadOnlyList<ISearchBlock> Blocks { get; }
 
