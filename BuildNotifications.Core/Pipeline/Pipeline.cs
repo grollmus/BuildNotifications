@@ -310,8 +310,8 @@ namespace BuildNotifications.Core.Pipeline
 
                 LogTo.Debug("BuildTree is done. Producing notifications.");
                 // don't show any notifications for the initial fetch
-                IBuildTreeBuildsDelta delta = _oldTree == null 
-                    ? new BuildTreeBuildsDelta() 
+                IBuildTreeBuildsDelta delta = _oldTree == null
+                    ? new BuildTreeBuildsDelta()
                     : new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus, _configuration.PartialSucceededTreatmentMode);
 
                 var notifications = _notificationFactory.ProduceNotifications(delta).ToList();

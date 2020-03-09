@@ -62,7 +62,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                 LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
                 return new SolidColorBrush(Colors.White);
             }
-            
+
             _cache.Add(key, resolvedBrush);
             return resolvedBrush;
         }

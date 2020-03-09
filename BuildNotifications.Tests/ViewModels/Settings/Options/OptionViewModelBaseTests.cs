@@ -19,7 +19,10 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
             public TestOptionViewModel(string name, string description, IStringLocalizer localizer)
                 : base(name, description, localizer)
             {
+                StringLocalizer = localizer;
             }
+
+            public IStringLocalizer StringLocalizer { get; }
         }
 
         private class TestOptionViewModelInt : OptionViewModelBase<int>
@@ -37,10 +40,10 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
             var localizer = Substitute.For<IStringLocalizer>();
 
             // Act
-            var unused = new TestOptionViewModel("name", "description", localizer);
+            var sut = new TestOptionViewModel("name", "description", localizer);
 
             // Assert
-            localizer.Received(1).GetText("description", Arg.Any<CultureInfo>());
+            sut.StringLocalizer.Received(1).GetText("description", Arg.Any<CultureInfo>());
         }
 
         [Fact]
@@ -50,10 +53,10 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
             var localizer = Substitute.For<IStringLocalizer>();
 
             // Act
-            var unused = new TestOptionViewModel("name", "description", localizer);
+            var sut = new TestOptionViewModel("name", "description", localizer);
 
             // Assert
-            localizer.Received(1).GetText("name", Arg.Any<CultureInfo>());
+            sut.StringLocalizer.Received(1).GetText("name", Arg.Any<CultureInfo>());
         }
 
         [Fact]
