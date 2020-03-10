@@ -59,35 +59,35 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _someoneElse.Id.Returns("SomeoneElse");
 
             _allowAllConfiguration = Substitute.For<IConfiguration>();
-            _allowAllConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _allowAllConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _allowAllConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _allowAllConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _allowAllConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _allowAllConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
 
             _onlyRequestedByMeConfiguration = Substitute.For<IConfiguration>();
-            _onlyRequestedByMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
-            _onlyRequestedByMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
-            _onlyRequestedByMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
+            _onlyRequestedByMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
+            _onlyRequestedByMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
+            _onlyRequestedByMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
 
             _onlyRequestedForMeConfiguration = Substitute.For<IConfiguration>();
-            _onlyRequestedForMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
-            _onlyRequestedForMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
-            _onlyRequestedForMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
 
             _dontNotifyConfiguration = Substitute.For<IConfiguration>();
-            _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.None);
-            _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.None);
-            _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.None);
+            _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.None);
+            _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.None);
+            _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.None);
 
             _treatPartialsAsSucceededConfiguration = Substitute.For<IConfiguration>();
-            _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
             _treatPartialsAsSucceededConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             _treatPartialsAsFailedConfiguration = Substitute.For<IConfiguration>();
-            _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
             _treatPartialsAsFailedConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsFailed);
 
             _userIdentityList = Substitute.For<IUserIdentityList>();

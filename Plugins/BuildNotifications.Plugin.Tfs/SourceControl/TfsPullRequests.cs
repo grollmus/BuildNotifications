@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using System.Globalization;
+using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace BuildNotifications.Plugin.Tfs.SourceControl
@@ -11,7 +12,7 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
             Description = native.Description;
             SourceBranch = native.SourceRefName;
             TargetBranch = native.TargetRefName;
-            Id = native.PullRequestId.ToString();
+            Id = native.PullRequestId.ToString(CultureInfo.InvariantCulture);
         }
 
         public override bool IsPullRequest => true;

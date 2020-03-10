@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using System;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.TestMocks
 {
@@ -12,7 +13,7 @@ namespace BuildNotifications.TestMocks
         public bool Equals(IBranch other)
         {
             var mock = other as MockBranch;
-            return mock?.FullName.Equals(FullName) == true;
+            return mock?.FullName.Equals(FullName, StringComparison.InvariantCulture) == true;
         }
 
         public string DisplayName { get; }

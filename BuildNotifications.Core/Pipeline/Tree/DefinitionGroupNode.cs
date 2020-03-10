@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using System;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
@@ -11,9 +12,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public IBuildDefinition Definition { get; }
 
-        public override bool Equals(IBuildTreeNode other)
-        {
-            return base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition.Id);
-        }
+        public override bool Equals(IBuildTreeNode other) => base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition.Id, StringComparison.InvariantCulture);
     }
 }

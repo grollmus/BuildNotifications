@@ -37,7 +37,7 @@ namespace BuildNotifications.TestMocks
         public bool Equals(IBaseBuild other)
         {
             var mock = other as MockBuild;
-            return mock?.Id.Equals(Id) == true;
+            return mock?.Id.Equals(Id, StringComparison.InvariantCulture) == true;
         }
 
         public string BranchName { get; }

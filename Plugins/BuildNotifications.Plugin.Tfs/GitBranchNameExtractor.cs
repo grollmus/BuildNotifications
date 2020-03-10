@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -7,7 +8,7 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public string ExtractDisplayName(string fullBranchName)
         {
-            if (fullBranchName.StartsWith(GitRefHeadPrefix))
+            if (fullBranchName.StartsWith(GitRefHeadPrefix, StringComparison.InvariantCultureIgnoreCase))
                 return fullBranchName.Substring(GitRefHeadPrefix.Length);
 
             var match = PullRequestPattern.Match(fullBranchName);

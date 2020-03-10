@@ -1,4 +1,6 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree
+﻿using System;
+
+namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class SourceGroupNode : TreeNode, ISourceGroupNode
     {
@@ -11,7 +13,7 @@
 
         public override bool Equals(IBuildTreeNode other)
         {
-            return base.Equals(other) && SourceName.Equals((other as SourceGroupNode)?.SourceName);
+            return base.Equals(other) && SourceName.Equals((other as SourceGroupNode)?.SourceName, StringComparison.InvariantCulture);
         }
     }
 }

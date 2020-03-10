@@ -8,7 +8,7 @@ using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Notification
 {
-    public class NotificationViewModel : BaseViewModel, IEquatable<NotificationViewModel>
+    public sealed class NotificationViewModel : BaseViewModel, IEquatable<NotificationViewModel>
     {
         public NotificationViewModel(INotification notification)
         {
@@ -48,6 +48,10 @@ namespace BuildNotifications.ViewModel.Notification
 
         public string Title => Notification.DisplayTitle;
 
+        public override bool Equals(object? obj) => Equals(obj as NotificationViewModel);
+
+        public override int GetHashCode() => NotificationGuid.GetHashCode();
+
         public void InvokeTimeUntilNowUpdate()
         {
             OnPropertyChanged(nameof(TimeUntilNow));
@@ -68,7 +72,7 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        public bool Equals(NotificationViewModel other) => NotificationGuid == other?.NotificationGuid;
+        public bool Equals(NotificationViewModel? other) => NotificationGuid == other?.NotificationGuid;
 
         private bool _isUnread = true;
     }

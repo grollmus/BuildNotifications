@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using System;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.TestMocks
 {
@@ -19,7 +20,7 @@ namespace BuildNotifications.TestMocks
         public bool Equals(IBuildDefinition other)
         {
             var mock = other as MockBuildDefinition;
-            return mock?.Id.Equals(Id) == true;
+            return mock?.Id.Equals(Id, StringComparison.InvariantCulture) == true;
         }
 
         public string Id { get; set; }

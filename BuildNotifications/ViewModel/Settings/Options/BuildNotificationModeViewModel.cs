@@ -2,9 +2,9 @@
 
 namespace BuildNotifications.ViewModel.Settings.Options
 {
-    public class BuildNotificationModeViewModel : EnumOptionBaseViewModel<BuildNotificationMode>
+    public class BuildNotificationModeViewModel : EnumOptionBaseViewModel<BuildNotificationModes>
     {
-        public BuildNotificationModeViewModel(BuildNotificationMode value, string displayName)
+        public BuildNotificationModeViewModel(BuildNotificationModes value, string displayName)
             : base(displayName, value)
         {
         }

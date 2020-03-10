@@ -8,7 +8,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
         private class CollectionOptionViewModel : CollectionOptionBaseViewModel<int, NumberOptionViewModel>
         {
             public CollectionOptionViewModel()
-                : base(new int[0], string.Empty)
+                : base(System.Array.Empty<int>(), string.Empty)
             {
             }
 

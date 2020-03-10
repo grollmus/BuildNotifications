@@ -48,7 +48,7 @@ namespace BuildNotifications.Core.Config
 
         private bool AllConnectionsUsedInProject(IProjectConfiguration project, List<string> connectionNames)
         {
-            return connectionNames.All(n => project.BuildConnectionName.Contains(n) || project.SourceControlConnectionName.Contains(n));
+            return connectionNames.All(n => project.BuildConnectionName.Contains(n) || project.SourceControlConnectionName == n);
         }
 
         private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
@@ -61,13 +61,10 @@ namespace BuildNotifications.Core.Config
             return project;
         }
 
-        public IProjectConfiguration CreateEmptyConfiguration(string name)
+        public IProjectConfiguration CreateEmptyConfiguration(string name) => new ProjectConfiguration
         {
-            return new ProjectConfiguration
-            {
-                ProjectName = name
-            };
-        }
+            ProjectName = name
+        };
 
         private readonly IPathResolver _pathResolver;
         private readonly IConfigurationSerializer _configurationSerializer;

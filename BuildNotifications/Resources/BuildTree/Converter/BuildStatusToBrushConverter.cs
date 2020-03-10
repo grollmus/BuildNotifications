@@ -20,8 +20,6 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
 
-        private readonly Dictionary<string, SolidColorBrush> _cache = new Dictionary<string, SolidColorBrush>();
-
         public Brush Convert(BuildStatus status)
         {
             switch (status)
@@ -52,6 +50,19 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return DefaultBrush;
         }
 
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch (value)
+            {
+                case BuildTreeNodeViewModel node:
+                    return Convert(node);
+                case BuildStatus status:
+                    return Convert(status);
+                default:
+                    return DefaultBrush;
+            }
+        }
+
         private SolidColorBrush GetBrush(string key)
         {
             if (_cache.TryGetValue(key, out var cachedBrush))
@@ -67,23 +78,9 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return resolvedBrush;
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch (value)
-            {
-                case BuildTreeNodeViewModel node:
-                    return Convert(node);
-                case BuildStatus status:
-                    return Convert(status);
-                default:
-                    return DefaultBrush;
-            }
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly Dictionary<string, SolidColorBrush> _cache = new Dictionary<string, SolidColorBrush>();
 
         private const string DefaultBrushKey = "Foreground1";
     }

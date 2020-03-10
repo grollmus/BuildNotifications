@@ -29,8 +29,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 return $"{BuildNodes.First().Build.Definition.Name}\n{BuildNodes.First().Build.BranchName}";
             var branchCount = BuildNodes.Select(x => x.Build.BranchName).Distinct().Count();
             var definitionCount = BuildNodes.Select(x => x.Build.Definition.Name).Distinct().Count();
-            var branchText = string.Format(StringLocalizer.BranchesCount, branchCount);
-            var definitionText = string.Format(StringLocalizer.DefinitionsCount, definitionCount);
+            var branchText = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.BranchesCount, branchCount);
+            var definitionText = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.DefinitionsCount, definitionCount);
 
             return $"{branchText}\n{definitionText}";
         }
@@ -47,7 +47,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 Parameters.Add(build.Build.BranchName);
             }
             else
-                Parameters.Add(BuildNodes.Count.ToString());
+                Parameters.Add(BuildNodes.Count.ToString(StringLocalizer.CurrentCulture));
         }
 
         // Build {1} on {2} {0}. E.g. Build Ci on stage failed.

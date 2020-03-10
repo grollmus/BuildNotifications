@@ -22,12 +22,12 @@ namespace BuildNotifications.Tests.ViewModels.Settings
                     vm => vm.AnimationsMode.Value = AnimationMode.DoubleSpeed,
                     vm => vm.AutoStartMode.Value = AutostartMode.StartWithWindows,
                     vm => vm.BuildsPerGroup.Value = 12,
-                    vm => vm.CanceledBuildNotify.Value = BuildNotificationMode.Always,
-                    vm => vm.FailedBuildNotify.Value = BuildNotificationMode.Always,
+                    vm => vm.CanceledBuildNotify.Value = BuildNotificationModes.Always,
+                    vm => vm.FailedBuildNotify.Value = BuildNotificationModes.Always,
                     vm => vm.Language.Value = vm.Language.AvailableValues.Last().Value,
                     vm => vm.PartialSucceededTreatmentMode.Value = PartialSucceededTreatmentMode.TreatAsFailed,
                     vm => vm.ShowBusyIndicatorDuringUpdate.Value = true,
-                    vm => vm.SucceededBuildNotify.Value = BuildNotificationMode.Always,
+                    vm => vm.SucceededBuildNotify.Value = BuildNotificationModes.Always,
                     vm => vm.UpdateInterval.Value = 12,
                     vm => vm.UpdateToPreReleases.Value = true
                 };

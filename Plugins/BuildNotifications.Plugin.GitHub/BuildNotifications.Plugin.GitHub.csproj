@@ -14,7 +14,19 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Anotar.NLog.Fody" Version="5.1.0" />
+		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.8">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.8">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Octokit" Version="0.43.0" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.4.0.15306">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>

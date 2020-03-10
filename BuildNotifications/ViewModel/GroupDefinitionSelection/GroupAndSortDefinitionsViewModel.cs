@@ -29,7 +29,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             set => FromSortDefinitions(value);
         }
 
-        public RemoveTrackingObservableCollection<GroupDefinitionsViewModel> Definitions { get; set; }
+        public RemoveTrackingObservableCollection<GroupDefinitionsViewModel> Definitions { get; }
 
         private void AddNoneAtEnd()
         {

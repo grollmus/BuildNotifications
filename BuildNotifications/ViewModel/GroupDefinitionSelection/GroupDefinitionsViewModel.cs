@@ -21,7 +21,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             SelectedDefinition = _selectedDefinition;
         }
 
-        public ObservableCollection<GroupDefinitionViewModel> Definitions { get; set; }
+        public ObservableCollection<GroupDefinitionViewModel> Definitions { get; }
 
         public string GroupByText
         {

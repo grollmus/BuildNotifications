@@ -14,7 +14,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             ContentTextId = messageTextId;
         }
 
-        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), _parameter);
+        public string DisplayContent => string.Format(StringLocalizer.CurrentCulture, StringLocalizer.Instance.GetText(ContentTextId), _parameter);
 
         public string ContentTextId { get; }
 

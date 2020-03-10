@@ -36,7 +36,7 @@ namespace BuildNotifications.ViewModel.Notification
 
         public INotificationDistributor NotificationDistributor { get; } = new NotificationDistributor();
 
-        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; set; }
+        public RemoveTrackingObservableCollection<NotificationViewModel> Notifications { get; }
 
         public NotificationViewModel? SelectedNotification
         {

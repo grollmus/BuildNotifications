@@ -24,7 +24,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which canceled builds to receive notifications for
         /// </summary>
-        BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
+        BuildNotificationModes CanceledBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// List of all saved connections.
@@ -39,7 +39,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which failed builds to receive notifications for
         /// </summary>
-        BuildNotificationMode FailedBuildNotifyConfig { get; set; }
+        BuildNotificationModes FailedBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// Defines how builds should be grouped.
@@ -74,7 +74,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which succeeded builds to receive notifications for
         /// </summary>
-        BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
+        BuildNotificationModes SucceededBuildNotifyConfig { get; set; }
 
         /// <summary>
         /// Seconds between each update cycle.

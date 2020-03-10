@@ -11,6 +11,7 @@ namespace BuildNotifications.TestMocks
 
         public void UpdateWith(IBranch branch)
         {
+            // Do nothing
         }
     }
 }

@@ -6,7 +6,7 @@ namespace BuildNotifications.Core.Config
     /// Describes configurations for which builds notifications shall be shown.
     /// </summary>
     [Flags]
-    public enum BuildNotificationMode
+    public enum BuildNotificationModes
     {
         None = 0,
 

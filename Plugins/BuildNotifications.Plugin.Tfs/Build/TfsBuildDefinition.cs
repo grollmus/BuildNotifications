@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using System.Globalization;
+using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.VisualStudio.Services.WebApi;
 
@@ -10,7 +11,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
         {
             Name = definition.Name;
             NativeId = definition.Id;
-            Id = NativeId.ToString();
+            Id = NativeId.ToString(CultureInfo.InvariantCulture);
             Links = new ReferenceLinks();
         }
 

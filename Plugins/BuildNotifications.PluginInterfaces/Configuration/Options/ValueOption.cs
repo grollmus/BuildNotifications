@@ -49,7 +49,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 if (value is TValue typed)
                     Value = typed;
                 else
-                    throw new ArgumentException();
+                    throw new ArgumentException("Value has wrong type", nameof(value));
             }
         }
 

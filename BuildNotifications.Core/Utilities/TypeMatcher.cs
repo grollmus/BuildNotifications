@@ -33,8 +33,8 @@ namespace BuildNotifications.Core.Utilities
             {
                 unchecked
                 {
-                    return ((_assemblyName != null ? _assemblyName.GetHashCode() : 0) * 397)
-                           ^ (_fullTypeName != null ? _fullTypeName.GetHashCode() : 0);
+                    return ((_assemblyName != null ? _assemblyName.GetHashCode(StringComparison.InvariantCulture) : 0) * 397)
+                           ^ (_fullTypeName != null ? _fullTypeName.GetHashCode(StringComparison.InvariantCulture) : 0);
                 }
             }
 

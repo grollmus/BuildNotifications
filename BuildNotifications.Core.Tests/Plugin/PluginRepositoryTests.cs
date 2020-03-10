@@ -28,7 +28,7 @@ namespace BuildNotifications.Core.Tests.Plugin
                 Substitute.For<ISourceControlPlugin>()
             };
 
-            var notificationProcessors = new INotificationProcessor[0];
+            var notificationProcessors = System.Array.Empty<INotificationProcessor>();
 
             var typeMatcher = Substitute.For<ITypeMatcher>();
 
@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Tests.Plugin
             var typeMatcher = Substitute.For<ITypeMatcher>();
             typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
 
-            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+            var sut = new PluginRepository(buildPlugins, System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), typeMatcher);
 
             // Act
             var actual = sut.FindBuildPlugin("typeName");
@@ -74,7 +74,7 @@ namespace BuildNotifications.Core.Tests.Plugin
         public void FindBuildPluginShouldReturnNullWhenPluginWasNotFound()
         {
             // Arrange
-            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], Substitute.For<ITypeMatcher>());
+            var sut = new PluginRepository(System.Array.Empty<IBuildPlugin>(), System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), Substitute.For<ITypeMatcher>());
 
             // Act
             var actual = sut.FindBuildPlugin("non.existing");
@@ -99,7 +99,7 @@ namespace BuildNotifications.Core.Tests.Plugin
             var typeMatcher = Substitute.For<ITypeMatcher>();
             typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
 
-            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+            var sut = new PluginRepository(buildPlugins, System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), typeMatcher);
 
             // Act
             var actual = sut.FindIconGeometry("typeName");
@@ -112,7 +112,7 @@ namespace BuildNotifications.Core.Tests.Plugin
         public void FindIconGeometryShouldReturnNullWhenPluginWasNotFound()
         {
             // Arrange
-            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], new TypeMatcher());
+            var sut = new PluginRepository(System.Array.Empty<IBuildPlugin>(), System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), new TypeMatcher());
 
             // Act
             var actual = sut.FindIconGeometry("typeName");
@@ -137,7 +137,7 @@ namespace BuildNotifications.Core.Tests.Plugin
             var typeMatcher = Substitute.For<ITypeMatcher>();
             typeMatcher.MatchesType(buildPlugins[0].GetType(), "typeName").Returns(true);
 
-            var sut = new PluginRepository(buildPlugins, new ISourceControlPlugin[0], new INotificationProcessor[0], typeMatcher);
+            var sut = new PluginRepository(buildPlugins, System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), typeMatcher);
 
             // Act
             var actual = sut.FindPluginName("typeName");
@@ -150,7 +150,7 @@ namespace BuildNotifications.Core.Tests.Plugin
         public void FindPluginNameShouldReturnNullWhenPluginWasNotFound()
         {
             // Arrange
-            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], new TypeMatcher());
+            var sut = new PluginRepository(System.Array.Empty<IBuildPlugin>(), System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), new TypeMatcher());
 
             // Act
             var actual = sut.FindPluginName("typeName");
@@ -171,7 +171,7 @@ namespace BuildNotifications.Core.Tests.Plugin
             var typeMatcher = Substitute.For<ITypeMatcher>();
             typeMatcher.MatchesType(sourceControlPlugins[0].GetType(), "typeName").Returns(true);
 
-            var sut = new PluginRepository(new IBuildPlugin[0], sourceControlPlugins, new INotificationProcessor[0], typeMatcher);
+            var sut = new PluginRepository(System.Array.Empty<IBuildPlugin>(), sourceControlPlugins, System.Array.Empty<INotificationProcessor>(), typeMatcher);
 
             // Act
             var actual = sut.FindSourceControlPlugin("typeName");
@@ -184,7 +184,7 @@ namespace BuildNotifications.Core.Tests.Plugin
         public void FindSourceControlPluginShouldReturnNullWhenPluginWasNotFound()
         {
             // Arrange
-            var sut = new PluginRepository(new IBuildPlugin[0], new ISourceControlPlugin[0], new INotificationProcessor[0], Substitute.For<ITypeMatcher>());
+            var sut = new PluginRepository(System.Array.Empty<IBuildPlugin>(), System.Array.Empty<ISourceControlPlugin>(), System.Array.Empty<INotificationProcessor>(), Substitute.For<ITypeMatcher>());
 
             // Act
             var actual = sut.FindSourceControlPlugin("non.existing");

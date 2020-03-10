@@ -13,9 +13,9 @@ namespace BuildNotifications.Core.Config
             Connections = new List<ConnectionData>();
             BuildsToShow = 5;
             UpdateInterval = 30;
-            CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
-            FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe;
-            SucceededBuildNotifyConfig = BuildNotificationMode.RequestedByMe;
+            CanceledBuildNotifyConfig = BuildNotificationModes.RequestedByMe;
+            FailedBuildNotifyConfig = BuildNotificationModes.RequestedByOrForMe;
+            SucceededBuildNotifyConfig = BuildNotificationModes.RequestedByMe;
             PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.TreatAsSucceeded;
             AutoStart = AutostartMode.StartWithWindowsMinimized;
             AnimationSpeed = AnimationMode.Enabled;
@@ -48,11 +48,11 @@ namespace BuildNotifications.Core.Config
 
         public bool UsePreReleases { get; set; }
 
-        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; }
+        public BuildNotificationModes CanceledBuildNotifyConfig { get; set; }
 
-        public BuildNotificationMode FailedBuildNotifyConfig { get; set; }
+        public BuildNotificationModes FailedBuildNotifyConfig { get; set; }
 
-        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; }
+        public BuildNotificationModes SucceededBuildNotifyConfig { get; set; }
 
         public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; }
 

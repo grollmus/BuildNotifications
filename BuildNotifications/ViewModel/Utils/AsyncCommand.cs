@@ -40,7 +40,7 @@ namespace BuildNotifications.ViewModel.Utils
         public static AsyncCommand<TResult> Create<TResult>(Func<CancellationToken, Task<TResult>> command) => new AsyncCommand<TResult>(command);
     }
 
-    public class AsyncCommand<TResult> : IAsyncCommand, INotifyPropertyChanged
+    public class AsyncCommand<TResult> : IAsyncCommand, INotifyPropertyChanged, IDisposable
     {
         public AsyncCommand(Func<CancellationToken, Task<TResult>> command)
             : this(command, () => true)
@@ -105,7 +105,7 @@ namespace BuildNotifications.ViewModel.Utils
         private readonly CancelAsyncCommand _cancelCommand;
         private NotifyTaskCompletion<TResult>? _execution;
 
-        private sealed class CancelAsyncCommand : ICommand
+        private sealed class CancelAsyncCommand : ICommand, IDisposable
         {
             public CancellationToken Token => _cts.Token;
 
@@ -143,8 +143,18 @@ namespace BuildNotifications.ViewModel.Utils
                 remove => CommandManager.RequerySuggested -= value;
             }
 
+            public void Dispose()
+            {
+                _cts.Dispose();
+            }
+
             private CancellationTokenSource _cts = new CancellationTokenSource();
             private bool _commandExecuting;
+        }
+
+        public void Dispose()
+        {
+            _cancelCommand.Dispose();
         }
     }
 }

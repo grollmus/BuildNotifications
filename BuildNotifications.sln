@@ -36,6 +36,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.PluginIn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.Plugin.GitHub", "Plugins\BuildNotifications.Plugin.GitHub\BuildNotifications.Plugin.GitHub.csproj", "{C72D01D7-7F92-4BE5-90DA-A58758A79486}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24915271-2D81-4492-AA12-88D5CEA0CF64}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildNotifications.TestMocks", "BuildNotifications.TestMocks\BuildNotifications.TestMocks.csproj", "{F121A90C-8A6F-41EA-AD54-B34005E4A5E1}"
 EndProject
 Global
