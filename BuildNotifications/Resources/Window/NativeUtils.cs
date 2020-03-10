@@ -3,11 +3,12 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 // ReSharper disable All
+#pragma warning disable CA1060 // Move pinvokes to native methods class
 
 namespace BuildNotifications.Resources.Window
 {
-    internal static class NativeUtils
-    {
+   internal static class NativeUtils
+   {
         static NativeUtils()
         {
             TPM_LEFTALIGN = 0;
@@ -26,9 +27,9 @@ namespace BuildNotifications.Resources.Window
         [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
         internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
-        internal static uint TPM_LEFTALIGN;
+        internal static readonly uint TPM_LEFTALIGN;
 
-        internal static uint TPM_RETURNCMD;
+        internal static readonly uint TPM_RETURNCMD;
     }
 
     [Serializable]

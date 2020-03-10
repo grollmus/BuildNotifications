@@ -116,7 +116,7 @@ namespace BuildNotifications.ViewModel.Overlays
 
             if (_settingsViewModel.Configuration.Projects.Count == 0)
             {
-                if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => x.TestConnectionViewModel.LastTestDidSucceed == false))
+                if (_settingsViewModel.ConnectionsWrapper.Connections.Any(x => !x.TestConnectionViewModel.LastTestDidSucceed))
                 {
                     DisplayedTextId = InitialSetupUntested;
                     DisplayedIconType = IconType.Dummy;

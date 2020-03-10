@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.VisualStudio.Services.Common;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -25,7 +26,7 @@ namespace BuildNotifications.Plugin.Tfs
         public string BuildPullRequestUrl(int pullRequestId)
         {
             var builder = new UriBuilder(_baseUri);
-            builder.AppendPathSegments("_git", _projectName, "pullrequest", pullRequestId.ToString());
+            builder.AppendPathSegments("_git", _projectName, "pullrequest", pullRequestId.ToString(CultureInfo.InvariantCulture));
 
             return builder.Uri.AbsoluteUri;
         }

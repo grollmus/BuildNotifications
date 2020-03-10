@@ -1,11 +1,10 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using BuildNotifications.Core.Text;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.ViewModel.Notification
 {
     public class NewNotificationsCounterViewModel : BaseViewModel
     {
-        private int _count;
-
         public int Count
         {
             get => _count;
@@ -18,7 +17,9 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        private BuildStatus _highestStatus;
+        public bool CountIsZero => Count == 0;
+
+        public string CountToDisplay => Count > 9 ? "*" : Count.ToString(StringLocalizer.CurrentCulture);
 
         public BuildStatus HighestStatus
         {
@@ -30,8 +31,8 @@ namespace BuildNotifications.ViewModel.Notification
             }
         }
 
-        public string CountToDisplay => Count > 9 ? "*" : Count.ToString();
+        private int _count;
 
-        public bool CountIsZero => Count == 0;
+        private BuildStatus _highestStatus;
     }
 }

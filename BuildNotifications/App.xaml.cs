@@ -20,13 +20,13 @@ namespace BuildNotifications
         static App()
         {
             GlobalTweenHandler = new TweenHandler();
+            _lastUpdate = TimeSpan.Zero;
         }
 
         public App()
         {
             SetWorkingDirectory();
             CompositionTarget.Rendering += CompositionTargetOnRendering;
-            _lastUpdate = TimeSpan.Zero;
 
             // setup global event logger
             ConfigurationItemFactory
@@ -44,7 +44,7 @@ namespace BuildNotifications
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (e.Args.Any(a => a.Contains(UriSchemeRegistration.UriScheme)))
+            if (e.Args.Any(a => a.Contains(UriSchemeRegistration.UriScheme, StringComparison.OrdinalIgnoreCase)))
                 GlobalDiagnosticsContext.Set("application", "invokedFromProtocol");
             else
                 GlobalDiagnosticsContext.Set("application", "default");
@@ -77,9 +77,9 @@ namespace BuildNotifications
             base.OnStartup(e);
         }
 
-        private bool ShouldBeMinimized(IEnumerable<string> args) => args.Any(a => a.Contains(AutostartHelper.MinimizeArgument));
+        private bool ShouldBeMinimized(IEnumerable<string> args) => args.Any(a => a.Contains(AutostartHelper.MinimizeArgument, StringComparison.OrdinalIgnoreCase));
 
-        public static bool StartMinimized;
+        public static bool StartMinimized { get; set; }
 
         private void CompositionTargetOnRendering(object? sender, EventArgs e)
         {
@@ -148,6 +148,6 @@ namespace BuildNotifications
         }
 
         private static TimeSpan _lastUpdate;
-        public static TweenHandler GlobalTweenHandler;
+        public static readonly TweenHandler GlobalTweenHandler;
     }
 }

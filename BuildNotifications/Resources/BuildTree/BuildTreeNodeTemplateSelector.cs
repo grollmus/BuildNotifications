@@ -35,7 +35,7 @@ namespace BuildNotifications.Resources.BuildTree
         {
             var type = groupNode.GetType();
             var fullName = type.Name;
-            var withoutViewModel = fullName.Replace("ViewModel", "");
+            var withoutViewModel = fullName.Replace("ViewModel", "", StringComparison.InvariantCulture);
             var expectedKey = $"{withoutViewModel}Template";
 
             return TryFindResource(element, expectedKey);

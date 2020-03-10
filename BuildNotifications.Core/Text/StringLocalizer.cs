@@ -35,6 +35,7 @@ namespace BuildNotifications.Core.Text
 
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();
+        public static CultureInfo CurrentCulture => CultureInfo.CurrentUICulture;
 
         public string this[string key] => GetText(key);
 
@@ -46,19 +47,13 @@ namespace BuildNotifications.Core.Text
                 return "";
 
             if (culture == null)
-                culture = CultureInfo.CurrentUICulture;
+                culture = CurrentCulture;
 
-            if (!Cache.TryGetValue(culture, out var dictionary))
-            {
-                if (!Cache.TryGetValue(culture.Parent, out dictionary))
-                    dictionary = _defaultDictionary;
-            }
+            if (!Cache.TryGetValue(culture, out var dictionary) && !Cache.TryGetValue(culture.Parent, out dictionary))
+                dictionary = _defaultDictionary;
 
-            if (!dictionary.TryGetValue(key, out var localizedText))
-            {
-                if (!_defaultDictionary.TryGetValue(key, out localizedText))
-                    localizedText = key;
-            }
+            if (!dictionary.TryGetValue(key, out var localizedText) && !_defaultDictionary.TryGetValue(key, out localizedText))
+                localizedText = key;
 
             return localizedText;
         }

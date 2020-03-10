@@ -1,4 +1,6 @@
-﻿using BuildNotifications.PluginInterfaces.SourceControl;
+﻿using System;
+using System.Globalization;
+using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -18,7 +20,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             DisplayName = $"PR {pullRequestId}";
             FullName = ComputePullRequestBranchName(pullRequestId);
-            _id = pullRequestId.ToString();
+            _id = pullRequestId.ToString(CultureInfo.InvariantCulture);
 
             WebUrl = urlBuilder.BuildPullRequestUrl(pullRequestId);
         }
@@ -27,7 +29,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         internal static string ComputePullRequestBranchName(int pullRequestId) => PullRequestPrefix + pullRequestId + PullRequestSuffix;
 
-        private string ExtractDisplayName(string branchName) => branchName.Replace(BranchNamePrefix, "");
+        private string ExtractDisplayName(string branchName) => branchName.Replace(BranchNamePrefix, "", StringComparison.OrdinalIgnoreCase);
 
         public bool Equals(IBranch other) => _id == (other as TfsBranch)?._id;
 

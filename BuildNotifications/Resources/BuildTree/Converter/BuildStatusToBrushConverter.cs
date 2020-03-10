@@ -20,8 +20,6 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         public static BuildStatusToBrushConverter Instance { get; } = new BuildStatusToBrushConverter();
 
-        private readonly Dictionary<string, SolidColorBrush> _cache = new Dictionary<string, SolidColorBrush>();
-
         public Brush Convert(BuildStatus status)
         {
             switch (status)
@@ -52,21 +50,6 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return DefaultBrush;
         }
 
-        private SolidColorBrush GetBrush(string key)
-        {
-            if (_cache.TryGetValue(key, out var cachedBrush))
-                return cachedBrush;
-
-            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
-            {
-                LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
-                return new SolidColorBrush(Colors.White);
-            }
-            
-            _cache.Add(key, resolvedBrush);
-            return resolvedBrush;
-        }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
@@ -80,10 +63,24 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        private SolidColorBrush GetBrush(string key)
         {
-            throw new NotImplementedException();
+            if (_cache.TryGetValue(key, out var cachedBrush))
+                return cachedBrush;
+
+            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
+            {
+                LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
+                return new SolidColorBrush(Colors.White);
+            }
+
+            _cache.Add(key, resolvedBrush);
+            return resolvedBrush;
         }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+
+        private readonly Dictionary<string, SolidColorBrush> _cache = new Dictionary<string, SolidColorBrush>();
 
         private const string DefaultBrushKey = "Foreground1";
     }

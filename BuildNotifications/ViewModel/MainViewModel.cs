@@ -32,7 +32,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel, IDisposable
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
@@ -216,7 +216,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private async void HandleExistingDistributedNotificationsOnNextFrame()
+        private async Task HandleExistingDistributedNotificationsOnNextFrame()
         {
             // wait until next frame is rendered
             await WaitUntilNextFrameIsRenderedAsync();
@@ -233,7 +233,7 @@ namespace BuildNotifications.ViewModel
             LoadProjects();
             ShowOverlay();
             RegisterUriProtocol();
-            HandleExistingDistributedNotificationsOnNextFrame();
+            HandleExistingDistributedNotificationsOnNextFrame().FireAndForget();
             UpdateApp().FireAndForget();
 
             if (Overlay == null)
@@ -619,6 +619,14 @@ namespace BuildNotifications.ViewModel
         {
             [UsedImplicitly]
             public int DummyProp { get; set; }
+        }
+
+        public void Dispose()
+        {
+            _trayIcon.Dispose();
+            _cancellationTokenSource.Dispose();
+            _postPipelineUpdateTask?.Dispose();
+            _fileWatch?.Dispose();
         }
     }
 }

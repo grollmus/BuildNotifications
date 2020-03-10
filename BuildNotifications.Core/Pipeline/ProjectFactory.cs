@@ -95,7 +95,7 @@ namespace BuildNotifications.Core.Pipeline
         private void ReportError(string messageTextId, params object[] parameter)
         {
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
-            var fullMessage = string.Format(localizedMessage, parameter);
+            var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
                 LogTo.ErrorException(fullMessage, exception);
             else

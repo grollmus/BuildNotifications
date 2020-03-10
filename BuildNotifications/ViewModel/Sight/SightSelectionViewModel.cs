@@ -18,6 +18,7 @@ namespace BuildNotifications.ViewModel.Sight
 
         private void UpdateBuildSights()
         {
+            // Do nothing
         }
         
         public bool? HighlightManualBuilds { get; set; }

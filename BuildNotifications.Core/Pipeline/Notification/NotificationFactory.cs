@@ -169,7 +169,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
                    && !fromDelta.Succeeded.Any();
         }
 
-        private BuildNotificationMode NotifySetting(IBuildNode buildNode)
+        private BuildNotificationModes NotifySetting(IBuildNode buildNode)
         {
             switch (buildNode.Status)
             {
@@ -188,13 +188,13 @@ namespace BuildNotifications.Core.Pipeline.Notification
             var currentUserIdentities = _configuration.IdentitiesOfCurrentUser;
             switch (notifySetting)
             {
-                case BuildNotificationMode.None:
+                case BuildNotificationModes.None:
                     return false;
-                case BuildNotificationMode.RequestedByMe:
+                case BuildNotificationModes.RequestedByMe:
                     return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedBy));
-                case BuildNotificationMode.RequestedForMe:
+                case BuildNotificationModes.RequestedForMe:
                     return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor));
-                case BuildNotificationMode.RequestedByOrForMe:
+                case BuildNotificationModes.RequestedByOrForMe:
                     return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor) || IsSameUser(u, buildNode.Build.RequestedBy));
                 default:
                     return true;

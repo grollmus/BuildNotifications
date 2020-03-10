@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public RemoveTrackingObservableCollection<SortingDefinitionViewModel> Sortings { get; set; }
+        public RemoveTrackingObservableCollection<SortingDefinitionViewModel> Sortings { get; }
 
         public event EventHandler<SortingDefinitionsSelectionChangedEventArgs>? SelectedSortingDefinitionChanged;
         private SortingDefinitionViewModel _selectedViewModel;

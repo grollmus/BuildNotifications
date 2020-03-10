@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -6,12 +7,12 @@ namespace BuildNotifications.Plugin.Tfs
     {
         public bool Equals(TfsBranch x, TfsBranch y)
         {
-            return x?.FullName.Equals(y?.FullName) == true;
+            return x?.FullName.Equals(y?.FullName, StringComparison.InvariantCulture) == true;
         }
 
         public int GetHashCode(TfsBranch obj)
         {
-            return obj.FullName.GetHashCode();
+            return obj.FullName.GetHashCode(StringComparison.InvariantCulture);
         }
     }
 }
