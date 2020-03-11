@@ -13,16 +13,23 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// </summary>
         /// <param name="value">Value of this item.</param>
         /// <param name="displayName">Text used for displaying this item.</param>
-        public ListOptionItem(TValue value, string displayName)
+        /// <param name="localize">Indicates whether the display name should be localized before being displayed in the UI.</param>
+        public ListOptionItem(TValue value, string displayName, bool localize = false)
         {
             Value = value;
             DisplayName = displayName;
+            Localize = localize;
         }
 
         /// <summary>
         /// Text used used for displaying this item
         /// </summary>
         public string DisplayName { get; }
+
+        /// <summary>
+        /// Indicates whether the display name should be localized before being displayed in the UI.
+        /// </summary>
+        public bool Localize { get; }
 
         /// <summary>
         /// Value of this item

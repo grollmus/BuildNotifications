@@ -25,6 +25,13 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             IsLoading = true;
             try
             {
+                if (string.IsNullOrEmpty(rawData.Url) || string.IsNullOrEmpty(rawData.CollectionName))
+                    return;
+                if (rawData.AuthenticationType == AuthenticationType.Token && string.IsNullOrEmpty(rawData.Token?.PlainText()))
+                    return;
+                if (rawData.AuthenticationType == AuthenticationType.Account && (string.IsNullOrEmpty(rawData.Username) || string.IsNullOrEmpty(rawData.Password?.PlainText())))
+                    return;
+
                 var pool = new TfsConnectionPool();
                 var vssConnection = pool.CreateConnection(rawData);
                 if (vssConnection == null)

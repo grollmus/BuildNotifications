@@ -86,7 +86,6 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 
                 if (rawData != null)
                 {
-                    _url.Value = rawData.Url;
                     _collectionName.Value = rawData.CollectionName;
                     _project.Value = rawData.Project;
                     _repository.Value = rawData.Repository;
@@ -94,6 +93,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
                     _userName.Value = rawData.Username;
                     _password.Value = rawData.Password;
                     _token.Value = rawData.Token;
+                    _url.Value = rawData.Url;
 
                     FetchAvailableValues(rawData);
 
@@ -112,12 +112,12 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
         {
             yield return _url;
             yield return _collectionName;
-            yield return _project;
-            yield return _repository;
             yield return _authenticationType;
             yield return _userName;
             yield return _password;
             yield return _token;
+            yield return _project;
+            yield return _repository;
         }
 
         public string Serialize()

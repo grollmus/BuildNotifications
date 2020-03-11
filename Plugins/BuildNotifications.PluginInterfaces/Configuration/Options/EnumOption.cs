@@ -30,7 +30,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 return Enum.GetValues(enumType).Cast<TEnum>().Select(e =>
                 {
                     var textId = $"{enumType.FullName}.{e}";
-                    return new ListOptionItem<TEnum>(e, textId);
+                    return new ListOptionItem<TEnum>(e, textId, true);
                 });
             }
         }
