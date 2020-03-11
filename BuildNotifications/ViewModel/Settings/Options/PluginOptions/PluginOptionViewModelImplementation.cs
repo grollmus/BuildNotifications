@@ -21,6 +21,9 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         public string Description => _localizationProvider.Localize(Option.DescriptionTextId);
         public string DisplayName => _localizationProvider.Localize(Option.NameTextId);
+        public bool IsEnabled => Option.IsEnabled;
+        public bool IsLoading => Option.IsLoading;
+        public bool IsVisible => Option.IsVisible;
 
         private IOption Option { get; }
 

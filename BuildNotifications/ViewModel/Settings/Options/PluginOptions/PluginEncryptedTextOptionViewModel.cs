@@ -11,6 +11,12 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             _pluginOptionViewModelImplementation = new PluginOptionViewModelImplementation<PasswordString?>(valueOption, localizationProvider, this);
         }
 
+        public override string Description => _pluginOptionViewModelImplementation.Description;
+        public override string DisplayName => _pluginOptionViewModelImplementation.DisplayName;
+        public override bool IsEnabled => _pluginOptionViewModelImplementation.IsEnabled;
+        public override bool IsLoading => _pluginOptionViewModelImplementation.IsLoading;
+        public override bool IsVisible => _pluginOptionViewModelImplementation.IsVisible;
+
         public string RawValue
         {
             get => Value?.PlainText() ?? string.Empty;

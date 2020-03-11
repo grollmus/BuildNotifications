@@ -12,6 +12,9 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         public override string Description => _pluginOptionViewModelImplementation.Description;
         public override string DisplayName => _pluginOptionViewModelImplementation.DisplayName;
+        public override bool IsEnabled => _pluginOptionViewModelImplementation.IsEnabled;
+        public override bool IsLoading => _pluginOptionViewModelImplementation.IsLoading;
+        public override bool IsVisible => _pluginOptionViewModelImplementation.IsVisible;
 
         public override bool Value
         {

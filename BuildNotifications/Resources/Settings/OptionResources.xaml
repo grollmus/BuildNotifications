@@ -17,7 +17,7 @@
 	</ResourceDictionary.MergedDictionaries>
 
 	<DataTemplate x:Key="BooleanOptionTemplate" DataType="{x:Type options:BooleanOptionViewModel}">
-		<CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
+		<CheckBox IsChecked="{Binding Value, Mode=TwoWay}" Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
 		          Margin="{StaticResource BlockHalfYOnlyMargin}">
 			<TextBlock
 				Text="{Binding DisplayName}"
@@ -40,7 +40,7 @@
 	</DataTemplate>
 
 	<DataTemplate x:Key="StringCollectionOptionTemplate" DataType="{x:Type options:StringCollectionOptionViewModel}">
-		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel">
+		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel" Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
             <Grid DockPanel.Dock="Top">
                 <DockPanel>
                     <Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
@@ -135,7 +135,7 @@
 
     
 	<DataTemplate x:Key="PluginCommandOptionTemplate" DataType="{x:Type pluginOptions:PluginCommandOptionViewModel}">
-		<Grid>
+		<Grid Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
 			<icons:IconButton Command="{Binding Command}" Style="{StaticResource IconButtonWithDockedContent}"
 			                  Foreground="{DynamicResource Foreground1}" Content="{Binding DisplayName}"
 			                  ToolTip="{Binding Description}" />
