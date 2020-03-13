@@ -89,7 +89,7 @@
 
                 <Rectangle Fill="{DynamicResource Background3}"
                            Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
-                           Visibility="{Binding IsHighlighted, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" UseLayoutRounding="True">
+                           Visibility="Collapsed" UseLayoutRounding="True">
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
                             <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False" />

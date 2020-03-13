@@ -1,4 +1,5 @@
-﻿using System.Windows.Interactivity;
+﻿using System.Windows;
+using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using BuildNotifications.Resources.Animation;
@@ -12,7 +13,13 @@ namespace BuildNotifications.Resources.BuildTree.Build
         protected override void Invoke(object parameter)
         {
             var globalTweenHandler = App.GlobalTweenHandler;
+            // do nothing when animations are disabled
+            if (globalTweenHandler.TimeModifier > 10)
+                return;
+
             globalTweenHandler.ClearTweensOf(AssociatedObject);
+
+            AssociatedObject.Visibility = Visibility.Visible;
 
             var brush = new SolidColorBrush();
             var targetBrush = new SolidColorBrush(Colors.Transparent);
