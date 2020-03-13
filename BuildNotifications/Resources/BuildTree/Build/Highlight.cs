@@ -1,4 +1,5 @@
-﻿using System.Windows.Interactivity;
+﻿using System.Windows;
+using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using BuildNotifications.Resources.Animation;
@@ -23,6 +24,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
 
             if (DoHighlight)
             {
+                AssociatedObject.Visibility = Visibility.Visible;
                 if (DoLongHighlight)
                     LongHighlight(brush, globalTweenHandler);
                 else
