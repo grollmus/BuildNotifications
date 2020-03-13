@@ -6,7 +6,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration
 {
     /// <summary>
     /// Converter that can be used to read and write <see cref="PasswordString" />
-    /// using Newtonsft.Json.
+    /// using Newtonsoft.Json.
     /// </summary>
     [PublicAPI]
     public class PasswordStringConverter : JsonConverter<PasswordString>
