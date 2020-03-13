@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,11 +27,8 @@ namespace BuildNotifications.ViewModel.Tree
                 buildTree.SetSorting(firstLevelSorting);
 
                 var children = CreateChildren(tree.Children, groupsAsList, sortingsAsList, 0);
-                foreach (var childVm in children)
-                {
-                    buildTree.Children.Add(childVm);
-                }
-
+                buildTree.Children.AddRange(children);
+                
                 return buildTree;
             });
 
@@ -84,10 +82,8 @@ namespace BuildNotifications.ViewModel.Tree
                 // the last level are always the builds which are always sorted by DateAscending, which is the default. So there is nothing to do in the else case
 
                 var childrenVms = CreateChildren(node.Children, groups, sortingsAsList, groupIndex + 1);
-                foreach (var childVm in childrenVms)
-                {
-                    nodeVm.Children.Add(childVm);
-                }
+
+                nodeVm.Children.AddRange(childrenVms);
 
                 yield return nodeVm;
             }
@@ -110,12 +106,19 @@ namespace BuildNotifications.ViewModel.Tree
             var taggedNodes = new List<BuildTreeNodeViewModel>();
             TagAllNodesForDeletion(tree1, taggedNodes);
 
+            var batchChangesToken = BatchAllChildChanges(tree1);
+
             foreach (var child in tree2.Children)
             {
                 MergeInternal(tree1, child, taggedNodes);
             }
 
             RemoveTaggedNodes(tree1, taggedNodes);
+
+            foreach (var token in batchChangesToken)
+            {
+                token.Dispose();
+            }
 
             return tree1;
         }
@@ -183,6 +186,19 @@ namespace BuildNotifications.ViewModel.Tree
             {
                 taggedNodes.Add(node);
                 TagAllNodesForDeletion(node, taggedNodes);
+            }
+        }
+
+        private IEnumerable<IDisposable> BatchAllChildChanges(BuildTreeNodeViewModel tree)
+        {
+            yield return tree.Children.BatchChanges();
+
+            foreach (var node in tree.Children)
+            {
+                foreach (var childToken in BatchAllChildChanges(node))
+                {
+                    yield return childToken;
+                }
             }
         }
     }

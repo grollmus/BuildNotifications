@@ -43,7 +43,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         public string IssueSource => ResolveIssueSource();
 
-        public string Source => BuildNodes.FirstOrDefault()?.Build?.ProjectName ?? "";
+        public string Source => BuildNodes.FirstOrDefault()?.Build.ProjectName ?? "";
 
         public NotificationType Type { get; }
 

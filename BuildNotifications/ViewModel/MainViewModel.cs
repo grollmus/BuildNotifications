@@ -626,7 +626,7 @@ namespace BuildNotifications.ViewModel
             _trayIcon.Dispose();
             _cancellationTokenSource.Dispose();
             _postPipelineUpdateTask?.Dispose();
-            _fileWatch?.Dispose();
+            _fileWatch.Dispose();
         }
     }
 }

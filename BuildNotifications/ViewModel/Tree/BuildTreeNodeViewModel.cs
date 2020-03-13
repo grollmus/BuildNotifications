@@ -16,7 +16,7 @@ namespace BuildNotifications.ViewModel.Tree
         {
             NodeSource = nodeSource;
             Children = new RemoveTrackingObservableCollection<BuildTreeNodeViewModel>(TimeSpan.FromSeconds(0.8));
-            Children.CollectionChanged += ChildrenOnCollectionChanged;
+            Children.BatchCollectionChanged += ChildrenOnCollectionChanged;
             SetChildrenSorting(_currentSortingDefinition);
 
             CurrentTreeLevelDepth = nodeSource.Depth;

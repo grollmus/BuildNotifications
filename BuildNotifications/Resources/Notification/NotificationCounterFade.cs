@@ -13,6 +13,9 @@ namespace BuildNotifications.Resources.Notification
 
         protected override void Invoke(object parameter)
         {
+            if (TargetElement == null)
+                return;
+
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(TargetElement);
 

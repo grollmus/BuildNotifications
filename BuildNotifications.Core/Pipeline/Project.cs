@@ -27,7 +27,7 @@ namespace BuildNotifications.Core.Pipeline
         {
         }
 
-        private IBranchNameExtractor BranchNameExtractor => _branchProvider?.NameExtractor ?? new NullBranchNameExtractor();
+        private IBranchNameExtractor BranchNameExtractor => _branchProvider.NameExtractor;
 
         private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, buildProvider);
 
