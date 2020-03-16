@@ -41,6 +41,7 @@ namespace BuildNotifications.Resources.Settings
                 PluginEncryptedTextOptionViewModel _ => (element?.TryFindResource("PluginEncryptedTextOptionTemplate") as DataTemplate),
                 StringCollectionOptionViewModel _ => (element?.TryFindResource("StringCollectionOptionTemplate") as DataTemplate),
                 PluginCommandOptionViewModel _ => (element?.TryFindResource("PluginCommandOptionTemplate") as DataTemplate),
+                PluginDisplayOptionViewModel _ => (element?.TryFindResource("PluginDisplayOptionTemplate") as DataTemplate),
                 _ => null
             };
         }

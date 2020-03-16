@@ -40,11 +40,15 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
                 TextOption tOption => ConstructOption(tOption),
                 CommandOption cOption => ConstructOption(cOption),
                 EncryptedTextOption eOption => ConstructOption(eOption),
+                StringCollectionOption sOption => ConstructOption(sOption),
+                DisplayOption dOption => ConstructOption(dOption),
 
                 _ => ConstructDisplayOption(option)
             };
         }
 
+        private PluginDisplayOptionViewModel ConstructOption(DisplayOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
+        private PluginStringCollectionOptionViewModel ConstructOption(StringCollectionOption option) => new PluginStringCollectionOptionViewModel(option, _localizationProvider);
         private PluginEncryptedTextOptionViewModel ConstructOption(EncryptedTextOption option) => new PluginEncryptedTextOptionViewModel(option, _localizationProvider);
         private IPluginOptionViewModel ConstructDisplayOption(IOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
         private PluginListOptionViewModel<TValue> ConstructListOption<TValue>(ListOption<TValue> option) => new PluginListOptionViewModel<TValue>(option, _localizationProvider);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -19,12 +20,35 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             };
 
             TestCommandOption = new CommandOption(ExecuteTest, CanExecuteTest, "Test", "Performs a test");
+
+            CollectionTestOption = new StringCollectionOption(new[] {"One", "Two"}, "Collection Test", "This is a test for the collection option");
+            CollectionDisplayOption = new DisplayOption(string.Empty, "Value of CollectionOption", "This is a test for the display option");
+
+            CollectionTestOption.ValueChanged += CollectionTestOption_ValueChanged;
+            RefreshDisplayOption();
+        }
+
+        public DisplayOption CollectionDisplayOption { get; }
+        public StringCollectionOption CollectionTestOption { get; }
+        public NumberOption Port { get; }
+        public ICommandOption TestCommandOption { get; }
+
+        public ConfigurationRawData AsRawData() => new ConfigurationRawData
+        {
+            Port = Port.Value
+        };
+
+        private bool CanExecuteTest() => Port.Value > 1000;
+
+        private void CollectionTestOption_ValueChanged(object sender, ValueChangedEventArgs<List<string>> e)
+        {
+            RefreshDisplayOption();
         }
 
         private async Task ExecuteTest()
         {
             Debug.WriteLine("Starting test command");
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 await Task.Delay(1000);
                 Debug.WriteLine("Testing...");
@@ -33,20 +57,10 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             Debug.WriteLine("Done");
         }
 
-        private bool CanExecuteTest()
+        private void RefreshDisplayOption()
         {
-            return Port.Value > 1000;
-        }
-
-        public NumberOption Port { get; }
-        public ICommandOption TestCommandOption { get; }
-
-        public ConfigurationRawData AsRawData()
-        {
-            return new ConfigurationRawData
-            {
-                Port = Port.Value
-            };
+            var value = string.Join(Environment.NewLine, CollectionTestOption.Value);
+            CollectionDisplayOption.Value = value;
         }
 
         public ILocalizer Localizer { get; } = new DummyLocalizer();
@@ -70,20 +84,16 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         {
             yield return Port;
             yield return TestCommandOption;
+            yield return CollectionTestOption;
+            yield return CollectionDisplayOption;
         }
 
-        public string Serialize()
-        {
-            return JsonConvert.SerializeObject(AsRawData());
-        }
+        public string Serialize() => JsonConvert.SerializeObject(AsRawData());
     }
 
     public class DummyLocalizer : ILocalizer
     {
-        public string Localized(string id, CultureInfo culture)
-        {
-            return id;
-        }
+        public string Localized(string id, CultureInfo culture) => id;
     }
 
     public class ConfigurationRawData
