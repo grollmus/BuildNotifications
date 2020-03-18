@@ -23,7 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.4.0.15306">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.5.0.15942">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
