@@ -40,9 +40,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             }
         }
 
-        /// <summary>
-        /// Raised when the value of this option has changed.
-        /// </summary>
+        /// <inheritdoc />
         public virtual event EventHandler<EventArgs>? ValueChanged;
 
         /// <summary>

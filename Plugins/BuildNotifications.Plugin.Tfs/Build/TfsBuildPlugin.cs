@@ -10,11 +10,6 @@ namespace BuildNotifications.Plugin.Tfs.Build
 {
     public class TfsBuildPlugin : TfsPlugin, IBuildPlugin
     {
-        public TfsBuildPlugin()
-        {
-            Configuration = new TfsConfiguration(ConfigurationFlags.HideRepository);
-        }
-
         IBuildProvider? IBuildPlugin.ConstructProvider(string serialized)
         {
             var config = ParseConfig(serialized);
@@ -38,6 +33,6 @@ namespace BuildNotifications.Plugin.Tfs.Build
         }
 
         Task<ConnectionTestResult> IBuildPlugin.TestConnection(string serialized) => TestConnection(serialized);
-        public override IPluginConfiguration Configuration { get; }
+        public override IPluginConfiguration Configuration => new TfsConfiguration(Host!.UiDispatcher, ConfigurationFlags.HideRepository);
     }
 }

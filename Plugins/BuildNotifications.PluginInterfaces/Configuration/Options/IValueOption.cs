@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
 {
@@ -12,5 +13,10 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// Gets or sets the current value of this option.
         /// </summary>
         object? Value { get; set; }
+
+        /// <summary>
+        /// Raised when the value of this option has changed.
+        /// </summary>
+        event EventHandler<EventArgs>? ValueChanged;
     }
 }

@@ -20,34 +20,35 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             get { return _availableProjects.Select(p => new ListOptionItem<TfsProject?>(p, p.ProjectName ?? string.Empty)); }
         }
 
-        public async Task FetchAvailableProjects(TfsConfigurationRawData rawData)
+        public async Task<IEnumerable<TfsProject>> FetchAvailableProjects(TfsConfigurationRawData rawData)
         {
             IsLoading = true;
             try
             {
                 if (string.IsNullOrEmpty(rawData.Url) || string.IsNullOrEmpty(rawData.CollectionName))
-                    return;
+                    return Enumerable.Empty<TfsProject>();
                 if (rawData.AuthenticationType == AuthenticationType.Token && string.IsNullOrEmpty(rawData.Token?.PlainText()))
-                    return;
+                    return Enumerable.Empty<TfsProject>();
                 if (rawData.AuthenticationType == AuthenticationType.Account && (string.IsNullOrEmpty(rawData.Username) || string.IsNullOrEmpty(rawData.Password?.PlainText())))
-                    return;
+                    return Enumerable.Empty<TfsProject>();
 
                 var pool = new TfsConnectionPool();
                 var vssConnection = pool.CreateConnection(rawData);
                 if (vssConnection == null)
                 {
                     _availableProjects.Clear();
-                    return;
+                    return Enumerable.Empty<TfsProject>();
                 }
 
                 var projectClient = vssConnection.GetClient<ProjectHttpClient>();
                 var projects = await projectClient.GetProjects(ProjectState.WellFormed);
 
-                _availableProjects = projects.Select(p => new TfsProject(p)).ToList();
+                return projects.Select(p => new TfsProject(p));
             }
             catch (Exception e)
             {
                 LogTo.InfoException("Failed to fetch projects", e);
+                return Enumerable.Empty<TfsProject>();
             }
             finally
             {
@@ -56,7 +57,15 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
         }
 
-        protected override bool ValidateValue(TfsProject? value) => value != null && !string.IsNullOrEmpty(value.Id);
+        public void SetAvailableProjects(IEnumerable<TfsProject> availableProjects)
+        {
+            _availableProjects = availableProjects.ToList();
+        }
+
+        protected override bool ValidateValue(TfsProject? value)
+        {
+            return value != null && !string.IsNullOrEmpty(value.Id);
+        }
 
         private List<TfsProject> _availableProjects = new List<TfsProject>();
     }

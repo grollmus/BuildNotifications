@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
+using BuildNotifications.PluginInterfaces.Host;
 using Newtonsoft.Json;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
 {
-    internal class TfsConfiguration : IPluginConfiguration
+    internal class TfsConfiguration : AsyncPluginConfiguration
     {
-        public TfsConfiguration(ConfigurationFlags flags = ConfigurationFlags.None)
+        public TfsConfiguration(IDispatcher uiDispatcher, ConfigurationFlags flags = ConfigurationFlags.None)
+            : base(uiDispatcher)
         {
             Localizer = new TfsLocalizer();
 
@@ -31,55 +35,30 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 
             if (flags.HasFlag(ConfigurationFlags.HideRepository))
                 _repository.IsVisible = false;
+
+            var repositoryValueCalculator = CreateCalculator(FetchProjectsAsync, OnProjectsFetched);
+            repositoryValueCalculator.Attach(_url);
+            repositoryValueCalculator.Attach(_collectionName);
         }
 
-        public TfsConfigurationRawData AsRawData() => new TfsConfigurationRawData
-        {
-            Url = _url.Value,
-            CollectionName = _collectionName.Value ?? string.Empty,
-            Project = _project.Value,
-            Repository = _repository.Value,
-            AuthenticationType = _authenticationType.Value,
-            Username = _userName.Value,
-            Password = _password.Value,
-            Token = _token.Value
-        };
+        public override ILocalizer Localizer { get; }
 
-        private void AuthenticationType_ValueChanged(object? sender, EventArgs e)
+        public TfsConfigurationRawData AsRawData()
         {
-            UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
+            return new TfsConfigurationRawData
+            {
+                Url = _url.Value,
+                CollectionName = _collectionName.Value ?? string.Empty,
+                Project = _project.Value,
+                Repository = _repository.Value,
+                AuthenticationType = _authenticationType.Value,
+                Username = _userName.Value,
+                Password = _password.Value,
+                Token = _token.Value
+            };
         }
 
-        private void FetchAvailableValues(TfsConfigurationRawData raw)
-        {
-            _project.FetchAvailableProjects(raw).FireAndForget();
-            _repository.FetchAvailableRepositories(raw).FireAndForget();
-        }
-
-        private void OptionChanged(object? sender, EventArgs e)
-        {
-            var raw = AsRawData();
-
-            FetchAvailableValues(raw);
-        }
-
-        private async void Project_ValueChanged(object? sender, EventArgs e)
-        {
-            var raw = AsRawData();
-
-            await _repository.FetchAvailableRepositories(raw);
-        }
-
-        private void UpdateAuthenticationFieldsVisibility(AuthenticationType authenticationType)
-        {
-            _token.IsVisible = authenticationType == AuthenticationType.Token;
-            _userName.IsVisible = authenticationType == AuthenticationType.Account;
-            _password.IsVisible = authenticationType == AuthenticationType.Account;
-        }
-
-        public ILocalizer Localizer { get; }
-
-        public bool Deserialize(string serialized)
+        public override bool Deserialize(string serialized)
         {
             try
             {
@@ -109,7 +88,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             return false;
         }
 
-        public IEnumerable<IOption> ListAvailableOptions()
+        public override IEnumerable<IOption> ListAvailableOptions()
         {
             yield return _url;
             yield return _collectionName;
@@ -121,11 +100,60 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             yield return _repository;
         }
 
-        public string Serialize()
+        public override string Serialize()
         {
             var raw = AsRawData();
 
             return JsonConvert.SerializeObject(raw, Formatting.None, new PasswordStringConverter());
+        }
+
+        private void AuthenticationType_ValueChanged(object? sender, EventArgs e)
+        {
+            UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
+        }
+
+        private void FetchAvailableValues(TfsConfigurationRawData raw)
+        {
+            _repository.FetchAvailableRepositories(raw).FireAndForget();
+        }
+
+        private async Task<IAsyncValueCalculationResult<IEnumerable<TfsProject>>> FetchProjectsAsync(CancellationToken token)
+        {
+            try
+            {
+                var projects = await _project.FetchAvailableProjects(AsRawData());
+                return ValueCalculationResult.Success(projects);
+            }
+            catch (Exception)
+            {
+                return ValueCalculationResult.Fail<IEnumerable<TfsProject>>();
+            }
+        }
+
+        private void OnProjectsFetched(IEnumerable<TfsProject> fetchedProjects)
+        {
+            _project.SetAvailableProjects(fetchedProjects);
+        }
+
+        private void OptionChanged(object? sender, EventArgs e)
+        {
+            var raw = AsRawData();
+
+            FetchAvailableValues(raw);
+        }
+
+        private async void Project_ValueChanged(object? sender, EventArgs e)
+        {
+            var raw = AsRawData();
+
+            await _repository.FetchAvailableRepositories(raw);
+        }
+
+        private void UpdateAuthenticationFieldsVisibility(AuthenticationType authenticationType)
+        {
+            _token.IsVisible = authenticationType == AuthenticationType.Token;
+            _userName.IsVisible = authenticationType == AuthenticationType.Account;
+            _password.IsVisible = authenticationType == AuthenticationType.Account;
         }
 
         private readonly EnumOption<AuthenticationType> _authenticationType;

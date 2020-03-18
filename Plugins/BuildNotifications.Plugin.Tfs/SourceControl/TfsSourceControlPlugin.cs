@@ -10,13 +10,12 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
 {
     public class TfsSourceControlPlugin : TfsPlugin, ISourceControlPlugin
     {
-        public TfsSourceControlPlugin()
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string serialized)
         {
-            Configuration = new TfsConfiguration();
+            return TestConnection(serialized);
         }
 
-        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string serialized) => TestConnection(serialized);
-        public override IPluginConfiguration Configuration { get; }
+        public override IPluginConfiguration Configuration => new TfsConfiguration(Host!.UiDispatcher);
 
         IBranchProvider? ISourceControlPlugin.ConstructProvider(string serialized)
         {

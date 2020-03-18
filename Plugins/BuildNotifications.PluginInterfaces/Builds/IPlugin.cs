@@ -1,4 +1,5 @@
 ﻿using BuildNotifications.PluginInterfaces.Configuration;
+using BuildNotifications.PluginInterfaces.Host;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds
@@ -23,5 +24,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Geometry path for an vector icon. System.Windows.Media.GeometryDrawing Syntax
         /// </summary>
         string IconSvgPath { get; }
+
+        /// <summary>
+        /// Called after the plugin has been loaded.
+        /// </summary>
+        /// <param name="host">The host that loaded the plugin.</param>
+        void OnPluginLoaded(IPluginHost host);
     }
 }
