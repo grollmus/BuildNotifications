@@ -13,7 +13,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
         }
 
         public AsyncCommand<object?> Command { get; }
-        
+
         public override string Description => _pluginOptionViewModelImplementation.Description;
         public override string DisplayName => _pluginOptionViewModelImplementation.DisplayName;
         public override bool IsEnabled => _pluginOptionViewModelImplementation.IsEnabled;
