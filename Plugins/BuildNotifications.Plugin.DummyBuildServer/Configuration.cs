@@ -40,7 +40,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         private bool CanExecuteTest() => Port.Value > 1000;
 
-        private void CollectionTestOption_ValueChanged(object sender, ValueChangedEventArgs<List<string>> e)
+        private void CollectionTestOption_ValueChanged(object sender, EventArgs e)
         {
             RefreshDisplayOption();
         }

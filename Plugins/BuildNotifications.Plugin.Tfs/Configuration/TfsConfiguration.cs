@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Newtonsoft.Json;
@@ -44,9 +45,9 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             Token = _token.Value
         };
 
-        private void AuthenticationType_ValueChanged(object? sender, ValueChangedEventArgs<AuthenticationType> e)
+        private void AuthenticationType_ValueChanged(object? sender, EventArgs e)
         {
-            UpdateAuthenticationFieldsVisibility(e.NewValue);
+            UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
         }
 
         private void FetchAvailableValues(TfsConfigurationRawData raw)
@@ -55,14 +56,14 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             _repository.FetchAvailableRepositories(raw).FireAndForget();
         }
 
-        private void OptionChanged<T>(object? sender, ValueChangedEventArgs<T> e)
+        private void OptionChanged(object? sender, EventArgs e)
         {
             var raw = AsRawData();
 
             FetchAvailableValues(raw);
         }
 
-        private async void Project_ValueChanged(object? sender, ValueChangedEventArgs<TfsProject?> e)
+        private async void Project_ValueChanged(object? sender, EventArgs e)
         {
             var raw = AsRawData();
 

@@ -35,10 +35,32 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 if (!ValidateValue(value))
                     return;
 
-                var oldValue = _value;
                 _value = value;
-                RaiseValueChanged(oldValue, value);
+                RaiseValueChanged();
             }
+        }
+
+        /// <summary>
+        /// Raised when the value of this option has changed.
+        /// </summary>
+        public virtual event EventHandler<EventArgs>? ValueChanged;
+
+        /// <summary>
+        /// Raises the ValueChanged event.
+        /// </summary>
+        protected void RaiseValueChanged()
+        {
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Called during Value setter to check if new value is valid.
+        /// </summary>
+        /// <param name="value">The value that is about to be set.</param>
+        /// <returns><c>true</c> if the value is valid for this option; otherwise <c>false</c>.</returns>
+        protected virtual bool ValidateValue(TValue value)
+        {
+            return true;
         }
 
         object? IValueOption.Value
@@ -51,31 +73,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 else
                     throw new ArgumentException("Value has wrong type", nameof(value));
             }
-        }
-
-        /// <summary>
-        /// Raised when the value of this option has changed.
-        /// </summary>
-        public virtual event EventHandler<ValueChangedEventArgs<TValue>>? ValueChanged;
-
-        /// <summary>
-        /// Raises the ValueChanged event.
-        /// </summary>
-        /// <param name="oldValue">The previous value of this option.</param>
-        /// <param name="newValue">The new value of this option.</param>
-        protected void RaiseValueChanged(TValue oldValue, TValue newValue)
-        {
-            ValueChanged?.Invoke(this, new ValueChangedEventArgs<TValue>(oldValue, newValue));
-        }
-
-        /// <summary>
-        /// Called during Value setter to check if new value is valid.
-        /// </summary>
-        /// <param name="value">The value that is about to be set.</param>
-        /// <returns><c>true</c> if the value is valid for this option; otherwise <c>false</c>.</returns>
-        protected virtual bool ValidateValue(TValue value)
-        {
-            return true;
         }
 
         private TValue _value;

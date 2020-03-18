@@ -28,7 +28,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public void AddNewItem(TItem item)
         {
             Value.Add(item);
-            RaiseValueChanged(Value, Value);
+            RaiseValueChanged();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public void RemoveItem(TItem item)
         {
             Value.Remove(item);
-            RaiseValueChanged(Value, Value);
+            RaiseValueChanged();
         }
     }
 }

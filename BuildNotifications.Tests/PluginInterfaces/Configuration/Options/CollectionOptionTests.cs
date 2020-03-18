@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Xunit;
 
@@ -23,7 +22,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var sut = new TestCollectionOption(Array.Empty<int>());
 
             // Act
-            var evt = Assert.Raises<ValueChangedEventArgs<List<int>>>(
+            var evt = Assert.Raises<EventArgs>(
                 e => sut.ValueChanged += e,
                 e => sut.ValueChanged -= e,
                 () => sut.AddNewItem(123));
@@ -40,7 +39,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var sut = new TestCollectionOption(Array.Empty<int>());
 
             // Act
-            var evt = Assert.Raises<ValueChangedEventArgs<List<int>>>(
+            var evt = Assert.Raises<EventArgs>(
                 e => sut.ValueChanged += e,
                 e => sut.ValueChanged -= e,
                 () => sut.RemoveItem(123));

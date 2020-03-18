@@ -1,5 +1,4 @@
 ﻿using System;
-using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 
 namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
@@ -67,7 +66,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         private ValueOption<TValue> Option { get; }
 
-        private void OptionOnValueChanged(object? sender, ValueChangedEventArgs<TValue> e)
+        private void OptionOnValueChanged(object? sender, EventArgs e)
         {
             ViewModel.OnPropertyChanged(nameof(OptionViewModelBase<TValue>.Value));
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Xunit;
 
@@ -72,7 +71,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var newValue = new object();
 
             // Act
-            var evt = Assert.RaisesAny<ValueChangedEventArgs<object>>(
+            var evt = Assert.RaisesAny<EventArgs>(
                 e => sut.ValueChanged += e,
                 e => sut.ValueChanged -= e,
                 () => sut.Value = newValue);
@@ -80,7 +79,6 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Assert
             Assert.NotNull(evt);
             Assert.Same(sut, evt.Sender);
-            Assert.Same(newValue, evt.Arguments.NewValue);
         }
 
         [Fact]

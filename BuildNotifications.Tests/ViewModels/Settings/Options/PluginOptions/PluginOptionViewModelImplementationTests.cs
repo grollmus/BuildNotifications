@@ -1,4 +1,4 @@
-﻿using BuildNotifications.PluginInterfaces.Configuration;
+﻿using System;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using BuildNotifications.ViewModel;
 using BuildNotifications.ViewModel.Settings.Options;
@@ -104,7 +104,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options.PluginOptions
             var sut = new PluginOptionViewModelImplementation<int>(option, localizationProvider, viewModel);
 
             // Act
-            option.ValueChanged += Raise.EventWith(new ValueChangedEventArgs<int>(0, 1));
+            option.ValueChanged += Raise.EventWith(EventArgs.Empty);
 
             // Assert
             sut.ViewModel.Received(1).OnPropertyChanged(nameof(OptionViewModelBase<int>.Value));
