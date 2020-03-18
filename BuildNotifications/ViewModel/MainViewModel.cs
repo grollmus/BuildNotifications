@@ -345,7 +345,7 @@ namespace BuildNotifications.ViewModel
 
         private void SetupViewModel()
         {
-            SearchViewModel = new SearchViewModel(_coreSetup.Pipeline);
+            SearchViewModel = new SearchViewModel(_coreSetup.Pipeline, _coreSetup.SearchEngine);
             StatusIndicator = new StatusIndicatorViewModel();
             StatusIndicator.ResumeRequested += StatusIndicator_OnResumeRequested;
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;

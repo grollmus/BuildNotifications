@@ -26,7 +26,7 @@ namespace BuildNotifications.ViewModel.Utils
         public bool IsSuccessfullyCompleted => Task.Status ==
                                                TaskStatus.RanToCompletion;
 
-        public TResult Result => Task.Status == TaskStatus.RanToCompletion ? Task.Result : default;
+        public TResult Result => Task.Status == TaskStatus.RanToCompletion ? Task.Result : default!;
 
         public TaskStatus Status => Task.Status;
         public Task<TResult> Task { get; }

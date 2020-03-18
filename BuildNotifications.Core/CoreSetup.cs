@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
@@ -8,6 +9,8 @@ using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
+using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Builds.Search;
 
 namespace BuildNotifications.Core
 {
@@ -35,6 +38,7 @@ namespace BuildNotifications.Core
             Pipeline.Notifier.Updated += Notifier_Updated;
 
             SearchEngine = new SearchEngine();
+            SearchEngine.AddCriteria(new TestSearchCriteria());
 
             if (notificationReceiver != null)
             {
@@ -79,5 +83,17 @@ namespace BuildNotifications.Core
         private readonly IPathResolver _pathResolver;
 
         private readonly ConfigurationSerializer _configurationSerializer;
+    }
+
+    public class TestSearchCriteria : ISearchCriteria
+    {
+        public string LocalizedKeyword => "asd";
+
+        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
+        {
+            yield break;
+        }
+
+        public bool IsBuildIncluded(IBuild build, string input) => true;
     }
 }

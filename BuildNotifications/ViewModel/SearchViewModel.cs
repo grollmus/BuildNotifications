@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Windows.Threading;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Tree.Search;
 
 namespace BuildNotifications.ViewModel
 {
     public class SearchViewModel : BaseViewModel
     {
-        public SearchViewModel(IPipeline pipeline)
+        public SearchViewModel(IPipeline pipeline, ISearchEngine searchEngine)
         {
             _pipeline = pipeline;
+            _searchEngine = searchEngine;
             _searchTerm = string.Empty;
 
             _searchTimer = new DispatcherTimer(DispatcherPriority.Input)
@@ -16,6 +18,16 @@ namespace BuildNotifications.ViewModel
                 Interval = TimeSpan.FromMilliseconds(250)
             };
             _searchTimer.Tick += SearchTimerOnTick;
+        }
+
+        public ISearchEngine SearchEngine
+        {
+            get => _searchEngine;
+            set
+            {
+                _searchEngine = value;
+                OnPropertyChanged();
+            }
         }
 
         public string SearchTerm
@@ -51,6 +63,8 @@ namespace BuildNotifications.ViewModel
 
         private readonly IPipeline _pipeline;
         private readonly DispatcherTimer _searchTimer;
+
+        private ISearchEngine _searchEngine;
         private string _searchTerm;
     }
 }

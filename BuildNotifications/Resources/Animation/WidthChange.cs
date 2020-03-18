@@ -20,6 +20,12 @@ namespace BuildNotifications.Resources.Animation
             set => SetValue(IsActiveProperty, value);
         }
 
+        public bool SetMinWidth
+        {
+            get => (bool) GetValue(SetMinWidthProperty);
+            set => SetValue(SetMinWidthProperty, value);
+        }
+
         public double TargetWidth
         {
             get => (double) GetValue(TargetWidthProperty);
@@ -34,11 +40,17 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.ClearTweensOf(TargetElement);
 
-            globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
+            if (SetMinWidth)
+                globalTweenHandler.Add(TargetElement.Tween(x => x.MinWidth).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
+            else
+                globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
         }
 
         public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register(
             "IsActive", typeof(bool), typeof(WidthChange), new PropertyMetadata(true));
+
+        public static readonly DependencyProperty SetMinWidthProperty = DependencyProperty.Register(
+            "SetMinWidth", typeof(bool), typeof(WidthChange), new PropertyMetadata(default(bool)));
 
         public static readonly DependencyProperty TargetWidthProperty = DependencyProperty.Register(
             "TargetWidth", typeof(double), typeof(WidthChange), new PropertyMetadata(default(double)));
