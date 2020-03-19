@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using BuildNotifications.Core.Pipeline.Tree.Search;
+using BuildNotifications.PluginInterfaces.Builds.Search;
 using BuildNotifications.Resources.Icons;
+using BuildNotifications.ViewModel;
+using BuildNotifications.ViewModel.Utils;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.Resources.Search
 {
-    internal class SearchTextBox : RichTextBox
+    internal class SearchTextBox : RichTextBox, INotifyPropertyChanged
     {
         public SearchTextBox()
         {
@@ -25,9 +33,20 @@ namespace BuildNotifications.Resources.Search
             // use dummy instances for a quick and easy way to avoid null reference exceptions
             _scrollViewer = new ScrollViewer();
             _overlay = new Border();
+            _popup = new Popup();
 
             TextChanged += OnTextChanged;
+            Loaded += OnLoaded;
+            SelectionChanged += OnSelectionChanged;
+
+            CurrentSuggestions.Add(new SearchSuggestionViewModel());
+            CurrentSuggestions.Add(new SearchSuggestionViewModel());
+            CurrentSuggestions.Add(new SearchSuggestionViewModel());
+            CurrentSuggestions.Add(new SearchSuggestionViewModel());
         }
+
+        [UsedImplicitly]
+        public RemoveTrackingObservableCollection<SearchSuggestionViewModel> CurrentSuggestions { get; } = new RemoveTrackingObservableCollection<SearchSuggestionViewModel>();
 
         public IconType Icon
         {
@@ -53,6 +72,16 @@ namespace BuildNotifications.Resources.Search
             set => SetValue(SearchCriteriaForegroundProperty, value);
         }
 
+        public SearchBlockViewModel? SearchCriteriaViewModel
+        {
+            get => _searchCriteriaViewModel;
+            set
+            {
+                _searchCriteriaViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ISearchEngine? SearchEngine
         {
             get => (ISearchEngine) GetValue(SearchEngineProperty);
@@ -75,8 +104,27 @@ namespace BuildNotifications.Resources.Search
         {
             _scrollViewer = GetTemplateChild("PART_ContentHost") as ScrollViewer ?? new ScrollViewer();
             _overlay = GetTemplateChild("Overlay") as Border ?? new Border();
+            _popup = GetTemplateChild("PART_Popup") as Popup ?? new Popup();
 
             base.OnApplyTemplate();
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private (ISearchBlock block, bool caretIsInSearchCriteria) BlockOfCurrentSelection(IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> search)
+        {
+            var allInlines = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines ?? Enumerable.Empty<Inline>();
+
+            var inlineOfCursor = allInlines.FirstOrDefault(x => x.ContentStart.CompareTo(Selection.Start) == -1 && x.ContentEnd.CompareTo(Selection.Start) == 1);
+            foreach (var (createdRun, forBlock, isSearchCriteria) in search)
+            {
+                if (createdRun == inlineOfCursor)
+                    return (forBlock, isSearchCriteria);
+            }
+
+            var lastTuple = search.Last();
+            return (lastTuple.forBlock, lastTuple.isSearchCriteria);
         }
 
         private void CheckForScrollViewerCollision()
@@ -111,7 +159,7 @@ namespace BuildNotifications.Resources.Search
             return run;
         }
 
-        private void DisplaySearchBlocks(IReadOnlyList<ISearchBlock> parsedBlocks)
+        private IEnumerable<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> DisplaySearchBlocks(IEnumerable<ISearchBlock> parsedBlocks)
         {
             var blocks = Document.Blocks;
             var paragraph = blocks.OfType<Paragraph>().FirstOrDefault();
@@ -129,15 +177,44 @@ namespace BuildNotifications.Resources.Search
                 if (string.IsNullOrEmpty(parsedBlock.SearchCriteria.LocalizedKeyword))
                 {
                     if (!string.IsNullOrEmpty(parsedBlock.SearchedText))
-                        inlines.Add(DefaultRun(parsedBlock.SearchedText));
+                    {
+                        var run = DefaultRun(parsedBlock.SearchedText);
+                        inlines.Add(run);
+                        yield return (run, parsedBlock, false);
+                    }
                 }
                 else
                 {
-                    inlines.Add(SearchCriteriaRun($"{parsedBlock.SearchCriteria.LocalizedKeyword}:"));
+                    var searchCriteriaRun = SearchCriteriaRun($"{parsedBlock.SearchCriteria.LocalizedKeyword}:");
+                    inlines.Add(searchCriteriaRun);
+                    yield return (searchCriteriaRun, parsedBlock, true);
+
                     if (!string.IsNullOrEmpty(parsedBlock.SearchedText))
-                        inlines.Add(SearchTermRun(parsedBlock.SearchedText));
+                    {
+                        var searchTermRun = SearchTermRun(parsedBlock.SearchedText);
+                        inlines.Add(searchTermRun);
+                        yield return (searchTermRun, parsedBlock, false);
+                    }
                 }
             }
+        }
+
+        private void DisplaySuggestions((ISearchBlock block, bool caretIsInSearchCriteria) blockOfCaret)
+        {
+            var (block, caretIsInSearchCriteria) = blockOfCaret;
+
+            CurrentSuggestions.Clear();
+            if (SearchCriteriaViewModel?.SearchCriteria != block.SearchCriteria)
+                SearchCriteriaViewModel = new SearchBlockViewModel(block.SearchCriteria);
+        }
+
+        private void DisplaySuggestionsForCaret()
+        {
+            if (!_runsForCurrentSearchBlocks.Any())
+                return;
+
+            var blockOfCurrentSelection = BlockOfCurrentSelection(_runsForCurrentSearchBlocks);
+            DisplaySuggestions(blockOfCurrentSelection);
         }
 
         private void OnGotFocus(object sender, RoutedEventArgs e)
@@ -152,6 +229,14 @@ namespace BuildNotifications.Resources.Search
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             CheckForScrollViewerCollision();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= OnLoaded;
+            var windowThisControlIsIn = System.Windows.Window.GetWindow(this);
+            if (windowThisControlIsIn != null)
+                windowThisControlIsIn.LocationChanged += OnWindowLocationChanged;
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)
@@ -172,22 +257,34 @@ namespace BuildNotifications.Resources.Search
             e.Handled = true;
         }
 
+        private void OnSelectionChanged(object sender, RoutedEventArgs e) => DisplaySuggestionsForCaret();
+
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (SearchEngine == null)
                 return;
 
             var currentText = CurrentText();
-            var parsedBlocks = SearchEngine.Parse(currentText);
+            var search = SearchEngine.Parse(currentText);
 
             TextChanged -= OnTextChanged;
             var storedSelection = StoreSelection();
 
-            DisplaySearchBlocks(parsedBlocks.Blocks);
+            var createdRuns = DisplaySearchBlocks(search.Blocks);
+            _runsForCurrentSearchBlocks.Clear();
+            var valueTuples = createdRuns.ToList();
+            foreach (var keyValuePair in createdRuns)
+            {
+                _runsForCurrentSearchBlocks.Add(keyValuePair);
+            }
 
             RestoreSelection(storedSelection);
             TextChanged += OnTextChanged;
+
+            DisplaySuggestionsForCaret();
         }
+
+        private void OnWindowLocationChanged(object? sender, EventArgs e) => UpdatePopupPlacement();
 
         private Size RenderSizeOfElement(FrameworkElement element)
         {
@@ -280,8 +377,23 @@ namespace BuildNotifications.Resources.Search
             return (start, length, inlineCount);
         }
 
+        private void UpdatePopupPlacement()
+        {
+            // force a redraw
+            var offset = _popup.HorizontalOffset;
+            _popup.HorizontalOffset = offset + 1;
+            _popup.HorizontalOffset = offset;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private readonly IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> _runsForCurrentSearchBlocks = new List<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)>();
+
+        private SearchBlockViewModel? _searchCriteriaViewModel;
+
         private ScrollViewer _scrollViewer;
         private Border _overlay;
+        private Popup _popup;
 
         private double _overlayWidth;
 
@@ -305,5 +417,41 @@ namespace BuildNotifications.Resources.Search
 
         public static readonly DependencyProperty SearchTermForegroundProperty = DependencyProperty.Register(
             "SearchTermForeground", typeof(Brush), typeof(SearchTextBox), new PropertyMetadata(default(Brush)));
+    }
+
+    internal class SearchSuggestionViewModel : BaseViewModel
+    {
+    }
+
+    internal class SearchBlockViewModel : BaseViewModel
+    {
+        public ISearchCriteria SearchCriteria { get; }
+
+        public SearchBlockViewModel(ISearchCriteria searchCriteria)
+        {
+            SearchCriteria = searchCriteria;
+            for (var i = 0; i < 5; i++)
+            {
+                Examples.Add(new SearchBlockExampleViewModel($" {SearchCriteria.LocalizedKeyword}: ", "test" + i));
+            }
+        }
+
+        public string Description => "Search for a asd. Or something idk.";
+
+        public string Keyword => SearchCriteria.LocalizedKeyword;
+
+        public ObservableCollection<SearchBlockExampleViewModel> Examples { get; } = new ObservableCollection<SearchBlockExampleViewModel>();
+    }
+
+    internal class SearchBlockExampleViewModel : BaseViewModel
+    {
+        public string Keyword { get; }
+        public string ExampleText { get; }
+
+        public SearchBlockExampleViewModel(string keyword, string exampleText)
+        {
+            Keyword = keyword;
+            ExampleText = exampleText;
+        }
     }
 }
