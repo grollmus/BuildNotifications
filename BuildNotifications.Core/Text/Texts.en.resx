@@ -597,4 +597,8 @@
   <data name="ManualBuildsSightToolTip" xml:space="preserve">
     <value>Show only manually requested builds</value>
   </data>
+  <data name="SearchDefault_Description" xml:space="preserve">
+    <value>Search by any criteria. 
+Use keywords for specific filter.</value>
+  </data>
 </root>

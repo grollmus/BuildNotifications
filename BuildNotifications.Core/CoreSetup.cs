@@ -89,11 +89,21 @@ namespace BuildNotifications.Core
     {
         public string LocalizedKeyword => "asd";
 
+        public string LocalizedDescription => "Temporary criteria for GUI testing purposes";
+
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {
             yield break;
         }
 
         public bool IsBuildIncluded(IBuild build, string input) => true;
+        public IEnumerable<string> LocalizedExamples => Examples();
+
+        private IEnumerable<string> Examples()
+        {
+            yield return "Test";
+            yield return "Something";
+            yield return "Hello";
+        }
     }
 }

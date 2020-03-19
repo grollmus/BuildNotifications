@@ -22,10 +22,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
         private class DummyBranchSearchCriteria : ISearchCriteria
         {
             public string LocalizedKeyword => "Branch";
+            public string LocalizedDescription => "Unused";
 
             public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input) => Enumerable.Empty<ISearchCriteriaSuggestion>();
 
             public bool IsBuildIncluded(IBuild build, string input) => string.IsNullOrWhiteSpace(input) || build.BranchName.Contains(input, StringComparison.OrdinalIgnoreCase);
+
+            public IEnumerable<string> LocalizedExamples => Enumerable.Empty<string>();
         }
 
         [Fact]

@@ -16,6 +16,22 @@
         </DockPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type search:DefaultSearchBlockViewModel}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Grid.Row="1"
+                       Grid.Column="1" />
+            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+            <ItemsControl ItemsSource="{Binding Examples}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
         <StackPanel Orientation="Vertical">
             <Grid>

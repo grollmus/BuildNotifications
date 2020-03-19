@@ -18,6 +18,14 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         string LocalizedKeyword { get; }
 
         /// <summary>
+        /// A short, localized description of what this search criteria does.
+        /// </summary>
+        /// <example>
+        /// 'Specifies build of certain users.'
+        /// </example>
+        string LocalizedDescription { get; }
+
+        /// <summary>
         /// Resolve suggestions to auto-complete for the given input.
         /// </summary>
         /// <param name="input">The user-made input for this criteria.</param>
@@ -31,5 +39,10 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         /// <param name="input">The user-made input for this criteria.</param>
         /// <returns>True when this criteria matches the build and it shall be included, false otherwise.</returns>
         bool IsBuildIncluded(IBuild build, string input);
+
+        /// <summary>
+        /// Localized examples for search terms for this search criteria.
+        /// </summary>
+        IEnumerable<string> LocalizedExamples { get; }
     }
 }

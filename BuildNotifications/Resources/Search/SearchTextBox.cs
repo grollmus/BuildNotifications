@@ -205,7 +205,7 @@ namespace BuildNotifications.Resources.Search
 
             CurrentSuggestions.Clear();
             if (SearchCriteriaViewModel?.SearchCriteria != block.SearchCriteria)
-                SearchCriteriaViewModel = new SearchBlockViewModel(block.SearchCriteria);
+                SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria);
         }
 
         private void DisplaySuggestionsForCaret()
@@ -427,20 +427,45 @@ namespace BuildNotifications.Resources.Search
     {
         public ISearchCriteria SearchCriteria { get; }
 
-        public SearchBlockViewModel(ISearchCriteria searchCriteria)
+        protected SearchBlockViewModel(ISearchCriteria searchCriteria)
         {
             SearchCriteria = searchCriteria;
-            for (var i = 0; i < 5; i++)
+        }
+
+        public static SearchBlockViewModel FromSearchCriteria(ISearchCriteria searchCriteria)
+        {
+            if (searchCriteria is DefaultSearchCriteria defaultSearchCriteria)
+                return new DefaultSearchBlockViewModel(defaultSearchCriteria);
+            else
             {
-                Examples.Add(new SearchBlockExampleViewModel($" {SearchCriteria.LocalizedKeyword}: ", "test" + i));
+                var searchBlockViewModel = new SearchBlockViewModel(searchCriteria);
+
+                foreach (var example in searchCriteria.LocalizedExamples)
+                {
+                    searchBlockViewModel.Examples.Add(new SearchBlockExampleViewModel($" {searchCriteria.LocalizedKeyword}: ", example));
+                }
+
+                return searchBlockViewModel;
             }
         }
 
-        public string Description => "Search for a asd. Or something idk.";
+        public string Description => SearchCriteria.LocalizedDescription;
 
         public string Keyword => SearchCriteria.LocalizedKeyword;
 
+        [UsedImplicitly]
         public ObservableCollection<SearchBlockExampleViewModel> Examples { get; } = new ObservableCollection<SearchBlockExampleViewModel>();
+    }
+
+    internal class DefaultSearchBlockViewModel : SearchBlockViewModel
+    {
+        public DefaultSearchBlockViewModel(DefaultSearchCriteria defaultSearchCriteria) : base(defaultSearchCriteria)
+        {
+            foreach (var (keyword, exampleTerm) in defaultSearchCriteria.ExamplesFromEachSubCriteria())
+            {
+                Examples.Add(new SearchBlockExampleViewModel($" {keyword}: ", exampleTerm));
+            }
+        }
     }
 
     internal class SearchBlockExampleViewModel : BaseViewModel

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Search;
 
@@ -8,7 +9,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     /// <summary>
     /// Searches through multiple given criteria. If one matches, the build is included.
     /// </summary>
-    internal class DefaultSearchCriteria : ISearchCriteria
+    public class DefaultSearchCriteria : ISearchCriteria
     {
         private readonly IList<ISearchCriteria> _includedCriterions;
 
@@ -18,6 +19,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
 
         public string LocalizedKeyword => "";
+
+        public string LocalizedDescription => StringLocalizer.SearchDefault_Description;
 
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {
@@ -33,5 +36,20 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
 
         public bool IsBuildIncluded(IBuild build, string input) => _includedCriterions.Any(c => c.IsBuildIncluded(build, input));
+
+        public IEnumerable<string> LocalizedExamples => ExamplesFromEachSubCriteria().Select(t => t.exampleTerm);
+
+        public IEnumerable<(string keyword, string exampleTerm)> ExamplesFromEachSubCriteria()
+        {
+            const int suggestionsToTakeFromEachCriteria = 1;
+
+            foreach (var searchCriteria in _includedCriterions)
+            {
+                foreach (var example in searchCriteria.LocalizedExamples.Take(suggestionsToTakeFromEachCriteria))
+                {
+                    yield return (searchCriteria.LocalizedKeyword, example);
+                }
+            }
+        }
     }
 }

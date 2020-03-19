@@ -19,6 +19,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             private readonly string[] _suggestionsForAnyInputNotEqualDummyString;
             public string LocalizedKeyword => "Unused";
 
+            public string LocalizedDescription => "Unused";
+
             protected BaseDummySearch(string searchDummyString, params string[] suggestionsForAnyInputNotEqualDummyString)
             {
                 _searchDummyString = searchDummyString;
@@ -44,6 +46,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             }
 
             public bool IsBuildIncluded(IBuild build, string input) => string.IsNullOrWhiteSpace(input) || input.Contains(_searchDummyString, StringComparison.OrdinalIgnoreCase);
+
+            public IEnumerable<string> LocalizedExamples => _suggestionsForAnyInputNotEqualDummyString;
         }
 
         private class DummySearchCriteriaA : BaseDummySearch
@@ -97,6 +101,36 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             // assert
             Assert.NotEqual(totalSuggestions, actual.Count());
+        }
+
+        [Fact]
+        public void ExamplesFromEachSearchCriteriaAreLimited()
+        {
+            // arrange
+            var referenceA = new DummySearchCriteriaA();
+            var referenceB = new DummySearchCriteriaB();
+            var totalSuggestions = referenceA.LocalizedExamples.Concat(referenceB.LocalizedExamples).Count();
+
+            // act
+            var actual = _criteriaToTest.LocalizedExamples;
+
+            // assert
+            Assert.NotEqual(totalSuggestions, actual.Count());
+        }
+
+        [Fact]
+        public void ExamplesAreFromEachSearchCriteria()
+        {
+            // arrange
+            var referenceA = new DummySearchCriteriaA();
+            var referenceB = new DummySearchCriteriaB();
+
+            // act
+            var actual = _criteriaToTest.LocalizedExamples.ToList();
+
+            // assert
+            Assert.Contains(actual, e => referenceA.LocalizedExamples.Contains(e));
+            Assert.Contains(actual, e => referenceB.LocalizedExamples.Contains(e));
         }
 
         [Fact]
