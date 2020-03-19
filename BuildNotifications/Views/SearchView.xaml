@@ -7,13 +7,19 @@
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
+             xmlns:search="clr-namespace:BuildNotifications.Resources.Search"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:SearchViewModel}}">
 
     <Grid Width="{StaticResource BlockTriple}">
-        <text:DecoratedTextBox Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <search:SearchTextBox SearchEngine="{Binding SearchEngine}"
                                Icon="Search" x:Name="SearchTextBox" ToolTip="{text:Localized SearchTooltip}"
                                MaxHeight="{StaticResource BlockOneAndHalf}"
-                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" TextWrapping="NoWrap" />
+                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" 
+                               SearchCriteriaBackground="{DynamicResource Background3}"
+                               SearchCriteriaForeground="{DynamicResource Foreground1}"
+                               SearchTermBackground="{DynamicResource Background2}"
+                               SearchTermForeground="{DynamicResource Foreground1}"
+                               />
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
                 <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />

@@ -120,8 +120,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             foreach (var build in filteredBuilds)
             {
                 var path = BuildPath(build, branchList, sights.Any(s => s.IsEnabled && s.IsHighlighted(build)));
-                if (path == null)
-                    continue;
 
                 Merge(tree, path, taggedNodes);
             }

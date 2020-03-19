@@ -143,7 +143,7 @@ namespace DummyBuildServer.ViewModels
 
         private bool IsBuildDataSelected(object arg)
         {
-            return SelectedBranch != null && SelectedDefinition != null && SelectedUser != null;
+            return true;
         }
 
         private bool IsBuildSelected(object arg)

@@ -198,7 +198,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateBuildStatus()
         {
-            var newStatus = Node?.Status ?? BuildStatus.None;
+            var newStatus = Node.Status;
             if (_buildStatus == newStatus)
                 return;
 
@@ -209,7 +209,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateChangedDate()
         {
-            var newDate = Node?.LastChangedTime ?? DateTime.MinValue;
+            var newDate = Node.LastChangedTime ?? DateTime.MinValue;
             if (_changedDate == newDate)
                 return;
 
@@ -219,7 +219,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateQueuedDate()
         {
-            var newDate = Node?.QueueTime ?? DateTime.MinValue;
+            var newDate = Node.QueueTime ?? DateTime.MinValue;
             if (_queuedTime == newDate)
                 return;
 
