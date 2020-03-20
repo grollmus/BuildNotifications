@@ -30,7 +30,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration
         /// <param name="calculationTaskFactory"></param>
         /// <param name="handleResultCallback"></param>
         /// <returns>The created calculator.</returns>
-        protected IAsyncValueCalculator CreateCalculator<T>(Func<CancellationToken, Task<IAsyncValueCalculationResult<T>>> calculationTaskFactory, Action<T> handleResultCallback)
+        protected IAsyncValueCalculator CreateCalculator<T>(Func<CancellationToken, Task<IValueCalculationResult<T>>> calculationTaskFactory, Action<T> handleResultCallback)
         {
             var asyncValueCalculator = new AsyncValueCalculator<T>(_uiDispatcher, calculationTaskFactory, handleResultCallback);
             _calculators.Add(asyncValueCalculator);

@@ -55,7 +55,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         object? IListOption.Value
         {
             get => Value;
-            set => Value = value != null ? (TValue) value : default;
+            set => Value = value != null ? (TValue) value : Activator.CreateInstance<TValue>();
         }
     }
 }

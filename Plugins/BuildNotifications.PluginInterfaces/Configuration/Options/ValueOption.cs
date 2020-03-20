@@ -40,9 +40,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             }
         }
 
-        /// <inheritdoc />
-        public virtual event EventHandler<EventArgs>? ValueChanged;
-
         /// <summary>
         /// Raises the ValueChanged event.
         /// </summary>
@@ -56,10 +53,10 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// </summary>
         /// <param name="value">The value that is about to be set.</param>
         /// <returns><c>true</c> if the value is valid for this option; otherwise <c>false</c>.</returns>
-        protected virtual bool ValidateValue(TValue value)
-        {
-            return true;
-        }
+        protected virtual bool ValidateValue(TValue value) => true;
+
+        /// <inheritdoc />
+        public virtual event EventHandler<EventArgs>? ValueChanged;
 
         object? IValueOption.Value
         {

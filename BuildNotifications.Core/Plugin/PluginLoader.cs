@@ -6,6 +6,7 @@ using System.Reflection;
 using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Host;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
 
@@ -13,12 +14,46 @@ namespace BuildNotifications.Core.Plugin
 {
     internal class PluginLoader : IPluginLoader
     {
+        public PluginLoader(IPluginHost pluginHost)
+        {
+            _pluginHost = pluginHost;
+        }
+
         private static IEnumerable<string> PluginsToIgnore { get; } = new List<string>
         {
             Path.GetFileName(typeof(IBuildPlugin).Assembly.Location)!,
             Path.GetFileName(typeof(ISourceControlPlugin).Assembly.Location)!,
             Path.GetFileName(typeof(INotificationProcessor).Assembly.Location)!
         }.Distinct();
+
+        private IEnumerable<T> ConstructPluginsOfType<T>(IEnumerable<Type> types)
+        {
+            LogTo.Debug($"Parsing plugins to type {typeof(T).Name}.");
+            var baseType = typeof(T);
+
+            foreach (var type in types)
+            {
+                if (baseType.IsAssignableFrom(type))
+                {
+                    T value;
+                    try
+                    {
+                        value = (T) Activator.CreateInstance(type)!;
+                    }
+                    catch (Exception ex)
+                    {
+                        var typeName = type.AssemblyQualifiedName;
+                        LogTo.ErrorException($"Exception while trying to construct {typeName}", ex);
+                        continue;
+                    }
+
+                    LogTo.Debug($"Successfully constructed instance of type {typeof(T).FullName}");
+                    yield return value;
+                }
+                else
+                    LogTo.Debug($"Type {baseType.FullName} is not assignable from {type.FullName}");
+            }
+        }
 
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
@@ -75,40 +110,31 @@ namespace BuildNotifications.Core.Plugin
             }
         }
 
+        private IEnumerable<T> LoadPlugins<T>(IEnumerable<T> plugins)
+            where T : IPlugin
+        {
+            foreach (var plugin in plugins)
+            {
+                try
+                {
+                    plugin.OnPluginLoaded(_pluginHost);
+                }
+                catch (Exception ex)
+                {
+                    var typeName = plugin.GetType().AssemblyQualifiedName;
+                    LogTo.ErrorException($"Exception during OnPluginLoaded for {typeName}", ex);
+                    continue;
+                }
+
+                yield return plugin;
+            }
+        }
+
         private bool NotIgnored(string file)
         {
             var fileName = Path.GetFileName(file);
             var isIgnored = PluginsToIgnore.Any(p => p == fileName);
             return !isIgnored;
-        }
-
-        private IEnumerable<T> LoadPluginsOfType<T>(IEnumerable<Type> types)
-        {
-            LogTo.Debug($"Parsing plugins to type {typeof(T).Name}.");
-            var baseType = typeof(T);
-
-            foreach (var type in types)
-            {
-                if (baseType.IsAssignableFrom(type))
-                {
-                    T value;
-                    try
-                    {
-                        value = (T) Activator.CreateInstance(type)!;
-                    }
-                    catch (Exception ex)
-                    {
-                        var typeName = type.AssemblyQualifiedName;
-                        LogTo.ErrorException($"Exception while trying to construct {typeName}", ex);
-                        continue;
-                    }
-
-                    LogTo.Debug($"Successfully constructed instance of type {typeof(T).FullName}");
-                    yield return value;
-                }
-                else
-                    LogTo.Debug($"Type {baseType.FullName} is not assignable from {type.FullName}");
-            }
         }
 
         public IPluginRepository LoadPlugins(IEnumerable<string> folders)
@@ -120,14 +146,16 @@ namespace BuildNotifications.Core.Plugin
                 .Where(t => !t.IsAbstract)
                 .ToList();
 
-            var buildPlugins = LoadPluginsOfType<IBuildPlugin>(exportedTypes).ToList();
-            var sourceControlPlugins = LoadPluginsOfType<ISourceControlPlugin>(exportedTypes).ToList();
-            var notificationProcessors = LoadPluginsOfType<INotificationProcessor>(exportedTypes).ToList();
+            var buildPlugins = LoadPlugins(ConstructPluginsOfType<IBuildPlugin>(exportedTypes)).ToList();
+            var sourceControlPlugins = LoadPlugins(ConstructPluginsOfType<ISourceControlPlugin>(exportedTypes)).ToList();
+            var notificationProcessors = ConstructPluginsOfType<INotificationProcessor>(exportedTypes).ToList();
 
             LogTo.Info($"Loaded {buildPlugins.Count} build plugins.");
             LogTo.Info($"Loaded {sourceControlPlugins.Count} source control plugins.");
             LogTo.Info($"Loaded {notificationProcessors.Count} notification processor plugins.");
             return new PluginRepository(buildPlugins, sourceControlPlugins, notificationProcessors, new TypeMatcher());
         }
+
+        private readonly IPluginHost _pluginHost;
     }
 }

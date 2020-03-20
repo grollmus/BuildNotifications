@@ -22,7 +22,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Indicates whether this option is currently calculation available values.
         /// </summary>
-        bool IsLoading { get; }
+        bool IsLoading { get; set; }
 
         /// <summary>
         /// Determine whether this option should be visible in the UI.
@@ -40,13 +40,13 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         event EventHandler<EventArgs>? IsEnabledChanged;
 
         /// <summary>
-        /// Occurs when the value of the <see cref="IsVisible" /> property changed.
-        /// </summary>
-        event EventHandler<EventArgs>? IsVisibleChanged;
-
-        /// <summary>
         /// Occurs when the value of the <see cref="IsLoading" /> property changed.
         /// </summary>
         event EventHandler<EventArgs>? IsLoadingChanged;
+
+        /// <summary>
+        /// Occurs when the value of the <see cref="IsVisible" /> property changed.
+        /// </summary>
+        event EventHandler<EventArgs>? IsVisibleChanged;
     }
 }

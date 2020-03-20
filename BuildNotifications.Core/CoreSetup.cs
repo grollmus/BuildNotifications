@@ -6,18 +6,21 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.Core.Plugin.Host;
 using BuildNotifications.Core.Utilities;
+using BuildNotifications.PluginInterfaces.Host;
 
 namespace BuildNotifications.Core
 {
     public class CoreSetup
     {
-        public CoreSetup(IPathResolver pathResolver, IDistributedNotificationReceiver? notificationReceiver)
+        public CoreSetup(IPathResolver pathResolver, IDistributedNotificationReceiver? notificationReceiver, IDispatcher uiDispatcher)
         {
             _pathResolver = pathResolver;
             var serializer = new Serializer();
 
-            var pluginLoader = new PluginLoader();
+            var pluginHost = new PluginHost(uiDispatcher);
+            var pluginLoader = new PluginLoader(pluginHost);
             PluginRepository = pluginLoader.LoadPlugins(pathResolver.PluginFolders);
 
             _configurationSerializer = new ConfigurationSerializer(serializer);

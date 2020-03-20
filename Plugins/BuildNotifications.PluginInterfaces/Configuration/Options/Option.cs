@@ -48,7 +48,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public bool IsLoading
         {
             get => _isLoading;
-            protected set
+            set
             {
                 if (_isLoading == value)
                     return;

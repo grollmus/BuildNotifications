@@ -44,7 +44,8 @@ namespace BuildNotifications.ViewModel
             _trayIcon = new TrayIconHandle();
             _trayIcon.ExitRequested += TrayIconOnExitRequested;
             _trayIcon.ShowWindowRequested += TrayIconOnShowWindowRequested;
-            _coreSetup = new CoreSetup(pathResolver, _fileWatch);
+            var dispatcher = new WpfDispatcher();
+            _coreSetup = new CoreSetup(pathResolver, _fileWatch, dispatcher);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);

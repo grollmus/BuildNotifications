@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using BuildNotifications.Plugin.Tfs.SourceControl;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using BuildNotifications.PluginInterfaces.Host;
@@ -24,39 +25,38 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             _userName = new TextOption(string.Empty, TextIds.UserNameName, TextIds.UserNameDescription);
             _password = new EncryptedTextOption(string.Empty, TextIds.PasswordName, TextIds.PasswordDescription);
             _token = new EncryptedTextOption(string.Empty, TextIds.TokenName, TextIds.TokenDescription);
-
-            _url.ValueChanged += OptionChanged;
-            _collectionName.ValueChanged += OptionChanged;
-            _project.ValueChanged += Project_ValueChanged;
-
+         
             UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
             _authenticationType.ValueChanged += AuthenticationType_ValueChanged;
-            _authenticationType.ValueChanged += OptionChanged;
 
             if (flags.HasFlag(ConfigurationFlags.HideRepository))
                 _repository.IsVisible = false;
 
-            var repositoryValueCalculator = CreateCalculator(FetchProjectsAsync, OnProjectsFetched);
-            repositoryValueCalculator.Attach(_url);
-            repositoryValueCalculator.Attach(_collectionName);
+            var projectValueCalculator = CreateCalculator(FetchProjectsAsync, OnProjectsFetched);
+            projectValueCalculator.Attach(_url, _collectionName);
+            projectValueCalculator.Attach(_authenticationType, _token, _password, _userName);
+            projectValueCalculator.Affect(_project);
+
+            var repositoryValueCalculator = CreateCalculator(FetchRepositoriesAsync, OnRepositoriesFetched);
+            repositoryValueCalculator.Attach(_url, _collectionName);
+            repositoryValueCalculator.Attach(_project);
+            repositoryValueCalculator.Attach(_authenticationType, _token, _password, _userName);
+            repositoryValueCalculator.Affect(_repository);
         }
 
         public override ILocalizer Localizer { get; }
 
-        public TfsConfigurationRawData AsRawData()
+        public TfsConfigurationRawData AsRawData() => new TfsConfigurationRawData
         {
-            return new TfsConfigurationRawData
-            {
-                Url = _url.Value,
-                CollectionName = _collectionName.Value ?? string.Empty,
-                Project = _project.Value,
-                Repository = _repository.Value,
-                AuthenticationType = _authenticationType.Value,
-                Username = _userName.Value,
-                Password = _password.Value,
-                Token = _token.Value
-            };
-        }
+            Url = _url.Value,
+            CollectionName = _collectionName.Value ?? string.Empty,
+            Project = _project.Value,
+            Repository = _repository.Value,
+            AuthenticationType = _authenticationType.Value,
+            Username = _userName.Value,
+            Password = _password.Value,
+            Token = _token.Value
+        };
 
         public override bool Deserialize(string serialized)
         {
@@ -117,7 +117,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             _repository.FetchAvailableRepositories(raw).FireAndForget();
         }
 
-        private async Task<IAsyncValueCalculationResult<IEnumerable<TfsProject>>> FetchProjectsAsync(CancellationToken token)
+        private async Task<IValueCalculationResult<IEnumerable<TfsProject>>> FetchProjectsAsync(CancellationToken token)
         {
             try
             {
@@ -130,23 +130,27 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
         }
 
+        private async Task<IValueCalculationResult<IEnumerable<TfsRepository>>> FetchRepositoriesAsync(CancellationToken token)
+        {
+            try
+            {
+                var repositories = await _repository.FetchAvailableRepositories(AsRawData());
+                return ValueCalculationResult.Success(repositories);
+            }
+            catch (Exception)
+            {
+                return ValueCalculationResult.Fail<IEnumerable<TfsRepository>>();
+            }
+        }
+
         private void OnProjectsFetched(IEnumerable<TfsProject> fetchedProjects)
         {
             _project.SetAvailableProjects(fetchedProjects);
         }
 
-        private void OptionChanged(object? sender, EventArgs e)
+        void OnRepositoriesFetched(IEnumerable<TfsRepository> fetchedRepositories)
         {
-            var raw = AsRawData();
-
-            FetchAvailableValues(raw);
-        }
-
-        private async void Project_ValueChanged(object? sender, EventArgs e)
-        {
-            var raw = AsRawData();
-
-            await _repository.FetchAvailableRepositories(raw);
+            _repository.SetAvailableRepositories(fetchedRepositories);
         }
 
         private void UpdateAuthenticationFieldsVisibility(AuthenticationType authenticationType)

@@ -22,7 +22,6 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 
         public async Task<IEnumerable<TfsProject>> FetchAvailableProjects(TfsConfigurationRawData rawData)
         {
-            IsLoading = true;
             try
             {
                 if (string.IsNullOrEmpty(rawData.Url) || string.IsNullOrEmpty(rawData.CollectionName))
@@ -50,16 +49,12 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
                 LogTo.InfoException("Failed to fetch projects", e);
                 return Enumerable.Empty<TfsProject>();
             }
-            finally
-            {
-                IsLoading = false;
-                RaiseAvailableValuesChanged();
-            }
         }
 
         public void SetAvailableProjects(IEnumerable<TfsProject> availableProjects)
         {
             _availableProjects = availableProjects.ToList();
+            RaiseAvailableValuesChanged();
         }
 
         protected override bool ValidateValue(TfsProject? value)
