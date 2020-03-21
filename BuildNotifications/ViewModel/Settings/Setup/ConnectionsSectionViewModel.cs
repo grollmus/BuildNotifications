@@ -53,7 +53,10 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 OnPropertyChanged();
 
                 if (_selectedConnection != null)
+                {
                     _selectedConnection.TestConnection.TestFinished += TestConnection_TestFinished;
+                    _selectedConnection.OnSelected();
+                }
             }
         }
 

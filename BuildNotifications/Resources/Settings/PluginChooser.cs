@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -42,16 +41,16 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(TitleProperty, value);
         }
 
-        private void FixSelection()
+        private void FixSelection(IPlugin? wantedPlugin)
         {
-            if (!Plugins.Contains(SelectedPlugin))
-                SelectedPlugin = Plugins.FirstOrDefault(p => p.DisplayName.Equals(SelectedPlugin?.DisplayName, StringComparison.Ordinal));
+            if (!Plugins.Contains(SelectedPlugin) && Plugins.Contains(wantedPlugin))
+                SelectedPlugin = wantedPlugin;
         }
 
         private static void OnPluginRepositoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginChooser ctrl)
-                ctrl.RefreshItems();
+                ctrl.OnPluginTypeChanged();
         }
 
         private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -62,27 +61,16 @@ namespace BuildNotifications.Resources.Settings
 
         private void OnPluginsChanged()
         {
-            FixSelection();
+            FixSelection(SelectedPlugin);
         }
 
         private static void OnPluginTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginChooser ctrl)
-                ctrl.RefreshItems();
+                ctrl.OnPluginTypeChanged();
         }
 
-        private static void OnSelectedPluginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is PluginChooser ctrl)
-                ctrl.OnSelectedPluginChanged();
-        }
-
-        private void OnSelectedPluginChanged()
-        {
-            FixSelection();
-        }
-
-        private void RefreshItems()
+        private void OnPluginTypeChanged()
         {
             if (PluginRepository != null)
             {
@@ -97,6 +85,17 @@ namespace BuildNotifications.Resources.Settings
             }
             else
                 Plugins = new ObservableCollection<IPlugin>();
+        }
+
+        private static void OnSelectedPluginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PluginChooser ctrl)
+                ctrl.OnSelectedPluginChanged(e.NewValue as IPlugin);
+        }
+
+        private void OnSelectedPluginChanged(IPlugin? newSelectedValue)
+        {
+            FixSelection(newSelectedValue);
         }
 
         public static readonly DependencyProperty PluginRepositoryProperty = DependencyProperty.Register(

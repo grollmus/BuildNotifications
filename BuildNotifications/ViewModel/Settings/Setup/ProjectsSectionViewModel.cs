@@ -88,6 +88,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             _configuration.Projects.Remove(viewModel.Model);
             Projects.Remove(viewModel);
             SelectedProject = Projects.FirstOrDefault();
+
+            SaveAction.Invoke();
         }
 
         private readonly IConfigurationBuilder _configurationBuilder;

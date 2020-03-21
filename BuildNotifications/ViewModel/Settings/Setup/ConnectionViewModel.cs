@@ -101,31 +101,39 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
                 _selectedPlugin = value;
                 OnPropertyChanged();
-
-                if (_selectedPlugin != null)
-                {
-                    var config = _selectedPlugin.Configuration;
-                    config.Deserialize(Model.PluginConfiguration ?? string.Empty);
-                    PluginConfiguration = new PluginConfigurationViewModel(config);
-                    TestConnection.SetConfiguration(_selectedPlugin, config, ConnectionPluginType);
-                }
+                RestoreConfiguration();
             }
         }
 
         public TestConnectionViewModel TestConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
 
+        public void OnSelected()
+        {
+            RestoreConfiguration();
+        }
+
         private void RaiseSaveRequested()
         {
             SaveRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SaveConnection()
+        private void RestoreConfiguration()
         {
             if (_selectedPlugin != null)
             {
                 var config = _selectedPlugin.Configuration;
-                var serialized = config.Serialize();
+                config.Deserialize(Model.PluginConfiguration ?? string.Empty);
+                PluginConfiguration = new PluginConfigurationViewModel(config);
+                TestConnection.SetConfiguration(_selectedPlugin, config, ConnectionPluginType);
+            }
+        }
+
+        private void SaveConnection()
+        {
+            if (_selectedPlugin != null && PluginConfiguration != null)
+            {
+                var serialized = PluginConfiguration.Configuration.Serialize();
 
                 Model.ConnectionType = ConnectionPluginType;
                 Model.PluginType = _selectedPlugin.GetType().FullName;

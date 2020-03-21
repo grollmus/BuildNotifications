@@ -18,6 +18,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 Connections,
                 Projects
             };
+
+            _selectedItem = Sections.First();
         }
 
         public ConnectionsSectionViewModel Connections { get; }
@@ -25,6 +27,19 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public IEnumerable<SetupSectionViewModel> Sections { get; }
 
-        public SetupSectionViewModel SelectedItem => Sections.First();
+        public SetupSectionViewModel SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem == value)
+                    return;
+
+                _selectedItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private SetupSectionViewModel _selectedItem;
     }
 }

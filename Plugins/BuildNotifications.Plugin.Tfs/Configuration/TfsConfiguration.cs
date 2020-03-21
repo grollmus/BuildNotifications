@@ -12,9 +12,12 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 {
     internal class TfsConfiguration : AsyncPluginConfiguration
     {
+        private readonly ConfigurationFlags _flags;
+
         public TfsConfiguration(IDispatcher uiDispatcher, ConfigurationFlags flags = ConfigurationFlags.None)
             : base(uiDispatcher)
         {
+            _flags = flags;
             Localizer = new TfsLocalizer();
 
             _url = new TextOption(string.Empty, TextIds.UrlName, TextIds.UrlDescription);
@@ -25,7 +28,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             _userName = new TextOption(string.Empty, TextIds.UserNameName, TextIds.UserNameDescription);
             _password = new EncryptedTextOption(string.Empty, TextIds.PasswordName, TextIds.PasswordDescription);
             _token = new EncryptedTextOption(string.Empty, TextIds.TokenName, TextIds.TokenDescription);
-         
+
             UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
             _authenticationType.ValueChanged += AuthenticationType_ValueChanged;
 
@@ -37,11 +40,14 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             projectValueCalculator.Attach(_authenticationType, _token, _password, _userName);
             projectValueCalculator.Affect(_project);
 
-            var repositoryValueCalculator = CreateCalculator(FetchRepositoriesAsync, OnRepositoriesFetched);
-            repositoryValueCalculator.Attach(_url, _collectionName);
-            repositoryValueCalculator.Attach(_project);
-            repositoryValueCalculator.Attach(_authenticationType, _token, _password, _userName);
-            repositoryValueCalculator.Affect(_repository);
+            if (!flags.HasFlag(ConfigurationFlags.HideRepository))
+            {
+                var repositoryValueCalculator = CreateCalculator(FetchRepositoriesAsync, OnRepositoriesFetched);
+                repositoryValueCalculator.Attach(_url, _collectionName);
+                repositoryValueCalculator.Attach(_project);
+                repositoryValueCalculator.Attach(_authenticationType, _token, _password, _userName);
+                repositoryValueCalculator.Affect(_repository);
+            }
         }
 
         public override ILocalizer Localizer { get; }
@@ -74,8 +80,6 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
                     _password.Value = rawData.Password;
                     _token.Value = rawData.Token;
                     _url.Value = rawData.Url;
-
-                    FetchAvailableValues(rawData);
 
                     return true;
                 }
@@ -112,11 +116,6 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             UpdateAuthenticationFieldsVisibility(_authenticationType.Value);
         }
 
-        private void FetchAvailableValues(TfsConfigurationRawData raw)
-        {
-            _repository.FetchAvailableRepositories(raw).FireAndForget();
-        }
-
         private async Task<IValueCalculationResult<IEnumerable<TfsProject>>> FetchProjectsAsync(CancellationToken token)
         {
             try
@@ -148,7 +147,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             _project.SetAvailableProjects(fetchedProjects);
         }
 
-        void OnRepositoriesFetched(IEnumerable<TfsRepository> fetchedRepositories)
+        private void OnRepositoriesFetched(IEnumerable<TfsRepository> fetchedRepositories)
         {
             _repository.SetAvailableRepositories(fetchedRepositories);
         }

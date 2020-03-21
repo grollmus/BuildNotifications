@@ -55,6 +55,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
         {
             _availableProjects = availableProjects.ToList();
             RaiseAvailableValuesChanged();
+            Value = _availableProjects.FirstOrDefault(r => Equals(r, Value));
         }
 
         protected override bool ValidateValue(TfsProject? value)

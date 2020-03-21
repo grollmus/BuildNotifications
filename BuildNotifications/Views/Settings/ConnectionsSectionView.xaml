@@ -8,7 +8,7 @@
              xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionsSectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
-	<buttonNavigation:ButtonNavigation Items="{Binding Connections}" SelectedItem="{Binding SelectedConnection}"
+	<buttonNavigation:ButtonNavigation Items="{Binding Connections}" SelectedItem="{Binding SelectedConnection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 	                                   AddItemCommand="{Binding AddConnectionCommand}" RemoveItemCommand="{Binding RemoveConnectionCommand}">
 		<buttonNavigation:ButtonNavigation.Resources>
 			<ResourceDictionary>

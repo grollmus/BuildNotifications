@@ -106,6 +106,6 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             "RemoveItemCommand", typeof(ICommand), typeof(ButtonNavigation), new PropertyMetadata(default(ICommand)));
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", typeof(IButtonNavigationItem), typeof(ButtonNavigation), new PropertyMetadata(default(IButtonNavigationItem)));
+            "SelectedItem", typeof(IButtonNavigationItem), typeof(ButtonNavigation), new FrameworkPropertyMetadata(default(IButtonNavigationItem), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     }
 }

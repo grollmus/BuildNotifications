@@ -29,7 +29,7 @@
 
 	                        <ListBox ItemsSource="{TemplateBinding Items}" SelectedIndex="0" x:Name="ListBox"
                                      HorizontalContentAlignment="Stretch"
-	                                 SelectedItem="{TemplateBinding SelectedItem}">
+	                                 SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel Margin="{StaticResource BlockHalfThickness}"

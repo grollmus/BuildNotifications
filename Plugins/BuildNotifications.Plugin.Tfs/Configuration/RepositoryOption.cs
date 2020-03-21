@@ -71,6 +71,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
         {
             _availableRepositories = fetchedRepositories.ToList();
             RaiseAvailableValuesChanged();
+            Value = _availableRepositories.FirstOrDefault(r => Equals(r, Value));
         }
     }
 }

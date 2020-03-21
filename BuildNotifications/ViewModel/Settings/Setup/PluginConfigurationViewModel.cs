@@ -8,8 +8,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class PluginConfigurationViewModel : BaseViewModel
     {
+        public IPluginConfiguration Configuration { get; }
+
         public PluginConfigurationViewModel(IPluginConfiguration configuration)
         {
+            Configuration = configuration;
             Options = new ObservableCollection<IPluginOptionViewModel>(ConstructOptionViewModels(configuration));
         }
 
