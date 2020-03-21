@@ -41,10 +41,9 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(TitleProperty, value);
         }
 
-        private void FixSelection(IPlugin? wantedPlugin)
+        private void FixSelection()
         {
-            if (!Plugins.Contains(SelectedPlugin) && Plugins.Contains(wantedPlugin))
-                SelectedPlugin = wantedPlugin;
+            // F
         }
 
         private static void OnPluginRepositoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -61,7 +60,7 @@ namespace BuildNotifications.Resources.Settings
 
         private void OnPluginsChanged()
         {
-            FixSelection(SelectedPlugin);
+            FixSelection();
         }
 
         private static void OnPluginTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -90,12 +89,12 @@ namespace BuildNotifications.Resources.Settings
         private static void OnSelectedPluginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginChooser ctrl)
-                ctrl.OnSelectedPluginChanged(e.NewValue as IPlugin);
+                ctrl.OnSelectedPluginChanged();
         }
 
-        private void OnSelectedPluginChanged(IPlugin? newSelectedValue)
+        private void OnSelectedPluginChanged()
         {
-            FixSelection(newSelectedValue);
+            FixSelection();
         }
 
         public static readonly DependencyProperty PluginRepositoryProperty = DependencyProperty.Register(

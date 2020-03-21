@@ -38,6 +38,11 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         protected virtual string? DisplayNameFor(TItem item) => item?.ToString();
 
+        protected void ResetFlag()
+        {
+            _valuesFetched = false;
+        }
+
         private void Init()
         {
             if (_valuesFetched)
@@ -48,13 +53,18 @@ namespace BuildNotifications.ViewModel.Settings.Options
             );
 
             _valuesFetched = true;
-            SelectedValue = AvailableValues.FirstOrDefault(v => Equals(v.Value, _initialValue));
+
+            if (!_initialized)
+            {
+                _initialized = true;
+                SelectedValue = AvailableValues.FirstOrDefault(v => Equals(v.Value, _initialValue));
+            }
         }
 
         private readonly TItem _initialValue;
-
         private bool _valuesFetched;
         private List<ListOptionItemViewModel<TItem>>? _availableValues;
         private ListOptionItemViewModel<TItem>? _selectedValue;
+        private bool _initialized;
     }
 }

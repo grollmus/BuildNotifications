@@ -12,12 +12,9 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
 {
     internal class TfsConfiguration : AsyncPluginConfiguration
     {
-        private readonly ConfigurationFlags _flags;
-
         public TfsConfiguration(IDispatcher uiDispatcher, ConfigurationFlags flags = ConfigurationFlags.None)
             : base(uiDispatcher)
         {
-            _flags = flags;
             Localizer = new TfsLocalizer();
 
             _url = new TextOption(string.Empty, TextIds.UrlName, TextIds.UrlDescription);

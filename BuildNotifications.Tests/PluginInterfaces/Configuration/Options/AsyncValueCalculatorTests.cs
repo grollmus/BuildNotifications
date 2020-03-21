@@ -46,7 +46,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
                 tcs.SetResult(arg);
             }
 
-            var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
+            using var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
 
             var option = Substitute.For<IValueOption>();
             sut.Attach(option);
@@ -85,7 +85,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
                 tcs.SetResult(arg);
             }
 
-            var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
+            using var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
 
             var option = Substitute.For<IValueOption>();
             sut.Affect(option);
@@ -131,7 +131,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
                 tcs.SetResult(arg);
             }
 
-            var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
+            using var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
 
             var option = Substitute.For<IValueOption>();
             sut.Affect(option);
@@ -165,7 +165,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
                 tcs.SetResult(arg);
             }
 
-            var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
+            using var sut = new AsyncValueCalculator<int>(dispatcher, CalculationTaskFactory, HandleResultCallback);
 
             var option = Substitute.For<IValueOption>();
             sut.Affect(option);

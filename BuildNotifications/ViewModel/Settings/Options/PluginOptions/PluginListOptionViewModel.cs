@@ -50,6 +50,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         private void ListOption_AvailableValuesChanged(object? sender, EventArgs e)
         {
+            ResetFlag();
             OnPropertyChanged(nameof(AvailableValues));
         }
 

@@ -20,12 +20,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             SaveConnectionCommand = new DelegateCommand(SaveConnection);
 
             ConnectionPluginType = model.ConnectionType;
-            SelectedPlugin = ConnectionPluginType switch
-            {
-                ConnectionPluginType.SourceControl => pluginRepository.FindSourceControlPlugin(model.PluginType),
-                ConnectionPluginType.Build => pluginRepository.FindBuildPlugin(model.PluginType),
-                _ => null
-            };
+            SelectedPlugin = SelectPluginFromModel();
         }
 
         internal ConnectionViewModel(ConnectionData model, IPluginRepository pluginRepository, TestConnectionViewModel testConnection)
@@ -120,6 +115,9 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RestoreConfiguration()
         {
+            if (_selectedPlugin == null)
+                SelectedPlugin = SelectPluginFromModel();
+
             if (_selectedPlugin != null)
             {
                 var config = _selectedPlugin.Configuration;
@@ -141,6 +139,16 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
                 RaiseSaveRequested();
             }
+        }
+
+        private IPlugin? SelectPluginFromModel()
+        {
+            return ConnectionPluginType switch
+            {
+                ConnectionPluginType.SourceControl => PluginRepository.FindSourceControlPlugin(Model.PluginType),
+                ConnectionPluginType.Build => PluginRepository.FindBuildPlugin(Model.PluginType),
+                _ => null
+            };
         }
 
         private IPlugin? _selectedPlugin;
