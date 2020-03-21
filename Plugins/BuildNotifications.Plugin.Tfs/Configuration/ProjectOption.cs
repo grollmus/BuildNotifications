@@ -34,10 +34,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
                 var pool = new TfsConnectionPool();
                 var vssConnection = pool.CreateConnection(rawData);
                 if (vssConnection == null)
-                {
-                    _availableProjects.Clear();
                     return Enumerable.Empty<TfsProject>();
-                }
 
                 var projectClient = vssConnection.GetClient<ProjectHttpClient>();
                 var projects = await projectClient.GetProjects(ProjectState.WellFormed);
@@ -59,10 +56,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             RaiseValueChanged();
         }
 
-        protected override bool ValidateValue(TfsProject? value)
-        {
-            return value != null && !string.IsNullOrEmpty(value.Id);
-        }
+        protected override bool ValidateValue(TfsProject? value) => value != null && !string.IsNullOrEmpty(value.Id);
 
         private List<TfsProject> _availableProjects = new List<TfsProject>();
     }

@@ -181,15 +181,23 @@
 				FontSize="{StaticResource Block}" Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
 
-			<settings:DecoratedComboBox ItemsSource="{Binding AvailableValues}"
-			                            SelectedItem="{Binding SelectedValue, Mode=TwoWay}"
-			                            Margin="{StaticResource BlockQuarterYOnlyMargin}">
-				<settings:DecoratedComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding DisplayName}" />
-					</DataTemplate>
-				</settings:DecoratedComboBox.ItemTemplate>
-			</settings:DecoratedComboBox>
+			<Grid>
+				<settings:DecoratedComboBox ItemsSource="{Binding AvailableValues}"
+				                            SelectedItem="{Binding SelectedValue, Mode=TwoWay}"
+				                            Margin="{StaticResource BlockQuarterYOnlyMargin}">
+					<settings:DecoratedComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding DisplayName}" />
+						</DataTemplate>
+					</settings:DecoratedComboBox.ItemTemplate>
+				</settings:DecoratedComboBox>
+
+				<Viewbox DockPanel.Dock="Right" Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+				         HorizontalAlignment="Center" VerticalAlignment="Center">
+					<views:BusyIndicator IsBusy="{Binding IsLoading}" />
+				</Viewbox>
+			</Grid>
+
 		</StackPanel>
 	</DataTemplate>
 	<!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
