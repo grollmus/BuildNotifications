@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class ProjectsSectionViewModel : SetupSectionViewModel
     {
-        public ProjectsSectionViewModel(IConfigurationBuilder configurationBuilder, IConfiguration configuration, Action saveAction)
-            : base(configuration, saveAction)
+        public ProjectsSectionViewModel(IConfigurationBuilder configurationBuilder, IConfiguration configuration, Action saveAction, IPopupService popupService)
+            : base(configuration, saveAction, popupService)
         {
             _configurationBuilder = configurationBuilder;
             _configuration = configuration;
@@ -49,6 +51,14 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
+        internal void AddProjectViewModel(ProjectViewModel vm)
+        {
+            vm.SaveRequested += ProjectViewModel_SaveRequested;
+            Projects.Add(vm);
+
+            SelectedProject = vm;
+        }
+
         private void AddProject()
         {
             var project = _configurationBuilder.CreateEmptyConfiguration(StringLocalizer.NewProject);
@@ -57,14 +67,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             var vm = new ProjectViewModel(project, _configuration);
             AddProjectViewModel(vm);
-        }
-
-        internal void AddProjectViewModel(ProjectViewModel vm)
-        {
-            vm.SaveRequested += ProjectViewModel_SaveRequested;
-            Projects.Add(vm);
-
-            SelectedProject = vm;
         }
 
         private IEnumerable<ProjectViewModel> ConstructProjectViewModels(IConfiguration configuration)
@@ -84,6 +86,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RemoveProject(ProjectViewModel viewModel)
         {
+            var text = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.ConfirmDeleteProject, viewModel.Name);
+            var confirm = PopupService.ShowMessageBox(text, StringLocalizer.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
             viewModel.SaveRequested -= ProjectViewModel_SaveRequested;
             _configuration.Projects.Remove(viewModel.Model);
             Projects.Remove(viewModel);

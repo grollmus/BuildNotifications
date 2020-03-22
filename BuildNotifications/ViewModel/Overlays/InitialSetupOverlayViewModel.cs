@@ -4,6 +4,7 @@ using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Resources.Icons;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Settings.Setup;
 using BuildNotifications.ViewModel.Utils;
 using Newtonsoft.Json;
@@ -16,12 +17,12 @@ namespace BuildNotifications.ViewModel.Overlays
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-        public InitialSetupOverlayViewModel(IConfiguration configuration, IPluginRepository pluginRepository, IConfigurationBuilder configurationBuilder, Action saveAction)
+        public InitialSetupOverlayViewModel(IConfiguration configuration, IPluginRepository pluginRepository, IConfigurationBuilder configurationBuilder, Action saveAction, IPopupService popupService)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             _configuration = configuration;
 
-            SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction, configurationBuilder);
+            SetupViewModel = new SetupViewModel(configuration, pluginRepository, saveAction, configurationBuilder, popupService);
             SetupViewModel.Projects.Changed += UpdateText;
             SetupViewModel.Connections.Changed += UpdateText;
             SetupViewModel.Connections.TestFinished += UpdateText;

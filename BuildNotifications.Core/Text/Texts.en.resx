@@ -333,7 +333,7 @@
   <data name="ConnectionNotFound" xml:space="preserve">
     <value>No connection with name '{0}' found.</value>
   </data>
-  <data name=" " xml:space="preserve">
+  <data name="SourceControlPluginNotFound" xml:space="preserve">
     <value>No source control plugin '{0}' found.</value>
   </data>
   <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
@@ -599,5 +599,14 @@
   </data>
   <data name="ConnectionTypeDescription" xml:space="preserve">
 	  <value>Type of this connection.</value>
+  </data>
+  <data name="ConfirmDeletion" xml:space="preserve">
+	  <value>Really delete?</value>
+  </data>
+  <data name="ConfirmDeleteConnection" xml:space="preserve">
+	  <value>Do you really want to delete the connection '{0}'?</value>
+  </data>
+  <data name="ConfirmDeleteProject" xml:space="preserve">
+	  <value>Do you really want to delete the project '{0}'?</value>
   </data>
 </root>

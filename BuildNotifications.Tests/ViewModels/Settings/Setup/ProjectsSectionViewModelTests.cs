@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Settings.Setup;
 using NSubstitute;
 using Xunit;
@@ -16,7 +17,8 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var configuration = Substitute.For<IConfiguration>();
             var configurationBuilder = Substitute.For<IConfigurationBuilder>();
             Action saveAction = () => { };
-            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+            var popupService = Substitute.For<IPopupService>();
+            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
 
             // Act
             sut.AddProjectCommand.Execute(null);
@@ -32,7 +34,8 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var configuration = Substitute.For<IConfiguration>();
             var configurationBuilder = Substitute.For<IConfigurationBuilder>();
             Action saveAction = () => { };
-            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+            var popupService = Substitute.For<IPopupService>();
+            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
 
             var model = Substitute.For<IProjectConfiguration>();
             sut.Projects.Add(new ProjectViewModel(model, configuration));
@@ -52,8 +55,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var configuration = Substitute.For<IConfiguration>();
             var saveActionExecuted = false;
             Action saveAction = () => { saveActionExecuted = true; };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
 
             var model = Substitute.For<IProjectConfiguration>();
             var project = Substitute.For<ProjectViewModel>(model, configuration);
@@ -80,7 +84,8 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
 
             var configurationBuilder = Substitute.For<IConfigurationBuilder>();
             Action saveAction = () => { };
-            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+            var popupService = Substitute.For<IPopupService>();
+            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
 
             // Act
             var actual = sut.Projects.ToList();

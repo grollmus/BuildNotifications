@@ -2,6 +2,7 @@
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Settings.Setup;
 using NSubstitute;
 using Xunit;
@@ -17,8 +18,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var configuration = Substitute.For<IConfiguration>();
             var pluginRepository = Substitute.For<IPluginRepository>();
             Action saveAction = () => { };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
             // Act
             sut.AddConnectionCommand.Execute(null);
@@ -35,8 +37,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var pluginRepository = Substitute.For<IPluginRepository>();
             var saveActionExecuted = false;
             Action saveAction = () => { saveActionExecuted = true; };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
             sut.Connections.Add(new ConnectionViewModel(new ConnectionData(), pluginRepository));
 
@@ -56,8 +59,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var pluginRepository = Substitute.For<IPluginRepository>();
             var saveActionExecuted = false;
             Action saveAction = () => { saveActionExecuted = true; };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
             var connection = Substitute.For<ConnectionViewModel>(new ConnectionData(), pluginRepository);
 
@@ -83,8 +87,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
 
             var pluginRepository = Substitute.For<IPluginRepository>();
             Action saveAction = () => { };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
             // Act
             var actual = sut.Connections.ToList();
@@ -102,8 +107,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var configuration = Substitute.For<IConfiguration>();
             var pluginRepository = Substitute.For<IPluginRepository>();
             Action saveAction = () => { };
+            var popupService = Substitute.For<IPopupService>();
 
-            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
             var testConnectionViewModel = Substitute.For<TestConnectionViewModel>(pluginRepository);
             var connection = Substitute.For<ConnectionViewModel>(new ConnectionData(), pluginRepository, testConnectionViewModel);

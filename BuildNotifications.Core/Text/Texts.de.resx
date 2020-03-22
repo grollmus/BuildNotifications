@@ -345,7 +345,7 @@
   <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
     <value>Branch Provider für Verbindung '{0}' konnte nicht erstellt werden. Fehlermeldung: {1}</value>
   </data>
-  <data name=" " xml:space="preserve">
+  <data name="SourceControlPluginNotFound" xml:space="preserve">
     <value>Source Control Plugin '{0}' nicht gefunden.</value>
   </data>
   <data name="FailedToFindBuildPluginForType" xml:space="preserve">
@@ -599,5 +599,14 @@
   </data>
   <data name="ConnectionNameDescription" xml:space="preserve">
 	  <value>Name, mit dem diese Verbindung identifiziert werden kann.</value>
+  </data>
+  <data name="ConfirmDeletion" xml:space="preserve">
+	  <value>Wirklich löschen?</value>
+  </data>
+  <data name="ConfirmDeleteConnection" xml:space="preserve">
+	  <value>Soll die Verbindung '{0}' wirklich gelöscht werden?</value>
+  </data>
+  <data name="ConfirmDeleteProject" xml:space="preserve">
+	  <value>Soll das Projekt '{0}' wirklich gelöscht werden?</value>
   </data>
 </root>

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.Services;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class SetupViewModel : BaseViewModel
     {
-        public SetupViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction, IConfigurationBuilder configurationBuilder)
+        public SetupViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction, IConfigurationBuilder configurationBuilder, IPopupService popupService)
         {
-            Connections = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction);
-            Projects = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction);
+            Connections = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
+            Projects = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
 
             Sections = new SetupSectionViewModel[]
             {

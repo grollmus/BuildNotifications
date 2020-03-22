@@ -51,6 +51,7 @@ namespace BuildNotifications.ViewModel
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
+            _popupService = new PopupService();
             Initialize();
         }
 
@@ -398,7 +399,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StopUpdating();
-            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges);
+            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges, _popupService);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
@@ -624,6 +625,7 @@ namespace BuildNotifications.ViewModel
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
+        private readonly IPopupService _popupService;
 
         private class Dummy
         {

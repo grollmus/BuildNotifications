@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Icons;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
     internal class ConnectionsSectionViewModel : SetupSectionViewModel
     {
-        public ConnectionsSectionViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction)
-            : base(configuration, saveAction)
+        public ConnectionsSectionViewModel(IConfiguration configuration, IPluginRepository pluginRepository, Action saveAction, IPopupService popupService)
+            : base(configuration, saveAction, popupService)
         {
             _configuration = configuration;
             _pluginRepository = pluginRepository;
@@ -62,6 +64,14 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public event EventHandler<EventArgs>? TestFinished;
 
+        internal void AddConnectionViewModel(ConnectionViewModel vm)
+        {
+            vm.SaveRequested += ConnectionViewModel_SaveRequested;
+            Connections.Add(vm);
+
+            SelectedConnection = vm;
+        }
+
         private void AddConnection()
         {
             var connection = new ConnectionData
@@ -73,14 +83,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             var vm = new ConnectionViewModel(connection, _pluginRepository);
             AddConnectionViewModel(vm);
-        }
-
-        internal void AddConnectionViewModel(ConnectionViewModel vm)
-        {
-            vm.SaveRequested += ConnectionViewModel_SaveRequested;
-            Connections.Add(vm);
-
-            SelectedConnection = vm;
         }
 
         private void ConnectionViewModel_SaveRequested(object? sender, EventArgs e)
@@ -105,6 +107,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RemoveConnection(ConnectionViewModel viewModel)
         {
+            var text = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.ConfirmDeleteConnection, viewModel.Name);
+            var confirm = PopupService.ShowMessageBox(text, StringLocalizer.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
             viewModel.SaveRequested -= ConnectionViewModel_SaveRequested;
             _configuration.Connections.Remove(viewModel.Model);
             Connections.Remove(viewModel);
