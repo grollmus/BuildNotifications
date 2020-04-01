@@ -29,6 +29,27 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
         }
 
         [Fact]
+        public void RemoveCommandShouldDoNothingWhenNoConfirmationIsGiven()
+        {
+            // Arrange
+            var configuration = Substitute.For<IConfiguration>();
+            var configurationBuilder = Substitute.For<IConfigurationBuilder>();
+            Action saveAction = () => { };
+            var popupService = Substitute.For<IPopupService>();
+            popupService.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No).Returns(MessageBoxResult.No);
+            var sut = new ProjectsSectionViewModel(configurationBuilder, configuration, saveAction, popupService);
+
+            var model = Substitute.For<IProjectConfiguration>();
+            sut.Projects.Add(new ProjectViewModel(model, configuration));
+
+            // Act
+            sut.RemoveProjectCommand.Execute(sut.Projects.First());
+
+            // Assert
+            Assert.NotEmpty(sut.Projects);
+        }
+
+        [Fact]
         public void RemoveCommandShouldRemoveConnection()
         {
             // Arrange
