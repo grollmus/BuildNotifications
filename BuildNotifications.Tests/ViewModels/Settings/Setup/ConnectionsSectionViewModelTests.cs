@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Services;
@@ -38,6 +39,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var saveActionExecuted = false;
             Action saveAction = () => { saveActionExecuted = true; };
             var popupService = Substitute.For<IPopupService>();
+            popupService.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No).Returns(MessageBoxResult.Yes);
 
             var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
 
