@@ -25,6 +25,7 @@
 
             <Style TargetType="buildNotifications:MainWindow" BasedOn="{StaticResource CustomWindowStyle}" />
             <Style TargetType="views:InfoPopupDialog" BasedOn="{StaticResource CustomPopupStyle}" />
+            <Style TargetType="views:MessageBoxView" BasedOn="{StaticResource CustomPopupStyle}" />
 
         </ResourceDictionary>
     </Application.Resources>

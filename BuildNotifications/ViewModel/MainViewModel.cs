@@ -32,7 +32,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable
+    public class MainViewModel : BaseViewModel, IDisposable, IBlur
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
@@ -51,8 +51,18 @@ namespace BuildNotifications.ViewModel
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
-            _popupService = new PopupService();
+            _popupService = new PopupService(this);
             Initialize();
+        }
+
+        public void Blur()
+        {
+            BlurMainView = true;
+        }
+
+        public void UnBlur()
+        {
+            BlurMainView = false;
         }
 
         public bool BlurMainView
@@ -388,9 +398,9 @@ namespace BuildNotifications.ViewModel
                 DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
             };
 
-            BlurMainView = true;
+            Blur();
             popup.ShowDialog();
-            BlurMainView = false;
+            UnBlur();
         }
 
         private void ShowInitialSetupOverlayViewModel()
