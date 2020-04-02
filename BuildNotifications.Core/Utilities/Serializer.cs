@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace BuildNotifications.Core.Utilities
 {
@@ -22,7 +23,7 @@ namespace BuildNotifications.Core.Utilities
 
         public T Deserialize<T>(string serialized)
         {
-            return JsonConvert.DeserializeObject<T>(serialized, _settings);
+            return JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>();
         }
 
         private readonly JsonSerializerSettings _settings;
