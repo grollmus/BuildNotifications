@@ -31,7 +31,7 @@
     </PackageReference>
     <PackageReference Include="NSubstitute" Version="4.2.1" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.12" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.5.0.15942">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.0.16497">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
