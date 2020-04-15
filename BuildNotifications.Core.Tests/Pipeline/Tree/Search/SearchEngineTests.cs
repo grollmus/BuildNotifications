@@ -54,7 +54,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
         [InlineData("notAKeyword: random text")]
         [InlineData("notAKeyword:randomText")]
         [InlineData(":notA:Keyword:ran:domText:")]
-        [InlineData(",:notA:Key,word:ran:dom,Text:")]
         [InlineData("::::::::")]
         public void InputWithoutKeywordResultsInSearchWithDefaultCriteria(string input)
         {
@@ -71,10 +70,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         [Theory]
         [InlineData(" branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria))]
-        [InlineData(" branch:branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria))]
+        [InlineData(" branch:branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria),typeof(DummyBranchSearchCriteria))]
         [InlineData(" branch:*branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
         [InlineData(" bRanCh::Branch: ", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
-        [InlineData("branch: someWord sBranch:", typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
+        [InlineData("branch: someWord sBranch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
         [InlineData("", typeof(DefaultSearchCriteria))]
         public void InputWithKeywordResultsInCertainSearchBlocks(string input, params Type[] expectedCriterionTypes)
         {
@@ -89,8 +88,11 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         [Theory]
         [InlineData(" branch:test,test", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DefaultSearchCriteria))]
-        [InlineData("branch:test,test", typeof(DummyBranchSearchCriteria), typeof(DefaultSearchCriteria))]
-        [InlineData("test,test", typeof(DefaultSearchCriteria))]
+        [InlineData("branch:test,test", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DefaultSearchCriteria))]
+        [InlineData("test, test", typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria))]
+        [InlineData("test,test", typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria))]
+        [InlineData(" test , test ", typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria))]
+        [InlineData(",:notA:Key,word:ran:domText:,", typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria), typeof(DefaultSearchCriteria))]
         public void CommaBreaksSpecificCriteria(string input, params Type[] expectedCriterionTypes)
         {
             // arrange

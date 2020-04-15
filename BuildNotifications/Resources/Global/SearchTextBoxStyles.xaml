@@ -3,13 +3,44 @@
                     xmlns:search="clr-namespace:BuildNotifications.Resources.Search"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+    <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+        <Setter Property="ItemsSource" Value="{Binding Suggestions}" />
+        <Setter Property="SelectedItem" Value="{Binding SelectedSuggestion}" />
+        <Setter Property="SelectedIndex" Value="{Binding SelectedSuggestionIndex}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <animation:AnimatedStackPanel Orientation="Vertical" IsItemsHost="True" AnimationDuration="0.15"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate DataType="{x:Type search:SearchSuggestionViewModel}">
+        <DockPanel>
+            <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" />
+
+
+            <i:Interaction.Triggers>
+                <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
+                    <triggerActions:ElementFadeOut Duration="0.15" Anchor="MiddleRight" DoScale="True" />
+                </ei:DataTrigger>
+            </i:Interaction.Triggers>
+        </DockPanel>
+
+    </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type search:SearchBlockExampleViewModel}">
         <DockPanel>
             <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
-                       Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Left" Margin="{StaticResource BlockLeft}"
+                       Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Left"
+                       Margin="{StaticResource BlockLeft}"
                        HorizontalAlignment="Left" />
             <TextBlock Text="{Binding ExampleText}" Foreground="{DynamicResource Foreground1}"
                        Margin="{StaticResource BlockHalfXOnlyMargin}" />
@@ -18,6 +49,9 @@
 
     <DataTemplate DataType="{x:Type search:DefaultSearchBlockViewModel}">
         <StackPanel Orientation="Vertical">
+            <ListBox Style="{StaticResource SuggestionsListBoxStyle}" />
+            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
             <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
@@ -30,9 +64,12 @@
             </ItemsControl>
         </StackPanel>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
         <StackPanel Orientation="Vertical">
+            <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
+            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -42,7 +79,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}" Padding="{StaticResource BlockSixthThickness}"
+                <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
+                           Padding="{StaticResource BlockSixthThickness}"
                            Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="14"
                            Grid.Row="0" Grid.Column="0"
                            HorizontalAlignment="Left" />
@@ -51,6 +89,7 @@
             </Grid>
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+
             <ItemsControl ItemsSource="{Binding Examples}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -118,8 +157,6 @@
                                             <ContentPresenter
                                                 Content="{Binding SearchCriteriaViewModel, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}" />
                                         </Border>
-                                        <ListBox
-                                            ItemsSource="{Binding CurrentSuggestions, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}" />
                                     </StackPanel>
                                 </Border>
                             </Popup>

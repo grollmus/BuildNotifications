@@ -20,7 +20,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         private ISearchCriteria _defaultCriteria;
 
-        private const char KeywordSeparator = ':';
+        public const char KeywordSeparator = ':';
 
         private const char SpecificToGeneralSeparator = ',';
 
@@ -40,7 +40,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             {
                 sb.Append(character);
 
-                if (character == SpecificToGeneralSeparator && currentCriteria != _defaultCriteria)
+                if (character == SpecificToGeneralSeparator)
                 {
                     yield return new SearchBlock(currentCriteria, sb.ToString());
                     currentCriteria = _defaultCriteria;
@@ -60,8 +60,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
                 var keywordLength = $"{matchingCriteria.LocalizedKeyword}:".Length;
 
                 sb.Remove(sb.Length - keywordLength, keywordLength);
-                if (sb.Length > 0)
-                    yield return new SearchBlock(currentCriteria, sb.ToString());
+
+                yield return new SearchBlock(currentCriteria, sb.ToString());
 
                 sb.Clear();
                 currentCriteria = matchingCriteria;

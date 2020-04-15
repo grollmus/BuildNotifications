@@ -572,7 +572,7 @@ namespace BuildNotifications.ViewModel
                 try
                 {
 #if DEBUG
-                    const int updateInterval = 5;
+                    const int updateInterval = 500;
 #else
                     var updateInterval = _coreSetup.Configuration.UpdateInterval;
 #endif

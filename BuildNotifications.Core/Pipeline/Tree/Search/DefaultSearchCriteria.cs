@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -11,11 +12,14 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     /// </summary>
     public class DefaultSearchCriteria : ISearchCriteria
     {
-        private readonly IList<ISearchCriteria> _includedCriterions;
+        private readonly IReadOnlyList<ISearchCriteria> _includedCriterions;
+
+        private readonly IReadOnlyList<ISearchCriteriaSuggestion> _criterionsAsSuggestions;
 
         public DefaultSearchCriteria(IEnumerable<ISearchCriteria> includedCriterions)
         {
             _includedCriterions = includedCriterions.ToList();
+            _criterionsAsSuggestions = _includedCriterions.Select(s => new SearchCriteriaAsSuggestion(s)).ToList();
         }
 
         public string LocalizedKeyword => "";
@@ -25,6 +29,12 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {
             const int suggestionsToTakeFromEachCriteria = 2;
+
+            foreach (var searchCriteriaSuggestion in _criterionsAsSuggestions)
+            {
+                if (string.IsNullOrEmpty(input) || searchCriteriaSuggestion.Suggestion.StartsWith(input, StringComparison.InvariantCultureIgnoreCase))
+                    yield return searchCriteriaSuggestion;
+            }
 
             foreach (var searchCriteria in _includedCriterions)
             {
@@ -51,5 +61,15 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
                 }
             }
         }
+    }
+
+    public class SearchCriteriaAsSuggestion : ISearchCriteriaSuggestion
+    {
+        public SearchCriteriaAsSuggestion(ISearchCriteria searchCriteria)
+        {
+            Suggestion = searchCriteria.LocalizedKeyword + SearchEngine.KeywordSeparator;
+        }
+
+        public string Suggestion { get; }
     }
 }

@@ -598,7 +598,7 @@
     <value>Show only manually requested builds</value>
   </data>
   <data name="SearchDefaultDescription" xml:space="preserve">
-    <value>Search by any criteria. 
-Use keywords for specific filter.</value>
+    <value>Search by any criteria listed below.
+Use keywords for specific filter. Comma to separate terms.</value>
   </data>
 </root>

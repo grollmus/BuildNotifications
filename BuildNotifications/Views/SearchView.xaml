@@ -12,7 +12,7 @@
 
     <Grid Width="{StaticResource BlockTriple}">
         <search:SearchTextBox SearchEngine="{Binding SearchEngine}"
-                               Icon="Search" x:Name="SearchTextBox" ToolTip="{text:Localized SearchTooltip}"
+                               Icon="Search" x:Name="SearchTextBox"
                                MaxHeight="{StaticResource BlockOneAndHalf}"
                                Margin="{DynamicResource BlockQuarterXOnlyMargin}" 
                                SearchCriteriaBackground="{DynamicResource Background3}"

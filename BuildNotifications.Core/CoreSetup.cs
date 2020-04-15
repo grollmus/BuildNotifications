@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
@@ -38,6 +39,7 @@ namespace BuildNotifications.Core
 
             SearchEngine = new SearchEngine();
             SearchEngine.AddCriteria(new TestSearchCriteria());
+            SearchEngine.AddCriteria(new TestSearchCriteria2());
 
             if (notificationReceiver != null)
             {
@@ -92,7 +94,7 @@ namespace BuildNotifications.Core
 
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {
-            yield break;
+            return Examples().Where(e => e.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).Select(e => new SearchCriteriaSuggestion(e));
         }
 
         public bool IsBuildIncluded(IBuild build, string input) => true;
@@ -103,6 +105,28 @@ namespace BuildNotifications.Core
             yield return "Test";
             yield return "Something";
             yield return "Hello";
+        }
+    }
+    
+    public class TestSearchCriteria2 : ISearchCriteria
+    {
+        public string LocalizedKeyword => "test";
+
+        public string LocalizedDescription => "Temporary criteria for GUI testing purposes";
+
+        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
+        {
+            return Examples().Where(e => e.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).Select(e => new SearchCriteriaSuggestion(e));
+        }
+
+        public bool IsBuildIncluded(IBuild build, string input) => true;
+        public IEnumerable<string> LocalizedExamples => Examples();
+
+        private IEnumerable<string> Examples()
+        {
+            yield return "Don't care";
+            yield return "Anything";
+            yield return "Absolutely anything";
         }
     }
 }
