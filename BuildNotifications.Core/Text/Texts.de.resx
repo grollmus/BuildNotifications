@@ -597,4 +597,7 @@
   <data name="ManualBuildsSightToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="SearchDefault_Description" xml:space="preserve">
+    <value />
+  </data>
 </root>

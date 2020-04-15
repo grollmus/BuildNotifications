@@ -8,7 +8,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.Build
 {
-    class ShortHighlight : TriggerAction<Rectangle>
+    internal class ShortHighlight : TriggerAction<Rectangle>
     {
         protected override void Invoke(object parameter)
         {
@@ -18,9 +18,10 @@ namespace BuildNotifications.Resources.BuildTree.Build
                 return;
 
             globalTweenHandler.ClearTweensOf(AssociatedObject);
-
-            AssociatedObject.Visibility = Visibility.Visible;
-
+            
+            if (AssociatedObject.Visibility != Visibility.Visible)
+                AssociatedObject.Visibility = Visibility.Visible;
+            
             var brush = new SolidColorBrush();
             var targetBrush = new SolidColorBrush(Colors.Transparent);
             var background = AssociatedObject.FindResource("Background1") as SolidColorBrush;

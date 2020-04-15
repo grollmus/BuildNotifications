@@ -22,6 +22,9 @@ namespace BuildNotifications.Resources.BuildTree.Build
 
             var brush = new SolidColorBrush();
 
+            if (AssociatedObject.Visibility != Visibility.Visible)
+                AssociatedObject.Visibility = Visibility.Visible;
+
             if (DoHighlight)
             {
                 AssociatedObject.Visibility = Visibility.Visible;

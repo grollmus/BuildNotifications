@@ -6,6 +6,62 @@
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
 
 
+    <DataTemplate DataType="{x:Type search:SearchBlockExampleViewModel}">
+        <DockPanel>
+            <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
+                       Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Left" Margin="{StaticResource BlockLeft}"
+                       HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding ExampleText}" Foreground="{DynamicResource Foreground1}"
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" />
+        </DockPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type search:DefaultSearchBlockViewModel}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" />
+            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+            <ItemsControl ItemsSource="{Binding Examples}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
+        <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}" Padding="{StaticResource BlockSixthThickness}"
+                           Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="14"
+                           Grid.Row="0" Grid.Column="0"
+                           HorizontalAlignment="Left" />
+                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Grid.Row="1"
+                           Grid.Column="1" />
+            </Grid>
+            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+            <ItemsControl ItemsSource="{Binding Examples}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </DataTemplate>
+
+
     <Style TargetType="{x:Type search:SearchTextBox}">
         <Setter Property="MaxHeight" Value="{StaticResource BlockOneAndHalf}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Background3}" />
@@ -24,7 +80,9 @@
                             BorderThickness="{TemplateBinding BorderThickness}" MaxHeight="{TemplateBinding MaxHeight}"
                             MaxWidth="{TemplateBinding MaxWidth}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                        <Grid>
+
+                        <!--TEXTBOX-->
+                        <Grid x:Name="ContentGrid">
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
                             <Grid HorizontalAlignment="Right">
@@ -44,6 +102,27 @@
                                     </DockPanel>
                                 </Border>
                             </Grid>
+
+                            <!--SUGGESTIONS-->
+                            <Popup MinWidth="{Binding ActualWidth, ElementName=border}"
+                                   PlacementTarget="{Binding ElementName=ContentGrid}" Placement="Bottom"
+                                   VerticalOffset="{StaticResource BlockQuarter}"
+                                   x:Name="PART_Popup"
+                                   StaysOpen="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}"
+                                   IsHitTestVisible="False">
+                                <Border Background="{DynamicResource Background1}" IsHitTestVisible="False"
+                                        BorderBrush="{DynamicResource Background2}" BorderThickness="1"
+                                        Padding="{StaticResource BlockQuarterThickness}">
+                                    <StackPanel Orientation="Vertical">
+                                        <Border BorderBrush="{DynamicResource Background3}">
+                                            <ContentPresenter
+                                                Content="{Binding SearchCriteriaViewModel, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}" />
+                                        </Border>
+                                        <ListBox
+                                            ItemsSource="{Binding CurrentSuggestions, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}" />
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
                         </Grid>
 
                         <i:Interaction.Triggers>
@@ -78,6 +157,7 @@
                             <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
                             <Setter Property="Foreground" TargetName="Label" Value="{DynamicResource Foreground1}" />
                             <Setter Property="MaxHeight" Value="9999" />
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
