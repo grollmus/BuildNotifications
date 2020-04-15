@@ -181,7 +181,6 @@ namespace DummyBuildServer.Models
 
                 var json = JsonConvert.SerializeObject(data, Formatting.None, settings);
                 var buffer = Encoding.ASCII.GetBytes(json);
-
                 await response.WriteAsync(buffer, 0, buffer.Length);
                 response.Flush();
             }

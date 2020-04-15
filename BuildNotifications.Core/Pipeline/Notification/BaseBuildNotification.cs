@@ -33,11 +33,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
             };
         }
 
-        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), Parameters.OfType<object>().ToArray());
+        public string DisplayContent => string.Format(StringLocalizer.CurrentCulture, StringLocalizer.Instance.GetText(ContentTextId), Parameters.OfType<object>().ToArray());
 
         public string ContentTextId => GetMessageTextId();
 
-        public string DisplayTitle => string.Format(StringLocalizer.Instance.GetText(TitleTextId), new object[] {StatusTextId(BuildNodes.Count == 1), BuildNodes.Count.ToString()});
+        public string DisplayTitle => string.Format(StringLocalizer.CurrentCulture, StringLocalizer.Instance.GetText(TitleTextId), new object[] {StatusTextId(BuildNodes.Count == 1), BuildNodes.Count.ToString(StringLocalizer.CurrentCulture)});
 
         public string TitleTextId => BuildNodes.Count == 1 ? BuildNotificationContentSingularTextId : BuildNotificationContentPluralTextId;
 

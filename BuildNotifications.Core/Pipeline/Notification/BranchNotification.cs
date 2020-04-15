@@ -29,7 +29,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
         private void SetParameter()
         {
             Parameters.Clear();
-            Parameters.Add(StatusTextId(_branchNames.Count() == 1));
+            Parameters.Add(StatusTextId(_branchNames.Count == 1));
             Parameters.AddRange(Truncate(_branchNames));
         }
 

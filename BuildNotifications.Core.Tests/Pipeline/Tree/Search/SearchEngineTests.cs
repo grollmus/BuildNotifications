@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             // assert
             Assert.Equal(1, search.Blocks.Count);
-            var searchBlock = search.Blocks.First();
+            var searchBlock = search.Blocks[0];
             Assert.IsType<DefaultSearchCriteria>(searchBlock.SearchCriteria);
             Assert.Equal(input, searchBlock.SearchedText);
         }

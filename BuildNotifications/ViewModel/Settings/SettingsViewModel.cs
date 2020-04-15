@@ -27,7 +27,7 @@ namespace BuildNotifications.ViewModel.Settings
             UpdateUser();
         }
 
-        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; set; } = new ObservableCollection<UserViewModel>();
+        public ObservableCollection<UserViewModel> CurrentUserIdentities { get; } = new ObservableCollection<UserViewModel>();
 
         public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
 

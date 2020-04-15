@@ -1,4 +1,5 @@
-﻿using Microsoft.TeamFoundation.Core.WebApi;
+﻿using System;
+using Microsoft.TeamFoundation.Core.WebApi;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -22,13 +23,13 @@ namespace BuildNotifications.Plugin.Tfs
         public override bool Equals(object? obj)
         {
             var other = obj as TfsProject;
-            return other?.Id.Equals(Id) == true;
+            return other?.Id.Equals(Id, StringComparison.InvariantCulture) == true;
         }
 
         public override int GetHashCode()
         {
             // ReSharper disable once NonReadonlyMemberInGetHashCode
-            return Id.GetHashCode();
+            return Id.GetHashCode(StringComparison.InvariantCulture);
         }
 
         public override string ToString()

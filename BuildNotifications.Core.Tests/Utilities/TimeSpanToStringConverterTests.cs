@@ -57,7 +57,7 @@ namespace BuildNotifications.Core.Tests.Utilities
         private static string GetTimeString(string textId, int amount)
         {
             var baseText = GetTimeString(textId);
-            return string.Format(baseText, amount);
+            return string.Format(CultureInfo.InvariantCulture, baseText, amount);
         }
 
         private static string GetTimeString(string textId)

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
+using JetBrains.Annotations;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.ViewModel.Settings
@@ -30,7 +31,10 @@ namespace BuildNotifications.ViewModel.Settings
         [CalculatedValues(nameof(PossibleSourceControlPlugins), nameof(PossibleSourceControlPlugins))]
         [CalculatedType(nameof(BuildPluginConfigurationType), nameof(BuildPluginConfigurationType))]
         [CalculatedType(nameof(SourceControlPluginConfigurationType), nameof(SourceControlPluginConfigurationType))]
+        [UsedImplicitly]
+#pragma warning disable CA2227 // Collection properties should be read only - the setter is required (though unused) by ReflectSettings
         public ObservableCollection<ConnectionDataViewModel> Connections { get; set; }
+#pragma warning restore CA2227 
 
         public event EventHandler? TestFinished;
 

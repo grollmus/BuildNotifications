@@ -37,7 +37,7 @@ namespace BuildNotifications.Services
             var baseAddress = new Uri(url.Scheme + "://" + url.Host);
 
             using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(url.AbsolutePath.TrimStart('/'));
+            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -53,7 +53,7 @@ namespace BuildNotifications.Services
             var baseAddress = new Uri(url.Scheme + "://" + url.Host);
 
             using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(url.AbsolutePath.TrimStart('/'));
+            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -96,10 +96,7 @@ namespace BuildNotifications.Services
             return fullPath;
         }
 
-        private Task<string> GetLatestUpdateUrl()
-        {
-            return GetUpdateUrl(string.Empty);
-        }
+        private Task<string> GetLatestUpdateUrl() => GetUpdateUrl(string.Empty);
 
         private async Task<string> GetUpdateUrl(string version)
         {
@@ -118,17 +115,17 @@ namespace BuildNotifications.Services
 
             using var client = new HttpClient {BaseAddress = baseAddress};
             client.DefaultRequestHeaders.UserAgent.Add(userAgent);
-            var response = await client.GetAsync(releasesApiBuilder.ToString());
+            var response = await client.GetAsync(new Uri(releasesApiBuilder.ToString()));
             response.EnsureSuccessStatusCode();
 
             var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
             var release = releases
-                .Where(x => string.IsNullOrEmpty(version) || x.HtmlUrl.Contains(version))
+                .Where(x => string.IsNullOrEmpty(version) || x.HtmlUrl.Contains(version, StringComparison.OrdinalIgnoreCase))
                 .Where(FilterRelease)
                 .OrderByDescending(x => x.PublishedAt)
                 .First();
 
-            var updateUrl = release.HtmlUrl.Replace("/tag/", "/download/");
+            var updateUrl = release.HtmlUrl.Replace("/tag/", "/download/", StringComparison.OrdinalIgnoreCase);
             _updateUrlCache[version] = updateUrl;
             return updateUrl;
         }
@@ -201,7 +198,7 @@ namespace BuildNotifications.Services
                 p.OutputDataReceived += (s, e) =>
                 {
                     LogTo.Debug($"Checking: {e.Data}");
-                    if (e.Data?.StartsWith("{") ?? false)
+                    if (e.Data?.StartsWith("{", StringComparison.OrdinalIgnoreCase) ?? false)
                         textResult = e.Data;
                 };
 

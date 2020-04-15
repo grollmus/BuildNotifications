@@ -11,6 +11,6 @@ namespace BuildNotifications.ViewModel.Notification
             BuildNodes = buildNodes;
         }
 
-        public IList<IBuildNode> BuildNodes { get; set; }
+        public IList<IBuildNode> BuildNodes { get; }
     }
 }

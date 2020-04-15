@@ -16,7 +16,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
             Type = notificationType;
         }
 
-        public string DisplayContent => string.Format(StringLocalizer.Instance.GetText(ContentTextId), _parameter);
+        public string DisplayContent => string.Format(StringLocalizer.CurrentCulture, StringLocalizer.Instance.GetText(ContentTextId), _parameter);
 
         public string ContentTextId { get; }
 

@@ -16,18 +16,6 @@ namespace BuildNotifications.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public bool IsRemoving
-        {
-            get => _isRemoving;
-            set
-            {
-                _isRemoving = value;
-                OnPropertyChanged();
-            }
-        }
-
         protected async Task WaitUntilNextFrameIsRenderedAsync()
         {
             var frameRendered = false;
@@ -45,6 +33,18 @@ namespace BuildNotifications.ViewModel
             }
 
             CompositionTarget.Rendering -= FrameRendered;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public bool IsRemoving
+        {
+            get => _isRemoving;
+            set
+            {
+                _isRemoving = value;
+                OnPropertyChanged();
+            }
         }
 
         private bool _isRemoving;

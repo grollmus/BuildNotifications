@@ -7,6 +7,7 @@ using MS.WindowsAPICodePack.Internal;
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
+#pragma warning disable CA1712 // Do not prefix enum values with type name
 
 namespace ToastNotificationsPlugin
 {
@@ -151,10 +152,10 @@ namespace ToastNotificationsPlugin
 
     public static class ErrorHelper
     {
-        public static void VerifySucceeded(UInt32 hresult)
+        public static void VerifySucceeded(uint hresult)
         {
             if (hresult > 1)
-                throw new Exception("Failed with HRESULT: " + hresult.ToString("X"));
+                throw new ExternalException("Failed with HRESULT: " + hresult.ToString("X"), unchecked((int) hresult));
         }
     }
 }

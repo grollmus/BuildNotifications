@@ -9,7 +9,7 @@ namespace BuildNotifications.ViewModel.Settings
 
         public string Name => User.DisplayName;
 
-        public string Description => string.Format(StringLocalizer.UserDescription, User.DisplayName, User.Id, User.UniqueName);
+        public string Description => string.Format(StringLocalizer.CurrentCulture, StringLocalizer.UserDescription, User.DisplayName, User.Id, User.UniqueName);
 
         public UserViewModel(IUser user)
         {

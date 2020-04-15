@@ -2,13 +2,13 @@
 using System.Text.RegularExpressions;
 using BuildNotifications.PluginInterfaces.SourceControl;
 
-namespace BuildNotifications.Core.Utilities
+namespace BuildNotifications.Plugin.Tfs
 {
-    internal class BranchNameExtractor : IBranchNameExtractor
+    internal class GitBranchNameExtractor : IBranchNameExtractor
     {
         public string ExtractDisplayName(string fullBranchName)
         {
-            if (fullBranchName.StartsWith(GitRefHeadPrefix, StringComparison.InvariantCulture))
+            if (fullBranchName.StartsWith(GitRefHeadPrefix, StringComparison.InvariantCultureIgnoreCase))
                 return fullBranchName.Substring(GitRefHeadPrefix.Length);
 
             var match = PullRequestPattern.Match(fullBranchName);

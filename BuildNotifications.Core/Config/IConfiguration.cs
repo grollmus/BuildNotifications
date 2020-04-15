@@ -18,7 +18,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which canceled builds to receive notifications for
         /// </summary>
-        BuildNotificationMode CanceledBuildNotifyConfig { get; }
+        BuildNotificationModes CanceledBuildNotifyConfig { get; }
 
         /// <summary>
         /// List of all saved connections.
@@ -33,7 +33,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which failed builds to receive notifications for
         /// </summary>
-        BuildNotificationMode FailedBuildNotifyConfig { get; }
+        BuildNotificationModes FailedBuildNotifyConfig { get; }
 
         /// <summary>
         /// Defines how builds should be grouped.
@@ -62,7 +62,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// For which succeeded builds to receive notifications for
         /// </summary>
-        BuildNotificationMode SucceededBuildNotifyConfig { get; }
+        BuildNotificationModes SucceededBuildNotifyConfig { get; }
 
         /// <summary>
         /// How to treat builds with warnings (or partially succeeded builds)

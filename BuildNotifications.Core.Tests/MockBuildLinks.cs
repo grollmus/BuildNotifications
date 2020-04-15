@@ -11,6 +11,7 @@ namespace BuildNotifications.Core.Tests
 
         public void UpdateWith(IBranch branch)
         {
+            // Do nothing
         }
     }
 }

@@ -15,7 +15,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.12" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.0.16497">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -25,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications\BuildNotifications.csproj" />
+    <ProjectReference Include="..\Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj" />
   </ItemGroup>
 
 </Project>

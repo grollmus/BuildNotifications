@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToastNotificationsPlugin", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.PluginInterfacesLegacy", "BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj", "{3DF6B2D1-284A-4341-A148-AA397327B254}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildNotifications.Plugin.GitHub", "Plugins\BuildNotifications.Plugin.GitHub\BuildNotifications.Plugin.GitHub.csproj", "{C72D01D7-7F92-4BE5-90DA-A58758A79486}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildNotifications.Plugin.GitHub", "Plugins\BuildNotifications.Plugin.GitHub\BuildNotifications.Plugin.GitHub.csproj", "{C72D01D7-7F92-4BE5-90DA-A58758A79486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

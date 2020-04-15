@@ -66,9 +66,10 @@ namespace BuildNotifications.Core.Tests.Config
             var sut = new ConfigurationSerializer(serializer, pluginRepo);
 
             // Act
-            var _ = sut.Load(fileName);
+            var actual = sut.Load(fileName);
 
             // Assert
+            Assert.NotNull(actual);
             Assert.False(File.Exists(fileName));
         }
 
@@ -85,7 +86,7 @@ namespace BuildNotifications.Core.Tests.Config
             var expected = new Configuration
             {
                 BuildsToShow = 2,
-                CanceledBuildNotifyConfig = BuildNotificationMode.RequestedByMe,
+                CanceledBuildNotifyConfig = BuildNotificationModes.RequestedByMe,
                 Connections = new List<ConnectionData>
                 {
                     new ConnectionData
@@ -97,13 +98,13 @@ namespace BuildNotifications.Core.Tests.Config
                         SourceControlPluginType = "SourcePlugin"
                     }
                 },
-                FailedBuildNotifyConfig = BuildNotificationMode.RequestedByOrForMe,
+                FailedBuildNotifyConfig = BuildNotificationModes.RequestedByOrForMe,
                 GroupDefinition = new BuildTreeGroupDefinition(GroupDefinition.Branch, GroupDefinition.Status),
                 UsePreReleases = true,
                 Language = "language",
                 SortingDefinition = new BuildTreeSortingDefinition(SortingDefinition.DateAscending, SortingDefinition.StatusDescending),
                 UpdateInterval = 3,
-                SucceededBuildNotifyConfig = BuildNotificationMode.RequestedForMe,
+                SucceededBuildNotifyConfig = BuildNotificationModes.RequestedForMe,
                 Projects = new List<IProjectConfiguration>
                 {
                     new ProjectConfiguration

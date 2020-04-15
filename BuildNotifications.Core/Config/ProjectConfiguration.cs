@@ -51,7 +51,7 @@ namespace BuildNotifications.Core.Config
         public bool HideCompletedPullRequests { get; set; }
 
         [IsHidden]
-        [Obsolete]
+        [Obsolete("Is replaced by PullRequestDisplay")]
         public bool ShowPullRequests { get; set; }
 
         public PullRequestDisplayMode PullRequestDisplay { get; set; }

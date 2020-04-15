@@ -11,7 +11,7 @@ using Application = System.Windows.Application;
 
 namespace BuildNotifications.ViewModel.Utils
 {
-    internal class TrayIconHandle : INotificationProcessor
+    internal class TrayIconHandle : INotificationProcessor, IDisposable
     {
         public TrayIconHandle()
         {
@@ -115,6 +115,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Initialize()
         {
+            // Do nothing
         }
 
         public void Process(IDistributedNotification notification)
@@ -130,10 +131,16 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Shutdown()
         {
+            // Do nothing
         }
 
         private readonly NotifyIcon _notifyIcon;
 
         private BuildStatus _buildStatus;
+
+        public void Dispose()
+        {
+            _notifyIcon.Dispose();
+        }
     }
 }

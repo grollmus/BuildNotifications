@@ -182,7 +182,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(BuildStatus)))
+            if (e.PropertyName.Equals(nameof(BuildStatus), StringComparison.Ordinal))
             {
                 UpdateBuildStatus();
                 if (_currentSortingDefinition == SortingDefinition.StatusAscending || _currentSortingDefinition == SortingDefinition.StatusDescending)
@@ -192,7 +192,7 @@ namespace BuildNotifications.ViewModel.Tree
                     SetSpecificBuildChildrenProperties();
             }
 
-            if (e.PropertyName.Equals(nameof(QueueTime)))
+            if (e.PropertyName.Equals(nameof(QueueTime), StringComparison.Ordinal))
             {
                 UpdateQueuedTime();
                 if (_currentSortingDefinition == SortingDefinition.DateAscending || _currentSortingDefinition == SortingDefinition.DateDescending)
@@ -305,7 +305,7 @@ namespace BuildNotifications.ViewModel.Tree
                 if (ChildrenAreBuilds)
                     newStatus = MostCurrentBuildStatus(Children.OfType<BuildNodeViewModel>());
                 else
-                    newStatus = Children.ToList().Max(x => x.BuildStatus);
+                    newStatus = Children.Max(x => x.BuildStatus);
             }
 
             if (_buildStatus == newStatus)
@@ -317,7 +317,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateChangedDate()
         {
-            var newDate = !Children.Any() ? DateTime.MinValue : Children.ToList().Max(x => x.ChangedDate);
+            var newDate = !Children.Any() ? DateTime.MinValue : Children.Max(x => x.ChangedDate);
             if (_changedDate == newDate)
                 return;
 
@@ -327,7 +327,7 @@ namespace BuildNotifications.ViewModel.Tree
 
         private void UpdateQueuedTime()
         {
-            var newDate = !Children.Any() ? DateTime.MinValue : Children.ToList().Max(x => x.QueueTime);
+            var newDate = !Children.Any() ? DateTime.MinValue : Children.Max(x => x.QueueTime);
             if (_queuedTime == newDate)
                 return;
 

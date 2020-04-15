@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using System;
+using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Sight;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Sight
@@ -12,6 +13,6 @@ namespace BuildNotifications.Core.Pipeline.Tree.Sight
 
         public bool IsHighlighted(IBuild build) => false;
 
-        public bool IsBuildShown(IBuild build) => build.RequestedBy.Id.Equals(build.RequestedFor?.Id);
+        public bool IsBuildShown(IBuild build) => build.RequestedBy.Id.Equals(build.RequestedFor?.Id, StringComparison.InvariantCulture);
     }
 }

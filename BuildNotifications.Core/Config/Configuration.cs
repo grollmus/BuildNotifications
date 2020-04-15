@@ -72,11 +72,11 @@ namespace BuildNotifications.Core.Config
 
         public bool UsePreReleases { get; set; } = false;
 
-        public BuildNotificationMode CanceledBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+        public BuildNotificationModes CanceledBuildNotifyConfig { get; set; } = BuildNotificationModes.RequestedByMe;
 
-        public BuildNotificationMode FailedBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByOrForMe;
+        public BuildNotificationModes FailedBuildNotifyConfig { get; set; } = BuildNotificationModes.RequestedByOrForMe;
 
-        public BuildNotificationMode SucceededBuildNotifyConfig { get; set; } = BuildNotificationMode.RequestedByMe;
+        public BuildNotificationModes SucceededBuildNotifyConfig { get; set; } = BuildNotificationModes.RequestedByMe;
 
         public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; } = PartialSucceededTreatmentMode.TreatAsSucceeded;
 

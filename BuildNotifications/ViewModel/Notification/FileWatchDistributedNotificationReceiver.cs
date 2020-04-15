@@ -8,7 +8,7 @@ using BuildNotifications.PluginInterfacesLegacy.Notification;
 
 namespace BuildNotifications.ViewModel.Notification
 {
-    internal class FileWatchDistributedNotificationReceiver : IDistributedNotificationReceiver
+    internal class FileWatchDistributedNotificationReceiver : IDistributedNotificationReceiver, IDisposable
     {
         public FileWatchDistributedNotificationReceiver(IPathResolver pathResolver)
         {
@@ -142,5 +142,10 @@ namespace BuildNotifications.ViewModel.Notification
         private FileSystemWatcher? _watcher;
 
         private const string FileExtension = "distributedNotification";
+
+        public void Dispose()
+        {
+            _watcher?.Dispose();
+        }
     }
 }

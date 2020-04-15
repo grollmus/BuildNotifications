@@ -55,7 +55,7 @@ namespace BuildNotifications.Core.Utilities
             else
                 text = JustNowTextId;
 
-            return string.Format(StringLocalizer.Instance.GetText(text, _culture), amount);
+            return string.Format(StringLocalizer.CurrentCulture, StringLocalizer.Instance.GetText(text, _culture), amount);
         }
 
         private readonly CultureInfo? _culture;

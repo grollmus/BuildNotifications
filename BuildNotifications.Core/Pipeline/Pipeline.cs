@@ -104,7 +104,7 @@ namespace BuildNotifications.Core.Pipeline
                     var count = 0;
                     await foreach (var branch in branches)
                     {
-                        _branchCache.AddOrReplace(projectId, branch.Name.GetHashCode(), branch);
+                        _branchCache.AddOrReplace(projectId, branch.FullName.GetHashCode(StringComparison.InvariantCulture), branch);
                         count += 1;
                     }
 
@@ -115,7 +115,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var branch in removedBranches)
                     {
-                        _branchCache.Remove(projectId, branch.Name.GetHashCode());
+                        _branchCache.Remove(projectId, branch.FullName.GetHashCode(StringComparison.InvariantCulture));
                         count += 1;
                     }
 
@@ -152,7 +152,7 @@ namespace BuildNotifications.Core.Pipeline
                     var count = 0;
                     await foreach (var build in builds)
                     {
-                        _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(), build);
+                        _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(StringComparison.InvariantCulture), build);
                         count += 1;
                     }
 
@@ -161,7 +161,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var build in removedBuilds)
                     {
-                        _buildCache.Remove(projectId, build.Id.GetHashCode());
+                        _buildCache.Remove(projectId, build.Id.GetHashCode(StringComparison.InvariantCulture));
                         count += 1;
                     }
 
@@ -192,7 +192,7 @@ namespace BuildNotifications.Core.Pipeline
                     var count = 0;
                     await foreach (var definition in definitions)
                     {
-                        _definitionCache.AddOrReplace(projectId, definition.Id.GetHashCode(), definition);
+                        _definitionCache.AddOrReplace(projectId, definition.Id.GetHashCode(StringComparison.InvariantCulture), definition);
                         count += 1;
                     }
 
@@ -202,7 +202,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var definition in removedDefinitions)
                     {
-                        _definitionCache.Remove(projectId, definition.Id.GetHashCode());
+                        _definitionCache.Remove(projectId, definition.Id.GetHashCode(StringComparison.InvariantCulture));
                         count += 1;
                     }
 
@@ -220,7 +220,7 @@ namespace BuildNotifications.Core.Pipeline
         private void ReportError(string messageTextId, params object[] parameter)
         {
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
-            var fullMessage = string.Format(localizedMessage, parameter);
+            var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
                 LogTo.ErrorException(fullMessage, exception);
             else

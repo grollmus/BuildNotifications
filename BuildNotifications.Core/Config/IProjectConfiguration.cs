@@ -10,28 +10,28 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// List of branches to never load information for.
         /// </summary>
-        IList<string> BranchBlacklist { get; set; }
+        IList<string> BranchBlacklist { get; }
 
         /// <summary>
         /// List of branches to always load information for.
         /// </summary>
-        IList<string> BranchWhitelist { get; set; }
+        IList<string> BranchWhitelist { get; }
 
         /// <summary>
         /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        IList<string> BuildConnectionNames { get; set; }
+        IList<string> BuildConnectionNames { get; }
 
         /// <summary>
         /// List of build definitions to never load information for.
         /// </summary>
-        IList<string> BuildDefinitionBlacklist { get; set; }
+        IList<string> BuildDefinitionBlacklist { get; }
 
         /// <summary>
         /// List of build definitions to always load information for.
         /// </summary>
-        IList<string> BuildDefinitionWhitelist { get; set; }
+        IList<string> BuildDefinitionWhitelist { get; }
 
         /// <summary>
         /// Branch that should be used by default to use for branch comparision.

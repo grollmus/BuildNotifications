@@ -24,12 +24,22 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             buffer = new byte[Constants.Connection.BufferSize];
             Debug.WriteLine("C Receiving response...");
-            var received = _socket.Read(buffer, 0, buffer.Length);
 
-            var response = Encoding.ASCII.GetString(buffer, 0, received);
-            Debug.WriteLine($"C Received {received} bytes: {response}");
+            var responseBuilder = new StringBuilder();
+            var receivedBytesSum = 0;
+            int receivedBytesLastRead;
 
-            return response;
+            do
+            {
+                receivedBytesLastRead = _socket.Read(buffer, 0, buffer.Length);
+                receivedBytesSum += receivedBytesLastRead;
+                var response = Encoding.ASCII.GetString(buffer, 0, receivedBytesLastRead);
+                responseBuilder.Append(response);
+            } while (receivedBytesLastRead >= buffer.Length);
+
+            Debug.WriteLine($"C Received {receivedBytesSum} bytes: {responseBuilder}");
+
+            return responseBuilder.ToString();
         }
 
         internal async Task Connect()

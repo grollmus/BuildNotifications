@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Host
 {
@@ -8,5 +9,9 @@ namespace BuildNotifications.PluginInterfaces.Host
     [PublicAPI]
     public interface IPluginHost
     {
+        /// <summary>
+        /// The currently running version of the host.
+        /// </summary>
+        Version Version { get; }
     }
 }

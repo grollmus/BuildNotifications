@@ -7,7 +7,6 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Sight;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -37,7 +36,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new Core.Pipeline.Pipeline(builder, configuration);
 
             var buildProvider = Substitute.For<IBuildProvider>();
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
             sut.AddProject(project);
 
             // Act
@@ -57,7 +56,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
             sut.AddProject(project);
 
             // Act
@@ -93,9 +92,9 @@ namespace BuildNotifications.Core.Tests.Pipeline
             Assert.NotEmpty(parser.ChildrenAtLevel(4));
             Assert.Single(parser.ChildrenAtLevel(0));
             Assert.Single(parser.ChildrenAtLevel(1));
-            Assert.Single(parser.ChildrenAtLevel(2));
-            Assert.Single(parser.ChildrenAtLevel(3));
-            Assert.Equal(2, parser.ChildrenAtLevel(4).Count());
+            Assert.Equal(2, parser.ChildrenAtLevel(2).Count()); // stage + master
+            Assert.Equal(2, parser.ChildrenAtLevel(3).Count()); // ci + nightly
+            Assert.Equal(2, parser.ChildrenAtLevel(4).Count()); // 2 builds
         }
 
         [Fact]
@@ -205,7 +204,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             configuration.BuildsToShow.Returns(int.MaxValue);
             var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration);
 
-            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>(), Substitute.For<IBranchNameExtractor>());
+            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>());
             pipeline.AddProject(project);
 
             return pipeline;

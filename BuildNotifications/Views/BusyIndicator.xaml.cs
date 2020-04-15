@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 
 namespace BuildNotifications.Views
 {
-    public partial class BusyIndicator : INotifyPropertyChanged
+    public partial class BusyIndicator : INotifyPropertyChanged, IDisposable
     {
         public BusyIndicator()
         {
@@ -24,7 +24,7 @@ namespace BuildNotifications.Views
             _tokenSource = new CancellationTokenSource();
         }
 
-        public ObservableCollection<DummyItem> DummyItems { get; set; }
+        public ObservableCollection<DummyItem> DummyItems { get; }
 
         public bool IsBusy
         {
@@ -121,6 +121,12 @@ namespace BuildNotifications.Views
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            _removeAndAddingTask?.Dispose();
+            _tokenSource.Dispose();
         }
     }
 }

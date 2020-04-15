@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace BuildNotifications.Core.Config
@@ -64,11 +65,8 @@ namespace BuildNotifications.Core.Config
                     default:
 
                         var newIndex = input.IndexOf(split, Math.Max(0, currentIndex), matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase);
-                        if (!useWildcard)
-                        {
-                            if (newIndex != currentIndex + 1)
-                                return false;
-                        }
+                        if (!useWildcard && newIndex != currentIndex + 1)
+                            return false;
 
                         useWildcard = false;
 
@@ -110,7 +108,7 @@ namespace BuildNotifications.Core.Config
                         toReturn = string.Empty;
                     }
 
-                    yield return c.ToString();
+                    yield return c.ToString(CultureInfo.InvariantCulture);
                 }
                 else
                     toReturn += c;

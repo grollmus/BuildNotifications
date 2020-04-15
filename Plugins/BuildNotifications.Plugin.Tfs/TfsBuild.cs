@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
@@ -12,7 +13,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             _id = build.Url;
             BuildId = build.Id;
-            Id = build.Id.ToString();
+            Id = build.Id.ToString(CultureInfo.InvariantCulture);
 
             QueueTime = build.QueueTime;
             LastChangedTime = build.QueueTime;
@@ -30,15 +31,11 @@ namespace BuildNotifications.Plugin.Tfs
 
         internal int BuildId { get; }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(_id, Id);
-        }
+        public override bool Equals(object? obj) => Equals(obj as IBaseBuild);
 
-        public bool Equals(IBaseBuild other)
-        {
-            return _id == (other as TfsBuild)?._id;
-        }
+        public override int GetHashCode() => HashCode.Combine(_id, Id);
+
+        public bool Equals(IBaseBuild? other) => _id == (other as TfsBuild)?._id;
 
         public string BranchName { get; }
 

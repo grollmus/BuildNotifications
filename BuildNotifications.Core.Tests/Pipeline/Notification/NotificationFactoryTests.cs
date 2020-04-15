@@ -29,25 +29,25 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             _mobileDefinition.Name.Returns(Mobile);
 
             _stageBranch = Substitute.For<IBranch>();
-            _stageBranch.Name.Returns(Stage);
+            _stageBranch.FullName.Returns(Stage);
 
             _masterBranch = Substitute.For<IBranch>();
-            _masterBranch.Name.Returns(Master);
+            _masterBranch.FullName.Returns(Master);
 
             _featureBranch = Substitute.For<IBranch>();
-            _featureBranch.Name.Returns(Feature);
+            _featureBranch.FullName.Returns(Feature);
 
             _bugBranch = Substitute.For<IBranch>();
-            _bugBranch.Name.Returns(Bug);
+            _bugBranch.FullName.Returns(Bug);
 
             _longNameFeatureABranch = Substitute.For<IBranch>();
-            _longNameFeatureABranch.Name.Returns(LongNameFeatureA);
+            _longNameFeatureABranch.FullName.Returns(LongNameFeatureA);
 
             _longNameFeatureBBranch = Substitute.For<IBranch>();
-            _longNameFeatureBBranch.Name.Returns(LongNameFeatureB);
+            _longNameFeatureBBranch.FullName.Returns(LongNameFeatureB);
 
             _longNameFeatureCBranch = Substitute.For<IBranch>();
-            _longNameFeatureCBranch.Name.Returns(LongNameFeatureC);
+            _longNameFeatureCBranch.FullName.Returns(LongNameFeatureC);
 
             _me = Substitute.For<IUser>();
             _me.UniqueName.Returns("Me");
@@ -59,40 +59,40 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
 
             _allowAllConfiguration = Substitute.For<IConfiguration>();
             _allowAllConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _allowAllConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _allowAllConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _allowAllConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _allowAllConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _allowAllConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _allowAllConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
 
             _onlyRequestedByMeConfiguration = Substitute.For<IConfiguration>();
             _onlyRequestedByMeConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _onlyRequestedByMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
-            _onlyRequestedByMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
-            _onlyRequestedByMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByMe);
+            _onlyRequestedByMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
+            _onlyRequestedByMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
+            _onlyRequestedByMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByMe);
 
             _onlyRequestedForMeConfiguration = Substitute.For<IConfiguration>();
             _onlyRequestedForMeConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _onlyRequestedForMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
-            _onlyRequestedForMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
-            _onlyRequestedForMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
+            _onlyRequestedForMeConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.RequestedByOrForMe);
 
             _dontNotifyConfiguration = Substitute.For<IConfiguration>();
             _dontNotifyConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.None);
-            _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.None);
-            _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.None);
+            _dontNotifyConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.None);
+            _dontNotifyConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.None);
+            _dontNotifyConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.None);
 
             _treatPartialsAsSucceededConfiguration = Substitute.For<IConfiguration>();
             _treatPartialsAsSucceededConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsSucceededConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsSucceededConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsSucceededConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
             _treatPartialsAsSucceededConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             _treatPartialsAsFailedConfiguration = Substitute.For<IConfiguration>();
             _treatPartialsAsFailedConfiguration.IdentitiesOfCurrentUser.Returns(new List<IUser> {_me});
-            _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationMode.Always);
-            _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationMode.Always);
+            _treatPartialsAsFailedConfiguration.CanceledBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsFailedConfiguration.FailedBuildNotifyConfig.Returns(BuildNotificationModes.Always);
+            _treatPartialsAsFailedConfiguration.SucceededBuildNotifyConfig.Returns(BuildNotificationModes.Always);
             _treatPartialsAsFailedConfiguration.PartialSucceededTreatmentMode.Returns(PartialSucceededTreatmentMode.TreatAsFailed);
         }
 
@@ -158,7 +158,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         {
             var build = Substitute.For<IBuild>();
             build.Definition.Returns(definition);
-            var branchName = branch.Name;
+            var branchName = branch.FullName;
             build.BranchName.Returns(branchName);
             build.Id.Returns(id);
             build.Status.Returns(status);
@@ -191,7 +191,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, DefinitionAndBranchNotification.BranchAndDefinitionFailedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -255,9 +255,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.ThreeBranchesChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_featureBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_featureBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -305,8 +305,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.TwoBranchesChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_masterBranch.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_masterBranch.FullName, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -325,7 +325,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BranchNotification.BranchChangedTextId);
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -610,7 +610,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
         }
 
         [Fact]
@@ -628,7 +628,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
             Assert.Equal(BuildStatus.Succeeded, message.Status);
         }
 
@@ -647,7 +647,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
-            Assert.True(message.DisplayContent.Contains(_stageBranch.Name, StringComparison.Ordinal));
+            Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
             Assert.Equal(BuildStatus.Failed, message.Status);
         }
     }
