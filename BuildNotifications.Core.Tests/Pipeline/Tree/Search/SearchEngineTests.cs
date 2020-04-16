@@ -65,12 +65,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             Assert.Equal(1, search.Blocks.Count);
             var searchBlock = search.Blocks[0];
             Assert.IsType<DefaultSearchCriteria>(searchBlock.SearchCriteria);
-            Assert.Equal(input, searchBlock.SearchedText);
+            Assert.Equal(input, searchBlock.SearchedTerm);
         }
 
         [Theory]
         [InlineData(" branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria))]
-        [InlineData(" branch:branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria),typeof(DummyBranchSearchCriteria))]
+        [InlineData(" branch:branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
         [InlineData(" branch:*branch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
         [InlineData(" bRanCh::Branch: ", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
         [InlineData("branch: someWord sBranch:", typeof(DefaultSearchCriteria), typeof(DummyBranchSearchCriteria), typeof(DummyBranchSearchCriteria))]
@@ -120,6 +120,92 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             // assert
             Assert.Equal(expectedCount, filteredBuilds.Count());
+        }
+
+        [Theory]
+        [InlineData("branch:SomeBranch,test")]
+        [InlineData("branch:SomeBranch,")]
+        [InlineData("branch:SomeBranch, ,,, ,")]
+        [InlineData("branch:test,test")]
+        [InlineData("test, test")]
+        [InlineData("test,test")]
+        [InlineData(" test , test ")]
+        public void SearchedTermNeverIncludesSpecificToGeneralSeparator(string input)
+        {
+            // arrange
+            var search = _searchEngine.Parse(input);
+
+            // act
+            var blocks = search.Blocks;
+
+            // assert
+            Assert.All(blocks, block => Assert.False(block.SearchedTerm.Contains(SearchEngine.SpecificToGeneralSeparator, StringComparison.InvariantCulture)));
+        }
+
+        [Theory]
+        [InlineData("branch:SomeBranch,", 1)]
+        [InlineData("branch:SomeBranch, ", 1)]
+        [InlineData(",branch:test,test", 2)]
+        [InlineData("w,branch:test,test", 2)]
+        [InlineData("test, test", 1)]
+        [InlineData("test,test", 1)]
+        [InlineData(" test , test ", 1)]
+        public void EnteredTextDoesIncludesSpecificToGeneralSeparator(string input, int expectedAmount)
+        {
+            // arrange
+            var search = _searchEngine.Parse(input);
+
+            // act
+            var blocks = search.Blocks;
+
+            // assert
+            Assert.Equal(blocks.Count(block => block.EnteredText.Contains(SearchEngine.SpecificToGeneralSeparator, StringComparison.InvariantCulture)), expectedAmount);
+        }
+
+        [Theory]
+        [InlineData(" ", "")]
+        [InlineData(" t e s t ", "t e s t")]
+        [InlineData(" t    e    s    \tt ", "t e s t")]
+        [InlineData("t ", "t")]
+        public void SearchedTermRemovesRedundantWhitespace(string input, string expectedTerm)
+        {
+            // arrange
+            var search = _searchEngine.Parse(input);
+
+            // act
+            var blocks = search.Blocks;
+            var searchBlock = blocks[0];
+
+            // assert
+            Assert.Equal(expectedTerm, searchBlock.SearchedTerm);
+        }
+
+        [Theory]
+        [InlineData(" ")]
+        [InlineData(" t e s t ")]
+        [InlineData(" t    e    s    \tt ")]
+        [InlineData("t ")]
+        [InlineData(" branch:")]
+        [InlineData(" branch:branch:")]
+        [InlineData(" branch:*branch:")]
+        [InlineData(" bRanCh::Branch: ")]
+        [InlineData("branch: someWord sBranch:")]
+        [InlineData("branch: someWordBranch:test")]
+        [InlineData("branch: someWord, Branch:test")]
+        [InlineData("  branch: som  eWord,  Branch:  tes  t")]
+        [InlineData("  branch,: som,  e,Wo,,,rd,  Bra,nch:  tes  t")]
+        [InlineData("")]
+        public void CombinedEnteredTextPropertiesShouldResultInOriginalInput(string input)
+        {
+            // arrange
+            var search = _searchEngine.Parse(input);
+
+            // act
+            var blocks = search.Blocks;
+            var combined = string.Join("", blocks.Select(b => (string.IsNullOrEmpty(b.SearchCriteria.LocalizedKeyword) ? string.Empty : b.SearchCriteria.LocalizedKeyword + ":") + b.EnteredText));
+
+            // assert
+            Assert.Equal(input, combined, StringComparer.OrdinalIgnoreCase);
         }
 
         private static IEnumerable<IBuild> DummyBuilds()

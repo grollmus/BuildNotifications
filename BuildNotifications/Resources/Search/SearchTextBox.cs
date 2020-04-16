@@ -37,9 +37,8 @@ namespace BuildNotifications.Resources.Search
             _overlay = new Border();
             _popup = new Popup();
 
-            TextChanged += OnTextChanged;
+            ListenToTextEvents();
             Loaded += OnLoaded;
-            SelectionChanged += OnSelectionChanged;
         }
 
         public IconType Icon
@@ -109,26 +108,54 @@ namespace BuildNotifications.Resources.Search
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private (ISearchBlock block, Run? inlineOfCaret) BlockOfCurrentSelection(IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> search, bool ignoreRunsOfSearchCriteria = false)
+        private (ISearchBlock block, Run? inlineOfCaret, bool inlineIsSearchCriteria) BlockOfCurrentSelection(IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> search)
         {
             var allInlines = (Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines.OfType<Run>() ?? Enumerable.Empty<Run>()).ToList();
 
-            var inlineOfCursor = allInlines.FirstOrDefault(x => x.ContentStart.CompareTo(Selection.Start) <= 0 && x.ContentEnd.CompareTo(Selection.Start) >= 0);
+            // the run which contains the caret is ambiguous as the caret might be between two runs.
+            // additionally the "direction" of the caret also matters. As a workaround the positions left and right of the caret are used
+            // the right one will usually be the one the user expects to write in and is therefore used.
+            // However, between different runs there are "dead" spaces in which the caret cannot be.
+            // This is relevant when the caret is at the end of the search field and the run right to it is empty.
+            // In this case the caret is within no run (as it cannot be within the empty one) and the position LEFT to it, will touch the run to the left.
+            // However, since the user usually writes to the right, we try to reach further right
 
-            var start = Document.ContentStart.GetOffsetToPosition(Selection.Start);
-            var length = Selection.Start.GetOffsetToPosition(Selection.End);
-            var End = Document.ContentStart.GetOffsetToPosition(Selection.End);
-            LogTo.Debug($"\n\nSELECTION START: {start} End:{End} Length:{length}");
-            LogTo.Debug(string.Join("\n", allInlines.Select(x => $"INLINE: \"{x.Text}\" Start: {Document.ContentStart.GetOffsetToPosition(x.ContentStart)} End: {Document.ContentStart.GetOffsetToPosition(x.ContentEnd)}")));
+            var rightOfCaret = CaretPosition.GetPositionAtOffset(1, LogicalDirection.Forward) ?? CaretPosition;
+            var inlineOfCursor = allInlines.FirstOrDefault(x => x.ContentStart.CompareTo(rightOfCaret) <= 0 && x.ContentEnd.CompareTo(rightOfCaret) >= 0);
+
+            if (inlineOfCursor == null)
+            {
+                var leftOfCaret = CaretPosition.GetPositionAtOffset(-1, LogicalDirection.Backward) ?? CaretPosition;
+                inlineOfCursor = allInlines.FirstOrDefault(x => x.ContentStart.CompareTo(leftOfCaret) <= 0 && x.ContentEnd.CompareTo(leftOfCaret) == 0);
+
+                if (inlineOfCursor == null)
+                {
+                    rightOfCaret = CaretPosition.GetPositionAtOffset(2, LogicalDirection.Forward) ?? CaretPosition;
+                    inlineOfCursor = allInlines.FirstOrDefault(x => x.ContentStart.CompareTo(rightOfCaret) <= 0 && x.ContentEnd.CompareTo(rightOfCaret) >= 0) ?? allInlines.Last();
+                }
+            }
 
             foreach (var (createdRun, forBlock, isSearchCriteria) in search)
             {
-                if (createdRun == inlineOfCursor && (!ignoreRunsOfSearchCriteria || !isSearchCriteria))
-                    return (forBlock, createdRun);
+                if (createdRun == inlineOfCursor)
+                    return (forBlock, createdRun, isSearchCriteria);
             }
 
             var lastTuple = search.Last();
-            return (lastTuple.forBlock, null);
+            return (lastTuple.forBlock, null, true);
+        }
+
+        private void ListenToTextEvents()
+        {
+            StopListeningToTextEvents();
+            TextChanged += OnTextChanged;
+            SelectionChanged += OnSelectionChanged;
+        }
+
+        private void StopListeningToTextEvents()
+        {
+            TextChanged -= OnTextChanged;
+            SelectionChanged -= OnSelectionChanged;
         }
 
         private void CheckForScrollViewerCollision()
@@ -180,9 +207,7 @@ namespace BuildNotifications.Resources.Search
             {
                 if (string.IsNullOrEmpty(parsedBlock.SearchCriteria.LocalizedKeyword))
                 {
-                    // Omit empty default blocks. Except if default is the first block. This is the case when the entire search term is an empty string
-
-                    var run = DefaultRun(parsedBlock.SearchedText);
+                    var run = DefaultRun(parsedBlock.EnteredText);
                     inlines.Add(run);
                     yield return (run, parsedBlock, false);
                 }
@@ -192,21 +217,24 @@ namespace BuildNotifications.Resources.Search
                     inlines.Add(searchCriteriaRun);
                     yield return (searchCriteriaRun, parsedBlock, true);
 
-                    var searchTermRun = SearchTermRun(parsedBlock.SearchedText);
+                    var searchTermRun = SearchTermRun(parsedBlock.EnteredText);
                     inlines.Add(searchTermRun);
                     yield return (searchTermRun, parsedBlock, false);
                 }
             }
         }
 
-        private void DisplaySuggestions((ISearchBlock block, Run? inlineOfCaret) blockOfCaret)
+        private void DisplaySuggestions((ISearchBlock block, Run? inlineOfCaret, bool inlineIsSearchCriteria) blockOfCaret)
         {
-            var (block, _) = blockOfCaret;
+            var (block, _, isSearchCriteria) = blockOfCaret;
 
             if (SearchCriteriaViewModel?.SearchCriteria != block.SearchCriteria)
                 SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria);
 
-            SearchCriteriaViewModel.UpdateSuggestions(block.SearchedText);
+            if (isSearchCriteria)
+                SearchCriteriaViewModel.ClearSuggestions();
+            else
+                SearchCriteriaViewModel.UpdateSuggestions(block.SearchedTerm);
         }
 
         private void DisplaySuggestionsForCaret()
@@ -290,7 +318,7 @@ namespace BuildNotifications.Resources.Search
                 return;
 
             var storedSelection = StoreSelection();
-            var (_, runOfBlock) = BlockOfCurrentSelection(_runsForCurrentSearchBlocks, true);
+            var (_, runOfBlock, __) = BlockOfCurrentSelection(_runsForCurrentSearchBlocks);
             int indicesToMoveCaret;
 
             var suggestionText = selectedSuggestion.SuggestedText;
@@ -317,9 +345,8 @@ namespace BuildNotifications.Resources.Search
                 indicesToMoveCaret = suggestionText.Length - indexOfCaretInRun;
             }
 
-            storedSelection = (storedSelection.startOffset + indicesToMoveCaret, storedSelection.lengthOffset, storedSelection.amountOfInlines);
+            storedSelection = (storedSelection.startOffset + indicesToMoveCaret, storedSelection.lengthOffset, storedSelection.amountOfInlines, storedSelection.caretPosition);
             RestoreSelection(storedSelection);
-            DisplaySuggestionsForCaret();
         }
 
         private void OnSizeChanged(object? sender, EventArgs e) => UpdatePopupPlacement();
@@ -359,7 +386,7 @@ namespace BuildNotifications.Resources.Search
             var currentText = CurrentText();
             var search = SearchEngine.Parse(currentText);
 
-            TextChanged -= OnTextChanged;
+            StopListeningToTextEvents();
             var storedSelection = StoreSelection();
 
             var createdRuns = DisplaySearchBlocks(search.Blocks.ToList());
@@ -373,6 +400,7 @@ namespace BuildNotifications.Resources.Search
             TextChanged += OnTextChanged;
 
             DisplaySuggestionsForCaret();
+            ListenToTextEvents();
         }
 
         private void OnWindowLocationChanged(object? sender, EventArgs e)
@@ -394,7 +422,7 @@ namespace BuildNotifications.Resources.Search
             _scrollViewer.MaxWidth = double.MaxValue;
         }
 
-        private void RestoreSelection((int startOffset, int lengthOffset, int amountOfInlines) storedSelection)
+        private void RestoreSelection((int startOffset, int lengthOffset, int amountOfInlines, int caretPosition) storedSelection)
         {
             // when restoring do not ignore empty inlines. I am honestly not sure why, but 
             var inlineCountNow = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines.Count ?? 0;
@@ -407,10 +435,18 @@ namespace BuildNotifications.Resources.Search
                 return;
 
             Selection.Select(start, end);
+            for (var i = 0; i <= 2; i++)
+            {
+                CaretPosition = start?.GetPositionAtOffset(i) ?? start;
+                if (Document.ContentStart.GetOffsetToPosition(CaretPosition) == Document.ContentStart.GetOffsetToPosition(start))
+                    break;
+            }
 
             // bring selection into view
             var characterRect = end.GetCharacterRect(LogicalDirection.Forward);
             ScrollToHorizontalOffset(HorizontalOffset + characterRect.Left - ActualWidth + _overlayWidth + 2d); // 2 for caret width
+
+            LogTo.Debug($"Selection restored: Start: {Document.ContentStart.GetOffsetToPosition(start)} Length: {Document.ContentStart.GetOffsetToPosition(start) - Document.ContentStart.GetOffsetToPosition(end)} inlineCount: {inlineCountNow} caret: {Document.ContentStart.GetOffsetToPosition(CaretPosition)}");
         }
 
         private bool ScrollViewerReachesIntoLabelOrIcon()
@@ -428,7 +464,8 @@ namespace BuildNotifications.Resources.Search
             {
                 Background = SearchCriteriaBackground,
                 Foreground = SearchCriteriaForeground,
-                FontWeight = FontWeights.Bold
+                FontWeight = FontWeights.Bold,
+                FontStretch = FontStretch.FromOpenTypeStretch(5),
             };
 
             return run;
@@ -463,13 +500,15 @@ namespace BuildNotifications.Resources.Search
             _scrollViewer.MaxWidth = double.MaxValue;
         }
 
-        private (int startOffset, int lengthOffset, int amountOfInlines) StoreSelection()
+        private (int startOffset, int lengthOffset, int amountOfInlines, int caretPosition) StoreSelection()
         {
             var start = Document.ContentStart.GetOffsetToPosition(Selection.Start);
+            var caret = Document.ContentStart.GetOffsetToPosition(CaretPosition);
             var length = Selection.Start.GetOffsetToPosition(Selection.End);
             var inlineCount = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines.Count ?? 0;
 
-            return (start, length, inlineCount);
+            LogTo.Debug($"Selection stored: Start: {start} Length: {length} inlineCount: {inlineCount} caret: {caret}");
+            return (start, length, inlineCount, caret);
         }
 
         private void UpdatePopupPlacement()
@@ -569,6 +608,8 @@ namespace BuildNotifications.Resources.Search
             }
         }
 
+        public bool HasSuggestions => Suggestions.Any(x => !x.IsRemoving);
+
         public string Keyword => SearchCriteria.LocalizedKeyword;
         public ISearchCriteria SearchCriteria { get; }
 
@@ -586,8 +627,20 @@ namespace BuildNotifications.Resources.Search
             return searchBlockViewModel;
         }
 
+        public void ClearSuggestions()
+        {
+            var hadSuggestionsBeforeUpdate = HasSuggestions;
+
+            Suggestions.Clear();
+            SelectedSuggestionIndex = 0;
+
+            if (hadSuggestionsBeforeUpdate != HasSuggestions)
+                OnPropertyChanged(nameof(HasSuggestions));
+        }
+
         public void UpdateSuggestions(string currentSearchTerm)
         {
+            var hadSuggestionsBeforeUpdate = HasSuggestions;
             var newSuggestions = SearchCriteria.Suggest(currentSearchTerm).Select(s => new SearchSuggestionViewModel(s)).ToList();
 
             var toRemove = Suggestions.Where(s => !newSuggestions.Any(n => n.IsSameSuggestion(s))).ToList();
@@ -607,6 +660,9 @@ namespace BuildNotifications.Resources.Search
 
             if (Suggestions.Any(s => !s.IsRemoving) && (SelectedSuggestion == null || SelectedSuggestion.IsRemoving))
                 SelectedSuggestion = Suggestions.First(s => !s.IsRemoving);
+
+            if (hadSuggestionsBeforeUpdate != HasSuggestions)
+                OnPropertyChanged(nameof(HasSuggestions));
         }
 
         public void ChangeSelectedSuggestionIndex(int indexChange)

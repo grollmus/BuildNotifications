@@ -6,14 +6,18 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     internal class SearchBlock : ISearchBlock
     {
         public ISearchCriteria SearchCriteria { get; }
-        public string SearchedText { get; }
 
-        public SearchBlock(ISearchCriteria searchCriteria, string searchedText)
+        public string SearchedTerm { get; }
+
+        public string EnteredText { get; }
+
+        public SearchBlock(ISearchCriteria searchCriteria, string enteredText, string searchedTerm)
         {
             SearchCriteria = searchCriteria;
-            SearchedText = searchedText;
+            EnteredText = enteredText;
+            SearchedTerm = searchedTerm;
         }
 
-        public bool IsBuildIncluded(IBuild build) => SearchCriteria.IsBuildIncluded(build, SearchedText);
+        public bool IsBuildIncluded(IBuild build) => SearchCriteria.IsBuildIncluded(build, SearchedTerm);
     }
 }

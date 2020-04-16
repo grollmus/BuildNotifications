@@ -85,7 +85,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             var actual = _criteriaToTest.Suggest(string.Empty).Select(s => s.Suggestion).ToList();
 
             // assert
-            Assert.Equal(actual, new[] {"1", "2", "4", "5"});
+            Assert.Equal(actual, new[] {"Unused:", "Unused:", "1", "2", "4", "5"});
         }
 
         [Fact]
@@ -95,6 +95,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             var referenceA = new DummySearchCriteriaA();
             var referenceB = new DummySearchCriteriaB();
             var totalSuggestions = referenceA.Suggest(string.Empty).Concat(referenceB.Suggest(string.Empty)).Count();
+            totalSuggestions += 2; // the search criterions themselves are also suggested within the DefaultCriteria.
 
             // act
             var actual = _criteriaToTest.Suggest(string.Empty);

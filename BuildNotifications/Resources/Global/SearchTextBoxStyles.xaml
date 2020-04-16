@@ -7,6 +7,7 @@
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+
     <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter Property="ItemsSource" Value="{Binding Suggestions}" />
         <Setter Property="SelectedItem" Value="{Binding SelectedSuggestion}" />
@@ -14,7 +15,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedStackPanel Orientation="Vertical" IsItemsHost="True" AnimationDuration="0.15"/>
+                    <animation:AnimatedStackPanel Orientation="Vertical" IsItemsHost="True" AnimationDuration="0.15" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -24,7 +25,6 @@
         <DockPanel>
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
                        Margin="{StaticResource BlockHalfXOnlyMargin}" />
-
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
@@ -66,10 +66,21 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
-        <StackPanel Orientation="Vertical">
-            <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
-            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
-                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+        <animation:AnimatedStackPanel Orientation="Vertical">
+            <animation:AnimatedStackPanel Orientation="Vertical">
+                <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
+                <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
+                           HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+
+                <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding Path=HasSuggestions}" Value="false">
+                        <triggerActions:ElementFadeOut Duration="0.1" DoScale="False" />
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding Path=HasSuggestions}" Value="true">
+                        <triggerActions:ElementFadeIn Duration="0.1" DoScale="False" />
+                    </ei:DataTrigger>
+                </i:Interaction.Triggers>
+            </animation:AnimatedStackPanel>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -97,7 +108,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-        </StackPanel>
+        </animation:AnimatedStackPanel>
     </DataTemplate>
 
 

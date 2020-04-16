@@ -22,7 +22,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public const char KeywordSeparator = ':';
 
-        private const char SpecificToGeneralSeparator = ',';
+        public const char SpecificToGeneralSeparator = ',';
 
         public SearchEngine()
         {
@@ -42,7 +42,13 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
                 if (character == SpecificToGeneralSeparator)
                 {
-                    yield return new SearchBlock(currentCriteria, sb.ToString());
+                    var enteredText = sb.ToString();
+
+                    // the separator is not part of the searched text
+                    sb.Remove(sb.Length - 1, 1);
+                    var searchedTerm = RemoveSpareSpaces(sb.ToString());
+
+                    yield return new SearchBlock(currentCriteria, enteredText, searchedTerm);
                     currentCriteria = _defaultCriteria;
                     sb.Clear();
                     continue;
@@ -61,13 +67,17 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
                 sb.Remove(sb.Length - keywordLength, keywordLength);
 
-                yield return new SearchBlock(currentCriteria, sb.ToString());
+                var textUntilKeyword = sb.ToString();
+                yield return new SearchBlock(currentCriteria, textUntilKeyword, RemoveSpareSpaces(textUntilKeyword));
 
                 sb.Clear();
                 currentCriteria = matchingCriteria;
             }
 
-            yield return new SearchBlock(currentCriteria, sb.ToString());
+            var enteredRest = sb.ToString();
+            yield return new SearchBlock(currentCriteria, enteredRest, RemoveSpareSpaces(enteredRest));
         }
+
+        private string RemoveSpareSpaces(string input) => string.Join(" ", input.Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries));
     }
 }

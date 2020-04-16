@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
-             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
              xmlns:search="clr-namespace:BuildNotifications.Resources.Search"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:SearchViewModel}}">
