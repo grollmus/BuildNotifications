@@ -24,7 +24,7 @@
 		</PackageReference>
 		<PackageReference Include="Octokit" Version="0.46.0" />
 		<PackageReference Include="ReflectSettings" Version="1.1.4" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.0.16497">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.6.1.17183">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
