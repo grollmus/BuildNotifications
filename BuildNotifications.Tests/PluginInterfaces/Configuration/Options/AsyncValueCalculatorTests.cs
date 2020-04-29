@@ -74,7 +74,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             {
                 _output.WriteLine($"{DateTime.Now.Ticks} - Calc {calculationCount}");
                 ++calculationCount;
-                Thread.Sleep(50);
+                Thread.Sleep(100);
                 return Task.FromResult<IValueCalculationResult<int>>(ValueCalculationResult.Success(123));
             }
 
@@ -95,7 +95,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             {
                 _output.WriteLine($"{DateTime.Now.Ticks} - Update {i}");
                 sut.Update();
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
 
             // Assert
