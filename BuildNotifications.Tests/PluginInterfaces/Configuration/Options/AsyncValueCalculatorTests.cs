@@ -74,7 +74,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             {
                 _output.WriteLine($"{DateTime.Now.Ticks} - Calc {calculationCount}");
                 ++calculationCount;
-                Thread.Sleep(100);
+                Thread.Sleep(30);
                 return Task.FromResult<IValueCalculationResult<int>>(ValueCalculationResult.Success(123));
             }
 
@@ -100,6 +100,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             // Assert
             await tcs.Task;
+            await Task.Delay(100);
 
             Assert.Equal(1, callbackCount);
             Assert.Equal(runs, calculationCount);
@@ -175,6 +176,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             // Assert
             await tcs.Task;
+            await Task.Delay(100);
 
             option.Received(1).IsLoading = true;
             option.Received(1).IsLoading = false;
