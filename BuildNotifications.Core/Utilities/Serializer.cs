@@ -19,7 +19,7 @@ namespace BuildNotifications.Core.Utilities
 
         public string Serialize(object value) => JsonConvert.SerializeObject(value, Formatting.Indented, _settings);
 
-        public T Deserialize<T>(string serialized) => JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>();
+        public T Deserialize<T>(string serialized) => JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>()!;
 
         private readonly JsonSerializerSettings _settings;
     }
