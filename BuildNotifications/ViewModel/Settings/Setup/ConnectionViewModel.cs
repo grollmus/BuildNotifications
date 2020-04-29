@@ -108,6 +108,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             RestoreConfiguration();
         }
 
+        private void OnConfigurationOptionChanged(object? sender, EventArgs e)
+        {
+            SaveConnection();
+        }
+
         private void RaiseSaveRequested()
         {
             SaveRequested?.Invoke(this, EventArgs.Empty);
@@ -120,9 +125,13 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             if (_selectedPlugin != null)
             {
+                if (PluginConfiguration != null)
+                    PluginConfiguration.ValueChanged -= OnConfigurationOptionChanged;
+
                 var config = _selectedPlugin.Configuration;
                 config.Deserialize(Model.PluginConfiguration ?? string.Empty);
                 PluginConfiguration = new PluginConfigurationViewModel(config);
+                PluginConfiguration.ValueChanged += OnConfigurationOptionChanged;
                 TestConnection.SetConfiguration(_selectedPlugin, config, ConnectionPluginType);
             }
         }

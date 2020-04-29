@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 {
@@ -26,6 +29,12 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         private IOption Option { get; }
 
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private void Option_IsEnabledChanged(object? sender, EventArgs e)
         {
             ViewModel.OnPropertyChanged(nameof(OptionViewModelBase.IsEnabled));
@@ -40,6 +49,8 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
         {
             ViewModel.OnPropertyChanged(nameof(OptionViewModelBase.IsVisible));
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected internal readonly IViewModel ViewModel;
 

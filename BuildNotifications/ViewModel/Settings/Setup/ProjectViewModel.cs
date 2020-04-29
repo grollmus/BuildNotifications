@@ -36,6 +36,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             connections = configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.Build).ToList();
             connection = connections.FirstOrDefault(c => c.Name == model.BuildConnectionName.FirstOrDefault());
             BuildConnection = new ConnectionOptionViewModel(StringLocalizer.BuildConnectionNames, connections, connection);
+
+            foreach (var option in Options)
+            {
+                option.ValueChanged += Option_ValueChanged;
+            }
         }
 
         public StringCollectionOptionViewModel BranchBlacklist { get; }
@@ -74,6 +79,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
+
+        private void Option_ValueChanged(object? sender, EventArgs e)
+        {
+            Save();
+        }
 
         private void RaiseSaveRequested()
         {

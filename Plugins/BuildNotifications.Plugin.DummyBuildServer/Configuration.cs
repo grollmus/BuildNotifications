@@ -70,6 +70,9 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             try
             {
                 var raw = JsonConvert.DeserializeObject<ConfigurationRawData>(serialized);
+                if (raw == null)
+                    return false;
+
                 Port.Value = raw.Port;
 
                 return true;

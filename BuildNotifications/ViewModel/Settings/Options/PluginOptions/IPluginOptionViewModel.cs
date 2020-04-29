@@ -1,6 +1,8 @@
-﻿namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
+﻿using System.ComponentModel;
+
+namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 {
-    internal interface IPluginOptionViewModel
+    internal interface IPluginOptionViewModel : INotifyPropertyChanged
     {
     }
 }
