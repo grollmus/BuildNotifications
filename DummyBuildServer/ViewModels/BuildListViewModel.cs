@@ -106,14 +106,17 @@ namespace DummyBuildServer.ViewModels
 
         public ICommand UpdateBuildCommand { get; }
 
+        private static Random Random { get; } = new Random();
+
         public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
         {
             var user = SelectedUser.User;
+            var changedDate = DateTime.Now - TimeSpan.FromDays(Random.Next(0, 5));
 
             var build = new Build
             {
-                LastChangedTime = DateTime.Now,
-                QueueTime = DateTime.Now,
+                LastChangedTime = changedDate,
+                QueueTime = changedDate,
                 Definition = definition,
                 BranchName = branch.FullName,
                 RequestedBy = RandomUser(),

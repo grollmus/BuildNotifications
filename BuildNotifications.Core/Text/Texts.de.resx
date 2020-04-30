@@ -559,7 +559,7 @@
     <value>Ein Update wurde installiert.</value>
   </data>
   <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
-    <value>Starten Sie die Anwendung neu, um das Update zu verwenden.</value>
+    <value>Starten Sie die Anwendung neu, um das Update zu verwenden</value>
   </data>
   <data name="GoToPullRequest" xml:space="preserve">
 	  <value>Gehe zu Pull-Request</value>
@@ -599,5 +599,65 @@
   </data>
   <data name="SearchDefaultDescription" xml:space="preserve">
     <value />
+  </data>
+  <data name="SearchCriteriaAfterKeyword" xml:space="preserve">
+    <value>Nach</value>
+  </data>
+  <data name="SearchCriteriaAfterDescription" xml:space="preserve">
+    <value>Builds die nach dem gegebenen Datum erstellt worden sind</value>
+  </data>
+  <data name="SearchCriteriaAfterYesterday" xml:space="preserve">
+    <value>Gestern</value>
+  </data>
+  <data name="SearchCriteriaBeforeKeyword" xml:space="preserve">
+    <value>Vor</value>
+  </data>
+  <data name="SearchCriteriaBeforeDescription" xml:space="preserve">
+    <value>Builds die vor dem gegebenen Datum erstellt worden sind</value>
+  </data>
+  <data name="SearchCriteriaBeforeToday" xml:space="preserve">
+    <value>Heute</value>
+  </data>
+  <data name="SearchCriteriaDuringKeyword" xml:space="preserve">
+    <value>Während</value>
+  </data>
+  <data name="SearchCriteriaDuringDescription" xml:space="preserve">
+    <value>Builds die an einem bestimmten Tag erstellt worden sind</value>
+  </data>
+  <data name="SearchCriteriaDuringToday" xml:space="preserve">
+    <value>Heute</value>
+  </data>
+  <data name="SearchCriteriaByKeyword" xml:space="preserve">
+    <value>Von</value>
+  </data>
+  <data name="SearchCriteriaByDescription" xml:space="preserve">
+    <value>Builds die von einem bestimmten Nutzer erstellt worden sind</value>
+  </data>
+  <data name="SearchCriteriaForKeyword" xml:space="preserve">
+    <value>Für</value>
+  </data>
+  <data name="SearchCriteriaForDescription" xml:space="preserve">
+    <value>Builds die für einen bestimmen Nutzer erstellt worden sind</value>
+  </data>
+  <data name="SearchCriteriaIsKeyword" xml:space="preserve">
+    <value>Ist</value>
+  </data>
+  <data name="SearchCriteriaIsDescription" xml:space="preserve">
+    <value>Diverse Kriterien eines Builds</value>
+  </data>
+  <data name="SearchCriteriaBranchKeyword" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="SearchCriteriaBranchDescription" xml:space="preserve">
+    <value>Builds von einem bestimmten Branch. Unterstützt Wildcards (*)</value>
+  </data>
+  <data name="SearchCriteriaDefinitionKeyword" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="SearchCriteriaDefinitionDescription" xml:space="preserve">
+    <value>Builds einer bestimmten Builddefinition</value>
+  </data>
+  <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
+    <value>Gestern</value>
   </data>
 </root>

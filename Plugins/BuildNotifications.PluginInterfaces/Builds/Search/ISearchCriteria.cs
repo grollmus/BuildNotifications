@@ -41,7 +41,7 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         bool IsBuildIncluded(IBuild build, string input);
 
         /// <summary>
-        /// Localized examples for search terms for this search criteria.
+        /// Localized examples for search terms for this search criteria. Only inputs. Not including the keyword.
         /// </summary>
         IEnumerable<string> LocalizedExamples { get; }
     }

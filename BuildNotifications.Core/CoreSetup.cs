@@ -8,6 +8,7 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Search;
+using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -38,6 +39,7 @@ namespace BuildNotifications.Core
             Pipeline.Notifier.Updated += Notifier_Updated;
 
             SearchEngine = new SearchEngine();
+            SearchEngine.AddCriteria(new BeforeCriteria());
             SearchEngine.AddCriteria(new TestSearchCriteria());
             SearchEngine.AddCriteria(new TestSearchCriteria2());
 

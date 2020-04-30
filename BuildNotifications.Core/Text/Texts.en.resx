@@ -559,7 +559,7 @@
     <value>An update has been installed.</value>
   </data>
   <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
-    <value>Restart application to apply the update.</value>
+    <value>Restart application to apply the update</value>
   </data>
   <data name="GoToPullRequest" xml:space="preserve">
     <value>Go to Pull request</value>
@@ -600,5 +600,65 @@
   <data name="SearchDefaultDescription" xml:space="preserve">
     <value>Search by any criteria listed below.
 Use keywords for specific filter. Comma to separate terms.</value>
+  </data>
+  <data name="SearchCriteriaAfterKeyword" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="SearchCriteriaAfterDescription" xml:space="preserve">
+    <value>Builds starting after a specific date</value>
+  </data>
+  <data name="SearchCriteriaAfterYesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="SearchCriteriaBeforeKeyword" xml:space="preserve">
+    <value>Before</value>
+  </data>
+  <data name="SearchCriteriaBeforeDescription" xml:space="preserve">
+    <value>Builds started before a specific date</value>
+  </data>
+  <data name="SearchCriteriaBeforeToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="SearchCriteriaDuringKeyword" xml:space="preserve">
+    <value>During</value>
+  </data>
+  <data name="SearchCriteriaDuringDescription" xml:space="preserve">
+    <value>Builds that were started on a specific date</value>
+  </data>
+  <data name="SearchCriteriaDuringToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="SearchCriteriaByKeyword" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="SearchCriteriaByDescription" xml:space="preserve">
+    <value>Builds created by a certain user</value>
+  </data>
+  <data name="SearchCriteriaForKeyword" xml:space="preserve">
+    <value>For</value>
+  </data>
+  <data name="SearchCriteriaForDescription" xml:space="preserve">
+    <value>Builds created for a certain user</value>
+  </data>
+  <data name="SearchCriteriaIsKeyword" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="SearchCriteriaIsDescription" xml:space="preserve">
+    <value>Various criterions of a build</value>
+  </data>
+  <data name="SearchCriteriaBranchKeyword" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="SearchCriteriaBranchDescription" xml:space="preserve">
+    <value>Builds from a specific branch. Supports wildcards (*)</value>
+  </data>
+  <data name="SearchCriteriaDefinitionKeyword" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="SearchCriteriaDefinitionDescription" xml:space="preserve">
+    <value>Builds from a specific builds definition</value>
+  </data>
+  <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
 </root>
