@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.ViewModel.Settings.Options
 {
-    public class PullRequestDisplayModeOptionViewModel : EnumOptionBaseViewModel<PullRequestDisplayMode>
+    public class PullRequestDisplayModeOptionViewModel : EnumOptionViewModel<PullRequestDisplayMode>
     {
         public PullRequestDisplayModeOptionViewModel(string displayName, PullRequestDisplayMode value = default)
             : base(displayName, value)

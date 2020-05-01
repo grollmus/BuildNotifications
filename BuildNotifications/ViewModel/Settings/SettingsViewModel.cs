@@ -21,12 +21,12 @@ namespace BuildNotifications.ViewModel.Settings
             EditConnectionsCommand = new DelegateCommand(EditConnections);
 
             Language = new LanguageOptionViewModel(configuration.Language);
-            AnimationsMode = new AnimationsOptionViewModel(configuration.AnimationSpeed);
-            AutoStartMode = new AutoStartModeViewModel(configuration.AutoStart);
-            CanceledBuildNotify = new BuildNotificationModeViewModel(configuration.CanceledBuildNotifyConfig, StringLocalizer.Keys.CanceledBuildNotifyConfig);
-            FailedBuildNotify = new BuildNotificationModeViewModel(configuration.FailedBuildNotifyConfig, StringLocalizer.Keys.FailedBuildNotifyConfig);
-            SucceededBuildNotify = new BuildNotificationModeViewModel(configuration.SucceededBuildNotifyConfig, StringLocalizer.Keys.SucceededBuildNotifyConfig);
-            PartialSucceededTreatmentMode = new PartialSucceededTreatmentModeOptionViewModel(configuration.PartialSucceededTreatmentMode);
+            AnimationsMode = new EnumOptionViewModel<AnimationMode>(StringLocalizer.Keys.AnimationSpeed, configuration.AnimationSpeed);
+            AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.AutoStart);
+            CanceledBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.CanceledBuildNotifyConfig, configuration.CanceledBuildNotifyConfig);
+            FailedBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.FailedBuildNotifyConfig, configuration.FailedBuildNotifyConfig);
+            SucceededBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.SucceededBuildNotifyConfig, configuration.SucceededBuildNotifyConfig);
+            PartialSucceededTreatmentMode = new EnumOptionViewModel<PartialSucceededTreatmentMode>(StringLocalizer.Keys.PartialSucceededTreatmentMode, configuration.PartialSucceededTreatmentMode);
             BuildsPerGroup = new NumberOptionViewModel(configuration.BuildsToShow, 1, 100, StringLocalizer.Keys.BuildsToShow);
             ShowBusyIndicatorDuringUpdate = new BooleanOptionViewModel(configuration.ShowBusyIndicatorOnDeltaUpdates, StringLocalizer.Keys.ShowBusyIndicatorOnDeltaUpdates);
             UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, 30, int.MaxValue, StringLocalizer.Keys.UpdateInterval);
@@ -62,15 +62,15 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        internal AnimationsOptionViewModel AnimationsMode { get; }
-        internal AutoStartModeViewModel AutoStartMode { get; }
+        internal EnumOptionViewModel<AnimationMode> AnimationsMode { get; }
+        internal EnumOptionViewModel<AutostartMode> AutoStartMode { get; }
         internal NumberOptionViewModel BuildsPerGroup { get; }
-        internal BuildNotificationModeViewModel CanceledBuildNotify { get; }
-        internal BuildNotificationModeViewModel FailedBuildNotify { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> CanceledBuildNotify { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> FailedBuildNotify { get; }
         internal LanguageOptionViewModel Language { get; }
-        internal PartialSucceededTreatmentModeOptionViewModel PartialSucceededTreatmentMode { get; }
+        internal EnumOptionViewModel<PartialSucceededTreatmentMode> PartialSucceededTreatmentMode { get; }
         internal BooleanOptionViewModel ShowBusyIndicatorDuringUpdate { get; }
-        internal BuildNotificationModeViewModel SucceededBuildNotify { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> SucceededBuildNotify { get; }
         internal NumberOptionViewModel UpdateInterval { get; }
         internal BooleanOptionViewModel UpdateToPreReleases { get; }
 

@@ -20,7 +20,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             Name = new TextOptionViewModel(model.ProjectName, StringLocalizer.ProjectName);
             IsEnabled = new BooleanOptionViewModel(model.IsEnabled, StringLocalizer.IsEnabled);
-            PullRequestDisplayMode = new PullRequestDisplayModeOptionViewModel(StringLocalizer.ShowPullRequests, model.PullRequestDisplay);
+            PullRequestDisplayMode = new EnumOptionViewModel<PullRequestDisplayMode>(StringLocalizer.ShowPullRequests, model.PullRequestDisplay);
             DefaultCompareBranch = new TextOptionViewModel(model.DefaultCompareBranch, StringLocalizer.DefaultCompareBranch);
             HideCompletedPullRequests = new BooleanOptionViewModel(model.HideCompletedPullRequests, StringLocalizer.HideCompletedPullRequests);
 
@@ -74,7 +74,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
-        public PullRequestDisplayModeOptionViewModel PullRequestDisplayMode { get; }
+        public EnumOptionViewModel<PullRequestDisplayMode> PullRequestDisplayMode { get; }
 
         public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
