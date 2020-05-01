@@ -17,7 +17,7 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
 
         public void UpdateRegistrationForAutostart()
         {
-            LogTo.Info($"Updating autostart registration. Autostart mode: {_configuration.AutoStart}");
+            LogTo.Info($"Updating autostart registration. Autostart mode: {_configuration.Autostart}");
 
             if (InDebug())
             {
@@ -99,12 +99,12 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
 
         private bool ShouldAutostart()
         {
-            return _configuration.AutoStart == AutostartMode.StartWithWindows || _configuration.AutoStart == AutostartMode.StartWithWindowsMinimized;
+            return _configuration.Autostart == AutostartMode.StartWithWindows || _configuration.Autostart == AutostartMode.StartWithWindowsMinimized;
         }
 
         private string StartupMode()
         {
-            return _configuration.AutoStart == AutostartMode.StartWithWindowsMinimized ? MinimizeArgument : "";
+            return _configuration.Autostart == AutostartMode.StartWithWindowsMinimized ? MinimizeArgument : "";
         }
 
         private readonly IConfiguration _configuration;

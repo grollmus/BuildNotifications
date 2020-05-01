@@ -33,7 +33,7 @@ namespace BuildNotifications.Core.Config
 
         public PartialSucceededTreatmentMode PartialSucceededTreatmentMode { get; set; } = PartialSucceededTreatmentMode.TreatAsSucceeded;
 
-        public AutostartMode AutoStart { get; set; } = AutostartMode.StartWithWindowsMinimized;
+        public AutostartMode Autostart { get; set; } = AutostartMode.StartWithWindowsMinimized;
 
         public AnimationMode AnimationSpeed { get; set; } = AnimationMode.Enabled;
 

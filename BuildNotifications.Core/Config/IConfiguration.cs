@@ -14,7 +14,7 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// Whether BuildNotifications shall start with Windows
         /// </summary>
-        AutostartMode AutoStart { get; set; }
+        AutostartMode Autostart { get; set; }
 
         /// <summary>
         /// How many builds shall be shown in one group.

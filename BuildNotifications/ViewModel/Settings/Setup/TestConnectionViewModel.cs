@@ -80,15 +80,15 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         {
             await new SynchronizationContextRemover();
             StatusIndicator.Busy();
-            Notifications.ClearNotificationsOfType(NotificationType.Error, RemoveFlags.Immediately);
-            Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlags.Immediately);
-            Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlags.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Error, RemoveFlag.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlag.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlag.Immediately);
             Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
 
             await TestConnection(BuildConnectionData());
 
             StatusIndicator.ClearStatus();
-            Notifications.ClearNotificationsOfType(NotificationType.Progress, RemoveFlags.Immediately);
+            Notifications.ClearNotificationsOfType(NotificationType.Progress, RemoveFlag.Immediately);
         }
 
         private async Task TestConnection(ConnectionData connectionData)

@@ -94,10 +94,10 @@ namespace BuildNotifications.ViewModel.Notification
             UpdateUnreadCount();
         }
 
-        public void ClearNotificationsOfType(NotificationType type, RemoveFlags flags)
+        public void ClearNotificationsOfType(NotificationType type, RemoveFlag flag)
         {
             var toRemove = Notifications.Where(x => x.NotificationType == type).ToList();
-            RemoveNotifications(toRemove, flags);
+            RemoveNotifications(toRemove, flag);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
@@ -121,10 +121,10 @@ namespace BuildNotifications.ViewModel.Notification
             return false;
         }
 
-        private void ClearAll(RemoveFlags flags = RemoveFlags.None)
+        private void ClearAll(RemoveFlag flag = RemoveFlag.None)
         {
             ClearSelection();
-            RemoveNotifications(Notifications.ToList(), flags);
+            RemoveNotifications(Notifications.ToList(), flag);
 
             OnPropertyChanged(nameof(NoNotifications));
             OnPropertyChanged(nameof(ClearButtonVisible));
@@ -137,9 +137,9 @@ namespace BuildNotifications.ViewModel.Notification
                 CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications, RemoveFlags flags)
+        private void RemoveNotifications(IEnumerable<NotificationViewModel> notifications, RemoveFlag flag)
         {
-            if (flags.HasFlag(RemoveFlags.Immediately))
+            if (flag == RemoveFlag.Immediately)
             {
                 Notifications.Clear();
                 NotificationDistributor.ClearAllMessages();

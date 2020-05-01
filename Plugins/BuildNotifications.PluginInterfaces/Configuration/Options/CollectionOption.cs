@@ -14,9 +14,9 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="value">Initial value of </param>
-        /// <param name="nameTextId"></param>
-        /// <param name="descriptionTextId"></param>
+        /// <param name="value">Initial value of the this option.</param>
+        /// <param name="nameTextId">Text id used for localizing the name of this option.</param>
+        /// <param name="descriptionTextId">Text id used for localizing the description of this option.</param>
         protected CollectionOption(IEnumerable<TItem> value, string nameTextId, string descriptionTextId)
             : base(value.ToList(), nameTextId, descriptionTextId)
         {

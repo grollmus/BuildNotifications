@@ -1,12 +1,9 @@
-﻿using System;
-
-namespace BuildNotifications.ViewModel.Utils
+﻿namespace BuildNotifications.ViewModel.Utils
 {
     /// <summary>
     /// Defines flags that can be used to influence remove behavior of collections.
     /// </summary>
-    [Flags]
-    public enum RemoveFlags
+    public enum RemoveFlag
     {
         /// <summary>
         /// Defaults

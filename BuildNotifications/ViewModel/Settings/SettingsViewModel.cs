@@ -22,7 +22,7 @@ namespace BuildNotifications.ViewModel.Settings
 
             Language = new LanguageOptionViewModel(configuration.Language);
             AnimationsMode = new EnumOptionViewModel<AnimationMode>(StringLocalizer.Keys.AnimationSpeed, configuration.AnimationSpeed);
-            AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.AutoStart);
+            AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.Autostart);
             CanceledBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.CanceledBuildNotifyConfig, configuration.CanceledBuildNotifyConfig);
             FailedBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.FailedBuildNotifyConfig, configuration.FailedBuildNotifyConfig);
             SucceededBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.SucceededBuildNotifyConfig, configuration.SucceededBuildNotifyConfig);
@@ -102,7 +102,7 @@ namespace BuildNotifications.ViewModel.Settings
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
             _configuration.AnimationSpeed = AnimationsMode.Value;
-            _configuration.AutoStart = AutoStartMode.Value;
+            _configuration.Autostart = AutoStartMode.Value;
             _configuration.BuildsToShow = BuildsPerGroup.Value;
             _configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
             _configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
