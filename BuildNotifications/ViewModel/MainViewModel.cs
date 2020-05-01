@@ -35,7 +35,7 @@ namespace BuildNotifications.ViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
-        public MainViewModel()
+        public MainViewModel(IViewProvider viewProvider)
 #pragma warning restore CS8618
         {
             var pathResolver = new PathResolver();
@@ -50,7 +50,7 @@ namespace BuildNotifications.ViewModel
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
-            _popupService = new PopupService(this);
+            _popupService = new PopupService(this, viewProvider);
             Initialize();
         }
 

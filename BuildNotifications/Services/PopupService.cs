@@ -6,16 +6,17 @@ namespace BuildNotifications.Services
 {
     internal class PopupService : IPopupService
     {
-        public PopupService(IBlurrableViewModel blur)
+        public PopupService(IBlurrableViewModel blur, IViewProvider viewProvider)
         {
             _blur = blur;
+            _viewProvider = viewProvider;
         }
 
         public MessageBoxResult ShowMessageBox(string text, string title, MessageBoxButton buttons, MessageBoxImage icon = MessageBoxImage.Asterisk, MessageBoxResult defaultResult = MessageBoxResult.None)
         {
             var vm = new MessageBoxViewModel(text, title, buttons, icon, defaultResult);
 
-            var owner = Application.Current.MainWindow;
+            var owner = _viewProvider.View;
             var popup = new MessageBoxView
             {
                 Owner = owner,
@@ -43,5 +44,6 @@ namespace BuildNotifications.Services
         }
 
         private readonly IBlurrableViewModel _blur;
+        private readonly IViewProvider _viewProvider;
     }
 }
