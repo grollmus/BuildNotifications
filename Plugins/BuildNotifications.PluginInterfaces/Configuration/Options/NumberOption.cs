@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Configuration.Options
 {
@@ -25,12 +26,6 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         public int MinValue { get; set; } = int.MinValue;
 
         /// <inheritdoc />
-        protected override bool ValidateValue(int value)
-        {
-            if (!base.ValidateValue(value))
-                return false;
-
-            return value <= MaxValue && value >= MinValue;
-        }
+        protected override int Clamp(int value) => Math.Max(MinValue, Math.Min(MaxValue, value));
     }
 }

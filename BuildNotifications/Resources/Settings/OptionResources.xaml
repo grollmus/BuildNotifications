@@ -171,6 +171,7 @@
 	</DataTemplate>
 
 	<!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+	<!-- ListOptionViewModel<T> not supported as a DesignTimeDataContext in XAML because it is a generic type :( -->
 	<DataTemplate x:Key="ListOptionTemplate">
 		<StackPanel Orientation="Vertical" ToolTip="{Binding Description}" IsEnabled="{Binding IsEnabled}"
 		            Margin="{StaticResource BlockHalfYOnlyMargin}"

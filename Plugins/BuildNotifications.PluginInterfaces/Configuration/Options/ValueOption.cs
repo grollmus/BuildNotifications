@@ -29,16 +29,28 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             get => _value;
             set
             {
-                if (Equals(_value, value))
+                var clamped = Clamp(value);
+                if (Equals(_value, clamped))
                     return;
 
-                if (!ValidateValue(value))
+                if (!ValidateValue(clamped))
                     return;
 
-                _value = value;
+                _value = clamped;
                 RaiseValueChanged();
             }
         }
+
+        /// <summary>
+        /// Called during Value setter to clamp the value to a valid range.
+        /// </summary>
+        /// <remarks>
+        /// Either override <see cref="Clamp" /> to implicitly set valid values
+        /// or override <see cref="ValidateValue" /> to forbid setting invalid values.
+        /// </remarks>
+        /// <param name="value">Value that is to be set</param>
+        /// <returns>The clamped value.</returns>
+        protected virtual TValue Clamp(TValue value) => value;
 
         /// <summary>
         /// Raises the ValueChanged event.
@@ -51,6 +63,10 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         /// <summary>
         /// Called during Value setter to check if new value is valid.
         /// </summary>
+        /// <remarks>
+        /// Either override <see cref="Clamp" /> to implicitly set valid values
+        /// or override <see cref="ValidateValue" /> to forbid setting invalid values.
+        /// </remarks>
         /// <param name="value">The value that is about to be set.</param>
         /// <returns><c>true</c> if the value is valid for this option; otherwise <c>false</c>.</returns>
         protected virtual bool ValidateValue(TValue value) => true;

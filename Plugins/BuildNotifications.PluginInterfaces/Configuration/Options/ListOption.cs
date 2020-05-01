@@ -33,6 +33,13 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
         protected void RaiseAvailableValuesChanged()
         {
             AvailableValuesChanged?.Invoke(this, EventArgs.Empty);
+
+            if (!ValidateValue(Value))
+            {
+                var firstAvailable = AvailableValues.FirstOrDefault();
+                if (firstAvailable != null)
+                    Value = firstAvailable.Value;
+            }
         }
 
         /// <inheritdoc />

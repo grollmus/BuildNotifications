@@ -19,6 +19,14 @@ namespace BuildNotifications.Resources.Settings
                    ?? base.SelectTemplate(item, container);
         }
 
+        private DataTemplate? BooleanOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(BooleanOptionTemplate)) as DataTemplate;
+        private DataTemplate? NumberOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(NumberOptionTemplate)) as DataTemplate;
+        private DataTemplate? PluginCommandOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(PluginCommandOptionTemplate)) as DataTemplate;
+        private DataTemplate? PluginDisplayOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(PluginDisplayOptionTemplate)) as DataTemplate;
+        private DataTemplate? PluginEncryptedTextOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(PluginEncryptedTextOptionTemplate)) as DataTemplate;
+        private DataTemplate? StringCollectionOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(StringCollectionOptionTemplate)) as DataTemplate;
+        private DataTemplate? TextOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(TextOptionTemplate)) as DataTemplate;
+
         private DataTemplate? TryFindTemplateGeneric(object item, FrameworkElement? element)
         {
             var itemType = item.GetType();
@@ -35,13 +43,13 @@ namespace BuildNotifications.Resources.Settings
         {
             return item switch
             {
-                BooleanOptionViewModel _ => (element?.TryFindResource("BooleanOptionTemplate") as DataTemplate),
-                NumberOptionViewModel _ => (element?.TryFindResource("NumberOptionTemplate") as DataTemplate),
-                TextOptionViewModel _ => (element?.TryFindResource("TextOptionTemplate") as DataTemplate),
-                PluginEncryptedTextOptionViewModel _ => (element?.TryFindResource("PluginEncryptedTextOptionTemplate") as DataTemplate),
-                StringCollectionOptionViewModel _ => (element?.TryFindResource("StringCollectionOptionTemplate") as DataTemplate),
-                PluginCommandOptionViewModel _ => (element?.TryFindResource("PluginCommandOptionTemplate") as DataTemplate),
-                PluginDisplayOptionViewModel _ => (element?.TryFindResource("PluginDisplayOptionTemplate") as DataTemplate),
+                BooleanOptionViewModel _ => BooleanOptionTemplate(element),
+                NumberOptionViewModel _ => NumberOptionTemplate(element),
+                TextOptionViewModel _ => TextOptionTemplate(element),
+                PluginEncryptedTextOptionViewModel _ => PluginEncryptedTextOptionTemplate(element),
+                StringCollectionOptionViewModel _ => StringCollectionOptionTemplate(element),
+                PluginCommandOptionViewModel _ => PluginCommandOptionTemplate(element),
+                PluginDisplayOptionViewModel _ => PluginDisplayOptionTemplate(element),
                 _ => null
             };
         }
