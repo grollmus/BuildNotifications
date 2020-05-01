@@ -37,7 +37,7 @@
                              Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
             <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
-                       VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"
+                       VerticalAlignment="Center" Margin="{StaticResource BlockLeft}"
                        Text="{Binding RelativeChangedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
                        FontSize="{StaticResource BlockThreeQuarters}"
                        Foreground="{DynamicResource Foreground1}" />
@@ -56,6 +56,11 @@
                            Foreground="{DynamicResource Foreground1HalfTransparency}"
                            Background="Transparent" DockPanel.Dock="Top"
                            FontSize="{StaticResource BlockThreeQuarters}" />
+                <TextBlock DockPanel.Dock="Bottom" HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom" 
+                           Text="{Binding RelativeQueuedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
+                           FontSize="{StaticResource BlockThreeQuarters}"
+                           Foreground="{DynamicResource Foreground1}" />
                 <TextBlock Text="{Binding RequestedBy}" Foreground="{DynamicResource Foreground1}"
                            Background="Transparent" />
             </DockPanel>
@@ -101,12 +106,6 @@
                         <ei:DataTrigger Binding="{Binding DoShortHighlight}" Value="true">
                             <resourcesBuildTreeBuild:ShortHighlight />
                         </ei:DataTrigger>
-                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="true">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="True" />
-                        </ei:DataTrigger>
-                        <ei:DataTrigger Binding="{Binding IsHighlightedBySight}" Value="false">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="True" />
-                        </ei:DataTrigger>
                     </i:Interaction.Triggers>
                 </Rectangle>
 
@@ -129,7 +128,6 @@
                         <i:InvokeCommandAction Command="{Binding MouseLeaveCommand}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-
 
             </Grid>
 

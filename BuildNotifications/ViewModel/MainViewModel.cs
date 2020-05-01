@@ -20,7 +20,6 @@ using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
-using BuildNotifications.ViewModel.Sight;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
@@ -64,8 +63,6 @@ namespace BuildNotifications.ViewModel
         }
 
         public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
-
-        public SightSelectionViewModel SightSelection { get; set; }
 
         public NotificationCenterViewModel NotificationCenter { get; set; }
 
@@ -365,14 +362,6 @@ namespace BuildNotifications.ViewModel
                 BuildTreeSortingDefinition = _coreSetup.Configuration.SortingDefinition
             };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
-
-            SightSelection = new SightSelectionViewModel();
-            foreach (var sightViewModel in SightSelection.Sights)
-            {
-                _coreSetup.Pipeline.AddSight(sightViewModel.Sight);
-            }
-
-            SightSelection.SightSelectionChanged += (sender, args) => _coreSetup.Pipeline.ApplySightChanges();
 
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);

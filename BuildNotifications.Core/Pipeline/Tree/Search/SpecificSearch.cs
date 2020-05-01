@@ -14,5 +14,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
 
         public IEnumerable<IBuild> ApplySearch(IEnumerable<IBuild> onBuilds) => onBuilds.Where(build => Blocks.All(b => b.IsBuildIncluded(build)));
+
+        public override string ToString()
+        {
+            return $"{{Specific Search {string.Join("", Blocks.Select(b => b.ToString()))}}}";
+        }
     }
 }

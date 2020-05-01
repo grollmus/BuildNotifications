@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             }
         }
 
-        public bool IsBuildIncluded(IBuild build, string input) => _includedCriterions.Any(c => c.IsBuildIncluded(build, input));
+        public bool IsBuildIncluded(IBuild build, string input) => string.IsNullOrWhiteSpace(input) || _includedCriterions.Any(c => c.IsBuildIncluded(build, input));
 
         public IEnumerable<string> LocalizedExamples => ExamplesFromEachSubCriteria().Select(t => t.exampleTerm);
 

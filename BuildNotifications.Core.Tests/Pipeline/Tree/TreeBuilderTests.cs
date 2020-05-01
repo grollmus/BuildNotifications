@@ -4,7 +4,6 @@ using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
@@ -20,11 +19,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
 
             var config = Substitute.For<IConfiguration>();
             config.GroupDefinition.Returns(groupDefinition);
-
-            var searcher = Substitute.For<IBuildSearcher>();
-            searcher.Matches(Arg.Any<IBuild>(), Arg.Any<string>()).Returns(true);
-
-            return new TreeBuilder(config, searcher);
+            
+            return new TreeBuilder(config);
         }
 
         private IBuild CreateBuild(IBuildDefinition definition, IBranch branch, string id)
@@ -44,11 +40,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var sut = Construct();
 
             var builds = Enumerable.Empty<IBuild>();
-            var branches = Enumerable.Empty<IBranch>();
-            var definitions = Enumerable.Empty<IBuildDefinition>();
 
             // Act
-            var actual = sut.Build(builds, branches, definitions);
+            var actual = sut.Build(builds);
 
             // Assert
             Assert.Empty(actual.Children);
@@ -63,11 +57,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var sut = Construct(groupDefinitions);
 
             var builds = Enumerable.Empty<IBuild>();
-            var branches = Enumerable.Empty<IBranch>();
-            var definitions = Enumerable.Empty<IBuildDefinition>();
 
             // Act
-            var actual = sut.Build(builds, branches, definitions);
+            var actual = sut.Build(builds);
 
             // Assert
             Assert.Empty(actual.Children);
@@ -82,11 +74,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Arrange
             var sut = Construct(grouping, GroupDefinition.Status);
 
-            var branch = Substitute.For<IBranch>();
             var definition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {branch};
-            var definitions = new[] {definition};
 
             var builds = new List<IBuild>();
 
@@ -96,7 +84,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(b1);
 
             // Act
-            var actual = sut.Build(builds, branches, definitions);
+            var actual = sut.Build(builds);
 
             // Assert
             var expectedCount = builds.Count;
@@ -108,15 +96,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
         {
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
-
-            var masterBranch = Substitute.For<IBranch>();
-            var ciDefinition = Substitute.For<IBuildDefinition>();
-            var stageBranch = Substitute.For<IBranch>();
             var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
-
             var builds = new List<IBuild>();
 
             var b1 = Substitute.For<IBuild>();
@@ -125,7 +105,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(b1);
 
             // Act
-            var actual = sut.Build(builds, branches, definitions);
+            var actual = sut.Build(builds);
 
             // Assert
             var parser = new BuildTreeParser(actual);
@@ -144,14 +124,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
             var ciDefinition = Substitute.For<IBuildDefinition>();
             var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
-
             var builds = new List<IBuild>();
 
             var build1 = CreateBuild(ciDefinition, stageBranch, "1");
@@ -164,7 +138,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(build3);
 
             // Act
-            var firstResult = sut.Build(builds, branches, definitions);
+            var firstResult = sut.Build(builds);
             var newBuild1 = CreateBuild(ciDefinition, stageBranch, "1");
             newBuild1.Status.Returns(BuildStatus.Failed);
 
@@ -175,7 +149,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild3.Status.Returns(BuildStatus.Cancelled);
 
             var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var newTree = sut.Build(updatedBuilds);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
@@ -193,13 +167,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
             var ciDefinition = Substitute.For<IBuildDefinition>();
             var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
 
             var builds = new List<IBuild>();
 
@@ -216,7 +185,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(build3);
 
             // Act
-            var firstResult = sut.Build(builds, branches, definitions);
+            var firstResult = sut.Build(builds);
             var newBuild1 = CreateBuild(ciDefinition, stageBranch, "1");
             newBuild1.Status.Returns(BuildStatus.Failed);
 
@@ -227,7 +196,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             newBuild3.Status.Returns(BuildStatus.Cancelled);
 
             var updatedBuilds = new List<IBuild> {newBuild1, newBuild2, newBuild3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var newTree = sut.Build(updatedBuilds);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
@@ -249,13 +218,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
             var ciDefinition = Substitute.For<IBuildDefinition>();
             var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
 
             var builds = new List<IBuild>();
 
@@ -269,12 +233,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(build3);
 
             // Act
-            var firstResult = sut.Build(builds, branches, definitions);
+            var firstResult = sut.Build(builds);
             var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
             newBuild2.Status.Returns(expectedResult);
 
             var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var newTree = sut.Build(updatedBuilds);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
@@ -310,13 +274,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             // Arrange
             var sut = Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
 
-            var masterBranch = Substitute.For<IBranch>();
             var ciDefinition = Substitute.For<IBuildDefinition>();
             var stageBranch = Substitute.For<IBranch>();
-            var nightlyDefinition = Substitute.For<IBuildDefinition>();
-
-            var branches = new[] {masterBranch, stageBranch};
-            var definitions = new[] {ciDefinition, nightlyDefinition};
 
             var builds = new List<IBuild>();
 
@@ -330,12 +289,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             builds.Add(build3);
 
             // Act
-            var firstResult = sut.Build(builds, branches, definitions);
+            var firstResult = sut.Build(builds);
             var newBuild2 = CreateBuild(ciDefinition, stageBranch, "2");
             newBuild2.Status.Returns(expectedResult);
 
             var updatedBuilds = new List<IBuild> {build1, newBuild2, build3};
-            var newTree = sut.Build(updatedBuilds, branches, definitions);
+            var newTree = sut.Build(updatedBuilds);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
             var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);

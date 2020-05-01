@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Builds.Search;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search
@@ -10,5 +11,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         void AddCriteria(ISearchCriteria criteria);
 
         ISpecificSearch Parse(string textInput);
+
+        event EventHandler<SearchEngineEventArgs>? SearchParsed;
     }
 }

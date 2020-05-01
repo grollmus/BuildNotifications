@@ -92,20 +92,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private bool _isHighlightedBySight;
-
-        public bool IsHighlightedBySight
-        {
-            get => _isHighlightedBySight;
-            set
-            {
-                if (_isHighlightedBySight == value)
-                    return;
-                _isHighlightedBySight = value;
-                OnPropertyChanged();
-            }
-        }
-
         public bool IsLargeSize
         {
             get => _isLargeSize;
@@ -182,7 +168,6 @@ namespace BuildNotifications.ViewModel.Tree
             UpdateQueuedDate();
 
             ActualProgress = Node.Progress;
-            IsHighlightedBySight = Node.IsHighlightedBySight;
         }
 
         private void OnMouseEnter(object obj)

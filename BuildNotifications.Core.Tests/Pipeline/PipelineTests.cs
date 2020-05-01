@@ -8,7 +8,6 @@ using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfaces.Builds.Sight;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
 using Xunit;
@@ -95,79 +94,6 @@ namespace BuildNotifications.Core.Tests.Pipeline
             Assert.Equal(2, parser.ChildrenAtLevel(2).Count()); // stage + master
             Assert.Equal(2, parser.ChildrenAtLevel(3).Count()); // ci + nightly
             Assert.Equal(2, parser.ChildrenAtLevel(4).Count()); // 2 builds
-        }
-
-        [Fact]
-        public async Task EnabledSightsShouldBeApplied()
-        {
-            // Arrange
-            var pipeline = MockPipeline();
-            IBuildTree? tree = null;
-            pipeline.Notifier.Updated += (s, e) => tree = e.Tree;
-
-            var filterStageBuildsSight = Substitute.For<ISight>();
-            filterStageBuildsSight.IsBuildShown(Arg.Any<IBuild>()).Returns(args => ((IBuild) args[0]).BranchName != "stage");
-            filterStageBuildsSight.IsEnabled.Returns(true);
-            pipeline.AddSight(filterStageBuildsSight);
-
-            // Act
-            await pipeline.Update();
-            await pipeline.Update();
-
-            // Assert
-            Assert.NotNull(tree);
-            var buildNodes = tree!.Children.OfType<IBuildNode>().ToList();
-            Assert.NotEmpty(buildNodes);
-            Assert.All(buildNodes, b => Assert.NotEqual("stage", b.Build.BranchName));
-        }
-
-        [Fact]
-        public async Task DisabledSightsShouldNotBeApplied()
-        {
-            // Arrange
-            var pipeline = MockPipeline();
-            IBuildTree? tree = null;
-            pipeline.Notifier.Updated += (s, e) => tree = e.Tree;
-
-            var filterStageBuildsSight = Substitute.For<ISight>();
-            filterStageBuildsSight.IsBuildShown(Arg.Any<IBuild>()).Returns(args => ((IBuild) args[0]).BranchName != "stage");
-            filterStageBuildsSight.IsEnabled.Returns(false);
-            pipeline.AddSight(filterStageBuildsSight);
-
-            // Act
-            await pipeline.Update();
-            await pipeline.Update();
-
-            // Assert
-            Assert.NotNull(tree);
-            var buildNodes = tree!.Children.OfType<IBuildNode>().ToList();
-            Assert.NotEmpty(buildNodes);
-            Assert.Contains(buildNodes, b => b.Build.BranchName == "stage");
-        }
-
-        [Fact]
-        public async Task EnabledSightsShouldBeHighlightBuilds()
-        {
-            // Arrange
-            var pipeline = MockPipeline();
-            IBuildTree? tree = null;
-            pipeline.Notifier.Updated += (s, e) => tree = e.Tree;
-
-            var highlightStageBuilds = Substitute.For<ISight>();
-            highlightStageBuilds.IsHighlighted(Arg.Any<IBuild>()).Returns(args => ((IBuild) args[0]).BranchName == "stage");
-            highlightStageBuilds.IsBuildShown(Arg.Any<IBuild>()).Returns(true);
-            highlightStageBuilds.IsEnabled.Returns(true);
-            pipeline.AddSight(highlightStageBuilds);
-
-            // Act
-            await pipeline.Update();
-            await pipeline.Update();
-
-            // Assert
-            Assert.NotNull(tree);
-            var buildNodes = tree!.Children.OfType<IBuildNode>().ToList();
-            Assert.NotEmpty(buildNodes);
-            Assert.All(buildNodes, b => Assert.True(b.Build.BranchName != "stage" || b.IsHighlightedBySight));
         }
 
         private Core.Pipeline.Pipeline MockPipeline(params GroupDefinition[] groupDefinitions)

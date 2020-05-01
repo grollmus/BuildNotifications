@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using BuildNotifications.PluginInterfaces.Builds.Sight;
+using BuildNotifications.Core.Pipeline.Tree.Search;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -18,17 +18,6 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <param name="project">Project to add.</param>
         void AddProject(IProject project);
-        
-        /// <summary>
-        /// Adds a sight for filtering and highlighting data.
-        /// </summary>
-        /// <param name="sight">The sight to add.</param>
-        void AddSight(ISight sight);
-        
-        /// <summary>
-        /// Refreshes the build tree and causes all effects by changed sights to be in effect immediately.
-        /// </summary>
-        void ApplySightChanges();
 
         /// <summary>
         /// Clears all projects and cached data.
@@ -36,13 +25,10 @@ namespace BuildNotifications.Core.Pipeline
         void ClearProjects();
 
         /// <summary>
-        /// Filters builds in the pipeline to match the term.
+        /// Applies the given search to the pipeline.
         /// </summary>
-        /// <param name="searchTerm">
-        /// Term to search for.
-        /// Use empty string to clear search filter
-        /// </param>
-        void Search(string searchTerm);
+        /// <param name="search">The search that shall be applied.</param>
+        void Search(ISpecificSearch search);
 
         /// <summary>
         /// Updates the pipeline i.e. fetch data from projects, group builds and

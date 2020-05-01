@@ -24,7 +24,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public DateTime? QueueTime { get; private set; }
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
-        public bool IsHighlightedBySight { get; set; }
 
         public IBuild Build { get; }
 
@@ -33,7 +32,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             if (!(nodeToInsert is IBuildNode otherBuild))
                 return;
 
-            IsHighlightedBySight = otherBuild.IsHighlightedBySight;
             UpdateProperties(otherBuild.Build);
         }
 

@@ -29,7 +29,14 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             _defaultCriteria = new DefaultSearchCriteria(Enumerable.Empty<ISearchCriteria>());
         }
 
-        public ISpecificSearch Parse(string textInput) => new SpecificSearch(ParseIntoBlocks(textInput));
+        public ISpecificSearch Parse(string textInput)
+        {
+            var specificSearch = new SpecificSearch(ParseIntoBlocks(textInput));
+            InvokeSearchParsed(textInput, specificSearch);
+            return specificSearch;
+        }
+
+        public event EventHandler<SearchEngineEventArgs>? SearchParsed;
 
         private IEnumerable<ISearchBlock> ParseIntoBlocks(string textInput)
         {
@@ -77,6 +84,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             var enteredRest = sb.ToString();
             yield return new SearchBlock(currentCriteria, enteredRest, RemoveSpareSpaces(enteredRest));
         }
+
+        private void InvokeSearchParsed(string textInput, ISpecificSearch result) => SearchParsed?.Invoke(this, new SearchEngineEventArgs(result, textInput));
 
         private string RemoveSpareSpaces(string input) => string.Join(" ", input.Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries));
     }

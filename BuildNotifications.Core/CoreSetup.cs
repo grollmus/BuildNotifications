@@ -32,8 +32,7 @@ namespace BuildNotifications.Core
 
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
-            var searcher = new BuildSearcher();
-            var treeBuilder = new TreeBuilder(Configuration, searcher);
+            var treeBuilder = new TreeBuilder(Configuration);
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration);
 
             Pipeline.Notifier.Updated += Notifier_Updated;

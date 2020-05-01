@@ -19,5 +19,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
 
         public bool IsBuildIncluded(IBuild build) => SearchCriteria.IsBuildIncluded(build, SearchedTerm);
+
+        public override string ToString() => $"{SearchCriteria.LocalizedKeyword}: {EnteredText}";
     }
 }
