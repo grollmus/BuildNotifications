@@ -14,6 +14,6 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         protected override IEnumerable<ConnectionData> ModelValues { get; }
 
-        protected override string? DisplayNameFor(ConnectionData item) => item.Name;
+        protected override string DisplayNameFor(ConnectionData item) => item.Name;
     }
 }

@@ -47,17 +47,6 @@ namespace BuildNotifications.Resources.Settings
                 ctrl.OnPluginTypeChanged();
         }
 
-        private static void OnPluginsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is PluginChooser ctrl)
-                ctrl.OnPluginsChanged();
-        }
-
-        private void OnPluginsChanged()
-        {
-            FixSelection();
-        }
-
         private static void OnPluginTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginChooser ctrl)
@@ -81,17 +70,6 @@ namespace BuildNotifications.Resources.Settings
                 Plugins = new ObservableCollection<IPlugin>();
         }
 
-        private static void OnSelectedPluginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is PluginChooser ctrl)
-                ctrl.OnSelectedPluginChanged();
-        }
-
-        private void OnSelectedPluginChanged()
-        {
-            FixSelection();
-        }
-
         public static readonly DependencyProperty PluginRepositoryProperty = DependencyProperty.Register(
             "PluginRepository", typeof(IPluginRepository), typeof(PluginChooser), new PropertyMetadata(default(IPluginRepository), OnPluginRepositoryChanged));
 
@@ -100,13 +78,13 @@ namespace BuildNotifications.Resources.Settings
 
         private static readonly DependencyPropertyKey PluginsKey
             = DependencyProperty.RegisterReadOnly("Plugins", typeof(IEnumerable<IPlugin>), typeof(PluginChooser),
-                new FrameworkPropertyMetadata(default(IEnumerable<IPlugin>), FrameworkPropertyMetadataOptions.None, OnPluginsChanged));
+                new FrameworkPropertyMetadata(default(IEnumerable<IPlugin>), FrameworkPropertyMetadataOptions.None));
 
         public static readonly DependencyProperty PluginsProperty
             = PluginsKey.DependencyProperty;
 
         public static readonly DependencyProperty SelectedPluginProperty = DependencyProperty.Register(
-            "SelectedPlugin", typeof(IPlugin), typeof(PluginChooser), new FrameworkPropertyMetadata(default(IPlugin), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedPluginChanged));
+            "SelectedPlugin", typeof(IPlugin), typeof(PluginChooser), new FrameworkPropertyMetadata(default(IPlugin), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
             "Title", typeof(string), typeof(PluginChooser), new PropertyMetadata(default(string)));

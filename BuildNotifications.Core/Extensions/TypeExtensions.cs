@@ -19,6 +19,9 @@ namespace BuildNotifications.Core
             var result = type;
             while (result?.CompareWithoutGenericTypes(baseType) == false)
             {
+                if (result.BaseType == null)
+                    return null;
+
                 result = result.BaseType;
             }
 

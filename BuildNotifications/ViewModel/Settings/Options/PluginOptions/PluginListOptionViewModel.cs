@@ -34,7 +34,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             get { return _listOption.AvailableValues.Select(x => x.Value); }
         }
 
-        protected override string? DisplayNameFor(TValue item)
+        protected override string DisplayNameFor(TValue item)
         {
             var optionValue = _listOption.AvailableValues.FirstOrDefault(v => Equals(v.Value, item));
             if (optionValue != null)

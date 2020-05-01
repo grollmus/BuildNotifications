@@ -5,7 +5,7 @@ using BuildNotifications.Services;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
-    internal abstract class SetupSectionViewModel : ButtonNavigationItem
+    internal abstract class SetupSectionViewModel : BaseButtonNavigationItem
     {
         protected SetupSectionViewModel(IConfiguration configuration, Action saveAction, IPopupService popupService)
         {

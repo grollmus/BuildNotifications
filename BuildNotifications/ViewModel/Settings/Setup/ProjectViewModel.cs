@@ -11,7 +11,7 @@ using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
-    internal class ProjectViewModel : ButtonNavigationItem
+    internal class ProjectViewModel : BaseButtonNavigationItem
     {
         public ProjectViewModel(IProjectConfiguration model, IConfiguration configuration)
         {

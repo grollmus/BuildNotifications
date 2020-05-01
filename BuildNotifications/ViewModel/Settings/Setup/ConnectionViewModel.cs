@@ -10,7 +10,7 @@ using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
-    internal class ConnectionViewModel : ButtonNavigationItem
+    internal class ConnectionViewModel : BaseButtonNavigationItem
     {
         public ConnectionViewModel(ConnectionData model, IPluginRepository pluginRepository)
         {

@@ -61,7 +61,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void AddProject()
         {
-            var project = _configurationBuilder.CreateEmptyConfiguration(StringLocalizer.NewProject);
+            var project = _configurationBuilder.EmptyConfiguration(StringLocalizer.NewProject);
 
             _configuration.Projects.Add(project);
 

@@ -6,7 +6,7 @@ namespace BuildNotifications.Services
 {
     internal class PopupService : IPopupService
     {
-        public PopupService(IBlur blur)
+        public PopupService(IBlurrableViewModel blur)
         {
             _blur = blur;
         }
@@ -29,6 +29,6 @@ namespace BuildNotifications.Services
             return vm.Result;
         }
 
-        private readonly IBlur _blur;
+        private readonly IBlurrableViewModel _blur;
     }
 }

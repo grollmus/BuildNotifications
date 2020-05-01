@@ -38,7 +38,6 @@ namespace BuildNotifications.Plugin.Tfs
 
         internal async Task<ConnectionTestResult> TestConnection(TfsConfigurationRawData data)
         {
-
             if (string.IsNullOrWhiteSpace(data.Url))
                 return ConnectionTestResult.Failure(ErrorMessages.UrlWasEmpty);
 

@@ -7,11 +7,10 @@ namespace BuildNotifications.Core.Config
 {
     public interface IConfigurationBuilder
     {
-        IProjectConfiguration CreateEmptyConfiguration(string name);
+        IProjectConfiguration EmptyConfiguration(string name);
     }
 
-    public class ConfigurationBuilder
-        : IConfigurationBuilder
+    public class ConfigurationBuilder : IConfigurationBuilder
     {
         public ConfigurationBuilder(IPathResolver pathResolver, IConfigurationSerializer configurationSerializer)
         {
