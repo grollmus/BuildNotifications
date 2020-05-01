@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Config;
@@ -9,8 +10,13 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     public abstract class BaseSearchCriteria : ISearchCriteria
     {
-        protected BaseSearchCriteria(string localizedKeyword, string localizedDescription)
+        private readonly IPipeline _pipeline;
+
+        private DateTime _lastTimeDataFetchedFromPipeline = DateTime.MinValue;
+
+        protected BaseSearchCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline)
         {
+            _pipeline = pipeline;
             LocalizedKeyword = localizedKeyword;
             LocalizedDescription = localizedDescription;
             _currentCultureInfo = CultureInfo.CurrentUICulture;
@@ -35,8 +41,19 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {
-            _stringMatcher.SearchPattern = input;
-            return SuggestInternal(input, _stringMatcher).Select(AsSuggestion);
+            UpdateCacheIfNecessary();
+
+            var trimmed = TrimInput(input);
+            _stringMatcher.SearchPattern = trimmed;
+            return SuggestInternal(trimmed, _stringMatcher).Select(AsSuggestion);
+        }
+
+        private void UpdateCacheIfNecessary()
+        {
+            if (_lastTimeDataFetchedFromPipeline < _pipeline.LastUpdate)
+                UpdateCacheForSuggestions(_pipeline);
+
+            _lastTimeDataFetchedFromPipeline = DateTime.Now;
         }
 
         /// <summary>
@@ -47,13 +64,21 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         /// <returns>Plain text suggestions for the given input.</returns>
         protected abstract IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher);
 
+        /// <summary>
+        /// Gets called when the cache for suggestions shall be updated.
+        /// </summary>
+        /// <param name="pipeline">The pipeline to crawl data from. To be used for suggestions.</param>
+        protected abstract void UpdateCacheForSuggestions(IPipeline pipeline);
+
         public bool IsBuildIncluded(IBuild build, string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return true;
 
-            return IsBuildIncludedInternal(build, input.TrimStart(' ').TrimEnd(' '));
+            return IsBuildIncludedInternal(build, TrimInput(input));
         }
+
+        private static string TrimInput(string input) => input.TrimStart(' ').TrimEnd(' ');
 
         protected abstract bool IsBuildIncludedInternal(IBuild build, string input);
 

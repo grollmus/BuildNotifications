@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using BuildNotifications.Core.Config;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal abstract class BaseDateSearchCriteria : BaseSearchCriteria
     {
-        protected BaseDateSearchCriteria(string localizedKeyword, string localizedDescription) : base(localizedKeyword, localizedDescription)
+        protected BaseDateSearchCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline) : base(localizedKeyword, localizedDescription, pipeline)
         {
         }
 
@@ -16,11 +17,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected IEnumerable<string> SuggestInputWithToday(string inputSoFar)
         {
-            var todayInLocalizedString = DateTime.Now.ToString("d", CurrentCultureInfo);
-            var suggestions = new List<(DateTime dateTime, string suggestion)>();
+            var todayInLocalizedString = DateTime.Today.ToString("d", CurrentCultureInfo);
 
             if (string.IsNullOrWhiteSpace(inputSoFar))
-                return todayInLocalizedString.Yield();
+                yield break;
 
             var suggestion = new StringBuilder(inputSoFar);
             var charactersToAddFromTodayString = 0;
@@ -29,7 +29,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             do
             {
                 if (DateTime.TryParse(suggestion.ToString(), CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var asDateTime) && asDateTime.Year == DateTime.Today.Year)
-                    suggestions.Add((asDateTime, suggestion.ToString()));
+                    yield return suggestion.ToString();
 
                 charactersToAddFromTodayString += 1;
 
@@ -37,12 +37,42 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 suggestion.Append(inputSoFar);
                 suggestion.Append(todayInLocalizedString.Substring(todayInLocalizedString.Length - charactersToAddFromTodayString, charactersToAddFromTodayString));
             } while (charactersToAddFromTodayString < todayInLocalizedString.Length);
+        }
 
+        protected IEnumerable<string> ParseSuggestions(IEnumerable<string> suggestions)
+        {
             return suggestions
+                .Select(AsDateTimeTuple)
                 .OrderBy(t => t.suggestion.Length) // shortest to longest
                 .Distinct(SuggestionTupleEqualByDateTimeEqualityComparer) // only unique dates
                 .OrderByDescending(t => t.dateTime) // display highest dates first
                 .Select(t => t.suggestion);
+        }
+
+        protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher) => ParseSuggestions(SuggestDatesInternal(input, stringMatcher));
+
+        protected abstract IEnumerable<string> SuggestDatesInternal(string input, StringMatcher stringMatcher);
+
+        private (DateTime dateTime, string suggestion) AsDateTimeTuple(string dateTimeAsString)
+        {
+            if (DateTime.TryParse(dateTimeAsString, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var asDateTime))
+                return (asDateTime, dateTimeAsString);
+
+            return (DateTime.MaxValue, dateTimeAsString);
+        }
+
+        protected IEnumerable<string> SuggestPossibleDates(string inputSoFar, IEnumerable<DateTime> possibleDates)
+        {
+            foreach (var possibleDate in possibleDates)
+            {
+                var possibleDateAsString = possibleDate.ToString("d", CurrentCultureInfo);
+                if (inputSoFar.Length > possibleDateAsString.Length)
+                    continue;
+
+                var inputAutoFilledWithPossibleDate = inputSoFar + possibleDateAsString.Substring(inputSoFar.Length, possibleDateAsString.Length - inputSoFar.Length);
+                if (DateTime.TryParse(inputAutoFilledWithPossibleDate, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var asDateTime) && asDateTime.Equals(possibleDate))
+                    yield return inputAutoFilledWithPossibleDate;
+            }
         }
 
         private class SuggestionTupleEqualByDateTime : EqualityComparer<(DateTime dateTime, string suggestion)>

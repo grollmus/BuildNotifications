@@ -96,6 +96,63 @@ namespace BuildNotifications.Core.Tests.Pipeline
             Assert.Equal(2, parser.ChildrenAtLevel(4).Count()); // 2 builds
         }
 
+        [Fact]
+        public async Task LastUpdateShouldBeSetAfterUpdate()
+        {
+            // Arrange
+            var pipeline = MockPipeline(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+            var timeStampBeforeUpdate = pipeline.LastUpdate;
+
+            // Act
+            await pipeline.Update();
+            var timeStampAfterUpdate = pipeline.LastUpdate;
+
+            // Assert
+            Assert.NotEqual(timeStampBeforeUpdate, timeStampAfterUpdate);
+        }
+
+        [Fact]
+        public async Task BuildsCacheShouldContainAllBuilds()
+        {
+            // Arrange
+            var pipeline = MockPipeline(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            // Act
+            await pipeline.Update();
+            var builds = pipeline.CachedBuilds();
+
+            // Assert
+            Assert.Equal(new [] {"1"}, builds.Select(b => b.Id));
+        }
+
+        [Fact]
+        public async Task DefinitionCacheShouldContainAllDefinitions()
+        {
+            // Arrange
+            var pipeline = MockPipeline(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            // Act
+            await pipeline.Update();
+            var definitions = pipeline.CachedDefinitions();
+
+            // Assert
+            Assert.Equal(new [] {"ci", "nightly"}, definitions.Select(d => d.Name));
+        }
+
+        [Fact]
+        public async Task BranchCacheShouldContainAllBranches()
+        {
+            // Arrange
+            var pipeline = MockPipeline(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+
+            // Act
+            await pipeline.Update();
+            var branches = pipeline.CachedBranches();
+
+            // Assert
+            Assert.Equal(new [] {"master", "stage"}, branches.Select(b => b.FullName));
+        }
+
         private Core.Pipeline.Pipeline MockPipeline(params GroupDefinition[] groupDefinitions)
         {
             var treeBuilder = TreeBuilderTests.Construct(groupDefinitions);

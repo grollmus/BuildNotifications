@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using BuildNotifications.Core.Pipeline.Tree.Search;
+using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -35,5 +39,28 @@ namespace BuildNotifications.Core.Pipeline
         /// raise notifications.
         /// </summary>
         Task Update();
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached builds.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBuild> CachedBuilds();
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached definitions.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBuildDefinition> CachedDefinitions();
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached branches.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBranch> CachedBranches();
+
+        /// <summary>
+        /// Time of the last successful update. DateTime.Min if it never happened.
+        /// </summary>
+        DateTime LastUpdate { get; }
     }
 }

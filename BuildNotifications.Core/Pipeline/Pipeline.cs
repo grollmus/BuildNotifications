@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -332,8 +333,17 @@ namespace BuildNotifications.Core.Pipeline
 
             _oldTree = treeResult.BuildTree;
             stopWatch.Stop();
+            LastUpdate = DateTime.Now;
             LogTo.Info($"Update done in {stopWatch.ElapsedMilliseconds} ms.");
         }
+
+        public IReadOnlyList<IBuild> CachedBuilds() => _buildCache.ContentCopy().ToList();
+
+        public IReadOnlyList<IBuildDefinition> CachedDefinitions() => _definitionCache.ContentCopy().ToList();
+
+        public IReadOnlyList<IBranch> CachedBranches() => _branchCache.ContentCopy().ToList();
+
+        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
 

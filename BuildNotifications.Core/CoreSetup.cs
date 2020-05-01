@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Anotar.NLog;
 using BuildNotifications.Core.Config;
@@ -11,8 +9,6 @@ using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
-using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfaces.Builds.Search;
 
 namespace BuildNotifications.Core
 {
@@ -38,9 +34,7 @@ namespace BuildNotifications.Core
             Pipeline.Notifier.Updated += Notifier_Updated;
 
             SearchEngine = new SearchEngine();
-            SearchEngine.AddCriteria(new BeforeCriteria());
-            SearchEngine.AddCriteria(new TestSearchCriteria());
-            SearchEngine.AddCriteria(new TestSearchCriteria2());
+            SearchEngine.AddCriteria(new BeforeCriteria(Pipeline));
 
             if (notificationReceiver != null)
             {
@@ -85,49 +79,5 @@ namespace BuildNotifications.Core
         private readonly IPathResolver _pathResolver;
 
         private readonly ConfigurationSerializer _configurationSerializer;
-    }
-
-    public class TestSearchCriteria : ISearchCriteria
-    {
-        public string LocalizedKeyword => "asd";
-
-        public string LocalizedDescription => "Temporary criteria for GUI testing purposes";
-
-        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
-        {
-            return Examples().Where(e => e.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).Select(e => new SearchCriteriaSuggestion(e));
-        }
-
-        public bool IsBuildIncluded(IBuild build, string input) => true;
-        public IEnumerable<string> LocalizedExamples => Examples();
-
-        private IEnumerable<string> Examples()
-        {
-            yield return "Test";
-            yield return "Something";
-            yield return "Hello";
-        }
-    }
-    
-    public class TestSearchCriteria2 : ISearchCriteria
-    {
-        public string LocalizedKeyword => "test";
-
-        public string LocalizedDescription => "Temporary criteria for GUI testing purposes";
-
-        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
-        {
-            return Examples().Where(e => e.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).Select(e => new SearchCriteriaSuggestion(e));
-        }
-
-        public bool IsBuildIncluded(IBuild build, string input) => true;
-        public IEnumerable<string> LocalizedExamples => Examples();
-
-        private IEnumerable<string> Examples()
-        {
-            yield return "Don't care";
-            yield return "Anything";
-            yield return "Absolutely anything";
-        }
     }
 }

@@ -258,6 +258,9 @@ namespace BuildNotifications.Resources.Search
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (!_popup.IsOpen)
+                _popup.IsOpen = true;
+
             CheckForScrollViewerCollision();
 
             if (SearchCriteriaViewModel == null)
