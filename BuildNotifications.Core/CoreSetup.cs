@@ -34,7 +34,9 @@ namespace BuildNotifications.Core
             Pipeline.Notifier.Updated += Notifier_Updated;
 
             SearchEngine = new SearchEngine();
-            SearchEngine.AddCriteria(new BeforeCriteria(Pipeline));
+            SearchEngine.AddCriteria(new DuringCriteria(Pipeline));
+            SearchEngine.AddCriteria(new AfterCriteria(Pipeline), false);
+            SearchEngine.AddCriteria(new BeforeCriteria(Pipeline), false);
 
             if (notificationReceiver != null)
             {
@@ -66,15 +68,9 @@ namespace BuildNotifications.Core
             _configurationSerializer.Save(Configuration, configFilePath);
         }
 
-        public Task Update()
-        {
-            return Pipeline.Update();
-        }
+        public Task Update() => Pipeline.Update();
 
-        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
-        {
-            PipelineUpdated?.Invoke(this, e);
-        }
+        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e) => PipelineUpdated?.Invoke(this, e);
 
         private readonly IPathResolver _pathResolver;
 

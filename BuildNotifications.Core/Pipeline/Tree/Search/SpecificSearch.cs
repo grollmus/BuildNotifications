@@ -17,7 +17,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public override string ToString()
         {
-            return $"{{Specific Search {string.Join("", Blocks.Select(b => b.ToString()))}}}";
+            return $"{{SearchBlocks: \"{string.Join("", Blocks.Select(b => b.ToString()))}\"}}";
         }
     }
 }

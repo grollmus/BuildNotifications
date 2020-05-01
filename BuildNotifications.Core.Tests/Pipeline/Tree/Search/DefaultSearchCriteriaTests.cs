@@ -17,9 +17,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
         {
             private readonly string _searchDummyString;
             private readonly string[] _suggestionsForAnyInputNotEqualDummyString;
-            public string LocalizedKeyword => "Unused";
+            public string LocalizedKeyword => "Unused" + _searchDummyString;
 
-            public string LocalizedDescription => "Unused";
+            public string LocalizedDescription => "Unused" + _searchDummyString;
 
             protected BaseDummySearch(string searchDummyString, params string[] suggestionsForAnyInputNotEqualDummyString)
             {
@@ -52,14 +52,21 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         private class DummySearchCriteriaA : BaseDummySearch
         {
-            public DummySearchCriteriaA() : base("A", "1", "2", "3")
+            public DummySearchCriteriaA() : base("A", "1", "2", "3", "10")
             {
             }
         }
 
         private class DummySearchCriteriaB : BaseDummySearch
         {
-            public DummySearchCriteriaB() : base("B", "4", "5", "6")
+            public DummySearchCriteriaB() : base("B", "4", "5", "6", "10")
+            {
+            }
+        }
+
+        private class IgnoredDummySearchCriteriaC : BaseDummySearch
+        {
+            public IgnoredDummySearchCriteriaC() : base("C", "!", "!!", "!!!")
             {
             }
         }
@@ -74,18 +81,37 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         public DefaultSearchCriteriaTests()
         {
-            _criteriaToTest = new DefaultSearchCriteria(new ISearchCriteria[] {new DummySearchCriteriaA(), new DummySearchCriteriaB()});
+            var ignoredCriteria = new IgnoredDummySearchCriteriaC();
+            _criteriaToTest = new DefaultSearchCriteria(new ISearchCriteria[] {new DummySearchCriteriaA(), new DummySearchCriteriaB(), ignoredCriteria}, new ISearchCriteria[] {ignoredCriteria});
+            _criteriaToTest.SuggestionsToTakeFromEachCriteria = 2;
         }
 
         [Fact]
         public void SuggestionsComeFromEachCriteria()
         {
             // arrange
+            _criteriaToTest.SuggestionsToTakeFromEachCriteria = 2;
+            _criteriaToTest.MaxSuggestions = int.MaxValue;
+
             // act
             var actual = _criteriaToTest.Suggest(string.Empty).Select(s => s.Suggestion).ToList();
 
             // assert
-            Assert.Equal(actual, new[] {"Unused:", "Unused:", "1", "2", "4", "5"});
+            Assert.Equal(actual, new[] {"UnusedA:", "UnusedB:", "UnusedC:", "1", "2", "4", "5", "!", "!!"});
+        }
+
+        [Fact]
+        public void SuggestionsAreDistinctEvenIfTwoCriterionsSuggestTheSame()
+        {
+            // arrange
+            _criteriaToTest.SuggestionsToTakeFromEachCriteria = 10;
+
+            // act
+            var suggestions = _criteriaToTest.Suggest(string.Empty).Select(s => s.Suggestion).ToList();
+            var distinctSuggestions = suggestions.Distinct();
+
+            // assert
+            Assert.Equal(distinctSuggestions.Count(), suggestions.Count);
         }
 
         [Fact]
@@ -94,8 +120,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             // arrange
             var referenceA = new DummySearchCriteriaA();
             var referenceB = new DummySearchCriteriaB();
-            var totalSuggestions = referenceA.Suggest(string.Empty).Concat(referenceB.Suggest(string.Empty)).Count();
-            totalSuggestions += 2; // the search criterions themselves are also suggested within the DefaultCriteria.
+            var referenceC = new IgnoredDummySearchCriteriaC();
+            var totalSuggestions = referenceA.Suggest(string.Empty).Concat(referenceB.Suggest(string.Empty)).Concat(referenceC.Suggest(string.Empty)).Count();
+            totalSuggestions += 3; // the search criterions themselves are also suggested within the DefaultCriteria.
 
             // act
             var actual = _criteriaToTest.Suggest(string.Empty);
@@ -110,7 +137,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             // arrange
             var referenceA = new DummySearchCriteriaA();
             var referenceB = new DummySearchCriteriaB();
-            var totalSuggestions = referenceA.LocalizedExamples.Concat(referenceB.LocalizedExamples).Count();
+            var referenceC = new IgnoredDummySearchCriteriaC();
+            var totalSuggestions = referenceA.LocalizedExamples.Concat(referenceB.LocalizedExamples).Concat(referenceC.LocalizedExamples).Count();
 
             // act
             var actual = _criteriaToTest.LocalizedExamples;
@@ -125,6 +153,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             // arrange
             var referenceA = new DummySearchCriteriaA();
             var referenceB = new DummySearchCriteriaB();
+            var referenceC = new IgnoredDummySearchCriteriaC();
 
             // act
             var actual = _criteriaToTest.LocalizedExamples.ToList();
@@ -132,6 +161,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             // assert
             Assert.Contains(actual, e => referenceA.LocalizedExamples.Contains(e));
             Assert.Contains(actual, e => referenceB.LocalizedExamples.Contains(e));
+            Assert.Contains(actual, e => referenceC.LocalizedExamples.Contains(e));
         }
 
         [Fact]
@@ -165,6 +195,19 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             // assert
             Assert.True(result);
+        }
+
+        [Fact]
+        public void BuildIsNotIncludedForIgnoredCriteria()
+        {
+            // arrange
+            var build = Substitute.For<IBuild>();
+
+            // act
+            var result = _criteriaToTest.IsBuildIncluded(build, "C");
+
+            // assert
+            Assert.False(result);
         }
     }
 }

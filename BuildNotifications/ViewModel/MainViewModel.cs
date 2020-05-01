@@ -551,7 +551,16 @@ namespace BuildNotifications.ViewModel
 
                 _isInitialFetch = false;
 
-                await _coreSetup.Update();
+                try
+                {
+                    await _coreSetup.Update();
+                }
+                catch (Exception e)
+                {
+                    LogTo.ErrorException(e.Message, e);
+                    throw;
+                }
+
                 if (_postPipelineUpdateTask != null)
                     await _postPipelineUpdateTask;
 

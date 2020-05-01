@@ -15,5 +15,10 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         /// The suggested string.
         /// </summary>
         string Suggestion { get; }
+
+        /// <summary>
+        /// Whether this suggestion is based on keyword.
+        /// </summary>
+        bool IsKeyword { get; }
     }
 }

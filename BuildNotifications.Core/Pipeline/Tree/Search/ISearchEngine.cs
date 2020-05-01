@@ -8,7 +8,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     {
         IReadOnlyList<ISearchCriteria> SearchCriterions { get; }
 
-        void AddCriteria(ISearchCriteria criteria);
+        void AddCriteria(ISearchCriteria criteria, bool includeInDefaultCriteria = true);
 
         ISpecificSearch Parse(string textInput);
 

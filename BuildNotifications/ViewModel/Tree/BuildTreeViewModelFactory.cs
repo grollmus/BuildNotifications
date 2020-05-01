@@ -46,7 +46,7 @@ namespace BuildNotifications.ViewModel.Tree
             SetBuildIsFromPullRequest(buildTreeResult);
 
             stopWatch.Stop();
-            LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms.");
+            LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms. Displayed nodes: {GetNodeCount(buildTreeResult)}");
             return buildTreeResult;
         }
 
@@ -104,6 +104,18 @@ namespace BuildNotifications.ViewModel.Tree
 
             return maxDepth;
         }
+        
+        private static int GetNodeCount(BuildTreeNodeViewModel node)
+        {
+            var count = 0;
+            foreach (var child in node.Children)
+            {
+                count += GetNodeCount(child);
+                count += 1;
+            }
+
+            return count;
+        }
 
         private BuildTreeViewModel Merge(BuildTreeViewModel tree1, BuildTreeViewModel tree2)
         {
@@ -125,7 +137,7 @@ namespace BuildNotifications.ViewModel.Tree
             var insertTarget = tree1;
             var nodeToInsert = tree2;
 
-            var subTree = insertTarget.Children.FirstOrDefault(node => node.NodeSource.Equals(nodeToInsert.NodeSource));
+            var subTree = insertTarget.Children.FirstOrDefault(node => node.NodeSource.Equals(nodeToInsert.NodeSource) && !node.IsRemoving);
             if (subTree != null)
             {
                 foreach (var child in nodeToInsert.Children)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Threading;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 
@@ -25,8 +24,6 @@ namespace BuildNotifications.ViewModel
         {
             _lastParsedSearch = e.CreatedSearch;
             _lastParsedSearchTerm = e.ParsedText;
-            LogTo.Debug("Last search parsed text: " + _lastParsedSearchTerm);
-            LogTo.Debug("Last search: " + _lastParsedSearch);
             OnPropertyChanged(nameof(TextIsEmpty));
             StartSearchTask();
         }

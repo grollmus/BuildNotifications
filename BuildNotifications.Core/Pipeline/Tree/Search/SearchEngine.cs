@@ -12,10 +12,16 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         private readonly List<ISearchCriteria> _searchCriteria = new List<ISearchCriteria>();
 
-        public void AddCriteria(ISearchCriteria criteria)
+        private readonly List<ISearchCriteria> _ignoredCriterionsForDefaultSearch = new List<ISearchCriteria>();
+
+        public void AddCriteria(ISearchCriteria criteria, bool includeInDefaultCriteria = true)
         {
             _searchCriteria.Add(criteria);
-            _defaultCriteria = new DefaultSearchCriteria(_searchCriteria);
+
+            if (!includeInDefaultCriteria)
+                _ignoredCriterionsForDefaultSearch.Add(criteria);
+
+            _defaultCriteria = new DefaultSearchCriteria(_searchCriteria, _ignoredCriterionsForDefaultSearch);
         }
 
         private ISearchCriteria _defaultCriteria;
@@ -26,7 +32,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public SearchEngine()
         {
-            _defaultCriteria = new DefaultSearchCriteria(Enumerable.Empty<ISearchCriteria>());
+            _defaultCriteria = new DefaultSearchCriteria(Enumerable.Empty<ISearchCriteria>(), Enumerable.Empty<ISearchCriteria>());
         }
 
         public ISpecificSearch Parse(string textInput)

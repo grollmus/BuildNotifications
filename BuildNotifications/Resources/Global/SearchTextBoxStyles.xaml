@@ -22,9 +22,9 @@
     </Style>
 
     <DataTemplate DataType="{x:Type search:SearchSuggestionViewModel}">
-        <DockPanel>
+        <DockPanel x:Name="SuggestionDockPanel">
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
-                       Margin="{StaticResource BlockHalfXOnlyMargin}" />
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" x:Name="SuggestionTextBlock"/>
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
@@ -33,6 +33,12 @@
             </i:Interaction.Triggers>
         </DockPanel>
 
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsKeyword}" Value="True">
+                <Setter TargetName="SuggestionDockPanel" Property="Background" Value="{DynamicResource Background3}"/>
+                <Setter TargetName="SuggestionTextBlock" Property="FontWeight" Value="Bold"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
 

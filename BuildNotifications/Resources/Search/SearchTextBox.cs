@@ -248,12 +248,10 @@ namespace BuildNotifications.Resources.Search
         private void OnGotFocus(object sender, RoutedEventArgs e)
         {
             CheckForScrollViewerCollision();
-            if (string.IsNullOrWhiteSpace(Selection.ToString()))
-                SelectAll();
-
             _overlayWidth = RenderSizeOfElement(_overlay).Width;
             ParseCurrentText();
             _popup.IsOpen = true;
+            SelectAll();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -277,6 +275,12 @@ namespace BuildNotifications.Resources.Search
 
                     _lastPressedKey = e.Key;
                     break;
+                case Key.Escape:
+                    var request = new TraversalRequest(FocusNavigationDirection.Next);
+                    request.Wrapped = true;
+                    MoveFocus(request);
+                    e.Handled = true;
+                    return;
                 default:
                     return;
             }
@@ -362,7 +366,11 @@ namespace BuildNotifications.Resources.Search
                 windowThisControlIsIn.LocationChanged += OnWindowLocationChanged;
         }
 
-        private void OnLostFocus(object sender, RoutedEventArgs e) => ResetScrollViewerMargin();
+        private void OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            ResetScrollViewerMargin();
+            _popup.IsOpen = false;
+        }
 
         private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -562,6 +570,8 @@ namespace BuildNotifications.Resources.Search
         private readonly ISearchCriteriaSuggestion _searchCriteriaSuggestion;
         public string SuggestedText { get; }
 
+        public bool IsKeyword => _searchCriteriaSuggestion.IsKeyword;
+
         public SearchSuggestionViewModel(ISearchCriteriaSuggestion searchCriteriaSuggestion)
         {
             _searchCriteriaSuggestion = searchCriteriaSuggestion;
@@ -643,29 +653,46 @@ namespace BuildNotifications.Resources.Search
 
         public void UpdateSuggestions(string currentSearchTerm)
         {
+            var selectedIndexBeforeUpdate = SelectedSuggestionIndex;
             var hadSuggestionsBeforeUpdate = HasSuggestions;
             var newSuggestions = SearchCriteria.Suggest(currentSearchTerm).Select(s => new SearchSuggestionViewModel(s)).ToList();
 
             var toRemove = Suggestions.Where(s => !newSuggestions.Any(n => n.IsSameSuggestion(s))).ToList();
             var toAdd = newSuggestions.Where(n => !Suggestions.Any(s => s.IsSameSuggestion(n))).ToList();
 
-            foreach (var suggestionToRemove in toRemove)
-            {
-                Suggestions.Remove(suggestionToRemove);
-            }
-
             foreach (var suggestionToAdd in toAdd)
             {
                 Suggestions.Add(suggestionToAdd);
             }
 
-            Suggestions.Sort(s => newSuggestions.IndexOf(s));
+            SortSuggestions(newSuggestions);
+
+            foreach (var suggestionToRemove in toRemove)
+            {
+                Suggestions.Remove(suggestionToRemove);
+            }
 
             if (Suggestions.Any(s => !s.IsRemoving) && (SelectedSuggestion == null || SelectedSuggestion.IsRemoving))
                 SelectedSuggestion = Suggestions.First(s => !s.IsRemoving);
 
             if (hadSuggestionsBeforeUpdate != HasSuggestions)
                 OnPropertyChanged(nameof(HasSuggestions));
+
+            // keep the selection on the first item, except when the user has previously selected another item (and the index is != 0)
+            if (selectedIndexBeforeUpdate == 0 && SelectedSuggestionIndex != 0)
+                SelectedSuggestionIndex = 0;
+        }
+
+        private void SortSuggestions(IList<SearchSuggestionViewModel> newSuggestions)
+        {
+            Suggestions.Sort(s =>
+            {
+                var index = newSuggestions.IndexOf(newSuggestions.FirstOrDefault(nS => nS.SuggestedText.Equals(s.SuggestedText, StringComparison.InvariantCulture)));
+                if (index == -1)
+                    index = Suggestions.IndexOf(s);
+
+                return index;
+            });
         }
 
         public void ChangeSelectedSuggestionIndex(int indexChange)

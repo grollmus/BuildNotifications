@@ -155,8 +155,8 @@ namespace BuildNotifications.Core.Pipeline
                         _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(StringComparison.InvariantCulture), build);
                         count += 1;
                     }
-
-                    LogTo.Debug($"Added \"{count}\" builds in project \"{project.Name}\"");
+                    
+                    LogTo.Debug($"Added \"{count}\" builds in project \"{project.Name}\". Build cache total: {_buildCache.Size}");
                     var removedBuilds = project.FetchRemovedBuilds();
                     count = 0;
                     await foreach (var build in removedBuilds)
@@ -283,13 +283,6 @@ namespace BuildNotifications.Core.Pipeline
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
             LogTo.Debug($"Applied search \"{search}\".");
-        }
-
-        public void ApplySightChanges()
-        {
-            LogTo.Debug($"{nameof(ApplySightChanges)} called.");
-            var tree = BuildTree();
-            _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
         }
 
         public async Task Update()

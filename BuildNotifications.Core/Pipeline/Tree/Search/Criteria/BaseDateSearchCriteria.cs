@@ -43,9 +43,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         {
             return suggestions
                 .Select(AsDateTimeTuple)
-                .OrderBy(t => t.suggestion.Length) // shortest to longest
                 .Distinct(SuggestionTupleEqualByDateTimeEqualityComparer) // only unique dates
-                .OrderByDescending(t => t.dateTime) // display highest dates first
                 .Select(t => t.suggestion);
         }
 
@@ -58,8 +56,11 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             if (DateTime.TryParse(dateTimeAsString, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var asDateTime))
                 return (asDateTime, dateTimeAsString);
 
-            return (DateTime.MaxValue, dateTimeAsString);
+            // use hashcode of string to get unique DateTimes.
+            return (DateTime.Now, dateTimeAsString);
         }
+
+        private readonly StringMatcher _suggestionStringMatcher = new StringMatcher();
 
         protected IEnumerable<string> SuggestPossibleDates(string inputSoFar, IEnumerable<DateTime> possibleDates)
         {
@@ -72,6 +73,12 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 var inputAutoFilledWithPossibleDate = inputSoFar + possibleDateAsString.Substring(inputSoFar.Length, possibleDateAsString.Length - inputSoFar.Length);
                 if (DateTime.TryParse(inputAutoFilledWithPossibleDate, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var asDateTime) && asDateTime.Equals(possibleDate))
                     yield return inputAutoFilledWithPossibleDate;
+                else
+                {
+                    _suggestionStringMatcher.SearchPattern = inputSoFar;
+                    if (_suggestionStringMatcher.IsMatch(possibleDateAsString))
+                        yield return possibleDateAsString;
+                }
             }
         }
 

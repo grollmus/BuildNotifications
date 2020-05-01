@@ -91,5 +91,10 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// <param name="providerId">Id of the provider to fetch data for.</param>
         /// <returns>List of all values matching the provider.</returns>
         IEnumerable<T> Values(int providerId);
+
+        /// <summary>
+        /// Amount of items present within the cache.
+        /// </summary>
+        int Size { get; }
     }
 }

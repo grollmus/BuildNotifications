@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Search;
@@ -15,12 +16,14 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         protected ISearchCriteria CriteriaUnderTest { get; }
         protected static CultureInfo TestCulture => CultureInfo.GetCultureInfo("en");
 
+        protected const string ReferenceDate = "6/15/2020";
+
         protected DateCriteriaTests(BaseSearchCriteria criteriaUnderTest)
         {
             CriteriaUnderTest = criteriaUnderTest;
             criteriaUnderTest.UseSpecificCulture(TestCulture);
         }
-        
+
         protected void ExpectNoMatch(string referenceDate, string input)
         {
             var build = BuildFromReferenceDate(referenceDate);
@@ -29,7 +32,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 
             Assert.False(isMatch);
         }
-        
+
         protected void ExpectMatch(string referenceDate, string input)
         {
             var build = BuildFromReferenceDate(referenceDate);
@@ -74,6 +77,46 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             Assert.Equal(suggestions.Count, distinctSuggestions.Count());
         }
 
+        [Theory]
+        [InlineData("1")]
+        [InlineData("1/")]
+        [InlineData("10")]
+        [InlineData("12")]
+        [InlineData("1/5")]
+        public void SuggestionsAreSortedDescending(string input)
+        {
+            var suggestions = CriteriaUnderTest.Suggest(input).ToList();
+
+            var asDateTimes = suggestions.Select(s => DateTime.Parse(s.Suggestion, TestCulture, DateTimeStyles.AssumeLocal)).ToList();
+            var sortedRecentToOldest = asDateTimes.OrderByDescending(x => x);
+
+            Assert.Equal(sortedRecentToOldest, asDateTimes);
+        }
+
+        [Theory]
+        [InlineData("1")]
+        [InlineData("1/")]
+        [InlineData("10")]
+        [InlineData("12")]
+        [InlineData("1/5")]
+        [InlineData("6/16/2020")]
+        [InlineData("6")]
+        [InlineData("6/")]
+        [InlineData("6/16")]
+        [InlineData(" 6/16")]
+        [InlineData(" 6/16 ")]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void SuggestionsAreUnique(string input)
+        {
+            var suggestions = CriteriaUnderTest.Suggest(input).ToList();
+
+            var asDateTimes = suggestions.Select(s => DateTime.TryParse(s.Suggestion, TestCulture, DateTimeStyles.AssumeLocal, out var asDateTime) ? asDateTime.ToString("d", TestCulture) : s.Suggestion).ToList();
+            var distinctDateTimes = asDateTimes.Distinct();
+
+            Assert.Equal(suggestions.Count, distinctDateTimes.Count());
+        }
+
         public static IEnumerable<object[]> TodaySuggestionTestData()
         {
             var todayAsString = DateTime.Today.ToString("d", TestCulture);
@@ -83,12 +126,22 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             }
         }
 
-        protected IBuild BuildFromReferenceDate(string dateStringRepresentationInTestCulture)
+        private static IBuild BuildFromReferenceDate(string dateStringRepresentationInTestCulture)
         {
             var build = Substitute.For<IBuild>();
             build.QueueTime.Returns(DateTime.Parse(dateStringRepresentationInTestCulture, TestCulture));
 
             return build;
+        }
+
+        protected static IPipeline MockPipelineWithBuildsFromReferenceDay()
+        {
+            var pipeline = Substitute.For<IPipeline>();
+            pipeline.LastUpdate.Returns(DateTime.Now);
+
+            pipeline.CachedBuilds().Returns(x => new List<IBuild> {BuildFromReferenceDate(ReferenceDate)});
+
+            return pipeline;
         }
     }
 }

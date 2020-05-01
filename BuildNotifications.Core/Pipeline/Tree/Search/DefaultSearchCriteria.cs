@@ -12,12 +12,15 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     /// </summary>
     public class DefaultSearchCriteria : ISearchCriteria
     {
+        private readonly IEnumerable<ISearchCriteria> _ignoredCriterionsForBuildInclusion;
+
         private readonly IReadOnlyList<ISearchCriteria> _includedCriterions;
 
         private readonly IReadOnlyList<ISearchCriteriaSuggestion> _criterionsAsSuggestions;
 
-        public DefaultSearchCriteria(IEnumerable<ISearchCriteria> includedCriterions)
+        public DefaultSearchCriteria(IEnumerable<ISearchCriteria> includedCriterions, IEnumerable<ISearchCriteria> ignoredCriterionsForBuildInclusion)
         {
+            _ignoredCriterionsForBuildInclusion = ignoredCriterionsForBuildInclusion;
             _includedCriterions = includedCriterions.ToList();
             _criterionsAsSuggestions = _includedCriterions.Select(s => new SearchCriteriaAsSuggestion(s)).ToList();
         }
@@ -26,10 +29,16 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public string LocalizedDescription => StringLocalizer.SearchDefaultDescription;
 
-        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
-        {
-            const int suggestionsToTakeFromEachCriteria = 2;
+        public int SuggestionsToTakeFromEachCriteria { get; set; } = 2;
 
+        private const int ExamplesToTakeFromEachCriteria = 1;
+
+        public int MaxSuggestions { get; set; } = 5;
+
+        public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input) => SuggestionsFromEachCriteria(input).Distinct().Take(MaxSuggestions);
+
+        private IEnumerable<ISearchCriteriaSuggestion> SuggestionsFromEachCriteria(string input)
+        {
             foreach (var searchCriteriaSuggestion in _criterionsAsSuggestions)
             {
                 if (string.IsNullOrEmpty(input) || searchCriteriaSuggestion.Suggestion.StartsWith(input, StringComparison.InvariantCultureIgnoreCase))
@@ -38,24 +47,22 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
             foreach (var searchCriteria in _includedCriterions)
             {
-                foreach (var suggestion in searchCriteria.Suggest(input).Take(suggestionsToTakeFromEachCriteria))
+                foreach (var suggestion in searchCriteria.Suggest(input).Take(SuggestionsToTakeFromEachCriteria))
                 {
                     yield return suggestion;
                 }
             }
         }
 
-        public bool IsBuildIncluded(IBuild build, string input) => string.IsNullOrWhiteSpace(input) || _includedCriterions.Any(c => c.IsBuildIncluded(build, input));
+        public bool IsBuildIncluded(IBuild build, string input) => string.IsNullOrWhiteSpace(input) || _includedCriterions.Except(_ignoredCriterionsForBuildInclusion).Any(c => c.IsBuildIncluded(build, input));
 
         public IEnumerable<string> LocalizedExamples => ExamplesFromEachSubCriteria().Select(t => t.exampleTerm);
 
         public IEnumerable<(string keyword, string exampleTerm)> ExamplesFromEachSubCriteria()
         {
-            const int suggestionsToTakeFromEachCriteria = 1;
-
             foreach (var searchCriteria in _includedCriterions)
             {
-                foreach (var example in searchCriteria.LocalizedExamples.Take(suggestionsToTakeFromEachCriteria))
+                foreach (var example in searchCriteria.LocalizedExamples.Take(ExamplesToTakeFromEachCriteria))
                 {
                     yield return (searchCriteria.LocalizedKeyword, example);
                 }
@@ -63,7 +70,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
     }
 
-    public class SearchCriteriaAsSuggestion : ISearchCriteriaSuggestion
+    public sealed class SearchCriteriaAsSuggestion : ISearchCriteriaSuggestion
     {
         public SearchCriteriaAsSuggestion(ISearchCriteria searchCriteria)
         {
@@ -71,5 +78,20 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         }
 
         public string Suggestion { get; }
+
+        public bool IsKeyword => true;
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ISearchCriteriaSuggestion asSuggestion)
+                return Equals(asSuggestion);
+
+            return false;
+        }
+
+        private bool Equals(ISearchCriteriaSuggestion other) => 
+            other.Suggestion.Equals(Suggestion, StringComparison.InvariantCulture) && other.IsKeyword == IsKeyword;
+
+        public override int GetHashCode() => Suggestion.GetHashCode(StringComparison.InvariantCulture);
     }
 }
