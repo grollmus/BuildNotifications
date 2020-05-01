@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using BuildNotifications.Core;
@@ -33,29 +34,16 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
                 }
             }
 
-            return option switch
-            {
-                BooleanOption bOption => ConstructOption(bOption),
-                NumberOption nOption => ConstructOption(nOption),
-                TextOption tOption => ConstructOption(tOption),
-                CommandOption cOption => ConstructOption(cOption),
-                EncryptedTextOption eOption => ConstructOption(eOption),
-                StringCollectionOption sOption => ConstructOption(sOption),
-                DisplayOption dOption => ConstructOption(dOption),
-
-                _ => ConstructDisplayOption(option)
-            };
+            Binder? binder = null;
+            var args = new object?[] {option, _localizationProvider};
+            const BindingFlags bindingAttributes = BindingFlags.CreateInstance;
+            CultureInfo? culture = null;
+            return Activator.CreateInstance(option.GetType(), bindingAttributes, binder, args, culture) as IPluginOptionViewModel
+                   ?? ConstructDisplayOption(option);
         }
 
-        private PluginDisplayOptionViewModel ConstructOption(DisplayOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
-        private PluginStringCollectionOptionViewModel ConstructOption(StringCollectionOption option) => new PluginStringCollectionOptionViewModel(option, _localizationProvider);
-        private PluginEncryptedTextOptionViewModel ConstructOption(EncryptedTextOption option) => new PluginEncryptedTextOptionViewModel(option, _localizationProvider);
         private IPluginOptionViewModel ConstructDisplayOption(IOption option) => new PluginDisplayOptionViewModel(option, _localizationProvider);
         private PluginListOptionViewModel<TValue> ConstructListOption<TValue>(ListOption<TValue> option) => new PluginListOptionViewModel<TValue>(option, _localizationProvider);
-        private PluginNumberOptionViewModel ConstructOption(NumberOption option) => new PluginNumberOptionViewModel(option, _localizationProvider);
-        private PluginTextOptionViewModel ConstructOption(TextOption option) => new PluginTextOptionViewModel(option, _localizationProvider);
-        private PluginCommandOptionViewModel ConstructOption(CommandOption option) => new PluginCommandOptionViewModel(option, _localizationProvider);
-        private PluginBooleanOptionViewModel ConstructOption(BooleanOption option) => new PluginBooleanOptionViewModel(option, _localizationProvider);
         private readonly MethodInfo _constructListOptionMethodInfo;
         private readonly ILocalizationProvider _localizationProvider;
     }
