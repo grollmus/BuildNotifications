@@ -30,7 +30,7 @@ namespace BuildNotifications.Plugin.GitHub
 
         public void OnPluginLoaded(IPluginHost host)
         {
-            // to be implemented
+            // nothing to do
         }
 
         IBranchProvider? ISourceControlPlugin.ConstructProvider(string serialized)

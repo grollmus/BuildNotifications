@@ -53,7 +53,7 @@ namespace BuildNotifications.Core.Config
 
         private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
         {
-            var project = CreateEmptyConfiguration(withConnection.Name);
+            var project = EmptyConfiguration(withConnection.Name);
 
             project.BuildConnectionName.Add(withConnection.Name);
             project.SourceControlConnectionName = withConnection.Name;
@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Config
             return project;
         }
 
-        public IProjectConfiguration CreateEmptyConfiguration(string name) => new ProjectConfiguration
+        public IProjectConfiguration EmptyConfiguration(string name) => new ProjectConfiguration
         {
             ProjectName = name
         };

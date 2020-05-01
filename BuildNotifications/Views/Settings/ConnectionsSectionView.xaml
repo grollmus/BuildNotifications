@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
-             xmlns:settings1="clr-namespace:BuildNotifications.Views.Settings"
+             xmlns:settings="clr-namespace:BuildNotifications.Views.Settings"
              xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionsSectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -13,7 +13,7 @@
 		<buttonNavigation:ButtonNavigation.Resources>
 			<ResourceDictionary>
 				<DataTemplate DataType="{x:Type setup:ConnectionViewModel}">
-					<settings1:ConnectionView />
+					<settings:ConnectionView />
 				</DataTemplate>
 			</ResourceDictionary>
 		</buttonNavigation:ButtonNavigation.Resources>

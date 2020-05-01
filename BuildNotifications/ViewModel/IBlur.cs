@@ -1,6 +1,6 @@
 ﻿namespace BuildNotifications.ViewModel
 {
-    public interface IBlur
+    public interface IBlurrableViewModel
     {
         void Blur();
         void UnBlur();

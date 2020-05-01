@@ -55,10 +55,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
             }
         }
 
-        private void OnValueChanged(object? sender, EventArgs e)
-        {
-            Update();
-        }
+        private void OnValueChanged(object? sender, EventArgs e) => Update();
 
         private void SetLoadingFlag(bool isLoading)
         {

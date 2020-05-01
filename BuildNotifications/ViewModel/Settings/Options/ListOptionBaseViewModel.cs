@@ -36,7 +36,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         protected abstract IEnumerable<TItem> ModelValues { get; }
 
-        protected virtual string? DisplayNameFor(TItem item) => item?.ToString();
+        protected virtual string DisplayNameFor(TItem item) => item?.ToString() ?? string.Empty;
 
         protected void ResetFlag()
         {

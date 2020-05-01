@@ -41,7 +41,6 @@
         Queued,
         PullRequest,
         EyeIris,
-        EyeLid,
-        Save
+        EyeLid
     }
 }

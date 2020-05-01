@@ -41,11 +41,6 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(TitleProperty, value);
         }
 
-        private void FixSelection()
-        {
-            // F
-        }
-
         private static void OnPluginRepositoryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is PluginChooser ctrl)

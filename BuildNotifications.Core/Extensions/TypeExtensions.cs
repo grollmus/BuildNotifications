@@ -16,7 +16,7 @@ namespace BuildNotifications.Core
 
         public static Type? FindBaseType(this Type type, Type baseType)
         {
-            Type? result = type;
+            var result = type;
             while (result?.CompareWithoutGenericTypes(baseType) == false)
             {
                 result = result.BaseType;
@@ -26,8 +26,6 @@ namespace BuildNotifications.Core
         }
 
         public static bool IsAssignableToGenericType(this Type givenType, Type genericType) => IsAssignableToGenericTypeInternal(givenType, genericType);
-
-        public static bool IsGenericAssignableFrom(this Type genericType, Type givenType) => IsAssignableToGenericTypeInternal(givenType, genericType);
 
         private static bool IsAssignableToGenericTypeInternal(Type givenType, Type genericType)
         {

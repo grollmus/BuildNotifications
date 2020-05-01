@@ -13,7 +13,7 @@
 						           Foreground="{DynamicResource Foreground1}" />
 						<ListBox ItemsSource="{TemplateBinding Plugins}" x:Name="ListBox" Padding="0"
 						         HorizontalContentAlignment="Center" HorizontalAlignment="Center"
-						         SelectedItem="{Binding SelectedPlugin, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+						         SelectedItem="{Binding SelectedPlugin, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" SelectedIndex="0">
 
 							<ListBox.ItemTemplate>
 								<DataTemplate>
