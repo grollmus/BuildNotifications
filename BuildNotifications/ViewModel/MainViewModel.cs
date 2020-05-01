@@ -54,12 +54,12 @@ namespace BuildNotifications.ViewModel
             Initialize();
         }
 
-        public bool BlurMainView
+        public bool BlurView
         {
-            get => _blurMainView;
+            get => _blurView;
             set
             {
-                _blurMainView = value;
+                _blurView = value;
                 OnPropertyChanged();
             }
         }
@@ -593,12 +593,12 @@ namespace BuildNotifications.ViewModel
 
         public void Blur()
         {
-            BlurMainView = true;
+            BlurView = true;
         }
 
         public void UnBlur()
         {
-            BlurMainView = false;
+            BlurView = false;
         }
 
         public void Dispose()
@@ -616,7 +616,7 @@ namespace BuildNotifications.ViewModel
         private readonly ConfigurationApplication _configurationApplication;
         private readonly IPopupService _popupService;
         private bool _showSights;
-        private bool _blurMainView;
+        private bool _blurView;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private Task? _postPipelineUpdateTask;

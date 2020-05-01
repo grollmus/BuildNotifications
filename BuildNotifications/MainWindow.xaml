@@ -79,10 +79,10 @@
 
     <Grid>
         <i:Interaction.Triggers>
-            <ei:DataTrigger Binding="{Binding BlurMainView}" Value="false">
+            <ei:DataTrigger Binding="{Binding BlurView}" Value="false">
                 <animation:Blur Amount="0" Duration="0.5"/>
             </ei:DataTrigger>
-            <ei:DataTrigger Binding="{Binding BlurMainView}" Value="true">
+            <ei:DataTrigger Binding="{Binding BlurView}" Value="true">
                 <animation:Blur Amount="15" Duration="1"/>
             </ei:DataTrigger>
         </i:Interaction.Triggers>
