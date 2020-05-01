@@ -44,6 +44,20 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             Assert.Equal(expected, acutal);
         }
 
+        [Fact]
+        public void SettingValueShouldNotChangeCurrentValueWhenNewValueIsInvalid()
+        {
+            // Arrange
+            var sut = new EnumOption<TestEnum>(TestEnum.None, string.Empty, string.Empty);
+
+            // Act
+            sut.Value = (TestEnum) 12345;
+
+            // Assert
+            var actual = sut.Value;
+            Assert.Equal(TestEnum.None, actual);
+        }
+
         [Theory]
         [InlineData(TestEnum.One, true)]
         [InlineData(TestEnum.Three, true)]
