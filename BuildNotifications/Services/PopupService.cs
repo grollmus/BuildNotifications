@@ -29,6 +29,19 @@ namespace BuildNotifications.Services
             return vm.Result;
         }
 
+        public void ShowInfoPopup(bool includePreReleases, IAppUpdater appUpdater)
+        {
+            var popup = new InfoPopupDialog
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = new InfoPopupViewModel(appUpdater, includePreReleases)
+            };
+
+            _blur.Blur();
+            popup.ShowDialog();
+            _blur.UnBlur();
+        }
+
         private readonly IBlurrableViewModel _blur;
     }
 }

@@ -24,7 +24,6 @@ using BuildNotifications.ViewModel.Sight;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
-using BuildNotifications.Views;
 using JetBrains.Annotations;
 using Semver;
 using TweenSharp.Animation;
@@ -53,16 +52,6 @@ namespace BuildNotifications.ViewModel
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             _popupService = new PopupService(this);
             Initialize();
-        }
-
-        public void Blur()
-        {
-            BlurMainView = true;
-        }
-
-        public void UnBlur()
-        {
-            BlurMainView = false;
         }
 
         public bool BlurMainView
@@ -392,15 +381,7 @@ namespace BuildNotifications.ViewModel
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
 
-            var popup = new InfoPopupDialog
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
-            };
-
-            Blur();
-            popup.ShowDialog();
-            UnBlur();
+            _popupService.ShowInfoPopup(includePreReleases, appUpdater);
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -610,6 +591,16 @@ namespace BuildNotifications.ViewModel
             ShowNotifications(e.Notifications);
         }
 
+        public void Blur()
+        {
+            BlurMainView = true;
+        }
+
+        public void UnBlur()
+        {
+            BlurMainView = false;
+        }
+
         public void Dispose()
         {
             _trayIcon.Dispose();
@@ -623,6 +614,7 @@ namespace BuildNotifications.ViewModel
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
+        private readonly IPopupService _popupService;
         private bool _showSights;
         private bool _blurMainView;
         private CancellationTokenSource _cancellationTokenSource;
@@ -635,7 +627,6 @@ namespace BuildNotifications.ViewModel
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
-        private readonly IPopupService _popupService;
 
         private class Dummy
         {
