@@ -44,13 +44,18 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 if (result.Success && !token.IsCancellationRequested)
                     _dispatcher.Dispatch(() => _handleResultCallback(result.Value));
             }
-            catch (Exception)
+            catch (ThreadAbortException)
             {
-                // ignored
+                // ignored because a new update has been started
+            }
+            catch
+            {
+                SetLoadingFlag(false);
             }
             finally
             {
-                if (!token.IsCancellationRequested)
+                var newUpdateRunning = token.IsCancellationRequested;
+                if (!newUpdateRunning)
                     SetLoadingFlag(false);
             }
         }
