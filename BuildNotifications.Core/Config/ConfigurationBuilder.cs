@@ -54,7 +54,7 @@ namespace BuildNotifications.Core.Config
         {
             var project = EmptyConfiguration(withConnection.Name);
 
-            project.BuildConnectionName.Add(withConnection.Name);
+            project.BuildConnectionName = new List<string> {withConnection.Name};
             project.SourceControlConnectionName = withConnection.Name;
 
             return project;

@@ -75,7 +75,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public EnumOptionViewModel<PullRequestDisplayMode> PullRequestDisplayMode { get; }
-
         public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
@@ -93,8 +92,10 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         private void Save()
         {
             Model.ProjectName = Name.Value ?? string.Empty;
-            Model.BuildConnectionName.Clear();
-            Model.BuildConnectionName.Add(BuildConnection.Value.Name);
+            Model.BuildConnectionName = new List<string>
+            {
+                BuildConnection.Value.Name
+            };
             Model.SourceControlConnectionName = SourceControlConnection.Value.Name;
             Model.IsEnabled = IsEnabled.Value;
             Model.HideCompletedPullRequests = HideCompletedPullRequests.Value;
@@ -103,6 +104,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Model.BranchBlacklist = BranchBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
             Model.BuildDefinitionWhitelist = BuildDefinitionWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
             Model.BuildDefinitionBlacklist = BuildDefinitionBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
+            Model.PullRequestDisplay = PullRequestDisplayMode.Value;
 
             RaiseSaveRequested();
         }

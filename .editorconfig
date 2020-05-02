@@ -110,3 +110,6 @@ dotnet_diagnostic.S2344.severity = suggestion
 
 # CA1065: Do not raise exceptions in unexpected locations
 dotnet_diagnostic.CA1065.severity = suggestion
+
+# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
+dotnet_diagnostic.CA1826.severity = suggestion

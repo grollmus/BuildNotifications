@@ -28,15 +28,15 @@ namespace BuildNotifications.Core.Config
 
         public string ProjectName { get; set; }
 
-        public IList<string> BuildConnectionName { get; set; }
+        public IReadOnlyList<string> BuildConnectionName { get; set; }
 
-        public IList<string> BranchBlacklist { get; set; }
+        public IReadOnlyList<string> BranchBlacklist { get; set; }
 
-        public IList<string> BranchWhitelist { get; set; }
+        public IReadOnlyList<string> BranchWhitelist { get; set; }
 
-        public IList<string> BuildDefinitionBlacklist { get; set; }
+        public IReadOnlyList<string> BuildDefinitionBlacklist { get; set; }
 
-        public IList<string> BuildDefinitionWhitelist { get; set; }
+        public IReadOnlyList<string> BuildDefinitionWhitelist { get; set; }
 
         public string DefaultCompareBranch { get; set; }
 
