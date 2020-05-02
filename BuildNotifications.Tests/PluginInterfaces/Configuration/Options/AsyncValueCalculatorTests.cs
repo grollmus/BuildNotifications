@@ -164,9 +164,10 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var tcs = new TaskCompletionSource<int>();
             var dispatcher = CreateDispatcher();
 
-            Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
+            async Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
             {
-                return Task.FromResult<IValueCalculationResult<int>>(ValueCalculationResult.Success(123));
+                await Task.Delay(50, ct);
+                return ValueCalculationResult.Success(123);
             }
 
             void HandleResultCallback(int arg)
@@ -184,6 +185,8 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             // Assert
             await tcs.Task;
+
+            Assert.False(option.IsLoading);
 
             option.Received(1).IsLoading = true;
             option.Received(1).IsLoading = false;
