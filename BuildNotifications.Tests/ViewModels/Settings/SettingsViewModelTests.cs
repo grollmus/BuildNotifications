@@ -75,13 +75,12 @@ namespace BuildNotifications.Tests.ViewModels.Settings
         }
 
         [Fact]
-        public void UpdateUsersShouldSynchronizeUserIdentities()
+        public void UsersShouldSynchronizeUserIdentities()
         {
             // Arrange
             var configuration = Substitute.For<IConfiguration>();
             var userIdentityList = Substitute.For<IUserIdentityList>();
             Action saveMethod = () => { };
-            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList);
 
             ICollection<IUser> expectedUsers = new List<IUser>();
             expectedUsers.Add(new MockUser("123", "User123", "U123"));
@@ -89,7 +88,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings
             userIdentityList.IdentitiesOfCurrentUser.Returns(expectedUsers);
 
             // Act
-            sut.UpdateUser();
+            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList);
 
             // Assert
             Assert.Equal(expectedUsers, sut.CurrentUserIdentities.Select(u => u.User));

@@ -268,8 +268,6 @@ namespace BuildNotifications.ViewModel
                 _coreSetup.Pipeline.AddProject(project);
                 _hasAnyProjects = true;
             }
-
-            SettingsViewModel.UpdateUser();
         }
 
         private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)

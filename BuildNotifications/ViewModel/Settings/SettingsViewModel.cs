@@ -76,24 +76,6 @@ namespace BuildNotifications.ViewModel.Settings
 
         public event EventHandler<EventArgs>? EditConnectionsRequested;
 
-        public void UpdateUser()
-        {
-            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
-
-            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
-            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
-
-            foreach (var user in toAdd)
-            {
-                CurrentUserIdentities.Add(user);
-            }
-
-            foreach (var user in toRemove)
-            {
-                CurrentUserIdentities.Remove(user);
-            }
-        }
-
         private void EditConnections()
         {
             EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
@@ -114,6 +96,24 @@ namespace BuildNotifications.ViewModel.Settings
             _configuration.UsePreReleases = UpdateToPreReleases.Value;
 
             _saveMethod.Invoke();
+        }
+
+        private void UpdateUser()
+        {
+            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
+
+            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
+            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
+
+            foreach (var user in toAdd)
+            {
+                CurrentUserIdentities.Add(user);
+            }
+
+            foreach (var user in toRemove)
+            {
+                CurrentUserIdentities.Remove(user);
+            }
         }
 
         private readonly IConfiguration _configuration;

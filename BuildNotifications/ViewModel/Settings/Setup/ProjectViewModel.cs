@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Text;
 using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
 using BuildNotifications.ViewModel.Settings.Options;
-using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+    // Virtual Events are used in Tests
     internal class ProjectViewModel : BaseButtonNavigationItem
     {
         public ProjectViewModel(IProjectConfiguration model, IConfiguration configuration)
         {
             Model = model;
-            SaveCommand = new DelegateCommand(Save);
 
             Name = new TextOptionViewModel(model.ProjectName, StringLocalizer.ProjectName);
             IsEnabled = new BooleanOptionViewModel(model.IsEnabled, StringLocalizer.IsEnabled);
@@ -75,7 +74,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public EnumOptionViewModel<PullRequestDisplayMode> PullRequestDisplayMode { get; }
-        public ICommand SaveCommand { get; }
         public ConnectionOptionViewModel SourceControlConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
 

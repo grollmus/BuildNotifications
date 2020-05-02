@@ -144,7 +144,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var result = await tcs.Task;
 
             option.Received(1).IsLoading = true;
-            option.Received(1).IsLoading = false;
+            option.Received(2).IsLoading = false;
 
             Assert.Equal(0, result);
         }

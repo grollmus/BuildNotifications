@@ -65,6 +65,15 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             });
         }
 
+        private void ReportConnectionTestStarted()
+        {
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                var notification = new StatusNotification("PleaseWait", "Testing", NotificationType.Progress);
+                Notifications.ShowNotifications(new List<INotification> {notification});
+            });
+        }
+
         private void ReportSuccess()
         {
             Application.Current.Dispatcher?.Invoke(() =>
@@ -83,7 +92,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Notifications.ClearNotificationsOfType(NotificationType.Error, RemoveFlag.Immediately);
             Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlag.Immediately);
             Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlag.Immediately);
-            Notifications.ShowNotifications(new List<INotification> {new StatusNotification("PleaseWait", "Testing", NotificationType.Progress)});
 
             await TestConnection(BuildConnectionData());
 
@@ -93,6 +101,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private async Task TestConnection(ConnectionData connectionData)
         {
+            ReportConnectionTestStarted();
             var failed = false;
 
             if (connectionData.ConnectionType == ConnectionPluginType.Build)
