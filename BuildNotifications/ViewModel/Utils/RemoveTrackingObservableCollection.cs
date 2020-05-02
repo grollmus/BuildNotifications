@@ -29,8 +29,7 @@ namespace BuildNotifications.ViewModel.Utils
             _list = new ObservableCollection<T>(initialValues);
             _list.CollectionChanged += (sender, args) =>
             {
-                Application.Current.Dispatcher?.Invoke(() =>
-                    CollectionChanged?.Invoke(sender, args));
+                CollectionChanged?.Invoke(sender, args);
             };
 
             _sortFunction = _list;
