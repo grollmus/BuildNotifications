@@ -44,7 +44,7 @@ namespace BuildNotifications.PluginInterfaces.Configuration.Options
                 if (result.Success && !token.IsCancellationRequested)
                     _dispatcher.Dispatch(() => _handleResultCallback(result.Value));
             }
-            catch (ThreadAbortException)
+            catch (TaskCanceledException)
             {
                 // ignored because a new update has been started
             }
