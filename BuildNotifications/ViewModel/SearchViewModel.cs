@@ -23,14 +23,14 @@ namespace BuildNotifications.ViewModel
         private void SearchEngineOnSearchParsed(object? sender, SearchEngineEventArgs e)
         {
             _lastParsedSearch = e.CreatedSearch;
-            _lastParsedSearchTerm = e.ParsedText;
+            LastSearchedTerm = e.ParsedText;
             OnPropertyChanged(nameof(TextIsEmpty));
             StartSearchTask();
         }
 
         public ISearchEngine SearchEngine { get; }
 
-        public bool TextIsEmpty => _lastParsedSearchTerm.Length == 0;
+        public bool TextIsEmpty => LastSearchedTerm.Length == 0;
 
         private void SearchTimerOnTick(object? sender, EventArgs e)
         {
@@ -49,6 +49,16 @@ namespace BuildNotifications.ViewModel
         private readonly DispatcherTimer _searchTimer;
         private ISpecificSearch _lastParsedSearch = new EmptySearch();
 
-        private string _lastParsedSearchTerm = string.Empty;
+        private string _lastSearchedTerm = string.Empty;
+
+        public string LastSearchedTerm
+        {
+            get => _lastSearchedTerm;
+            set
+            {
+                _lastSearchedTerm = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

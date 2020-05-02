@@ -9,22 +9,33 @@
              xmlns:search="clr-namespace:BuildNotifications.Resources.Search"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:SearchViewModel}}">
 
-    <Grid Width="{StaticResource BlockTriple}">
+    <Grid>
         <search:SearchTextBox SearchEngine="{Binding SearchEngine}"
-                               Icon="Search" x:Name="SearchTextBox"
-                               MaxHeight="{StaticResource BlockOneAndHalf}"
-                               Margin="{DynamicResource BlockQuarterXOnlyMargin}" 
-                               SearchCriteriaBackground="{DynamicResource Background3}"
-                               SearchCriteriaForeground="{DynamicResource Foreground1}"
-                               SearchTermBackground="{DynamicResource Background2}"
-                               SearchTermForeground="{DynamicResource Foreground1}"
-                               />
+                              HorizontalAlignment="Right"
+                              Width="{Binding ElementName=SizeDummy, Path=ActualWidth}"
+                              Icon="Search" x:Name="SearchTextBox"
+                              MaxHeight="{StaticResource BlockOneAndHalf}"
+                              Margin="{DynamicResource BlockQuarterXOnlyMargin}"
+                              SearchCriteriaBackground="{DynamicResource Background3}"
+                              SearchCriteriaForeground="{DynamicResource Foreground1}"
+                              SearchTermBackground="{DynamicResource Background2}"
+                              SearchTermForeground="{DynamicResource Foreground1}" />
+
+        <!--The SearchTextBox scaled very weird by itself. Therefore a plain text block is used with the same input as the SearchTextBox to use as a reference size-->
+        <Border x:Name="SizeDummy" IsHitTestVisible="False" Visibility="Hidden" HorizontalAlignment="Right">
+            <TextBlock x:Name="SizeDummyTextBlock" Margin="{StaticResource BlockXOnlyMargin}" Text="{Binding LastSearchedTerm}"
+                       MinWidth="{StaticResource Block}" />
+        </Border>
+
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
-                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" />
+                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" TweenMinWidth="True"
+                                       Target="{Binding ElementName=SizeDummyTextBlock}" />
             </i:EventTrigger>
             <i:EventTrigger EventName="LostKeyboardFocus">
-                <animation:WidthChange TargetWidth="{StaticResource BlockTriple}" IsActive="{Binding TextIsEmpty}" />
+                <animation:WidthChange TargetWidth="{StaticResource Block}" TweenMinWidth="True"
+                                       IsActive="{Binding TextIsEmpty}"
+                                       Target="{Binding ElementName=SizeDummyTextBlock}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
     </Grid>
