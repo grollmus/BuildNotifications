@@ -5,19 +5,11 @@ using BuildNotifications.PluginInterfaces.Configuration.Options;
 using BuildNotifications.PluginInterfaces.Host;
 using NSubstitute;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 {
     public class AsyncValueCalculatorTests
     {
-        public AsyncValueCalculatorTests(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
-        private readonly ITestOutputHelper _output;
-
         private IDispatcher CreateDispatcher()
         {
             var dispatcher = Substitute.For<IDispatcher>();
@@ -62,26 +54,44 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
         [Fact]
         public async Task MultipleUpdateShouldTriggerCallbackOnlyOnce()
         {
-            // Arrange
-            const int runs = 3;
+            // As with all async code there is much magic happening here:
+            // We want to start a second update while the first one is still running.
+            // To do so we start the first update wait for a WaitHandle to be
+            // signaled and then start the second update.
+            //
+            // When the update method is run, it will signal the wait handle
+            // then wait some time to let the second update start
+            //
+            // The callback will set a TaskCompletionSource and this task is awaited
+            // in the test.
+            //
+            // The asserts check that
+            // - The update method was called twice
+            // - The result callback was only called once
+            // - The affected option is not loading anymore
+            // - The loading flags was set and unset correctly
+            //
+            // Yes one assert per test :x
 
+            // Arrange
             var tcs = new TaskCompletionSource<int>();
             var dispatcher = CreateDispatcher();
             var callbackCount = 0;
             var calculationCount = 0;
 
-            Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
+            var updateStartBlock = new ManualResetEventSlim(false);
+
+            async Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
             {
-                _output.WriteLine($"{DateTime.Now.Ticks} - Calc {calculationCount}");
-                ++calculationCount;
-                Thread.Sleep(30);
-                return Task.FromResult<IValueCalculationResult<int>>(ValueCalculationResult.Success(123));
+                Interlocked.Increment(ref calculationCount);
+                updateStartBlock.Set();
+                await Task.Delay(25, ct);
+                return ValueCalculationResult.Success(123);
             }
 
             void HandleResultCallback(int arg)
             {
-                _output.WriteLine($"{DateTime.Now.Ticks} - Callback {callbackCount}");
-                ++callbackCount;
+                Interlocked.Increment(ref callbackCount);
                 tcs.SetResult(arg);
             }
 
@@ -91,21 +101,19 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             sut.Affect(option);
 
             // Act
-            for (var i = 0; i < runs; ++i)
-            {
-                _output.WriteLine($"{DateTime.Now.Ticks} - Update {i}");
-                sut.Update();
-                Thread.Sleep(5);
-            }
+            sut.Update();
+            updateStartBlock.Wait();
+            sut.Update();
 
             // Assert
             await tcs.Task;
-            await Task.Delay(100);
 
             Assert.Equal(1, callbackCount);
-            Assert.Equal(runs, calculationCount);
+            Assert.Equal(2, calculationCount);
 
-            option.Received(runs).IsLoading = true;
+            Assert.False(option.IsLoading);
+
+            option.Received(2).IsLoading = true;
             option.Received(1).IsLoading = false;
         }
 
@@ -176,7 +184,6 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             // Assert
             await tcs.Task;
-            await Task.Delay(100);
 
             option.Received(1).IsLoading = true;
             option.Received(1).IsLoading = false;
