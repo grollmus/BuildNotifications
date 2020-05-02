@@ -86,8 +86,10 @@ namespace BuildNotifications.Plugin.Tfs
             return new VssCredentials(new VssBasicCredential(username, pw?.PlainText()));
         }
 
-        private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+        private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(AnonymousIdentityId);
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
+
+        private static readonly Guid AnonymousIdentityId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
     }
 }
