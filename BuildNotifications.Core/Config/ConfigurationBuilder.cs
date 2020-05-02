@@ -47,14 +47,14 @@ namespace BuildNotifications.Core.Config
 
         private bool AllConnectionsUsedInProject(IProjectConfiguration project, List<string> connectionNames)
         {
-            return connectionNames.All(n => project.BuildConnectionName.Contains(n) || project.SourceControlConnectionName == n);
+            return connectionNames.All(n => project.BuildConnectionNames.Contains(n) || project.SourceControlConnectionName == n);
         }
 
         private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
         {
             var project = EmptyConfiguration(withConnection.Name);
 
-            project.BuildConnectionName = new List<string> {withConnection.Name};
+            project.BuildConnectionNames = new List<string> {withConnection.Name};
             project.SourceControlConnectionName = withConnection.Name;
 
             return project;

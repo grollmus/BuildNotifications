@@ -11,7 +11,7 @@ namespace BuildNotifications.Core.Config
             BranchWhitelist = new List<string>();
             BuildDefinitionBlacklist = new List<string>();
             BuildDefinitionWhitelist = new List<string>();
-            BuildConnectionName = new List<string>();
+            BuildConnectionNames = new List<string>();
             SourceControlConnectionName = string.Empty;
 
             ProjectName = StringLocalizer.NewProject;
@@ -28,7 +28,7 @@ namespace BuildNotifications.Core.Config
 
         public string ProjectName { get; set; }
 
-        public IReadOnlyList<string> BuildConnectionName { get; set; }
+        public IReadOnlyList<string> BuildConnectionNames { get; set; }
 
         public IReadOnlyList<string> BranchBlacklist { get; set; }
 

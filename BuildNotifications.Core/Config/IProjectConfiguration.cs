@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Config
         /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        IReadOnlyList<string> BuildConnectionName { get; set; }
+        IReadOnlyList<string> BuildConnectionNames { get; set; }
 
         /// <summary>
         /// List of build definitions to never load information for.

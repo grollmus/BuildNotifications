@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.BuildConnectionNames.Returns(new List<string> {"connection"});
 
             // Act
             var actual = sut.Construct(project);
@@ -50,7 +50,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.BuildConnectionNames.Returns(new List<string> {"connection"});
 
             // Act
             var actual = sut.Construct(project);
@@ -77,7 +77,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.BuildConnectionNames.Returns(new List<string> {"connection"});
             project.SourceControlConnectionName.Returns("connection2");
 
             // Act
@@ -107,7 +107,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new ProjectFactory(pluginRepository, configuration);
 
             var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionName.Returns(new List<string> {"connection"});
+            project.BuildConnectionNames.Returns(new List<string> {"connection"});
             project.SourceControlConnectionName.Returns("connection");
 
             // Act

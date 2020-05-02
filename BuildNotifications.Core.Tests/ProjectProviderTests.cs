@@ -25,7 +25,7 @@ namespace BuildNotifications.Core.Tests
                 ProjectName = name,
                 IsEnabled = enabled,
                 SourceControlConnectionName = "source",
-                BuildConnectionName = new[] {"build"}
+                BuildConnectionNames = new[] {"build"}
             };
         }
 

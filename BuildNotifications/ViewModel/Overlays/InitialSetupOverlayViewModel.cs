@@ -132,7 +132,7 @@ namespace BuildNotifications.ViewModel.Overlays
             }
             else
             {
-                var anyConnectedBuildProviderSetup = _configuration.Projects.Any(x => x.BuildConnectionName.Any());
+                var anyConnectedBuildProviderSetup = _configuration.Projects.Any(x => x.BuildConnectionNames.Any());
                 var anyConnectedSourceControlProviderSetup = _configuration.Projects.Any(x => x.SourceControlConnectionName.Any());
 
                 if (!anyConnectedSourceControlProviderSetup && !anyConnectedBuildProviderSetup)

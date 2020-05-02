@@ -34,7 +34,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             SourceControlConnection = new ConnectionOptionViewModel(StringLocalizer.SourceControlConnectionNames, connections, connection);
 
             connections = configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.Build).ToList();
-            connection = connections.FirstOrDefault(c => c.Name == model.BuildConnectionName.FirstOrDefault());
+            connection = connections.FirstOrDefault(c => c.Name == model.BuildConnectionNames.FirstOrDefault());
             BuildConnection = new ConnectionOptionViewModel(StringLocalizer.BuildConnectionNames, connections, connection);
 
             foreach (var option in Options)
@@ -92,7 +92,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         private void Save()
         {
             Model.ProjectName = Name.Value ?? string.Empty;
-            Model.BuildConnectionName = new List<string>
+            Model.BuildConnectionNames = new List<string>
             {
                 BuildConnection.Value.Name
             };

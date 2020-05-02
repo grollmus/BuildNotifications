@@ -101,11 +101,11 @@ namespace BuildNotifications.Core.Pipeline
 
         public IProject? Construct(IProjectConfiguration config)
         {
-            var buildConnectionNames = string.Join(", ", config.BuildConnectionName);
+            var buildConnectionNames = string.Join(", ", config.BuildConnectionNames);
             LogTo.Debug($"Trying to construct project from {buildConnectionNames} and {config.SourceControlConnectionName}");
 
             var buildProviders = new List<IBuildProvider>();
-            foreach (var connectionName in config.BuildConnectionName)
+            foreach (var connectionName in config.BuildConnectionNames)
             {
                 var buildProvider = BuildProvider(connectionName);
                 if (buildProvider == null)
