@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace BuildNotifications.ViewModel.Settings.Options
@@ -16,7 +17,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
             get
             {
                 Init();
-                return _availableValues ?? new List<ListOptionItemViewModel<TItem>>();
+                return _availableValues;
             }
         }
 
@@ -38,21 +39,24 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         protected virtual string DisplayNameFor(TItem item) => item?.ToString() ?? string.Empty;
 
-        protected void ResetFlag()
+        protected void InvalidateAvailableValues()
         {
-            _valuesFetched = false;
+            _shouldFetchValues = true;
+            OnPropertyChanged(nameof(AvailableValues));
         }
 
         private void Init()
         {
-            if (_valuesFetched)
+            if (!_shouldFetchValues)
                 return;
 
-            _availableValues = new List<ListOptionItemViewModel<TItem>>(
-                ModelValues.Select(v => new ListOptionItemViewModel<TItem>(v, DisplayNameFor(v)))
-            );
+            _availableValues.Clear();
+            foreach (var option in ModelValues.Select(v => new ListOptionItemViewModel<TItem>(v, DisplayNameFor(v))))
+            {
+                _availableValues.Add(option);
+            }
 
-            _valuesFetched = true;
+            _shouldFetchValues = true;
 
             if (!_initialized)
             {
@@ -62,8 +66,8 @@ namespace BuildNotifications.ViewModel.Settings.Options
         }
 
         private readonly TItem _initialValue;
-        private bool _valuesFetched;
-        private List<ListOptionItemViewModel<TItem>>? _availableValues;
+        private readonly ObservableCollection<ListOptionItemViewModel<TItem>> _availableValues = new ObservableCollection<ListOptionItemViewModel<TItem>>();
+        private bool _shouldFetchValues = true;
         private ListOptionItemViewModel<TItem>? _selectedValue;
         private bool _initialized;
     }
