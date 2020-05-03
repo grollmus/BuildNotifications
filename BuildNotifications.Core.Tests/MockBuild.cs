@@ -48,6 +48,8 @@ namespace BuildNotifications.Core.Tests
 
         public string ProjectName { get; } = string.Empty;
 
+        public Guid ProjectId { get; } = Guid.Empty;
+
         public bool IsRequestedByCurrentUser { get; } = false;
     }
 }

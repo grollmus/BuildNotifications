@@ -9,10 +9,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         public void IsProviderShouldReturnFalseWhenProviderIsDifferent()
         {
             // Arrange
-            var p1 = 123;
-            var p2 = 111;
+            var p1 = "123";
+            var p2 = "111";
 
-            var sut = new CacheKey(p1, 1);
+            var sut = new CacheKey(p1, "1");
 
             // Act
             var actual = sut.IsProvider(p2);
@@ -25,10 +25,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         public void IsProviderShouldReturnTrueWhenProviderIsSame()
         {
             // Arrange
-            var p1 = 123;
-            var p2 = 123;
+            var p1 = "123";
+            var p2 = "123";
 
-            var sut = new CacheKey(p1, 1);
+            var sut = new CacheKey(p1, "1");
 
             // Act
             var actual = sut.IsProvider(p2);
@@ -41,9 +41,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         public void KeysShouldBeDifferentWhenDifferentItemIdIsUsed()
         {
             // Arrange
-            const int providerId = 1;
-            const int itemA = 2;
-            const int itemB = 3;
+            const string providerId = "1";
+            const string itemA = "2";
+            const string itemB = "3";
 
             var a = new CacheKey(providerId, itemA);
             var b = new CacheKey(providerId, itemB);
@@ -61,9 +61,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         public void KeysShouldBeDifferentWhenDifferentProviderIsUsed()
         {
             // Arrange
-            const int providerA = 1;
-            const int providerB = 2;
-            const int itemId = 3;
+            const string providerA = "1";
+            const string providerB = "2";
+            const string itemId = "3";
 
             var a = new CacheKey(providerA, itemId);
             var b = new CacheKey(providerB, itemId);
@@ -81,8 +81,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         public void KeysShouldBeEqualWhenItemAndProviderAreEqual()
         {
             // Arrange
-            const int itemId = 1;
-            const int providerId = 2;
+            const string itemId = "1";
+            const string providerId = "2";
 
             var a = new CacheKey(providerId, itemId);
             var b = new CacheKey(providerId, itemId);

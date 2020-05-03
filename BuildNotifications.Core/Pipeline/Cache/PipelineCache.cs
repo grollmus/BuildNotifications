@@ -11,7 +11,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
             _items[key] = item;
         }
 
-        public void AddOrReplace(int providerId, int itemId, T item)
+        public void AddOrReplace(string providerId, string itemId, T item)
         {
             AddOrReplace(new CacheKey(providerId, itemId), item);
         }
@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
             _items.Remove(key, out _);
         }
 
-        public void Remove(int providerId, int itemId)
+        public void Remove(string providerId, string itemId)
         {
             Remove(new CacheKey(providerId, itemId));
         }
@@ -31,7 +31,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return _items.ContainsKey(key);
         }
 
-        public bool Contains(int providerId, int itemId)
+        public bool Contains(string providerId, string itemId)
         {
             return Contains(new CacheKey(providerId, itemId));
         }
@@ -55,7 +55,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
             }
         }
 
-        public IEnumerable<T> Values(int providerId)
+        public IEnumerable<T> Values(string providerId)
         {
             return _items.Where(kvp => kvp.Key.IsProvider(providerId)).Select(kvp => kvp.Value);
         }
@@ -64,6 +64,8 @@ namespace BuildNotifications.Core.Pipeline.Cache
         {
             return new List<T>(_items.Values);
         }
+
+        public IReadOnlyDictionary<CacheKey, T> CachedValues() => _items;
 
         public void Clear()
         {

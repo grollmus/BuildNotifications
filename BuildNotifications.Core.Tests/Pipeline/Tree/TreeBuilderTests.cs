@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Utilities;
@@ -178,7 +179,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var newTree = sut.Build(updatedBuilds, branches, definitions);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => x.Build.CacheKey(), x => x.Status);
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
@@ -230,7 +231,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var newTree = sut.Build(updatedBuilds, branches, definitions);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => x.Build.CacheKey(), x => x.Status);
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
@@ -277,7 +278,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var newTree = sut.Build(updatedBuilds, branches, definitions);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => x.Build.CacheKey(), x => x.Status);
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, PartialSucceededTreatmentMode.TreatAsSucceeded);
 
             // Assert
@@ -338,7 +339,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
             var newTree = sut.Build(updatedBuilds, branches, definitions);
             var currentBuildNodes = newTree.AllChildren().OfType<IBuildNode>();
 
-            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => (BuildId: x.Build.Id, Project: x.Build.ProjectName), x => x.Status);
+            var oldStatus = firstResult.AllChildren().OfType<IBuildNode>().ToDictionary(x => x.Build.CacheKey(), x => x.Status);
             var delta = new BuildTreeBuildsDelta(currentBuildNodes, oldStatus, partialSucceededTreatmentMode);
 
             // Assert
