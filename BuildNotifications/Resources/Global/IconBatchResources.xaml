@@ -387,7 +387,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <DrawingImage x:Key="MyBuildDrawingImage">
+    <DrawingImage x:Key="ManualBuildDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
                 <DrawingGroup po:Freeze="True">
@@ -399,7 +399,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <DrawingImage x:Key="ManualBuildDrawingImage">
+    <DrawingImage x:Key="TriggeredBuildDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
                 <DrawingGroup po:Freeze="True">
@@ -410,6 +410,24 @@
                         Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                         Geometry="F1 M12,12z M0,0z M8,6.65L8.05,6.65 8.05,2.65 4.35,4.65 4.35,9 8,6.65 M4.1,0L0.35,2.05 4.1,3.95 7.95,2.05 4.1,0 M3.75,4.65L0.1,2.65 0.1,6.65 3.75,9 3.75,4.65z" />
                 </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="ScheduledDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z" po:Freeze="True">
+                <DrawingGroup Opacity="1" Transform="0.03125,0,0,0.03125,0,0">
+                    <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M12,12z M0,0z M384.05,192Q384.05,112.8 328.6,57.4 271.2,0 192,0 112.8,0 57.4,57.4 0,112.8 0,192 0,271.2 57.4,328.6 112.8,384.05 192,384.05 271.2,384.05 328.6,328.6 384.05,271.2 384.05,192 M170.25,31.65Q178.15,21.75 192,21.75 203.9,21.75 213.8,31.65 223.7,39.55 223.7,53.45L223.7,178.15 273.15,217.75Q283.05,225.65 285.05,239.5 287.05,251.4 279.1,261.3 271.2,271.2 257.35,273.15 245.45,275.15 235.55,267.25L172.2,217.75Q168.25,211.8 164.3,205.85 160.35,199.95 160.35,192L160.35,53.45Q160.35,39.55,170.25,31.65z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="CiDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z" po:Freeze="True">
+                <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M12,12z M0,0z M1.2,0.05Q1.15,0,1.1,0L1,0Q0.35,0.75 0.15,2.05 -0.3,4.55 1.95,7.2L1.4,7.75 4.6,8.2 3.5,5.15 3.05,5.8Q2.35,5.35 1.8,4.5 0.35,2.6 1.15,0.1L1.2,0.05 M12,12L12,1.65 8.2,1.65 5.15,4.3 5.15,12 12,12 M10.5,5.2Q10.7,5.2 10.85,5.3 10.95,5.4 10.95,5.6 10.95,5.75 10.85,5.9 10.7,6 10.5,6L6.6,6Q6.4,6 6.3,5.9 6.15,5.75 6.15,5.6 6.15,5.4 6.3,5.3 6.4,5.2 6.6,5.2L10.5,5.2 M10.95,8Q10.95,8.2 10.85,8.3 10.7,8.4 10.5,8.4L6.6,8.4Q6.4,8.4 6.3,8.3 6.15,8.2 6.15,8 6.15,7.85 6.3,7.75 6.4,7.6 6.6,7.6L10.5,7.6Q10.7,7.6 10.85,7.75 10.95,7.85 10.95,8 M10.85,10.7Q10.7,10.85,10.5,10.85L6.6,10.85Q6.4,10.85 6.3,10.7 6.15,10.6 6.15,10.45 6.15,10.25 6.3,10.15 6.4,10 6.6,10L10.5,10Q10.7,10 10.85,10.15 10.95,10.25 10.95,10.45 10.95,10.6 10.85,10.7z" />
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
@@ -658,14 +676,26 @@
 
             <DataTrigger
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
-                Value="MyBuild">
-                <Setter Property="Image.Source" Value="{StaticResource MyBuildDrawingImage}" />
+                Value="TriggeredBuild">
+                <Setter Property="Image.Source" Value="{StaticResource TriggeredBuildDrawingImage}" />
             </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                 Value="ManualBuild">
                 <Setter Property="Image.Source" Value="{StaticResource ManualBuildDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="Scheduled">
+                <Setter Property="Image.Source" Value="{StaticResource ScheduledDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="Ci">
+                <Setter Property="Image.Source" Value="{StaticResource CiDrawingImage}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

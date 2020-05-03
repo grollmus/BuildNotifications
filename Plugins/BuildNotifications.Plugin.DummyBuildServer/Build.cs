@@ -55,6 +55,8 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
         public BuildStatus Status { get; set; }
 
+        public BuildReason Reason { get; set; }
+
         public IBuildLinks Links { get; } = new DummyBuildLinks();
 
         public bool Equals(IBaseBuild other)

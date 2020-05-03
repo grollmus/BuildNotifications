@@ -130,9 +130,9 @@ namespace BuildNotifications.ViewModel.Tree
 
         public string RequestedFor => Node.Build.RequestedFor?.DisplayName ?? RequestedBy;
 
-        public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
-
         public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
+
+        public BuildReason Reason => Node.Build.Reason;
 
         public int UserColumns => RequestedByIsSameAsFor ? 1 : 2;
 

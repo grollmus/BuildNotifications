@@ -43,7 +43,9 @@
         EyeIris,
         EyeLid,
         Pinned,
+        TriggeredBuild,
         ManualBuild,
-        MyBuild
+        Scheduled,
+        Ci
     }
 }

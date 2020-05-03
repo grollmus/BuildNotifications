@@ -124,6 +124,11 @@ namespace DummyBuildServer.ViewModels
                 Status = BuildStatus.Pending,
                 Id = (++_idCounter).ToString()
             };
+            
+            // random reason
+            var reasonValues = Enum.GetValues(typeof(BuildReason));
+            var random = new Random();
+            build.Reason = (BuildReason) reasonValues.GetValue(random.Next(reasonValues.Length))!;
 
             _mainViewModel.AddBuild(build);
             var buildViewModel = new BuildViewModel(build);

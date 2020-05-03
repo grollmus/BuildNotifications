@@ -61,6 +61,7 @@
     <Thickness Left="{StaticResource BlockOneAndQuarter}" Right="{StaticResource BlockThreeQuarters}" Top="0" Bottom="0" x:Key="BlockOneAndQuarterLeftAndThreeQuartersRight"/>
     <Thickness Left="{StaticResource BlockQuarter}" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockLeftAndRight"/>
     <Thickness Left="0" Right="{StaticResource BlockQuarter}" Top="0" Bottom="0" x:Key="BlockQuarterRight"/>
+    <Thickness Left="0" Right="{StaticResource BlockHalf}" Top="0" Bottom="0" x:Key="BlockHalfRight"/>
     <Thickness Left="{StaticResource NegativeBlockHalf}" Right="{StaticResource NegativeBlockHalf}" Top="{StaticResource NegativeBlockHalf}" Bottom="{StaticResource NegativeBlockHalf}" x:Key="NegativeBlockHalfThickness"/>
     <Thickness Left="-6.5" Right="-6.5" Top="-4.46" Bottom="-4.46" x:Key="NegativeBlockHalfThicknessAndABit"/>
     <Thickness Left="0" Right="0" Top="3" Bottom="3" x:Key="BlockQuarterYOnlyMargin"/>
