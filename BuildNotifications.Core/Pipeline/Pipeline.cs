@@ -96,13 +96,11 @@ namespace BuildNotifications.Core.Pipeline
                 LogTo.Debug($"Fetching branches for project \"{project.Name}\"");
                 try
                 {
-                    var projectId = project.GetHashCode();
-
                     var branches = project.FetchExistingBranches();
                     var count = 0;
                     await foreach (var branch in branches)
                     {
-                        _branchCache.AddOrReplace(projectId, branch.FullName.GetHashCode(StringComparison.InvariantCulture), branch);
+                        _branchCache.AddOrReplace(branch.CacheKey(project), branch);
                         count += 1;
                     }
 
@@ -113,7 +111,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var branch in removedBranches)
                     {
-                        _branchCache.Remove(projectId, branch.FullName.GetHashCode(StringComparison.InvariantCulture));
+                        _branchCache.Remove(branch.CacheKey(project));
                         count += 1;
                     }
 
@@ -135,8 +133,7 @@ namespace BuildNotifications.Core.Pipeline
             {
                 try
                 {
-                    var projectId = project.GetHashCode();
-                    LogTo.Debug($"Fetching builds for project \"{project.Name}\". ID: \"{projectId}\"");
+                    LogTo.Debug($"Fetching builds for project \"{project.Name}\". ID: \"{project.Guid}\"");
 
                     if (_lastUpdate.HasValue)
                         LogTo.Debug($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"");
@@ -150,7 +147,7 @@ namespace BuildNotifications.Core.Pipeline
                     var count = 0;
                     await foreach (var build in builds)
                     {
-                        _buildCache.AddOrReplace(projectId, build.Id.GetHashCode(StringComparison.InvariantCulture), build);
+                        _buildCache.AddOrReplace(build.CacheKey(), build);
                         count += 1;
                     }
 
@@ -159,7 +156,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var build in removedBuilds)
                     {
-                        _buildCache.Remove(projectId, build.Id.GetHashCode(StringComparison.InvariantCulture));
+                        _buildCache.Remove(build.CacheKey());
                         count += 1;
                     }
 
@@ -184,13 +181,11 @@ namespace BuildNotifications.Core.Pipeline
                 LogTo.Debug($"Fetching definitions for project \"{project.Name}\"");
                 try
                 {
-                    var projectId = project.GetHashCode();
-
                     var definitions = project.FetchBuildDefinitions();
                     var count = 0;
                     await foreach (var definition in definitions)
                     {
-                        _definitionCache.AddOrReplace(projectId, definition.Id.GetHashCode(StringComparison.InvariantCulture), definition);
+                        _definitionCache.AddOrReplace(definition.CacheKey(project), definition);
                         count += 1;
                     }
 
@@ -200,7 +195,7 @@ namespace BuildNotifications.Core.Pipeline
                     count = 0;
                     await foreach (var definition in removedDefinitions)
                     {
-                        _definitionCache.Remove(projectId, definition.Id.GetHashCode(StringComparison.InvariantCulture));
+                        _definitionCache.Remove(definition.CacheKey(project));
                         count += 1;
                     }
 
@@ -231,7 +226,7 @@ namespace BuildNotifications.Core.Pipeline
             foreach (var project in _projectList)
             {
                 LogTo.Debug($"Updating builds of project \"{project.Name}\".");
-                var projectId = project.GetHashCode();
+                var projectId = project.Guid.ToString();
                 var buildsForProject = _buildCache.Values(projectId).ToList();
                 var branchesForProject = _branchCache.Values(projectId);
 
@@ -290,7 +285,7 @@ namespace BuildNotifications.Core.Pipeline
             LogTo.Info("Starting update.");
             var treeResult = await Task.Run(async () =>
             {
-                var previousBuildStatus = _buildCache.ContentCopy().ToDictionary(x => (BuildId: x.Id, Project: x.ProjectName), x => x.Status);
+                var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
                 var branchTask = FetchBranches();
                 var definitionsTask = FetchDefinitions();
                 var buildsTask = FetchBuilds();

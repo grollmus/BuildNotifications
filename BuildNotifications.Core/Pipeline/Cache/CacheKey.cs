@@ -1,8 +1,10 @@
-﻿namespace BuildNotifications.Core.Pipeline.Cache
+﻿using System;
+
+namespace BuildNotifications.Core.Pipeline.Cache
 {
     internal sealed class CacheKey
     {
-        public CacheKey(int providerId, int itemId)
+        public CacheKey(string providerId, string itemId)
         {
             _providerId = providerId;
             _itemId = itemId;
@@ -22,25 +24,21 @@
             return EqualsOtherCacheKey((CacheKey) obj);
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (_providerId * 397) ^ _itemId;
-            }
-        }
+        public override int GetHashCode() => HashCode.Combine(_providerId, _itemId);
 
-        public bool IsProvider(int providerId)
+        public bool IsProvider(string providerId)
         {
             return _providerId == providerId;
         }
 
         private bool EqualsOtherCacheKey(CacheKey other)
         {
-            return _providerId == other._providerId && _itemId == other._itemId;
+            return
+                string.Equals(_providerId, other._providerId, StringComparison.InvariantCulture)
+                && string.Equals(_itemId, other._itemId, StringComparison.InvariantCulture);
         }
 
-        private readonly int _providerId;
-        private readonly int _itemId;
+        private readonly string _providerId;
+        private readonly string _itemId;
     }
 }
