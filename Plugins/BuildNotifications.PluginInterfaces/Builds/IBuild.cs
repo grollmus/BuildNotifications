@@ -75,5 +75,10 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Status of this build.
         /// </summary>
         BuildStatus Status { get; }
+
+        /// <summary>
+        /// Creation reason of the build.
+        /// </summary>
+        BuildReason Reason { get; }
     }
 }

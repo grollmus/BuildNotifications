@@ -49,6 +49,8 @@ namespace BuildNotifications.Core.Pipeline
 
         public BuildStatus Status => OriginalBuild.Status;
 
+        public BuildReason Reason => OriginalBuild.Reason;
+
         public IBuildLinks Links => OriginalBuild.Links;
     }
 }

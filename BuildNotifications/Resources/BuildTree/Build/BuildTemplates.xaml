@@ -10,9 +10,13 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:menu="clr-namespace:BuildNotifications.Resources.Menu"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
-                    xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification">
+                    xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    mc:Ignorable="d">
 
-    <ContextMenu x:Key="BuildContextMenu">
+    <ContextMenu x:Key="BuildContextMenu"
+                 d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
         <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
                                 IconType="SingleBuild" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
@@ -27,14 +31,16 @@
     </ContextMenu>
 
 
-    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}" x:Key="ToolTip">
+    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}" x:Key="ToolTip"
+                d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
 
         <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-            <icons:IconBatch Type="Settings" Width="{StaticResource Block}"
-                             Margin="{StaticResource BlockHalfXOnlyMargin}"
-                             Height="{StaticResource Block}" DockPanel.Dock="Left"
-                             VerticalAlignment="Center"
-                             Foreground="{DynamicResource Foreground1HalfTransparency}" />
+            <Grid DockPanel.Dock="Left" Margin="{StaticResource BlockHalfRight}" VerticalAlignment="Center">
+                <icons:IconBatch
+                    Type="{Binding Reason, Converter={x:Static converter:BuildReasonToIconTypeConverter.Instance}}"
+                    Height="{StaticResource BlockOneAndHalf}" Width="{StaticResource BlockOneAndHalf}"
+                    Foreground="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />
+            </Grid>
 
             <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
                        VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"

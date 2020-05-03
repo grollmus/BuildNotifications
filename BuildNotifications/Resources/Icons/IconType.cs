@@ -41,6 +41,11 @@
         Queued,
         PullRequest,
         EyeIris,
-        EyeLid
+        EyeLid,
+        Pinned,
+        TriggeredBuild,
+        ManualBuild,
+        Scheduled,
+        Ci
     }
 }
