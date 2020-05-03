@@ -674,13 +674,15 @@ namespace BuildNotifications.Resources.Search
 
             if (Suggestions.Any(s => !s.IsRemoving) && (SelectedSuggestion == null || SelectedSuggestion.IsRemoving))
                 SelectedSuggestion = Suggestions.First(s => !s.IsRemoving);
+            else
+            {
+                // keep the selection on the first item, except when the user has previously selected another item (and the index is != 0)
+                if (selectedIndexBeforeUpdate == 0 && SelectedSuggestionIndex != 0)
+                    SelectedSuggestionIndex = 0;
+            }
 
             if (hadSuggestionsBeforeUpdate != HasSuggestions)
                 OnPropertyChanged(nameof(HasSuggestions));
-
-            // keep the selection on the first item, except when the user has previously selected another item (and the index is != 0)
-            if (selectedIndexBeforeUpdate == 0 && SelectedSuggestionIndex != 0)
-                SelectedSuggestionIndex = 0;
         }
 
         private void SortSuggestions(IList<SearchSuggestionViewModel> newSuggestions)

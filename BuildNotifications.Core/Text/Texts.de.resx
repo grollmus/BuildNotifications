@@ -660,4 +660,40 @@
   <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
     <value>Gestern</value>
   </data>
+  <data name="SearchCriteriaIsByMe" xml:space="preserve">
+    <value>Von mir</value>
+  </data>
+  <data name="SearchCriteriaIsCancelled" xml:space="preserve">
+    <value>Abgebrochen</value>
+  </data>
+  <data name="SearchCriteriaIsCi" xml:space="preserve">
+    <value>CI</value>
+  </data>
+  <data name="SearchCriteriaIsFailed" xml:space="preserve">
+    <value>Fehlgeschlagen</value>
+  </data>
+  <data name="SearchCriteriaIsInProgress" xml:space="preserve">
+    <value>In Arbeit</value>
+  </data>
+  <data name="SearchCriteriaIsManual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="SearchCriteriaIsNightly" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
+  <data name="SearchCriteriaIsPullRequest" xml:space="preserve">
+    <value>Pull Request</value>
+  </data>
+  <data name="SearchCriteriaIsPending" xml:space="preserve">
+    <value>Ausstehend</value>
+  </data>
+  <data name="SearchCriteriaIsPartiallySucceeded" xml:space="preserve">
+    <value>Teilweise erfolgreich</value>
+  </data>
+  <data name="SearchCriteriaIsSucceeded" xml:space="preserve">
+    <value>Erfolgreich</value>
+  </data>
+  <data name="SearchCriteriaIsScheduled" xml:space="preserve">
+    <value>Geplant</value>
+  </data>
 </root>

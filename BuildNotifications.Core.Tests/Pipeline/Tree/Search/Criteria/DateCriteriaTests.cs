@@ -83,22 +83,6 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         [InlineData("10")]
         [InlineData("12")]
         [InlineData("1/5")]
-        public void SuggestionsAreSortedDescending(string input)
-        {
-            var suggestions = CriteriaUnderTest.Suggest(input).ToList();
-
-            var asDateTimes = suggestions.Select(s => DateTime.Parse(s.Suggestion, TestCulture, DateTimeStyles.AssumeLocal)).ToList();
-            var sortedRecentToOldest = asDateTimes.OrderByDescending(x => x);
-
-            Assert.Equal(sortedRecentToOldest, asDateTimes);
-        }
-
-        [Theory]
-        [InlineData("1")]
-        [InlineData("1/")]
-        [InlineData("10")]
-        [InlineData("12")]
-        [InlineData("1/5")]
         [InlineData("6/16/2020")]
         [InlineData("6")]
         [InlineData("6/")]

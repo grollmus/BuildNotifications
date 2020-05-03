@@ -15,7 +15,7 @@ namespace BuildNotifications.ViewModel
 
             _searchTimer = new DispatcherTimer(DispatcherPriority.Input)
             {
-                Interval = TimeSpan.FromMilliseconds(250)
+                Interval = TimeSpan.FromMilliseconds(400)
             };
             _searchTimer.Tick += SearchTimerOnTick;
         }

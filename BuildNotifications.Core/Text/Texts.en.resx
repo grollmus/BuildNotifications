@@ -661,4 +661,40 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
+  <data name="SearchCriteriaIsManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="SearchCriteriaIsByMe" xml:space="preserve">
+    <value>By me</value>
+  </data>
+  <data name="SearchCriteriaIsInProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="SearchCriteriaIsPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="SearchCriteriaIsFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="SearchCriteriaIsCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="SearchCriteriaIsCi" xml:space="preserve">
+    <value>CI</value>
+  </data>
+  <data name="SearchCriteriaIsNightly" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
+  <data name="SearchCriteriaIsPullRequest" xml:space="preserve">
+    <value>Pull request</value>
+  </data>
+  <data name="SearchCriteriaIsSucceeded" xml:space="preserve">
+    <value>Succeeded</value>
+  </data>
+  <data name="SearchCriteriaIsPartiallySucceeded" xml:space="preserve">
+    <value>Partially succeeded</value>
+  </data>
+  <data name="SearchCriteriaIsScheduled" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
 </root>
