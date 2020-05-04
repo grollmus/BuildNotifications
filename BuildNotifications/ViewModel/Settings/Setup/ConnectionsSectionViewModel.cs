@@ -83,6 +83,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             var vm = new ConnectionViewModel(connection, _pluginRepository);
             AddConnectionViewModel(vm);
+            RaiseChanged();
         }
 
         private void ConnectionViewModel_SaveRequested(object? sender, EventArgs e)
@@ -117,6 +118,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Connections.Remove(viewModel);
             SelectedConnection = Connections.FirstOrDefault();
             SaveAction();
+            RaiseChanged();
         }
 
         private void TestConnection_TestFinished(object? sender, EventArgs e)

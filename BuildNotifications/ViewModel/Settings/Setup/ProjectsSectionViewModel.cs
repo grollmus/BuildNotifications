@@ -51,6 +51,14 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
+        public override void Refresh()
+        {
+            foreach (var project in Projects)
+            {
+                project.RefreshConnections();
+            }
+        }
+
         internal void AddProjectViewModel(ProjectViewModel vm)
         {
             vm.SaveRequested += ProjectViewModel_SaveRequested;

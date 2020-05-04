@@ -9,11 +9,19 @@ namespace BuildNotifications.ViewModel.Settings.Options
         public ConnectionOptionViewModel(string displayName, IEnumerable<ConnectionData> connections, ConnectionData value)
             : base(displayName, value)
         {
-            ModelValues = connections.ToList();
+            _connectionList = connections.ToList();
         }
 
-        protected override IEnumerable<ConnectionData> ModelValues { get; }
+        protected override IEnumerable<ConnectionData> ModelValues => _connectionList;
+
+        public void SetAvailableConnections(IEnumerable<ConnectionData> connections)
+        {
+            _connectionList = connections.ToList();
+            InvalidateAvailableValues();
+        }
 
         protected override string DisplayNameFor(ConnectionData item) => item.Name;
+
+        private List<ConnectionData> _connectionList;
     }
 }

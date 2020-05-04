@@ -15,6 +15,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
     {
         public ProjectViewModel(IProjectConfiguration model, IConfiguration configuration)
         {
+            _configuration = configuration;
             Model = model;
 
             Name = new TextOptionViewModel(model.ProjectName, StringLocalizer.ProjectName);
@@ -77,6 +78,15 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public ConnectionOptionViewModel SourceControlConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
 
+        public void RefreshConnections()
+        {
+            var connections = _configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.SourceControl);
+            SourceControlConnection.SetAvailableConnections(connections);
+
+            connections = _configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.Build);
+            BuildConnection.SetAvailableConnections(connections);
+        }
+
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
             Save();
@@ -106,5 +116,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             RaiseSaveRequested();
         }
+
+        private readonly IConfiguration _configuration;
     }
 }

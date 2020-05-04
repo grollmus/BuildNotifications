@@ -20,6 +20,10 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public event EventHandler? Changed;
 
+        public virtual void Refresh()
+        {
+        }
+
         protected void RaiseChanged()
         {
             Changed?.Invoke(this, EventArgs.Empty);

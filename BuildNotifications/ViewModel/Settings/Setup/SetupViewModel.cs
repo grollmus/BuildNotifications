@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuildNotifications.Core;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Services;
@@ -21,6 +22,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             };
 
             _selectedItem = Sections.First();
+
+            foreach (var section in Sections)
+            {
+                section.Changed += Section_Changed;
+            }
         }
 
         public ConnectionsSectionViewModel Connections { get; }
@@ -38,6 +44,17 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
                 _selectedItem = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private void Section_Changed(object? sender, EventArgs e)
+        {
+            var senderSection = sender as SetupSectionViewModel;
+            var otherSections = Sections.Except(senderSection.Yield()).WhereNotNull();
+
+            foreach (var otherSection in otherSections)
+            {
+                otherSection!.Refresh();
             }
         }
 
