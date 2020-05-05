@@ -10,6 +10,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     public abstract class BaseSearchCriteria : ISearchCriteria
     {
+        public int MaxAmountOfSuggestions { get; internal set; } = 5;
+
         private readonly IPipeline _pipeline;
 
         private DateTime _lastTimeDataFetchedFromPipeline = DateTime.MinValue;
@@ -45,7 +47,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
             var trimmed = TrimInput(input);
             _stringMatcher.SearchPattern = trimmed;
-            return SuggestInternal(trimmed, _stringMatcher).Select(AsSuggestion);
+            return SuggestInternal(trimmed, _stringMatcher).Take(MaxAmountOfSuggestions).Select(AsSuggestion);
         }
 
         private void UpdateCacheIfNecessary()

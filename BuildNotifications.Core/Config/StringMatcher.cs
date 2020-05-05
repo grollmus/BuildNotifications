@@ -70,9 +70,10 @@ namespace BuildNotifications.Core.Config
 
                         useWildcard = false;
 
-                        currentIndex = newIndex;
-                        if (currentIndex < 0)
+                        if (newIndex < 0)
                             return false;
+
+                        currentIndex = newIndex + split.Length;
                         break;
                 }
             }
@@ -83,11 +84,10 @@ namespace BuildNotifications.Core.Config
                 if (lastSearchTerm == null)
                     return currentIndex >= 0;
 
-                var expectedEnd = currentIndex + lastSearchTerm.Length;
-                return expectedEnd == input.Length;
+                return currentIndex == input.Length;
             }
 
-            return currentIndex >= 0;
+            return currentIndex >= 0 || SearchPattern.All(c => c.Equals('*'));
         }
 
         private bool IsNonSpecialCharacter(string split)

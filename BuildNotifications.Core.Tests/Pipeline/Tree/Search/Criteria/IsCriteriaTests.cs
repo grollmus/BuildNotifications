@@ -89,6 +89,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         public void KeywordsAreSuggestedIfSubsetsOfTheirKeywordsAreEntered(string keyword)
         {
             var criteria = TestCriteria();
+            criteria.MaxAmountOfSuggestions = int.MaxValue;
+
             for (var amountOfCharsEntered = 1; amountOfCharsEntered <= keyword.Length; amountOfCharsEntered++)
             {
                 for (var subsetPosition = 0; subsetPosition <= keyword.Length - amountOfCharsEntered; subsetPosition++)
