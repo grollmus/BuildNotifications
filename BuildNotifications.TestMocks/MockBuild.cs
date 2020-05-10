@@ -8,22 +8,6 @@ namespace BuildNotifications.TestMocks
     {
         public MockBuild()
         {
-            Id = string.Empty;
-            BranchName = string.Empty;
-            ProjectName = string.Empty;
-            Definition = new MockBuildDefinition();
-
-            RequestedBy = new MockUser();
-            RequestedFor = new MockUser();
-
-            Progress = 0;
-            QueueTime = null;
-            LastChangedTime = null;
-            Status = BuildStatus.None;
-
-            IsRequestedByCurrentUser = false;
-
-            Links = new MockBuildLinks();
         }
 
         public MockBuild(string id, IBuildDefinition buildDefinition, string branchName)
@@ -40,17 +24,32 @@ namespace BuildNotifications.TestMocks
             return mock?.Id.Equals(Id, StringComparison.InvariantCulture) == true;
         }
 
-        public string BranchName { get; }
-        public IBuildDefinition Definition { get; }
-        public string Id { get; }
-        public DateTime? LastChangedTime { get; }
-        public int Progress { get; }
-        public DateTime? QueueTime { get; }
-        public IUser RequestedBy { get; }
-        public IUser RequestedFor { get; }
-        public BuildStatus Status { get; }
-        public IBuildLinks Links { get; }
-        public string ProjectName { get; }
-        public bool IsRequestedByCurrentUser { get; }
+        public string BranchName { get; } = string.Empty;
+
+        public IBuildDefinition Definition { get; } = new MockBuildDefinition();
+
+        public string Id { get; } = string.Empty;
+
+        public DateTime? LastChangedTime { get; } = null;
+
+        public int Progress { get; } = 0;
+
+        public DateTime? QueueTime { get; } = null;
+
+        public IUser RequestedBy { get; } = new MockUser();
+
+        public IUser RequestedFor { get; } = new MockUser();
+
+        public BuildStatus Status { get; } = BuildStatus.None;
+
+        public BuildReason Reason { get; } = BuildReason.Other;
+
+        public IBuildLinks Links { get; } = new MockBuildLinks();
+
+        public string ProjectName { get; } = string.Empty;
+
+        public Guid ProjectId { get; } = Guid.Empty;
+
+        public bool IsRequestedByCurrentUser { get; } = false;
     }
 }

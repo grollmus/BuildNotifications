@@ -29,7 +29,7 @@ namespace BuildNotifications.Core.Pipeline
 
         private IBranchNameExtractor BranchNameExtractor => _branchProvider.NameExtractor;
 
-        private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, buildProvider);
+        private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, Guid, buildProvider);
 
         private string ExtractBranchName(IPullRequest pr)
         {
@@ -52,6 +52,8 @@ namespace BuildNotifications.Core.Pipeline
         public IProjectConfiguration Config { get; set; }
 
         public string Name { get; set; }
+
+        public Guid Guid { get; } = Guid.NewGuid();
 
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {

@@ -134,6 +134,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
 
+        public BuildReason Reason => Node.Build.Reason;
+
         public int UserColumns => RequestedByIsSameAsFor ? 1 : 2;
 
         public override void BackendPropertiesChanged()

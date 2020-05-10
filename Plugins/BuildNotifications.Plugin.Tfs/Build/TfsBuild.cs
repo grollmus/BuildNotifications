@@ -3,6 +3,7 @@ using System.Globalization;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using Microsoft.TeamFoundation.Build.WebApi;
+using BuildReason = BuildNotifications.PluginInterfaces.Builds.BuildReason;
 using BuildStatus = BuildNotifications.PluginInterfaces.Builds.BuildStatus;
 
 namespace BuildNotifications.Plugin.Tfs.Build
@@ -21,6 +22,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
 
             _nativeResult = build.Result;
             _nativeStatus = build.Status;
+            _nativeReason = build.Reason;
 
             RequestedBy = new TfsUser(build.RequestedBy);
             RequestedFor = new TfsUser(build.RequestedFor);
@@ -91,10 +93,38 @@ namespace BuildNotifications.Plugin.Tfs.Build
             }
         }
 
+        public BuildReason Reason
+        {
+            get
+            {
+                switch (_nativeReason)
+                {
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.None:
+                        return BuildReason.Unknown;
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.Manual:
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.UserCreated:
+                        return BuildReason.Manual;
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.IndividualCI:
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.BatchedCI:
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.ValidateShelveset:
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.CheckInShelveset:
+                        return BuildReason.CheckedIn;
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.Schedule:
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.ScheduleForced:
+                        return BuildReason.Scheduled;
+                    case Microsoft.TeamFoundation.Build.WebApi.BuildReason.PullRequest:
+                        return BuildReason.PullRequest;
+                    default:
+                        return BuildReason.Other;
+                }
+            }
+        }
+
         public IBuildLinks Links { get; }
 
         private readonly string _id;
         private readonly Microsoft.TeamFoundation.Build.WebApi.BuildStatus? _nativeStatus;
         private readonly BuildResult? _nativeResult;
+        private readonly Microsoft.TeamFoundation.Build.WebApi.BuildReason _nativeReason;
     }
 }
