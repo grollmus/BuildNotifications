@@ -103,7 +103,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             option.When(o => o.IsLoading = false)
                 .Do(x => updateFinishBlock.Set());
-            
+
             // Act
             sut.Update();
             updateStartBlock.Wait();
@@ -168,6 +168,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Arrange
             var tcs = new TaskCompletionSource<int>();
             var dispatcher = CreateDispatcher();
+            var updateFinishBlock = new ManualResetEventSlim(false);
 
             async Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
             {
@@ -185,11 +186,15 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var option = Substitute.For<IValueOption>();
             sut.Affect(option);
 
+            option.When(o => o.IsLoading = false)
+                .Do(x => updateFinishBlock.Set());
+
             // Act
             sut.Update();
 
             // Assert
             await tcs.Task;
+            updateFinishBlock.Wait(TimeSpan.FromSeconds(1));
 
             Assert.False(option.IsLoading);
 
