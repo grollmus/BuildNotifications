@@ -23,9 +23,9 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(PluginRepositoryProperty, value);
         }
 
-        public IEnumerable<IPlugin> Plugins
+        public ObservableCollection<IPlugin> Plugins
         {
-            get => (IEnumerable<IPlugin>) GetValue(PluginsProperty);
+            get => (ObservableCollection<IPlugin>) GetValue(PluginsProperty);
             private set => SetValue(PluginsKey, value);
         }
 
@@ -55,6 +55,9 @@ namespace BuildNotifications.Resources.Settings
 
         private void OnPluginTypeChanged()
         {
+            var oldSelected = SelectedPlugin;
+            Plugins.Clear();
+
             if (PluginRepository != null)
             {
                 var plugins = ConnectionPluginType switch
@@ -64,10 +67,13 @@ namespace BuildNotifications.Resources.Settings
                     _ => Enumerable.Empty<IPlugin>()
                 };
 
-                Plugins = new ObservableCollection<IPlugin>(plugins);
+                foreach (var plugin in plugins)
+                {
+                    Plugins.Add(plugin);
+                }
             }
-            else
-                Plugins = new ObservableCollection<IPlugin>();
+
+            SelectedPlugin = Plugins.FirstOrDefault(p => p.GetType() == oldSelected?.GetType());
         }
 
         public static readonly DependencyProperty PluginRepositoryProperty = DependencyProperty.Register(
@@ -77,8 +83,8 @@ namespace BuildNotifications.Resources.Settings
             "ConnectionPluginType", typeof(ConnectionPluginType), typeof(PluginChooser), new PropertyMetadata(default(ConnectionPluginType), OnPluginTypeChanged));
 
         private static readonly DependencyPropertyKey PluginsKey
-            = DependencyProperty.RegisterReadOnly("Plugins", typeof(IEnumerable<IPlugin>), typeof(PluginChooser),
-                new FrameworkPropertyMetadata(default(IEnumerable<IPlugin>), FrameworkPropertyMetadataOptions.None));
+            = DependencyProperty.RegisterReadOnly("Plugins", typeof(ObservableCollection<IPlugin>), typeof(PluginChooser),
+                new FrameworkPropertyMetadata(new ObservableCollection<IPlugin>(), FrameworkPropertyMetadataOptions.None));
 
         public static readonly DependencyProperty PluginsProperty
             = PluginsKey.DependencyProperty;

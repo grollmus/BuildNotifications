@@ -102,9 +102,9 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Model.ProjectName = Name.Value ?? string.Empty;
             Model.BuildConnectionNames = new List<string>
             {
-                BuildConnection.Value.Name
+                BuildConnection.Value?.Name ?? string.Empty
             };
-            Model.SourceControlConnectionName = SourceControlConnection.Value.Name;
+            Model.SourceControlConnectionName = SourceControlConnection.Value?.Name ?? string.Empty;
             Model.IsEnabled = IsEnabled.Value;
             Model.HideCompletedPullRequests = HideCompletedPullRequests.Value;
             Model.DefaultCompareBranch = DefaultCompareBranch.Value ?? string.Empty;

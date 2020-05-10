@@ -48,6 +48,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
                 _connectionPluginType = value;
                 OnPropertyChanged();
+                SaveConnection();
             }
         }
 
@@ -91,12 +92,10 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             get => _selectedPlugin;
             set
             {
-                if (_selectedPlugin == value)
-                    return;
-
                 _selectedPlugin = value;
                 OnPropertyChanged();
                 RestoreConfiguration();
+                SaveConnection();
             }
         }
 
@@ -120,8 +119,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RestoreConfiguration()
         {
-            if (_selectedPlugin == null)
-                SelectedPlugin = SelectPluginFromModel();
+            _selectedPlugin ??= SelectPluginFromModel();
 
             if (_selectedPlugin != null)
             {
