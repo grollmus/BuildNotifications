@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces.Builds;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.Resources.Settings
 {
@@ -26,7 +26,7 @@ namespace BuildNotifications.Resources.Settings
         public ObservableCollection<IPlugin> Plugins
         {
             get => (ObservableCollection<IPlugin>) GetValue(PluginsProperty);
-            private set => SetValue(PluginsKey, value);
+            [UsedImplicitly] private set => SetValue(PluginsKey, value);
         }
 
         public IPlugin? SelectedPlugin

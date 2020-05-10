@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.Resources.Global.Navigation.ButtonNavigation;
 using BuildNotifications.Resources.Icons;
-using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings.Setup
 {
@@ -17,7 +15,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Model = model;
             PluginRepository = pluginRepository;
             TestConnection = new TestConnectionViewModel(PluginRepository);
-            SaveConnectionCommand = new DelegateCommand(SaveConnection);
 
             ConnectionPluginType = model.ConnectionType;
             SelectedPlugin = SelectPluginFromModel();
@@ -85,8 +82,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public IPluginRepository PluginRepository { get; }
 
-        public ICommand SaveConnectionCommand { get; }
-
         public IPlugin? SelectedPlugin
         {
             get => _selectedPlugin;
@@ -104,6 +99,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public void OnSelected()
         {
+            _selectedPlugin = null;
             RestoreConfiguration();
         }
 
