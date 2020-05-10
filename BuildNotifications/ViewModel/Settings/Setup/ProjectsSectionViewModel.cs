@@ -94,7 +94,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RemoveProject(ProjectViewModel viewModel)
         {
-            var text = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.ConfirmDeleteProject, viewModel.Name);
+            var text = string.Format(StringLocalizer.CurrentCulture, StringLocalizer.ConfirmDeleteProject, viewModel.Name.Value);
             var confirm = PopupService.ShowMessageBox(text, StringLocalizer.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             if (confirm != MessageBoxResult.Yes)
                 return;
