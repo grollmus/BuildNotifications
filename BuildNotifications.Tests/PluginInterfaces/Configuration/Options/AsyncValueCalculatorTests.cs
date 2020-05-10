@@ -80,6 +80,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var calculationCount = 0;
 
             var updateStartBlock = new ManualResetEventSlim(false);
+            var updateFinishBlock = new ManualResetEventSlim(false);
 
             async Task<IValueCalculationResult<int>> CalculationTaskFactory(CancellationToken ct)
             {
@@ -100,6 +101,9 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             var option = Substitute.For<IValueOption>();
             sut.Affect(option);
 
+            option.When(o => o.IsLoading = false)
+                .Do(x => updateFinishBlock.Set());
+            
             // Act
             sut.Update();
             updateStartBlock.Wait();
@@ -107,6 +111,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 
             // Assert
             await tcs.Task;
+            updateFinishBlock.Wait(TimeSpan.FromSeconds(1));
 
             Assert.Equal(1, callbackCount);
             Assert.Equal(2, calculationCount);
