@@ -83,6 +83,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
             var vm = new ConnectionViewModel(connection, _pluginRepository);
             AddConnectionViewModel(vm);
+            SaveAction();
             RaiseChanged();
         }
 
