@@ -20,6 +20,11 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
         public override bool IsLoading => _pluginOptionViewModelImplementation.IsLoading;
         public override bool IsVisible => _pluginOptionViewModelImplementation.IsVisible;
 
+        public void Clear()
+        {
+            _pluginOptionViewModelImplementation.Clear();
+        }
+
         private readonly PluginOptionViewModelImplementation _pluginOptionViewModelImplementation;
     }
 }

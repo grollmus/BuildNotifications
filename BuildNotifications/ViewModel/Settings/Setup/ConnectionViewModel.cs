@@ -90,12 +90,22 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 _selectedPlugin = value;
                 OnPropertyChanged();
                 RestoreConfiguration(false);
-                SaveConnection();
             }
         }
 
         public TestConnectionViewModel TestConnection { get; }
         public virtual event EventHandler<EventArgs>? SaveRequested;
+
+        public void OnDeselected()
+        {
+            if (PluginConfiguration != null)
+            {
+                PluginConfiguration.ValueChanged -= OnConfigurationOptionChanged;
+                PluginConfiguration.Clear();
+                _pluginConfiguration = null;
+                _selectedPlugin = null;
+            }
+        }
 
         public void OnSelected()
         {
@@ -105,6 +115,9 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void OnConfigurationOptionChanged(object? sender, EventArgs e)
         {
+            if (_inRestore)
+                return;
+
             SaveConnection();
         }
 
@@ -115,24 +128,34 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         private void RestoreConfiguration(bool loadFromModel)
         {
+            _inRestore = true;
+
+            if (PluginConfiguration != null)
+            {
+                PluginConfiguration.ValueChanged -= OnConfigurationOptionChanged;
+                PluginConfiguration.Clear();
+            }
+
             if (loadFromModel)
                 _selectedPlugin ??= SelectPluginFromModel();
 
             if (_selectedPlugin != null)
             {
-                if (PluginConfiguration != null)
-                    PluginConfiguration.ValueChanged -= OnConfigurationOptionChanged;
-
-                var config = _selectedPlugin.Configuration;
+                var config = _selectedPlugin.ConstructNewConfiguration();
                 config.Deserialize(Model.PluginConfiguration ?? string.Empty);
                 PluginConfiguration = new PluginConfigurationViewModel(config);
                 PluginConfiguration.ValueChanged += OnConfigurationOptionChanged;
                 TestConnection.SetConfiguration(_selectedPlugin, config, ConnectionPluginType);
             }
+
+            _inRestore = false;
         }
 
         private void SaveConnection()
         {
+            if (_inRestore)
+                return;
+
             if (_selectedPlugin != null && PluginConfiguration != null)
             {
                 var serialized = PluginConfiguration.Configuration.Serialize();
@@ -158,5 +181,6 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         private IPlugin? _selectedPlugin;
         private PluginConfigurationViewModel? _pluginConfiguration;
         private ConnectionPluginType _connectionPluginType;
+        private bool _inRestore;
     }
 }

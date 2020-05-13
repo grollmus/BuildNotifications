@@ -28,6 +28,15 @@ namespace BuildNotifications.ViewModel.Settings.Setup
 
         public event EventHandler<EventArgs>? ValueChanged;
 
+        public void Clear()
+        {
+            foreach (var option in Options)
+            {
+                option.PropertyChanged -= OptionOnPropertyChanged;
+                option.Clear();
+            }
+        }
+
         private IEnumerable<IPluginOptionViewModel> ConstructOptionViewModels(IPluginConfiguration configuration)
         {
             var factory = new PluginOptionViewModelFactory(configuration.Localizer);

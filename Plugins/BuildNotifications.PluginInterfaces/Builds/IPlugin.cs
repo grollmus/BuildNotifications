@@ -11,9 +11,9 @@ namespace BuildNotifications.PluginInterfaces.Builds
     public interface IPlugin
     {
         /// <summary>
-        /// Configuration instance that can be used to configure the plugin.
+        /// Constructs a new configuration instance that can be used to configure the plugin.
         /// </summary>
-        IPluginConfiguration Configuration { get; }
+        IPluginConfiguration ConstructNewConfiguration();
 
         /// <summary>
         /// Name for the plugin to display. Not localized.

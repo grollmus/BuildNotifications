@@ -30,6 +30,11 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             _pluginOptionViewModelImplementation.Value = Values.Select(v => v.Value ?? string.Empty).ToList();
         }
 
+        public void Clear()
+        {
+            _pluginOptionViewModelImplementation.Clear();
+        }
+
         private readonly PluginOptionViewModelImplementation<List<string>> _pluginOptionViewModelImplementation;
     }
 }

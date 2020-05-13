@@ -53,6 +53,11 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             InvalidateAvailableValues();
         }
 
+        public void Clear()
+        {
+            _pluginOptionViewModelImplementation.Clear();
+        }
+
         private readonly ListOption<TValue> _listOption;
         private readonly ILocalizationProvider _localizationProvider;
         private readonly PluginOptionViewModelImplementation<TValue> _pluginOptionViewModelImplementation;

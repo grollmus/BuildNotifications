@@ -52,6 +52,13 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public virtual void Clear()
+        {
+            Option.IsEnabledChanged -= Option_IsEnabledChanged;
+            Option.IsVisibleChanged -= Option_IsVisibleChanged;
+            Option.IsLoadingChanged -= Option_IsLoadingChanged;
+        }
+
         protected internal readonly IViewModel ViewModel;
 
         private readonly ILocalizationProvider _localizationProvider;
@@ -76,6 +83,12 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
         }
 
         private ValueOption<TValue> Option { get; }
+
+        public override void Clear()
+        {
+            base.Clear();
+            Option.ValueChanged -= OptionOnValueChanged;
+        }
 
         private void OptionOnValueChanged(object? sender, EventArgs e)
         {

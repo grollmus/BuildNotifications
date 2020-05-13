@@ -22,6 +22,11 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             set => _pluginOptionViewModelImplementation.Value = value;
         }
 
+        public void Clear()
+        {
+            _pluginOptionViewModelImplementation.Clear();
+        }
+
         private readonly PluginOptionViewModelImplementation<string?> _pluginOptionViewModelImplementation;
     }
 }

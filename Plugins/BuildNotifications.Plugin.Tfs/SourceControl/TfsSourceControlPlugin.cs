@@ -5,17 +5,16 @@ using BuildNotifications.Plugin.Tfs.Configuration;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Configuration;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using JetBrains.Annotations;
 
 namespace BuildNotifications.Plugin.Tfs.SourceControl
 {
+    [UsedImplicitly]
     public class TfsSourceControlPlugin : TfsPlugin, ISourceControlPlugin
     {
-        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string serialized)
-        {
-            return TestConnection(serialized);
-        }
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string serialized) => TestConnection(serialized);
 
-        public override IPluginConfiguration Configuration => new TfsConfiguration(Host!.UiDispatcher);
+        public override IPluginConfiguration ConstructNewConfiguration() => new TfsConfiguration(Host!.UiDispatcher);
 
         IBranchProvider? ISourceControlPlugin.ConstructProvider(string serialized)
         {

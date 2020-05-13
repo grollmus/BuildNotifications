@@ -33,6 +33,6 @@ namespace BuildNotifications.Plugin.Tfs.Build
         }
 
         Task<ConnectionTestResult> IBuildPlugin.TestConnection(string serialized) => TestConnection(serialized);
-        public override IPluginConfiguration Configuration => new TfsConfiguration(Host!.UiDispatcher, ConfigurationFlags.HideRepository);
+        public override IPluginConfiguration ConstructNewConfiguration() => new TfsConfiguration(Host!.UiDispatcher, ConfigurationFlags.HideRepository);
     }
 }
