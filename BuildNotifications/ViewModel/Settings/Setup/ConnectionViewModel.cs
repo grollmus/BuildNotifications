@@ -89,7 +89,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             {
                 _selectedPlugin = value;
                 OnPropertyChanged();
-                RestoreConfiguration();
+                RestoreConfiguration(false);
                 SaveConnection();
             }
         }
@@ -100,7 +100,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public void OnSelected()
         {
             _selectedPlugin = null;
-            RestoreConfiguration();
+            RestoreConfiguration(true);
         }
 
         private void OnConfigurationOptionChanged(object? sender, EventArgs e)
@@ -113,9 +113,10 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             SaveRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RestoreConfiguration()
+        private void RestoreConfiguration(bool loadFromModel)
         {
-            _selectedPlugin ??= SelectPluginFromModel();
+            if (loadFromModel)
+                _selectedPlugin ??= SelectPluginFromModel();
 
             if (_selectedPlugin != null)
             {

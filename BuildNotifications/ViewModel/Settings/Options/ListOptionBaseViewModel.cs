@@ -30,6 +30,8 @@ namespace BuildNotifications.ViewModel.Settings.Options
                     return;
 
                 _selectedValue = value;
+                OnPropertyChanged(nameof(SelectedValue));
+
                 if (_selectedValue != null)
                     Value = _selectedValue.Value;
             }
@@ -56,7 +58,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
                 _availableValues.Add(option);
             }
 
-            _shouldFetchValues = true;
+            _shouldFetchValues = false;
 
             if (!_initialized)
             {
