@@ -60,11 +60,14 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
             _shouldFetchValues = false;
 
+            var valueToSelect = Value;
             if (!_initialized)
             {
                 _initialized = true;
-                SelectedValue = AvailableValues.FirstOrDefault(v => Equals(v.Value, _initialValue));
+                valueToSelect = _initialValue;
             }
+
+            SelectedValue = AvailableValues.FirstOrDefault(v => Equals(v.Value, valueToSelect));
         }
 
         private readonly TItem _initialValue;
