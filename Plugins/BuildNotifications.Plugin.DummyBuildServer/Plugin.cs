@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Pipes;
 using System.Threading.Tasks;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -19,9 +18,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             if (Connections.TryGetValue(port, out var connection))
                 return connection;
 
-            var socket = new NamedPipeClientStream(".", $"BuildNotifications.DummyBuildServer.{port}", PipeDirection.InOut);
-
-            connection = new Connection(socket);
+            connection = new Connection(port);
             Connections.Add(port, connection);
             return connection;
         }
@@ -39,7 +36,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         {
             try
             {
-                using var connection = GetConnection(data);
+                var connection = GetConnection(data);
                 await connection.Connect();
             }
             catch (Exception ex)
@@ -56,10 +53,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             return new BuildProvider(connection);
         }
 
-        Task<ConnectionTestResult> IBuildPlugin.TestConnection(string data)
-        {
-            return TestConnection(ParseConfig(data));
-        }
+        Task<ConnectionTestResult> IBuildPlugin.TestConnection(string data) => TestConnection(ParseConfig(data));
 
         public IPluginConfiguration ConstructNewConfiguration() => new Configuration();
 
@@ -71,10 +65,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         {
         }
 
-        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string data)
-        {
-            return TestConnection(ParseConfig(data));
-        }
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string data) => TestConnection(ParseConfig(data));
 
         public IBranchProvider ConstructProvider(string data)
         {

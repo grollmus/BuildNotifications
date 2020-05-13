@@ -27,24 +27,24 @@ namespace DummyBuildServer.Models
         {
             var pipeServer = new NamedPipeServerStream($"BuildNotifications.DummyBuildServer.{_port}", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
 
-            try
-            {
-                await pipeServer.WaitForConnectionAsync(_cancellationToken);
-            }
-            catch (Exception)
-            {
-                pipeServer.Close();
-                return;
-            }
-
-            pipeServer.ReadMode = PipeTransmissionMode.Byte;
-
-            var buffer = new byte[Constants.Connection.BufferSize];
-
             while (_isRunning)
             {
+                try
+                {
+                    await pipeServer.WaitForConnectionAsync(_cancellationToken);
+                }
+                catch (Exception)
+                {
+                    pipeServer.Close();
+                    return;
+                }
+
+                pipeServer.ReadMode = PipeTransmissionMode.Byte;
+
+                var buffer = new byte[Constants.Connection.BufferSize];
+
                 Debug.WriteLine("S Receiving data...");
-                var bufferLength = pipeServer.Read(buffer, 0, Constants.Connection.BufferSize);
+                var bufferLength = await pipeServer.ReadAsync(buffer, 0, Constants.Connection.BufferSize, _cancellationToken);
                 Debug.WriteLine($"S Received {bufferLength} bytes");
                 var command = Encoding.ASCII.GetString(buffer, 0, bufferLength);
 

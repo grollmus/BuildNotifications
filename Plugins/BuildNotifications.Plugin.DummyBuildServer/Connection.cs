@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class Connection : IDisposable
+    internal class Connection
     {
-        public Connection(NamedPipeClientStream socket)
+        public Connection(int port)
         {
-            _socket = socket;
+            _port = port;
         }
 
         public async Task<string> Query(string query)
         {
-            await Connect();
+            await using var socket = await Connect();
 
             var buffer = Encoding.ASCII.GetBytes(Prepare(query));
             Debug.WriteLine($"C Sending {buffer.Length} bytes: {query} ...");
-            _socket.Write(buffer, 0, buffer.Length);
+            socket.Write(buffer, 0, buffer.Length);
             Debug.WriteLine("C Sent");
 
             buffer = new byte[Constants.Connection.BufferSize];
@@ -31,7 +31,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
 
             do
             {
-                receivedBytesLastRead = _socket.Read(buffer, 0, buffer.Length);
+                receivedBytesLastRead = socket.Read(buffer, 0, buffer.Length);
                 receivedBytesSum += receivedBytesLastRead;
                 var response = Encoding.ASCII.GetString(buffer, 0, receivedBytesLastRead);
                 responseBuilder.Append(response);
@@ -42,10 +42,13 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             return responseBuilder.ToString();
         }
 
-        internal async Task Connect()
+        internal async Task<NamedPipeClientStream> Connect()
         {
-            if (!_socket.IsConnected)
-                await _socket.ConnectAsync((int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+            var socket = new NamedPipeClientStream(".", $"BuildNotifications.DummyBuildServer.{_port}", PipeDirection.InOut);
+
+            await socket.ConnectAsync((int) TimeSpan.FromSeconds(5).TotalMilliseconds);
+
+            return socket;
         }
 
         private string Prepare(string query)
@@ -56,11 +59,6 @@ namespace BuildNotifications.Plugin.DummyBuildServer
             return query;
         }
 
-        public void Dispose()
-        {
-            _socket?.Dispose();
-        }
-
-        private readonly NamedPipeClientStream _socket;
+        private readonly int _port;
     }
 }

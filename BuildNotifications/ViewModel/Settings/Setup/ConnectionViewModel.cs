@@ -90,6 +90,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 _selectedPlugin = value;
                 OnPropertyChanged();
                 RestoreConfiguration(false);
+                SaveConnection();
             }
         }
 
