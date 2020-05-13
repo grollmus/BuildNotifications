@@ -55,9 +55,23 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             return data;
         }
 
+        private void DispatchOnUiThread(Action action)
+        {
+            Application.Current.Dispatcher?.Invoke(action);
+        }
+
+        private void ReportConnectionTestStarted()
+        {
+            DispatchOnUiThread(() =>
+            {
+                var notification = new StatusNotification("PleaseWait", "Testing", NotificationType.Progress);
+                Notifications.ShowNotifications(new List<INotification> {notification});
+            });
+        }
+
         private void ReportError(string titleId, string message)
         {
-            Application.Current.Dispatcher?.Invoke(() =>
+            DispatchOnUiThread(() =>
             {
                 var notification = new ErrorNotification(message);
                 notification.TitleTextId = titleId;
@@ -65,18 +79,9 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             });
         }
 
-        private void ReportConnectionTestStarted()
-        {
-            Application.Current.Dispatcher?.Invoke(() =>
-            {
-                var notification = new StatusNotification("PleaseWait", "Testing", NotificationType.Progress);
-                Notifications.ShowNotifications(new List<INotification> {notification});
-            });
-        }
-
         private void ReportSuccess()
         {
-            Application.Current.Dispatcher?.Invoke(() =>
+            DispatchOnUiThread(() =>
             {
                 var notification = new StatusNotification("ConnectionTestCaption", "ConnectionTestSuccessful", NotificationType.Success);
                 Notifications.ShowNotifications(new List<INotification> {notification});
@@ -89,14 +94,17 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         {
             await new SynchronizationContextRemover();
             StatusIndicator.Busy();
-            Notifications.ClearNotificationsOfType(NotificationType.Error, RemoveFlag.Immediately);
-            Notifications.ClearNotificationsOfType(NotificationType.Success, RemoveFlag.Immediately);
-            Notifications.ClearNotificationsOfType(NotificationType.Info, RemoveFlag.Immediately);
+            DispatchOnUiThread(() =>
+            {
+                Notifications.ClearNotificationsOfType(NotificationType.Error);
+                Notifications.ClearNotificationsOfType(NotificationType.Success);
+                Notifications.ClearNotificationsOfType(NotificationType.Info);
+            });
 
             await TestConnection(BuildConnectionData());
 
             StatusIndicator.ClearStatus();
-            Notifications.ClearNotificationsOfType(NotificationType.Progress, RemoveFlag.Immediately);
+            DispatchOnUiThread(() => { Notifications.ClearNotificationsOfType(NotificationType.Progress); });
         }
 
         private async Task TestConnection(ConnectionData connectionData)
@@ -151,7 +159,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             if (!failed)
                 ReportSuccess();
 
-            Application.Current.Dispatcher?.Invoke(() => { TestFinished?.Invoke(this, EventArgs.Empty); });
+            DispatchOnUiThread(() => { TestFinished?.Invoke(this, EventArgs.Empty); });
         }
 
         private readonly IPluginRepository _pluginRepository;
