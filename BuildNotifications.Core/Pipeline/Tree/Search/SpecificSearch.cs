@@ -6,10 +6,13 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 {
     internal class SpecificSearch : ISpecificSearch
     {
+        public string SearchedTerm { get; }
+
         public IReadOnlyList<ISearchBlock> Blocks { get; }
 
-        public SpecificSearch(IEnumerable<ISearchBlock> blocks)
+        public SpecificSearch(IEnumerable<ISearchBlock> blocks, string searchedTerm)
         {
+            SearchedTerm = searchedTerm;
             Blocks = blocks.ToList();
         }
 

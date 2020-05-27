@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,10 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Search;
-using BuildNotifications.PluginInterfaces.Builds.Search;
 using BuildNotifications.Resources.Icons;
-using BuildNotifications.ViewModel;
-using BuildNotifications.ViewModel.Utils;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.Resources.Search
@@ -81,6 +77,12 @@ namespace BuildNotifications.Resources.Search
             set => SetValue(SearchEngineProperty, value);
         }
 
+        public ISearchHistory? SearchHistory
+        {
+            get => (ISearchHistory) GetValue(SearchHistoryProperty);
+            set => SetValue(SearchHistoryProperty, value);
+        }
+
         public Brush SearchTermBackground
         {
             get => (Brush) GetValue(SearchTermBackgroundProperty);
@@ -106,6 +108,43 @@ namespace BuildNotifications.Resources.Search
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ApplySuggestion(SearchSuggestionViewModel selectedSuggestion)
+        {
+            if (!_runsForCurrentSearchBlocks.Any())
+                return;
+
+            var storedSelection = StoreSelection();
+            var (_, runOfBlock, __) = BlockOfCurrentSelection(_runsForCurrentSearchBlocks);
+            int indicesToMoveCaret;
+
+            var suggestionText = selectedSuggestion.SuggestedText;
+
+            // if the suggestion isn't a search criteria (end with the keyword separator), add the general separator so a new search term is automatically opened for the user
+            const char specificToGeneralSeparator = ',';
+            const char keywordSeparator = ':';
+
+            if (!suggestionText.EndsWith(keywordSeparator) && !selectedSuggestion.IsFromHistory)
+                suggestionText += specificToGeneralSeparator;
+
+            // if the caret is on the end of the text and there is no run
+            if (runOfBlock == null)
+            {
+                var inlines = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines;
+
+                inlines?.Add(DefaultRun(suggestionText));
+                indicesToMoveCaret = suggestionText.Length;
+            }
+            else // if the caret is somewhere within a search term
+            {
+                var indexOfCaretInRun = runOfBlock.ContentStart.GetOffsetToPosition(Selection.Start);
+                runOfBlock.Text = suggestionText;
+                indicesToMoveCaret = suggestionText.Length - indexOfCaretInRun;
+            }
+
+            storedSelection = (storedSelection.startOffset + indicesToMoveCaret, storedSelection.lengthOffset, storedSelection.amountOfInlines, storedSelection.caretPosition);
+            RestoreSelection(storedSelection);
         }
 
         private (ISearchBlock block, Run? inlineOfCaret, bool inlineIsSearchCriteria) BlockOfCurrentSelection(IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> search)
@@ -143,19 +182,6 @@ namespace BuildNotifications.Resources.Search
 
             var lastTuple = search.Last();
             return (lastTuple.forBlock, null, true);
-        }
-
-        private void ListenToTextEvents()
-        {
-            StopListeningToTextEvents();
-            TextChanged += OnTextChanged;
-            SelectionChanged += OnSelectionChanged;
-        }
-
-        private void StopListeningToTextEvents()
-        {
-            TextChanged -= OnTextChanged;
-            SelectionChanged -= OnSelectionChanged;
         }
 
         private void CheckForScrollViewerCollision()
@@ -229,7 +255,7 @@ namespace BuildNotifications.Resources.Search
             var (block, _, isSearchCriteria) = blockOfCaret;
 
             if (SearchCriteriaViewModel?.SearchCriteria != block.SearchCriteria)
-                SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria);
+                SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria, SearchHistory ?? new EmptySearchHistory());
 
             if (isSearchCriteria)
                 SearchCriteriaViewModel.ClearSuggestions();
@@ -243,6 +269,13 @@ namespace BuildNotifications.Resources.Search
                 return;
             var blockOfCurrentSelection = BlockOfCurrentSelection(_runsForCurrentSearchBlocks);
             DisplaySuggestions(blockOfCurrentSelection);
+        }
+
+        private void ListenToTextEvents()
+        {
+            StopListeningToTextEvents();
+            TextChanged += OnTextChanged;
+            SelectionChanged += OnSelectionChanged;
         }
 
         private void OnGotFocus(object sender, RoutedEventArgs e)
@@ -319,45 +352,6 @@ namespace BuildNotifications.Resources.Search
             }
         }
 
-        private void ApplySuggestion(SearchSuggestionViewModel selectedSuggestion)
-        {
-            if (!_runsForCurrentSearchBlocks.Any())
-                return;
-
-            var storedSelection = StoreSelection();
-            var (_, runOfBlock, __) = BlockOfCurrentSelection(_runsForCurrentSearchBlocks);
-            int indicesToMoveCaret;
-
-            var suggestionText = selectedSuggestion.SuggestedText;
-
-            // if the suggestion isn't a search criteria (end with the keyword separator), add the general separator so a new search term is automatically opened for the user
-            const char specificToGeneralSeparator = ',';
-            const char keywordSeparator = ':';
-
-            if (!suggestionText.EndsWith(keywordSeparator))
-                suggestionText += specificToGeneralSeparator;
-
-            // if the caret is on the end of the text and there is no run
-            if (runOfBlock == null)
-            {
-                var inlines = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines;
-
-                inlines?.Add(DefaultRun(suggestionText));
-                indicesToMoveCaret = suggestionText.Length;
-            }
-            else // if the caret is somewhere within a search term
-            {
-                var indexOfCaretInRun = runOfBlock.ContentStart.GetOffsetToPosition(Selection.Start);
-                runOfBlock.Text = suggestionText;
-                indicesToMoveCaret = suggestionText.Length - indexOfCaretInRun;
-            }
-
-            storedSelection = (storedSelection.startOffset + indicesToMoveCaret, storedSelection.lengthOffset, storedSelection.amountOfInlines, storedSelection.caretPosition);
-            RestoreSelection(storedSelection);
-        }
-
-        private void OnSizeChanged(object? sender, EventArgs e) => UpdatePopupPlacement();
-
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             Loaded -= OnLoaded;
@@ -370,6 +364,8 @@ namespace BuildNotifications.Resources.Search
         {
             ResetScrollViewerMargin();
             _popup.IsOpen = false;
+            if (SearchHistory != null && !string.IsNullOrEmpty(_currentSearchTerm))
+                SearchHistory.AddEntry(_currentSearchTerm);
         }
 
         private void OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -387,7 +383,14 @@ namespace BuildNotifications.Resources.Search
 
         private void OnSelectionChanged(object sender, RoutedEventArgs e) => DisplaySuggestionsForCaret();
 
+        private void OnSizeChanged(object? sender, EventArgs e) => UpdatePopupPlacement();
+
         private void OnTextChanged(object sender, TextChangedEventArgs e) => ParseCurrentText();
+
+        private void OnWindowLocationChanged(object? sender, EventArgs e)
+        {
+            UpdatePopupPlacement();
+        }
 
         private void ParseCurrentText()
         {
@@ -396,6 +399,7 @@ namespace BuildNotifications.Resources.Search
 
             var currentText = CurrentText();
             var search = SearchEngine.Parse(currentText);
+            _currentSearchTerm = search.SearchedTerm;
 
             StopListeningToTextEvents();
             var storedSelection = StoreSelection();
@@ -412,11 +416,6 @@ namespace BuildNotifications.Resources.Search
 
             DisplaySuggestionsForCaret();
             ListenToTextEvents();
-        }
-
-        private void OnWindowLocationChanged(object? sender, EventArgs e)
-        {
-            UpdatePopupPlacement();
         }
 
         private Size RenderSizeOfElement(FrameworkElement element)
@@ -511,6 +510,12 @@ namespace BuildNotifications.Resources.Search
             _scrollViewer.MaxWidth = double.MaxValue;
         }
 
+        private void StopListeningToTextEvents()
+        {
+            TextChanged -= OnTextChanged;
+            SelectionChanged -= OnSelectionChanged;
+        }
+
         private (int startOffset, int lengthOffset, int amountOfInlines, int caretPosition) StoreSelection()
         {
             var start = Document.ContentStart.GetOffsetToPosition(Selection.Start);
@@ -540,6 +545,7 @@ namespace BuildNotifications.Resources.Search
         private Border _overlay;
         private Popup _popup;
         private Key? _lastPressedKey;
+        private string _currentSearchTerm = string.Empty;
 
         private double _overlayWidth;
 
@@ -558,178 +564,13 @@ namespace BuildNotifications.Resources.Search
         public static readonly DependencyProperty SearchEngineProperty = DependencyProperty.Register(
             "SearchEngine", typeof(ISearchEngine), typeof(SearchTextBox), new PropertyMetadata(default(ISearchEngine)));
 
+        public static readonly DependencyProperty SearchHistoryProperty = DependencyProperty.Register(
+            "SearchHistory", typeof(ISearchHistory), typeof(SearchTextBox), new PropertyMetadata(default(ISearchHistory)));
+
         public static readonly DependencyProperty SearchTermBackgroundProperty = DependencyProperty.Register(
             "SearchTermBackground", typeof(Brush), typeof(SearchTextBox), new PropertyMetadata(default(Brush)));
 
         public static readonly DependencyProperty SearchTermForegroundProperty = DependencyProperty.Register(
             "SearchTermForeground", typeof(Brush), typeof(SearchTextBox), new PropertyMetadata(default(Brush)));
-    }
-
-    internal class SearchSuggestionViewModel : BaseViewModel
-    {
-        private readonly ISearchCriteriaSuggestion _searchCriteriaSuggestion;
-        public string SuggestedText { get; }
-
-        public bool IsKeyword => _searchCriteriaSuggestion.IsKeyword;
-
-        public SearchSuggestionViewModel(ISearchCriteriaSuggestion searchCriteriaSuggestion)
-        {
-            _searchCriteriaSuggestion = searchCriteriaSuggestion;
-            SuggestedText = _searchCriteriaSuggestion.Suggestion;
-        }
-
-        public bool IsSameSuggestion(SearchSuggestionViewModel otherViewModel)
-        {
-            return otherViewModel._searchCriteriaSuggestion.Suggestion.Equals(_searchCriteriaSuggestion.Suggestion, StringComparison.InvariantCulture);
-        }
-    }
-
-    internal class SearchBlockViewModel : BaseViewModel
-    {
-        protected SearchBlockViewModel(ISearchCriteria searchCriteria)
-        {
-            SearchCriteria = searchCriteria;
-        }
-
-        public string Description => SearchCriteria.LocalizedDescription;
-
-        public ObservableCollection<SearchBlockExampleViewModel> Examples { get; } = new ObservableCollection<SearchBlockExampleViewModel>();
-
-        public RemoveTrackingObservableCollection<SearchSuggestionViewModel> Suggestions { get; } = new RemoveTrackingObservableCollection<SearchSuggestionViewModel>(TimeSpan.FromMilliseconds(100));
-
-        private SearchSuggestionViewModel? _selectedSuggestion;
-
-        public SearchSuggestionViewModel? SelectedSuggestion
-        {
-            get => _selectedSuggestion;
-            set
-            {
-                _selectedSuggestion = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _selectedSuggestionIndex;
-
-        public int SelectedSuggestionIndex
-        {
-            get => _selectedSuggestionIndex;
-            set
-            {
-                _selectedSuggestionIndex = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool HasSuggestions => Suggestions.Any(x => !x.IsRemoving);
-
-        public string Keyword => SearchCriteria.LocalizedKeyword;
-        public ISearchCriteria SearchCriteria { get; }
-
-        public static SearchBlockViewModel FromSearchCriteria(ISearchCriteria searchCriteria)
-        {
-            if (searchCriteria is DefaultSearchCriteria defaultSearchCriteria)
-                return new DefaultSearchBlockViewModel(defaultSearchCriteria);
-            var searchBlockViewModel = new SearchBlockViewModel(searchCriteria);
-
-            foreach (var example in searchCriteria.LocalizedExamples)
-            {
-                searchBlockViewModel.Examples.Add(new SearchBlockExampleViewModel($" {searchCriteria.LocalizedKeyword}: ", example));
-            }
-
-            return searchBlockViewModel;
-        }
-
-        public void ClearSuggestions()
-        {
-            var hadSuggestionsBeforeUpdate = HasSuggestions;
-
-            Suggestions.Clear();
-            SelectedSuggestionIndex = 0;
-
-            if (hadSuggestionsBeforeUpdate != HasSuggestions)
-                OnPropertyChanged(nameof(HasSuggestions));
-        }
-
-        public void UpdateSuggestions(string currentSearchTerm)
-        {
-            var selectedIndexBeforeUpdate = SelectedSuggestionIndex;
-            var hadSuggestionsBeforeUpdate = HasSuggestions;
-            var newSuggestions = SearchCriteria.Suggest(currentSearchTerm).Select(s => new SearchSuggestionViewModel(s)).ToList();
-
-            var toRemove = Suggestions.Where(s => !newSuggestions.Any(n => n.IsSameSuggestion(s))).ToList();
-            var toAdd = newSuggestions.Where(n => !Suggestions.Any(s => s.IsSameSuggestion(n))).ToList();
-
-            foreach (var suggestionToAdd in toAdd)
-            {
-                Suggestions.Add(suggestionToAdd);
-            }
-
-            SortSuggestions(newSuggestions);
-
-            foreach (var suggestionToRemove in toRemove)
-            {
-                Suggestions.Remove(suggestionToRemove);
-            }
-
-            if (Suggestions.Any(s => !s.IsRemoving) && (SelectedSuggestion == null || SelectedSuggestion.IsRemoving))
-                SelectedSuggestion = Suggestions.First(s => !s.IsRemoving);
-            else
-            {
-                // keep the selection on the first item, except when the user has previously selected another item (and the index is != 0)
-                if (selectedIndexBeforeUpdate == 0 && SelectedSuggestionIndex != 0)
-                    SelectedSuggestionIndex = 0;
-            }
-
-            if (hadSuggestionsBeforeUpdate != HasSuggestions)
-                OnPropertyChanged(nameof(HasSuggestions));
-        }
-
-        private void SortSuggestions(IList<SearchSuggestionViewModel> newSuggestions)
-        {
-            Suggestions.Sort(s =>
-            {
-                var index = newSuggestions.IndexOf(newSuggestions.FirstOrDefault(nS => nS.SuggestedText.Equals(s.SuggestedText, StringComparison.InvariantCulture)));
-                if (index == -1)
-                    index = Suggestions.IndexOf(s);
-
-                return index;
-            });
-        }
-
-        public void ChangeSelectedSuggestionIndex(int indexChange)
-        {
-            var newIndex = SelectedSuggestionIndex + indexChange;
-            if (newIndex < 0)
-                newIndex = Suggestions.Count - 1;
-
-            if (newIndex >= Suggestions.Count)
-                newIndex = Suggestions.Count == 0 ? -1 : 0;
-
-            SelectedSuggestionIndex = newIndex;
-        }
-    }
-
-    internal class DefaultSearchBlockViewModel : SearchBlockViewModel
-    {
-        public DefaultSearchBlockViewModel(DefaultSearchCriteria defaultSearchCriteria) : base(defaultSearchCriteria)
-        {
-            foreach (var (keyword, exampleTerm) in defaultSearchCriteria.ExamplesFromEachSubCriteria())
-            {
-                Examples.Add(new SearchBlockExampleViewModel($" {keyword}: ", exampleTerm));
-            }
-        }
-    }
-
-    internal class SearchBlockExampleViewModel : BaseViewModel
-    {
-        public SearchBlockExampleViewModel(string keyword, string exampleText)
-        {
-            Keyword = keyword;
-            ExampleText = exampleText;
-        }
-
-        public string ExampleText { get; }
-        public string Keyword { get; }
     }
 }

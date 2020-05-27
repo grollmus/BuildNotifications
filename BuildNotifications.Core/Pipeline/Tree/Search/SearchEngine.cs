@@ -37,7 +37,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public ISpecificSearch Parse(string textInput)
         {
-            var specificSearch = new SpecificSearch(ParseIntoBlocks(textInput));
+            var specificSearch = new SpecificSearch(ParseIntoBlocks(textInput), textInput);
             InvokeSearchParsed(textInput, specificSearch);
             return specificSearch;
         }
