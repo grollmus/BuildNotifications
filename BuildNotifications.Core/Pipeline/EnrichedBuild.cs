@@ -7,10 +7,11 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class EnrichedBuild : IBuild
     {
-        public EnrichedBuild(IBaseBuild build, string projectName, IBuildProvider provider)
+        public EnrichedBuild(IBaseBuild build, string projectName, Guid projectId, IBuildProvider provider)
         {
             OriginalBuild = build;
             ProjectName = projectName;
+            ProjectId = projectId;
             Provider = provider;
             BranchName = OriginalBuild.BranchName;
             IsRequestedByCurrentUser = provider.User.Id == build.RequestedBy.Id;
@@ -28,6 +29,8 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         public string ProjectName { get; }
+
+        public Guid ProjectId { get; }
 
         public bool IsRequestedByCurrentUser { get; }
 

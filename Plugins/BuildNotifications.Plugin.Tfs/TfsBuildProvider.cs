@@ -107,7 +107,7 @@ namespace BuildNotifications.Plugin.Tfs
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var builds = await buildClient.GetBuildsAsync(project.Id);
+            var builds = await FetchMaxAmountOfBuilds(buildClient, project);
 
             foreach (var build in builds)
             {
@@ -115,6 +115,15 @@ namespace BuildNotifications.Plugin.Tfs
                 _knownBuilds.Add(converted);
                 yield return converted;
             }
+        }
+
+        private async Task<IList<Build>> FetchMaxAmountOfBuilds(BuildHttpClient buildClient, TeamProjectReference project)
+        {
+            const int maxBuildsToFetch = 5000;
+            var definitions = await buildClient.GetFullDefinitionsAsync(project.Id);
+            var buildsPerDefinition = maxBuildsToFetch / Math.Max(definitions.Count, 1);
+            var builds = await buildClient.GetBuildsAsync(project.Id, queryOrder: BuildQueryOrder.QueueTimeDescending, top: maxBuildsToFetch, maxBuildsPerDefinition: buildsPerDefinition);
+            return builds;
         }
 
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
@@ -209,7 +218,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-            var builds = await buildClient.GetBuildsAsync(project.Id);
+            var builds = await FetchMaxAmountOfBuilds(buildClient, project);
 
             var deletedBuilds = _knownBuilds.Where(known => builds.All(build => build.Id != known.BuildId));
 

@@ -25,6 +25,11 @@ namespace BuildNotifications.Core.Pipeline
         string Name { get; set; }
 
         /// <summary>
+        /// Unique identifier for this project.
+        /// </summary>
+        Guid Guid { get; }
+
+        /// <summary>
         /// Fetches all builds for this project.
         /// </summary>
         /// <returns>List of builds.</returns>

@@ -12,7 +12,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            var key = new CacheKey(1, 2);
+            var key = new CacheKey("1", "2");
             sut.AddOrReplace(key, "hello world");
 
             // Act
@@ -29,9 +29,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            sut.AddOrReplace(1, 1, "test");
-            sut.AddOrReplace(1, 2, "test");
-            sut.AddOrReplace(1, 3, "test");
+            sut.AddOrReplace("1", "1", "test");
+            sut.AddOrReplace("1", "2", "test");
+            sut.AddOrReplace("1", "3", "test");
 
             // Act
             sut.Clear();
@@ -45,7 +45,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            var key = new CacheKey(1, 2);
+            var key = new CacheKey("1", "2");
 
             // Act
             var ex = Record.Exception(() => sut.Remove(key));
@@ -59,7 +59,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            var key = new CacheKey(1, 2);
+            var key = new CacheKey("1", "2");
 
             // Act
             var actual = sut.Contains(key);
@@ -73,7 +73,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            var key = new CacheKey(1, 2);
+            var key = new CacheKey("1", "2");
             sut.AddOrReplace(key, "hello world");
 
             // Act
@@ -88,9 +88,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            sut.AddOrReplace(1, 1, "test1");
-            sut.AddOrReplace(1, 2, "test2");
-            sut.AddOrReplace(1, 3, "test3");
+            sut.AddOrReplace("1", "1", "test1");
+            sut.AddOrReplace("1", "2", "test2");
+            sut.AddOrReplace("1", "3", "test3");
 
             // Act
             var actual = sut.ContentCopy();
@@ -107,7 +107,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            var key = new CacheKey(1, 2);
+            var key = new CacheKey("1", "2");
             sut.AddOrReplace(key, "hello world");
 
             // Act
@@ -125,9 +125,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            sut.AddOrReplace(1, 1, "test1");
-            sut.AddOrReplace(1, 2, "test2");
-            sut.AddOrReplace(1, 3, "test3");
+            sut.AddOrReplace("1", "1", "test1");
+            sut.AddOrReplace("1", "2", "test2");
+            sut.AddOrReplace("1", "3", "test3");
 
             // Act
             sut.RemoveValue("test2");
@@ -144,12 +144,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         {
             // Arrange
             var sut = new PipelineCache<string>();
-            sut.AddOrReplace(1, 1, "test");
-            sut.AddOrReplace(2, 1, "wrong");
-            sut.AddOrReplace(1, 2, "test");
+            sut.AddOrReplace("1", "1", "test");
+            sut.AddOrReplace("2", "1", "wrong");
+            sut.AddOrReplace("1", "2", "test");
 
             // Act
-            var actual = sut.Values(1);
+            var actual = sut.Values("1");
 
             // Assert
             Assert.All(actual, x => Assert.Equal("test", x));

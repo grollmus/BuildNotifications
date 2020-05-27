@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class BuildTreeBuildsDelta : IBuildTreeBuildsDelta
     {
-        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, Dictionary<(string BuildId, string Project), BuildStatus> previousStatesOfBuildIds, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
+        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, IReadOnlyDictionary<CacheKey, BuildStatus> previousStatesOfBuildIds, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
         {
             // without information of the previous state, a delta is not possible to calculate
             if (previousStatesOfBuildIds == null)
@@ -14,7 +15,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
             foreach (var newBuild in currentBuildNodes)
             {
-                if (previousStatesOfBuildIds.TryGetValue((BuildId: newBuild.Build.Id, Project: newBuild.Build.ProjectName), out var previousStatus))
+                if (previousStatesOfBuildIds.TryGetValue(newBuild.Build.CacheKey(), out var previousStatus))
                 {
                     if (previousStatus != newBuild.Status)
                         AddToDelta(newBuild);

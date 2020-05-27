@@ -15,6 +15,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         string ProjectName { get; }
 
         /// <summary>
+        /// ID of the project this build originates from.
+        /// </summary>
+        Guid ProjectId { get; }
+
+        /// <summary>
         /// Whether this build has been requested by the current user identity of this builds source build provider
         /// </summary>
         bool IsRequestedByCurrentUser { get; }

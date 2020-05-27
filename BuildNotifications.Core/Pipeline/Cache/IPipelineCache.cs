@@ -24,7 +24,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// <param name="itemId">Item part of the key to add item for.</param>
         /// <param name="item">Item to add.</param>
         /// <returns>Action that was performed by this operation.</returns>
-        void AddOrReplace(int providerId, int itemId, T item);
+        void AddOrReplace(string providerId, string itemId, T item);
 
         /// <summary>
         /// Clears all stored data.
@@ -44,7 +44,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// <param name="providerId">Provider part of the key to add item for.</param>
         /// <param name="itemId">Item part of the key to add item for.</param>
         /// <returns><c>true</c> if the item exists; otherwise <c>false</c>.</returns>
-        bool Contains(int providerId, int itemId);
+        bool Contains(string providerId, string itemId);
 
         /// <summary>
         /// Determine if an item that matches the given predicate exists in the cache.
@@ -77,7 +77,7 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="providerId">Provider part of the key to add item for.</param>
         /// <param name="itemId">Item part of the key to add item for.</param>
-        void Remove(int providerId, int itemId);
+        void Remove(string providerId, string itemId);
 
         /// <summary>
         /// Removes an item from the cache.
@@ -90,7 +90,13 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <param name="providerId">Id of the provider to fetch data for.</param>
         /// <returns>List of all values matching the provider.</returns>
-        IEnumerable<T> Values(int providerId);
+        IEnumerable<T> Values(string providerId);
+
+        /// <summary>
+        /// Returns the entire content of this cache.
+        /// </summary>
+        /// <returns>Read only dictionary of all CacheKeys and their associated values.</returns>
+        IReadOnlyDictionary<CacheKey, T> CachedValues();
 
         /// <summary>
         /// Amount of items present within the cache.
