@@ -11,6 +11,7 @@
 
     <Grid>
         <search:SearchTextBox SearchEngine="{Binding SearchEngine}"
+                              SearchHistory="{Binding SearchHistory}"
                               HorizontalAlignment="Right"
                               Width="{Binding ElementName=SizeDummy, Path=ActualWidth}"
                               Icon="Search" x:Name="SearchTextBox"

@@ -8,5 +8,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
         IReadOnlyList<ISearchBlock> Blocks { get; }
 
         IEnumerable<IBuild> ApplySearch(IEnumerable<IBuild> onBuilds);
+
+        string SearchedTerm { get; }
     }
 }

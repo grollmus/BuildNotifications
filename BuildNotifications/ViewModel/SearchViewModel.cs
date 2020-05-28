@@ -7,10 +7,11 @@ namespace BuildNotifications.ViewModel
 {
     public class SearchViewModel : BaseViewModel
     {
-        public SearchViewModel(IPipeline pipeline, ISearchEngine searchEngine)
+        public SearchViewModel(IPipeline pipeline, ISearchEngine searchEngine, ISearchHistory searchHistory)
         {
             _pipeline = pipeline;
             SearchEngine = searchEngine;
+            SearchHistory = searchHistory;
             SearchEngine.SearchParsed += SearchEngineOnSearchParsed;
 
             _searchTimer = new DispatcherTimer(DispatcherPriority.Input)
@@ -27,8 +28,10 @@ namespace BuildNotifications.ViewModel
             OnPropertyChanged(nameof(TextIsEmpty));
             StartSearchTask();
         }
-
+        
         public ISearchEngine SearchEngine { get; }
+
+        public ISearchHistory SearchHistory { get; }
 
         public bool TextIsEmpty => LastSearchedTerm.Length == 0;
 

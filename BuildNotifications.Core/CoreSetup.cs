@@ -41,6 +41,8 @@ namespace BuildNotifications.Core
             SearchEngine.AddCriteria(new AfterCriteria(Pipeline), false);
             SearchEngine.AddCriteria(new BeforeCriteria(Pipeline), false);
 
+            SearchHistory = new RuntimeSearchHistory();
+
             if (notificationReceiver != null)
             {
                 NotificationReceiver = notificationReceiver;
@@ -49,6 +51,8 @@ namespace BuildNotifications.Core
         }
 
         public ISearchEngine SearchEngine { get; }
+
+        public ISearchHistory SearchHistory { get; }
 
         public IConfiguration Configuration { get; }
 

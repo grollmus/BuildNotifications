@@ -6,12 +6,14 @@
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
-                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation">
+                    xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
 
     <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter Property="ItemsSource" Value="{Binding Suggestions}" />
         <Setter Property="SelectedItem" Value="{Binding SelectedSuggestion}" />
         <Setter Property="SelectedIndex" Value="{Binding SelectedSuggestionIndex}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -23,8 +25,15 @@
 
     <DataTemplate DataType="{x:Type search:SearchSuggestionViewModel}">
         <DockPanel x:Name="SuggestionDockPanel">
+            <icons:IconButton Icon="Close" DockPanel.Dock="Right" Command="{Binding DeleteSuggestionCommand}"
+                              IconSize="{StaticResource BlockFiveSixths}"
+                              Foreground="{DynamicResource Background3}" Margin="{StaticResource BlockHalfRight}"
+                              HorizontalAlignment="Right" Width="{StaticResource Block}" VerticalAlignment="Center"
+                              Visibility="{Binding IsFromHistory, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
-                       Margin="{StaticResource BlockHalfXOnlyMargin}" x:Name="SuggestionTextBlock"/>
+                       VerticalAlignment="Center" 
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" x:Name="SuggestionTextBlock" />
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
@@ -35,8 +44,7 @@
 
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsKeyword}" Value="True">
-                <Setter TargetName="SuggestionDockPanel" Property="Background" Value="{DynamicResource Background3}"/>
-                <Setter TargetName="SuggestionTextBlock" Property="FontWeight" Value="Bold"/>
+                <Setter TargetName="SuggestionTextBlock" Property="FontWeight" Value="Bold" />
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -46,7 +54,7 @@
         <DockPanel>
             <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
                        Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Left"
-                       Margin="{StaticResource BlockLeft}"
+                       Margin="{StaticResource BlockLeft}" MinWidth="{StaticResource BlockFourTimes}"
                        HorizontalAlignment="Left" />
             <TextBlock Text="{Binding ExampleText}" Foreground="{DynamicResource Foreground1}"
                        Margin="{StaticResource BlockHalfXOnlyMargin}" />
@@ -58,7 +66,7 @@
             <ListBox Style="{StaticResource SuggestionsListBoxStyle}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
-            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" />
+            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Margin="{StaticResource BlockQuarterThickness}"/>
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
             <ItemsControl ItemsSource="{Binding Examples}">
@@ -97,12 +105,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
-                           Padding="{StaticResource BlockSixthThickness}"
+                           Padding="{StaticResource BlockSixthThickness}" Margin="{StaticResource BlockQuarterThickness}"
                            Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="14"
                            Grid.Row="0" Grid.Column="0"
                            HorizontalAlignment="Left" />
                 <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Grid.Row="1"
-                           Grid.Column="1" />
+                           Grid.Column="1" Margin="{StaticResource BlockQuarterThickness}"/>
             </Grid>
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
@@ -164,9 +172,8 @@
                                    PlacementTarget="{Binding ElementName=ContentGrid}" Placement="Bottom"
                                    VerticalOffset="{StaticResource BlockQuarter}"
                                    x:Name="PART_Popup"
-                                   StaysOpen="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}"
-                                   IsHitTestVisible="False">
-                                <Border Background="{DynamicResource Background1}" IsHitTestVisible="False"
+                                   StaysOpen="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}">
+                                <Border Background="{DynamicResource Background1}"
                                         BorderBrush="{DynamicResource Background2}" BorderThickness="1"
                                         Padding="{StaticResource BlockQuarterThickness}">
                                     <StackPanel Orientation="Vertical">
