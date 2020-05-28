@@ -7,9 +7,9 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
-    internal class BranchCriteria : BaseSearchCriteria
+    internal class DefinitionCriteria : BaseSearchCriteria
     {
-        public BranchCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaBranchKeyword, StringLocalizer.SearchCriteriaBranchDescription, pipeline)
+        public DefinitionCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaDefinitionKeyword, StringLocalizer.SearchCriteriaDefinitionKeyword, pipeline)
         {
         }
 
@@ -17,17 +17,17 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher)
         {
-            return _validBranches.Where(stringMatcher.IsMatch).OrderBy(k => _stringComparer.Compare(input, k));
+            return _validDefinitions.Where(stringMatcher.IsMatch).OrderBy(k => _stringComparer.Compare(input, k));
         }
 
-        private readonly HashSet<string> _validBranches = new HashSet<string>();
+        private readonly HashSet<string> _validDefinitions = new HashSet<string>();
 
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {
-            _validBranches.Clear();
-            foreach (var branchName in pipeline.CachedBranches().Select(b => b.DisplayName).Distinct())
+            _validDefinitions.Clear();
+            foreach (var definition in pipeline.CachedDefinitions().Select(b => b.Name).Distinct())
             {
-                _validBranches.Add(branchName);
+                _validDefinitions.Add(definition);
             }
         }
 
@@ -38,15 +38,15 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             if (!_stringMatcher.SearchPattern.Equals(input, StringComparison.InvariantCulture))
                 _stringMatcher.SearchPattern = input;
 
-            return _stringMatcher.IsMatch(build.BranchName);
+            return _stringMatcher.IsMatch(build.Definition.Name);
         }
 
         protected override IEnumerable<string> Examples()
         {
-            yield return StringLocalizer.SearchCriteriaBranchStageExample;
-            yield return string.Join("", StringLocalizer.SearchCriteriaBranchStageExample.ToLower(CurrentCultureInfo).Take(3));
-            yield return "=" + StringLocalizer.SearchCriteriaBranchStageExample;
-            yield return "*" + StringLocalizer.SearchCriteriaBranchStageExample;
+            yield return StringLocalizer.SearchCriteriaDefinitionNightlyExample;
+            yield return string.Join("", StringLocalizer.SearchCriteriaDefinitionNightlyExample.ToLower(CurrentCultureInfo).Take(3));
+            yield return "=" + StringLocalizer.SearchCriteriaDefinitionNightlyExample;
+            yield return "*" + StringLocalizer.SearchCriteriaDefinitionNightlyExample;
         }
     }
 }

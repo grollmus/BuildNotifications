@@ -35,6 +35,7 @@ namespace BuildNotifications.Core
 
             SearchEngine = new SearchEngine();
             SearchEngine.AddCriteria(new BranchCriteria(Pipeline));
+            SearchEngine.AddCriteria(new DefinitionCriteria(Pipeline));
             SearchEngine.AddCriteria(new DuringCriteria(Pipeline));
             SearchEngine.AddCriteria(new IsCriteria(Pipeline));
             SearchEngine.AddCriteria(new AfterCriteria(Pipeline), false);

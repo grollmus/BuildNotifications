@@ -696,4 +696,10 @@
   <data name="SearchCriteriaIsScheduled" xml:space="preserve">
     <value>Geplant</value>
   </data>
+  <data name="SearchCriteriaBranchStageExample" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
 </root>

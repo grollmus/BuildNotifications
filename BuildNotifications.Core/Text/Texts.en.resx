@@ -697,4 +697,10 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="SearchCriteriaIsScheduled" xml:space="preserve">
     <value>Scheduled</value>
   </data>
+  <data name="SearchCriteriaBranchStageExample" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
 </root>
