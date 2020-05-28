@@ -703,4 +703,16 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
     <value>Nightly</value>
   </data>
+  <data name="SearchCriteriaForMeExample" xml:space="preserve">
+    <value>Me</value>
+  </data>
+  <data name="SearchCriteriaByMeExample" xml:space="preserve">
+    <value>Me</value>
+  </data>
+  <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
+    <value>John Doe</value>
+  </data>
+  <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
+    <value>John Doe</value>
+  </data>
 </root>

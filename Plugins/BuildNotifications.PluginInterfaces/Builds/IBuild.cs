@@ -1,4 +1,5 @@
 ﻿using System;
+using BuildNotifications.PluginInterfaces.SourceControl;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds
@@ -7,7 +8,8 @@ namespace BuildNotifications.PluginInterfaces.Builds
     /// Contains enriched information about a single build.
     /// </summary>
     [PublicAPI]
-    public interface IBuild : IBaseBuild
+    public interface 
+        IBuild : IBaseBuild
     {
         /// <summary>
         /// Name of the project this build originates from.
@@ -23,6 +25,11 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// Whether this build has been requested by the current user identity of this builds source build provider
         /// </summary>
         bool IsRequestedByCurrentUser { get; }
+
+        /// <summary>
+        /// Branch this build originates from.
+        /// </summary>
+        IBranch? Branch { get; }
     }
 
     /// <summary>

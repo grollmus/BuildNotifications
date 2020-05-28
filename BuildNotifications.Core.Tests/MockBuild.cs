@@ -1,6 +1,7 @@
 ﻿using System;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Tests
 {
@@ -51,5 +52,7 @@ namespace BuildNotifications.Core.Tests
         public Guid ProjectId { get; } = Guid.Empty;
 
         public bool IsRequestedByCurrentUser { get; } = false;
+
+        public IBranch? Branch { get; } = null;
     }
 }

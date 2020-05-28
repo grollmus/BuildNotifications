@@ -46,8 +46,12 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             UpdateCacheIfNecessary();
 
             var trimmed = TrimInput(input);
+            var isExplicit = trimmed.StartsWith(StringMatcher.ForceExplicitMatchCharacter);
+            if (isExplicit)
+                trimmed = trimmed.Substring(1);
+
             _stringMatcher.SearchPattern = trimmed;
-            return SuggestInternal(trimmed, _stringMatcher).Take(MaxAmountOfSuggestions).Select(AsSuggestion);
+            return SuggestInternal(trimmed, _stringMatcher).Take(MaxAmountOfSuggestions).Select(t => isExplicit ? $"={t}" : t).Select(AsSuggestion);
         }
 
         private void UpdateCacheIfNecessary()

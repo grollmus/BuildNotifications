@@ -10,7 +10,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.Resources.Icons;
 using JetBrains.Annotations;
@@ -23,6 +22,7 @@ namespace BuildNotifications.Resources.Search
         {
             GotFocus += OnGotFocus;
             LostFocus += OnLostFocus;
+            LostKeyboardFocus += (sender, args) => _popup.IsOpen = false;
             PreviewMouseDown += OnPreviewMouseDown;
             PreviewKeyDown += OnKeyDown;
             PreviewKeyUp += OnKeyUp;
@@ -125,8 +125,15 @@ namespace BuildNotifications.Resources.Search
             const char specificToGeneralSeparator = ',';
             const char keywordSeparator = ':';
 
+            // apply spaces for a cleaner appearance
+            if (!selectedSuggestion.IsKeyword && !selectedSuggestion.IsFromHistory)
+                suggestionText = ' ' + suggestionText;
+
+            // add automatic separator for better ease-of-use
             if (!suggestionText.EndsWith(keywordSeparator) && !selectedSuggestion.IsFromHistory)
                 suggestionText += specificToGeneralSeparator;
+            else
+                suggestionText += ' ';
 
             // if the caret is on the end of the text and there is no run
             if (runOfBlock == null)
@@ -144,7 +151,29 @@ namespace BuildNotifications.Resources.Search
             }
 
             storedSelection = (storedSelection.startOffset + indicesToMoveCaret, storedSelection.lengthOffset, storedSelection.amountOfInlines, storedSelection.caretPosition);
+            if (!IsFocused)
+                Focus();
             RestoreSelection(storedSelection);
+            InvalidateVisual();
+            Invalidate(this);
+        }
+
+        private void Invalidate(DependencyObject dependencyObject)
+        {
+            var parent = VisualTreeHelper.GetParent(dependencyObject);
+            var childCount = VisualTreeHelper.GetChildrenCount(dependencyObject);
+            for (var i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(dependencyObject, i);
+                if (child is UIElement childUiElement)
+                    childUiElement.InvalidateVisual();
+            }
+
+            if (parent is UIElement uiElement)
+            {
+                uiElement.InvalidateVisual();
+                Invalidate(parent);
+            }
         }
 
         private (ISearchBlock block, Run? inlineOfCaret, bool inlineIsSearchCriteria) BlockOfCurrentSelection(IList<(Run createdRun, ISearchBlock forBlock, bool isSearchCriteria)> search)
@@ -255,7 +284,7 @@ namespace BuildNotifications.Resources.Search
             var (block, _, isSearchCriteria) = blockOfCaret;
 
             if (SearchCriteriaViewModel?.SearchCriteria != block.SearchCriteria)
-                SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria, SearchHistory ?? new EmptySearchHistory());
+                SearchCriteriaViewModel = SearchBlockViewModel.FromSearchCriteria(block.SearchCriteria, SearchHistory ?? new EmptySearchHistory(), ApplySuggestion);
 
             if (isSearchCriteria)
                 SearchCriteriaViewModel.ClearSuggestions();
@@ -451,12 +480,6 @@ namespace BuildNotifications.Resources.Search
                 if (Document.ContentStart.GetOffsetToPosition(CaretPosition) == Document.ContentStart.GetOffsetToPosition(start))
                     break;
             }
-
-            // bring selection into view
-            var characterRect = end.GetCharacterRect(LogicalDirection.Forward);
-            ScrollToHorizontalOffset(HorizontalOffset + characterRect.Left - ActualWidth + _overlayWidth + 2d); // 2 for caret width
-
-            LogTo.Debug($"Selection restored: Start: {Document.ContentStart.GetOffsetToPosition(start)} Length: {Document.ContentStart.GetOffsetToPosition(start) - Document.ContentStart.GetOffsetToPosition(end)} inlineCount: {inlineCountNow} caret: {Document.ContentStart.GetOffsetToPosition(CaretPosition)}");
         }
 
         private bool ScrollViewerReachesIntoLabelOrIcon()
@@ -474,8 +497,7 @@ namespace BuildNotifications.Resources.Search
             {
                 Background = SearchCriteriaBackground,
                 Foreground = SearchCriteriaForeground,
-                FontWeight = FontWeights.Bold,
-                FontStretch = FontStretch.FromOpenTypeStretch(5),
+                FontWeight = FontWeights.Bold
             };
 
             return run;
@@ -523,7 +545,6 @@ namespace BuildNotifications.Resources.Search
             var length = Selection.Start.GetOffsetToPosition(Selection.End);
             var inlineCount = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines.Count ?? 0;
 
-            LogTo.Debug($"Selection stored: Start: {start} Length: {length} inlineCount: {inlineCount} caret: {caret}");
             return (start, length, inlineCount, caret);
         }
 

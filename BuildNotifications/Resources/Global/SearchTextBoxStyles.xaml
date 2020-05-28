@@ -7,6 +7,7 @@
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
 
     <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
@@ -32,8 +33,7 @@
                               Visibility="{Binding IsFromHistory, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
 
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
-                       VerticalAlignment="Center" 
-                       Margin="{StaticResource BlockHalfXOnlyMargin}" x:Name="SuggestionTextBlock" />
+                       x:Name="SuggestionTextBlock" VerticalAlignment="Center" Margin="{StaticResource BlockHalfXOnlyMargin}" />
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
@@ -51,14 +51,20 @@
 
 
     <DataTemplate DataType="{x:Type search:SearchBlockExampleViewModel}">
-        <DockPanel>
+        <Grid Margin="{StaticResource BlockXOnlyMargin}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*" />
+                <ColumnDefinition Width="23*" />
+            </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
                        Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Left"
-                       Margin="{StaticResource BlockLeft}" MinWidth="{StaticResource BlockFourTimes}"
-                       HorizontalAlignment="Left" />
+                       MinWidth="{StaticResource BlockFourTimes}"
+                       Padding="{StaticResource BlockSixthThickness}"
+                       HorizontalAlignment="Stretch" FontWeight="Bold" Grid.Column="0" />
             <TextBlock Text="{Binding ExampleText}" Foreground="{DynamicResource Foreground1}"
-                       Margin="{StaticResource BlockHalfXOnlyMargin}" />
-        </DockPanel>
+                       HorizontalAlignment="Left"
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" Grid.Column="1" />
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type search:DefaultSearchBlockViewModel}">
@@ -66,7 +72,8 @@
             <ListBox Style="{StaticResource SuggestionsListBoxStyle}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
-            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Margin="{StaticResource BlockQuarterThickness}"/>
+            <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}"
+                       Margin="{StaticResource BlockThicknessOnXHalfOnY}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
                        HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
             <ItemsControl ItemsSource="{Binding Examples}">
@@ -81,6 +88,16 @@
 
     <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
         <animation:AnimatedStackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Margin="{StaticResource BlockQuarterThickness}" >
+                <TextBlock Text="{Binding Keyword}" 
+                           Padding="{StaticResource BlockQuarterThicknessOnYHalfOnX}" 
+                           Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="16"
+                           Grid.Row="0" Grid.Column="0" 
+                           HorizontalAlignment="Left" />
+
+                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1HalfTransparency}" Grid.Row="1"
+                           Grid.Column="1" Margin="{StaticResource BlockDoubleXOnlyMargin}" />
+            </StackPanel>
             <animation:AnimatedStackPanel Orientation="Vertical">
                 <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
                 <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
@@ -95,25 +112,7 @@
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </animation:AnimatedStackPanel>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Keyword}" Background="{DynamicResource Background2}"
-                           Padding="{StaticResource BlockSixthThickness}" Margin="{StaticResource BlockQuarterThickness}"
-                           Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="14"
-                           Grid.Row="0" Grid.Column="0"
-                           HorizontalAlignment="Left" />
-                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}" Grid.Row="1"
-                           Grid.Column="1" Margin="{StaticResource BlockQuarterThickness}"/>
-            </Grid>
-            <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
-                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+            
 
             <ItemsControl ItemsSource="{Binding Examples}">
                 <ItemsControl.ItemsPanel>
@@ -142,12 +141,11 @@
                 <ControlTemplate TargetType="{x:Type search:SearchTextBox}">
                     <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Cursor="IBeam"
                             BorderThickness="{TemplateBinding BorderThickness}" MaxHeight="{TemplateBinding MaxHeight}"
-                            MaxWidth="{TemplateBinding MaxWidth}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
 
                         <!--TEXTBOX-->
                         <Grid x:Name="ContentGrid">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left" MaxWidth="{x:Static system:Double.MaxValue}"
                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
                             <Grid HorizontalAlignment="Right">
                                 <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom"
@@ -172,8 +170,8 @@
                                    PlacementTarget="{Binding ElementName=ContentGrid}" Placement="Bottom"
                                    VerticalOffset="{StaticResource BlockQuarter}"
                                    x:Name="PART_Popup"
-                                   StaysOpen="{Binding IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}">
-                                <Border Background="{DynamicResource Background1}"
+                                   StaysOpen="True">
+                                <Border Background="{DynamicResource Background1Dark}"
                                         BorderBrush="{DynamicResource Background2}" BorderThickness="1"
                                         Padding="{StaticResource BlockQuarterThickness}">
                                     <StackPanel Orientation="Vertical">

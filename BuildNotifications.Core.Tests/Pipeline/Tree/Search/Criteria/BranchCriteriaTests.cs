@@ -23,9 +23,9 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             }
         }
 
-        private static readonly IBuild BranchABuild = Build();
-        private static readonly IBuild BranchBBuild = Build();
-        private static readonly IBuild BranchAAndBBuild = Build();
+        private static readonly IBuild BranchABuild = Build("BranchA");
+        private static readonly IBuild BranchBBuild = Build("BranchB");
+        private static readonly IBuild BranchAAndBBuild = Build("BranchAB");
 
         private static IEnumerable<(string branchName, IBuild build)> BranchNameBuildTuples()
         {
@@ -80,9 +80,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             return sut;
         }
 
-        private static IBuild Build()
+        private static IBuild Build(string branchName)
         {
             var build = Substitute.For<IBuild>();
+            var branch = Substitute.For<IBranch>();
+            branch.DisplayName.Returns(branchName);
+            build.Branch.Returns(branch);
+
             return build;
         }
 

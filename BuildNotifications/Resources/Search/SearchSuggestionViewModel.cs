@@ -8,7 +8,7 @@ namespace BuildNotifications.Resources.Search
 {
     internal class SearchSuggestionViewModel : BaseViewModel
     {
-        public SearchSuggestionViewModel(ISearchCriteriaSuggestion searchCriteriaSuggestion)
+        public SearchSuggestionViewModel(ISearchCriteriaSuggestion searchCriteriaSuggestion, Action<SearchSuggestionViewModel> selectSuggestionAction)
         {
             IsFromHistory = false;
             IsKeyword = searchCriteriaSuggestion.IsKeyword;
@@ -17,17 +17,21 @@ namespace BuildNotifications.Resources.Search
             {
                 // do nothing for suggestions not originating on history
             });
+            SelectSuggestionCommand = new DelegateCommand(() => selectSuggestionAction(this));
         }
 
-        public SearchSuggestionViewModel(string term, Action<string> deleteSuggestionAction)
+        public SearchSuggestionViewModel(string term, Action<string> deleteSuggestionAction, Action<SearchSuggestionViewModel> selectSuggestionAction)
         {
             IsKeyword = false;
             IsFromHistory = true;
             SuggestedText = term;
             DeleteSuggestionCommand = new DelegateCommand(() => deleteSuggestionAction(term));
+            SelectSuggestionCommand = new DelegateCommand(() => selectSuggestionAction(this));
         }
 
         public ICommand DeleteSuggestionCommand { get; }
+
+        public ICommand SelectSuggestionCommand { get; }
 
         public bool IsFromHistory { get; }
 

@@ -598,7 +598,8 @@
     <value />
   </data>
   <data name="SearchDefaultDescription" xml:space="preserve">
-    <value />
+    <value>Suche nach jedem Suchkriterium gleichzeitig.
+Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum trennen der Terme.</value>
   </data>
   <data name="SearchCriteriaAfterKeyword" xml:space="preserve">
     <value>Nach</value>
@@ -701,5 +702,17 @@
   </data>
   <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
     <value>Nightly</value>
+  </data>
+  <data name="SearchCriteriaByMeExample" xml:space="preserve">
+    <value>Mir</value>
+  </data>
+  <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
+    <value>Max Mustermann</value>
+  </data>
+  <data name="SearchCriteriaForMeExample" xml:space="preserve">
+    <value>Mir</value>
+  </data>
+  <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
+    <value>Max Mustermann</value>
   </data>
 </root>

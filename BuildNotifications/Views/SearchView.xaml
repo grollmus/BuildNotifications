@@ -17,15 +17,16 @@
                               Icon="Search" x:Name="SearchTextBox"
                               MaxHeight="{StaticResource BlockOneAndHalf}"
                               Margin="{DynamicResource BlockQuarterXOnlyMargin}"
-                              SearchCriteriaBackground="{DynamicResource Background3}"
+                              CaretBrush="{DynamicResource Foreground1}"
+                              SearchCriteriaBackground="{DynamicResource Background1}"
                               SearchCriteriaForeground="{DynamicResource Foreground1}"
-                              SearchTermBackground="{DynamicResource Background2}"
-                              SearchTermForeground="{DynamicResource Foreground1}" />
+                              SearchTermBackground="{DynamicResource Background1}"
+                              SearchTermForeground="{DynamicResource Foreground1HalfTransparency}" />
 
-        <!--The SearchTextBox scaled very weird by itself. Therefore a plain text block is used with the same input as the SearchTextBox to use as a reference size-->
+        <!--The SearchTextBox scales very weird by itself. Therefore a plain text block is used with the same input as the SearchTextBox to use as a reference size-->
         <Border x:Name="SizeDummy" IsHitTestVisible="False" Visibility="Hidden" HorizontalAlignment="Right">
             <TextBlock x:Name="SizeDummyTextBlock" Margin="{StaticResource BlockXOnlyMargin}" Text="{Binding LastSearchedTerm}"
-                       MinWidth="{StaticResource Block}" />
+                       MinWidth="{StaticResource Block}" FontSize="13"/>
         </Border>
 
         <i:Interaction.Triggers>

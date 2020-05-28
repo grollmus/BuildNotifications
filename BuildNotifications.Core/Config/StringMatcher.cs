@@ -16,18 +16,23 @@ namespace BuildNotifications.Core.Config
 
         private string _searchPattern = string.Empty;
 
+        public const char ForceExplicitMatchCharacter = '=';
+
         public string SearchPattern
         {
             get => _searchPattern;
             set
             {
-                if (value.Length > 0 && value[0] == '=')
+                if (value.Length > 0 && value[0] == ForceExplicitMatchCharacter)
                 {
                     _implyWildcards = false;
                     _searchPattern = value.Substring(1);
                 }
                 else
+                {
+                    _implyWildcards = true;
                     _searchPattern = value;
+                }
 
                 _splitBySpecialCharacter = SplitBySpecialCharacters(SearchPattern).ToList();
             }

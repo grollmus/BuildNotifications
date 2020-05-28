@@ -11,9 +11,10 @@ namespace BuildNotifications.Resources.Search
 {
     internal class SearchBlockViewModel : BaseViewModel
     {
-        protected SearchBlockViewModel(ISearchCriteria searchCriteria)
+        protected SearchBlockViewModel(ISearchCriteria searchCriteria, Action<SearchSuggestionViewModel> applySuggestionAction)
         {
             SearchCriteria = searchCriteria;
+            ApplySuggestionAction = applySuggestionAction;
         }
 
         public string Description => SearchCriteria.LocalizedDescription;
@@ -24,6 +25,7 @@ namespace BuildNotifications.Resources.Search
 
         public string Keyword => SearchCriteria.LocalizedKeyword;
         public ISearchCriteria SearchCriteria { get; }
+        protected Action<SearchSuggestionViewModel> ApplySuggestionAction { get; }
 
         public SearchSuggestionViewModel? SelectedSuggestion
         {
@@ -70,12 +72,12 @@ namespace BuildNotifications.Resources.Search
                 OnPropertyChanged(nameof(HasSuggestions));
         }
 
-        public static SearchBlockViewModel FromSearchCriteria(ISearchCriteria searchCriteria, ISearchHistory history)
+        public static SearchBlockViewModel FromSearchCriteria(ISearchCriteria searchCriteria, ISearchHistory history, Action<SearchSuggestionViewModel> applySuggestionAction)
         {
             if (searchCriteria is DefaultSearchCriteria defaultSearchCriteria)
-                return new DefaultSearchBlockViewModel(defaultSearchCriteria, history);
+                return new DefaultSearchBlockViewModel(defaultSearchCriteria, history, applySuggestionAction);
 
-            var searchBlockViewModel = new SearchBlockViewModel(searchCriteria);
+            var searchBlockViewModel = new SearchBlockViewModel(searchCriteria, applySuggestionAction);
 
             foreach (var example in searchCriteria.LocalizedExamples)
             {
@@ -86,7 +88,7 @@ namespace BuildNotifications.Resources.Search
         }
 
         protected virtual IEnumerable<SearchSuggestionViewModel> SuggestionsForSearchTerm(string searchTerm)
-            => SearchCriteria.Suggest(searchTerm).Select(s => new SearchSuggestionViewModel(s));
+            => SearchCriteria.Suggest(searchTerm).Select(s => new SearchSuggestionViewModel(s, ApplySuggestionAction));
 
         public void UpdateSuggestions(string currentSearchTerm)
         {
