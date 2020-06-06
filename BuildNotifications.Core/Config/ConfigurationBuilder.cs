@@ -35,7 +35,10 @@ namespace BuildNotifications.Core.Config
             var predefinedConnectionNames = predefinedConnections.Select(p => p.Name).ToList();
             if (!config.Projects.Any(p => AllConnectionsUsedInProject(p, predefinedConnectionNames)) && predefinedConnections.Any())
             {
-                var defaultProject = CreateDefaultProject(predefinedConnections.First());
+                var buildConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.Build);
+                var sourceConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.SourceControl);
+
+                var defaultProject = CreateDefaultProject(buildConnection, sourceConnection);
                 config.Projects.Add(defaultProject);
             }
 
@@ -50,12 +53,12 @@ namespace BuildNotifications.Core.Config
             return connectionNames.All(n => project.BuildConnectionNames.Contains(n) || project.SourceControlConnectionName == n);
         }
 
-        private IProjectConfiguration CreateDefaultProject(ConnectionData withConnection)
+        private IProjectConfiguration CreateDefaultProject(ConnectionData buildConnection, ConnectionData sourceConnection)
         {
-            var project = EmptyConfiguration(withConnection.Name);
+            var project = EmptyConfiguration(buildConnection.Name);
 
-            project.BuildConnectionNames = new List<string> {withConnection.Name};
-            project.SourceControlConnectionName = withConnection.Name;
+            project.BuildConnectionNames = new List<string> {buildConnection.Name};
+            project.SourceControlConnectionName = sourceConnection.Name;
 
             return project;
         }
