@@ -110,7 +110,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
             }
         }
 
-        private async Task<IList<Build>> FetchMaxAmountOfBuilds(BuildHttpClient buildClient, TeamProjectReference project)
+        private async Task<IList<Microsoft.TeamFoundation.Build.WebApi.Build>> FetchMaxAmountOfBuilds(BuildHttpClient buildClient, TeamProjectReference project)
         {
             const int maxBuildsToFetch = 5000;
             var definitions = await buildClient.GetFullDefinitionsAsync(project.Id);
