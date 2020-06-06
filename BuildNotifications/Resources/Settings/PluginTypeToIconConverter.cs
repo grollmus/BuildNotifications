@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media;
-using Anotar.NLog;
 using BuildNotifications.Core.Plugin;
+using NLog.Fluent;
 
 namespace BuildNotifications.Resources.Settings
 {
@@ -34,7 +34,7 @@ namespace BuildNotifications.Resources.Settings
             }
             catch (Exception e)
             {
-                LogTo.DebugException($"Failed to parse geometry data from plugin: {pluginType}", e);
+                Log.Debug().Message($"Failed to parse geometry data from plugin: {pluginType}").Exception(e).Write();
                 return Geometry.Empty;
             }
         }

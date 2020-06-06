@@ -10,8 +10,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using Newtonsoft.Json;
+using NLog.Fluent;
 
 namespace BuildNotifications.Services
 {
@@ -23,7 +23,7 @@ namespace BuildNotifications.Services
             _notifier = notifier;
             _updateExePath = FindUpdateExe();
             _packagesFolder = FindPackagesFolder();
-            LogTo.Info($"Update.exe should be located at {_updateExePath}");
+            Log.Info().Message($"Update.exe should be located at {_updateExePath}").Write();
         }
 
         private async Task DownloadFullNupkgFile(string targetFilePath, string version)
@@ -67,7 +67,7 @@ namespace BuildNotifications.Services
             if (!x.PreRelease)
                 return true;
 
-            LogTo.Debug($"Ignoring pre-release at \"{x.HtmlUrl}\"");
+            Log.Debug().Message($"Ignoring pre-release at \"{x.HtmlUrl}\"").Write();
             return false;
         }
 
@@ -132,25 +132,25 @@ namespace BuildNotifications.Services
 
         private async Task SanitizePackages()
         {
-            LogTo.Info($"Sanitizing packages folder at {_packagesFolder}");
+            Log.Info().Message($"Sanitizing packages folder at {_packagesFolder}").Write();
 
             if (!Directory.Exists(_packagesFolder))
             {
-                LogTo.Debug("Folder missing. Creating.");
+                Log.Debug().Message("Folder missing. Creating.").Write();
                 Directory.CreateDirectory(_packagesFolder);
             }
 
             var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
             if (version == null)
             {
-                LogTo.Debug("Unable to determine current version");
+                Log.Debug().Message("Unable to determine current version").Write();
                 return;
             }
 
             var releasesFilePath = Path.Combine(_packagesFolder, "RELEASES");
             if (!File.Exists(releasesFilePath))
             {
-                LogTo.Debug("RELEASES file does not exist. Downloading.");
+                Log.Debug().Message("RELEASES file does not exist. Downloading.").Write();
                 await DownloadReleasesFile(releasesFilePath, version);
             }
 
@@ -158,22 +158,22 @@ namespace BuildNotifications.Services
             var currentNupkgFilePath = Path.Combine(_packagesFolder, currentNupkgName);
             if (!File.Exists(currentNupkgFilePath))
             {
-                LogTo.Debug("Current full nupkg does not exist. Downloading");
+                Log.Debug().Message("Current full nupkg does not exist. Downloading").Write();
                 await DownloadFullNupkgFile(currentNupkgFilePath, version);
             }
 
-            LogTo.Info("Packages folder is sanitized");
+            Log.Info().Message("Packages folder is sanitized").Write();
         }
 
         public async Task<UpdateCheckResult?> CheckForUpdates(CancellationToken cancellationToken = default)
         {
             if (!File.Exists(_updateExePath))
             {
-                LogTo.Warn($"Update.exe not found. Expected it to be located at {_updateExePath}");
+                Log.Warn().Message($"Update.exe not found. Expected it to be located at {_updateExePath}").Write();
                 return null;
             }
 
-            LogTo.Info($"Checking for updates (include pre-releases: {_includePreReleases})");
+            Log.Info().Message($"Checking for updates (include pre-releases: {_includePreReleases})").Write();
 
             await SanitizePackages();
 
@@ -197,7 +197,7 @@ namespace BuildNotifications.Services
                 string? textResult = null;
                 p.OutputDataReceived += (s, e) =>
                 {
-                    LogTo.Debug($"Checking: {e.Data}");
+                    Log.Debug().Message($"Checking: {e.Data}").Write();
                     if (e.Data?.StartsWith("{", StringComparison.OrdinalIgnoreCase) ?? false)
                         textResult = e.Data;
                 };
@@ -208,11 +208,11 @@ namespace BuildNotifications.Services
 
                 if (!string.IsNullOrWhiteSpace(textResult))
                 {
-                    LogTo.Debug($"Updater response is: {textResult}");
+                    Log.Debug().Message($"Updater response is: {textResult}").Write();
                     return JsonConvert.DeserializeObject<UpdateCheckResult>(textResult);
                 }
 
-                LogTo.Info("Got no meaningful response from updater");
+                Log.Info().Message("Got no meaningful response from updater").Write();
                 return null;
             }, cancellationToken);
         }
@@ -221,7 +221,7 @@ namespace BuildNotifications.Services
         {
             if (!File.Exists(_updateExePath))
             {
-                LogTo.Warn($"Update.exe not found. Expected it to be located at {_updateExePath}");
+                Log.Warn().Message($"Update.exe not found. Expected it to be located at {_updateExePath}").Write();
                 return;
             }
 

@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using Microsoft.Win32;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Utils.Configuration
 {
@@ -17,11 +17,11 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
 
         public void UpdateRegistrationForAutostart()
         {
-            LogTo.Info($"Updating autostart registration. Autostart mode: {_configuration.Autostart}");
+            Log.Info().Message($"Updating autostart registration. Autostart mode: {_configuration.Autostart}").Write();
 
             if (InDebug())
             {
-                LogTo.Info("App was started in Debug. Not registering autostart");
+                Log.Info().Message("App was started in Debug. Not registering autostart").Write();
                 return;
             }
 
@@ -30,20 +30,17 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
 
             if (ShouldAutostart())
             {
-                LogTo.Info("Registering Autostart.");
+                Log.Info().Message("Registering Autostart.").Write();
                 RegisterForAutostart(name);
             }
             else
             {
-                LogTo.Info("Deregistering Autostart.");
+                Log.Info().Message("Deregistering Autostart.").Write();
                 DeregisterForAutostart(name);
             }
         }
 
-        private string AutostartCommand()
-        {
-            return $"\"{AutostartLocation()}\" {StartupMode()}";
-        }
+        private string AutostartCommand() => $"\"{AutostartLocation()}\" {StartupMode()}";
 
         private string AutostartLocation()
         {
@@ -69,7 +66,7 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Could not remove autostart from registry", e);
+                Log.Error().Message("Could not remove autostart from registry").Exception(e).Write();
             }
         }
 
@@ -93,19 +90,13 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Could not write autostart to registry", e);
+                Log.Error().Message("Could not write autostart to registry").Exception(e).Write();
             }
         }
 
-        private bool ShouldAutostart()
-        {
-            return _configuration.Autostart == AutostartMode.StartWithWindows || _configuration.Autostart == AutostartMode.StartWithWindowsMinimized;
-        }
+        private bool ShouldAutostart() => _configuration.Autostart == AutostartMode.StartWithWindows || _configuration.Autostart == AutostartMode.StartWithWindowsMinimized;
 
-        private string StartupMode()
-        {
-            return _configuration.Autostart == AutostartMode.StartWithWindowsMinimized ? MinimizeArgument : "";
-        }
+        private string StartupMode() => _configuration.Autostart == AutostartMode.StartWithWindowsMinimized ? MinimizeArgument : "";
 
         private readonly IConfiguration _configuration;
 

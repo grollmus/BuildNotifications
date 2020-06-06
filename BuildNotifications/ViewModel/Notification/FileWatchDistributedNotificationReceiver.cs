@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Notification
 {
@@ -29,7 +29,7 @@ namespace BuildNotifications.ViewModel.Notification
             if (_watcher != null)
                 return;
 
-            LogTo.Info($"Starting file watch on path \"{_targetDirectory}\".");
+            Log.Info().Message($"Starting file watch on path \"{_targetDirectory}\".").Write();
             _watcher = new FileSystemWatcher
             {
                 Path = _targetDirectory,
@@ -46,7 +46,7 @@ namespace BuildNotifications.ViewModel.Notification
             if (_watcher == null)
                 return;
 
-            LogTo.Info($"Stopping file watch on path \"{_watcher.Path}\".");
+            Log.Info().Message($"Stopping file watch on path \"{_watcher.Path}\".").Write();
             _watcher.EnableRaisingEvents = false;
             _watcher.Changed -= OnDirectoryChanged;
             _watcher = null;
@@ -58,12 +58,12 @@ namespace BuildNotifications.ViewModel.Notification
             var targetPath = Path.Combine(pathResolver.ConfigurationFolder, $"{Guid.NewGuid().ToString()}.{FileExtension}");
             try
             {
-                LogTo.Info($"Writing distributed message to path \"{targetPath}\".");
+                Log.Info().Message($"Writing distributed message to path \"{targetPath}\".").Write();
                 File.WriteAllText(targetPath, base64Notification);
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to serialize and write DistributedNotification.", e);
+                Log.Error().Message("Failed to serialize and write DistributedNotification.").Exception(e).Write();
             }
         }
 
@@ -82,10 +82,10 @@ namespace BuildNotifications.ViewModel.Notification
 
         private async void OnDirectoryChanged(object sender, FileSystemEventArgs e)
         {
-            LogTo.Info($"New file in watched directory found. Path: \"{e.FullPath}\"");
-            LogTo.Debug($"Waiting for {e.FullPath} to be ready.");
+            Log.Info().Message($"New file in watched directory found. Path: \"{e.FullPath}\"").Write();
+            Log.Debug().Message($"Waiting for {e.FullPath} to be ready.").Write();
             await WaitForFileToBeCopied(e);
-            LogTo.Debug("Waiting succeeded parsing file.");
+            Log.Debug().Message("Waiting succeeded parsing file.").Write();
             ProcessFile(e.FullPath);
         }
 
@@ -95,7 +95,7 @@ namespace BuildNotifications.ViewModel.Notification
             if (notification == null)
                 return;
 
-            LogTo.Debug("Parsing succeeded distributing event.");
+            Log.Debug().Message("Parsing succeeded distributing event.").Write();
             DistributedNotificationReceived?.Invoke(this, new DistributedNotificationReceivedEventArgs(notification));
         }
 
@@ -103,25 +103,25 @@ namespace BuildNotifications.ViewModel.Notification
         {
             try
             {
-                LogTo.Debug($"Reading content and deserializing \"{path}\".");
+                Log.Debug().Message($"Reading content and deserializing \"{path}\".").Write();
                 var content = File.ReadAllText(path);
                 return DistributedNotification.FromSerialized(content);
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to deserialize DistributedNotification.", e);
+                Log.Error().Message("Failed to deserialize DistributedNotification.").Exception(e).Write();
                 return null;
             }
             finally
             {
                 try
                 {
-                    LogTo.Info($"Deleting file \"{path}\".");
+                    Log.Info().Message($"Deleting file \"{path}\".").Write();
                     File.Delete(path);
                 }
                 catch (Exception e)
                 {
-                    LogTo.ErrorException($"Failed to cleanup Notification \"{path}\".", e);
+                    Log.Error().Message($"Failed to cleanup Notification \"{path}\".").Exception(e).Write();
                 }
             }
         }
@@ -137,15 +137,15 @@ namespace BuildNotifications.ViewModel.Notification
             });
         }
 
+        public void Dispose()
+        {
+            _watcher?.Dispose();
+        }
+
         public event EventHandler<DistributedNotificationReceivedEventArgs>? DistributedNotificationReceived;
         private readonly string _targetDirectory;
         private FileSystemWatcher? _watcher;
 
         private const string FileExtension = "distributedNotification";
-
-        public void Dispose()
-        {
-            _watcher?.Dispose();
-        }
     }
 }

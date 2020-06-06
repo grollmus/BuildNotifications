@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Media;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -11,6 +10,7 @@ using BuildNotifications.PluginInterfacesLegacy.Notification;
 using BuildNotifications.Resources.BuildTree.Converter;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.Views.Notification;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Notification
 {
@@ -29,7 +29,7 @@ namespace BuildNotifications.ViewModel.Notification
         public static void DeleteAllTemporaryImageFiles()
         {
             var path = TemporaryPngStorageLocation;
-            LogTo.Info($"Removing old png files from location: \"{path}\".");
+            Log.Info().Message($"Removing old png files from location: \"{path}\".").Write();
             if (!Directory.Exists(path))
                 return;
 
@@ -37,13 +37,13 @@ namespace BuildNotifications.ViewModel.Notification
             {
                 foreach (var file in Directory.EnumerateFiles(path, "*.png").ToList())
                 {
-                    LogTo.Info($"Deleting \"{file}\".");
+                    Log.Info().Message($"Deleting \"{file}\".").Write();
                     File.Delete(file);
                 }
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to delete temporary png files.", e);
+                Log.Error().Message("Failed to delete temporary png files.").Exception(e).Write();
             }
         }
 
@@ -68,7 +68,7 @@ namespace BuildNotifications.ViewModel.Notification
             distributedNotification.ContentImageUrl = CreateNotificationImage(distributedNotification);
             distributedNotification.FeedbackArguments = distributedNotification.ToUriProtocol();
 
-            LogTo.Debug($"Created Feedback Argument for notification \"{distributedNotification.FeedbackArguments}\".");
+            Log.Debug().Message($"Created Feedback Argument for notification \"{distributedNotification.FeedbackArguments}\".").Write();
             return distributedNotification;
         }
 

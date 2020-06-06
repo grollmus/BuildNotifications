@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -97,18 +97,18 @@ namespace BuildNotifications.Core.Pipeline
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
             var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
+                Log.Error().Message(fullMessage).Exception(exception).Write();
             else
-                LogTo.Error(fullMessage);
+                Log.Error().Message(fullMessage).Write();
 
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs());
         }
 
         public IProject? Construct(IProjectConfiguration config)
         {
-            LogTo.Debug($"Trying to construct project from {JoinStringList(config.BuildConnectionNames)} and {JoinStringList(config.SourceControlConnectionNames)}");
+            Log.Debug().Message($"Trying to construct project from {JoinStringList(config.BuildConnectionNames)} and {JoinStringList(config.SourceControlConnectionNames)}").Write();
             if (config.SourceControlConnectionNames.Count > 1)
-                LogTo.Warn("Multiple SourceControlConnections per project are no longer supported. Using first one in list.");
+                Log.Warn().Message("Multiple SourceControlConnections per project are no longer supported. Using first one in list.").Write();
 
             var buildProviders = new List<IBuildProvider>();
             foreach (var connectionName in config.BuildConnectionNames)

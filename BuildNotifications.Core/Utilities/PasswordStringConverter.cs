@@ -1,7 +1,7 @@
 ﻿using System;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces;
 using Newtonsoft.Json;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Utilities
 {
@@ -19,7 +19,7 @@ namespace BuildNotifications.Core.Utilities
             }
             catch (Exception ex)
             {
-                LogTo.WarnException("Failed to read encrypted password from configuration.", ex);
+                Log.Warn().Message("Failed to read encrypted password from configuration.").Exception(ex).Write();
                 return new PasswordString(string.Empty);
             }
         }

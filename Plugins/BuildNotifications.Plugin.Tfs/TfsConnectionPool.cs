@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -15,7 +15,7 @@ namespace BuildNotifications.Plugin.Tfs
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
             {
-                LogTo.Error(ErrorMessages.UrlWasEmpty);
+                Log.Error().Message(ErrorMessages.UrlWasEmpty).Write();
                 return null;
             }
 
@@ -83,10 +83,7 @@ namespace BuildNotifications.Plugin.Tfs
             return new VssCredentials(new VssBasicCredential(username, pw?.PlainText()));
         }
 
-        private bool IsAuthenticatedId(Guid authenticatedIdentityId)
-        {
-            return !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
-        }
+        private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
 
         private bool IsOnPremiseServer(string? url)
         {
@@ -97,10 +94,7 @@ namespace BuildNotifications.Plugin.Tfs
             return uri.Host != "dev.azure.com";
         }
 
-        private bool NeedsToAppendCollectionName(TfsConfiguration data)
-        {
-            return IsOnPremiseServer(data.Url);
-        }
+        private bool NeedsToAppendCollectionName(TfsConfiguration data) => IsOnPremiseServer(data.Url);
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
     }

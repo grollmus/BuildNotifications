@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces;
 using JetBrains.Annotations;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
+using NLog.Fluent;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Plugin.Tfs
@@ -127,7 +127,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
             catch (Exception e)
             {
-                LogTo.InfoException("Failed to fetch projectIds", e);
+                Log.Info().Message("Failed to fetch projectIds").Exception(e).Write();
                 return DefaultProjectReturnValue();
             }
             finally
@@ -152,7 +152,7 @@ namespace BuildNotifications.Plugin.Tfs
             }
             catch (Exception e)
             {
-                LogTo.InfoException("Failed to fetch projectIds", e);
+                Log.Info().Message("Failed to fetch projectIds").Exception(e).Write();
                 return DefaultRepositoryReturnValue();
             }
             finally

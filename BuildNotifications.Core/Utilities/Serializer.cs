@@ -23,7 +23,7 @@ namespace BuildNotifications.Core.Utilities
 
         public T Deserialize<T>(string serialized)
         {
-            return JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>();
+            return JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>()!;
         }
 
         private readonly JsonSerializerSettings _settings;

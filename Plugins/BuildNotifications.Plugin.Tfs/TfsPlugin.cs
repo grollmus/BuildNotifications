@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Identity;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -32,7 +32,7 @@ namespace BuildNotifications.Plugin.Tfs
         {
             if (!(data is TfsConfiguration configuration))
             {
-                LogTo.Error("Given data was no TfsConfiguration");
+                Log.Error().Message("Given data was no TfsConfiguration").Write();
                 return null;
             }
 
@@ -42,28 +42,22 @@ namespace BuildNotifications.Plugin.Tfs
 
             if (configuration.Project == null)
             {
-                LogTo.Error("ProjectId not given in connection data");
+                Log.Error().Message("ProjectId not given in connection data").Write();
                 return null;
             }
 
             return new TfsBuildProvider(connection, Guid.Parse(configuration.Project.Id));
         }
 
-        Task<ConnectionTestResult> IBuildPlugin.TestConnection(object data)
-        {
-            return TestConnection(data);
-        }
+        Task<ConnectionTestResult> IBuildPlugin.TestConnection(object data) => TestConnection(data);
 
-        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(object data)
-        {
-            return TestConnection(data);
-        }
+        Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(object data) => TestConnection(data);
 
         IBranchProvider? ISourceControlPlugin.ConstructProvider(object? data)
         {
             if (!(data is TfsConfiguration configuration))
             {
-                LogTo.Error("Given data was no TfsConfiguration");
+                Log.Error().Message("Given data was no TfsConfiguration").Write();
                 return null;
             }
 
@@ -73,13 +67,13 @@ namespace BuildNotifications.Plugin.Tfs
 
             if (configuration.Repository == null)
             {
-                LogTo.Error("RepositoryId not given in connection data");
+                Log.Error().Message("RepositoryId not given in connection data").Write();
                 return null;
             }
 
             if (configuration.Project == null)
             {
-                LogTo.Error("ProjectId not given in connection data");
+                Log.Error().Message("ProjectId not given in connection data").Write();
                 return null;
             }
 
@@ -90,10 +84,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public string IconSvgPath => "F1 M64,64z M0,0z M48.2,14.3L48.15,14.3 28.45,0 28.65,6.7 6.3,15.05 0,23.1 0,41.55 7.6,43.9 7.6,21.85 48.2,14.3 M64,11.2L48.25,14.3 48.25,41.7 48.25,49.05 7.65,43.9 24.35,63.9 24.15,55.7 48.05,64 64,50.5 64,11.2z";
 
-        public Type GetConfigurationType()
-        {
-            return typeof(TfsConfiguration);
-        }
+        public Type GetConfigurationType() => typeof(TfsConfiguration);
 
         public void SetCurrentConfiguration(object instance)
         {

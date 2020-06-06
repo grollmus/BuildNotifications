@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -66,7 +66,7 @@ namespace BuildNotifications.Core.Pipeline
                     if (IsAllowed(build))
                         yield return Enrich(build, buildProvider);
                     else
-                        LogTo.Debug($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered");
+                        Log.Debug().Message($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered").Write();
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace BuildNotifications.Core.Pipeline
                     if (IsAllowed(build))
                         yield return Enrich(build, buildProvider);
                     else
-                        LogTo.Debug($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered");
+                        Log.Debug().Message($"Build {build.Definition.Name}.{build.Id} on {build.BranchName} fetched but was filtered").Write();
                 }
             }
         }

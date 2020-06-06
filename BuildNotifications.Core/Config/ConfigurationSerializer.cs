@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
 {
@@ -28,13 +28,13 @@ namespace BuildNotifications.Core.Config
                 }
                 catch (Exception e)
                 {
-                    LogTo.InfoException("Failed to load existing config.", e);
+                    Log.Info().Message("Failed to load existing config").Exception(e).Write();
                     configuration = new Configuration();
                 }
             }
             else
             {
-                LogTo.Info($"File {fileName} does not exist. Using default configuration");
+                Log.Info().Message($"File {fileName} does not exist. Using default configuration").Write();
                 configuration = new Configuration();
             }
 
@@ -59,7 +59,7 @@ namespace BuildNotifications.Core.Config
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to load predefined connections.", e);
+                Log.Error().Message("Failed to load predefined connections.").Exception(e).Write();
                 return Enumerable.Empty<ConnectionData>();
             }
         }
@@ -71,18 +71,18 @@ namespace BuildNotifications.Core.Config
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
-                LogTo.Info($"Creating directory for config \"{directory}\" as it does not exist.");
+                Log.Info().Message($"Creating directory for config \"{directory}\" as it does not exist.").Write();
             }
 
-            LogTo.Info("Saving current configuration.");
+            Log.Info().Message("Saving current configuration.").Write();
             try
             {
-                LogTo.Debug($"Writing to path \"{fileName}\".");
+                Log.Debug().Message($"Writing to path \"{fileName}\".").Write();
                 File.WriteAllText(fileName, json);
             }
             catch (Exception e)
             {
-                LogTo.FatalException("Failed to persist configuration.", e);
+                Log.Fatal().Message("Failed to persist configuration.").Exception(e).Write();
             }
         }
 

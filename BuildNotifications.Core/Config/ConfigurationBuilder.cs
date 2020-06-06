@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.NLog;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
 {
@@ -16,7 +16,7 @@ namespace BuildNotifications.Core.Config
         public IConfiguration LoadConfiguration()
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
-            LogTo.Info($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"");
+            Log.Info().Message($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"").Write();
             var config = _configurationSerializer.Load(configFilePath);
 
             var predefinedFilePath = _pathResolver.PredefinedConfigurationFilePath;
@@ -34,7 +34,7 @@ namespace BuildNotifications.Core.Config
                 config.Projects.Add(defaultProject);
             }
 
-            LogTo.Info($"Setting language to \"{config.Culture}\"");
+            Log.Info().Message($"Setting language to \"{config.Culture}\"").Write();
             CultureInfo.CurrentUICulture = config.Culture;
 
             return config;

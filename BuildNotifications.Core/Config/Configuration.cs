@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.PluginInterfaces;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using NLog.Fluent;
 using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
@@ -89,21 +89,15 @@ namespace BuildNotifications.Core.Config
         [JsonIgnore]
         public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
 
-        public IEnumerable<string?> PossibleBuildPlugins()
-        {
-            return PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-        }
+        public IEnumerable<string?> PossibleBuildPlugins() => PossibleBuildPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
-        public IEnumerable<string?> PossibleSourceControlPlugins()
-        {
-            return PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
-        }
+        public IEnumerable<string?> PossibleSourceControlPlugins() => PossibleSourceControlPluginsFunction?.Invoke() ?? Enumerable.Empty<string?>();
 
         public Type BuildPluginConfigurationType(ConnectionData connectionData)
         {
             if (PluginRepository == null || connectionData.BuildPluginType == null)
             {
-                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+                Log.Debug().Message("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.").Write();
                 return typeof(object);
             }
 
@@ -115,7 +109,7 @@ namespace BuildNotifications.Core.Config
         {
             if (PluginRepository == null || connectionData.SourceControlPluginType == null)
             {
-                LogTo.Debug("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.");
+                Log.Debug().Message("PluginRepository not set on Configuration. Impossible to retrieve correct Configuration type for plugin.").Write();
                 return typeof(object);
             }
 
