@@ -31,8 +31,8 @@ namespace BuildNotifications.Core.Tests.Config
             var userConfiguration = new Configuration();
             var connectionList = new List<ConnectionData>
             {
-                new ConnectionData {Name = "c1"},
-                new ConnectionData {Name = "c2"}
+                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build},
+                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl}
             };
 
             var pathResolver = MockResolver();
@@ -60,8 +60,8 @@ namespace BuildNotifications.Core.Tests.Config
 
             var connectionList = new List<ConnectionData>
             {
-                new ConnectionData {Name = "c1"},
-                new ConnectionData {Name = "c2"}
+                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build},
+                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl}
             };
 
             var pathResolver = MockResolver();
@@ -90,8 +90,8 @@ namespace BuildNotifications.Core.Tests.Config
 
             var connectionList = new List<ConnectionData>
             {
-                new ConnectionData {Name = "c1"},
-                new ConnectionData {Name = "c2"}
+                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build},
+                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl}
             };
 
             var pathResolver = MockResolver();
