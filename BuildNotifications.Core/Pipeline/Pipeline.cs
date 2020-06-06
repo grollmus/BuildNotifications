@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Notification;
@@ -11,6 +10,7 @@ using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -32,17 +32,17 @@ namespace BuildNotifications.Core.Pipeline
 
         private IBuildTree BuildTree()
         {
-            LogTo.Debug("Creating BuildTree");
+            Log.Debug().Message("Creating BuildTree").Write();
             var builds = _buildCache.ContentCopy().ToList();
             var branches = _branchCache.ContentCopy().ToList();
             var definitions = _definitionCache.ContentCopy().ToList();
-            LogTo.Debug($"{builds.Count} cached builds, {branches.Count} cached branches, {definitions.Count} cached definitions");
+            Log.Debug().Message($"{builds.Count} cached builds, {branches.Count} cached branches, {definitions.Count} cached definitions").Write();
 
             var tree = _treeBuilder.Build(builds, branches, definitions, _oldTree, _searchTerm);
-            LogTo.Debug("Created tree.");
+            Log.Debug().Message("Created tree.").Write();
             if (_configuration.GroupDefinition.Any())
             {
-                LogTo.Debug("Cutting tree.");
+                Log.Debug().Message("Cutting tree.").Write();
                 CutTree(tree);
             }
 
@@ -51,7 +51,7 @@ namespace BuildNotifications.Core.Pipeline
 
         private void CleanupBuilds()
         {
-            LogTo.Debug("Cleaning up builds");
+            Log.Debug().Message("Cleaning up builds").Write();
             var builds = _buildCache.ContentCopy();
             var count = 0;
             foreach (var build in builds.Cast<EnrichedBuild>())
@@ -65,7 +65,7 @@ namespace BuildNotifications.Core.Pipeline
                 }
             }
 
-            LogTo.Debug($"Cleaned {count} builds");
+            Log.Debug().Message($"Cleaned {count} builds").Write();
         }
 
         private void CutTree(IBuildTreeNode tree)
@@ -91,10 +91,10 @@ namespace BuildNotifications.Core.Pipeline
 
         private async Task FetchBranches()
         {
-            LogTo.Debug("Fetching branches");
+            Log.Debug().Message("Fetching branches").Write();
             foreach (var project in _projectList)
             {
-                LogTo.Debug($"Fetching branches for project \"{project.Name}\"");
+                Log.Debug().Message($"Fetching branches for project \"{project.Name}\"").Write();
                 try
                 {
                     var branches = project.FetchExistingBranches();
@@ -105,7 +105,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Added \"{count}\" branches in project \"{project.Name}\"");
+                    Log.Debug().Message($"Added \"{count}\" branches in project \"{project.Name}\"").Write();
 
                     var removedBranches = project.FetchRemovedBranches();
 
@@ -116,7 +116,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Removed \"{count}\" branches in project \"{project.Name}\"");
+                    Log.Debug().Message($"Removed \"{count}\" branches in project \"{project.Name}\"").Write();
                 }
                 catch (Exception ex)
                 {
@@ -124,22 +124,22 @@ namespace BuildNotifications.Core.Pipeline
                 }
             }
 
-            LogTo.Debug("Done fetching branches");
+            Log.Debug().Message("Done fetching branches").Write();
         }
 
         private async Task FetchBuilds()
         {
-            LogTo.Debug("Fetching builds");
+            Log.Debug().Message("Fetching builds").Write();
             foreach (var project in _projectList)
             {
                 try
                 {
-                    LogTo.Debug($"Fetching builds for project \"{project.Name}\". ID: \"{project.Guid}\"");
+                    Log.Debug().Message($"Fetching builds for project \"{project.Name}\". ID: \"{project.Guid}\"").Write();
 
                     if (_lastUpdate.HasValue)
-                        LogTo.Debug($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"");
+                        Log.Debug().Message($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"").Write();
                     else
-                        LogTo.Debug($"Fetching all builds for project \"{project.Name}\"");
+                        Log.Debug().Message($"Fetching all builds for project \"{project.Name}\"").Write();
 
                     var builds = _lastUpdate.HasValue
                         ? project.FetchBuildsChangedSince(_lastUpdate.Value)
@@ -152,7 +152,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Added \"{count}\" builds in project \"{project.Name}\"");
+                    Log.Debug().Message($"Added \"{count}\" builds in project \"{project.Name}\"").Write();
                     var removedBuilds = project.FetchRemovedBuilds();
                     count = 0;
                     await foreach (var build in removedBuilds)
@@ -161,7 +161,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Removed \"{count}\" builds in project \"{project.Name}\"");
+                    Log.Debug().Message($"Removed \"{count}\" builds in project \"{project.Name}\"").Write();
                 }
                 catch (Exception ex)
                 {
@@ -170,16 +170,16 @@ namespace BuildNotifications.Core.Pipeline
                 }
             }
 
-            LogTo.Debug("Done fetching builds");
+            Log.Debug().Message("Done fetching builds").Write();
             _lastUpdate = DateTime.UtcNow;
         }
 
         private async Task FetchDefinitions()
         {
-            LogTo.Debug("Fetching definitions");
+            Log.Debug().Message("Fetching definitions").Write();
             foreach (var project in _projectList)
             {
-                LogTo.Debug($"Fetching definitions for project \"{project.Name}\"");
+                Log.Debug().Message($"Fetching definitions for project \"{project.Name}\"").Write();
                 try
                 {
                     var definitions = project.FetchBuildDefinitions();
@@ -190,7 +190,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Added \"{count}\" definitions in project \"{project.Name}\"");
+                    Log.Debug().Message($"Added \"{count}\" definitions in project \"{project.Name}\"").Write();
 
                     var removedDefinitions = project.FetchRemovedBuildDefinitions();
                     count = 0;
@@ -200,7 +200,7 @@ namespace BuildNotifications.Core.Pipeline
                         count += 1;
                     }
 
-                    LogTo.Debug($"Added \"{count}\" definitions in project \"{project.Name}\"");
+                    Log.Debug().Message($"Added \"{count}\" definitions in project \"{project.Name}\"").Write();
                 }
                 catch (Exception ex)
                 {
@@ -208,7 +208,7 @@ namespace BuildNotifications.Core.Pipeline
                 }
             }
 
-            LogTo.Debug("Done fetching definitions");
+            Log.Debug().Message("Done fetching definitions").Write();
         }
 
         private void ReportError(string messageTextId, params object[] parameter)
@@ -216,17 +216,17 @@ namespace BuildNotifications.Core.Pipeline
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
             var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
+                Log.Error().Message(fullMessage).Exception(exception).Write();
             else
-                LogTo.Error(fullMessage);
+                Log.Error().Message(fullMessage).Write();
         }
 
         private async Task UpdateBuilds()
         {
-            LogTo.Debug("Updating builds.");
+            Log.Debug().Message("Updating builds.").Write();
             foreach (var project in _projectList)
             {
-                LogTo.Debug($"Updating builds of project \"{project.Name}\".");
+                Log.Debug().Message($"Updating builds of project \"{project.Name}\".").Write();
                 var projectId = project.Guid.ToString();
                 var buildsForProject = _buildCache.Values(projectId).ToList();
                 var branchesForProject = _branchCache.Values(projectId);
@@ -240,27 +240,27 @@ namespace BuildNotifications.Core.Pipeline
 
         public void AddProject(IProject project)
         {
-            LogTo.Info($"Adding project \"{project.Name}\"");
+            Log.Info().Message($"Adding project \"{project.Name}\"").Write();
             _projectList.Add(project);
             try
             {
                 var currentUserIdentities = project.FetchCurrentUserIdentities();
                 foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
                 {
-                    LogTo.Debug($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"");
+                    Log.Debug().Message($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"").Write();
                     _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);
                 }
             }
             catch (Exception e)
             {
-                LogTo.DebugException($"Failed to fetch identities of project {project.Name}", e);
+                Log.Debug().Message($"Failed to fetch identities of project {project.Name}").Exception(e).Write();
                 ReportError("ErrorFetchingUserIdentities", project.Name, e);
             }
         }
 
         public void ClearProjects()
         {
-            LogTo.Info("Clearing projects and all cached data.");
+            Log.Info().Message("Clearing projects and all cached data.").Write();
             _projectList.Clear();
             _definitionCache.Clear();
             _buildCache.Clear();
@@ -272,19 +272,19 @@ namespace BuildNotifications.Core.Pipeline
 
         public void Search(string searchTerm)
         {
-            LogTo.Info($"Applying search \"{searchTerm}\".");
+            Log.Info().Message($"Applying search \"{searchTerm}\".").Write();
             _searchTerm = searchTerm;
 
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
-            LogTo.Debug($"Applied search \"{searchTerm}\".");
+            Log.Debug().Message($"Applied search \"{searchTerm}\".").Write();
         }
 
         public async Task Update()
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            LogTo.Info("Starting update.");
+            Log.Info().Message("Starting update.").Write();
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
@@ -294,7 +294,7 @@ namespace BuildNotifications.Core.Pipeline
 
                 await Task.WhenAll(branchTask, definitionsTask, buildsTask);
 
-                LogTo.Debug("Everything is fetched.");
+                Log.Debug().Message("Everything is fetched.").Write();
 
                 await UpdateBuilds();
 
@@ -304,7 +304,7 @@ namespace BuildNotifications.Core.Pipeline
 
                 var currentBuildNodes = tree.AllChildren().OfType<IBuildNode>();
 
-                LogTo.Debug("BuildTree is done. Producing notifications.");
+                Log.Debug().Message("BuildTree is done. Producing notifications.").Write();
                 // don't show any notifications for the initial fetch
                 IBuildTreeBuildsDelta delta = _oldTree == null
                     ? new BuildTreeBuildsDelta()
@@ -314,12 +314,12 @@ namespace BuildNotifications.Core.Pipeline
                 return (BuildTree: tree, Notifications: notifications);
             });
 
-            LogTo.Debug("Calling notify.");
+            Log.Debug().Message("Calling notify.").Write();
             _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
 
             _oldTree = treeResult.BuildTree;
             stopWatch.Stop();
-            LogTo.Info($"Update done in {stopWatch.ElapsedMilliseconds} ms.");
+            Log.Info().Message($"Update done in {stopWatch.ElapsedMilliseconds} ms.").Write();
         }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;

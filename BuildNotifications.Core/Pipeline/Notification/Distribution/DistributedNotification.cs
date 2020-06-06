@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using Anotar.NLog;
 using BuildNotifications.Core.Protocol;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
 using Newtonsoft.Json;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
@@ -13,14 +13,14 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         {
             try
             {
-                LogTo.Debug("Reading content and deserializing.");
+                Log.Debug().Message("Reading content and deserializing.").Write();
                 var content = FromBase64(base64);
-                LogTo.Debug("Successfully converted back from base64.");
+                Log.Debug().Message("Successfully converted back from base64.").Write();
                 return JsonConvert.DeserializeObject<DistributedNotification>(content);
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to deserialize DistributedNotification.", e);
+                Log.Error().Message("Failed to deserialize DistributedNotification.").Exception(e).Write();
                 return null;
             }
         }
@@ -31,20 +31,11 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             return ToBase64(serialized);
         }
 
-        public string ToUriProtocol()
-        {
-            return $"{UriSchemeRegistration.UriScheme}:{Serialize()}";
-        }
+        public string ToUriProtocol() => $"{UriSchemeRegistration.UriScheme}:{Serialize()}";
 
-        private static string FromBase64(string base64)
-        {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-        }
+        private static string FromBase64(string base64) => Encoding.UTF8.GetString(Convert.FromBase64String(base64));
 
-        private static string ToBase64(string source)
-        {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
-        }
+        private static string ToBase64(string source) => Convert.ToBase64String(Encoding.UTF8.GetBytes(source));
 
         public uint ColorCode { get; set; } = 0xffffffff;
 

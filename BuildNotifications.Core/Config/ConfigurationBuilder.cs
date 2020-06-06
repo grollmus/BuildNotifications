@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Anotar.NLog;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
 {
@@ -21,7 +21,7 @@ namespace BuildNotifications.Core.Config
         public IConfiguration LoadConfiguration()
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
-            LogTo.Info($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"");
+            Log.Info().Message($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"").Write();
             var config = _configurationSerializer.Load(configFilePath);
             var configDirty = false;
 
@@ -31,7 +31,7 @@ namespace BuildNotifications.Core.Config
             {
                 if (config.Connections.All(c => c.Name != connection.Name))
                 {
-                    LogTo.Debug($"Adding predefined connection: {connection.Name}");
+                    Log.Debug().Message($"Adding predefined connection: {connection.Name}").Write();
                     config.Connections.Add(connection);
                     configDirty = true;
                 }
@@ -44,18 +44,18 @@ namespace BuildNotifications.Core.Config
                 var sourceConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.SourceControl);
 
                 var defaultProject = CreateDefaultProject(buildConnection, sourceConnection);
-                LogTo.Debug($"Adding project with predefined connections: {buildConnection.Name} and {sourceConnection.Name}");
+                Log.Debug().Message($"Adding project with predefined connections: {buildConnection.Name} and {sourceConnection.Name}").Write();
                 config.Projects.Add(defaultProject);
                 configDirty = true;
             }
 
             if (configDirty)
             {
-                LogTo.Info("Edited configuration because of predefined connections. Saving new configuration.");
+                Log.Info().Message("Edited configuration because of predefined connections. Saving new configuration.").Write();
                 _configurationSerializer.Save(config, configFilePath);
             }
 
-            LogTo.Info($"Setting language to \"{config.Culture}\"");
+            Log.Info().Message($"Setting language to \"{config.Culture}\"").Write();
             CultureInfo.CurrentUICulture = config.Culture;
 
             return config;

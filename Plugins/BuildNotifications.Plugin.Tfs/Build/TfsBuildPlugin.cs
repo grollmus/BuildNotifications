@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Plugin.Tfs.Configuration;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Configuration;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs.Build
 {
@@ -15,7 +15,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
             var config = ParseConfig(serialized);
             if (config == null)
             {
-                LogTo.Error("Given data was no TfsConfiguration");
+                Log.Error().Message("Given data was no TfsConfiguration").Write();
                 return null;
             }
 
@@ -25,7 +25,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
 
             if (config.Project == null)
             {
-                LogTo.Error("ProjectId not given in connection data");
+                Log.Error().Message("ProjectId not given in connection data").Write();
                 return null;
             }
 

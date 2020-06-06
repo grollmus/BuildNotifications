@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Host;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Plugin
 {
@@ -28,7 +28,7 @@ namespace BuildNotifications.Core.Plugin
 
         private IEnumerable<T> ConstructPluginsOfType<T>(IEnumerable<Type> types)
         {
-            LogTo.Debug($"Parsing plugins to type {typeof(T).Name}.");
+            Log.Debug().Message($"Parsing plugins to type {typeof(T).Name}.").Write();
             var baseType = typeof(T);
 
             foreach (var type in types)
@@ -43,25 +43,25 @@ namespace BuildNotifications.Core.Plugin
                     catch (Exception ex)
                     {
                         var typeName = type.AssemblyQualifiedName;
-                        LogTo.ErrorException($"Exception while trying to construct {typeName}", ex);
+                        Log.Error().Message($"Exception while trying to construct {typeName}").Exception(ex).Write();
                         continue;
                     }
 
-                    LogTo.Debug($"Successfully constructed instance of type {typeof(T).FullName}");
+                    Log.Debug().Message($"Successfully constructed instance of type {typeof(T).FullName}").Write();
                     yield return value;
                 }
                 else
-                    LogTo.Debug($"Type {baseType.FullName} is not assignable from {type.FullName}");
+                    Log.Debug().Message($"Type {baseType.FullName} is not assignable from {type.FullName}").Write();
             }
         }
 
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
-            LogTo.Info($"Loading plugin assemblies in folder \"{folder}\".");
+            Log.Info().Message($"Loading plugin assemblies in folder \"{folder}\".");
             var fullPath = Path.GetFullPath(folder);
             if (!Directory.Exists(fullPath))
             {
-                LogTo.Warn("Plugin directory does not exist.");
+                Log.Warn().Message("Plugin directory does not exist.").Write();
                 yield break;
             }
 
@@ -77,11 +77,11 @@ namespace BuildNotifications.Core.Plugin
                 {
                     if (Path.GetFileName(dll)?.Contains("plugin", StringComparison.OrdinalIgnoreCase) != true)
                     {
-                        LogTo.Debug($"Found file \"{dll}\" but is skipped, as it does not contain string \"plugin\".");
+                        Log.Debug().Message($"Found file \"{dll}\" but is skipped, as it does not contain string \"plugin\".").Write();
                         continue;
                     }
 
-                    LogTo.Debug($"Loading plugin \"{dll}\".");
+                    Log.Debug().Message($"Loading plugin \"{dll}\".").Write();
                     Assembly assembly;
                     try
                     {
@@ -91,7 +91,7 @@ namespace BuildNotifications.Core.Plugin
                         {
                             if (referencedAssembly.ContentType == AssemblyContentType.WindowsRuntime)
                             {
-                                LogTo.Debug($"Skip loading referenced assembly {referencedAssembly.Name} because it contains WinRT code");
+                                Log.Debug().Message($"Skip loading referenced assembly {referencedAssembly.Name} because it contains WinRT code").Write();
                                 continue;
                             }
 
@@ -100,11 +100,11 @@ namespace BuildNotifications.Core.Plugin
                     }
                     catch (Exception ex)
                     {
-                        LogTo.WarnException($"Exception while trying to load {dll}", ex);
+                        Log.Warn().Message($"Exception while trying to load {dll}").Exception(ex).Write();
                         continue;
                     }
 
-                    LogTo.Debug($"Successfully loaded plugin \"{dll}\".");
+                    Log.Debug().Message($"Successfully loaded plugin \"{dll}\".").Write();
                     yield return assembly;
                 }
             }
@@ -122,7 +122,7 @@ namespace BuildNotifications.Core.Plugin
                 catch (Exception ex)
                 {
                     var typeName = plugin.GetType().AssemblyQualifiedName;
-                    LogTo.ErrorException($"Exception during OnPluginLoaded for {typeName}", ex);
+                    Log.Error().Message($"Exception during OnPluginLoaded for {typeName}").Exception(ex).Write();
                     continue;
                 }
 
@@ -150,9 +150,9 @@ namespace BuildNotifications.Core.Plugin
             var sourceControlPlugins = LoadPlugins(ConstructPluginsOfType<ISourceControlPlugin>(exportedTypes)).ToList();
             var notificationProcessors = ConstructPluginsOfType<INotificationProcessor>(exportedTypes).ToList();
 
-            LogTo.Info($"Loaded {buildPlugins.Count} build plugins.");
-            LogTo.Info($"Loaded {sourceControlPlugins.Count} source control plugins.");
-            LogTo.Info($"Loaded {notificationProcessors.Count} notification processor plugins.");
+            Log.Info().Message($"Loaded {buildPlugins.Count} build plugins.").Write();
+            Log.Info().Message($"Loaded {sourceControlPlugins.Count} source control plugins.").Write();
+            Log.Info().Message($"Loaded {notificationProcessors.Count} notification processor plugins.").Write();
             return new PluginRepository(buildPlugins, sourceControlPlugins, notificationProcessors, new TypeMatcher());
         }
 

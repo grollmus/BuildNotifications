@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Anotar.NLog;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using NLog.Fluent;
 using Application = System.Windows.Application;
 
 namespace BuildNotifications.ViewModel.Utils
@@ -37,7 +37,7 @@ namespace BuildNotifications.ViewModel.Utils
                 }
                 catch (Exception e)
                 {
-                    LogTo.ErrorException("Failed to update tray icon.", e);
+                    Log.Error().Message("Failed to update tray icon.").Exception(e).Write();
                 }
             }
         }
@@ -73,20 +73,20 @@ namespace BuildNotifications.ViewModel.Utils
         {
             // clear icon so it disappears from the windows tray
             _notifyIcon.Icon = null;
-            LogTo.Info("Exit requested.");
+            Log.Info().Message("Exit requested.").Write();
             ExitRequested?.Invoke(this, EventArgs.Empty);
         }
 
         private Icon GetIcon(string path)
         {
-            LogTo.Info($"Updating tray icon to \"{path}\"");
+            Log.Info().Message($"Updating tray icon to \"{path}\"").Write();
             var icon = new Icon(path);
             return icon;
         }
 
         private ImageSource GetImageSource(string path)
         {
-            LogTo.Info($"Updating app icon to \"{path}\"");
+            Log.Info().Message($"Updating app icon to \"{path}\"").Write();
             return BitmapFrame.Create(new Uri(path));
         }
 
@@ -109,8 +109,13 @@ namespace BuildNotifications.ViewModel.Utils
 
         private void ShowWindow(object? sender, EventArgs e)
         {
-            LogTo.Info("Show window requested.");
+            Log.Info().Message("Show window requested.").Write();
             ShowWindowRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Dispose()
+        {
+            _notifyIcon.Dispose();
         }
 
         public void Initialize()
@@ -137,10 +142,5 @@ namespace BuildNotifications.ViewModel.Utils
         private readonly NotifyIcon _notifyIcon;
 
         private BuildStatus _buildStatus;
-
-        public void Dispose()
-        {
-            _notifyIcon.Dispose();
-        }
     }
 }

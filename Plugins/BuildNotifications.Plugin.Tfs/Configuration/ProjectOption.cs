@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Microsoft.TeamFoundation.Core.WebApi;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
 {
@@ -43,7 +43,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
             catch (Exception e)
             {
-                LogTo.InfoException("Failed to fetch projects", e);
+                Log.Info().Message("Failed to fetch projects").Exception(e).Write();
                 return Enumerable.Empty<TfsProject>();
             }
         }

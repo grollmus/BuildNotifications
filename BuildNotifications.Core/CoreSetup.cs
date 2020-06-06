@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
@@ -9,6 +8,7 @@ using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Plugin.Host;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Host;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core
 {
@@ -65,7 +65,7 @@ namespace BuildNotifications.Core
         public void PersistConfigurationChanges()
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
-            LogTo.Info($"Persisting configuration to path {configFilePath}");
+            Log.Info().Message($"Persisting configuration to path {configFilePath}").Write();
             _configurationSerializer.Save(Configuration, configFilePath);
         }
 

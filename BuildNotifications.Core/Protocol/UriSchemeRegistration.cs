@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using Anotar.NLog;
 using Microsoft.Win32;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Protocol
 {
@@ -13,7 +13,7 @@ namespace BuildNotifications.Core.Protocol
         {
             try
             {
-                LogTo.Info($"Registering URI scheme \"{UriScheme}\".");
+                Log.Info().Message($"Registering URI scheme \"{UriScheme}\".").Write();
                 using var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + UriScheme);
                 if (key == null)
                     return;
@@ -33,7 +33,7 @@ namespace BuildNotifications.Core.Protocol
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to register URI protocol.", e);
+                Log.Error().Message("Failed to register URI protocol.").Exception(e).Write();
                 throw;
             }
         }

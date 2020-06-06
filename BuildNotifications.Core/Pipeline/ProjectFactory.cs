@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -92,9 +92,9 @@ namespace BuildNotifications.Core.Pipeline
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
             var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
+                Log.Error().Message(fullMessage).Exception(exception).Write();
             else
-                LogTo.Error(fullMessage);
+                Log.Error().Message(fullMessage).Write();
 
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs());
         }
@@ -102,7 +102,7 @@ namespace BuildNotifications.Core.Pipeline
         public IProject? Construct(IProjectConfiguration config)
         {
             var buildConnectionNames = string.Join(", ", config.BuildConnectionNames);
-            LogTo.Debug($"Trying to construct project from {buildConnectionNames} and {config.SourceControlConnectionName}");
+            Log.Debug().Message($"Trying to construct project from {buildConnectionNames} and {config.SourceControlConnectionName}").Write();
 
             var buildProviders = new List<IBuildProvider>();
             foreach (var connectionName in config.BuildConnectionNames)

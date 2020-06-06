@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
@@ -25,6 +24,7 @@ using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
 using JetBrains.Annotations;
+using NLog.Fluent;
 using Semver;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
@@ -417,11 +417,11 @@ namespace BuildNotifications.ViewModel
 
             if (!_hasAnyProjects)
             {
-                LogTo.Info("Not starting to update, as no projects are loaded.");
+                Log.Info().Message("Not starting to update, as no projects are loaded.").Write();
                 return;
             }
 
-            LogTo.Info("Start updating");
+            Log.Info().Message("Start updating").Write();
             StatusIndicator.Resume();
             _keepUpdating = true;
             UpdateTimer().FireAndForget();
@@ -440,7 +440,7 @@ namespace BuildNotifications.ViewModel
 
         private void StopUpdating()
         {
-            LogTo.Info("Stop updating");
+            Log.Info().Message("Stop updating").Write();
             _keepUpdating = false;
             _isInitialFetch = true;
             UpdateNow(); // cancels the wait timer
@@ -450,13 +450,13 @@ namespace BuildNotifications.ViewModel
 
         private void ToggleGroupDefinitionSelection()
         {
-            LogTo.Info($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}");
+            Log.Info().Message($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}").Write();
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
 
         private void ToggleShowNotificationCenter()
         {
-            LogTo.Info($"Toggling notification center. Value: {!ShowNotificationCenter}");
+            Log.Info().Message($"Toggling notification center. Value: {!ShowNotificationCenter}").Write();
             ShowNotificationCenter = !ShowNotificationCenter;
             if (ShowSettings && ShowNotificationCenter)
                 ShowSettings = false;
@@ -469,7 +469,7 @@ namespace BuildNotifications.ViewModel
 
         private void ToggleShowSettings()
         {
-            LogTo.Info($"Toggling settings. Value: {!ShowSettings}");
+            Log.Info().Message($"Toggling settings. Value: {!ShowSettings}").Write();
             ShowSettings = !ShowSettings;
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
@@ -492,7 +492,7 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateApp(IAppUpdater? updater = null)
         {
-            LogTo.Info("Checking for updates...");
+            Log.Info().Message("Checking for updates...").Write();
 
             try
             {
@@ -512,15 +512,15 @@ namespace BuildNotifications.ViewModel
                     var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
                     if (newestVersion != null && newestVersion > currentVersion)
                     {
-                        LogTo.Info($"Updating to version {result.FutureVersion}");
+                        Log.Info().Message($"Updating to version {result.FutureVersion}").Write();
                         await updater.PerformUpdate();
-                        LogTo.Info("Update finished");
+                        Log.Info().Message("Update finished").Write();
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogTo.WarnException("Update check failed", ex);
+                Log.Warn().Message("Update check failed").Exception(ex).Write();
             }
         }
 
@@ -538,7 +538,7 @@ namespace BuildNotifications.ViewModel
             while (_keepUpdating)
             {
                 stopwatch.Restart();
-                LogTo.Debug($"Starting update at UTC: {DateTime.UtcNow}.");
+                Log.Debug().Message($"Starting update at UTC: {DateTime.UtcNow}.").Write();
 
                 ResetError();
 
@@ -562,11 +562,11 @@ namespace BuildNotifications.ViewModel
                     var updateInterval = _coreSetup.Configuration.UpdateInterval;
 #endif
                     stopwatch.Stop();
-                    LogTo.Debug($"Update finished in {stopwatch.Elapsed.TotalSeconds:F1} seconds. Waiting {updateInterval} seconds until next update.");
+                    Log.Debug().Message($"Update finished in {stopwatch.Elapsed.TotalSeconds:F1} seconds. Waiting {updateInterval} seconds until next update.").Write();
                     stopwatch.Restart();
                     await WaitUntilNextFrameIsRenderedAsync();
                     stopwatch.Stop();
-                    LogTo.Debug($"Took {stopwatch.ElapsedMilliseconds} ms to render new tree.");
+                    Log.Debug().Message($"Took {stopwatch.ElapsedMilliseconds} ms to render new tree.").Write();
                     await Task.Delay(TimeSpan.FromSeconds(updateInterval), _cancellationTokenSource.Token);
                 }
                 catch (Exception)

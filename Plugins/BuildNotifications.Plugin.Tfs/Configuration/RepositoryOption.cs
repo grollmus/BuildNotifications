@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Plugin.Tfs.SourceControl;
 using BuildNotifications.PluginInterfaces.Configuration.Options;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs.Configuration
 {
@@ -47,7 +47,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             }
             catch (Exception e)
             {
-                LogTo.InfoException("Failed to fetch repositories", e);
+                Log.Info().Message("Failed to fetch repositories").Exception(e).Write();
                 return Enumerable.Empty<TfsRepository>();
             }
             finally

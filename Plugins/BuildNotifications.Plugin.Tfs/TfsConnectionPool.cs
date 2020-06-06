@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Plugin.Tfs.Configuration;
 using BuildNotifications.PluginInterfaces;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs
 {
@@ -16,7 +16,7 @@ namespace BuildNotifications.Plugin.Tfs
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
             {
-                LogTo.Error(ErrorMessages.UrlWasEmpty);
+                Log.Error().Message(ErrorMessages.UrlWasEmpty).Write();
                 return null;
             }
 

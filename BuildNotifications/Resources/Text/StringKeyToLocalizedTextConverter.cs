@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Anotar.NLog;
 using BuildNotifications.Core.Text;
+using NLog.Fluent;
 
 namespace BuildNotifications.Resources.Text
 {
@@ -22,14 +22,11 @@ namespace BuildNotifications.Resources.Text
             }
             catch (Exception)
             {
-                LogTo.Warn("Failed to retrieve localized text for key: " + asString);
+                Log.Warn().Message("Failed to retrieve localized text for key: " + asString).Write();
                 return "";
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }
