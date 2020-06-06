@@ -23,13 +23,18 @@ namespace BuildNotifications.Core.Config
             var configFilePath = _pathResolver.UserConfigurationFilePath;
             LogTo.Info($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"");
             var config = _configurationSerializer.Load(configFilePath);
+            var configDirty = false;
 
             var predefinedFilePath = _pathResolver.PredefinedConfigurationFilePath;
             var predefinedConnections = _configurationSerializer.LoadPredefinedConnections(predefinedFilePath).ToList();
             foreach (var connection in predefinedConnections)
             {
                 if (config.Connections.All(c => c.Name != connection.Name))
+                {
+                    LogTo.Debug($"Adding predefined connection: {connection.Name}");
                     config.Connections.Add(connection);
+                    configDirty = true;
+                }
             }
 
             var predefinedConnectionNames = predefinedConnections.Select(p => p.Name).ToList();
@@ -39,7 +44,15 @@ namespace BuildNotifications.Core.Config
                 var sourceConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.SourceControl);
 
                 var defaultProject = CreateDefaultProject(buildConnection, sourceConnection);
+                LogTo.Debug($"Adding project with predefined connections: {buildConnection.Name} and {sourceConnection.Name}");
                 config.Projects.Add(defaultProject);
+                configDirty = true;
+            }
+
+            if (configDirty)
+            {
+                LogTo.Info("Edited configuration because of predefined connections. Saving new configuration.");
+                _configurationSerializer.Save(config, configFilePath);
             }
 
             LogTo.Info($"Setting language to \"{config.Culture}\"");
