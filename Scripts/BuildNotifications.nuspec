@@ -12,8 +12,8 @@
     <description>My package description.</description>
   </metadata>
   <files>
-    <file src="..\Plugins\BuildNotifications.Plugin.Tfs\bin\Release\netcoreapp3.1\win-x64\publish\**" target="lib\net45\plugins\tfs" exclude="**\*.pdb;**\*.xml;**\JetBrains.Annotations.dll;**\BuildNotifications.PluginInterfaces.dll" />
-	<file src="..\BuildNotifications\bin\Release\netcoreapp3.1\win-x64\publish\**" target="lib\net45" exclude="**\*.pdb;**\JetBrains.Annotations.dll" />
-	<file src="..\ToastNotificationsPlugin\bin\Release\**" target="lib\net45\plugins\toast" exclude="**\*.pdb;**\BuildNotifications.PluginInterfacesLegacy.dll;**\JetBrains.Annotations.dll" />
+    <file src="..\Plugins\BuildNotifications.Plugin.Tfs\bin\Release\netcoreapp3.1\win-x64\publish\**" target="lib\net45\plugins\tfs" exclude="**\*.pdb;**\*.xml;**\BuildNotifications.PluginInterfaces.dll" />
+	<file src="..\BuildNotifications\bin\Release\netcoreapp3.1\win-x64\publish\**" target="lib\net45" exclude="**\*.pdb" />
+	<file src="..\ToastNotificationsPlugin\bin\Release\**" target="lib\net45\plugins\toast" exclude="**\*.pdb;**\BuildNotifications.PluginInterfacesLegacy.dll" />
   </files>
 </package>
