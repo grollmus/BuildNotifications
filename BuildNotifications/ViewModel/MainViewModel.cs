@@ -50,6 +50,7 @@ namespace BuildNotifications.ViewModel
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
+            _windowSettingsSerializer = new WindowSettingsSerializer(pathResolver.WindowSettingsFilePath);
             Initialize();
         }
 
@@ -145,6 +146,17 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
         public ICommand ToggleShowSightsCommand { get; set; }
+
+        public void RestoreWindowStateFor(Window window)
+        {
+            var settings = _windowSettingsSerializer.Load();
+            settings.ApplyTo(window);
+        }
+
+        public void SaveWindowStateOf(Window window)
+        {
+            _windowSettingsSerializer.Save(window);
+        }
 
         private void BringWindowToFront()
         {
@@ -617,6 +629,7 @@ namespace BuildNotifications.ViewModel
             _fileWatch?.Dispose();
         }
 
+        private readonly WindowSettingsSerializer _windowSettingsSerializer;
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
