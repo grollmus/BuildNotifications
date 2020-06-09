@@ -188,7 +188,11 @@ namespace BuildNotifications.ViewModel
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
         {
-            StopUpdating();
+            if (_previouslyFetchedAnyBuilds)
+                StopUpdating();
+            else
+                Log.Debug().Message("Error occured but no builds have ever been loaded. Keep on trying to update").Write();
+
             StatusIndicator.Error(e.ErrorNotifications);
 
             // errors may occur on any thread.
@@ -273,7 +277,9 @@ namespace BuildNotifications.ViewModel
 
         private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)
         {
-            ToggleShowNotificationCenter();
+            if (ShowNotificationCenter)
+                ToggleShowNotificationCenter();
+
             if (NotificationCenter.NoNotifications)
             {
                 StatusIndicator.ClearStatus();
@@ -585,6 +591,13 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
         {
+            if (!_previouslyFetchedAnyBuilds && e.Tree.Children.Any())
+            {
+                NotificationCenter.ClearAllCommand.Execute(null);
+
+                _previouslyFetchedAnyBuilds = true;
+            }
+
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
             var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
@@ -609,9 +622,8 @@ namespace BuildNotifications.ViewModel
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
-
+        private bool _previouslyFetchedAnyBuilds;
         private bool _showSights;
-
         private bool _blurMainView;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
