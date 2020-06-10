@@ -111,7 +111,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public bool Remove(T item)
         {
-            RemoveWithDelay(item).FireAndForget();
+            RemoveWithDelay(item).IgnoreResult();
             return true;
         }
 

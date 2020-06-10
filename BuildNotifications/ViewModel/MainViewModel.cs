@@ -245,8 +245,8 @@ namespace BuildNotifications.ViewModel
             LoadProjects();
             ShowOverlay();
             RegisterUriProtocol();
-            HandleExistingDistributedNotificationsOnNextFrame().FireAndForget();
-            UpdateApp().FireAndForget();
+            HandleExistingDistributedNotificationsOnNextFrame().IgnoreResult();
+            UpdateApp().IgnoreResult();
 
             if (Overlay == null)
                 StartUpdating();
@@ -448,7 +448,7 @@ namespace BuildNotifications.ViewModel
             Log.Info().Message("Start updating").Write();
             StatusIndicator.Resume();
             _keepUpdating = true;
-            UpdateTimer().FireAndForget();
+            UpdateTimer().IgnoreResult();
             _fileWatch.Start();
         }
 
