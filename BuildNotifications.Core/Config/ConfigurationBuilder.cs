@@ -5,11 +5,6 @@ using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
 {
-    public interface IConfigurationBuilder
-    {
-        IProjectConfiguration EmptyConfiguration(string name);
-    }
-
     public class ConfigurationBuilder : IConfigurationBuilder
     {
         public ConfigurationBuilder(IPathResolver pathResolver, IConfigurationSerializer configurationSerializer)
