@@ -123,6 +123,7 @@ namespace BuildNotifications.ViewModel.Notification
 
         private void ClearAll()
         {
+            AllRead();
             ClearSelection();
             RemoveNotifications(Notifications.ToList());
 

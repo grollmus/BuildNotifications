@@ -51,6 +51,7 @@ namespace BuildNotifications.ViewModel
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             _popupService = new PopupService(this, viewProvider);
+            _windowSettings = new WindowSettings(pathResolver.WindowSettingsFilePath);
             Initialize();
         }
 
@@ -147,6 +148,16 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleShowSettingsCommand { get; set; }
         public ICommand ToggleShowSightsCommand { get; set; }
 
+        public void RestoreWindowStateFor(Window window)
+        {
+            _windowSettings.ApplyTo(window);
+        }
+
+        public void SaveWindowStateOf(Window window)
+        {
+            _windowSettings.Save(window);
+        }
+
         private void BringWindowToFront()
         {
             var mainWindow = Application.Current.MainWindow;
@@ -189,7 +200,11 @@ namespace BuildNotifications.ViewModel
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
         {
-            StopUpdating();
+            if (_previouslyFetchedAnyBuilds)
+                StopUpdating();
+            else
+                Log.Debug().Message("Error occured but no builds have ever been loaded. Keep on trying to update").Write();
+
             StatusIndicator.Error(e.ErrorNotifications);
 
             // errors may occur on any thread.
@@ -272,7 +287,9 @@ namespace BuildNotifications.ViewModel
 
         private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)
         {
-            ToggleShowNotificationCenter();
+            if (ShowNotificationCenter)
+                ToggleShowNotificationCenter();
+
             if (NotificationCenter.NoNotifications)
             {
                 StatusIndicator.ClearStatus();
@@ -578,6 +595,13 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
         {
+            if (!_previouslyFetchedAnyBuilds && e.Tree.Children.Any())
+            {
+                NotificationCenter.ClearAllCommand.Execute(null);
+
+                _previouslyFetchedAnyBuilds = true;
+            }
+
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
             var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
@@ -607,12 +631,14 @@ namespace BuildNotifications.ViewModel
             _fileWatch.Dispose();
         }
 
+        private readonly WindowSettings _windowSettings;
         private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
         private readonly CoreSetup _coreSetup;
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
         private readonly IPopupService _popupService;
+        private bool _previouslyFetchedAnyBuilds;
         private bool _showSights;
         private bool _blurView;
         private CancellationTokenSource _cancellationTokenSource;

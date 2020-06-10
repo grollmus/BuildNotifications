@@ -18,6 +18,9 @@ namespace BuildNotifications
             }
         }
 
+        public string WindowSettingsFileName => "window.json";
+        public string WindowSettingsFilePath => Path.Combine(ConfigurationFolder, WindowSettingsFileName);
+
         public string UserConfigurationFileName => "config.json";
         public string UserConfigurationFilePath => Path.Combine(ConfigurationFolder, UserConfigurationFileName);
 
