@@ -30,6 +30,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         }
 
         public ConnectionsSectionViewModel Connections { get; }
+        
         public ProjectsSectionViewModel Projects { get; }
 
         public IEnumerable<SetupSectionViewModel> Sections { get; }

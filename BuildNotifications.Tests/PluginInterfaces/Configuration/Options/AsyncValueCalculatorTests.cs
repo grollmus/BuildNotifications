@@ -71,7 +71,6 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // - The affected option is not loading anymore
             // - The loading flags was set and unset correctly
             //
-            // Yes one assert per test :x
 
             // Arrange
             var tcs = new TaskCompletionSource<int>();
