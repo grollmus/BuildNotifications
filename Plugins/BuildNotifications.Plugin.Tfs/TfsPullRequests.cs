@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 

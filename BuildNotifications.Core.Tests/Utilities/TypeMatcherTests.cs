@@ -29,7 +29,7 @@ namespace BuildNotifications.Core.Tests.Utilities
             var sut = new TypeMatcher();
 
             var type = typeof(string);
-            var typeName = "System.String, System.Private.CoreLib, Version=4.0.0.0, PublicKeyToken=abcdef0123456789";
+            var typeName = @"System.String, System.Private.CoreLib, Version=4.0.0.0, PublicKeyToken=abcdef0123456789";
 
             // Act
             var actual = sut.MatchesType(type, typeName);

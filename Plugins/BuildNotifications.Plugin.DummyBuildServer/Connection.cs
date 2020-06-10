@@ -37,7 +37,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
                 responseBuilder.Append(response);
             } while (receivedBytesLastRead >= buffer.Length);
 
-            Debug.WriteLine($"C Received {receivedBytesSum} bytes: {responseBuilder.ToString()}");
+            Debug.WriteLine($"C Received {receivedBytesSum} bytes: {responseBuilder}");
 
             return responseBuilder.ToString();
         }

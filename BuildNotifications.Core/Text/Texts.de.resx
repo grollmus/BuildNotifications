@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- ReSharper disable MarkupTextTypo -->
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -592,3 +593,4 @@
 	  <value>Suche</value>
   </data>
 </root>
+<!-- ReSharper restore MarkupTextTypo -->

@@ -14,7 +14,7 @@ namespace BuildNotifications.Core.Tests.Utilities
                 yield return new[] {new object()};
                 yield return new object[] {123};
                 yield return new object[] {"hello, world"};
-                yield return new object[] { System.Array.Empty<int>() };
+                yield return new object[] {System.Array.Empty<int>()};
             }
 
             IEnumerator IEnumerable.GetEnumerator()
