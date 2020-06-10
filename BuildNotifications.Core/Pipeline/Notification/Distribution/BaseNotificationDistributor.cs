@@ -23,6 +23,19 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             _distributedNotifications.Add(notification, distributedNotification);
         }
 
+        public void ClearAllMessages()
+        {
+            foreach (var notification in _distributedNotifications)
+            {
+                foreach (var processor in _processors)
+                {
+                    processor.Clear(notification.Value);
+                }
+            }
+
+            _distributedNotifications.Clear();
+        }
+
         public void ClearDistributedMessage(INotification notification)
         {
             if (!_distributedNotifications.TryGetValue(notification, out var distributedNotification))

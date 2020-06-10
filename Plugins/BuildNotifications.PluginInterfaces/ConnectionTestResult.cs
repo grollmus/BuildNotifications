@@ -47,19 +47,13 @@ namespace BuildNotifications.PluginInterfaces
         /// </summary>
         /// <param name="message">The failure message.</param>
         /// <returns>The constructed result.</returns>
-        public static ConnectionTestResult Failure(string message)
-        {
-            return new ConnectionTestResult(false, message);
-        }
+        public static ConnectionTestResult Failure(string message) => new ConnectionTestResult(false, message);
 
         /// <summary>
         /// Constructs a new test result with multiple failure messages.
         /// </summary>
         /// <param name="messages">The failure messages.</param>
         /// <returns>The constructed result.</returns>
-        public static ConnectionTestResult Failure(IEnumerable<string> messages)
-        {
-            return new ConnectionTestResult(false, messages);
-        }
+        public static ConnectionTestResult Failure(IEnumerable<string> messages) => new ConnectionTestResult(false, messages);
     }
 }

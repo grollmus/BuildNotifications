@@ -104,3 +104,22 @@ dotnet_diagnostic.CS8767.severity = none
 
 # CS8769: Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
 dotnet_diagnostic.CS8769.severity = none
+
+# S3218: Inner class members should not shadow outer class "static" or type members
+dotnet_diagnostic.S3218.severity = none
+
+# S2290: Field-like events should not be virtual
+dotnet_diagnostic.S2290.severity = suggestion
+
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = suggestion
+
+# S2344: Enumeration type names should not have "Flags" or "Enum" suffixes
+dotnet_diagnostic.S2344.severity = suggestion
+
+# CA1065: Do not raise exceptions in unexpected locations
+dotnet_diagnostic.CA1065.severity = suggestion
+
+# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
+dotnet_diagnostic.CA1826.severity = suggestion
+dotnet_diagnostic.CA1826.severity = suggestion

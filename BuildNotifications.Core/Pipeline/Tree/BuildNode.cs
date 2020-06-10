@@ -36,9 +36,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
             UpdateProperties(otherBuild);
         }
 
-        public override bool Equals(IBuildTreeNode other)
-        {
-            return base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build?.Id, StringComparison.InvariantCulture);
-        }
+        public override bool Equals(IBuildTreeNode other) => base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build.Id, StringComparison.InvariantCulture);
     }
 }

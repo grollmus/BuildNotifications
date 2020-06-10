@@ -11,6 +11,7 @@ using MS.WindowsAPICodePack.Internal;
 
 namespace ToastNotificationsPlugin
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "<Pending>")]
     internal enum STGM : long
     {
         STGM_READ = 0x00000000L,

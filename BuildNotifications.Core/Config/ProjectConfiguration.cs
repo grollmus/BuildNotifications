@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BuildNotifications.Core.Text;
-using ReflectSettings.Attributes;
 
 namespace BuildNotifications.Core.Config
 {
-    internal class ProjectConfiguration : IProjectConfiguration
+    public class ProjectConfiguration : IProjectConfiguration
     {
         public ProjectConfiguration()
         {
@@ -14,7 +12,7 @@ namespace BuildNotifications.Core.Config
             BuildDefinitionBlacklist = new List<string>();
             BuildDefinitionWhitelist = new List<string>();
             BuildConnectionNames = new List<string>();
-            SourceControlConnectionNames = new List<string>();
+            SourceControlConnectionName = string.Empty;
 
             ProjectName = StringLocalizer.NewProject;
             DefaultCompareBranch = string.Empty;
@@ -24,35 +22,25 @@ namespace BuildNotifications.Core.Config
             IsEnabled = true;
         }
 
+        public string SourceControlConnectionName { get; set; }
+
         public bool IsEnabled { get; set; }
 
-        [IsDisplayName]
         public string ProjectName { get; set; }
 
-        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
-        public IList<string> BuildConnectionNames { get; set; }
+        public IReadOnlyList<string> BuildConnectionNames { get; set; }
 
-        [CalculatedValues(nameof(Configuration.ConnectionNames), true)]
-        public IList<string> SourceControlConnectionNames { get; set; }
+        public IReadOnlyList<string> BranchBlacklist { get; set; }
 
-        [TypesForInstantiation(typeof(List<string>))]
-        public IList<string> BranchBlacklist { get; set; }
+        public IReadOnlyList<string> BranchWhitelist { get; set; }
 
-        [TypesForInstantiation(typeof(List<string>))]
-        public IList<string> BranchWhitelist { get; set; }
+        public IReadOnlyList<string> BuildDefinitionBlacklist { get; set; }
 
-        public IList<string> BuildDefinitionBlacklist { get; set; }
-
-        [TypesForInstantiation(typeof(List<string>))]
-        public IList<string> BuildDefinitionWhitelist { get; set; }
+        public IReadOnlyList<string> BuildDefinitionWhitelist { get; set; }
 
         public string DefaultCompareBranch { get; set; }
 
         public bool HideCompletedPullRequests { get; set; }
-
-        [IsHidden]
-        [Obsolete("Is replaced by PullRequestDisplay")]
-        public bool ShowPullRequests { get; set; }
 
         public PullRequestDisplayMode PullRequestDisplay { get; set; }
     }

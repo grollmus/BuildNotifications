@@ -23,7 +23,6 @@ using BuildNotifications.ViewModel.Sight;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
-using BuildNotifications.Views;
 using JetBrains.Annotations;
 using NLog.Fluent;
 using Semver;
@@ -32,11 +31,11 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable
+    public class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
-        public MainViewModel()
+        public MainViewModel(IViewProvider viewProvider)
 #pragma warning restore CS8618
         {
             var pathResolver = new PathResolver();
@@ -44,22 +43,24 @@ namespace BuildNotifications.ViewModel
             _trayIcon = new TrayIconHandle();
             _trayIcon.ExitRequested += TrayIconOnExitRequested;
             _trayIcon.ShowWindowRequested += TrayIconOnShowWindowRequested;
-            _coreSetup = new CoreSetup(pathResolver, _fileWatch);
+            var dispatcher = new WpfDispatcher();
+            _coreSetup = new CoreSetup(pathResolver, _fileWatch, dispatcher);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
+            _popupService = new PopupService(this, viewProvider);
             _windowSettings = new WindowSettings(pathResolver.WindowSettingsFilePath);
             Initialize();
         }
 
-        public bool BlurMainView
+        public bool BlurView
         {
-            get => _blurMainView;
+            get => _blurView;
             set
             {
-                _blurMainView = value;
+                _blurView = value;
                 OnPropertyChanged();
             }
         }
@@ -282,8 +283,6 @@ namespace BuildNotifications.ViewModel
                 _coreSetup.Pipeline.AddProject(project);
                 _hasAnyProjects = true;
             }
-
-            SettingsViewModel.UpdateUser();
         }
 
         private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)
@@ -314,6 +313,12 @@ namespace BuildNotifications.ViewModel
                 buildNode.IsHighlighted = true;
                 _highlightedBuilds.Add(buildNode);
             }
+        }
+
+        private void PersistChanges()
+        {
+            _coreSetup.PersistConfigurationChanges();
+            _configurationApplication.ApplyChanges();
         }
 
         private void RegisterUriProtocol()
@@ -367,11 +372,7 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () =>
-            {
-                _coreSetup.PersistConfigurationChanges();
-                _configurationApplication.ApplyChanges();
-            }, _coreSetup.PluginRepository);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges, _coreSetup.UserIdentityList);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
@@ -395,15 +396,7 @@ namespace BuildNotifications.ViewModel
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
 
-            var popup = new InfoPopupDialog
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
-            };
-
-            BlurMainView = true;
-            popup.ShowDialog();
-            BlurMainView = false;
+            _popupService.ShowInfoPopup(includePreReleases, appUpdater);
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -412,7 +405,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StopUpdating();
-            var vm = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges, _popupService);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
@@ -620,12 +613,22 @@ namespace BuildNotifications.ViewModel
             ShowNotifications(e.Notifications);
         }
 
+        public void Blur()
+        {
+            BlurView = true;
+        }
+
+        public void UnBlur()
+        {
+            BlurView = false;
+        }
+
         public void Dispose()
         {
             _trayIcon.Dispose();
             _cancellationTokenSource.Dispose();
             _postPipelineUpdateTask?.Dispose();
-            _fileWatch?.Dispose();
+            _fileWatch.Dispose();
         }
 
         private readonly WindowSettings _windowSettings;
@@ -634,9 +637,10 @@ namespace BuildNotifications.ViewModel
         private readonly FileWatchDistributedNotificationReceiver _fileWatch;
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
+        private readonly IPopupService _popupService;
         private bool _previouslyFetchedAnyBuilds;
         private bool _showSights;
-        private bool _blurMainView;
+        private bool _blurView;
         private CancellationTokenSource _cancellationTokenSource;
         private bool _keepUpdating;
         private Task? _postPipelineUpdateTask;

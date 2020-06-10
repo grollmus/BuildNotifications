@@ -12,24 +12,18 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Constructs a provider from a set of key-value-pairs.
         /// </summary>
-        /// <param name="data">
-        /// The configuration instance, which type is specified through
-        /// <see cref="IPlugin.GetConfigurationType" />.
-        /// </param>
+        /// <param name="serialized">The serialized configuration data.</param>
         /// <returns>
         /// The constructed provider. Return <c>null</c> when you are
-        /// unable to construct a provider from <paramref name="data" />
+        /// unable to construct a provider from <paramref name="serialized" />
         /// </returns>
-        IBuildProvider? ConstructProvider(object? data);
+        IBuildProvider? ConstructProvider(string serialized);
 
         /// <summary>
         /// Determines whether a connection can be established with the given configuration.
         /// </summary>
-        /// <param name="data">
-        /// The configuration instance, which type is specified through
-        /// <see cref="IPlugin.GetConfigurationType" />.
-        /// </param>
+        /// <param name="serialized">The serialized configuration data.</param>
         /// <returns>Result of the connection test.</returns>
-        Task<ConnectionTestResult> TestConnection(object data);
+        Task<ConnectionTestResult> TestConnection(string serialized);
     }
 }

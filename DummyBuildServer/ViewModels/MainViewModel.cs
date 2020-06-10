@@ -28,7 +28,8 @@ namespace DummyBuildServer.ViewModels
         public BuildDefinitionListViewModel BuildDefinitions { get; }
         public BuildListViewModel Builds { get; }
         public ICommand EnqueuePermutatedBuildsCommand { get; }
-        public int Port { get; set; } = 1111;
+        public int BuildPort { get; set; } = 1111;
+        public int SourceControlPort { get; set; } = 1112;
 
         public ICommand StartServerCommand { get; }
         public ICommand StopServerCommand { get; }
@@ -113,7 +114,7 @@ namespace DummyBuildServer.ViewModels
 
         private void StartServer(object arg)
         {
-            _server.Start(Port);
+            _server.Start(BuildPort, SourceControlPort);
         }
 
         private void StopServer(object arg)

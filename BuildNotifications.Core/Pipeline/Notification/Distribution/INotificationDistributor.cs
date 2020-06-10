@@ -5,8 +5,9 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public interface INotificationDistributor : ICollection<INotificationProcessor>
     {
-        void Distribute(INotification notification);
-
+        void ClearAllMessages();
         void ClearDistributedMessage(INotification notification);
+      
+        void Distribute(INotification notification);
     }
 }

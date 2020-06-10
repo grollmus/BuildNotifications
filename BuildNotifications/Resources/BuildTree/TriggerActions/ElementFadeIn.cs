@@ -31,7 +31,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             }
             else
                 globalTweenHandler.Add(TargetElement.Tween(x => x.Opacity).To(1).In(Duration).Delay(Delay));
-            
+
             if (DoCollapsingLayoutTransform)
             {
                 var scaleTransform = new ScaleTransform(0, 1.0, Anchor.Position(TargetElement).X, Anchor.Position(TargetElement).Y);

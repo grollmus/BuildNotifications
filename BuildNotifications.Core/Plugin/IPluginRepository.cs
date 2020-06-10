@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
@@ -32,13 +31,6 @@ namespace BuildNotifications.Core.Plugin
         /// <param name="typeName">Type name to search for.</param>
         /// <returns>The build plugin or <c>null</c> if none matches <paramref name="typeName" />.</returns>
         IBuildPlugin? FindBuildPlugin(string? typeName);
-
-        /// <summary>
-        /// Searches for a build plugin that matches the given typename.
-        /// </summary>
-        /// <param name="typeName">Type name to search for.</param>
-        /// <returns>The type of the configuration the plugin wants.</returns>
-        Type? FindConfigurationType(string? typeName);
 
         /// <summary>
         /// Searches for any plugin that matches the given typename.

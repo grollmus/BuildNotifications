@@ -5,25 +5,57 @@
                     xmlns:buttonNavigation="clr-namespace:BuildNotifications.Resources.Global.Navigation.ButtonNavigation"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
                     mc:Ignorable="d">
     <Style TargetType="{x:Type buttonNavigation:ButtonNavigation}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <DockPanel d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigation}">
+                <ControlTemplate TargetType="{x:Type buttonNavigation:ButtonNavigation}">
+	                <DockPanel d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigation}" x:Name="RootPanel">
                         <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
-                            <ListBox ItemsSource="{Binding Items}" SelectedIndex="0" x:Name="ListBox"
-                                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+	                        <icons:IconButton Icon="Plus" Command="{TemplateBinding AddItemCommand}" x:Name="IconBtn"
+	                                          Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
+	                                          Background="{DynamicResource Background1}"
+	                                          Visibility="{TemplateBinding AddItemCommand, Converter={x:Static utils:NullToVisibilityConverter.Instance}}"
+	                                          Height="{StaticResource Block}" IconSize="{StaticResource Block}">
+		                        <i:Interaction.Triggers>
+			                        <i:EventTrigger EventName="Click">
+				                        <icons:ButtonInvokedAnimation />
+			                        </i:EventTrigger>
+		                        </i:Interaction.Triggers>
+	                        </icons:IconButton>
+
+	                        <ListBox ItemsSource="{TemplateBinding Items}" SelectedIndex="0" x:Name="ListBox"
+                                     HorizontalContentAlignment="Stretch"
+	                                 SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel Margin="{StaticResource BlockHalfThickness}"
                                                    MaxHeight="{StaticResource BlockTriple}"
-                                                   d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigationItem}">
-                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding IconType}"
+                                                   d:DataContext="{d:DesignInstance buttonNavigation:BaseButtonNavigationItem}">
+                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding Icon}"
                                                              Margin="{StaticResource BlockQuarterRight}"
                                                              Foreground="{DynamicResource Foreground1HalfTransparency}"
                                                              Width="{StaticResource BlockOneAndHalf}"
-                                                             Height="{StaticResource BlockOneAndHalf}" />
+                                                             Height="{StaticResource BlockOneAndHalf}"
+                                                             Visibility="{Binding Icon, Converter={x:Static utils:IconTypeToVisibilityConverter.Instance}}"
+                                                             />
+
+                                            <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                                              Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type buttonNavigation:ButtonNavigation}}, Path=RemoveItemCommand}"
+                                                              CommandParameter="{Binding}" x:Name="IconBtn"
+                                                              Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                                              Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type buttonNavigation:ButtonNavigation}}, Path=RemoveItemCommand, Converter={x:Static utils:NullToVisibilityConverter.Instance}}"
+                                                              Height="{StaticResource Block}" IconSize="{StaticResource Block}">
+	                                            <i:Interaction.Triggers>
+		                                            <i:EventTrigger EventName="Click">
+			                                            <icons:ButtonInvokedAnimation />
+		                                            </i:EventTrigger>
+	                                            </i:Interaction.Triggers>
+                                            </icons:IconButton>
+
                                             <TextBlock
                                                 Text="{Binding DisplayNameTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                                                 TextTrimming="CharacterEllipsis"
@@ -37,16 +69,28 @@
 
                             </ListBox>
                         </DockPanel>
-                        <Border>
-                            <DockPanel>
-                                <!--DataContext cannot be specified-->
-                                <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
+                        <Grid>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
                                 <ContentPresenter VerticalAlignment="Top"
                                                   Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                                  Content="{Binding ElementName=ListBox, Path=SelectedItem.Content}" />
-                            </DockPanel>
-                        </Border>
+                                                  Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
+                            </ScrollViewer>
+	                        <DockPanel Visibility="Collapsed" x:Name="InfoDockPanel">
+		                        <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}"
+		                                         DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
+		                                         Margin="{StaticResource BlockQuarterThickness}" />
+		                        <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
+	                        </DockPanel>
+                        </Grid>
                     </DockPanel>
+	                <ControlTemplate.Triggers>
+		                <Trigger Property="DisplayAddMessage">
+                            <Trigger.Value>
+                                <system:Boolean>True</system:Boolean>
+                            </Trigger.Value>
+			                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
+		                </Trigger>
+	                </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

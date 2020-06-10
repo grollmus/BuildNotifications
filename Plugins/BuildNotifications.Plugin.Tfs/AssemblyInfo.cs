@@ -1,3 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Resources;
+using System.Runtime.CompilerServices;
+
+[assembly: NeutralResourcesLanguage("en-US")]
 
 [assembly: InternalsVisibleTo("BuildNotifications.Tests")]

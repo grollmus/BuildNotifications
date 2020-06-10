@@ -1,4 +1,5 @@
 ﻿using System;
+using BuildNotifications.PluginInterfaces.Configuration;
 using Newtonsoft.Json;
 
 namespace BuildNotifications.Core.Utilities
@@ -16,15 +17,9 @@ namespace BuildNotifications.Core.Utilities
             _settings.Converters.Add(new PasswordStringConverter());
         }
 
-        public string Serialize(object value)
-        {
-            return JsonConvert.SerializeObject(value, Formatting.Indented, _settings);
-        }
+        public string Serialize(object value) => JsonConvert.SerializeObject(value, Formatting.Indented, _settings);
 
-        public T Deserialize<T>(string serialized)
-        {
-            return JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>()!;
-        }
+        public T Deserialize<T>(string serialized) => JsonConvert.DeserializeObject<T>(serialized, _settings) ?? Activator.CreateInstance<T>()!;
 
         private readonly JsonSerializerSettings _settings;
     }

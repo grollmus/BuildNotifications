@@ -23,6 +23,13 @@ namespace BuildNotifications.Core.Config
         IEnumerable<ConnectionData> LoadPredefinedConnections(string fileName);
 
         /// <summary>
+        /// Loads all predefined projects from a given file.
+        /// </summary>
+        /// <param name="fileName">Name of the file to load.</param>
+        /// <returns>List of all predefined connections.</returns>
+        IEnumerable<IProjectConfiguration> LoadPredefinedProjects(string fileName);
+
+        /// <summary>
         /// Saves a configuration to a file.
         /// </summary>
         /// <param name="configuration">Configuration to save.</param>

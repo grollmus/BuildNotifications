@@ -42,7 +42,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "non.existing",
+                    PluginType = "non.existing",
                     Name = "connection"
                 }
             });
@@ -69,7 +69,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "buildPluginType",
+                    PluginType = "buildPluginType",
                     Name = "connection"
                 }
             });
@@ -78,7 +78,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var project = Substitute.For<IProjectConfiguration>();
             project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionNames.Returns(new List<string> {"connection2"});
+            project.SourceControlConnectionName.Returns("connection2");
 
             // Act
             var actual = sut.Construct(project);
@@ -99,8 +99,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 new ConnectionData
                 {
-                    BuildPluginType = "buildPluginType",
-                    SourceControlPluginType = "non.existing",
+                    PluginType = "non.existing",
                     Name = "connection"
                 }
             });
@@ -109,7 +108,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var project = Substitute.For<IProjectConfiguration>();
             project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionNames.Returns(new List<string> {"connection"});
+            project.SourceControlConnectionName.Returns("connection");
 
             // Act
             var actual = sut.Construct(project);

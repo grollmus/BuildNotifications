@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BuildNotifications.Core.Utilities;
+using BuildNotifications.TestMocks;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Utilities

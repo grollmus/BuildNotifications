@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:settings="clr-namespace:BuildNotifications.ViewModel.Settings"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type settings:TestConnectionViewModel}}"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:TestConnectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />

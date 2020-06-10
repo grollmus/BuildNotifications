@@ -323,7 +323,7 @@
     <value>vor {0} Sekunden</value>
   </data>
   <data name="JustNowTextId" xml:space="preserve">
-    <value>Jetzt.</value>
+    <value>Jetzt</value>
   </data>
   <data name="AnErrorOccured" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten.</value>
@@ -346,7 +346,7 @@
   <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
     <value>Branch Provider für Verbindung '{0}' konnte nicht erstellt werden. Fehlermeldung: {1}</value>
   </data>
-  <data name=" " xml:space="preserve">
+  <data name="SourceControlPluginNotFound" xml:space="preserve">
     <value>Source Control Plugin '{0}' nicht gefunden.</value>
   </data>
   <data name="FailedToFindBuildPluginForType" xml:space="preserve">
@@ -431,10 +431,10 @@
 	  <value>Gehe zu Builddefinition</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value />
+    <value>Läuft</value>
   </data>
   <data name="Running" xml:space="preserve">
-    <value />
+    <value>Läuft</value>
   </data>
   <data name="Failed" xml:space="preserve">
 	  <value>Fehlgeschlagen</value>
@@ -458,13 +458,13 @@
     <value></value>
   </data>
   <data name="RequestedByMe" xml:space="preserve">
-    <value></value>
+    <value>Von mir angefordert</value>
   </data>
   <data name="RequestedByOrForMe" xml:space="preserve">
-    <value></value>
+    <value>Von mir oder für mich angefordert</value>
   </data>
   <data name="RequestedForMe" xml:space="preserve">
-    <value></value>
+    <value>Für mich angefordert</value>
   </data>
   <data name="Always" xml:space="preserve">
 	  <value>Immer</value>
@@ -591,6 +591,36 @@
   </data>
   <data name="SearchTooltip" xml:space="preserve">
 	  <value>Suche</value>
+  </data>
+  <data name="ConnectionTypeDescription" xml:space="preserve">
+	  <value>Art dieser Verbindung.</value>
+  </data>
+  <data name="ConnectionType" xml:space="preserve">
+	  <value>Verbindungsart</value>
+  </data>
+  <data name="ConnectionNameDescription" xml:space="preserve">
+	  <value>Name, mit dem diese Verbindung identifiziert werden kann.</value>
+  </data>
+  <data name="ConfirmDeletion" xml:space="preserve">
+	  <value>Wirklich löschen?</value>
+  </data>
+  <data name="ConfirmDeleteConnection" xml:space="preserve">
+	  <value>Soll die Verbindung '{0}' wirklich gelöscht werden?</value>
+  </data>
+  <data name="ConfirmDeleteProject" xml:space="preserve">
+	  <value>Soll das Projekt '{0}' wirklich gelöscht werden?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
   </data>
 </root>
 <!-- ReSharper restore MarkupTextTypo -->

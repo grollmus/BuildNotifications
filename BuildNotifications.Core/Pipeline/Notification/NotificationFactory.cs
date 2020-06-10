@@ -13,9 +13,11 @@ namespace BuildNotifications.Core.Pipeline.Notification
         /// Factory to create Notifications from a BuildTreeDelta.
         /// </summary>
         /// <param name="configuration">Configuration needed to filter which notifications should be created.</param>
-        public NotificationFactory(IConfiguration configuration)
+        /// <param name="userIdentityList">List of identities for the current user.</param>
+        public NotificationFactory(IConfiguration configuration, IUserIdentityList userIdentityList)
         {
             _configuration = configuration;
+            _userIdentityList = userIdentityList;
         }
 
         public IEnumerable<INotification> ProduceNotifications(IBuildTreeBuildsDelta fromDelta)
@@ -68,8 +70,8 @@ namespace BuildNotifications.Core.Pipeline.Notification
                 // otherwise there would be two many messages
                 if (groupedByDefinitionAndBranch.Count == 1)
                 {
-                    var tuple = groupedByDefinitionAndBranch.First().Key;
-                    yield return DefinitionAndBranchNotification(buildNodes, status, tuple.definition, tuple.branch);
+                    var (definition, branch) = groupedByDefinitionAndBranch.First().Key;
+                    yield return DefinitionAndBranchNotification(buildNodes, status, definition, branch);
                     continue;
                 }
 
@@ -88,15 +90,12 @@ namespace BuildNotifications.Core.Pipeline.Notification
             switch (buildStatus)
             {
                 case BuildStatus.PartiallySucceeded:
-                    switch (_configuration.PartialSucceededTreatmentMode)
+                    return _configuration.PartialSucceededTreatmentMode switch
                     {
-                        case PartialSucceededTreatmentMode.TreatAsSucceeded:
-                            return BuildStatus.Succeeded;
-                        case PartialSucceededTreatmentMode.TreatAsFailed:
-                            return BuildStatus.Failed;
-                        default:
-                            return buildStatus;
-                    }
+                        PartialSucceededTreatmentMode.TreatAsSucceeded => BuildStatus.Succeeded,
+                        PartialSucceededTreatmentMode.TreatAsFailed => BuildStatus.Failed,
+                        _ => buildStatus
+                    };
 
                 default:
                     return buildStatus;
@@ -185,22 +184,18 @@ namespace BuildNotifications.Core.Pipeline.Notification
         private bool ShouldNotifyAboutBuild(IBuildNode buildNode)
         {
             var notifySetting = NotifySetting(buildNode);
-            var currentUserIdentities = _configuration.IdentitiesOfCurrentUser;
-            switch (notifySetting)
+            var currentUserIdentities = _userIdentityList.IdentitiesOfCurrentUser;
+            return notifySetting switch
             {
-                case BuildNotificationModes.None:
-                    return false;
-                case BuildNotificationModes.RequestedByMe:
-                    return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedBy));
-                case BuildNotificationModes.RequestedForMe:
-                    return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor));
-                case BuildNotificationModes.RequestedByOrForMe:
-                    return currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor) || IsSameUser(u, buildNode.Build.RequestedBy));
-                default:
-                    return true;
-            }
+                BuildNotificationModes.None => false,
+                BuildNotificationModes.RequestedByMe => currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedBy)),
+                BuildNotificationModes.RequestedForMe => currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor)),
+                BuildNotificationModes.RequestedByOrForMe => currentUserIdentities.Any(u => IsSameUser(u, buildNode.Build.RequestedFor) || IsSameUser(u, buildNode.Build.RequestedBy)),
+                _ => true
+            };
         }
 
         private readonly IConfiguration _configuration;
+        private readonly IUserIdentityList _userIdentityList;
     }
 }

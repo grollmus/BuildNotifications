@@ -17,12 +17,12 @@ namespace BuildNotifications.Views
 
         public ICommand FocusSearchBarCommand { get; }
 
+        private void FocusSearchBar() => SearchTextBox.Focus();
+
         private InputBinding FocusSearchBarBinding()
         {
             var binding = new InputBinding(FocusSearchBarCommand, new KeyGesture(Key.F, ModifierKeys.Control));
             return binding;
         }
-
-        private void FocusSearchBar(object obj) => SearchTextBox.Focus();
     }
 }

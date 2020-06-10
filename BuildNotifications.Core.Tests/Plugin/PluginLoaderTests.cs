@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using BuildNotifications.Core.Plugin;
+using BuildNotifications.PluginInterfaces.Host;
+using NSubstitute;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Plugin
@@ -10,7 +12,7 @@ namespace BuildNotifications.Core.Tests.Plugin
         public void LoadPluginsShouldCreateEmptyRepositoryWhenNoFolderWasGiven()
         {
             // Arrange
-            var sut = new PluginLoader();
+            var sut = new PluginLoader(Substitute.For<IPluginHost>());
 
             // Act
             var actual = sut.LoadPlugins(Enumerable.Empty<string>());

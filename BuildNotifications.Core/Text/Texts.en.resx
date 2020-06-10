@@ -333,7 +333,7 @@
   <data name="ConnectionNotFound" xml:space="preserve">
     <value>No connection with name '{0}' found.</value>
   </data>
-  <data name=" " xml:space="preserve">
+  <data name="SourceControlPluginNotFound" xml:space="preserve">
     <value>No source control plugin '{0}' found.</value>
   </data>
   <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
@@ -590,5 +590,35 @@
   </data>
   <data name="SearchTooltip" xml:space="preserve">
 	  <value>Search</value>
+  </data>
+  <data name="ConnectionType" xml:space="preserve">
+	  <value>Connection type</value>
+  </data>
+  <data name="ConnectionNameDescription" xml:space="preserve">
+	  <value>Name that is used to indentify this connection.</value>
+  </data>
+  <data name="ConnectionTypeDescription" xml:space="preserve">
+	  <value>Type of this connection.</value>
+  </data>
+  <data name="ConfirmDeletion" xml:space="preserve">
+	  <value>Really delete?</value>
+  </data>
+  <data name="ConfirmDeleteConnection" xml:space="preserve">
+	  <value>Do you really want to delete the connection '{0}'?</value>
+  </data>
+  <data name="ConfirmDeleteProject" xml:space="preserve">
+	  <value>Do you really want to delete the project '{0}'?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

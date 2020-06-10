@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
-using BuildNotifications.Core.Plugin;
+using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Resources.Settings
 {
-    internal class PluginTypeToDisplayNameConverter : IMultiValueConverter
+    internal class PluginTypeToDisplayNameConverter : IValueConverter
     {
         private PluginTypeToDisplayNameConverter()
         {
@@ -14,19 +13,14 @@ namespace BuildNotifications.Resources.Settings
 
         public static PluginTypeToDisplayNameConverter Instance { get; } = new PluginTypeToDisplayNameConverter();
 
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var pluginType = values.FirstOrDefault()?.ToString();
+            if (value is IPlugin plugin)
+                return plugin.DisplayName;
 
-            if (pluginType == null || !(values.LastOrDefault() is IPluginRepository pluginRepo))
-                return "";
-
-            return pluginRepo.FindPluginName(pluginType) ?? "";
+            return string.Empty;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
+    <ProjectReference Include="..\BuildNotifications.TestMocks\BuildNotifications.TestMocks.csproj" />
     <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
         public bool DoScale { get; set; } = true;
         public double Duration { get; set; } = 1;
 
-        public T Target
+        public T? Target
         {
             get => (T) GetValue(TargetProperty);
             set => SetValue(TargetProperty, value);

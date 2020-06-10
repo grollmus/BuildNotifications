@@ -107,8 +107,10 @@
         </GroupBox>
         <GroupBox Header="Server">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Port" />
-                <TextBox Text="{Binding Port}" />
+                <TextBlock Text="Port for build connection" />
+                <TextBox Text="{Binding BuildPort}" />
+                <TextBlock Text="Port for source control connection" />
+                <TextBox Text="{Binding SourceControlPort}"></TextBox>
                 <Button Content="Start" Command="{Binding StartServerCommand}" />
                 <Button Content="Stop" Command="{Binding StopServerCommand}" />
                 <Button Content="Permutate and queue all" Command="{Binding EnqueuePermutatedBuildsCommand}" />

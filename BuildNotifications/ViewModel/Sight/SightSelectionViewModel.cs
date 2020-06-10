@@ -20,7 +20,7 @@ namespace BuildNotifications.ViewModel.Sight
         {
             // Do nothing
         }
-        
+
         public bool? HighlightManualBuilds { get; set; }
     }
 }

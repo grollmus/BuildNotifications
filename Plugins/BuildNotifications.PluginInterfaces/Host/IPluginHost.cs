@@ -13,5 +13,10 @@ namespace BuildNotifications.PluginInterfaces.Host
         /// The currently running version of the host.
         /// </summary>
         Version Version { get; }
+
+        /// <summary>
+        /// Dispatcher for callbacks, which must be handled within the UI thread. E.g. asynchronous operations which set possible values of a combobox.
+        /// </summary>
+        IDispatcher UiDispatcher { get; }
     }
 }
