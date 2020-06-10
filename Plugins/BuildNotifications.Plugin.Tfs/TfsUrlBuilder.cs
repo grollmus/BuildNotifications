@@ -26,7 +26,7 @@ namespace BuildNotifications.Plugin.Tfs
         public string BuildPullRequestUrl(int pullRequestId)
         {
             var builder = new UriBuilder(_baseUri);
-            builder.AppendPathSegments("_git", _projectName, "pullrequest", pullRequestId.ToString(CultureInfo.InvariantCulture));
+            builder.AppendPathSegments("_git", _projectName, "pullRequest", pullRequestId.ToString(CultureInfo.InvariantCulture));
 
             return builder.Uri.AbsoluteUri;
         }

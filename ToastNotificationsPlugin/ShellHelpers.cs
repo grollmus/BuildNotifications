@@ -49,7 +49,6 @@ namespace ToastNotificationsPlugin
             [Out] [MarshalAs(UnmanagedType.LPWStr)]
             StringBuilder pszFile,
             int cchMaxPath,
-            //ref _WIN32_FIND_DATAW pfd,
             IntPtr pfd,
             uint fFlags);
 

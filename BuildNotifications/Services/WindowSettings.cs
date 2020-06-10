@@ -35,23 +35,23 @@ namespace BuildNotifications.Services
             File.WriteAllText(_fileName, json);
         }
 
-        private NativeMethods.WindowPlacement Load()
+        private NativeMethods.WINDOWPLACEMENT Load()
         {
             if (!File.Exists(_fileName))
-                return new NativeMethods.WindowPlacement();
+                return new NativeMethods.WINDOWPLACEMENT();
 
             try
             {
                 var json = File.ReadAllText(_fileName);
-                var placement = JsonConvert.DeserializeObject<NativeMethods.WindowPlacement>(json);
-                placement.length = Marshal.SizeOf<NativeMethods.WindowPlacement>();
+                var placement = JsonConvert.DeserializeObject<NativeMethods.WINDOWPLACEMENT>(json);
+                placement.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
                 placement.flags = 0;
-                placement.showCmd = placement.showCmd == NativeMethods.SwShowMinimized ? NativeMethods.SwShowNormal : placement.showCmd;
+                placement.showCmd = placement.showCmd == NativeMethods.SW_SHOWMINIMIZED ? NativeMethods.SW_SHOWNORMAL : placement.showCmd;
                 return placement;
             }
             catch
             {
-                return new NativeMethods.WindowPlacement();
+                return new NativeMethods.WINDOWPLACEMENT();
             }
         }
 

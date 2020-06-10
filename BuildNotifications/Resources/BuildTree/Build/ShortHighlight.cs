@@ -8,7 +8,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.Resources.BuildTree.Build
 {
-    class ShortHighlight : TriggerAction<Rectangle>
+    internal class ShortHighlight : TriggerAction<Rectangle>
     {
         protected override void Invoke(object parameter)
         {

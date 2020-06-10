@@ -52,7 +52,7 @@ namespace BuildNotifications
             if (ShouldBeMinimized(e.Args))
             {
                 StartMinimized = true;
-                Logger.Log(LogLevel.Info, $"Minimized start requested.");
+                Logger.Log(LogLevel.Info, "Minimized start requested.");
             }
 
             Logger.Log(LogLevel.Info, $"BuildNotifications started. Version {CurrentVersion()} Args: {string.Join(" ", e.Args)}");

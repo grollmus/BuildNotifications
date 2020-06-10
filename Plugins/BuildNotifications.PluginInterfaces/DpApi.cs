@@ -56,7 +56,7 @@ namespace BuildNotifications.PluginInterfaces
         /// running under the same user account as the one making this call, will be able to decrypt
         /// data. Machine key will allow any application running on the same computer where data
         /// were encrypted to perform decryption.
-        /// Note: If optional entropy is specifed, it will be required for decryption.
+        /// Note: If optional entropy is specified, it will be required for decryption.
         /// </param>
         /// <param name="plainText"> Plaintext data to be encrypted. </param>
         /// <returns> Encrypted value in a base64-encoded format. </returns>
@@ -69,7 +69,7 @@ namespace BuildNotifications.PluginInterfaces
         }
 
         /// <summary>
-        /// Calls DPAPI CryptUnprotectData to decrypt ciphertext bytes. This function does not use
+        /// Calls DPAPI CryptUnprotectData to decrypt cipher text bytes. This function does not use
         /// additional entropy and does not return data description.
         /// </summary>
         /// <param name="keyType">
@@ -77,7 +77,7 @@ namespace BuildNotifications.PluginInterfaces
         /// running under the same user account as the one making this call, will be able to decrypt
         /// data. Machine key will allow any application running on the same computer where data
         /// were encrypted to perform decryption.
-        /// Note: If optional entropy is specifed, it will be required for decryption.
+        /// Note: If optional entropy is specified, it will be required for decryption.
         /// </param>
         /// <param name="cipherText"> Encrypted data formatted as a base64-encoded string. </param>
         /// <returns> Decrypted data returned as a UTF-8 string. </returns>
