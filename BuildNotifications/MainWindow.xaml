@@ -238,7 +238,7 @@
                                  Type="EyeIris" />
             </icons:IconButton>-->
 
-            <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Opacity="0"
+            <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Visibility="Collapsed"
                               Margin="{StaticResource BlockLeftAndRight}">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger
@@ -254,7 +254,7 @@
                 </i:Interaction.Triggers>
             </ContentPresenter>
 
-            <ContentPresenter Content="{Binding SightSelection}" Opacity="0">
+            <ContentPresenter Content="{Binding SightSelection}" Visibility="Collapsed">
                 <i:Interaction.Triggers>
                     <ei:DataTrigger
                         Binding="{Binding DataContext.ShowSights, ElementName=SightsButton}"
