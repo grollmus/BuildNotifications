@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using BuildNotifications.ViewModel;
 using NLog.Fluent;
@@ -12,11 +13,16 @@ namespace BuildNotifications
             DataContext = new MainViewModel();
             InitializeComponent();
             Visibility = App.StartMinimized ? Visibility.Hidden : Visibility.Visible;
-            ViewModel.RestoreWindowStateFor(this);
             Closing += OnClosing;
         }
 
         private MainViewModel ViewModel => (MainViewModel) DataContext;
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            ViewModel.RestoreWindowStateFor(this);
+        }
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
