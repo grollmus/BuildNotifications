@@ -175,16 +175,16 @@ namespace BuildNotifications.Resources.Window
                 return;
 
             var handle = new WindowInteropHelper(this).Handle;
-            var systemMenu = NativeUtils.GetSystemMenu(handle, false);
+            var systemMenu = NativeMethods.GetSystemMenu(handle, false);
 
             var uEnable = WindowState != WindowState.Maximized ? (uint) 0 : 1;
-            NativeUtils.EnableMenuItem(systemMenu, 61488, uEnable);
+            NativeMethods.EnableMenuItem(systemMenu, 61488, uEnable);
 
-            var num1 = NativeUtils.TrackPopupMenuEx(systemMenu, NativeUtils.TPM_LEFTALIGN | NativeUtils.TPM_RETURNCMD, Convert.ToInt32(screen.X + 2), Convert.ToInt32(screen.Y + 2), handle, IntPtr.Zero);
+            var num1 = NativeMethods.TrackPopupMenuEx(systemMenu, NativeMethods.TPM_LEFTALIGN | NativeMethods.TPM_RETURNCMD, Convert.ToInt32(screen.X + 2), Convert.ToInt32(screen.Y + 2), handle, IntPtr.Zero);
             if (num1 == 0)
                 return;
 
-            NativeUtils.PostMessage(handle, 274, new IntPtr(num1), IntPtr.Zero);
+            NativeMethods.PostMessage(handle, 274, new IntPtr(num1), IntPtr.Zero);
         }
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
