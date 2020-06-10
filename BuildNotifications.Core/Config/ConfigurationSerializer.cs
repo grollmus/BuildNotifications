@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BuildNotifications.Core.Utilities;
+using JetBrains.Annotations;
 using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
@@ -12,6 +13,38 @@ namespace BuildNotifications.Core.Config
         public ConfigurationSerializer(ISerializer serializer)
         {
             _serializer = serializer;
+        }
+
+        private IEnumerable<ConnectionData> LegacyLoadPredefinedConnections(string fileName)
+        {
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                var list = _serializer.Deserialize<List<ConnectionData>>(json);
+
+                return list;
+            }
+            catch (Exception e)
+            {
+                Log.Error().Message("Failed to load predefined connections.").Exception(e).Write();
+                return Enumerable.Empty<ConnectionData>();
+            }
+        }
+
+        private PredefinedConfigurationContainer LoadPredefinedConfigurationContainer(string fileName)
+        {
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                var container = _serializer.Deserialize<PredefinedConfigurationContainer>(json);
+
+                return container;
+            }
+            catch (Exception e)
+            {
+                Log.Error().Message("Failed to load predefined configuration container.").Exception(e).Write();
+                return new PredefinedConfigurationContainer();
+            }
         }
 
         public IConfiguration Load(string fileName)
@@ -44,18 +77,20 @@ namespace BuildNotifications.Core.Config
             if (!File.Exists(fileName))
                 return Enumerable.Empty<ConnectionData>();
 
-            try
-            {
-                var json = File.ReadAllText(fileName);
-                var list = _serializer.Deserialize<List<ConnectionData>>(json);
+            var container = LoadPredefinedConfigurationContainer(fileName);
+            if (!container.Connections.Any())
+                return LegacyLoadPredefinedConnections(fileName);
 
-                return list;
-            }
-            catch (Exception e)
-            {
-                Log.Error().Message("Failed to load predefined connections.").Exception(e).Write();
-                return Enumerable.Empty<ConnectionData>();
-            }
+            return container.Connections;
+        }
+
+        public IEnumerable<IProjectConfiguration> LoadPredefinedProjects(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return Enumerable.Empty<IProjectConfiguration>();
+
+            var container = LoadPredefinedConfigurationContainer(fileName);
+            return container.Projects;
         }
 
         public void Save(IConfiguration configuration, string fileName)
@@ -81,5 +116,14 @@ namespace BuildNotifications.Core.Config
         }
 
         private readonly ISerializer _serializer;
+
+        private class PredefinedConfigurationContainer
+        {
+            [UsedImplicitly]
+            public List<ConnectionData> Connections { get; set; } = new List<ConnectionData>();
+
+            [UsedImplicitly]
+            public List<ProjectConfiguration> Projects { get; set; } = new List<ProjectConfiguration>();
+        }
     }
 }
