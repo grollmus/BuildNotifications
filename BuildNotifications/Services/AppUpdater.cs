@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,27 +16,27 @@ namespace BuildNotifications.Services
 {
     internal class AppUpdater : IAppUpdater
     {
-        public AppUpdater(bool includePreReleases, INotifier notifier)
+        public AppUpdater(bool includePreReleases, INotifier notifier, IUpdateUrls updateUrls)
         {
             _includePreReleases = includePreReleases;
             _notifier = notifier;
             _updateExePath = FindUpdateExe();
             _packagesFolder = FindPackagesFolder();
             Log.Info().Message($"Update.exe should be located at {_updateExePath}").Write();
+            _updateUrls = updateUrls;
         }
 
         private async Task DownloadFullNupkgFile(string targetFilePath, string version)
         {
             var fileName = Path.GetFileName(targetFilePath);
-            var url = new Uri(await GetUpdateUrl(version) + "/" + fileName);
+            var updateUrl = await GetUpdateUrl(version);
+            var url = _updateUrls.DownloadFileFromReleasePackage(updateUrl, fileName);
 
             if (File.Exists(targetFilePath))
                 File.Delete(targetFilePath);
 
-            var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressOf(url)};
+            var stream = await client.GetStreamAsync(_updateUrls.RelativeFileDownloadUrl(url));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -45,15 +44,13 @@ namespace BuildNotifications.Services
 
         private async Task DownloadReleasesFile(string targetFilePath, string version)
         {
-            var url = new Uri(await GetUpdateUrl(version) + "/RELEASES");
+            var url = _updateUrls.DownloadFileFromReleasePackage(await GetUpdateUrl(version), "RELEASES");
 
             if (File.Exists(targetFilePath))
                 File.Delete(targetFilePath);
 
-            var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressOf(url)};
+            var stream = await client.GetStreamAsync(_updateUrls.RelativeFileDownloadUrl(url));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -106,16 +103,9 @@ namespace BuildNotifications.Services
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0);
             var userAgent = new ProductInfoHeaderValue(AppName, currentVersion.ToString(3));
 
-            var repoUri = new Uri(UpdateUrl);
-            var releasesApiBuilder = new StringBuilder("repos")
-                .Append(repoUri.AbsolutePath)
-                .Append("/releases");
-
-            var baseAddress = new Uri("https://api.github.com/");
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressForApiRequests()};
             client.DefaultRequestHeaders.UserAgent.Add(userAgent);
-            var response = await client.GetAsync(new Uri(releasesApiBuilder.ToString()));
+            var response = await client.GetAsync(_updateUrls.ListReleases());
             response.EnsureSuccessStatusCode();
 
             var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
@@ -256,8 +246,8 @@ namespace BuildNotifications.Services
         private readonly INotifier _notifier;
         private readonly string _packagesFolder;
         private readonly string _updateExePath;
+        private readonly IUpdateUrls _updateUrls;
         private const string AppName = "BuildNotifications";
-        private const string UpdateUrl = "https://github.com/grollmus/BuildNotifications";
 
         [DataContract]
         private class Release

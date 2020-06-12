@@ -52,6 +52,7 @@ namespace BuildNotifications.ViewModel
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
             _popupService = new PopupService(this, viewProvider);
             _windowSettings = new WindowSettings(pathResolver.WindowSettingsFilePath);
+            _updateUrls = new UpdateUrls();
             Initialize();
         }
 
@@ -394,7 +395,7 @@ namespace BuildNotifications.ViewModel
         private void ShowInfoPopup()
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
+            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
 
             _popupService.ShowInfoPopup(includePreReleases, appUpdater);
         }
@@ -514,7 +515,7 @@ namespace BuildNotifications.ViewModel
             try
             {
                 var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-                updater ??= new AppUpdater(includePreReleases, NotificationCenter);
+                updater ??= new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
 
                 var result = await updater.CheckForUpdates();
                 if (result != null)
@@ -651,6 +652,7 @@ namespace BuildNotifications.ViewModel
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
+        private readonly IUpdateUrls _updateUrls;
 
         private class Dummy
         {
