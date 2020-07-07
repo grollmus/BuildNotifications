@@ -10,10 +10,10 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
     public interface ISearchCriteria
     {
         /// <summary>
-        /// The keyword to search by this criteria. Case-insensitive. Is expected to be localized.
+        /// The keyword to for this criteria. Case-insensitive. Is expected to be localized.
         /// </summary>
         /// <example>
-        /// For a search criteria by which user the keyword could be 'RequestedBy'. E.g. 'RequestedBy: Me'
+        /// 'RequestedBy' could be the keyword for a search criteria, to search for the person which requested a build. E.g. 'RequestedBy: Me'
         /// </example>
         string LocalizedKeyword { get; }
 

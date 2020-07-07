@@ -17,7 +17,7 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         string Suggestion { get; }
 
         /// <summary>
-        /// Whether this suggestion is based on keyword.
+        /// Whether this suggestion is a keyword. E.g. input "br" would yield a "branch:" suggestion. Which itself is a keyword, rather than a value for a keyword.
         /// </summary>
         bool IsKeyword { get; }
     }

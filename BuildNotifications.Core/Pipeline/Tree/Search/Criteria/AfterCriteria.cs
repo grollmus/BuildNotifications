@@ -14,8 +14,6 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         {
         }
 
-        private const int MaxDatesToSuggest = 3;
-
         private readonly string _yesterdayString = StringLocalizer.SearchCriteriaAfterYesterday;
         private readonly List<DateTime> _validDates = new List<DateTime>();
 

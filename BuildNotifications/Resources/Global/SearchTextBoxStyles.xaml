@@ -215,7 +215,6 @@
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Foreground1}" />
                             <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
                             <Setter Property="Foreground" TargetName="Label" Value="{DynamicResource Foreground1}" />
-                            <Setter Property="MaxHeight" Value="9999" />
                             <Setter TargetName="PART_Popup" Property="IsOpen" Value="True" />
                         </Trigger>
                     </ControlTemplate.Triggers>

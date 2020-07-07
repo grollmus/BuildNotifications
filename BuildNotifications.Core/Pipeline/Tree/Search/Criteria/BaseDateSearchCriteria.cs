@@ -9,6 +9,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal abstract class BaseDateSearchCriteria : BaseSearchCriteria
     {
+        protected const int MaxDatesToSuggest = 3;
+
         protected BaseDateSearchCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline) : base(localizedKeyword, localizedDescription, pipeline)
         {
         }
