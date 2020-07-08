@@ -5,7 +5,7 @@ using BuildNotifications.PluginInterfaces.Builds;
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class Build : IBaseBuild
+    public class Build : IBaseBuild
     {
         public Build()
         {

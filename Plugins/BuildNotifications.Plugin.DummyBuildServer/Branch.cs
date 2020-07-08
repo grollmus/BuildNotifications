@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class Branch : IBranch
+    public class Branch : IBranch
     {
         public Branch()
         {

@@ -2,7 +2,7 @@
 
 namespace BuildNotifications.Plugin.DummyBuildServer
 {
-    internal class BuildDefinition : IBuildDefinition
+    public class BuildDefinition : IBuildDefinition
     {
         public BuildDefinition()
             : this(string.Empty)
