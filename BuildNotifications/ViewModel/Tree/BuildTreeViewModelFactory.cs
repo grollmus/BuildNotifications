@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Tree
 {
@@ -14,12 +14,12 @@ namespace BuildNotifications.ViewModel.Tree
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            LogTo.Debug("Producing ViewModel for BuildTree.");
+            Log.Debug().Message("Producing ViewModel for BuildTree.").Write();
             var buildTreeResult = await Task.Run(() =>
             {
                 var groupsAsList = tree.GroupDefinition.ToList();
                 var sortingsAsList = buildTreeSortingDefinition.ToList();
-                LogTo.Debug($"Grouping by {string.Join(",", tree.GroupDefinition)}.");
+                Log.Debug().Message($"Grouping by {string.Join(",", tree.GroupDefinition)}.").Write();
                 var buildTree = new BuildTreeViewModel(tree);
 
                 var firstLevelSorting = !buildTreeSortingDefinition.Any() ? SortingDefinition.AlphabeticalDescending : buildTreeSortingDefinition.First();
@@ -36,17 +36,17 @@ namespace BuildNotifications.ViewModel.Tree
 
             if (existingTree != null)
             {
-                LogTo.Debug("Merging with existing tree.");
+                Log.Debug().Message("Merging with existing tree.").Write();
                 buildTreeResult = Merge(existingTree, buildTreeResult);
             }
 
             var treeDepth = GetMaxDepth(buildTreeResult);
-            LogTo.Debug($"Setting max depths, which is {treeDepth}.");
+            Log.Debug().Message($"Setting max depths, which is {treeDepth}.").Write();
             SetMaxDepths(buildTreeResult, treeDepth);
             SetBuildIsFromPullRequest(buildTreeResult);
 
             stopWatch.Stop();
-            LogTo.Info($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms. Displayed nodes: {GetNodeCount(buildTreeResult)}");
+            Log.Info().Message($"Produced ViewModels for BuildTree in {stopWatch.ElapsedMilliseconds} ms. Displayed nodes: {GetNodeCount(buildTreeResult)}").Write();
             return buildTreeResult;
         }
 
@@ -166,15 +166,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)
-        {
-            node.MaxTreeDepth = maxDepth;
-            foreach (var child in node.Children)
-            {
-                SetMaxDepths(child, maxDepth);
-            }
-        }
-
         private static void SetBuildIsFromPullRequest(BuildTreeNodeViewModel node, bool parentIsPullRequest = false)
         {
             if (node is BranchGroupNodeViewModel asBranch && asBranch.IsPullRequest)
@@ -187,6 +178,15 @@ namespace BuildNotifications.ViewModel.Tree
 
             if (node is BuildNodeViewModel asBuild)
                 asBuild.IsFromPullRequest = parentIsPullRequest;
+        }
+
+        private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)
+        {
+            node.MaxTreeDepth = maxDepth;
+            foreach (var child in node.Children)
+            {
+                SetMaxDepths(child, maxDepth);
+            }
         }
 
         private void TagAllNodesForDeletion(BuildTreeNodeViewModel tree, List<BuildTreeNodeViewModel> taggedNodes)

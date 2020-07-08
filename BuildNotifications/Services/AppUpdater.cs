@@ -7,37 +7,36 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Anotar.NLog;
 using Newtonsoft.Json;
+using NLog.Fluent;
 
 namespace BuildNotifications.Services
 {
     internal class AppUpdater : IAppUpdater
     {
-        public AppUpdater(bool includePreReleases, INotifier notifier)
+        public AppUpdater(bool includePreReleases, INotifier notifier, IUpdateUrls updateUrls)
         {
             _includePreReleases = includePreReleases;
             _notifier = notifier;
             _updateExePath = FindUpdateExe();
             _packagesFolder = FindPackagesFolder();
-            LogTo.Info($"Update.exe should be located at {_updateExePath}");
+            Log.Info().Message($"Update.exe should be located at {_updateExePath}").Write();
+            _updateUrls = updateUrls;
         }
 
         private async Task DownloadFullNupkgFile(string targetFilePath, string version)
         {
             var fileName = Path.GetFileName(targetFilePath);
-            var url = new Uri(await GetUpdateUrl(version) + "/" + fileName);
+            var updateUrl = await GetUpdateUrl(version);
+            var url = _updateUrls.DownloadFileFromReleasePackage(updateUrl, fileName);
 
             if (File.Exists(targetFilePath))
                 File.Delete(targetFilePath);
 
-            var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressOf(url)};
+            var stream = await client.GetStreamAsync(_updateUrls.RelativeFileDownloadUrl(url));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -45,15 +44,13 @@ namespace BuildNotifications.Services
 
         private async Task DownloadReleasesFile(string targetFilePath, string version)
         {
-            var url = new Uri(await GetUpdateUrl(version) + "/RELEASES");
+            var url = _updateUrls.DownloadFileFromReleasePackage(await GetUpdateUrl(version), "RELEASES");
 
             if (File.Exists(targetFilePath))
                 File.Delete(targetFilePath);
 
-            var baseAddress = new Uri(url.Scheme + "://" + url.Host);
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
-            var stream = await client.GetStreamAsync(new Uri(url.AbsolutePath.TrimStart('/')));
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressOf(url)};
+            var stream = await client.GetStreamAsync(_updateUrls.RelativeFileDownloadUrl(url));
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
@@ -67,7 +64,7 @@ namespace BuildNotifications.Services
             if (!x.PreRelease)
                 return true;
 
-            LogTo.Debug($"Ignoring pre-release at \"{x.HtmlUrl}\"");
+            Log.Debug().Message($"Ignoring pre-release at \"{x.HtmlUrl}\"").Write();
             return false;
         }
 
@@ -106,16 +103,9 @@ namespace BuildNotifications.Services
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0);
             var userAgent = new ProductInfoHeaderValue(AppName, currentVersion.ToString(3));
 
-            var repoUri = new Uri(UpdateUrl);
-            var releasesApiBuilder = new StringBuilder("repos")
-                .Append(repoUri.AbsolutePath)
-                .Append("/releases");
-
-            var baseAddress = new Uri("https://api.github.com/");
-
-            using var client = new HttpClient {BaseAddress = baseAddress};
+            using var client = new HttpClient {BaseAddress = _updateUrls.BaseAddressForApiRequests()};
             client.DefaultRequestHeaders.UserAgent.Add(userAgent);
-            var response = await client.GetAsync(new Uri(releasesApiBuilder.ToString()));
+            var response = await client.GetAsync(_updateUrls.ListReleases());
             response.EnsureSuccessStatusCode();
 
             var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
@@ -132,25 +122,25 @@ namespace BuildNotifications.Services
 
         private async Task SanitizePackages()
         {
-            LogTo.Info($"Sanitizing packages folder at {_packagesFolder}");
+            Log.Info().Message($"Sanitizing packages folder at {_packagesFolder}").Write();
 
             if (!Directory.Exists(_packagesFolder))
             {
-                LogTo.Debug("Folder missing. Creating.");
+                Log.Debug().Message("Folder missing. Creating.").Write();
                 Directory.CreateDirectory(_packagesFolder);
             }
 
             var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
             if (version == null)
             {
-                LogTo.Debug("Unable to determine current version");
+                Log.Debug().Message("Unable to determine current version").Write();
                 return;
             }
 
             var releasesFilePath = Path.Combine(_packagesFolder, "RELEASES");
             if (!File.Exists(releasesFilePath))
             {
-                LogTo.Debug("RELEASES file does not exist. Downloading.");
+                Log.Debug().Message("RELEASES file does not exist. Downloading.").Write();
                 await DownloadReleasesFile(releasesFilePath, version);
             }
 
@@ -158,22 +148,22 @@ namespace BuildNotifications.Services
             var currentNupkgFilePath = Path.Combine(_packagesFolder, currentNupkgName);
             if (!File.Exists(currentNupkgFilePath))
             {
-                LogTo.Debug("Current full nupkg does not exist. Downloading");
+                Log.Debug().Message("Current full nupkg does not exist. Downloading").Write();
                 await DownloadFullNupkgFile(currentNupkgFilePath, version);
             }
 
-            LogTo.Info("Packages folder is sanitized");
+            Log.Info().Message("Packages folder is sanitized").Write();
         }
 
         public async Task<UpdateCheckResult?> CheckForUpdates(CancellationToken cancellationToken = default)
         {
             if (!File.Exists(_updateExePath))
             {
-                LogTo.Warn($"Update.exe not found. Expected it to be located at {_updateExePath}");
+                Log.Warn().Message($"Update.exe not found. Expected it to be located at {_updateExePath}").Write();
                 return null;
             }
 
-            LogTo.Info($"Checking for updates (include pre-releases: {_includePreReleases})");
+            Log.Info().Message($"Checking for updates (include pre-releases: {_includePreReleases})").Write();
 
             await SanitizePackages();
 
@@ -197,7 +187,7 @@ namespace BuildNotifications.Services
                 string? textResult = null;
                 p.OutputDataReceived += (s, e) =>
                 {
-                    LogTo.Debug($"Checking: {e.Data}");
+                    Log.Debug().Message($"Checking: {e.Data}").Write();
                     if (e.Data?.StartsWith("{", StringComparison.OrdinalIgnoreCase) ?? false)
                         textResult = e.Data;
                 };
@@ -208,11 +198,11 @@ namespace BuildNotifications.Services
 
                 if (!string.IsNullOrWhiteSpace(textResult))
                 {
-                    LogTo.Debug($"Updater response is: {textResult}");
+                    Log.Debug().Message($"Updater response is: {textResult}").Write();
                     return JsonConvert.DeserializeObject<UpdateCheckResult>(textResult);
                 }
 
-                LogTo.Info("Got no meaningful response from updater");
+                Log.Info().Message("Got no meaningful response from updater").Write();
                 return null;
             }, cancellationToken);
         }
@@ -221,7 +211,7 @@ namespace BuildNotifications.Services
         {
             if (!File.Exists(_updateExePath))
             {
-                LogTo.Warn($"Update.exe not found. Expected it to be located at {_updateExePath}");
+                Log.Warn().Message($"Update.exe not found. Expected it to be located at {_updateExePath}").Write();
                 return;
             }
 
@@ -256,8 +246,8 @@ namespace BuildNotifications.Services
         private readonly INotifier _notifier;
         private readonly string _packagesFolder;
         private readonly string _updateExePath;
+        private readonly IUpdateUrls _updateUrls;
         private const string AppName = "BuildNotifications";
-        private const string UpdateUrl = "https://github.com/grollmus/BuildNotifications";
 
         [DataContract]
         private class Release

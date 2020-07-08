@@ -33,7 +33,8 @@
                               Visibility="{Binding IsFromHistory, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
 
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
-                       x:Name="SuggestionTextBlock" VerticalAlignment="Center" Margin="{StaticResource BlockHalfXOnlyMargin}" />
+                       x:Name="SuggestionTextBlock" VerticalAlignment="Center"
+                       Margin="{StaticResource BlockHalfXOnlyMargin}" />
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
@@ -88,15 +89,14 @@
 
     <DataTemplate DataType="{x:Type search:SearchBlockViewModel}">
         <animation:AnimatedStackPanel Orientation="Vertical">
-            <StackPanel Orientation="Vertical" Margin="{StaticResource BlockQuarterThickness}" >
-                <TextBlock Text="{Binding Keyword}" 
-                           Padding="{StaticResource BlockQuarterThicknessOnYHalfOnX}" 
+            <StackPanel Orientation="Vertical" Margin="{StaticResource BlockQuarterThickness}">
+                <TextBlock Text="{Binding Keyword}"
+                           Padding="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
                            Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="16"
-                           Grid.Row="0" Grid.Column="0" 
                            HorizontalAlignment="Left" />
 
-                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1HalfTransparency}" Grid.Row="1"
-                           Grid.Column="1" Margin="{StaticResource BlockDoubleXOnlyMargin}" />
+                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1HalfTransparency}"
+                           Margin="{StaticResource BlockDoubleXOnlyMargin}" />
             </StackPanel>
             <animation:AnimatedStackPanel Orientation="Vertical">
                 <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
@@ -112,7 +112,7 @@
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </animation:AnimatedStackPanel>
-            
+
 
             <ItemsControl ItemsSource="{Binding Examples}">
                 <ItemsControl.ItemsPanel>
@@ -145,7 +145,8 @@
 
                         <!--TEXTBOX-->
                         <Grid x:Name="ContentGrid">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left" MaxWidth="{x:Static system:Double.MaxValue}"
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
+                                          MaxWidth="{x:Static system:Double.MaxValue}"
                                           HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
                             <Grid HorizontalAlignment="Right">
                                 <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom"

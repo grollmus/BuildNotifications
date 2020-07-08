@@ -1,0 +1,49 @@
+﻿<window:CustomDialog x:Class="BuildNotifications.Views.MessageBoxView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
+                     xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
+                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:MessageBoxViewModel}}"
+                     Title="{Binding Title}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+                     d:DesignHeight="450" d:DesignWidth="800">
+
+    <window:CustomWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/BuildTree/BuildTreeResources.xaml" />
+                <ResourceDictionary Source="../Resources/Icons/IconButtonStyles.xaml" />
+                <ResourceDictionary Source="../Resources/Window/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
+            </Style>
+        </ResourceDictionary>
+    </window:CustomWindow.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="{Binding Title}" Margin="{StaticResource BlockThicknessOnXHalfOnY}" FontWeight="Bold" />
+        <TextBlock Text="{Binding Message}" Margin="{StaticResource BlockThickness}" />
+
+        <ItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Right">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:MessageBoxCommandViewModel}">
+                    <icons:IconButton Content="{Binding Text}" IsDefault="{Binding IsDefault}"
+                                      IsCancel="{Binding IsCancel}"
+                                      Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource AncestorType={x:Type window:CustomDialog}}}"
+                                      CommandParameter="{Binding Result}"
+                                      Style="{StaticResource IconButtonWithDockedContent}" Margin="{StaticResource BlockHalfThickness}"
+                                      Foreground="{DynamicResource Foreground1}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </StackPanel>
+</window:CustomDialog>

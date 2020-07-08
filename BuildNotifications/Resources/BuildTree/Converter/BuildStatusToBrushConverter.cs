@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.ViewModel.Tree;
+using NLog.Fluent;
 
 namespace BuildNotifications.Resources.BuildTree.Converter
 {
@@ -50,6 +50,21 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return DefaultBrush;
         }
 
+        private SolidColorBrush GetBrush(string key)
+        {
+            if (_cache.TryGetValue(key, out var cachedBrush))
+                return cachedBrush;
+
+            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
+            {
+                Log.Debug().Message($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.").Write();
+                return new SolidColorBrush(Colors.White);
+            }
+
+            _cache.Add(key, resolvedBrush);
+            return resolvedBrush;
+        }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
@@ -61,21 +76,6 @@ namespace BuildNotifications.Resources.BuildTree.Converter
                 default:
                     return DefaultBrush;
             }
-        }
-
-        private SolidColorBrush GetBrush(string key)
-        {
-            if (_cache.TryGetValue(key, out var cachedBrush))
-                return cachedBrush;
-
-            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
-            {
-                LogTo.Debug($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.");
-                return new SolidColorBrush(Colors.White);
-            }
-
-            _cache.Add(key, resolvedBrush);
-            return resolvedBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

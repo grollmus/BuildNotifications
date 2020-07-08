@@ -56,7 +56,7 @@ namespace DummyBuildServer.ViewModels
         public ICommand RandomizeStatusOfAllBuildsCommand { get; set; }
         public ICommand RemoveBuildCommand { get; }
 
-        public BranchViewModel SelectedBranch
+        public BranchViewModel? SelectedBranch
         {
             get => _selectedBranch;
             set
@@ -80,7 +80,7 @@ namespace DummyBuildServer.ViewModels
             }
         }
 
-        public BuildDefinitionViewModel SelectedDefinition
+        public BuildDefinitionViewModel? SelectedDefinition
         {
             get => _selectedDefinition;
             set
@@ -92,7 +92,7 @@ namespace DummyBuildServer.ViewModels
             }
         }
 
-        public UserViewModel SelectedUser
+        public UserViewModel? SelectedUser
         {
             get => _selectedUser;
             set
@@ -110,7 +110,7 @@ namespace DummyBuildServer.ViewModels
 
         public void EnqueueSpecificBuild(BuildDefinition definition, Branch branch)
         {
-            var user = SelectedUser.User;
+            var user = SelectedUser?.User;
             var changedDate = DateTime.Now - TimeSpan.FromDays(Random.Next(0, 5));
 
             var build = new Build
@@ -146,7 +146,7 @@ namespace DummyBuildServer.ViewModels
 
         private void EnqueueBuild(object arg)
         {
-            EnqueueSpecificBuild(SelectedDefinition.Definition, SelectedBranch.Branch);
+            EnqueueSpecificBuild(SelectedDefinition!.Definition, SelectedBranch!.Branch);
         }
 
         private bool IsBuildDataSelected(object arg)
@@ -219,10 +219,10 @@ namespace DummyBuildServer.ViewModels
         }
 
         private readonly MainViewModel _mainViewModel;
-        private UserViewModel _selectedUser;
-        private BuildDefinitionViewModel _selectedDefinition;
+        private UserViewModel? _selectedUser;
+        private BuildDefinitionViewModel? _selectedDefinition;
         private BuildStatus _selectedBuildStatus;
-        private BranchViewModel _selectedBranch;
+        private BranchViewModel? _selectedBranch;
         private int _buildProgress;
 
         private static int _idCounter;

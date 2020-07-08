@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="BuildNotifications.Views.Settings.ConnectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BuildNotifications.Views.Settings"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+             xmlns:text1="clr-namespace:BuildNotifications.Core.Text;assembly=BuildNotifications.Core"
+             xmlns:settingsRes="clr-namespace:BuildNotifications.Resources.Settings"
+             xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
+             xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../../Resources/Settings/PluginChooserTemplate.xaml" />
+				<ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
+				<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<StackPanel Orientation="Vertical">
+		<text:DecoratedTextBox Text="{Binding Name, Mode=TwoWay}"
+		                       Label="{x:Static text1:StringLocalizer.Name}"
+		                       Margin="{StaticResource BlockYOnlyMargin}"
+		                       ToolTip="{x:Static text1:StringLocalizer.ConnectionNameDescription}" />
+
+		<settingsRes:DecoratedComboBox ItemsSource="{Binding AvailableConnectionTypes}"
+		                               SelectedValue="{Binding ConnectionPluginType}"
+		                               Margin="{StaticResource BlockYOnlyMargin}"
+		                               Text="{x:Static text1:StringLocalizer.ConnectionType}"
+		                               ToolTip="{x:Static text1:StringLocalizer.ConnectionTypeDescription}" />
+
+		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}"
+		                           ConnectionPluginType="{Binding ConnectionPluginType}"
+		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
+
+		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
+		              IsEnabled="{Binding SelectedPlugin, Converter={x:Static utils:NullToBoolConverter.Instance}}"
+		              ItemTemplateSelector="{x:Static settingsRes:OptionTemplateSelector.Instance}" />
+
+		<local:TestConnectionView DockPanel.Dock="Left" DataContext="{Binding TestConnection}" />
+	</StackPanel>
+</UserControl>

@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Anotar.NLog;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Utils
 {
@@ -11,7 +11,7 @@ namespace BuildNotifications.ViewModel.Utils
     {
         public static void ExportToPng(this FrameworkElement element, string toPath)
         {
-            LogTo.Info($"Exporting FrameWorkElement {element.Name} to png. Target path: {toPath}.");
+            Log.Info().Message($"Exporting FrameWorkElement {element.Name} to png. Target path: {toPath}.").Write();
             var size = new Size(0, 0);
 
             CallMeasureMethods(element, size);
@@ -42,7 +42,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         private static void SavePngToFile(PngBitmapEncoder encoder, string toPath)
         {
-            LogTo.Debug("Storing file");
+            Log.Debug().Message("Storing file").Write();
             try
             {
                 using var outputStream = new MemoryStream();
@@ -53,7 +53,7 @@ namespace BuildNotifications.ViewModel.Utils
             }
             catch (Exception e)
             {
-                LogTo.ErrorException("Failed to create output image for notification", e);
+                Log.Error().Message("Failed to create output image for notification").Exception(e).Write();
             }
         }
     }

@@ -69,7 +69,7 @@ namespace BuildNotifications.ViewModel.Overlays
             OnPropertyChanged(nameof(PauseVisible));
         }
 
-        private void RequestOpenErrorMessage(object obj)
+        private void RequestOpenErrorMessage()
         {
             if (_errorNotifications == null)
                 return;
@@ -77,7 +77,7 @@ namespace BuildNotifications.ViewModel.Overlays
             OpenErrorMessageRequested?.Invoke(this, new OpenErrorRequestEventArgs(_errorNotifications));
         }
 
-        private void RequestResume(object obj)
+        private void RequestResume()
         {
             ResumeRequested?.Invoke(this, EventArgs.Empty);
         }

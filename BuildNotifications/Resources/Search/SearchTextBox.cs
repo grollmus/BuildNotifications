@@ -310,7 +310,6 @@ namespace BuildNotifications.Resources.Search
         private void OnGotFocus(object sender, RoutedEventArgs e)
         {
             CheckForScrollViewerCollision();
-            _overlayWidth = RenderSizeOfElement(_overlay).Width;
             ParseCurrentText();
             _popup.IsOpen = true;
             SelectAll();
@@ -567,8 +566,6 @@ namespace BuildNotifications.Resources.Search
         private Popup _popup;
         private Key? _lastPressedKey;
         private string _currentSearchTerm = string.Empty;
-
-        private double _overlayWidth;
 
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
             "Icon", typeof(IconType), typeof(SearchTextBox), new PropertyMetadata(default(IconType)));

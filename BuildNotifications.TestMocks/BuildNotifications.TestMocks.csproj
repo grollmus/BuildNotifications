@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	  <Nullable>enable</Nullable>
+
+	  <IsPackable>false</IsPackable>
+
+	  <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+  </ItemGroup>
+
+</Project>

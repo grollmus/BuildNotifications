@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Anotar.NLog.Fody" Version="5.1.2" />
     <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,8 +22,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.153.0" />
-    <PackageReference Include="ReflectSettings" Version="1.1.4" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.7.0.17535">
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.9.0.19135">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -32,6 +31,21 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Strings.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

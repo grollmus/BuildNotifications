@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
-using Anotar.NLog;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Utils;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Notification
 {
@@ -23,7 +23,7 @@ namespace BuildNotifications.ViewModel.Notification
             Notifications.CollectionChanged += Notifications_CollectionChanged;
 
             NewNotificationsCounter = new NewNotificationsCounterViewModel();
-            ClearAllCommand = new DelegateCommand(x => ClearAll());
+            ClearAllCommand = new DelegateCommand(ClearAll);
         }
 
         public ICommand ClearAllCommand { get; set; }
@@ -123,6 +123,7 @@ namespace BuildNotifications.ViewModel.Notification
 
         private void ClearAll()
         {
+            AllRead();
             ClearSelection();
             RemoveNotifications(Notifications.ToList());
 
@@ -178,7 +179,7 @@ namespace BuildNotifications.ViewModel.Notification
 
             foreach (var notification in viewModels)
             {
-                LogTo.Debug($"Showing notification \"{notification.GetType().Name}\".");
+                Log.Debug().Message($"Showing notification \"{notification.GetType().Name}\".").Write();
                 Notifications.Add(notification);
             }
 

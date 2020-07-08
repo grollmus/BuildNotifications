@@ -9,6 +9,7 @@ using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using BuildNotifications.TestMocks;
 using NSubstitute;
 using Xunit;
 
@@ -32,7 +33,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
             var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration, userIdentityList);
 
             var buildProvider = Substitute.For<IBuildProvider>();
             var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
@@ -51,7 +53,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var builder = Substitute.For<ITreeBuilder>();
             var configuration = Substitute.For<IConfiguration>();
-            var sut = new Core.Pipeline.Pipeline(builder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var sut = new Core.Pipeline.Pipeline(builder, configuration, userIdentityList);
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
@@ -122,7 +125,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var builds = pipeline.CachedBuilds();
 
             // Assert
-            Assert.Equal(new [] {"1"}, builds.Select(b => b.Id));
+            Assert.Equal(new[] {"1"}, builds.Select(b => b.Id));
         }
 
         [Fact]
@@ -136,7 +139,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var definitions = pipeline.CachedDefinitions();
 
             // Assert
-            Assert.Equal(new [] {"ci", "nightly"}, definitions.Select(d => d.Name));
+            Assert.Equal(new[] {"ci", "nightly"}, definitions.Select(d => d.Name));
         }
 
         [Fact]
@@ -150,7 +153,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var branches = pipeline.CachedBranches();
 
             // Assert
-            Assert.Equal(new [] {"master", "stage"}, branches.Select(b => b.FullName));
+            Assert.Equal(new[] {"master", "stage"}, branches.Select(b => b.FullName));
         }
 
         private Core.Pipeline.Pipeline MockPipeline(params GroupDefinition[] groupDefinitions)
@@ -185,7 +188,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var configuration = Substitute.For<IConfiguration>();
             configuration.BuildsToShow.Returns(int.MaxValue);
-            var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);
 
             var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>());
             pipeline.AddProject(project);

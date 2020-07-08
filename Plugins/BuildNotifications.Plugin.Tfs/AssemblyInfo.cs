@@ -1,5 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using Anotar.NLog;
+﻿using System.Resources;
+using System.Runtime.CompilerServices;
 
-[assembly: LogMinimalMessage]
+[assembly: NeutralResourcesLanguage("en-US")]
+
 [assembly: InternalsVisibleTo("BuildNotifications.Tests")]

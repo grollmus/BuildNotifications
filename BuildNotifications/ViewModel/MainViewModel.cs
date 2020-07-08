@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Anotar.NLog;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification;
@@ -23,19 +22,18 @@ using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
-using BuildNotifications.Views;
-using JetBrains.Annotations;
+using NLog.Fluent;
 using Semver;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable
+    public class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
-        public MainViewModel()
+        public MainViewModel(IViewProvider viewProvider)
 #pragma warning restore CS8618
         {
             var pathResolver = new PathResolver();
@@ -43,13 +41,27 @@ namespace BuildNotifications.ViewModel
             _trayIcon = new TrayIconHandle();
             _trayIcon.ExitRequested += TrayIconOnExitRequested;
             _trayIcon.ShowWindowRequested += TrayIconOnShowWindowRequested;
-            _coreSetup = new CoreSetup(pathResolver, _fileWatch);
+            var dispatcher = new WpfDispatcher();
+            _coreSetup = new CoreSetup(pathResolver, _fileWatch, dispatcher);
             _coreSetup.PipelineUpdated += CoreSetup_PipelineUpdated;
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
             GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
+            _popupService = new PopupService(this, viewProvider);
+            _windowSettings = new WindowSettings(pathResolver.WindowSettingsFilePath);
+            _updateUrls = new UpdateUrls();
             Initialize();
+        }
+
+        public bool BlurView
+        {
+            get => _blurView;
+            set
+            {
+                _blurView = value;
+                OnPropertyChanged();
+            }
         }
 
         public BuildTreeViewModel? BuildTree
@@ -91,17 +103,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        private bool _showSights;
-
-        public bool ShowSights
-        {
-            get => _showSights;
-            set
-            {
-                _showSights = value;
-                OnPropertyChanged();
-            }
-        }
+        public ICommand ShowInfoPopupCommand { get; set; }
 
         public bool ShowNotificationCenter
         {
@@ -109,18 +111,6 @@ namespace BuildNotifications.ViewModel
             set
             {
                 _showNotificationCenter = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _blurMainView;
-
-        public bool BlurMainView
-        {
-            get => _blurMainView;
-            set
-            {
-                _blurMainView = value;
                 OnPropertyChanged();
             }
         }
@@ -142,8 +132,16 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
-        public ICommand ToggleShowSightsCommand { get; set; }
-        public ICommand ShowInfoPopupCommand { get; set; }
+
+        public void RestoreWindowStateFor(Window window)
+        {
+            _windowSettings.ApplyTo(window);
+        }
+
+        public void SaveWindowStateOf(Window window)
+        {
+            _windowSettings.Save(window);
+        }
 
         private void BringWindowToFront()
         {
@@ -187,7 +185,11 @@ namespace BuildNotifications.ViewModel
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
         {
-            StopUpdating();
+            if (_previouslyFetchedAnyBuilds)
+                StopUpdating();
+            else
+                Log.Debug().Message("Error occured but no builds have ever been loaded. Keep on trying to update").Write();
+
             StatusIndicator.Error(e.ErrorNotifications);
 
             // errors may occur on any thread.
@@ -229,8 +231,8 @@ namespace BuildNotifications.ViewModel
             LoadProjects();
             ShowOverlay();
             RegisterUriProtocol();
-            HandleExistingDistributedNotificationsOnNextFrame().FireAndForget();
-            UpdateApp().FireAndForget();
+            HandleExistingDistributedNotificationsOnNextFrame().IgnoreResult();
+            UpdateApp().IgnoreResult();
 
             if (Overlay == null)
                 StartUpdating();
@@ -266,13 +268,13 @@ namespace BuildNotifications.ViewModel
                 _coreSetup.Pipeline.AddProject(project);
                 _hasAnyProjects = true;
             }
-
-            SettingsViewModel.UpdateUser();
         }
 
         private void NotificationCenterOnCloseRequested(object? sender, EventArgs e)
         {
-            ToggleShowNotificationCenter();
+            if (ShowNotificationCenter)
+                ToggleShowNotificationCenter();
+
             if (NotificationCenter.NoNotifications)
             {
                 StatusIndicator.ClearStatus();
@@ -296,6 +298,12 @@ namespace BuildNotifications.ViewModel
                 buildNode.IsHighlighted = true;
                 _highlightedBuilds.Add(buildNode);
             }
+        }
+
+        private void PersistChanges()
+        {
+            _coreSetup.PersistConfigurationChanges();
+            _configurationApplication.ApplyChanges();
         }
 
         private void RegisterUriProtocol()
@@ -349,11 +357,7 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, () =>
-            {
-                _coreSetup.PersistConfigurationChanges();
-                _configurationApplication.ApplyChanges();
-            }, _coreSetup.PluginRepository);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges, _coreSetup.UserIdentityList);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
@@ -366,24 +370,14 @@ namespace BuildNotifications.ViewModel
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
-            ToggleShowSightsCommand = new DelegateCommand(ToggleShowSights);
             ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
         }
 
         private void ShowInfoPopup()
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter);
-
-            var popup = new InfoPopupDialog
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new InfoPopupViewModel(appUpdater, _coreSetup.Configuration)
-            };
-
-            BlurMainView = true;
-            popup.ShowDialog();
-            BlurMainView = false;
+            var appUpdater = new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
+            _popupService.ShowInfoPopup(includePreReleases, appUpdater);
         }
 
         private void ShowInitialSetupOverlayViewModel()
@@ -392,7 +386,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             StopUpdating();
-            var vm = new InitialSetupOverlayViewModel(SettingsViewModel, _coreSetup.PluginRepository);
+            var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges, _popupService);
             vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
@@ -421,14 +415,14 @@ namespace BuildNotifications.ViewModel
 
             if (!_hasAnyProjects)
             {
-                LogTo.Info("Not starting to update, as no projects are loaded.");
+                Log.Info().Message("Not starting to update, as no projects are loaded.").Write();
                 return;
             }
 
-            LogTo.Info("Start updating");
+            Log.Info().Message("Start updating").Write();
             StatusIndicator.Resume();
             _keepUpdating = true;
-            UpdateTimer().FireAndForget();
+            UpdateTimer().IgnoreResult();
             _fileWatch.Start();
         }
 
@@ -444,7 +438,7 @@ namespace BuildNotifications.ViewModel
 
         private void StopUpdating()
         {
-            LogTo.Info("Stop updating");
+            Log.Info().Message("Stop updating").Write();
             _keepUpdating = false;
             _isInitialFetch = true;
             UpdateNow(); // cancels the wait timer
@@ -454,13 +448,13 @@ namespace BuildNotifications.ViewModel
 
         private void ToggleGroupDefinitionSelection()
         {
-            LogTo.Info($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}");
+            Log.Info().Message($"Toggling group definition selection. Value: {!ShowGroupDefinitionSelection}").Write();
             ShowGroupDefinitionSelection = !ShowGroupDefinitionSelection;
         }
 
         private void ToggleShowNotificationCenter()
         {
-            LogTo.Info($"Toggling notification center. Value: {!ShowNotificationCenter}");
+            Log.Info().Message($"Toggling notification center. Value: {!ShowNotificationCenter}").Write();
             ShowNotificationCenter = !ShowNotificationCenter;
             if (ShowSettings && ShowNotificationCenter)
                 ShowSettings = false;
@@ -471,14 +465,9 @@ namespace BuildNotifications.ViewModel
                 NotificationCenter.ClearSelection();
         }
 
-        private void ToggleShowSights()
-        {
-            ShowSights = !ShowSights;
-        }
-
         private void ToggleShowSettings()
         {
-            LogTo.Info($"Toggling settings. Value: {!ShowSettings}");
+            Log.Info().Message($"Toggling settings. Value: {!ShowSettings}").Write();
             ShowSettings = !ShowSettings;
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
@@ -496,12 +485,12 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateApp(IAppUpdater? updater = null)
         {
-            LogTo.Info("Checking for updates...");
+            Log.Info().Message("Checking for updates...").Write();
 
             try
             {
                 var includePreReleases = _coreSetup.Configuration.UsePreReleases;
-                updater ??= new AppUpdater(includePreReleases, NotificationCenter);
+                updater ??= new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
 
                 var result = await updater.CheckForUpdates();
                 if (result != null)
@@ -516,15 +505,15 @@ namespace BuildNotifications.ViewModel
                     var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
                     if (newestVersion != null && newestVersion > currentVersion)
                     {
-                        LogTo.Info($"Updating to version {result.FutureVersion}");
+                        Log.Info().Message($"Updating to version {result.FutureVersion}").Write();
                         await updater.PerformUpdate();
-                        LogTo.Info("Update finished");
+                        Log.Info().Message("Update finished").Write();
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogTo.WarnException("Update check failed", ex);
+                Log.Warn().Message("Update check failed").Exception(ex).Write();
             }
         }
 
@@ -542,7 +531,7 @@ namespace BuildNotifications.ViewModel
             while (_keepUpdating)
             {
                 stopwatch.Restart();
-                LogTo.Debug($"Starting update at UTC: {DateTime.UtcNow}.");
+                Log.Debug().Message($"Starting update at UTC: {DateTime.UtcNow}.").Write();
 
                 ResetError();
 
@@ -557,7 +546,7 @@ namespace BuildNotifications.ViewModel
                 }
                 catch (Exception e)
                 {
-                    LogTo.ErrorException(e.Message, e);
+                    Log.Error().Message(e.Message).Exception(e).Write();
                     throw;
                 }
 
@@ -575,11 +564,11 @@ namespace BuildNotifications.ViewModel
                     var updateInterval = _coreSetup.Configuration.UpdateInterval;
 #endif
                     stopwatch.Stop();
-                    LogTo.Debug($"Update finished in {stopwatch.Elapsed.TotalSeconds:F1} seconds. Waiting {updateInterval} seconds until next update.");
+                    Log.Debug().Message($"Update finished in {stopwatch.Elapsed.TotalSeconds:F1} seconds. Waiting {updateInterval} seconds until next update.").Write();
                     stopwatch.Restart();
                     await WaitUntilNextFrameIsRenderedAsync();
                     stopwatch.Stop();
-                    LogTo.Debug($"Took {stopwatch.ElapsedMilliseconds} ms to render new tree.");
+                    Log.Debug().Message($"Took {stopwatch.ElapsedMilliseconds} ms to render new tree.").Write();
                     await Task.Delay(TimeSpan.FromSeconds(updateInterval), _cancellationTokenSource.Token);
                 }
                 catch (Exception)
@@ -591,6 +580,13 @@ namespace BuildNotifications.ViewModel
 
         private async Task UpdateTreeTask(PipelineUpdateEventArgs e)
         {
+            if (!_previouslyFetchedAnyBuilds && e.Tree.Children.Any())
+            {
+                NotificationCenter.ClearAllCommand.Execute(null);
+
+                _previouslyFetchedAnyBuilds = true;
+            }
+
             var buildTreeViewModelFactory = new BuildTreeViewModelFactory();
 
             var buildTreeViewModel = await buildTreeViewModelFactory.ProduceAsync(e.Tree, BuildTree, GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition);
@@ -602,26 +598,14 @@ namespace BuildNotifications.ViewModel
             ShowNotifications(e.Notifications);
         }
 
-        private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
-        private readonly CoreSetup _coreSetup;
-        private readonly FileWatchDistributedNotificationReceiver _fileWatch;
-        private readonly TrayIconHandle _trayIcon;
-        private CancellationTokenSource _cancellationTokenSource;
-        private bool _keepUpdating;
-        private Task? _postPipelineUpdateTask;
-        private BuildTreeViewModel? _buildTree;
-        private bool _showGroupDefinitionSelection;
-        private bool _showSettings;
-        private BaseViewModel? _overlay;
-        private bool _showNotificationCenter;
-        private bool _hasAnyProjects;
-        private readonly ConfigurationApplication _configurationApplication;
-        private bool _isInitialFetch = true;
-
-        private class Dummy
+        public void Blur()
         {
-            [UsedImplicitly]
-            public int DummyProp { get; set; }
+            BlurView = true;
+        }
+
+        public void UnBlur()
+        {
+            BlurView = false;
         }
 
         public void Dispose()
@@ -631,5 +615,26 @@ namespace BuildNotifications.ViewModel
             _postPipelineUpdateTask?.Dispose();
             _fileWatch.Dispose();
         }
+
+        private readonly WindowSettings _windowSettings;
+        private readonly IList<BuildNodeViewModel> _highlightedBuilds = new List<BuildNodeViewModel>();
+        private readonly CoreSetup _coreSetup;
+        private readonly FileWatchDistributedNotificationReceiver _fileWatch;
+        private readonly TrayIconHandle _trayIcon;
+        private readonly ConfigurationApplication _configurationApplication;
+        private readonly IPopupService _popupService;
+        private bool _previouslyFetchedAnyBuilds;
+        private bool _blurView;
+        private CancellationTokenSource _cancellationTokenSource;
+        private bool _keepUpdating;
+        private Task? _postPipelineUpdateTask;
+        private BuildTreeViewModel? _buildTree;
+        private bool _showGroupDefinitionSelection;
+        private bool _showSettings;
+        private BaseViewModel? _overlay;
+        private bool _showNotificationCenter;
+        private bool _hasAnyProjects;
+        private bool _isInitialFetch = true;
+        private readonly IUpdateUrls _updateUrls;
     }
 }

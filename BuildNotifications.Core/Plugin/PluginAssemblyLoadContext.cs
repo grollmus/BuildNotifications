@@ -15,8 +15,7 @@ namespace BuildNotifications.Core.Plugin
         {
             try
             {
-                var defaultAssembly = Default.LoadFromAssemblyName(assemblyName);
-                return defaultAssembly;
+                return Default.LoadFromAssemblyName(assemblyName);
             }
             catch
             {

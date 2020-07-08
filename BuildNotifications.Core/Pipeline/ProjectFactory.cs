@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -27,7 +27,7 @@ namespace BuildNotifications.Core.Pipeline
                 return null;
             }
 
-            var pluginType = connectionData.SourceControlPluginType ?? string.Empty;
+            var pluginType = connectionData.PluginType ?? string.Empty;
             var sourceControlPlugin = _pluginRepository.FindSourceControlPlugin(pluginType);
             if (sourceControlPlugin == null)
             {
@@ -38,8 +38,8 @@ namespace BuildNotifications.Core.Pipeline
             IBranchProvider? branchProvider;
             try
             {
-                var options = connectionData.SourceControlPluginConfiguration;
-                branchProvider = sourceControlPlugin.ConstructProvider(options);
+                var options = connectionData.PluginConfiguration;
+                branchProvider = sourceControlPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)
             {
@@ -59,7 +59,7 @@ namespace BuildNotifications.Core.Pipeline
                 return null;
             }
 
-            var pluginType = connectionData.BuildPluginType ?? string.Empty;
+            var pluginType = connectionData.PluginType ?? string.Empty;
             var buildPlugin = _pluginRepository.FindBuildPlugin(pluginType);
             if (buildPlugin == null)
             {
@@ -70,8 +70,8 @@ namespace BuildNotifications.Core.Pipeline
             IBuildProvider? buildProvider;
             try
             {
-                var options = connectionData.BuildPluginConfiguration;
-                buildProvider = buildPlugin.ConstructProvider(options);
+                var options = connectionData.PluginConfiguration;
+                buildProvider = buildPlugin.ConstructProvider(options ?? string.Empty);
             }
             catch (Exception e)
             {
@@ -87,28 +87,22 @@ namespace BuildNotifications.Core.Pipeline
             return _configuration.Connections.FirstOrDefault(c => c.Name == connectionName);
         }
 
-        private static string JoinStringList(IEnumerable<string> strings)
-        {
-            return string.Join(",", strings.Select(s => $"'{s}'"));
-        }
-
         private void ReportError(string messageTextId, params object[] parameter)
         {
             var localizedMessage = StringLocalizer.Instance.GetText(messageTextId);
             var fullMessage = string.Format(StringLocalizer.CurrentCulture, localizedMessage, parameter);
             if (parameter.FirstOrDefault(x => x is Exception) is Exception exception)
-                LogTo.ErrorException(fullMessage, exception);
+                Log.Error().Message(fullMessage).Exception(exception).Write();
             else
-                LogTo.Error(fullMessage);
+                Log.Error().Message(fullMessage).Write();
 
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs());
         }
 
         public IProject? Construct(IProjectConfiguration config)
         {
-            LogTo.Debug($"Trying to construct project from {JoinStringList(config.BuildConnectionNames)} and {JoinStringList(config.SourceControlConnectionNames)}");
-            if (config.SourceControlConnectionNames.Count > 1)
-                LogTo.Warn("Multiple SourceControlConnections per project are no longer supported. Using first one in list.");
+            var buildConnectionNames = string.Join(", ", config.BuildConnectionNames);
+            Log.Debug().Message($"Trying to construct project from {buildConnectionNames} and {config.SourceControlConnectionName}").Write();
 
             var buildProviders = new List<IBuildProvider>();
             foreach (var connectionName in config.BuildConnectionNames)
@@ -123,20 +117,15 @@ namespace BuildNotifications.Core.Pipeline
                 buildProviders.Add(buildProvider);
             }
 
-            var branchProviders = new List<IBranchProvider>();
-            foreach (var connectionName in config.SourceControlConnectionNames.Take(1))
-            {
-                var branchProvider = BranchProvider(connectionName);
-                if (branchProvider == null)
-                {
-                    ReportError("FailedToConstructBranchProviderForConnection", connectionName);
-                    return null;
-                }
+            IBranchProvider? branchProvider = null;
+            if (!string.IsNullOrEmpty(config.SourceControlConnectionName))
+                branchProvider = BranchProvider(config.SourceControlConnectionName);
 
-                branchProviders.Add(branchProvider);
-            }
+            if (branchProvider != null)
+                return new Project(buildProviders, branchProvider, config);
 
-            return new Project(buildProviders, branchProviders.FirstOrDefault(), config);
+            ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
+            return null;
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;

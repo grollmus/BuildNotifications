@@ -24,7 +24,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {
             var json = await _connection.Query(Constants.Queries.Builds);
-            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings) ?? new List<Build>();
 
             foreach (var build in list)
             {
@@ -37,7 +37,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
-            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings) ?? new List<Build>();
 
             foreach (var build in list)
             {
@@ -51,7 +51,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsChangedSince(DateTime date)
         {
             var json = await _connection.Query(Constants.Queries.Builds);
-            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings) ?? new List<Build>();
 
             foreach (var build in list)
             {
@@ -65,7 +65,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBuildDefinition> FetchExistingBuildDefinitions()
         {
             var json = await _connection.Query(Constants.Queries.Definitions);
-            var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings) ?? new List<BuildDefinition>();
 
             foreach (var buildDefinition in list)
             {
@@ -78,7 +78,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBuildDefinition> RemovedBuildDefinitions()
         {
             var json = await _connection.Query(Constants.Queries.Definitions);
-            var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<BuildDefinition>>(json, _settings) ?? new List<BuildDefinition>();
 
             var deletedDefinitions = _knownBuildDefinitions.Except(list, new BuildComparer());
 
@@ -91,7 +91,7 @@ namespace BuildNotifications.Plugin.DummyBuildServer
         public async IAsyncEnumerable<IBaseBuild> RemovedBuilds()
         {
             var json = await _connection.Query(Constants.Queries.Builds);
-            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings);
+            var list = JsonConvert.DeserializeObject<List<Build>>(json, _settings) ?? new List<Build>();
 
             var deletedBuilds = _knownBuilds.Except(list, new BuildComparer());
 

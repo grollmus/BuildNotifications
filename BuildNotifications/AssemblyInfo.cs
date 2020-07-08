@@ -1,3 +1,4 @@
-﻿using Anotar.NLog;
+﻿using System.Runtime.CompilerServices;
 
-[assembly: LogMinimalMessage]
+[assembly: InternalsVisibleTo("BuildNotifications.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

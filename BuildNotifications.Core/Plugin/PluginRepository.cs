@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Anotar.NLog;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Plugin
 {
@@ -26,7 +25,7 @@ namespace BuildNotifications.Core.Plugin
                          ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
             if (plugin == null)
-                LogTo.Warn($"Failed to find source control plugin for type \"{typeName}\"");
+                Log.Warn().Message($"Failed to find source control plugin for type \"{typeName}\"").Write();
 
             return plugin;
         }
@@ -39,7 +38,7 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)
-                LogTo.Warn($"Failed to find build plugin for type \"{typeName}\"");
+                Log.Warn().Message($"Failed to find build plugin for type \"{typeName}\"").Write();
 
             return plugin;
         }
@@ -48,7 +47,7 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
             if (plugin == null)
-                LogTo.Warn($"Failed to find source control plugin for type \"{typeName}\"");
+                Log.Warn().Message($"Failed to find source control plugin for type \"{typeName}\"").Write();
 
             return plugin;
         }
@@ -63,12 +62,6 @@ namespace BuildNotifications.Core.Plugin
         {
             var plugin = FindPlugin(typeName);
             return plugin?.IconSvgPath;
-        }
-
-        public Type? FindConfigurationType(string? typeName)
-        {
-            var plugin = FindPlugin(typeName);
-            return plugin?.GetConfigurationType();
         }
 
         private readonly ITypeMatcher _typeMatcher;

@@ -12,9 +12,6 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public IBuildDefinition Definition { get; }
 
-        public override bool Equals(IBuildTreeNode other)
-        {
-            return base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition.Id, StringComparison.InvariantCulture);
-        }
+        public override bool Equals(IBuildTreeNode other) => base.Equals(other) && Definition.Id.Equals((other as DefinitionGroupNode)?.Definition.Id, StringComparison.InvariantCulture);
     }
 }

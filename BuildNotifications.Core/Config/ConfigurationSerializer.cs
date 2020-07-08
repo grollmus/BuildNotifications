@@ -2,18 +2,49 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Anotar.NLog;
-using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
+using JetBrains.Annotations;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Config
 {
     public class ConfigurationSerializer : IConfigurationSerializer
     {
-        public ConfigurationSerializer(ISerializer serializer, IPluginRepository pluginRepository)
+        public ConfigurationSerializer(ISerializer serializer)
         {
             _serializer = serializer;
-            _pluginRepository = pluginRepository;
+        }
+
+        private IEnumerable<ConnectionData> LegacyLoadPredefinedConnections(string fileName)
+        {
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                var list = _serializer.Deserialize<List<ConnectionData>>(json);
+
+                return list;
+            }
+            catch (Exception e)
+            {
+                Log.Error().Message("Failed to load predefined connections.").Exception(e).Write();
+                return Enumerable.Empty<ConnectionData>();
+            }
+        }
+
+        private PredefinedConfigurationContainer LoadPredefinedConfigurationContainer(string fileName)
+        {
+            try
+            {
+                var json = File.ReadAllText(fileName);
+                var container = _serializer.Deserialize<PredefinedConfigurationContainer>(json);
+
+                return container;
+            }
+            catch (Exception e)
+            {
+                Log.Error().Message("Failed to load predefined configuration container.").Exception(e).Write();
+                return new PredefinedConfigurationContainer();
+            }
         }
 
         public IConfiguration Load(string fileName)
@@ -28,19 +59,15 @@ namespace BuildNotifications.Core.Config
                 }
                 catch (Exception e)
                 {
-                    LogTo.InfoException("Failed to load existing config.", e);
+                    Log.Info().Message("Failed to load existing config").Exception(e).Write();
                     configuration = new Configuration();
                 }
             }
             else
             {
-                LogTo.Info($"File {fileName} does not exist. Using default configuration");
+                Log.Info().Message($"File {fileName} does not exist. Using default configuration").Write();
                 configuration = new Configuration();
             }
-
-            configuration.PossibleBuildPluginsFunction = () => _pluginRepository.Build.Select(x => x.GetType().FullName);
-            configuration.PossibleSourceControlPluginsFunction = () => _pluginRepository.SourceControl.Select(x => x.GetType().FullName);
-            configuration.PluginRepository = _pluginRepository;
 
             return configuration;
         }
@@ -50,18 +77,20 @@ namespace BuildNotifications.Core.Config
             if (!File.Exists(fileName))
                 return Enumerable.Empty<ConnectionData>();
 
-            try
-            {
-                var json = File.ReadAllText(fileName);
-                var list = _serializer.Deserialize<List<ConnectionData>>(json);
+            var container = LoadPredefinedConfigurationContainer(fileName);
+            if (!container.Connections.Any())
+                return LegacyLoadPredefinedConnections(fileName);
 
-                return list;
-            }
-            catch (Exception e)
-            {
-                LogTo.ErrorException("Failed to load predefined connections.", e);
-                return Enumerable.Empty<ConnectionData>();
-            }
+            return container.Connections;
+        }
+
+        public IEnumerable<IProjectConfiguration> LoadPredefinedProjects(string fileName)
+        {
+            if (!File.Exists(fileName))
+                return Enumerable.Empty<IProjectConfiguration>();
+
+            var container = LoadPredefinedConfigurationContainer(fileName);
+            return container.Projects;
         }
 
         public void Save(IConfiguration configuration, string fileName)
@@ -71,22 +100,30 @@ namespace BuildNotifications.Core.Config
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
-                LogTo.Info($"Creating directory for config \"{directory}\" as it does not exist.");
+                Log.Info().Message($"Creating directory for config \"{directory}\" as it does not exist.").Write();
             }
 
-            LogTo.Info("Saving current configuration.");
+            Log.Info().Message("Saving current configuration.").Write();
             try
             {
-                LogTo.Debug($"Writing to path \"{fileName}\".");
+                Log.Debug().Message($"Writing to path \"{fileName}\".").Write();
                 File.WriteAllText(fileName, json);
             }
             catch (Exception e)
             {
-                LogTo.FatalException("Failed to persist configuration.", e);
+                Log.Fatal().Message("Failed to persist configuration.").Exception(e).Write();
             }
         }
 
         private readonly ISerializer _serializer;
-        private readonly IPluginRepository _pluginRepository;
+
+        private class PredefinedConfigurationContainer
+        {
+            [UsedImplicitly]
+            public List<ConnectionData> Connections { get; set; } = new List<ConnectionData>();
+
+            [UsedImplicitly]
+            public List<ProjectConfiguration> Projects { get; set; } = new List<ProjectConfiguration>();
+        }
     }
 }

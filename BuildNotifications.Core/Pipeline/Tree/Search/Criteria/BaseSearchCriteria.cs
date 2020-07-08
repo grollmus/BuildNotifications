@@ -21,20 +21,14 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             _pipeline = pipeline;
             LocalizedKeyword = localizedKeyword;
             LocalizedDescription = localizedDescription;
-            _currentCultureInfo = CultureInfo.CurrentUICulture;
+            CurrentCultureInfo = CultureInfo.CurrentUICulture;
         }
 
-        private CultureInfo _currentCultureInfo;
-
-        protected CultureInfo CurrentCultureInfo
-        {
-            get => _currentCultureInfo;
-            private set => _currentCultureInfo = value;
-        }
+        protected CultureInfo CurrentCultureInfo { get; private set; }
 
         internal void UseSpecificCulture(CultureInfo cultureInfo)
         {
-            _currentCultureInfo = cultureInfo;
+            CurrentCultureInfo = cultureInfo;
         }
 
         public string LocalizedKeyword { get; }

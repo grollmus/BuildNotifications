@@ -10,28 +10,28 @@ namespace BuildNotifications.Core.Config
         /// <summary>
         /// List of branches to never load information for.
         /// </summary>
-        IList<string> BranchBlacklist { get; }
+        IReadOnlyList<string> BranchBlacklist { get; set; }
 
         /// <summary>
         /// List of branches to always load information for.
         /// </summary>
-        IList<string> BranchWhitelist { get; }
+        IReadOnlyList<string> BranchWhitelist { get; set; }
 
         /// <summary>
         /// Names of the <see cref="ConnectionData" /> that are used to
         /// fetch builds for this project.
         /// </summary>
-        IList<string> BuildConnectionNames { get; }
+        IReadOnlyList<string> BuildConnectionNames { get; set; }
 
         /// <summary>
         /// List of build definitions to never load information for.
         /// </summary>
-        IList<string> BuildDefinitionBlacklist { get; }
+        IReadOnlyList<string> BuildDefinitionBlacklist { get; set; }
 
         /// <summary>
         /// List of build definitions to always load information for.
         /// </summary>
-        IList<string> BuildDefinitionWhitelist { get; }
+        IReadOnlyList<string> BuildDefinitionWhitelist { get; set; }
 
         /// <summary>
         /// Branch that should be used by default to use for branch comparision.
@@ -59,9 +59,9 @@ namespace BuildNotifications.Core.Config
         PullRequestDisplayMode PullRequestDisplay { get; set; }
 
         /// <summary>
-        /// Name of the <see cref="ConnectionData" /> that are used to
+        /// Name of the <see cref="ConnectionData" /> that is used to
         /// fetch branch information for this project.
         /// </summary>
-        IList<string> SourceControlConnectionNames { get; }
+        string SourceControlConnectionName { get; set; }
     }
 }

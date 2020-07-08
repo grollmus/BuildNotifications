@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Anotar.NLog;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
+using NLog.Fluent;
 
 namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {
     public abstract class BaseNotificationDistributor : INotificationDistributor
     {
-        private readonly Dictionary<INotification, IDistributedNotification> _distributedNotifications = new Dictionary<INotification, IDistributedNotification>();
-
         protected abstract IDistributedNotification ToDistributedNotification(INotification notification);
 
         public void Distribute(INotification notification)
         {
-            LogTo.Info($"Distributing notification \"{notification.GetType().Name}\".");
+            Log.Info().Message($"Distributing notification \"{notification.GetType().Name}\".").Write();
             var distributedNotification = ToDistributedNotification(notification);
             foreach (var processor in this)
             {
-                LogTo.Debug($"Distributing notification \"{notification.GetType().Name}\" with processor \"{processor.GetType().Name}\".");
+                Log.Debug().Message($"Distributing notification \"{notification.GetType().Name}\" with processor \"{processor.GetType().Name}\".").Write();
                 processor.Process(distributedNotification);
             }
 
             _distributedNotifications.Add(notification, distributedNotification);
+        }
+
+        public void ClearAllMessages()
+        {
+            foreach (var notification in _distributedNotifications)
+            {
+                foreach (var processor in _processors)
+                {
+                    processor.Clear(notification.Value);
+                }
+            }
+
+            _distributedNotifications.Clear();
         }
 
         public void ClearDistributedMessage(INotification notification)
@@ -38,60 +49,51 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             _distributedNotifications.Remove(notification);
         }
 
-        public IEnumerator<INotificationProcessor> GetEnumerator()
-        {
-            return _processors.GetEnumerator();
-        }
+        public IEnumerator<INotificationProcessor> GetEnumerator() => _processors.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(INotificationProcessor processor)
         {
             if (processor == null)
                 return;
 
-            LogTo.Info($"Adding NotificationProcessor \"{processor}\"");
+            Log.Info().Message($"Adding NotificationProcessor \"{processor}\"").Write();
             try
             {
-                LogTo.Debug($"Calling Initialize on NotificationProcessor \"{processor}\"");
+                Log.Debug().Message($"Calling Initialize on NotificationProcessor \"{processor}\"").Write();
                 processor.Initialize();
             }
             catch (Exception e)
             {
-                LogTo.WarnException($"NotificationProcessor \"{processor}\" failed to initialize. Error: \n {e}", e);
+                Log.Warn().Message($"NotificationProcessor \"{processor}\" failed to initialize. Error: \n {e}").Exception(e).Write();
             }
 
-            LogTo.Debug($"NotificationProcessor \"{processor}\" successfully initialized. Adding to list of processors.");
+            Log.Debug().Message($"NotificationProcessor \"{processor}\" successfully initialized. Adding to list of processors.").Write();
             _processors.Add(processor);
         }
 
         public void Clear()
         {
-            LogTo.Info("Clearing all NotificationProcessors.");
+            Log.Info().Message("Clearing all NotificationProcessors.").Write();
             foreach (var processor in _processors)
             {
-                LogTo.Debug($"Shutting down NotificationProcessor \"{processor}\"");
+                Log.Debug().Message($"Shutting down NotificationProcessor \"{processor}\"").Write();
                 try
                 {
                     processor.Shutdown();
                 }
                 catch (Exception e)
                 {
-                    LogTo.WarnException($"NotificationProcessor \"{processor}\" failed to shutdown. Error: \n {e}", e);
+                    Log.Warn().Message($"NotificationProcessor \"{processor}\" failed to shutdown. Error: \n {e}").Exception(e).Write();
                 }
             }
 
-            LogTo.Debug("All NotificationProcessor are shut down. Clearing internal list of processors.");
+            Log.Debug().Message("All NotificationProcessor are shut down. Clearing internal list of processors.").Write();
             _processors.Clear();
         }
 
-        public bool Contains(INotificationProcessor item)
-        {
-            return _processors.Contains(item);
-        }
+        public bool Contains(INotificationProcessor item) => _processors.Contains(item);
 
         public void CopyTo(INotificationProcessor[] array, int arrayIndex)
         {
@@ -100,18 +102,18 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 
         public bool Remove(INotificationProcessor processor)
         {
-            LogTo.Info($"Clearing NotificationProcessors {processor}");
+            Log.Info().Message($"Clearing NotificationProcessors {processor}").Write();
             if (!Contains(processor))
             {
-                LogTo.Debug($"NotificationProcessor \"{processor}\" was not present within the list of processors.");
+                Log.Debug().Message($"NotificationProcessor \"{processor}\" was not present within the list of processors.").Write();
                 return false;
             }
 
             var result = _processors.Remove(processor);
             if (!result)
-                LogTo.Debug($"Removed NotificationProcessor \"{processor}\".");
+                Log.Debug().Message($"Removed NotificationProcessor \"{processor}\".").Write();
             else
-                LogTo.Warn($"Did not remove NotificationProcessor \"{processor}\" after checking if its present within the list. This might indicate concurrency problems.");
+                Log.Warn().Message($"Did not remove NotificationProcessor \"{processor}\" after checking if its present within the list. This might indicate concurrency problems.").Write();
 
             return result;
         }
@@ -119,6 +121,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
         public int Count => _processors.Count;
 
         public bool IsReadOnly => false;
+        private readonly Dictionary<INotification, IDistributedNotification> _distributedNotifications = new Dictionary<INotification, IDistributedNotification>();
         private readonly IList<INotificationProcessor> _processors = new List<INotificationProcessor>();
     }
 }

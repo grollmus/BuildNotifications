@@ -1,48 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Anotar.NLog;
+using BuildNotifications.Plugin.Tfs.Configuration;
 using BuildNotifications.PluginInterfaces;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using NLog.Fluent;
 
 namespace BuildNotifications.Plugin.Tfs
 {
     internal class TfsConnectionPool
     {
-        internal VssConnection? CreateConnection(TfsConfiguration data)
+        internal VssConnection? CreateConnection(TfsConfigurationRawData data, bool useCache = true)
         {
             var url = data.Url;
             if (string.IsNullOrWhiteSpace(url))
             {
-                LogTo.Error(ErrorMessages.UrlWasEmpty);
+                Log.Error().Message(ErrorMessages.UrlWasEmpty).Write();
                 return null;
             }
 
-            if (NeedsToAppendCollectionName(data) && !string.IsNullOrWhiteSpace(data.CollectionName))
+            if (!string.IsNullOrWhiteSpace(data.CollectionName))
                 url = AppendCollectionName(data.CollectionName, url);
 
-            if (_connections.TryGetValue(url, out var cachedConnection))
+            if (useCache && _connections.TryGetValue(url, out var cachedConnection))
                 return cachedConnection;
 
             var credentials = CreateCredentials(data);
 
             var connection = new VssConnection(new Uri(url), credentials);
 
-            _connections.Add(url, connection);
+            if (useCache)
+                _connections.Add(url, connection);
 
             return connection;
         }
 
-        internal async Task<ConnectionTestResult> TestConnection(TfsConfiguration data)
+        internal async Task<ConnectionTestResult> TestConnection(TfsConfigurationRawData data)
         {
             if (string.IsNullOrWhiteSpace(data.Url))
                 return ConnectionTestResult.Failure(ErrorMessages.UrlWasEmpty);
 
             try
             {
-                var credentials = CreateCredentials(data);
-                using var connection = new VssConnection(new Uri(data.Url), credentials);
+                using var connection = CreateConnection(data, false);
+                if (connection == null)
+                    return ConnectionTestResult.Failure(ErrorMessages.MissingData);
 
                 await connection.ConnectAsync();
 
@@ -71,7 +74,7 @@ namespace BuildNotifications.Plugin.Tfs
             return url;
         }
 
-        private VssCredentials CreateCredentials(TfsConfiguration data)
+        private VssCredentials CreateCredentials(TfsConfigurationRawData data)
         {
             if (data.AuthenticationType == AuthenticationType.Windows)
                 return new VssCredentials();
@@ -83,25 +86,10 @@ namespace BuildNotifications.Plugin.Tfs
             return new VssCredentials(new VssBasicCredential(username, pw?.PlainText()));
         }
 
-        private bool IsAuthenticatedId(Guid authenticatedIdentityId)
-        {
-            return !authenticatedIdentityId.Equals(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
-        }
-
-        private bool IsOnPremiseServer(string? url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-                return false;
-
-            var uri = new Uri(url);
-            return uri.Host != "dev.azure.com";
-        }
-
-        private bool NeedsToAppendCollectionName(TfsConfiguration data)
-        {
-            return IsOnPremiseServer(data.Url);
-        }
+        private bool IsAuthenticatedId(Guid authenticatedIdentityId) => !authenticatedIdentityId.Equals(AnonymousIdentityId);
 
         private readonly Dictionary<string, VssConnection> _connections = new Dictionary<string, VssConnection>(StringComparer.OrdinalIgnoreCase);
+
+        private static readonly Guid AnonymousIdentityId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
     }
 }

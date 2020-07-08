@@ -4,50 +4,103 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
-using BuildNotifications.Core.Plugin;
-using ReflectSettings;
-using ReflectSettings.EditableConfigs;
-using DelegateCommand = BuildNotifications.ViewModel.Utils.DelegateCommand;
+using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Text;
+using BuildNotifications.ViewModel.Settings.Options;
+using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : BaseViewModel
     {
-// properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
-#pragma warning disable CS8618 // warning about uninitialized non-nullable properties
-        public SettingsViewModel(IConfiguration configuration, Action saveMethod, IPluginRepository pluginRepository)
-#pragma warning restore CS8618
+        public SettingsViewModel(IConfiguration configuration, Action saveMethod, IUserIdentityList userIdentityList)
         {
-            Configuration = configuration;
             _saveMethod = saveMethod;
-            _pluginRepository = pluginRepository;
-            EditConnectionsCommand = new DelegateCommand(OnEditConnections);
+            _userIdentityList = userIdentityList;
+            _configuration = configuration;
+            EditConnectionsCommand = new DelegateCommand(EditConnections);
 
-            CreateEditables();
+            Language = new LanguageOptionViewModel(configuration.Language);
+            AnimationsMode = new EnumOptionViewModel<AnimationMode>(StringLocalizer.Keys.AnimationSpeed, configuration.AnimationSpeed);
+            AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.Autostart);
+            CanceledBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.CanceledBuildNotifyConfig, configuration.CanceledBuildNotifyConfig);
+            FailedBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.FailedBuildNotifyConfig, configuration.FailedBuildNotifyConfig);
+            SucceededBuildNotify = new EnumOptionViewModel<BuildNotificationModes>(StringLocalizer.Keys.SucceededBuildNotifyConfig, configuration.SucceededBuildNotifyConfig);
+            PartialSucceededTreatmentMode = new EnumOptionViewModel<PartialSucceededTreatmentMode>(StringLocalizer.Keys.PartialSucceededTreatmentMode, configuration.PartialSucceededTreatmentMode);
+            BuildsPerGroup = new NumberOptionViewModel(configuration.BuildsToShow, 1, 100, StringLocalizer.Keys.BuildsToShow);
+            ShowBusyIndicatorDuringUpdate = new BooleanOptionViewModel(configuration.ShowBusyIndicatorOnDeltaUpdates, StringLocalizer.Keys.ShowBusyIndicatorOnDeltaUpdates);
+            UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, 30, int.MaxValue, StringLocalizer.Keys.UpdateInterval);
+            UpdateToPreReleases = new BooleanOptionViewModel(configuration.UsePreReleases, StringLocalizer.Keys.UsePreReleases);
+
+            foreach (var option in Options)
+            {
+                option.ValueChanged += Option_ValueChanged;
+            }
+
             UpdateUser();
         }
 
         public ObservableCollection<UserViewModel> CurrentUserIdentities { get; } = new ObservableCollection<UserViewModel>();
 
-        public ObservableCollection<IEditableConfig> Configs { get; } = new ObservableCollection<IEditableConfig>();
+        public ICommand EditConnectionsCommand { get; }
 
-        public IConfiguration Configuration { get; }
-
-        public SettingsSubSetViewModel ConnectionsSubSet { get; private set; }
-
-        public ConnectionsWrapperViewModel ConnectionsWrapper { get; private set; }
-
-        public ICommand EditConnectionsCommand { get; set; }
-
-        public SettingsSubSetViewModel ProjectsSubSet { get; private set; }
-
-        public event EventHandler? EditConnectionsRequested;
-
-        public event EventHandler? SettingsChanged;
-
-        public void UpdateUser()
+        public IEnumerable<OptionViewModelBase> Options
         {
-            var newUsers = Configuration.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
+            get
+            {
+                yield return Language;
+                yield return BuildsPerGroup;
+                yield return UpdateInterval;
+                yield return UpdateToPreReleases;
+                yield return CanceledBuildNotify;
+                yield return FailedBuildNotify;
+                yield return SucceededBuildNotify;
+                yield return PartialSucceededTreatmentMode;
+                yield return AutoStartMode;
+                yield return AnimationsMode;
+                yield return ShowBusyIndicatorDuringUpdate;
+            }
+        }
+
+        internal EnumOptionViewModel<AnimationMode> AnimationsMode { get; }
+        internal EnumOptionViewModel<AutostartMode> AutoStartMode { get; }
+        internal NumberOptionViewModel BuildsPerGroup { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> CanceledBuildNotify { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> FailedBuildNotify { get; }
+        internal LanguageOptionViewModel Language { get; }
+        internal EnumOptionViewModel<PartialSucceededTreatmentMode> PartialSucceededTreatmentMode { get; }
+        internal BooleanOptionViewModel ShowBusyIndicatorDuringUpdate { get; }
+        internal EnumOptionViewModel<BuildNotificationModes> SucceededBuildNotify { get; }
+        internal NumberOptionViewModel UpdateInterval { get; }
+        internal BooleanOptionViewModel UpdateToPreReleases { get; }
+
+        public event EventHandler<EventArgs>? EditConnectionsRequested;
+
+        private void EditConnections()
+        {
+            EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Option_ValueChanged(object? sender, EventArgs e)
+        {
+            _configuration.AnimationSpeed = AnimationsMode.Value;
+            _configuration.Autostart = AutoStartMode.Value;
+            _configuration.BuildsToShow = BuildsPerGroup.Value;
+            _configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
+            _configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
+            _configuration.Language = Language.Value.IetfLanguageTag;
+            _configuration.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
+            _configuration.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
+            _configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
+            _configuration.UpdateInterval = UpdateInterval.Value;
+            _configuration.UsePreReleases = UpdateToPreReleases.Value;
+
+            _saveMethod.Invoke();
+        }
+
+        private void UpdateUser()
+        {
+            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
 
             var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
             var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
@@ -63,52 +116,9 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        private void CreateEditables()
-        {
-            var factory = new SettingsFactory();
-            var changeTrackingManager = new ChangeTrackingManager();
-            var editables = factory.Reflect(Configuration, changeTrackingManager).ToList();
-
-            var projectsEditables = new List<IEditableConfig>();
-
-            foreach (var config in editables)
-            {
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Connections))
-                {
-                    // ignored, as connections are wrapped later
-                    continue;
-                }
-
-                if (config.PropertyInfo.Name == nameof(IConfiguration.Projects))
-                {
-                    projectsEditables.Add(config);
-                    continue;
-                }
-
-                Configs.Add(config);
-            }
-
-            ConnectionsWrapper = new ConnectionsWrapperViewModel(Configuration.Connections, Configuration, _pluginRepository);
-            var connectionsEditable = factory.Reflect(ConnectionsWrapper, changeTrackingManager);
-
-            ConnectionsSubSet = new SettingsSubSetViewModel(connectionsEditable);
-            ProjectsSubSet = new SettingsSubSetViewModel(projectsEditables);
-
-            changeTrackingManager.ConfigurationChanged += OnConfigurationChanged;
-        }
-
-        private void OnConfigurationChanged(object? sender, EventArgs args)
-        {
-            _saveMethod.Invoke();
-            SettingsChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnEditConnections(object parameter)
-        {
-            EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
-        }
+        private readonly IConfiguration _configuration;
 
         private readonly Action _saveMethod;
-        private readonly IPluginRepository _pluginRepository;
+        private readonly IUserIdentityList _userIdentityList;
     }
 }

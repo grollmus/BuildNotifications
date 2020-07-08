@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BuildNotifications.Core.Config;
 using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Utils;
 using Semver;
@@ -12,11 +11,11 @@ namespace BuildNotifications.ViewModel
 {
     internal class InfoPopupViewModel : BaseViewModel
     {
-        public InfoPopupViewModel(IAppUpdater appUpdater, IConfiguration configuration)
+        public InfoPopupViewModel(IAppUpdater appUpdater, bool includePreReleases)
         {
             _appUpdater = appUpdater;
-            _configuration = configuration;
-            OpenUrlCommand = new DelegateCommand(OpenAboutUrl);
+            _includePreReleases = includePreReleases;
+            OpenUrlCommand = new DelegateCommand<string>(OpenAboutUrl);
             CheckForUpdatesCommand = AsyncCommand.Create(CheckForUpdatesAsync);
             UpdateCommand = AsyncCommand.Create(UpdateAppAsync);
         }
@@ -41,7 +40,7 @@ namespace BuildNotifications.ViewModel
                 currentVersion = new SemVersion(0);
 
             var versions = result.ReleasesToApply.Select(TryParseSemVersion);
-            if (!_configuration.UsePreReleases)
+            if (!_includePreReleases)
                 versions = versions.Where(v => string.IsNullOrEmpty(v.Prerelease));
 
             var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
@@ -57,10 +56,7 @@ namespace BuildNotifications.ViewModel
             Url.GoTo(url);
         }
 
-        private static SemVersion TryParseSemVersion(ReleaseToApply r)
-        {
-            return SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0);
-        }
+        private static SemVersion TryParseSemVersion(ReleaseToApply r) => SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0);
 
         private async Task UpdateAppAsync()
         {
@@ -68,6 +64,6 @@ namespace BuildNotifications.ViewModel
         }
 
         private readonly IAppUpdater _appUpdater;
-        private readonly IConfiguration _configuration;
+        private readonly bool _includePreReleases;
     }
 }

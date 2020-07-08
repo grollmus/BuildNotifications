@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Anotar.NLog;
+using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Utils
 {
@@ -11,7 +11,7 @@ namespace BuildNotifications.ViewModel.Utils
             if (url == null)
                 return;
 
-            LogTo.Info($"Trying to go to URL: \"{url}\"");
+            Log.Info().Message($"Trying to go to URL: \"{url}\"").Write();
             if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 try
@@ -26,7 +26,7 @@ namespace BuildNotifications.ViewModel.Utils
                 }
                 catch (Exception e)
                 {
-                    LogTo.WarnException($"Failed to open URL \"{url}\".", e);
+                    Log.Warn().Message($"Failed to open URL \"{url}\".").Exception(e).Write();
                 }
             }
         }

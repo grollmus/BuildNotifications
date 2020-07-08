@@ -8,22 +8,34 @@
 <#@ import namespace="System.Xml.Linq" #>
 <#@ import namespace="System.Xml" #>
 <#@ output extension=".cs" #>
+<#
+
+var inputFilePath = this.Host.ResolvePath("Texts.en.resx");
+var xml = XDocument.Load(inputFilePath);
+
+var names = xml.Descendants("data").Select(x=>x.Attribute("name")?.Value).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+
+#>
+// ReSharper disable All
 namespace BuildNotifications.Core.Text
 {
     public partial class StringLocalizer
     {<#
-		var inputFilePath = this.Host.ResolvePath("Texts.en.resx");
-		var xml = XDocument.Load(inputFilePath);
-
 		WriteLine("");
-        foreach (var data in xml.Descendants("data"))
+        foreach (var name in names)
         {
-            var name = data.Attribute("name")?.Value;
-            if( string.IsNullOrWhiteSpace(name))
-                continue;
-
             WriteLine($"        public static string {name} => Instance[\"{name}\"];");
         }
 	#>
+
+        public static class Keys
+        {<#
+		    WriteLine("");
+            foreach (var name in names)
+            {
+                WriteLine($"             public const string {name} = \"{name}\";");
+            }
+    #>
+        }
     }
 }
