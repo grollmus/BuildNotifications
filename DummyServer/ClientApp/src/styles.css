@@ -164,7 +164,7 @@ a {
       text-decoration: none
     }
 
-pre, code, kbd, samp {
+pre, code, kbd, samp, code-header {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1em
 }
@@ -400,6 +400,54 @@ mark, .mark {
   background-color: #fcf8e3
 }
 
+.icon-branch {
+  mask: url(assets/Branch.svg) no-repeat center;
+}
+
+.icon-ci {
+  mask: url(assets/Ci.svg) no-repeat center;
+}
+
+.icon-definition {
+  mask: url(assets/Definition.svg) no-repeat center;
+}
+
+.icon-manualBuild {
+  mask: url(assets/ManualBuild.svg) no-repeat center;
+}
+
+.icon-person {
+  mask: url(assets/Person.svg) no-repeat center;
+}
+
+.icon-pullRequest {
+  mask: url(assets/PullRequest.svg) no-repeat center;
+}
+
+.icon-scheduled {
+  mask: url(assets/Scheduled.svg) no-repeat center;
+}
+
+.icon-triggeredBuild {
+  mask: url(assets/TriggeredBuild.svg) no-repeat center;
+}
+
+.icon {
+  background-color: #5C6982;
+  width: 24px;
+  height: 24px;
+}
+
+.icon-big {
+  background-color: #5C6982;
+  width: 36px;
+  height: 36px;
+}
+
+.icon-active {
+  background-color: #dee2e6;
+}
+
 .list-unstyled {
   padding-left: 0;
   list-style: none
@@ -468,7 +516,7 @@ mark, .mark {
 
 code {
   font-size: 87.5%;
-  color: #5C6982;
+  color: #f39c12;
   word-wrap: break-word
 }
 
@@ -3101,9 +3149,9 @@ a.btn.disabled, fieldset:disabled a.btn {
     }
 
 .btn-dark {
-  color: #D8DEE9;
-  background-color: #303030;
-  border-color: #303030
+  color: rgba(216, 222, 233, 0.85);
+  background-color: #212529;
+  border-color: #2f373c
 }
 
   .btn-dark:hover {
@@ -3362,8 +3410,8 @@ a.btn.disabled, fieldset:disabled a.btn {
     }
 
 .btn-outline-dark {
-  color: #303030;
-  border-color: #303030
+  color: rgba(255, 255, 255, 0.53);
+  border-color: #2f373c
 }
 
   .btn-outline-dark:hover {
@@ -5029,7 +5077,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #303030;
+  background-color: #292e3a;
   background-clip: border-box;
   border: 1px solid rgba(0,0,0,0.125);
   border-radius: 0.25rem

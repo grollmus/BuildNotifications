@@ -11,36 +11,36 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Unknown status.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// Build has been cancelled.
         /// </summary>
-        Cancelled,
+        Cancelled = 1,
 
         /// <summary>
         /// Build has not yet been finished.
         /// </summary>
-        Pending,
+        Pending = 2,
 
         /// <summary>
         /// Build is currently running
         /// </summary>
-        Running,
+        Running = 3,
 
         /// <summary>
         /// Build succeeded.
         /// </summary>
-        Succeeded,
+        Succeeded = 4,
 
         /// <summary>
         /// Build completed with warnings.
         /// </summary>
-        PartiallySucceeded,
+        PartiallySucceeded = 5,
 
         /// <summary>
         /// Build failed with errors.
         /// </summary>
-        Failed
+        Failed = 6
     }
 }

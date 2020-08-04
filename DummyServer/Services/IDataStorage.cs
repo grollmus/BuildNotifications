@@ -24,5 +24,11 @@ namespace DummyServer.Services
         void DeleteUser(string name);
 
         void AddBuild(string branchName, string definitionName, string userName);
+
+        void PermutateBuilds();
+
+        void RandomizeBuildStatus();
+
+        void DeleteBuild(string id);
     }
 }

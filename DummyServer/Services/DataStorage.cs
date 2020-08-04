@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.PluginInterfaces.Builds;
 using DummyServer.Models;
 
 namespace DummyServer.Services
@@ -85,9 +86,89 @@ namespace DummyServer.Services
                 c.Users.Remove(userToDelete);
         });
 
+        private static Random _random = new Random();
+
         public void AddBuild(string branchName, string definitionName, string userName)
         {
-            throw new NotImplementedException();
+            var build = ConstructBuild(branchName, definitionName, userName);
+
+            lock (_builds)
+            {
+                _builds.Add(build);
+            }
+        }
+
+        private static Build ConstructBuild(string branchName, string definitionName, string userName)
+        {
+            var build = new Build();
+            build.BranchName = branchName;
+            build.Definition = new BuildDefinition(definitionName);
+            var user = new User(userName);
+            build.RequestedBy = user;
+            build.RequestedFor = user;
+            build.Status = BuildStatus.Pending;
+            build.LastChangedTime = DateTime.Now;
+            build.QueueTime = DateTime.Now;
+            build.Reason = RandomEnum<BuildReason>();
+            return build;
+        }
+
+        private static T RandomEnum<T>()
+        {
+            var reasonValues = Enum.GetValues(typeof(T));
+            var randomIndex = _random.Next(1, reasonValues.Length);
+            var value = reasonValues.GetValue(randomIndex);
+            if (value is T asT)
+                return asT;
+
+            return default;
+        }
+
+        public void PermutateBuilds()
+        {
+            var branches = Branches();
+            var definitions = BuildDefinitions();
+            var users = Users();
+
+            var builds = new List<Build>();
+
+            foreach (var branch in branches)
+            {
+                foreach (var definition in definitions)
+                {
+                    foreach (var user in users)
+                    {
+                        builds.Add(ConstructBuild(branch.FullName, definition.Name, user.UniqueName));
+                    }
+                }
+            }
+
+            lock (_builds)
+            {
+                _builds.AddRange(builds);
+            }
+        }
+
+        public void RandomizeBuildStatus()
+        {
+            lock (_builds)
+            {
+                foreach (var build in _builds)
+                {
+                    build.Status = RandomEnum<BuildStatus>();
+                }
+            }
+        }
+
+        public void DeleteBuild(string id)
+        {
+            lock (_builds)
+            {
+                var existingBuild = _builds.FirstOrDefault(b => b.Id.Equals(id));
+                if (existingBuild == null)
+                    return;
+                _builds.Remove(existingBuild);
+            }
         }
 
         private T AccessConfig<T>(Func<ServerConfig, T> propertyAccessor)

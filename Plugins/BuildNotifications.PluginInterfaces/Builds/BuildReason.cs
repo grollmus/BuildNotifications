@@ -8,31 +8,31 @@
         /// <summary>
         /// When the build reason is not known or cannot be resolved.
         /// </summary>
-        Unknown,
+        Unknown = 0,
 
         /// <summary>
         /// Automatically created rolling build on code check-in. E.g. automatic for branch changes.
         /// </summary>
-        CheckedIn,
+        CheckedIn = 1,
 
         /// <summary>
         /// Scheduled during a fixed time. E.g. a nightly build.
         /// </summary>
-        Scheduled,
+        Scheduled = 2,
 
         /// <summary>
         /// Created for a pull request.
         /// </summary>
-        PullRequest,
+        PullRequest = 3,
 
         /// <summary>
         /// Manually created build.
         /// </summary>
-        Manual,
+        Manual = 4,
 
         /// <summary>
         /// Everything else that did not fit into the other categories.
         /// </summary>
-        Other
+        Other = 5
     }
 }

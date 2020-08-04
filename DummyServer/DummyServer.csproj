@@ -24,6 +24,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ClientApp\src\assets\Branch.svg" />
+    <Content Include="ClientApp\src\assets\Ci.svg" />
+    <Content Include="ClientApp\src\assets\Definition.svg" />
+    <Content Include="ClientApp\src\assets\ManualBuild.svg" />
+    <Content Include="ClientApp\src\assets\Person.svg" />
+    <Content Include="ClientApp\src\assets\PullRequest.svg" />
+    <Content Include="ClientApp\src\assets\Scheduled.svg" />
+    <Content Include="ClientApp\src\assets\TriggeredBuild.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Plugins\BuildNotifications.Plugin.DummyBuildServer\BuildNotifications.Plugin.DummyBuildServer.csproj" />
   </ItemGroup>
 

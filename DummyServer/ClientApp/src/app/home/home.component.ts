@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 import { switchMap, startWith } from "rxjs/operators";
 
 @Component({
@@ -12,44 +12,49 @@ export class HomeComponent {
   public branches: Branch[];
   public definitions: Definition[];
   public users: User[];
-  private http: HttpClient;
-  private baseUrl: string;
 
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    this.http = http;
-    this.baseUrl = baseUrl;
+  public selectedDefinition: Definition;
+  public selectedBranch: Branch;
+  public selectedUser: User;
 
-    this.refreshBuilds.asObservable().pipe(
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+
+    this.listenToUpdate<Build[]>(this.refreshBuilds, 'build', r => { this.builds = r; });
+    this.listenToUpdate<Branch[]>(this.refreshBranches,
+      'branch',
+      r => {
+        this.branches = r;
+        this.selectedBranch = this.selectedValueOrDefault(this.selectedBranch, r);
+      });
+    this.listenToUpdate<Definition[]>(this.refreshDefinitions,
+      'definition',
+      r => {
+        this.definitions = r;
+        this.selectedDefinition = this.selectedValueOrDefault(this.selectedDefinition, r);
+      });
+    this.listenToUpdate<User[]>(this.refreshUser,
+      'user',
+      r => {
+        this.users = r;
+        this.selectedUser = this.selectedValueOrDefault(this.selectedUser, r);
+      });
+
+  }
+
+  private listenToUpdate<T>(subject: Subject<Object>, path: string, resultHandler: (result: T) => any) {
+    subject.pipe(
       startWith(undefined),
-      switchMap(() => http.get<Build[]>(baseUrl + 'build'))
-    ).subscribe(result => {
-        this.builds = result;
-      },
-      error => console.error(error));
+      switchMap(() => this.http.get<T>(this.baseUrl + path))
+    ).subscribe(resultHandler, error => console.error(error));
+  }
 
-    this.refreshBranches.asObservable().pipe(
-      startWith(undefined),
-      switchMap(() => http.get<Branch[]>(baseUrl + 'branch'))
-    ).subscribe(result => {
-        this.branches = result;
-      },
-      error => console.error(error));
+  private selectedValueOrDefault<T>(currentValue: T, possibleValues: Array<T>): T {
+    if (!currentValue || possibleValues.indexOf(currentValue) < 0)
+      return this.firstOrDefault(possibleValues);
+  }
 
-    this.refreshDefinitions.asObservable().pipe(
-      startWith(undefined),
-      switchMap(() => http.get<Definition[]>(baseUrl + 'definition'))
-    ).subscribe(result => {
-        this.definitions = result;
-      },
-      error => console.error(error));
-
-    this.refreshUser.asObservable().pipe(
-      startWith(undefined),
-      switchMap(() => http.get<User[]>(baseUrl + 'user'))
-    ).subscribe(result => {
-        this.users = result;
-      },
-      error => console.error(error));
+  private firstOrDefault<T>(array: Array<T>) {
+    return array.length === 0 ? null : array[0];
   }
 
   private refreshBuilds = new Subject();
@@ -92,11 +97,53 @@ export class HomeComponent {
     this.http.delete<Branch>(this.baseUrl + 'user?name=' + name).subscribe(r => this.refreshUser.next());
   }
 
+  public addBuild() {
+    if (!this.selectedBranch || !this.selectedDefinition || !this.selectedUser)
+      return;
+
+    var build = new Build();
+    build.branchName = this.selectedBranch.fullName;
+    build.userName = this.selectedUser.uniqueName;
+    build.definitionName = this.selectedDefinition.name;
+    
+    this.postBuild(build);
+  }
+
+  private postBuild(build:Build) {
+    this.http.post<Build>(this.baseUrl + 'build', build)
+      .subscribe(r => this.refreshBuilds.next());
+  }
+
+  public updateBuildStatus(build:Build, status:number) {
+    build.status = status;
+    this.postBuild(build);
+  }
+
+  public updateBuildReason(build:Build, reason:number) {
+    build.reason = reason;
+    this.postBuild(build);
+  }
+
+  public permutate() {
+    this.http.get(this.baseUrl + 'build/permutate').subscribe(r => this.refreshBuilds.next());
+  }
+
+  public randomizeBuildStatus() {
+    this.http.get(this.baseUrl + 'build/randomizeBuildStatus').subscribe(r => this.refreshBuilds.next());
+  }
+
+  public deleteBuild(build: Build) {
+    this.http.delete<Build>(this.baseUrl + 'build?id=' + build.id).subscribe(r => this.refreshBuilds.next());
+  }
 }
 
-interface Build {
+class Build {
   branchName: string;
+  definitionName: string;
+  userName: string;
   id: string;
+  status: number;
+  reason: number;
 }
 
 interface Branch {
