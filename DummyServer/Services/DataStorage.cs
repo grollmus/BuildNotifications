@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.Plugin.DummyServer;
 using BuildNotifications.PluginInterfaces.Builds;
 using DummyServer.Models;
 
@@ -98,11 +98,17 @@ namespace DummyServer.Services
             }
         }
 
-        private static Build ConstructBuild(string branchName, string definitionName, string userName)
+        private Build ConstructBuild(string branchName, string definitionName, string userName)
         {
+            var definition = BuildDefinitions().FirstOrDefault(d => d.Name.Equals(definitionName));
+
+            if (definition == null)
+                definition = new BuildDefinition(definitionName);
+
             var build = new Build();
+
             build.BranchName = branchName;
-            build.Definition = new BuildDefinition(definitionName);
+            build.Definition = definition;
             var user = new User(userName);
             build.RequestedBy = user;
             build.RequestedFor = user;

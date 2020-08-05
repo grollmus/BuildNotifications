@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.Plugin.DummyServer;
 using DummyServer.Services;
 using Microsoft.AspNetCore.Mvc;
 

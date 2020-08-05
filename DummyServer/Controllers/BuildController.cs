@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.Plugin.DummyServer;
 using BuildNotifications.PluginInterfaces.Builds;
 using DummyServer.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +23,13 @@ namespace DummyServer.Controllers
         public IEnumerable<WebBuild> Get()
         {
             return _dataStorage.Builds().Select(b => new WebBuild(b));
+        }
+
+        [HttpGet]
+        [Route(nameof(Extern))]
+        public IEnumerable<Build> Extern()
+        {
+            return _dataStorage.Builds();
         }
 
         [HttpPost]

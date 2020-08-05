@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BuildNotifications.Plugin.DummyBuildServer;
+using BuildNotifications.Plugin.DummyServer;
 
 namespace DummyServer.Models
 {
