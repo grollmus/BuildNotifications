@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Plugins\BuildNotifications.Plugin.DummyBuildServer\BuildNotifications.Plugin.DummyBuildServer.csproj" />
     <ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
   </ItemGroup>
 
