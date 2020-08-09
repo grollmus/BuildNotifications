@@ -16,7 +16,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         protected ISearchCriteria CriteriaUnderTest { get; }
         protected static CultureInfo TestCulture => CultureInfo.GetCultureInfo("en");
 
-        protected const string ReferenceDate = "6/15/2020";
+        protected const string ReferenceDate = "6/15/1997";
 
         protected DateCriteriaTests(BaseSearchCriteria criteriaUnderTest)
         {
