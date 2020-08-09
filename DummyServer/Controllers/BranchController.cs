@@ -7,7 +7,7 @@ namespace DummyServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BranchController
+    public class BranchController : ControllerBase
     {
         private readonly IDataStorage _dataStorage;
 
@@ -17,21 +17,23 @@ namespace DummyServer.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Branch> Get()
+        public ActionResult<IEnumerable<Branch>> Get()
         {
             return _dataStorage.Branches();
         }
 
         [HttpPost]
-        public void Push([FromBody] string name)
+        public IActionResult Push([FromBody] string name)
         {
             _dataStorage.AddBranch(name);
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete(string name)
+        public IActionResult Delete(string name)
         {
             _dataStorage.DeleteBranch(name);
+            return Ok();
         }
     }
 }

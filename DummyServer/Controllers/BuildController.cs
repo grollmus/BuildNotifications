@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildNotifications.Plugin.DummyServer;
-using BuildNotifications.PluginInterfaces.Builds;
 using DummyServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +32,7 @@ namespace DummyServer.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] WebBuild webBuild)
+        public IActionResult Post([FromBody] WebBuild webBuild)
         {
             var existingBuild = _dataStorage.Builds().FirstOrDefault(b => b.Id.Equals(webBuild.Id));
             if (existingBuild == null)
@@ -44,50 +43,31 @@ namespace DummyServer.Controllers
                 existingBuild.Reason = webBuild.Reason;
                 existingBuild.LastChangedTime = DateTime.Now;
             }
+
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete(string id)
+        public IActionResult Delete(string id)
         {
             _dataStorage.DeleteBuild(id);
+            return Ok();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(Permutate))]
-        public void Permutate() => _dataStorage.PermutateBuilds();
+        public IActionResult Permutate()
+        {
+            _dataStorage.PermutateBuilds();
+            return Ok();
+        }
 
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(RandomizeBuildStatus))]
-        public void RandomizeBuildStatus() => _dataStorage.RandomizeBuildStatus();
-    }
-
-    public class WebBuild
-    {
-        public WebBuild(Build build)
+        public IActionResult RandomizeBuildStatus()
         {
-            BranchName = build.BranchName;
-            DefinitionName = build.Definition.Name;
-            UserName = build.RequestedBy.UniqueName;
-            Id = build.Id;
-            Status = build.Status;
-            Reason = build.Reason;
+            _dataStorage.RandomizeBuildStatus();
+            return Ok();
         }
-
-        public WebBuild()
-        {
-            // needed for serialization   
-        }
-
-        public string BranchName { get; set; }
-
-        public string DefinitionName { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Id { get; set; }
-
-        public BuildStatus Status { get; set; }
-
-        public BuildReason Reason { get; set; }
     }
 }

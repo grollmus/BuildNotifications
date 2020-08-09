@@ -7,7 +7,7 @@ namespace DummyServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DefinitionController
+    public class DefinitionController : ControllerBase
     {
         private readonly IDataStorage _dataStorage;
 
@@ -17,21 +17,23 @@ namespace DummyServer.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<BuildDefinition> Get()
+        public ActionResult<IEnumerable<BuildDefinition>> Get()
         {
             return _dataStorage.BuildDefinitions();
         }
 
         [HttpPost]
-        public void Push([FromBody] string name)
+        public IActionResult Push([FromBody] string name)
         {
             _dataStorage.AddDefinition(name);
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete(string name)
+        public IActionResult Delete(string name)
         {
             _dataStorage.DeleteDefinition(name);
+            return Ok();
         }
     }
 }
