@@ -29,6 +29,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         [InlineData("6/28/2020")]
         [InlineData("7/14/2020")]
         [InlineData("RandomText")]
+        [InlineData("Today")]
         public void CriteriaDoesExcludeBuildForGivenInput(string input) => ExpectNoMatch(ReferenceDate, input);
 
         [Theory]
@@ -42,14 +43,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         [InlineData("  6/1/2020  ")]
         [InlineData("")]
         [InlineData("   ")]
-        [InlineData("Yesterday")]
         public void CriteriaDoesIncludeBuildForGivenInput(string input) => ExpectMatch(ReferenceDate, input);
 
         [Fact]
-        public void CriteriaDoesIncludeBuildForYesterdayInputThatMatchesToday() => ExpectMatch(DateTime.Today.ToString("d", TestCulture), "Yesterday");
+        public void CriteriaDoesIncludeBuildForYesterdayInputThatMatchesToday() => ExpectMatch(ReferenceToday.ToString("d", TestCulture), "Yesterday");
 
         [Fact]
-        public void CriteriaDoesExcludeBuildForYesterdayInputThatDoesNotMatchToday() => ExpectNoMatch((DateTime.Today - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Yesterday");
+        public void CriteriaDoesExcludeBuildForYesterdayInputThatDoesNotMatchToday() => ExpectNoMatch((ReferenceToday - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Yesterday");
         
         [Theory]
         [InlineData("6/14/2020")]

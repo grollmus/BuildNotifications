@@ -53,16 +53,16 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         public void CriteriaDoesIncludeBuildForGivenInput(string input) => ExpectMatch(ReferenceDate, input);
 
         [Fact]
-        public void CriteriaDoesIncludeBuildForTodayInputThatMatchesToday() => ExpectMatch(DateTime.Today.ToString("d", TestCulture), "Today");
+        public void CriteriaDoesIncludeBuildForTodayInputThatMatchesToday() => ExpectMatch(ReferenceToday.ToString("d", TestCulture), "Today");
 
         [Fact]
-        public void CriteriaDoesExcludeBuildForTodayInputThatDoesNotMatchToday() => ExpectNoMatch((DateTime.Today - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Today");
+        public void CriteriaDoesExcludeBuildForTodayInputThatDoesNotMatchToday() => ExpectNoMatch((ReferenceToday - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Today");
 
         [Fact]
-        public void CriteriaDoesIncludeBuildForYesterdayInputThatMatchesYesterday() => ExpectMatch((DateTime.Today - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Yesterday");
+        public void CriteriaDoesIncludeBuildForYesterdayInputThatMatchesYesterday() => ExpectMatch((ReferenceToday - TimeSpan.FromDays(1)).ToString("d", TestCulture), "Yesterday");
 
         [Fact]
-        public void CriteriaDoesExcludeBuildForYesterdayInputThatDoesNotMatchYesterday() => ExpectNoMatch(DateTime.Today.ToString("d", TestCulture), "Yesterday");
+        public void CriteriaDoesExcludeBuildForYesterdayInputThatDoesNotMatchYesterday() => ExpectNoMatch(ReferenceToday.ToString("d", TestCulture), "Yesterday");
         
         [Theory]
         [InlineData("6/15/2020")]
