@@ -8,13 +8,13 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal abstract class BaseStringCriteria : BaseSearchCriteria
     {
-        protected BaseStringCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline) : base(localizedKeyword, localizedDescription, pipeline)
+        protected BaseStringCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
         
         private readonly HashSet<string> _validValues = new HashSet<string>();
 
-        private readonly StringComparer _stringComparer = StringComparer.FromComparison(StringComparison.InvariantCultureIgnoreCase);
+        private readonly StringComparer _stringComparer = StringComparer.FromComparison(StringComparison.CurrentCultureIgnoreCase);
 
         protected readonly StringMatcher StringMatcher = new StringMatcher();
 

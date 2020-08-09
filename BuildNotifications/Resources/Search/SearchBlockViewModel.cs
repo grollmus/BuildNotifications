@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.PluginInterfaces.Builds.Search;
@@ -17,14 +18,16 @@ namespace BuildNotifications.Resources.Search
             ApplySuggestionAction = applySuggestionAction;
         }
 
-        public string Description => SearchCriteria.LocalizedDescription;
+        public string Description => SearchCriteria.LocalizedDescription(CultureInfo.CurrentCulture);
 
         public ObservableCollection<SearchBlockExampleViewModel> Examples { get; } = new ObservableCollection<SearchBlockExampleViewModel>();
 
         public bool HasSuggestions => Suggestions.Any(x => !x.IsRemoving);
 
-        public string Keyword => SearchCriteria.LocalizedKeyword;
+        public string Keyword => SearchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture);
+
         public ISearchCriteria SearchCriteria { get; }
+
         protected Action<SearchSuggestionViewModel> ApplySuggestionAction { get; }
 
         public SearchSuggestionViewModel? SelectedSuggestion
@@ -81,7 +84,7 @@ namespace BuildNotifications.Resources.Search
 
             foreach (var example in searchCriteria.LocalizedExamples)
             {
-                searchBlockViewModel.Examples.Add(new SearchBlockExampleViewModel($" {searchCriteria.LocalizedKeyword}: ", example));
+                searchBlockViewModel.Examples.Add(new SearchBlockExampleViewModel($" {searchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture)}: ", example));
             }
 
             return searchBlockViewModel;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using BuildNotifications.PluginInterfaces.Builds.Search;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search
@@ -7,7 +8,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
     {
         public SearchCriteriaAsSuggestion(ISearchCriteria searchCriteria)
         {
-            Suggestion = searchCriteria.LocalizedKeyword + SearchEngine.KeywordSeparator;
+            Suggestion = searchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture) + SearchEngine.KeywordSeparator;
         }
 
         public string Suggestion { get; }

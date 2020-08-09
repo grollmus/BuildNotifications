@@ -10,7 +10,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class DuringCriteria : BaseDateSearchCriteria
     {
-        public DuringCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaDuringKeyword, StringLocalizer.SearchCriteriaDuringDescription, pipeline)
+        public DuringCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
 
@@ -50,6 +50,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 yield return suggestion;
             }
         }
+
+        public override string LocalizedKeyword(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaDuringKeyword;
+
+        public override string LocalizedDescription(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaDuringDescription;
 
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {

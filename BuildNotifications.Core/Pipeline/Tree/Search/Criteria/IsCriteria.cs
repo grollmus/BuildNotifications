@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Text;
@@ -9,7 +10,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class IsCriteria : BaseSearchCriteria
     {
-        public IsCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaIsKeyword, StringLocalizer.SearchCriteriaIsDescription, pipeline)
+        public IsCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
 
@@ -20,7 +21,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         private static readonly string PartiallySucceeded = StringLocalizer.SearchCriteriaIsPartiallySucceeded;
         private static readonly string InProgress = StringLocalizer.SearchCriteriaIsInProgress;
         private static readonly string Pending = StringLocalizer.SearchCriteriaIsPending;
-        
+
         // Reason
         private static readonly string Manual = StringLocalizer.SearchCriteriaIsManual;
         private static readonly string Ci = StringLocalizer.SearchCriteriaIsCi;
@@ -48,6 +49,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         };
 
         private readonly StringComparer _stringComparer = StringComparer.FromComparison(StringComparison.InvariantCultureIgnoreCase);
+
+        public override string LocalizedKeyword(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaIsKeyword;
+
+        public override string LocalizedDescription(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaIsDescription;
 
         protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher)
         {

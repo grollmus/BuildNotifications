@@ -1,4 +1,5 @@
-﻿using BuildNotifications.PluginInterfaces.Builds;
+﻿using System.Globalization;
+using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Search;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search
@@ -20,6 +21,6 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
 
         public bool IsBuildIncluded(IBuild build) => SearchCriteria.IsBuildIncluded(build, SearchedTerm);
 
-        public override string ToString() => $"{SearchCriteria.LocalizedKeyword}: {EnteredText}";
+        public override string ToString() => $"{SearchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture)}: {EnteredText}";
     }
 }

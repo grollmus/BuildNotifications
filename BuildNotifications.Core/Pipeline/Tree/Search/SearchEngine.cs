@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using BuildNotifications.PluginInterfaces.Builds.Search;
@@ -71,12 +72,12 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
                     continue;
 
                 var asString = sb.ToString();
-                var matchingCriteria = _searchCriteria.FirstOrDefault(c => asString.EndsWith($"{c.LocalizedKeyword}:", StringComparison.OrdinalIgnoreCase));
+                var matchingCriteria = _searchCriteria.FirstOrDefault(c => asString.EndsWith($"{c.LocalizedKeyword(CultureInfo.CurrentCulture)}:", StringComparison.OrdinalIgnoreCase));
 
                 if (matchingCriteria == null)
                     continue;
 
-                var keywordLength = $"{matchingCriteria.LocalizedKeyword}:".Length;
+                var keywordLength = $"{matchingCriteria.LocalizedKeyword(CultureInfo.CurrentCulture)}:".Length;
 
                 sb.Remove(sb.Length - keywordLength, keywordLength);
 
