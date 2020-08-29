@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -124,7 +125,7 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message("Done fetching branches").Write();
         }
 
-        private async Task FetchBuilds()
+        private async Task FetchBuilds(UpdateModes updateMode)
         {
             Log.Debug().Message("Fetching builds").Write();
             foreach (var project in _projectList)
@@ -133,14 +134,17 @@ namespace BuildNotifications.Core.Pipeline
                 {
                     Log.Debug().Message($"Fetching builds for project \"{project.Name}\". ID: \"{project.Guid}\"").Write();
 
-                    if (_lastUpdate.HasValue)
+                    IAsyncEnumerable<IBuild> builds;
+                    if (_lastUpdate.HasValue && !updateMode.HasFlag(UpdateModes.AllBuilds))
+                    {
                         Log.Debug().Message($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"").Write();
+                        builds = project.FetchBuildsChangedSince(_lastUpdate.Value);
+                    }
                     else
+                    {
                         Log.Debug().Message($"Fetching all builds for project \"{project.Name}\"").Write();
-
-                    var builds = _lastUpdate.HasValue
-                        ? project.FetchBuildsChangedSince(_lastUpdate.Value)
-                        : project.FetchAllBuilds();
+                        builds = project.FetchAllBuilds();
+                    }
 
                     var count = 0;
                     await foreach (var build in builds)
@@ -277,7 +281,7 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message($"Applied search \"{searchTerm}\".").Write();
         }
 
-        public async Task Update()
+        public async Task Update(UpdateModes mode = UpdateModes.DeltaBuilds)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -287,7 +291,7 @@ namespace BuildNotifications.Core.Pipeline
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
                 var branchTask = FetchBranches();
                 var definitionsTask = FetchDefinitions();
-                var buildsTask = FetchBuilds();
+                var buildsTask = FetchBuilds(mode);
 
                 await Task.WhenAll(branchTask, definitionsTask, buildsTask);
 

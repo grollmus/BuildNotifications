@@ -36,6 +36,7 @@ namespace BuildNotifications.Core.Pipeline
         /// Updates the pipeline i.e. fetch data from projects, group builds and
         /// raise notifications.
         /// </summary>
-        Task Update();
+        /// <param name="mode">Mode to use for update.</param>
+        Task Update(UpdateModes mode = UpdateModes.DeltaBuilds);
     }
 }

@@ -565,7 +565,7 @@ namespace BuildNotifications.ViewModel
 
                 _isInitialFetch = false;
 
-                await _coreSetup.Update();
+                await _coreSetup.Update(_previouslyFetchedAnyBuilds ? UpdateModes.DeltaBuilds : UpdateModes.AllBuilds);
                 if (_postPipelineUpdateTask != null)
                     await _postPipelineUpdateTask;
 
