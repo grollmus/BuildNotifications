@@ -123,3 +123,6 @@ dotnet_diagnostic.CA1065.severity = suggestion
 # CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
 dotnet_diagnostic.CA1826.severity = suggestion
 dotnet_diagnostic.CA1826.severity = suggestion
+
+# CA1070: Do not declare event fields as virtual
+dotnet_diagnostic.CA1070.severity = suggestion

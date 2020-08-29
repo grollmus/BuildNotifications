@@ -55,9 +55,6 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 
         public void Add(INotificationProcessor processor)
         {
-            if (processor == null)
-                return;
-
             Log.Info().Message($"Adding NotificationProcessor \"{processor}\"").Write();
             try
             {

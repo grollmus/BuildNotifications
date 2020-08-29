@@ -15,7 +15,7 @@ namespace BuildNotifications.Resources.BuildTree.Build
 
         public static IsLargeToBuildSizeConverter Instance { get; } = new IsLargeToBuildSizeConverter();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             var isLarge = value != null && (bool) value;
             return isLarge ? _largeSize : _smallSize;

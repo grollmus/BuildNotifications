@@ -15,7 +15,7 @@ namespace BuildNotifications
         protected override void Write(LogEventInfo logEvent)
         {
             var logMessage = Layout.Render(logEvent);
-            var source = logEvent?.LoggerName?.Split('.').Last() ?? "";
+            var source = logEvent.LoggerName?.Split('.').Last() ?? "";
             var notification = new ErrorNotification(logMessage) {Source = source};
             ErrorOccured?.Invoke(this, new ErrorNotificationEventArgs(notification));
         }

@@ -70,9 +70,6 @@ namespace BuildNotifications.Core.Pipeline
 
         private void CutTree(IBuildTreeNode tree)
         {
-            if (tree == null)
-                return;
-
             var buildChildrenToRemove = tree.Children.OfType<IBuildNode>()
                 .OrderByDescending(x => x.Build.LastChangedTime ?? DateTime.MinValue)
                 .Skip(_configuration.BuildsToShow)
