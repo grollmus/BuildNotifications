@@ -11,6 +11,7 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public void UpdateWith(IBranch branch)
         {
+            // Dummy implementation
         }
     }
 }

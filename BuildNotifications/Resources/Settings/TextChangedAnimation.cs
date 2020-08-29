@@ -23,10 +23,12 @@ namespace BuildNotifications.Resources.Settings
 
             AssociatedObject.Foreground = brush;
 
-            var tweens = new List<Timeline>();
-            tweens.Add(brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(1).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(1).In(Duration).Ease(Easing.ExpoEaseOut));
+            var tweens = new List<Timeline>
+            {
+                brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration),
+                scaleTransform.Tween(x => x.ScaleX).To(1).In(Duration).Ease(Easing.ExpoEaseOut),
+                scaleTransform.Tween(x => x.ScaleY).To(1).In(Duration).Ease(Easing.ExpoEaseOut)
+            };
 
             var globalTweenHandler = App.GlobalTweenHandler;
             globalTweenHandler.ClearTweensOf(AssociatedObject);

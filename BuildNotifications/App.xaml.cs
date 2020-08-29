@@ -44,10 +44,8 @@ namespace BuildNotifications
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (e.Args.Any(a => a.Contains(UriSchemeRegistration.UriScheme, StringComparison.OrdinalIgnoreCase)))
-                GlobalDiagnosticsContext.Set("application", "invokedFromProtocol");
-            else
-                GlobalDiagnosticsContext.Set("application", "default");
+            var uriSchemeInArgs = e.Args.Any(a => a.Contains(UriSchemeRegistration.UriScheme, StringComparison.OrdinalIgnoreCase));
+            GlobalDiagnosticsContext.Set("application", uriSchemeInArgs ? "invokedFromProtocol" : "default");
 
             if (ShouldBeMinimized(e.Args))
             {

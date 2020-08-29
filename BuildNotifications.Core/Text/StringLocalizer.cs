@@ -69,8 +69,7 @@ namespace BuildNotifications.Core.Text
             if (string.IsNullOrEmpty(key))
                 return "";
 
-            if (culture == null)
-                culture = CurrentCulture;
+            culture ??= CurrentCulture;
 
             if (!Cache.TryGetValue(culture, out var dictionary) && !Cache.TryGetValue(culture.Parent, out dictionary))
                 dictionary = _defaultDictionary;
