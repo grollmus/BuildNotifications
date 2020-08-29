@@ -10,7 +10,7 @@ namespace BuildNotifications.Resources.Settings
     {
         public static OptionTemplateSelector Instance { get; } = new OptionTemplateSelector();
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             var element = container as FrameworkElement;
 

@@ -15,7 +15,7 @@ namespace BuildNotifications.ViewModel.Utils
         public static NullToVisibilityConverter Instance { get; } = new NullToVisibilityConverter(false);
         public static NullToVisibilityConverter Inverted { get; } = new NullToVisibilityConverter(true);
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
                 return _inverted ? Visibility.Visible : Visibility.Collapsed;

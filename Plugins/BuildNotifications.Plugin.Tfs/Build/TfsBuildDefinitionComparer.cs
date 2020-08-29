@@ -4,10 +4,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
 {
     internal class TfsBuildDefinitionComparer : IEqualityComparer<TfsBuildDefinition>
     {
-        public bool Equals(TfsBuildDefinition x, TfsBuildDefinition y)
-        {
-            return x?.NativeId == y?.NativeId;
-        }
+        public bool Equals(TfsBuildDefinition? x, TfsBuildDefinition? y) => x?.NativeId == y?.NativeId;
 
         public int GetHashCode(TfsBuildDefinition obj)
         {

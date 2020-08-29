@@ -23,13 +23,13 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         public GroupDefinition ForGroupDefinition { get; }
 
-        public SortingDefinition SelectedSortingDefinition
+        public SortingDefinition? SelectedSortingDefinition
         {
-            get => SelectedViewModel.SortingDefinition;
+            get => SelectedViewModel?.SortingDefinition;
             set => SelectedViewModel = Sortings.First(x => Equals(x.SortingDefinition, value));
         }
 
-        public SortingDefinitionViewModel SelectedViewModel
+        public SortingDefinitionViewModel? SelectedViewModel
         {
             get => _selectedViewModel;
             set

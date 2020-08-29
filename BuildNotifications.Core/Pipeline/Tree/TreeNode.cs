@@ -33,7 +33,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public IEnumerable<IBuildTreeNode> Children => _childList;
 
-        public virtual bool Equals(IBuildTreeNode other)
+        public virtual bool Equals(IBuildTreeNode? other)
         {
             if (other == null)
                 return false;

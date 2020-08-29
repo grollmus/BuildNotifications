@@ -26,10 +26,7 @@ namespace BuildNotifications.ViewModel.Utils
         {
             RemoveDelay = removeDelay;
             _list = new ObservableCollection<T>(initialValues);
-            _list.CollectionChanged += (sender, args) =>
-            {
-                CollectionChanged?.Invoke(sender, args);
-            };
+            _list.CollectionChanged += (sender, args) => { CollectionChanged?.Invoke(sender, args); };
 
             _sortFunction = _list;
         }
@@ -72,9 +69,6 @@ namespace BuildNotifications.ViewModel.Utils
 
         private void Sort()
         {
-            if (_sortFunction == null)
-                return;
-
             var sortedItemsList = _sortFunction.ToList();
 
             foreach (var item in sortedItemsList)
@@ -90,8 +84,7 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Add(T item)
         {
-            if (item != null)
-                item.IsRemoving = false;
+            item.IsRemoving = false;
             _list.Add(item);
 
             Sort();

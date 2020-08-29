@@ -45,7 +45,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         public Brush Convert(BuildTreeNodeViewModel node)
         {
-            if (node != null && node.ShouldColorByStatus)
+            if (node.ShouldColorByStatus)
                 return Convert(node.BuildStatus);
             return DefaultBrush;
         }

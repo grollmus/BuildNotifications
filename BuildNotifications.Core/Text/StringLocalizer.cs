@@ -23,11 +23,14 @@ namespace BuildNotifications.Core.Text
             foreach (var culture in LocalizedCultures())
             {
                 var resourceSet = resourceManager.GetResourceSet(culture, true, true);
-                var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
-                    .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
-                    .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
+                if (resourceSet != null)
+                {
+                    var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
+                        .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
+                        .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
 
-                Cache.Add(culture, resourceDictionary);
+                    Cache.Add(culture, resourceDictionary);
+                }
             }
 
             _defaultDictionary = Cache[DefaultCulture];

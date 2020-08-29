@@ -518,7 +518,7 @@ namespace BuildNotifications.ViewModel
                 updater ??= new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
 
                 var result = await updater.CheckForUpdates();
-                if (result != null)
+                if (result?.ReleasesToApply != null)
                 {
                     if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))
                         currentVersion = new SemVersion(0);
@@ -544,7 +544,7 @@ namespace BuildNotifications.ViewModel
 
         private void UpdateNow()
         {
-            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 

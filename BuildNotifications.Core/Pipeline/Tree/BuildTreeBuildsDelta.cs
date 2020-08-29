@@ -7,7 +7,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class BuildTreeBuildsDelta : IBuildTreeBuildsDelta
     {
-        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, IReadOnlyDictionary<CacheKey, BuildStatus> previousStatesOfBuildIds, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
+        public BuildTreeBuildsDelta(IEnumerable<IBuildNode> currentBuildNodes, IReadOnlyDictionary<CacheKey, BuildStatus>? previousStatesOfBuildIds, PartialSucceededTreatmentMode partialSucceededTreatmentMode)
         {
             // without information of the previous state, a delta is not possible to calculate
             if (previousStatesOfBuildIds == null)

@@ -30,11 +30,11 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             BuildDefinitionWhitelist = new StringCollectionOptionViewModel(StringLocalizer.BuildDefinitionWhitelist, model.BuildDefinitionWhitelist);
 
             var connections = configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.SourceControl).ToList();
-            var connection = connections.FirstOrDefault(c => c.Name == model.SourceControlConnectionName);
+            var connection = connections.FirstOrDefault(c => c.Name == model.SourceControlConnectionName) ?? new ConnectionData();
             SourceControlConnection = new ConnectionOptionViewModel(StringLocalizer.SourceControlConnectionNames, connections, connection);
 
             connections = configuration.Connections.Where(c => c.ConnectionType == ConnectionPluginType.Build).ToList();
-            connection = connections.FirstOrDefault(c => c.Name == model.BuildConnectionNames.FirstOrDefault());
+            connection = connections.FirstOrDefault(c => c.Name == model.BuildConnectionNames.FirstOrDefault()) ?? new ConnectionData();
             BuildConnection = new ConnectionOptionViewModel(StringLocalizer.BuildConnectionNames, connections, connection);
 
             foreach (var option in Options)

@@ -21,7 +21,7 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             private set => SetValue(DisplayAddMessagePropertyKey, value);
         }
 
-        public IEnumerable<IButtonNavigationItem> Items
+        public IEnumerable<IButtonNavigationItem>? Items
         {
             get => (IEnumerable<IButtonNavigationItem>) GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
@@ -48,7 +48,7 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             if (items == null)
                 return false;
 
-            return !Items.Any();
+            return !items.Any();
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

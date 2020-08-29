@@ -10,7 +10,7 @@ namespace BuildNotifications.Resources.Text
     {
         public static StringKeyToLocalizedTextConverter Instance { get; } = new StringKeyToLocalizedTextConverter();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             var asString = value?.ToString();
             if (asString == null)

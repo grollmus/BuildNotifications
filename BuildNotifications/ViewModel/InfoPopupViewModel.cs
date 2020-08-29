@@ -33,7 +33,7 @@ namespace BuildNotifications.ViewModel
             await Task.Delay(TimeSpan.FromSeconds(3));
 
             var result = await _appUpdater.CheckForUpdates();
-            if (result == null)
+            if (result?.ReleasesToApply == null)
                 return false;
 
             if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))

@@ -67,7 +67,8 @@ namespace BuildNotifications.Plugin.Tfs.Build
                     continue;
 
                 var definition = _knownDefinitions.FirstOrDefault(d => d.Id == tfsBuild.Definition.Id);
-                links.UpdateLinks(definition);
+                if (definition != null)
+                    links.UpdateLinks(definition);
             }
         }
 
