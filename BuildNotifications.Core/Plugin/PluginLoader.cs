@@ -75,7 +75,7 @@ namespace BuildNotifications.Core.Plugin
 
                 foreach (var dll in files.Where(NotIgnored))
                 {
-                    if (Path.GetFileName(dll)?.Contains("plugin", StringComparison.OrdinalIgnoreCase) != true)
+                    if (!Path.GetFileName(dll).Contains("plugin", StringComparison.OrdinalIgnoreCase))
                     {
                         Log.Debug().Message($"Found file \"{dll}\" but is skipped, as it does not contain string \"plugin\".").Write();
                         continue;
