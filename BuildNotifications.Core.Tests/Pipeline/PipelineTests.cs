@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Cache;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 using BuildNotifications.Core.Tests.Pipeline.Tree;
@@ -25,6 +26,30 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 yield return build;
             }
+        }
+
+        [Fact]
+        public void ClearProjectsShouldClearAllLists()
+        {
+            // Arrange
+            var treeBuilder = Substitute.For<ITreeBuilder>();
+            var configuration = Substitute.For<IConfiguration>();
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+            var sut = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);
+
+            var buildCache = Substitute.For<IPipelineCache<IBuild>>();
+            var branchCache = Substitute.For<IPipelineCache<IBranch>>();
+            var definitionCache = Substitute.For<IPipelineCache<IBuildDefinition>>();
+            sut.ReplaceCaches(buildCache, branchCache, definitionCache);
+
+            // Act
+            sut.ClearProjects();
+
+            // Assert
+            userIdentityList.IdentitiesOfCurrentUser.Received(1).Clear();
+            buildCache.Received(1).Clear();
+            branchCache.Received(1).Clear();
+            definitionCache.Received(1).Clear();
         }
 
         [Fact]

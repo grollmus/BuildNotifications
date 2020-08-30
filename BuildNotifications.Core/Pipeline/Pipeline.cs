@@ -323,14 +323,21 @@ namespace BuildNotifications.Core.Pipeline
             Log.Info().Message($"Update done in {stopWatch.ElapsedMilliseconds} ms.").Write();
         }
 
+        internal void ReplaceCaches(IPipelineCache<IBuild> buildCache, IPipelineCache<IBranch> branchCache, IPipelineCache<IBuildDefinition> definitionCache)
+        {
+            _buildCache = buildCache;
+            _branchCache = branchCache;
+            _definitionCache = definitionCache;
+        }
+
         public IPipelineNotifier Notifier => _pipelineNotifier;
 
         private readonly ITreeBuilder _treeBuilder;
         private readonly IConfiguration _configuration;
         private readonly IUserIdentityList _userIdentityList;
-        private readonly IPipelineCache<IBuild> _buildCache;
-        private readonly IPipelineCache<IBranch> _branchCache;
-        private readonly IPipelineCache<IBuildDefinition> _definitionCache;
+        private IPipelineCache<IBuild> _buildCache;
+        private IPipelineCache<IBranch> _branchCache;
+        private IPipelineCache<IBuildDefinition> _definitionCache;
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private readonly NotificationFactory _notificationFactory;
