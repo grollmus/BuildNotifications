@@ -544,7 +544,7 @@ namespace BuildNotifications.ViewModel
 
         private void UpdateNow()
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -627,7 +627,7 @@ namespace BuildNotifications.ViewModel
         public void Dispose()
         {
             _trayIcon.Dispose();
-            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource?.Dispose();
             _postPipelineUpdateTask?.Dispose();
             _fileWatch.Dispose();
         }
@@ -642,7 +642,7 @@ namespace BuildNotifications.ViewModel
         private bool _previouslyFetchedAnyBuilds;
         private bool _showSights;
         private bool _blurView;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
         private bool _keepUpdating;
         private Task? _postPipelineUpdateTask;
         private BuildTreeViewModel? _buildTree;

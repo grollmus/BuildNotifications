@@ -65,7 +65,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return resolvedBrush;
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
             {
