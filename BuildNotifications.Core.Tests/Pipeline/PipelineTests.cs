@@ -29,6 +29,113 @@ namespace BuildNotifications.Core.Tests.Pipeline
         }
 
         [Fact]
+        public async Task BranchesShouldNotBeMergedWhenComingFromDifferentProviders()
+        {
+            IBuild BuildOnBranchA()
+            {
+                var build = Substitute.For<IBuild>();
+                build.Id.Returns("1");
+                build.Definition.Returns(new MockBuildDefinition());
+                build.BranchName.Returns("a");
+                return build;
+            }
+
+            IBuild BuildOnBranchB()
+            {
+                var build = Substitute.For<IBuild>();
+                build.Id.Returns("2");
+                build.Definition.Returns(new MockBuildDefinition());
+                build.BranchName.Returns("b");
+                return build;
+            }
+
+            IBuild BuildOnBranchC()
+            {
+                var build = Substitute.For<IBuild>();
+                build.Id.Returns("3");
+                build.Definition.Returns(new MockBuildDefinition());
+                build.BranchName.Returns("c");
+                return build;
+            }
+
+            IBranchProvider BranchProvider(params IBranch[] branches)
+            {
+                var branchProvider = Substitute.For<IBranchProvider>();
+                branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
+                return branchProvider;
+            }
+
+            IBuildProvider BuildProvider(params IBuild[] builds)
+            {
+                var buildProvider = Substitute.For<IBuildProvider>();
+                buildProvider.FetchAllBuilds().Returns(x => ToAsync(builds));
+                buildProvider.FetchExistingBuildDefinitions().Returns(x => ToAsync(new[] {new MockBuildDefinition()}));
+                return buildProvider;
+            }
+
+            // Arrange
+            var buildOnBranchA = BuildOnBranchA();
+            var buildOnBranchB = BuildOnBranchB();
+            var buildOnBranchC = BuildOnBranchC();
+
+            var buildsOfProjectA = new[] {buildOnBranchA, buildOnBranchB};
+            var buildsOfProjectB = new[] {buildOnBranchC};
+
+            var configuration = Substitute.For<IConfiguration>();
+            configuration.BuildsToShow.Returns(int.MaxValue);
+
+            var treeBuilder = TreeBuilderTests.Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
+            var userIdentityList = Substitute.For<IUserIdentityList>();
+
+            var sut = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);
+
+            var branchProviderA = BranchProvider(new MockBranch("a"), new MockBranch("b"));
+            var branchProviderB = BranchProvider(new MockBranch("c"));
+
+            var buildProviderA = BuildProvider(buildsOfProjectA);
+            var buildProviderB = BuildProvider(buildsOfProjectB);
+
+            var projectA = new Project(buildProviderA, branchProviderA, Substitute.For<IProjectConfiguration>())
+            {
+                Name = "a"
+            };
+            sut.AddProject(projectA);
+
+            var projectB = new Project(buildProviderB, branchProviderB, Substitute.For<IProjectConfiguration>())
+            {
+                Name = "b"
+            };
+            sut.AddProject(projectB);
+
+            IBuildTree? tree = null;
+            sut.Notifier.Updated += (s, e) => tree = e.Tree;
+
+            // Act
+            await sut.Update();
+
+            // Assert
+            Assert.NotNull(tree);
+
+            var resultTree = tree!;
+
+            Assert.Equal(2, resultTree.Children.Count());
+
+            var subTreeA = resultTree.Children.OfType<SourceGroupNode>().First(x => x.SourceName == projectA.Name);
+            var branchNode = subTreeA.Children.OfType<BranchGroupNode>().First(x => x.BranchName == new MockBranch("a").DisplayName);
+            var definitionNode = branchNode.Children.OfType<DefinitionGroupNode>().Single();
+            Assert.Single(definitionNode.Children.OfType<BuildNode>());
+
+            branchNode = subTreeA.Children.OfType<BranchGroupNode>().First(x => x.BranchName == new MockBranch("b").DisplayName);
+            definitionNode = branchNode.Children.OfType<DefinitionGroupNode>().Single();
+            Assert.Single(definitionNode.Children.OfType<BuildNode>());
+
+            var subTreeB = resultTree.Children.OfType<SourceGroupNode>().First(x => x.SourceName == projectB.Name);
+            branchNode = subTreeB.Children.OfType<BranchGroupNode>().First(x => x.BranchName == new MockBranch("c").DisplayName);
+            definitionNode = branchNode.Children.OfType<DefinitionGroupNode>().Single();
+            Assert.Single(definitionNode.Children.OfType<BuildNode>());
+        }
+
+        [Fact]
         public void ClearProjectsShouldClearAllLists()
         {
             // Arrange
