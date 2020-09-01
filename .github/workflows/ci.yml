@@ -23,7 +23,7 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
       
     - name: Download Coverage reporter
-      run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/4.0.5/codacy-coverage-reporter-4.0.5-assembly.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
+      run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/11.2.2/codacy-coverage-reporter-assembly-11.2.2.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 
     - name: Install coverage tools
       run: dotnet tool install --global coverlet.console

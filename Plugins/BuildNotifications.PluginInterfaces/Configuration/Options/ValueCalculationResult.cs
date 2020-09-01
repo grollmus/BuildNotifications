@@ -17,7 +17,7 @@
     }
 
     /// <summary>
-    /// Result of a asynchrous value calculation.
+    /// Result of a asynchronous value calculation.
     /// </summary>
     public static class ValueCalculationResult
     {
