@@ -13,9 +13,17 @@ jobs:
     
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: Setup Java for CodeCoverage results
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
         
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
+      
+    - name: Download Coverage reporter
+      run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/11.2.2/codacy-coverage-reporter-assembly-11.2.2.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 
     - name: Install coverage tools
       run: dotnet tool install --global coverlet.console
@@ -34,10 +42,7 @@ jobs:
     
     - name: Run tests
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln --no-build --configuration Release
-
+    
     - name: Upload code coverage results
-      uses: codacy/codacy-coverage-reporter-action@master
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: ./BuildNotifications.Core.Tests/coverage.cobertura.xml, ./BuildNotifications.Tests/coverage.cobertura.xml
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
       if: github.head_ref == 0
