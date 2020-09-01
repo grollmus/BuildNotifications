@@ -15,7 +15,7 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
             if (resource?.Value == null)
                 return $"[{id}]";
 
-            return resource.Value.ToString() ?? $"[{id}]";
+            return resource.Value.Value.ToString() ?? $"[{id}]";
         }
     }
 }
