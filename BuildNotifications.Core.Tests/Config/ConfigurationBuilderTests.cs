@@ -32,8 +32,8 @@ namespace BuildNotifications.Core.Tests.Config
             var userConfiguration = new Configuration();
             var connectionList = new List<ConnectionData>
             {
-                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build},
-                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl}
+                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build, PluginType = "TestPugin", PluginConfiguration = "{}"},
+                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl, PluginType = "TestPugin", PluginConfiguration = "{}"}
             };
             var projectList = new List<IProjectConfiguration>();
 
@@ -62,8 +62,8 @@ namespace BuildNotifications.Core.Tests.Config
 
             var connectionList = new List<ConnectionData>
             {
-                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build},
-                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl}
+                new ConnectionData {Name = "c1", ConnectionType = ConnectionPluginType.Build, PluginType = "TestPugin", PluginConfiguration = "{}"},
+                new ConnectionData {Name = "c2", ConnectionType = ConnectionPluginType.SourceControl, PluginType = "TestPugin", PluginConfiguration = "{}"}
             };
             var projectList = new List<IProjectConfiguration>();
 
