@@ -24,6 +24,12 @@ namespace BuildNotifications.Core.Config
             var predefinedConnections = _configurationSerializer.LoadPredefinedConnections(predefinedFilePath).ToList();
             foreach (var connection in predefinedConnections)
             {
+                if (connection.PluginType == null || connection.PluginConfiguration == null)
+                {
+                    Log.Warn().Message($"Connection '{connection.Name}' contains no data.").Write();
+                    continue;
+                }
+
                 if (config.Connections.All(c => c.Name != connection.Name))
                 {
                     Log.Debug().Message($"Adding predefined connection: {connection.Name}").Write();
@@ -50,13 +56,16 @@ namespace BuildNotifications.Core.Config
                 var predefinedConnectionNames = predefinedConnections.Select(p => p.Name).ToList();
                 if (!config.Projects.Any(p => AllConnectionsUsedInProject(p, predefinedConnectionNames)) && predefinedConnections.Any())
                 {
-                    var buildConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.Build);
-                    var sourceConnection = predefinedConnections.First(x => x.ConnectionType == ConnectionPluginType.SourceControl);
+                    var buildConnection = predefinedConnections.FirstOrDefault(x => x.ConnectionType == ConnectionPluginType.Build);
+                    var sourceConnection = predefinedConnections.FirstOrDefault(x => x.ConnectionType == ConnectionPluginType.SourceControl);
 
-                    var defaultProject = CreateDefaultProject(buildConnection, sourceConnection);
-                    Log.Debug().Message($"Adding project with predefined connections: {buildConnection.Name} and {sourceConnection.Name}").Write();
-                    config.Projects.Add(defaultProject);
-                    configDirty = true;
+                    if (buildConnection != null && sourceConnection != null)
+                    {
+                        var defaultProject = CreateDefaultProject(buildConnection, sourceConnection);
+                        Log.Debug().Message($"Adding project with predefined connections: {buildConnection.Name} and {sourceConnection.Name}").Write();
+                        config.Projects.Add(defaultProject);
+                        configDirty = true;
+                    }
                 }
             }
 
