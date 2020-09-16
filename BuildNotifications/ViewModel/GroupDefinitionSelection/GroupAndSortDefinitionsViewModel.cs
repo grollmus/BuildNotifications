@@ -33,7 +33,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         private void AddNoneAtEnd()
         {
-            var selectedGroupDefinition = Definitions.LastOrDefault()?.SelectedDefinition.GroupDefinition;
+            var selectedGroupDefinition = Definitions.LastOrDefault()?.SelectedDefinition?.GroupDefinition;
             if (selectedGroupDefinition == null || selectedGroupDefinition == GroupDefinition.None)
                 return;
 
@@ -102,7 +102,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         private void RemoveNoneElements()
         {
-            var allNoneItems = Definitions.Where(x => x.SelectedDefinition.GroupDefinition == GroupDefinition.None).ToList();
+            var allNoneItems = Definitions.Where(x => x.SelectedDefinition?.GroupDefinition == GroupDefinition.None).ToList();
             var lastItem = Definitions.Last();
 
             if (allNoneItems.Contains(lastItem))
@@ -155,7 +155,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
                 return;
 
             var newSelectedValue = e.NewValue.GroupDefinition;
-            var otherElementThatHasSameValue = Definitions.FirstOrDefault(x => !x.IsRemoving && x != sender && x.SelectedDefinition.GroupDefinition == newSelectedValue);
+            var otherElementThatHasSameValue = Definitions.FirstOrDefault(x => !x.IsRemoving && x != sender && x.SelectedDefinition?.GroupDefinition == newSelectedValue);
             var previousSelectedValue = sender.Definitions.First(x => x.GroupDefinition == e.OldValue.GroupDefinition);
 
             if (otherElementThatHasSameValue == null)
@@ -172,17 +172,19 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
         private IEnumerable<GroupDefinition> ToGroupDefinitions()
         {
-            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
+            foreach (var def in Definitions.Where(x => x.SelectedDefinition?.GroupDefinition != GroupDefinition.None))
             {
-                yield return def.SelectedDefinition.GroupDefinition;
+                if (def.SelectedDefinition?.GroupDefinition != null)
+                    yield return def.SelectedDefinition.GroupDefinition;
             }
         }
 
         private IEnumerable<SortingDefinition> ToSortDefinitions()
         {
-            foreach (var def in Definitions.Where(x => x.SelectedDefinition.GroupDefinition != GroupDefinition.None))
+            foreach (var def in Definitions.Where(x => x.SelectedDefinition?.GroupDefinition != GroupDefinition.None))
             {
-                yield return def.SelectedDefinition.SortingDefinitionsViewModel.SelectedViewModel.SortingDefinition;
+                if (def.SelectedDefinition?.SortingDefinitionsViewModel.SelectedViewModel != null)
+                    yield return def.SelectedDefinition.SortingDefinitionsViewModel.SelectedViewModel.SortingDefinition;
             }
         }
 

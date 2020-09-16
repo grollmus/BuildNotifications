@@ -18,8 +18,6 @@ namespace BuildNotifications.Plugin.Tfs.Build
         {
             _connection = connection;
             _projectId = projectId;
-
-            User = new TfsUser(_connection.AuthenticatedIdentity);
         }
 
         private int CalculateProgress(Timeline timeLine)
@@ -67,7 +65,8 @@ namespace BuildNotifications.Plugin.Tfs.Build
                     continue;
 
                 var definition = _knownDefinitions.FirstOrDefault(d => d.Id == tfsBuild.Definition.Id);
-                links.UpdateLinks(definition);
+                if (definition != null)
+                    links.UpdateLinks(definition);
             }
         }
 
@@ -93,7 +92,8 @@ namespace BuildNotifications.Plugin.Tfs.Build
             }
         }
 
-        public IUser User { get; }
+        private IUser? _user;
+        public IUser User => _user ??= new TfsUser(_connection.AuthenticatedIdentity);
 
         public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
         {

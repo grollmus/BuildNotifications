@@ -35,7 +35,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public GroupDefinitionViewModel SelectedDefinition
+        public GroupDefinitionViewModel? SelectedDefinition
         {
             get => _selectedDefinition;
             set
@@ -56,10 +56,14 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             }
         }
 
-        public SortingDefinition SelectedSortingDefinition
+        public SortingDefinition? SelectedSortingDefinition
         {
-            get => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition;
-            set => SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition = value;
+            get => SelectedDefinition?.SortingDefinitionsViewModel.SelectedSortingDefinition;
+            set
+            {
+                if (SelectedDefinition != null)
+                    SelectedDefinition.SortingDefinitionsViewModel.SelectedSortingDefinition = value;
+            }
         }
 
         public event EventHandler<GroupDefinitionsSelectionChangedEventArgs>? SelectedDefinitionChanged;

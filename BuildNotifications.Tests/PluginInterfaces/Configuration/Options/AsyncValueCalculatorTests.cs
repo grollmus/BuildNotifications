@@ -134,7 +134,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
                 {
                     Thread.Sleep(15);
                     tcs.SetResult(0);
-                });
+                }, ct);
 
                 return Task.FromException<IValueCalculationResult<int>>(new Exception("Test"));
             }

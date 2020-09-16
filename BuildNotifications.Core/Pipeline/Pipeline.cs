@@ -72,9 +72,6 @@ namespace BuildNotifications.Core.Pipeline
 
         private void CutTree(IBuildTreeNode tree)
         {
-            if (tree == null)
-                return;
-
             var buildChildrenToRemove = tree.Children.OfType<IBuildNode>()
                 .OrderByDescending(x => x.Build.LastChangedTime ?? DateTime.MinValue)
                 .Skip(_configuration.BuildsToShow)
@@ -129,7 +126,7 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message("Done fetching branches").Write();
         }
 
-        private async Task FetchBuilds()
+        private async Task FetchBuilds(UpdateModes updateMode)
         {
             Log.Debug().Message("Fetching builds").Write();
             foreach (var project in _projectList)
@@ -138,14 +135,17 @@ namespace BuildNotifications.Core.Pipeline
                 {
                     Log.Debug().Message($"Fetching builds for project \"{project.Name}\". ID: \"{project.Guid}\"").Write();
 
-                    if (_lastUpdate.HasValue)
-                        Log.Debug().Message($"Fetching all builds since {_lastUpdate.Value} for project \"{project.Name}\"").Write();
+                    IAsyncEnumerable<IBuild> builds;
+                    if (LastUpdate.HasValue && !updateMode.HasFlag(UpdateModes.AllBuilds))
+                    {
+                        Log.Debug().Message($"Fetching all builds since {LastUpdate.Value} for project \"{project.Name}\"").Write();
+                        builds = project.FetchBuildsChangedSince(LastUpdate.Value);
+                    }
                     else
+                    {
                         Log.Debug().Message($"Fetching all builds for project \"{project.Name}\"").Write();
-
-                    var builds = _lastUpdate.HasValue
-                        ? project.FetchBuildsChangedSince(_lastUpdate.Value)
-                        : project.FetchAllBuilds();
+                        builds = project.FetchAllBuilds();
+                    }
 
                     var count = 0;
                     await foreach (var build in builds)
@@ -173,7 +173,7 @@ namespace BuildNotifications.Core.Pipeline
             }
 
             Log.Debug().Message("Done fetching builds").Write();
-            _lastUpdate = DateTime.UtcNow;
+            LastUpdate = DateTime.UtcNow;
         }
 
         private async Task FetchDefinitions()
@@ -267,7 +267,7 @@ namespace BuildNotifications.Core.Pipeline
             _definitionCache.Clear();
             _buildCache.Clear();
             _branchCache.Clear();
-            _lastUpdate = null;
+            LastUpdate = null;
             _oldTree = null;
             _userIdentityList.IdentitiesOfCurrentUser.Clear();
         }
@@ -282,7 +282,7 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message($"Applied search \"{search}\".").Write();
         }
 
-        public async Task Update()
+        public async Task Update(UpdateModes mode = UpdateModes.DeltaBuilds)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -292,7 +292,7 @@ namespace BuildNotifications.Core.Pipeline
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
                 var branchTask = FetchBranches();
                 var definitionsTask = FetchDefinitions();
-                var buildsTask = FetchBuilds();
+                var buildsTask = FetchBuilds(mode);
 
                 await Task.WhenAll(branchTask, definitionsTask, buildsTask);
 
@@ -321,8 +321,14 @@ namespace BuildNotifications.Core.Pipeline
 
             _oldTree = treeResult.BuildTree;
             stopWatch.Stop();
-            LastUpdate = DateTime.Now;
             Log.Info().Message($"Update done in {stopWatch.ElapsedMilliseconds} ms.").Write();
+        }
+
+        internal void ReplaceCaches(IPipelineCache<IBuild> buildCache, IPipelineCache<IBranch> branchCache, IPipelineCache<IBuildDefinition> definitionCache)
+        {
+            _buildCache = buildCache;
+            _branchCache = branchCache;
+            _definitionCache = definitionCache;
         }
 
         public IReadOnlyList<IBuild> CachedBuilds() => _buildCache.ContentCopy().ToList();
@@ -331,20 +337,19 @@ namespace BuildNotifications.Core.Pipeline
 
         public IReadOnlyList<IBranch> CachedBranches() => _branchCache.ContentCopy().ToList();
 
-        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+        public DateTime? LastUpdate { get; private set; }
 
         public IPipelineNotifier Notifier => _pipelineNotifier;
 
         private readonly ITreeBuilder _treeBuilder;
         private readonly IConfiguration _configuration;
         private readonly IUserIdentityList _userIdentityList;
-        private readonly IPipelineCache<IBuild> _buildCache;
-        private readonly IPipelineCache<IBranch> _branchCache;
-        private readonly IPipelineCache<IBuildDefinition> _definitionCache;
+        private IPipelineCache<IBuild> _buildCache;
+        private IPipelineCache<IBranch> _branchCache;
+        private IPipelineCache<IBuildDefinition> _definitionCache;
         private readonly PipelineNotifier _pipelineNotifier;
         private readonly ConcurrentBag<IProject> _projectList = new ConcurrentBag<IProject>();
         private readonly NotificationFactory _notificationFactory;
-        private DateTime? _lastUpdate;
         private IBuildTree? _oldTree;
         private ISpecificSearch _currentSearch;
     }

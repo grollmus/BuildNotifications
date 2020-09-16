@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace BuildNotifications.Core.Config
 {
@@ -102,25 +103,25 @@ namespace BuildNotifications.Core.Config
 
         private IEnumerable<string> SplitBySpecialCharacters(string input)
         {
-            var toReturn = "";
+            var sb = new StringBuilder();
             foreach (var c in input)
             {
                 if (SpecialCharacters.Contains(c))
                 {
-                    if (toReturn.Length > 0)
+                    if (sb.Length > 0)
                     {
-                        yield return toReturn;
-                        toReturn = string.Empty;
+                        yield return sb.ToString();
+                        sb.Clear();
                     }
 
                     yield return c.ToString(CultureInfo.InvariantCulture);
                 }
                 else
-                    toReturn += c;
+                    sb.Append(c);
             }
 
-            if (toReturn.Length > 0 || input.Length == 0)
-                yield return toReturn;
+            if (sb.Length > 0 || input.Length == 0)
+                yield return sb.ToString();
         }
     }
 }

@@ -83,7 +83,7 @@ namespace BuildNotifications.ViewModel.Notification
             };
         }
 
-        private string? CreateNotificationImage(IDistributedNotification notification)
+        private string CreateNotificationImage(IDistributedNotification notification)
         {
             var view = new DistributedNotificationView();
             var viewModel = new DistributedNotificationViewModel(notification);

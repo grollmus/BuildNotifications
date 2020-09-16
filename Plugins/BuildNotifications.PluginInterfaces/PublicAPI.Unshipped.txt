@@ -1,0 +1,236 @@
+﻿BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.CheckedIn = 1 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.Manual = 4 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.Other = 5 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.PullRequest = 3 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.Scheduled = 2 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildReason.Unknown = 0 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.Cancelled = 1 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.Failed = 6 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.None = 0 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.PartiallySucceeded = 5 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.Pending = 2 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.Running = 3 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.BuildStatus.Succeeded = 4 -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.BranchName.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Definition.get -> BuildNotifications.PluginInterfaces.Builds.IBuildDefinition!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Id.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.LastChangedTime.get -> System.DateTime?
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Links.get -> BuildNotifications.PluginInterfaces.Builds.IBuildLinks!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Progress.get -> int
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.QueueTime.get -> System.DateTime?
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Reason.get -> BuildNotifications.PluginInterfaces.Builds.BuildReason
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.RequestedBy.get -> BuildNotifications.PluginInterfaces.IUser!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.RequestedFor.get -> BuildNotifications.PluginInterfaces.IUser?
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Status.get -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
+BuildNotifications.PluginInterfaces.Builds.IBuild
+BuildNotifications.PluginInterfaces.Builds.IBuild.Branch.get -> BuildNotifications.PluginInterfaces.SourceControl.IBranch?
+BuildNotifications.PluginInterfaces.Builds.IBuild.IsRequestedByCurrentUser.get -> bool
+BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectId.get -> System.Guid
+BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectName.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IBuildDefinition
+BuildNotifications.PluginInterfaces.Builds.IBuildDefinition.Id.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IBuildDefinition.Name.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IBuildLinks
+BuildNotifications.PluginInterfaces.Builds.IBuildLinks.BranchWeb.get -> string?
+BuildNotifications.PluginInterfaces.Builds.IBuildLinks.BuildWeb.get -> string?
+BuildNotifications.PluginInterfaces.Builds.IBuildLinks.DefinitionWeb.get -> string?
+BuildNotifications.PluginInterfaces.Builds.IBuildLinks.UpdateWith(BuildNotifications.PluginInterfaces.SourceControl.IBranch! branch) -> void
+BuildNotifications.PluginInterfaces.Builds.IBuildPlugin
+BuildNotifications.PluginInterfaces.Builds.IBuildPlugin.ConstructProvider(string! serialized) -> BuildNotifications.PluginInterfaces.Builds.IBuildProvider?
+BuildNotifications.PluginInterfaces.Builds.IBuildPlugin.TestConnection(string! serialized) -> System.Threading.Tasks.Task<BuildNotifications.PluginInterfaces.ConnectionTestResult!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchAllBuilds() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchBuildsChangedSince(System.DateTime date) -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchBuildsForDefinition(BuildNotifications.PluginInterfaces.Builds.IBuildDefinition! definition) -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchExistingBuildDefinitions() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBuildDefinition!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.RemovedBuildDefinitions() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBuildDefinition!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.RemovedBuilds() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.UpdateBuilds(System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>! builds) -> System.Threading.Tasks.Task!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.User.get -> BuildNotifications.PluginInterfaces.IUser!
+BuildNotifications.PluginInterfaces.Builds.IPlugin
+BuildNotifications.PluginInterfaces.Builds.IPlugin.ConstructNewConfiguration() -> BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration!
+BuildNotifications.PluginInterfaces.Builds.IPlugin.DisplayName.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IPlugin.IconSvgPath.get -> string!
+BuildNotifications.PluginInterfaces.Builds.IPlugin.OnPluginLoaded(BuildNotifications.PluginInterfaces.Host.IPluginHost! host) -> void
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.IsBuildIncluded(BuildNotifications.PluginInterfaces.Builds.IBuild! build, string! input) -> bool
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedDescription(System.Globalization.CultureInfo! forCulture) -> string!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedExamples.get -> System.Collections.Generic.IEnumerable<string!>!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedKeyword(System.Globalization.CultureInfo! forCulture) -> string!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.Suggest(string! input) -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion!>!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion.IsKeyword.get -> bool
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion.Suggestion.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration
+BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.AsyncPluginConfiguration(BuildNotifications.PluginInterfaces.Host.IDispatcher! uiDispatcher) -> void
+BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.CreateCalculator<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<BuildNotifications.PluginInterfaces.Configuration.Options.IValueCalculationResult<T>!>!>! calculationTaskFactory, System.Action<T>! handleResultCallback) -> BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator!
+BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.Dispose() -> void
+BuildNotifications.PluginInterfaces.Configuration.ILocalizer
+BuildNotifications.PluginInterfaces.Configuration.ILocalizer.Localized(string! id, System.Globalization.CultureInfo! culture) -> string!
+BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration
+BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration.Deserialize(string! serialized) -> bool
+BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration.ListAvailableOptions() -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Configuration.Options.IOption!>!
+BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration.Localizer.get -> BuildNotifications.PluginInterfaces.Configuration.ILocalizer!
+BuildNotifications.PluginInterfaces.Configuration.IPluginConfiguration.Serialize() -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.BooleanOption
+BuildNotifications.PluginInterfaces.Configuration.Options.BooleanOption.BooleanOption(bool value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CollectionOption<TItem>
+BuildNotifications.PluginInterfaces.Configuration.Options.CollectionOption<TItem>.AddNewItem(TItem item) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CollectionOption<TItem>.CollectionOption(System.Collections.Generic.IEnumerable<TItem>! value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CollectionOption<TItem>.RemoveItem(TItem item) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CommandOption
+BuildNotifications.PluginInterfaces.Configuration.Options.CommandOption.CanExecute() -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.CommandOption.CommandOption(System.Func<System.Threading.Tasks.Task!>! action, System.Func<bool>! canExecute, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CommandOption.CommandOption(System.Func<System.Threading.Tasks.Task!>! action, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.CommandOption.Execute() -> System.Threading.Tasks.Task!
+BuildNotifications.PluginInterfaces.Configuration.Options.DisplayOption
+BuildNotifications.PluginInterfaces.Configuration.Options.DisplayOption.DisplayOption(string! value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.EncryptedTextOption
+BuildNotifications.PluginInterfaces.Configuration.Options.EncryptedTextOption.EncryptedTextOption(string! plainValue, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.EnumOption<TEnum>
+BuildNotifications.PluginInterfaces.Configuration.Options.EnumOption<TEnum>.EnumOption(TEnum value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator.Affect(params BuildNotifications.PluginInterfaces.Configuration.Options.IOption![]! options) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator.Attach(params BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption![]! option) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator.Detach(params BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption![]! option) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator.RemoveAffect(params BuildNotifications.PluginInterfaces.Configuration.Options.IOption![]! options) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator.Update() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ICommandOption
+BuildNotifications.PluginInterfaces.Configuration.Options.ICommandOption.CanExecute() -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.ICommandOption.Execute() -> System.Threading.Tasks.Task!
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOption
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOption.AvailableValues.get -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Configuration.Options.IListOptionItem!>!
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOption.AvailableValuesChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOption.Value.get -> object?
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOption.Value.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOptionItem
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOptionItem.DisplayName.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.IListOptionItem.Value.get -> object?
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.DescriptionTextId.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsEnabled.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsEnabled.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsEnabledChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsLoading.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsLoading.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsLoadingChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsVisible.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsVisible.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.IsVisibleChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.IOption.NameTextId.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueCalculationResult<T>
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueCalculationResult<T>.Success.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueCalculationResult<T>.Value.get -> T
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption.Value.get -> object?
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption.Value.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.IValueOption.ValueChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>.AvailableValuesChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>.ListOption(TValue value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>.RaiseAvailableValuesChanged() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>.DisplayName.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>.ListOptionItem(TValue value, string! displayName, bool localize = false) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>.Localize.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>.Value.get -> TValue
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.MaxValue.get -> int
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.MaxValue.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.MinValue.get -> int
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.MinValue.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.NumberOption(int value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.Option
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.DescriptionTextId.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsEnabledChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsLoading.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsLoading.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsLoadingChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsVisibleChanged -> System.EventHandler<System.EventArgs!>?
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.NameTextId.get -> string!
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.Option(string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.RaiseIsEnabledChanged() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.RaiseIsLoadingChanged() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.Option.RaiseIsVisibleChanged() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.StringCollectionOption
+BuildNotifications.PluginInterfaces.Configuration.Options.StringCollectionOption.StringCollectionOption(System.Collections.Generic.IEnumerable<string!>! value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.TextOption
+BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.TextOption(string! value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult<T>
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult<T>.Success.get -> bool
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult<T>.Value.get -> T
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.RaiseValueChanged() -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.Value.get -> TValue
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.Value.set -> void
+BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.ValueOption(TValue value, string! nameTextId, string! descriptionTextId) -> void
+BuildNotifications.PluginInterfaces.Configuration.PasswordStringConverter
+BuildNotifications.PluginInterfaces.Configuration.PasswordStringConverter.PasswordStringConverter() -> void
+BuildNotifications.PluginInterfaces.ConnectionTestResult
+BuildNotifications.PluginInterfaces.ConnectionTestResult.ErrorMessage.get -> string!
+BuildNotifications.PluginInterfaces.ConnectionTestResult.Errors.get -> System.Collections.Generic.IEnumerable<string!>!
+BuildNotifications.PluginInterfaces.ConnectionTestResult.IsSuccess.get -> bool
+BuildNotifications.PluginInterfaces.Host.IDispatcher
+BuildNotifications.PluginInterfaces.Host.IDispatcher.Dispatch(System.Action! action) -> void
+BuildNotifications.PluginInterfaces.Host.IPluginHost
+BuildNotifications.PluginInterfaces.Host.IPluginHost.UiDispatcher.get -> BuildNotifications.PluginInterfaces.Host.IDispatcher!
+BuildNotifications.PluginInterfaces.Host.IPluginHost.Version.get -> System.Version!
+BuildNotifications.PluginInterfaces.IUser
+BuildNotifications.PluginInterfaces.IUser.DisplayName.get -> string!
+BuildNotifications.PluginInterfaces.IUser.Id.get -> string!
+BuildNotifications.PluginInterfaces.IUser.UniqueName.get -> string!
+BuildNotifications.PluginInterfaces.PasswordString
+BuildNotifications.PluginInterfaces.PasswordString.Encrypted() -> string!
+BuildNotifications.PluginInterfaces.PasswordString.PasswordString(string! encrypted = "") -> void
+BuildNotifications.PluginInterfaces.PasswordString.PlainText() -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IBranch
+BuildNotifications.PluginInterfaces.SourceControl.IBranch.DisplayName.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IBranch.FullName.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IBranch.IsPullRequest.get -> bool
+BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor
+BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor.ExtractDisplayName(string! fullBranchName) -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider
+BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.FetchExistingBranches() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.SourceControl.IBranch!>!
+BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.NameExtractor.get -> BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor!
+BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.RemovedBranches() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.SourceControl.IBranch!>!
+BuildNotifications.PluginInterfaces.SourceControl.IPullRequest
+BuildNotifications.PluginInterfaces.SourceControl.IPullRequest.Description.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IPullRequest.Id.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IPullRequest.SourceBranch.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.IPullRequest.TargetBranch.get -> string!
+BuildNotifications.PluginInterfaces.SourceControl.ISourceControlPlugin
+BuildNotifications.PluginInterfaces.SourceControl.ISourceControlPlugin.ConstructProvider(string! data) -> BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider?
+BuildNotifications.PluginInterfaces.SourceControl.ISourceControlPlugin.TestConnection(string! data) -> System.Threading.Tasks.Task<BuildNotifications.PluginInterfaces.ConnectionTestResult!>!
+abstract BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.Deserialize(string! serialized) -> bool
+abstract BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.ListAvailableOptions() -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Configuration.Options.IOption!>!
+abstract BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.Localizer.get -> BuildNotifications.PluginInterfaces.Configuration.ILocalizer!
+abstract BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.Serialize() -> string!
+abstract BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>.AvailableValues.get -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TValue>!>!
+override BuildNotifications.PluginInterfaces.Configuration.Options.EnumOption<TEnum>.AvailableValues.get -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Configuration.Options.ListOptionItem<TEnum>!>!
+override BuildNotifications.PluginInterfaces.Configuration.Options.EnumOption<TEnum>.ValidateValue(TEnum value) -> bool
+override BuildNotifications.PluginInterfaces.Configuration.Options.ListOption<TValue>.ValidateValue(TValue value) -> bool
+override BuildNotifications.PluginInterfaces.Configuration.Options.NumberOption.Clamp(int value) -> int
+override BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.ValidateValue(string? value) -> bool
+override BuildNotifications.PluginInterfaces.Configuration.PasswordStringConverter.ReadJson(Newtonsoft.Json.JsonReader! reader, System.Type! objectType, BuildNotifications.PluginInterfaces.PasswordString! existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer! serializer) -> BuildNotifications.PluginInterfaces.PasswordString!
+override BuildNotifications.PluginInterfaces.Configuration.PasswordStringConverter.WriteJson(Newtonsoft.Json.JsonWriter! writer, BuildNotifications.PluginInterfaces.PasswordString! value, Newtonsoft.Json.JsonSerializer! serializer) -> void
+static BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult.Fail<T>() -> BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult<T>!
+static BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult.Success<T>(T value) -> BuildNotifications.PluginInterfaces.Configuration.Options.ValueCalculationResult<T>!
+static BuildNotifications.PluginInterfaces.ConnectionTestResult.Failure(System.Collections.Generic.IEnumerable<string!>! messages) -> BuildNotifications.PluginInterfaces.ConnectionTestResult!
+static BuildNotifications.PluginInterfaces.ConnectionTestResult.Failure(string! message) -> BuildNotifications.PluginInterfaces.ConnectionTestResult!
+static BuildNotifications.PluginInterfaces.ConnectionTestResult.Success.get -> BuildNotifications.PluginInterfaces.ConnectionTestResult!
+static BuildNotifications.PluginInterfaces.PasswordString.FromPlainText(string! plainText) -> BuildNotifications.PluginInterfaces.PasswordString!
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsEnabled.get -> bool
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsEnabled.set -> void
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsVisible.get -> bool
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.Option.IsVisible.set -> void
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.MaximumLength.get -> int
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.MaximumLength.set -> void
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.MinimumLength.get -> int
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.TextOption.MinimumLength.set -> void
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.Clamp(TValue value) -> TValue
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.ValidateValue(TValue value) -> bool
+virtual BuildNotifications.PluginInterfaces.Configuration.Options.ValueOption<TValue>.ValueChanged -> System.EventHandler<System.EventArgs!>?

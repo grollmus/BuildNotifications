@@ -67,7 +67,7 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        private IEnumerable<BuildTreeNodeViewModel> CreateChildren(IEnumerable<IBuildTreeNode> children, IReadOnlyList<GroupDefinition> groups, List<SortingDefinition> sortingsAsList, int groupIndex)
+        private IEnumerable<BuildTreeNodeViewModel> CreateChildren(IEnumerable<IBuildTreeNode>? children, IReadOnlyList<GroupDefinition> groups, List<SortingDefinition> sortingsAsList, int groupIndex)
         {
             if (children == null)
                 yield break;

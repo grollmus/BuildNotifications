@@ -86,7 +86,7 @@ namespace BuildNotifications.Core
             _configurationSerializer.Save(Configuration, configFilePath);
         }
 
-        public Task Update() => Pipeline.Update();
+        public Task Update(UpdateModes mode) => Pipeline.Update(mode);
 
         private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e) => PipelineUpdated?.Invoke(this, e);
 

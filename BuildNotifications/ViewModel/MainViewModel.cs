@@ -181,6 +181,7 @@ namespace BuildNotifications.ViewModel
         private void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             _postPipelineUpdateTask = UpdateTreeTask(e);
+            SettingsViewModel.UpdateUser();
         }
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
@@ -469,8 +470,12 @@ namespace BuildNotifications.ViewModel
         {
             Log.Info().Message($"Toggling settings. Value: {!ShowSettings}").Write();
             ShowSettings = !ShowSettings;
+
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
+
+            if (ShowSettings)
+                SettingsViewModel.UpdateUser();
         }
 
         private void TrayIconOnExitRequested(object? sender, EventArgs e)
@@ -493,7 +498,7 @@ namespace BuildNotifications.ViewModel
                 updater ??= new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
 
                 var result = await updater.CheckForUpdates();
-                if (result != null)
+                if (result?.ReleasesToApply != null)
                 {
                     if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))
                         currentVersion = new SemVersion(0);
@@ -542,7 +547,7 @@ namespace BuildNotifications.ViewModel
 
                 try
                 {
-                    await _coreSetup.Update();
+                    await _coreSetup.Update(_previouslyFetchedAnyBuilds ? UpdateModes.DeltaBuilds : UpdateModes.AllBuilds);
                 }
                 catch (Exception e)
                 {
@@ -559,7 +564,7 @@ namespace BuildNotifications.ViewModel
                 try
                 {
 #if DEBUG
-                    const int updateInterval = 500;
+                    const int updateInterval = 5;
 #else
                     var updateInterval = _coreSetup.Configuration.UpdateInterval;
 #endif
@@ -611,7 +616,7 @@ namespace BuildNotifications.ViewModel
         public void Dispose()
         {
             _trayIcon.Dispose();
-            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource?.Dispose();
             _postPipelineUpdateTask?.Dispose();
             _fileWatch.Dispose();
         }
@@ -625,7 +630,7 @@ namespace BuildNotifications.ViewModel
         private readonly IPopupService _popupService;
         private bool _previouslyFetchedAnyBuilds;
         private bool _blurView;
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
         private bool _keepUpdating;
         private Task? _postPipelineUpdateTask;
         private BuildTreeViewModel? _buildTree;

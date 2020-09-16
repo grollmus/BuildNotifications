@@ -28,8 +28,10 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public JsonSerializer()
         {
-            _settings = new JsonSerializerSettings();
-            _settings.TypeNameHandling = TypeNameHandling.Objects;
+            _settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects
+            };
         }
 
         public string Serialize(object obj) => JsonConvert.SerializeObject(obj, _settings);

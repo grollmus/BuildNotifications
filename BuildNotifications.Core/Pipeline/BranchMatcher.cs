@@ -15,7 +15,6 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         public bool IsMatch(IBaseBuild build)
-
         {
             var branchName = _branchNameExtractor.ExtractDisplayName(build.BranchName);
             return _matchers.Any(m => m.IsMatch(branchName));

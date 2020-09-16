@@ -22,7 +22,7 @@ namespace BuildNotifications.Core.Plugin
         private IPlugin? FindPlugin(string? typeName)
         {
             var plugin = SourceControl.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName))
-                         ?? (IPlugin) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
+                         ?? (IPlugin?) Build.FirstOrDefault(t => _typeMatcher.MatchesType(t.GetType(), typeName));
 
             if (plugin == null)
                 Log.Warn().Message($"Failed to find source control plugin for type \"{typeName}\"").Write();

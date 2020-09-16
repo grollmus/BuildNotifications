@@ -7,7 +7,7 @@ namespace DummyServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly IDataStorage _dataStorage;
 
@@ -17,21 +17,23 @@ namespace DummyServer.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public ActionResult<IEnumerable<User>> Get()
         {
             return _dataStorage.Users();
         }
 
         [HttpPost]
-        public void Push([FromBody] string name)
+        public IActionResult Push([FromBody] string name)
         {
             _dataStorage.AddUser(name);
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete(string name)
+        public IActionResult Delete(string name)
         {
             _dataStorage.DeleteUser(name);
+            return Ok();
         }
     }
 }

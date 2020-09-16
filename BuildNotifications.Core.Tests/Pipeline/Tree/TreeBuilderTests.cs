@@ -16,7 +16,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
     {
         internal static TreeBuilder Construct(params GroupDefinition[] definitions)
         {
-            var groupDefinition = new BuildTreeGroupDefinition(definitions ?? Array.Empty<GroupDefinition>());
+            var groupDefinition = new BuildTreeGroupDefinition(definitions);
 
             var config = Substitute.For<IConfiguration>();
             config.GroupDefinition.Returns(groupDefinition);

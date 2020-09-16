@@ -19,6 +19,11 @@ export class HomeComponent {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
 
+
+  }
+
+
+  ngOnInit() {
     this.listenToUpdate<Build[]>(this.refreshBuilds, 'build', r => { this.builds = r; });
     this.listenToUpdate<Branch[]>(this.refreshBranches,
       'branch',
@@ -38,7 +43,6 @@ export class HomeComponent {
         this.users = r;
         this.selectedUser = this.selectedValueOrDefault(this.selectedUser, r);
       });
-
   }
 
   private listenToUpdate<T>(subject: Subject<Object>, path: string, resultHandler: (result: T) => any) {
@@ -67,7 +71,7 @@ export class HomeComponent {
   }
 
   public newBranch(name: string) {
-    var headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.http.post<Branch>(this.baseUrl + 'branch', JSON.stringify(name), { headers: headers })
       .subscribe(r => this.refreshBranches.next());
 
@@ -78,7 +82,7 @@ export class HomeComponent {
   }
 
   public newDefinition(name: string) {
-    var headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.http.post<Branch>(this.baseUrl + 'definition', JSON.stringify(name), { headers: headers })
       .subscribe(r => this.refreshDefinitions.next());
   }
@@ -88,7 +92,7 @@ export class HomeComponent {
   }
 
   public newUser(name: string) {
-    var headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.http.post<Branch>(this.baseUrl + 'user', JSON.stringify(name), { headers: headers })
       .subscribe(r => this.refreshUser.next());
   }
@@ -101,35 +105,35 @@ export class HomeComponent {
     if (!this.selectedBranch || !this.selectedDefinition || !this.selectedUser)
       return;
 
-    var build = new Build();
+    const build = new Build();
     build.branchName = this.selectedBranch.fullName;
     build.userName = this.selectedUser.uniqueName;
     build.definitionName = this.selectedDefinition.name;
-    
+
     this.postBuild(build);
   }
 
-  private postBuild(build:Build) {
+  private postBuild(build: Build) {
     this.http.post<Build>(this.baseUrl + 'build', build)
       .subscribe(r => this.refreshBuilds.next());
   }
 
-  public updateBuildStatus(build:Build, status:number) {
+  public updateBuildStatus(build: Build, status: number) {
     build.status = status;
     this.postBuild(build);
   }
 
-  public updateBuildReason(build:Build, reason:number) {
+  public updateBuildReason(build: Build, reason: number) {
     build.reason = reason;
     this.postBuild(build);
   }
 
   public permutate() {
-    this.http.get(this.baseUrl + 'build/permutate').subscribe(r => this.refreshBuilds.next());
+    this.http.post(this.baseUrl + 'build/permutate', null).subscribe(r => this.refreshBuilds.next());
   }
 
   public randomizeBuildStatus() {
-    this.http.get(this.baseUrl + 'build/randomizeBuildStatus').subscribe(r => this.refreshBuilds.next());
+    this.http.post(this.baseUrl + 'build/randomizeBuildStatus', null).subscribe(r => this.refreshBuilds.next());
   }
 
   public deleteBuild(build: Build) {

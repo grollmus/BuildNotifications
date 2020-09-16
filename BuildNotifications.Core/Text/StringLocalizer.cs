@@ -23,40 +23,27 @@ namespace BuildNotifications.Core.Text
             foreach (var culture in LocalizedCultures())
             {
                 var resourceSet = resourceManager.GetResourceSet(culture, true, true);
-                var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
-                    .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
-                    .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
+                if (resourceSet != null)
+                {
+                    var resourceDictionary = resourceSet.Cast<DictionaryEntry>()
+                        .Where(r => !string.IsNullOrEmpty(r.Value?.ToString()))
+                        .ToDictionary(r => r.Key.ToString()!, r => r.Value?.ToString() ?? string.Empty);
 
-                Cache.Add(culture, resourceDictionary);
+                    Cache.Add(culture, resourceDictionary);
+                }
             }
 
             _defaultDictionary = Cache[DefaultCulture];
         }
 
+        public static CultureInfo CurrentCulture => CultureInfo.CurrentUICulture;
+
         public static CultureInfo DefaultCulture => CultureInfo.GetCultureInfo("en-US");
         public static StringLocalizer Instance { get; } = new StringLocalizer();
-        public static CultureInfo CurrentCulture => CultureInfo.CurrentUICulture;
 
         public string this[string key] => GetText(key);
 
         internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
-
-        public string GetText(string key, CultureInfo? culture = null)
-        {
-            if (key == null)
-                return "";
-
-            if (culture == null)
-                culture = CurrentCulture;
-
-            if (!Cache.TryGetValue(culture, out var dictionary) && !Cache.TryGetValue(culture.Parent, out dictionary))
-                dictionary = _defaultDictionary;
-
-            if (!dictionary.TryGetValue(key, out var localizedText) && !_defaultDictionary.TryGetValue(key, out localizedText))
-                localizedText = key;
-
-            return localizedText;
-        }
 
         public static IEnumerable<CultureInfo> SupportedCultures()
         {
@@ -75,6 +62,22 @@ namespace BuildNotifications.Core.Text
         {
             yield return CultureInfo.GetCultureInfo("en-US");
             yield return CultureInfo.GetCultureInfo("de");
+        }
+
+        public string GetText(string key, CultureInfo? culture = null)
+        {
+            if (string.IsNullOrEmpty(key))
+                return "";
+
+            culture ??= CurrentCulture;
+
+            if (!Cache.TryGetValue(culture, out var dictionary) && !Cache.TryGetValue(culture.Parent, out dictionary))
+                dictionary = _defaultDictionary;
+
+            if (!dictionary.TryGetValue(key, out var localizedText) && !_defaultDictionary.TryGetValue(key, out localizedText))
+                localizedText = key;
+
+            return localizedText;
         }
 
         private readonly IDictionary<string, string> _defaultDictionary;

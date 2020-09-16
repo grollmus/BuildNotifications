@@ -68,6 +68,7 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public void OnPluginLoaded(IPluginHost host)
         {
+            // nothing to do
         }
 
         Task<ConnectionTestResult> ISourceControlPlugin.TestConnection(string data) => TestConnection(ParseConfig(data));

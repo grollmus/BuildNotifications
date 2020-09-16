@@ -57,7 +57,7 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModelOverlays:StatusIndicatorViewModel}">
-                <viewsOverlays:StatusIndicator Margin="{StaticResource BlockDoubleXOnlyMargin}"/>
+                <viewsOverlays:StatusIndicator Margin="{StaticResource BlockDoubleXOnlyMargin}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModelNotification:NotificationCenterViewModel}">
@@ -74,10 +74,10 @@
     <Grid>
         <i:Interaction.Triggers>
             <ei:DataTrigger Binding="{Binding BlurView}" Value="false">
-                <animation:Blur Amount="0" Duration="0.5"/>
+                <animation:Blur Amount="0" Duration="0.5" />
             </ei:DataTrigger>
             <ei:DataTrigger Binding="{Binding BlurView}" Value="true">
-                <animation:Blur Amount="15" Duration="1"/>
+                <animation:Blur Amount="15" Duration="1" />
             </ei:DataTrigger>
         </i:Interaction.Triggers>
 
@@ -132,7 +132,7 @@
                                   Foreground="{StaticResource Background3}"
                                   Command="{Binding ShowInfoPopupCommand}" />
             </Grid>
-	        <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
+            <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
                 <icons:IconButton Icon="Notification" ToolTip="{text:Localized NotificationsCenterButtonTooltip}"
                                   Width="{StaticResource BlockDouble}"
                                   Height="{StaticResource BlockDouble}"
@@ -149,9 +149,12 @@
                         </ei:DataTrigger>
                     </i:Interaction.Triggers>
                 </icons:IconButton>
-                <ContentPresenter Content="{Binding NotificationCenter.NewNotificationsCounter}" IsHitTestVisible="False"
-                                  Height="{StaticResource BlockOneAndQuarter}" Width="{StaticResource BlockOneAndQuarter}"
-                                  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="{StaticResource NegativeQuarterRightSixthBlockTopMargin}"/>
+                <ContentPresenter Content="{Binding NotificationCenter.NewNotificationsCounter}"
+                                  IsHitTestVisible="False"
+                                  Height="{StaticResource BlockOneAndQuarter}"
+                                  Width="{StaticResource BlockOneAndQuarter}"
+                                  HorizontalAlignment="Right" VerticalAlignment="Top"
+                                  Margin="{StaticResource NegativeQuarterRightSixthBlockTopMargin}" />
             </Grid>
             <ContentPresenter Content="{Binding SearchViewModel}" />
 
@@ -202,26 +205,29 @@
                                  Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
                                  Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
-                                 Foreground="{Binding ElementName=GroupDefinitionButton, Path=Foreground}"
+                                 Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type icons:IconButton}}}"
                                  Type="GroupingSolo" />
             </icons:IconButton>
-           
 
-            <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" Visibility="Collapsed"
-                              Margin="{StaticResource BlockLeftAndRight}">
+            <Grid Visibility="Collapsed">
+                <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}"
+                                  Margin="{StaticResource BlockLeftAndRight}"
+                                  x:Name="GroupAndSortDefinitionSelectionContentPresenter" />
                 <i:Interaction.Triggers>
                     <ei:DataTrigger
-                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Binding="{Binding ShowGroupDefinitionSelection}"
                         Value="true">
-                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2" Delay="0" DoCollapsingLayoutTransform="True"/>
+                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2" Delay="0"
+                                                      DoCollapsingLayoutTransform="True" />
                     </ei:DataTrigger>
                     <ei:DataTrigger
-                        Binding="{Binding DataContext.ShowGroupDefinitionSelection, ElementName=GroupDefinitionButton}"
+                        Binding="{Binding ShowGroupDefinitionSelection}"
                         Value="false">
-                        <triggerActions:ElementFadeOut Anchor="MiddleLeft" Duration="0.2" DoCollapsingLayoutTransform="True"/>
+                        <triggerActions:ElementFadeOut Anchor="MiddleLeft" Duration="0.2"
+                                                       DoCollapsingLayoutTransform="True" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
-            </ContentPresenter>
+            </Grid>
         </StackPanel>
     </window:CustomWindow.RightToTitleContent>
 </window:CustomWindow>

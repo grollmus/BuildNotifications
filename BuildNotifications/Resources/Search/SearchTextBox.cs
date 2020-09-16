@@ -463,21 +463,21 @@ namespace BuildNotifications.Resources.Search
 
         private void RestoreSelection((int startOffset, int lengthOffset, int amountOfInlines, int caretPosition) storedSelection)
         {
-            // when restoring do not ignore empty inlines. I am honestly not sure why, but 
+            // when restoring do not ignore empty inlines. I am honestly not sure why
             var inlineCountNow = Document.Blocks.OfType<Paragraph>().FirstOrDefault()?.Inlines.Count ?? 0;
             var additionalCountForInlines = (inlineCountNow - storedSelection.amountOfInlines) * 2;
 
             var start = Document.ContentStart.GetPositionAtOffset(storedSelection.startOffset + additionalCountForInlines);
             var end = start?.GetPositionAtOffset(storedSelection.lengthOffset);
 
-            if (end == null)
+            if (start == null || end == null)
                 return;
 
-            Selection.Select(start, end);
+            Selection.Select(start!, end);
             for (var i = 0; i <= 2; i++)
             {
                 CaretPosition = start?.GetPositionAtOffset(i) ?? start;
-                if (Document.ContentStart.GetOffsetToPosition(CaretPosition) == Document.ContentStart.GetOffsetToPosition(start))
+                if (CaretPosition == null || Document.ContentStart.GetOffsetToPosition(CaretPosition) == Document.ContentStart.GetOffsetToPosition(start!))
                     break;
             }
         }

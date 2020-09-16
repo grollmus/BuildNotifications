@@ -7,7 +7,7 @@ namespace BuildNotifications.ViewModel.Tree
         public DefinitionGroupNodeViewModel(IDefinitionGroupNode node)
             : base(node)
         {
-            DefinitionName = node?.Definition.Name ?? string.Empty;
+            DefinitionName = node.Definition.Name;
         }
 
         public string DefinitionName { get; set; }

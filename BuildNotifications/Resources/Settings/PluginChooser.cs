@@ -17,7 +17,7 @@ namespace BuildNotifications.Resources.Settings
             set => SetValue(PluginTypeProperty, value);
         }
 
-        public IPluginRepository PluginRepository
+        public IPluginRepository? PluginRepository
         {
             get => (IPluginRepository) GetValue(PluginRepositoryProperty);
             set => SetValue(PluginRepositoryProperty, value);

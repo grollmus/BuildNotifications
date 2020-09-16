@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
 
         private string AutostartLocation()
         {
-            var fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location) ?? "";
+            var fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
             fileName = Path.ChangeExtension(fileName, "exe");
 
             var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

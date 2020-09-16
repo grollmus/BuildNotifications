@@ -10,13 +10,13 @@ namespace BuildNotifications.Resources.Settings
     {
         public static OptionTemplateSelector Instance { get; } = new OptionTemplateSelector();
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             var element = container as FrameworkElement;
 
-            return (TryFindTemplateSimple(item, element)
-                    ?? TryFindTemplateGeneric(item, element)
-                    ?? base.SelectTemplate(item, container))!;
+            return TryFindTemplateSimple(item, element)
+                   ?? TryFindTemplateGeneric(item, element)
+                   ?? base.SelectTemplate(item, container);
         }
 
         private DataTemplate? BooleanOptionTemplate(FrameworkElement? element) => element?.TryFindResource(nameof(BooleanOptionTemplate)) as DataTemplate;

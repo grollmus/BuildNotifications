@@ -11,11 +11,11 @@ namespace BuildNotifications.Plugin.Tfs.Configuration
         public string Localized(string id, CultureInfo culture)
         {
             var resourceSet = Strings.ResourceManager.GetResourceSet(culture, true, true);
-            var resource = resourceSet.Cast<DictionaryEntry>().FirstOrDefault(e => e.Key.ToString() == id);
-            if (resource.Value == null)
+            var resource = resourceSet?.Cast<DictionaryEntry>().FirstOrDefault(e => e.Key.ToString() == id);
+            if (resource?.Value == null)
                 return $"[{id}]";
 
-            return resource.Value?.ToString() ?? $"[{id}]";
+            return resource.Value.Value.ToString() ?? $"[{id}]";
         }
     }
 }

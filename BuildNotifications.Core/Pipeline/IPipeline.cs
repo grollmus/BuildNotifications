@@ -38,7 +38,8 @@ namespace BuildNotifications.Core.Pipeline
         /// Updates the pipeline i.e. fetch data from projects, group builds and
         /// raise notifications.
         /// </summary>
-        Task Update();
+        /// <param name="mode">Mode to use for update.</param>
+        Task Update(UpdateModes mode = UpdateModes.DeltaBuilds);
 
         /// <summary>
         /// Gets a snapshot of the currently cached builds.
@@ -59,8 +60,8 @@ namespace BuildNotifications.Core.Pipeline
         IReadOnlyList<IBranch> CachedBranches();
 
         /// <summary>
-        /// Time of the last successful update. DateTime.Min if it never happened.
+        /// Time of the last successful update. Null if it never happened.
         /// </summary>
-        DateTime LastUpdate { get; }
+        DateTime? LastUpdate { get; }
     }
 }

@@ -6,14 +6,6 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
 {
     public class EnumOptionTests
     {
-        public enum TestEnum
-        {
-            None,
-            One,
-            Two,
-            Three
-        }
-
         [Fact]
         public void AvailableValuesShouldContainAllEnumMembers()
         {

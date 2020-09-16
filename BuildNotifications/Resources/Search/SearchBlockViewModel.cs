@@ -131,7 +131,8 @@ namespace BuildNotifications.Resources.Search
         {
             Suggestions.Sort(s =>
             {
-                var index = newSuggestions.IndexOf(newSuggestions.FirstOrDefault(nS => nS.SuggestedText.Equals(s.SuggestedText, StringComparison.InvariantCulture)));
+                var searchSuggestionViewModel = newSuggestions.FirstOrDefault(nS => nS.SuggestedText.Equals(s.SuggestedText, StringComparison.InvariantCulture));
+                var index = searchSuggestionViewModel == null ? -1 : newSuggestions.IndexOf(searchSuggestionViewModel);
                 if (index == -1)
                     index = Suggestions.IndexOf(s);
 

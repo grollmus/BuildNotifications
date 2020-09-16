@@ -45,7 +45,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
 
         public Brush Convert(BuildTreeNodeViewModel node)
         {
-            if (node != null && node.ShouldColorByStatus)
+            if (node.ShouldColorByStatus)
                 return Convert(node.BuildStatus);
             return DefaultBrush;
         }
@@ -65,7 +65,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             return resolvedBrush;
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             switch (value)
             {
