@@ -41,6 +41,8 @@ namespace BuildNotifications.ViewModel.Tree
 
         public TimeSpan RelativeChangedDate => ChangedDate.ToUniversalTime().TimespanToUtcNow();
 
+        public TimeSpan RelativeQueuedDate => QueueTime.ToUniversalTime().TimespanToUtcNow();
+
         // only display status for the lowest and third lowest levels. (By design in mockups)
         public bool ShouldColorByStatus
         {

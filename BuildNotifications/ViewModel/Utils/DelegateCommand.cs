@@ -36,6 +36,9 @@ namespace BuildNotifications.ViewModel.Utils
 
         public event EventHandler? CanExecuteChanged;
 
+        /// <summary>
+        /// Parameter could be null, but is treated as a valid value. As we cannot differentiate between T = object and T = object? during runtime.
+        /// </summary>
         public bool CanExecute(object parameter) => _canExecute.Invoke((TParameter) parameter);
 
         public void Execute(object parameter)

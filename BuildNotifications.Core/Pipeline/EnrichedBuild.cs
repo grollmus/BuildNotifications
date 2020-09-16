@@ -17,7 +17,7 @@ namespace BuildNotifications.Core.Pipeline
             IsRequestedByCurrentUser = provider.User.Id == build.RequestedBy.Id;
         }
 
-        internal IBranch? Branch { get; set; }
+        public IBranch? Branch { get; set; }
 
         public IBuildProvider Provider { get; }
 

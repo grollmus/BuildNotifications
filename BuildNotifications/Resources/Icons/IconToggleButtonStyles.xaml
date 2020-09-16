@@ -34,6 +34,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
+                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Foreground" TargetName="Icon"
                                     Value="{DynamicResource Foreground1HalfTransparency}" />

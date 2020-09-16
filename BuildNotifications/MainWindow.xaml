@@ -6,7 +6,6 @@
                      xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
                      xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                      xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
-                     xmlns:viewModelSight="clr-namespace:BuildNotifications.ViewModel.Sight"
                      xmlns:views="clr-namespace:BuildNotifications.Views"
                      xmlns:viewsTree="clr-namespace:BuildNotifications.Views.Tree"
                      xmlns:viewsSettings="clr-namespace:BuildNotifications.Views.Settings"
@@ -24,7 +23,6 @@
                      xmlns:viewsOverlays="clr-namespace:BuildNotifications.Views.Overlays"
                      xmlns:viewModelNotification="clr-namespace:BuildNotifications.ViewModel.Notification"
                      xmlns:viewsNotification="clr-namespace:BuildNotifications.Views.Notification"
-                     xmlns:viewsSight="clr-namespace:BuildNotifications.Views.Sight"
                      xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
@@ -68,10 +66,6 @@
 
             <DataTemplate DataType="{x:Type viewModelNotification:NewNotificationsCounterViewModel}">
                 <viewsNotification:NewNotificationsCounterView />
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type viewModelSight:SightSelectionViewModel}">
-                <viewsSight:SightSelectionView />
             </DataTemplate>
 
         </ResourceDictionary>
@@ -216,7 +210,7 @@
             </icons:IconButton>
 
             <Grid Visibility="Collapsed">
-                <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}" 
+                <ContentPresenter Content="{Binding GroupAndSortDefinitionsSelection}"
                                   Margin="{StaticResource BlockLeftAndRight}"
                                   x:Name="GroupAndSortDefinitionSelectionContentPresenter" />
                 <i:Interaction.Triggers>
@@ -234,22 +228,6 @@
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </Grid>
-
-            <ContentPresenter Content="{Binding SightSelection}" Visibility="Collapsed">
-                <i:Interaction.Triggers>
-                    <ei:DataTrigger
-                        Binding="{Binding DataContext.ShowSights, ElementName=SightsButton}"
-                        Value="true">
-                        <triggerActions:ElementFadeIn Anchor="MiddleLeft" Duration="0.2" Delay="0" />
-                    </ei:DataTrigger>
-                    <ei:DataTrigger
-                        Binding="{Binding DataContext.ShowSights, ElementName=SightsButton}"
-                        Value="false">
-                        <triggerActions:ElementFadeOut Anchor="MiddleLeft" Duration="0.2" />
-                    </ei:DataTrigger>
-                </i:Interaction.Triggers>
-            </ContentPresenter>
-
         </StackPanel>
     </window:CustomWindow.RightToTitleContent>
 </window:CustomWindow>

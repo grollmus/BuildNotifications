@@ -4,6 +4,8 @@ using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
+using BuildNotifications.Core.Pipeline.Tree.Search;
+using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Plugin.Host;
 using BuildNotifications.Core.Utilities;
@@ -31,11 +33,22 @@ namespace BuildNotifications.Core
 
             UserIdentityList = new UserIdentityList();
 
-            var searcher = new BuildSearcher();
-            var treeBuilder = new TreeBuilder(Configuration, searcher);
+            var treeBuilder = new TreeBuilder(Configuration);
             Pipeline = new Pipeline.Pipeline(treeBuilder, Configuration, UserIdentityList);
 
             Pipeline.Notifier.Updated += Notifier_Updated;
+
+            SearchEngine = new SearchEngine();
+            SearchEngine.AddCriteria(new BranchCriteria(Pipeline));
+            SearchEngine.AddCriteria(new DefinitionCriteria(Pipeline));
+            SearchEngine.AddCriteria(new IsCriteria(Pipeline));
+            SearchEngine.AddCriteria(new ForCriteria(Pipeline));
+            SearchEngine.AddCriteria(new ByCriteria(Pipeline));
+            SearchEngine.AddCriteria(new DuringCriteria(Pipeline));
+            SearchEngine.AddCriteria(new AfterCriteria(Pipeline), false);
+            SearchEngine.AddCriteria(new BeforeCriteria(Pipeline), false);
+
+            SearchHistory = new RuntimeSearchHistory();
 
             if (notificationReceiver != null)
             {
@@ -43,6 +56,10 @@ namespace BuildNotifications.Core
                 NotificationReceiver.DistributedNotificationReceived += (sender, args) => DistributedNotificationReceived?.Invoke(this, args);
             }
         }
+
+        public ISearchEngine SearchEngine { get; }
+
+        public ISearchHistory SearchHistory { get; }
 
         public IConfiguration Configuration { get; }
 
@@ -71,10 +88,7 @@ namespace BuildNotifications.Core
 
         public Task Update(UpdateModes mode) => Pipeline.Update(mode);
 
-        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
-        {
-            PipelineUpdated?.Invoke(this, e);
-        }
+        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e) => PipelineUpdated?.Invoke(this, e);
 
         private readonly IPathResolver _pathResolver;
 

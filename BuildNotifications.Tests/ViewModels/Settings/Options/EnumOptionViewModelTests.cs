@@ -8,9 +8,11 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
     {
         private enum TestEnumWithoutLocalization
         {
+            // ReSharper disable UnusedMember.Local
             NonLocalizableOne,
             NonLocalizableTwo,
             NonLocalizableThree,
+            // ReSharper enable UnusedMember.Local
         }
 
         [Fact]

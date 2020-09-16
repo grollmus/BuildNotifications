@@ -97,5 +97,10 @@ namespace BuildNotifications.Core.Pipeline.Cache
         /// </summary>
         /// <returns>Read only dictionary of all CacheKeys and their associated values.</returns>
         IReadOnlyDictionary<CacheKey, T> CachedValues();
+
+        /// <summary>
+        /// Amount of items present within the cache.
+        /// </summary>
+        int Size { get; }
     }
 }

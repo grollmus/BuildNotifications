@@ -29,11 +29,10 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
         {
-            var otherBuild = (nodeToInsert as IBuildNode)?.Build;
-            if (otherBuild == null)
+            if (!(nodeToInsert is IBuildNode otherBuild))
                 return;
 
-            UpdateProperties(otherBuild);
+            UpdateProperties(otherBuild.Build);
         }
 
         public override bool Equals(IBuildTreeNode other) => base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build.Id, StringComparison.InvariantCulture);

@@ -18,7 +18,7 @@ namespace BuildNotifications.Plugin.GitHub
             throw new NotImplementedException();
         }
 
-        IBuildProvider? IBuildPlugin.ConstructProvider(string serialized)
+        IBuildProvider IBuildPlugin.ConstructProvider(string serialized)
         {
             throw new NotImplementedException();
         }
@@ -33,7 +33,7 @@ namespace BuildNotifications.Plugin.GitHub
             // nothing to do
         }
 
-        IBranchProvider? ISourceControlPlugin.ConstructProvider(string serialized)
+        IBranchProvider ISourceControlPlugin.ConstructProvider(string serialized)
         {
             throw new NotImplementedException();
         }

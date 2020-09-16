@@ -2,18 +2,16 @@
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using BuildNotifications.Core.Utilities;
+using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline.Tree
 {
     internal class TreeBuilder : ITreeBuilder
     {
-        public TreeBuilder(IConfiguration config, IBuildSearcher searcher)
+        public TreeBuilder(IConfiguration config)
         {
             _config = config;
-            _searcher = searcher;
         }
 
         private IBuildTreeGroupDefinition GroupDefinition => _config.GroupDefinition;
@@ -97,10 +95,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
             }
         }
 
-        public IBuildTree Build(IEnumerable<IBuild> builds, IEnumerable<IBranch> branches,
-            IEnumerable<IBuildDefinition> definitions, IBuildTree? oldTree = null,
-            string searchTerm = "")
+        public IBuildTree Build(IEnumerable<IBuild> builds, IBuildTree? oldTree = null, ISpecificSearch? search = null)
         {
+            search ??= new EmptySearch();
             var tree = oldTree ?? new BuildTree(GroupDefinition);
 
             if (tree.GroupDefinition != GroupDefinition)
@@ -109,7 +106,8 @@ namespace BuildNotifications.Core.Pipeline.Tree
             var taggedNodes = new List<IBuildTreeNode>();
             TagAllNodesForDeletion(tree, taggedNodes);
 
-            var filteredBuilds = builds.Where(b => _searcher.Matches(b, searchTerm));
+            var filteredBuilds = search.ApplySearch(builds);
+
             foreach (var build in filteredBuilds)
             {
                 var path = BuildPath(build);
@@ -122,6 +120,5 @@ namespace BuildNotifications.Core.Pipeline.Tree
         }
 
         private readonly IConfiguration _config;
-        private readonly IBuildSearcher _searcher;
     }
 }
