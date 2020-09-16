@@ -7,15 +7,22 @@ using BuildNotifications.Core.Config;
 
 namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
-    internal abstract class BaseDateSearchCriteria : BaseSearchCriteria
+    public abstract class BaseDateSearchCriteria : BaseSearchCriteria
     {
+        private Func<DateTime> _resolveNow;
+
+        protected DateTime Today() => _resolveNow().Date;
+
         protected const int MaxDatesToSuggest = 3;
 
-        protected BaseDateSearchCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline) : base(localizedKeyword, localizedDescription, pipeline)
+        protected BaseDateSearchCriteria(IPipeline pipeline) : base(pipeline)
         {
+            _resolveNow = () => DateTime.Now;
         }
 
         private static readonly SuggestionTupleEqualByDateTime SuggestionTupleEqualByDateTimeEqualityComparer = new SuggestionTupleEqualByDateTime();
+
+        internal void SetResolveNow(Func<DateTime> to) => _resolveNow = to;
 
         protected IEnumerable<string> SuggestInputWithToday(string inputSoFar)
         {

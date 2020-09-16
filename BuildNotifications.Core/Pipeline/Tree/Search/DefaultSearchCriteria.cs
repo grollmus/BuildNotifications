@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -25,15 +26,15 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             _criterionsAsSuggestions = _includedCriterions.Select(s => new SearchCriteriaAsSuggestion(s)).ToList();
         }
 
-        public string LocalizedKeyword => "";
-
-        public string LocalizedDescription => StringLocalizer.SearchDefaultDescription;
-
         public int SuggestionsToTakeFromEachCriteria { get; set; } = 2;
 
         private const int ExamplesToTakeFromEachCriteria = 1;
 
         public int MaxSuggestions { get; set; } = 5;
+
+        string ISearchCriteria.LocalizedKeyword(CultureInfo forCulture) => string.Empty;
+
+        string ISearchCriteria.LocalizedDescription(CultureInfo forCulture) => StringLocalizer.SearchDefaultDescription;
 
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input) => SuggestionsFromEachCriteria(input).Distinct().Take(MaxSuggestions);
 
@@ -64,7 +65,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             {
                 foreach (var example in searchCriteria.LocalizedExamples.Take(ExamplesToTakeFromEachCriteria))
                 {
-                    yield return (searchCriteria.LocalizedKeyword, example);
+                    yield return (searchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture), example);
                 }
             }
         }

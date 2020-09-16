@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using JetBrains.Annotations;
 
 namespace BuildNotifications.PluginInterfaces.Builds.Search
@@ -12,18 +13,20 @@ namespace BuildNotifications.PluginInterfaces.Builds.Search
         /// <summary>
         /// The keyword to for this criteria. Case-insensitive. Is expected to be localized.
         /// </summary>
+        /// <param name="forCulture">The current culture of the application. The returned string is expected to be in this cultures language.</param>
         /// <example>
         /// 'RequestedBy' could be the keyword for a search criteria, to search for the person which requested a build. E.g. 'RequestedBy: Me'
         /// </example>
-        string LocalizedKeyword { get; }
+        string LocalizedKeyword(CultureInfo forCulture);
 
         /// <summary>
         /// A short, localized description of what this search criteria does.
         /// </summary>
+        /// <param name="forCulture">The current culture of the application. The returned string is expected to be in this cultures language.</param>
         /// <example>
         /// 'Specifies build of certain users.'
         /// </example>
-        string LocalizedDescription { get; }
+        string LocalizedDescription(CultureInfo forCulture);
 
         /// <summary>
         /// Resolve suggestions to auto-complete for the given input.

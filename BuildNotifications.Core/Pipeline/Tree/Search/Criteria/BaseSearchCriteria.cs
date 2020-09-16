@@ -16,11 +16,9 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         private DateTime _lastTimeDataFetchedFromPipeline = DateTime.MinValue;
 
-        protected BaseSearchCriteria(string localizedKeyword, string localizedDescription, IPipeline pipeline)
+        protected BaseSearchCriteria(IPipeline pipeline)
         {
             _pipeline = pipeline;
-            LocalizedKeyword = localizedKeyword;
-            LocalizedDescription = localizedDescription;
             CurrentCultureInfo = CultureInfo.CurrentUICulture;
         }
 
@@ -31,9 +29,9 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             CurrentCultureInfo = cultureInfo;
         }
 
-        public string LocalizedKeyword { get; }
+        public abstract string LocalizedKeyword(CultureInfo forCultureInfo);
 
-        public string LocalizedDescription { get; }
+        public abstract string LocalizedDescription(CultureInfo forCultureInfo);
 
         public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input)
         {

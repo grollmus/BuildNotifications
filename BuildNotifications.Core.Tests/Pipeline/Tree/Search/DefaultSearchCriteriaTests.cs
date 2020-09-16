@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -17,9 +18,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
         {
             private readonly string _searchDummyString;
             private readonly string[] _suggestionsForAnyInputNotEqualDummyString;
-            public string LocalizedKeyword => "Unused" + _searchDummyString;
 
-            public string LocalizedDescription => "Unused" + _searchDummyString;
+            public string LocalizedKeyword(CultureInfo forCultureInfo) => "Unused" + _searchDummyString;
+
+            string ISearchCriteria.LocalizedDescription(CultureInfo forCulture) => "Unused" + _searchDummyString;
 
             protected BaseDummySearch(string searchDummyString, params string[] suggestionsForAnyInputNotEqualDummyString)
             {

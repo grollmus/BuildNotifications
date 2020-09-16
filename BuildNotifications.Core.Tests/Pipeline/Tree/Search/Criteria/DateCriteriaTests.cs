@@ -17,11 +17,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         protected static CultureInfo TestCulture => CultureInfo.GetCultureInfo("en");
 
         protected const string ReferenceDate = "6/15/2020";
+        protected static readonly DateTime ReferenceToday = new DateTime(2020, 6, 18);
 
-        protected DateCriteriaTests(BaseSearchCriteria criteriaUnderTest)
+        protected DateCriteriaTests(BaseDateSearchCriteria criteriaUnderTest)
         {
             CriteriaUnderTest = criteriaUnderTest;
             criteriaUnderTest.UseSpecificCulture(TestCulture);
+            criteriaUnderTest.SetResolveNow(() => ReferenceToday);
         }
 
         protected void ExpectNoMatch(string referenceDate, string input)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
@@ -97,9 +98,13 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 
         private class TestSearchCriteria : BaseSearchCriteria
         {
-            public TestSearchCriteria(IPipeline pipeline) : base(string.Empty, string.Empty, pipeline)
+            public TestSearchCriteria(IPipeline pipeline) : base(pipeline)
             {
             }
+
+            public override string LocalizedKeyword(CultureInfo forCultureInfo) => string.Empty;
+
+            public override string LocalizedDescription(CultureInfo forCultureInfo) => string.Empty;
 
             protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher)
             {

@@ -10,7 +10,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class DuringCriteria : BaseDateSearchCriteria
     {
-        public DuringCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaDuringKeyword, StringLocalizer.SearchCriteriaDuringDescription, pipeline)
+        public DuringCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
 
@@ -51,6 +51,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             }
         }
 
+        public override string LocalizedKeyword(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaDuringKeyword;
+
+        public override string LocalizedDescription(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaDuringDescription;
+
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {
             _validDates.Clear();
@@ -70,10 +74,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 return true;
 
             if (input.Equals(_todayString, StringComparison.InvariantCultureIgnoreCase))
-                return buildDate.Value.Date.Equals(DateTime.Today);
+                return buildDate.Value.Date.Equals(Today());
 
             if (input.Equals(_yesterdayString, StringComparison.InvariantCultureIgnoreCase))
-                return buildDate.Value.Date.Equals(DateTime.Today - TimeSpan.FromDays(1));
+                return buildDate.Value.Date.Equals(Today() - TimeSpan.FromDays(1));
 
             if (DateTime.TryParse(input, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var inputAsDateTime))
                 return buildDate.Value.Date.Equals(inputAsDateTime.Date);
@@ -85,7 +89,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         {
             yield return _todayString;
             yield return _yesterdayString;
-            yield return DateTime.Today.ToString("d", CurrentCultureInfo);
+            yield return Today().ToString("d", CurrentCultureInfo);
         }
     }
 }

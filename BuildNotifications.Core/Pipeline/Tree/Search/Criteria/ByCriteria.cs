@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -8,11 +9,15 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class ByCriteria : BaseStringCriteria
     {
-        public ByCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaByKeyword, StringLocalizer.SearchCriteriaByDescription, pipeline)
+        public ByCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
 
         protected override IEnumerable<string> ResolveAllPossibleStringValues(IPipeline pipeline) => pipeline.CachedBuilds().Select(b => b.RequestedBy.DisplayName).Distinct();
+
+        public override string LocalizedKeyword(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaByKeyword;
+
+        public override string LocalizedDescription(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaByDescription;
 
         protected override bool IsBuildIncludedInternal(IBuild build, string input)
         {

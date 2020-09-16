@@ -10,7 +10,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class BeforeCriteria : BaseDateSearchCriteria
     {
-        public BeforeCriteria(IPipeline pipeline) : base(StringLocalizer.SearchCriteriaBeforeKeyword, StringLocalizer.SearchCriteriaBeforeDescription, pipeline)
+        public BeforeCriteria(IPipeline pipeline) : base(pipeline)
         {
         }
 
@@ -35,6 +35,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             }
         }
 
+        public override string LocalizedKeyword(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaBeforeKeyword;
+
+        public override string LocalizedDescription(CultureInfo forCultureInfo) => StringLocalizer.SearchCriteriaBeforeDescription;
+
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {
             _validDates.Clear();
@@ -54,7 +58,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 return true;
 
             if (input.Equals(_todayString, StringComparison.InvariantCultureIgnoreCase))
-                return buildDate.Value.Date < DateTime.Today;
+                return buildDate.Value.Date < Today();
 
             if (DateTime.TryParse(input, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var inputAsDateTime))
                 return buildDate.Value.Date < inputAsDateTime.Date;
@@ -65,8 +69,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         protected override IEnumerable<string> Examples()
         {
             yield return _todayString;
-            yield return DateTime.Today.ToString("d", CurrentCultureInfo);
-            yield return (DateTime.Today + TimeSpan.FromDays(1)).ToString("d", CurrentCultureInfo);
+            yield return Today().ToString("d", CurrentCultureInfo);
+            yield return (Today() + TimeSpan.FromDays(1)).ToString("d", CurrentCultureInfo);
         }
     }
 }

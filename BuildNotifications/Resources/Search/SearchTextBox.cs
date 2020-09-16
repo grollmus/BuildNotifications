@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -260,7 +261,7 @@ namespace BuildNotifications.Resources.Search
 
             foreach (var parsedBlock in parsedBlocks)
             {
-                if (string.IsNullOrEmpty(parsedBlock.SearchCriteria.LocalizedKeyword))
+                if (string.IsNullOrEmpty(parsedBlock.SearchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture)))
                 {
                     var run = DefaultRun(parsedBlock.EnteredText);
                     inlines.Add(run);
@@ -268,7 +269,7 @@ namespace BuildNotifications.Resources.Search
                 }
                 else
                 {
-                    var searchCriteriaRun = SearchCriteriaRun($"{parsedBlock.SearchCriteria.LocalizedKeyword}:");
+                    var searchCriteriaRun = SearchCriteriaRun($"{parsedBlock.SearchCriteria.LocalizedKeyword(CultureInfo.CurrentCulture)}:");
                     inlines.Add(searchCriteriaRun);
                     yield return (searchCriteriaRun, parsedBlock, true);
 

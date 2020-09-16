@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 using BuildNotifications.PluginInterfaces.Builds;
@@ -21,8 +22,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         private class DummyBranchSearchCriteria : ISearchCriteria
         {
-            public string LocalizedKeyword => "Branch";
-            public string LocalizedDescription => "Unused";
+            public string LocalizedKeyword(CultureInfo forCultureInfo) => "Branch";
+            public string LocalizedDescription(CultureInfo forCultureInfo) => "Unused";
 
             public IEnumerable<ISearchCriteriaSuggestion> Suggest(string input) => Enumerable.Empty<ISearchCriteriaSuggestion>();
 
@@ -202,7 +203,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             // act
             var blocks = search.Blocks;
-            var combined = string.Join("", blocks.Select(b => (string.IsNullOrEmpty(b.SearchCriteria.LocalizedKeyword) ? string.Empty : b.SearchCriteria.LocalizedKeyword + ":") + b.EnteredText));
+            var combined = string.Join("", blocks.Select(b => (string.IsNullOrEmpty(b.SearchCriteria.LocalizedKeyword(CultureInfo.InvariantCulture)) ? string.Empty : b.SearchCriteria.LocalizedKeyword(CultureInfo.InvariantCulture) + ":") + b.EnteredText));
 
             // assert
             Assert.Equal(input, combined, StringComparer.OrdinalIgnoreCase);
