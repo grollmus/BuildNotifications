@@ -35,7 +35,18 @@ namespace BuildNotifications.Core.Text
             {
                 WriteLine($"             public const string {name} = \"{name}\";");
             }
+
     #>
+
+             public static System.Collections.Generic.IEnumerable<string> All()
+             {<#
+		        WriteLine("");
+                foreach (var name in names)
+                {
+                    WriteLine($"                 yield return \"{name}\";");
+                }
+        #>
+             }
         }
     }
 }
