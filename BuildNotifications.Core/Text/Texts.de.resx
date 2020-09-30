@@ -622,5 +622,8 @@
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="UseDarkTheme" xml:space="preserve">
+    <value>Dunkles Thema verwenden</value>
+  </data>
 </root>
 <!-- ReSharper restore MarkupTextTypo -->
