@@ -289,11 +289,15 @@ namespace BuildNotifications.Core.Pipeline
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
+
+                // Fetch branches first so they are known when fetching builds
                 var branchTask = FetchBranches();
+                await branchTask;
+
                 var definitionsTask = FetchDefinitions();
                 var buildsTask = FetchBuilds(mode);
 
-                await Task.WhenAll(branchTask, definitionsTask, buildsTask);
+                await Task.WhenAll(definitionsTask, buildsTask);
 
                 Log.Debug().Message("Everything is fetched.").Write();
 

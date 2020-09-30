@@ -62,13 +62,14 @@ namespace BuildNotifications.Core.Tests.Pipeline
             {
                 var branchProvider = Substitute.For<IBranchProvider>();
                 branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
+                branchProvider.ExistingBranchCount.Returns(branches.Length);
                 return branchProvider;
             }
 
             IBuildProvider BuildProvider(params IBuild[] builds)
             {
                 var buildProvider = Substitute.For<IBuildProvider>();
-                buildProvider.FetchAllBuilds().Returns(x => ToAsync(builds));
+                buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(x => ToAsync(builds));
                 buildProvider.FetchExistingBuildDefinitions().Returns(x => ToAsync(new[] {new MockBuildDefinition()}));
                 return buildProvider;
             }
@@ -82,7 +83,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var buildsOfProjectB = new[] {buildOnBranchC};
 
             var configuration = Substitute.For<IConfiguration>();
-            configuration.BuildsToShow.Returns(int.MaxValue);
+            configuration.BuildsToShow.Returns(1);
 
             var treeBuilder = TreeBuilderTests.Construct(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
             var userIdentityList = Substitute.For<IUserIdentityList>();
@@ -95,13 +96,13 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var buildProviderA = BuildProvider(buildsOfProjectA);
             var buildProviderB = BuildProvider(buildsOfProjectB);
 
-            var projectA = new Project(buildProviderA, branchProviderA, Substitute.For<IProjectConfiguration>())
+            var projectA = new Project(buildProviderA, branchProviderA, Substitute.For<IProjectConfiguration>(), configuration)
             {
                 Name = "a"
             };
             sut.AddProject(projectA);
 
-            var projectB = new Project(buildProviderB, branchProviderB, Substitute.For<IProjectConfiguration>())
+            var projectB = new Project(buildProviderB, branchProviderB, Substitute.For<IProjectConfiguration>(), configuration)
             {
                 Name = "b"
             };
@@ -169,7 +170,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             var sut = new Core.Pipeline.Pipeline(builder, configuration, userIdentityList);
 
             var buildProvider = Substitute.For<IBuildProvider>();
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), configuration);
             sut.AddProject(project);
 
             // Act
@@ -190,7 +191,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
 
             var buildProvider = Substitute.For<IBuildProvider>();
 
-            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, Substitute.For<IBranchProvider>(), Substitute.For<IProjectConfiguration>(), configuration);
             sut.AddProject(project);
 
             // Act
@@ -198,7 +199,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             await sut.Update();
 
             // Assert
-            await buildProvider.Received(1).FetchAllBuilds().GetAsyncEnumerator().DisposeAsync();
+            await buildProvider.Received(1).FetchAllBuilds(configuration.BuildsToShow).GetAsyncEnumerator().DisposeAsync();
         }
 
         [Fact]
@@ -225,20 +226,21 @@ namespace BuildNotifications.Core.Tests.Pipeline
             b2.Definition.Returns(nightlyDefinition);
             b2.BranchName.Returns("stage");
 
+            var configuration = Substitute.For<IConfiguration>();
+            configuration.BuildsToShow.Returns(1);
+
             var buildProvider = Substitute.For<IBuildProvider>();
-            buildProvider.FetchAllBuilds().Returns(x => b1.AsyncYield());
+            buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(x => b1.AsyncYield());
             buildProvider.FetchBuildsChangedSince(Arg.Any<DateTime>()).Returns(x => b2.AsyncYield());
             buildProvider.FetchExistingBuildDefinitions().Returns(x => ToAsync(definitions));
 
             var branchProvider = Substitute.For<IBranchProvider>();
             branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
-
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.BuildsToShow.Returns(int.MaxValue);
+            branchProvider.ExistingBranchCount.Returns(branches.Length);
             var userIdentityList = Substitute.For<IUserIdentityList>();
             var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);
 
-            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>());
+            var project = new Project(buildProvider, branchProvider, Substitute.For<IProjectConfiguration>(), configuration);
             pipeline.AddProject(project);
 
             IBuildTree? tree = null;
