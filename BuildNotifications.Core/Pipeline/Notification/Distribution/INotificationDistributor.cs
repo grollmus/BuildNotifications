@@ -7,7 +7,6 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
     {
         void ClearAllMessages();
         void ClearDistributedMessage(INotification notification);
-      
         void Distribute(INotification notification);
     }
 }

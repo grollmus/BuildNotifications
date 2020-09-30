@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BuildNotifications.ViewModel.Settings.Options;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace BuildNotifications.Tests.ViewModels.Settings.Options
@@ -8,9 +9,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
     {
         private enum TestEnumWithoutLocalization
         {
-            NonLocalizableOne,
-            NonLocalizableTwo,
-            NonLocalizableThree,
+            [UsedImplicitly] NonLocalizableOne,
+            [UsedImplicitly] NonLocalizableTwo,
+            [UsedImplicitly] NonLocalizableThree,
         }
 
         [Fact]
