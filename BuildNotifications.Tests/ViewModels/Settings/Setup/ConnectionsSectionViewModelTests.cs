@@ -31,6 +31,30 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
         }
 
         [Fact]
+        public void ChangingConnectionNameShouldRaiseChangeEvent()
+        {
+            // Arrange
+            var configuration = Substitute.For<IConfiguration>();
+            var pluginRepository = Substitute.For<IPluginRepository>();
+            Action saveAction = () => { };
+            var popupService = Substitute.For<IPopupService>();
+
+            var sut = new ConnectionsSectionViewModel(configuration, pluginRepository, saveAction, popupService);
+
+            sut.AddConnectionCommand.Execute(null);
+            var connection = sut.Connections.First();
+
+            var changeRaised = false;
+            sut.Changed += (s, e) => changeRaised = true;
+
+            // Act
+            connection.Name = "new name";
+
+            // Assert
+            Assert.True(changeRaised);
+        }
+
+        [Fact]
         public void RemoveCommandShouldDoNothingWhenNoConfirmationIsGiven()
         {
             // Arrange
