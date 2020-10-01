@@ -43,7 +43,7 @@
             </Grid>
 
             <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
-                       VerticalAlignment="Top" Margin="{StaticResource BlockLeft}"
+                       VerticalAlignment="Center" Margin="{StaticResource BlockLeft}"
                        Text="{Binding RelativeChangedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
                        FontSize="{StaticResource BlockThreeQuarters}"
                        Foreground="{DynamicResource Foreground1}" />
@@ -62,6 +62,11 @@
                            Foreground="{DynamicResource Foreground1HalfTransparency}"
                            Background="Transparent" DockPanel.Dock="Top"
                            FontSize="{StaticResource BlockThreeQuarters}" />
+                <TextBlock DockPanel.Dock="Bottom" HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Text="{Binding RelativeQueuedDate, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
+                           FontSize="{StaticResource BlockThreeQuarters}"
+                           Foreground="{DynamicResource Foreground1}" />
                 <TextBlock Text="{Binding RequestedBy}" Foreground="{DynamicResource Foreground1}"
                            Background="Transparent" />
             </DockPanel>
@@ -93,9 +98,10 @@
                   Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}"
                   ToolTip="{StaticResource ToolTip}">
 
-                <Rectangle Fill="{DynamicResource Background3}"
-                           Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
-                           Visibility="Collapsed" UseLayoutRounding="True">
+                <!--The highlight block is by default collapsed, so it wont cause much overhead when the builds are reordered. However the highlight trigger will set the visibility to visible
+                and instead use opacity. Opacity is not used by default, as opacity has a drastically bigger performance impact.-->
+                <Rectangle Margin="{DynamicResource NegativeBlockHalfThicknessAndABit}"
+                           UseLayoutRounding="True" Visibility="Collapsed">
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
                             <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False" />
@@ -129,7 +135,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
-
             </Grid>
 
             <Grid.RenderTransform>
@@ -153,7 +158,7 @@
                 <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
             </Trigger>
 
-            <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
+            <DataTrigger Binding="{Binding DisplayAsHollow}" Value="True">
                 <Setter Property="Fill" Value="{DynamicResource Background1Dark}" TargetName="FillRectangle" />
             </DataTrigger>
 

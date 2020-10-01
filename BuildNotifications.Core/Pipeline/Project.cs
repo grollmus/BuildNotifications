@@ -12,7 +12,7 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider branchProvider, IProjectConfiguration config)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider, IProjectConfiguration config)
         {
             Name = config.ProjectName;
             _buildProviders = buildProviders.ToList();
@@ -27,7 +27,7 @@ namespace BuildNotifications.Core.Pipeline
         {
         }
 
-        private IBranchNameExtractor BranchNameExtractor => _branchProvider.NameExtractor;
+        private IBranchNameExtractor BranchNameExtractor => _branchProvider?.NameExtractor ?? new NullBranchNameExtractor();
 
         private IBuild Enrich(IBaseBuild build, IBuildProvider buildProvider) => new EnrichedBuild(build, Name, Guid, buildProvider);
 
@@ -89,6 +89,9 @@ namespace BuildNotifications.Core.Pipeline
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
         {
+            if (_branchProvider == null)
+                yield break;
+
             await foreach (var branch in _branchProvider.FetchExistingBranches())
             {
                 if (Config.PullRequestDisplay != PullRequestDisplayMode.None || !(branch is IPullRequest))
@@ -98,6 +101,9 @@ namespace BuildNotifications.Core.Pipeline
 
         public async IAsyncEnumerable<IBranch> FetchRemovedBranches()
         {
+            if (_branchProvider == null)
+                yield break;
+
             await foreach (var branch in _branchProvider.RemovedBranches())
             {
                 yield return branch;
@@ -172,7 +178,7 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private readonly IBranchProvider _branchProvider;
+        private readonly IBranchProvider? _branchProvider;
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
 

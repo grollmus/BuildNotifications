@@ -17,18 +17,23 @@ namespace BuildNotifications.Core.Config
 
         private string _searchPattern = string.Empty;
 
+        public const char ForceExplicitMatchCharacter = '=';
+
         public string SearchPattern
         {
             get => _searchPattern;
             set
             {
-                if (value.Length > 0 && value[0] == '=')
+                if (value.Length > 0 && value[0] == ForceExplicitMatchCharacter)
                 {
                     _implyWildcards = false;
                     _searchPattern = value.Substring(1);
                 }
                 else
+                {
+                    _implyWildcards = true;
                     _searchPattern = value;
+                }
 
                 _splitBySpecialCharacter = SplitBySpecialCharacters(SearchPattern).ToList();
             }
@@ -71,9 +76,10 @@ namespace BuildNotifications.Core.Config
 
                         useWildcard = false;
 
-                        currentIndex = newIndex;
-                        if (currentIndex < 0)
+                        if (newIndex < 0)
                             return false;
+
+                        currentIndex = newIndex + split.Length;
                         break;
                 }
             }
@@ -84,11 +90,10 @@ namespace BuildNotifications.Core.Config
                 if (lastSearchTerm == null)
                     return currentIndex >= 0;
 
-                var expectedEnd = currentIndex + lastSearchTerm.Length;
-                return expectedEnd == input.Length;
+                return currentIndex == input.Length;
             }
 
-            return currentIndex >= 0;
+            return currentIndex >= 0 || SearchPattern.All(c => c.Equals('*'));
         }
 
         private bool IsNonSpecialCharacter(string split)

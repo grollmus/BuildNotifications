@@ -60,6 +60,8 @@ namespace BuildNotifications.Core.Pipeline.Cache
             return _items.Where(kvp => kvp.Key.IsProvider(providerId)).Select(kvp => kvp.Value);
         }
 
+        public int Size => _items.Count;
+
         public IEnumerable<T> ContentCopy()
         {
             return new List<T>(_items.Values);

@@ -86,7 +86,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0" />
+                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0"/>
                         <ScrollBar Name="PART_VerticalScrollBar" Grid.Column="1"
                                    Margin="{StaticResource BlockQuarterThickness}"
                                    Value="{TemplateBinding VerticalOffset}"

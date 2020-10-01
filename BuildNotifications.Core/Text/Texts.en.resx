@@ -559,7 +559,7 @@
     <value>An update has been installed.</value>
   </data>
   <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
-    <value>Restart application to apply the update.</value>
+    <value>Restart application to apply the update</value>
   </data>
   <data name="GoToPullRequest" xml:space="preserve">
     <value>Go to Pull request</value>
@@ -620,5 +620,129 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="MyBuildsSightToolTip" xml:space="preserve">
+    <value>Show only builds requested by me</value>
+  </data>
+  <data name="ManualBuildsSightToolTip" xml:space="preserve">
+    <value>Show only manually requested builds</value>
+  </data>
+  <data name="SearchDefaultDescription" xml:space="preserve">
+    <value>Search by any criteria listed below.
+Use keywords for specific filter. Comma to separate terms.</value>
+  </data>
+  <data name="SearchCriteriaAfterKeyword" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="SearchCriteriaAfterDescription" xml:space="preserve">
+    <value>Builds starting after a specific date</value>
+  </data>
+  <data name="SearchCriteriaAfterYesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="SearchCriteriaBeforeKeyword" xml:space="preserve">
+    <value>Before</value>
+  </data>
+  <data name="SearchCriteriaBeforeDescription" xml:space="preserve">
+    <value>Builds started before a specific date</value>
+  </data>
+  <data name="SearchCriteriaBeforeToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="SearchCriteriaDuringKeyword" xml:space="preserve">
+    <value>During</value>
+  </data>
+  <data name="SearchCriteriaDuringDescription" xml:space="preserve">
+    <value>Builds that were started on a specific date</value>
+  </data>
+  <data name="SearchCriteriaDuringToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="SearchCriteriaByKeyword" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="SearchCriteriaByDescription" xml:space="preserve">
+    <value>Builds created by a certain user</value>
+  </data>
+  <data name="SearchCriteriaForKeyword" xml:space="preserve">
+    <value>For</value>
+  </data>
+  <data name="SearchCriteriaForDescription" xml:space="preserve">
+    <value>Builds created for a certain user</value>
+  </data>
+  <data name="SearchCriteriaIsKeyword" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="SearchCriteriaIsDescription" xml:space="preserve">
+    <value>Various criterions of a build</value>
+  </data>
+  <data name="SearchCriteriaBranchKeyword" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="SearchCriteriaBranchDescription" xml:space="preserve">
+    <value>Builds from a specific branch. Supports wildcards (*)</value>
+  </data>
+  <data name="SearchCriteriaDefinitionKeyword" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="SearchCriteriaDefinitionDescription" xml:space="preserve">
+    <value>Builds from a specific builds definition</value>
+  </data>
+  <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="SearchCriteriaIsManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="SearchCriteriaIsByMe" xml:space="preserve">
+    <value>By me</value>
+  </data>
+  <data name="SearchCriteriaIsInProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="SearchCriteriaIsPending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="SearchCriteriaIsFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="SearchCriteriaIsCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="SearchCriteriaIsCi" xml:space="preserve">
+    <value>CI</value>
+  </data>
+  <data name="SearchCriteriaIsNightly" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
+  <data name="SearchCriteriaIsPullRequest" xml:space="preserve">
+    <value>Pull request</value>
+  </data>
+  <data name="SearchCriteriaIsSucceeded" xml:space="preserve">
+    <value>Succeeded</value>
+  </data>
+  <data name="SearchCriteriaIsPartiallySucceeded" xml:space="preserve">
+    <value>Partially succeeded</value>
+  </data>
+  <data name="SearchCriteriaIsScheduled" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
+  <data name="SearchCriteriaBranchStageExample" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
+  <data name="SearchCriteriaForMeExample" xml:space="preserve">
+    <value>Me</value>
+  </data>
+  <data name="SearchCriteriaByMeExample" xml:space="preserve">
+    <value>Me</value>
+  </data>
+  <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
+    <value>John Doe</value>
+  </data>
+  <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
+    <value>John Doe</value>
   </data>
 </root>

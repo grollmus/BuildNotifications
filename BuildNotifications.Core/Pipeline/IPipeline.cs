@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BuildNotifications.Core.Pipeline.Tree.Search;
+using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.SourceControl;
 
 namespace BuildNotifications.Core.Pipeline
 {
@@ -24,13 +29,10 @@ namespace BuildNotifications.Core.Pipeline
         void ClearProjects();
 
         /// <summary>
-        /// Filters builds in the pipeline to match the term.
+        /// Applies the given search to the pipeline.
         /// </summary>
-        /// <param name="searchTerm">
-        /// Term to search for.
-        /// Use empty string to clear search filter
-        /// </param>
-        void Search(string searchTerm);
+        /// <param name="search">The search that shall be applied.</param>
+        void Search(ISpecificSearch search);
 
         /// <summary>
         /// Updates the pipeline i.e. fetch data from projects, group builds and
@@ -38,5 +40,28 @@ namespace BuildNotifications.Core.Pipeline
         /// </summary>
         /// <param name="mode">Mode to use for update.</param>
         Task Update(UpdateModes mode = UpdateModes.DeltaBuilds);
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached builds.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBuild> CachedBuilds();
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached definitions.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBuildDefinition> CachedDefinitions();
+
+        /// <summary>
+        /// Gets a snapshot of the currently cached branches.
+        /// </summary>
+        /// <returns>Read only list. Instance is not updated.</returns>
+        IReadOnlyList<IBranch> CachedBranches();
+
+        /// <summary>
+        /// Time of the last successful update. Null if it never happened.
+        /// </summary>
+        DateTime? LastUpdate { get; }
     }
 }
