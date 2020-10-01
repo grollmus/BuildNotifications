@@ -8,19 +8,43 @@ namespace BuildNotifications.Core.Tests.Text
 {
     public class StringLocalizerTests
     {
-        private IEnumerable<CultureInfo> AllCultures => CultureInfo.GetCultures(CultureTypes.AllCultures);
+        private static IEnumerable<CultureInfo> AllCultures => CultureInfo.GetCultures(CultureTypes.AllCultures);
 
         private const string NativeName = nameof(NativeName);
 
-        [Fact]
-        public void AllSupportedCulturesShouldHaveNativeNameLocalized()
+        public static TheoryData<CultureInfo> SupportedCultures
         {
-            Assert.All(StringLocalizer.SupportedCultures(), c =>
+            get
             {
-                var translation = StringLocalizer.Instance.GetText(NativeName, c);
+                var data = new TheoryData<CultureInfo>();
+                foreach (var supportedCulture in StringLocalizer.SupportedCultures())
+                {
+                    data.Add(supportedCulture);
+                }
 
-                Assert.NotEqual(translation, NativeName);
-            });
+                return data;
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(SupportedCultures))]
+        public void AllSupportedCulturesShouldHaveNativeNameLocalized(CultureInfo culture)
+        {
+            var translation = StringLocalizer.Instance.GetText(NativeName, culture);
+
+            Assert.NotEqual(translation, NativeName);
+        }
+
+        [Theory]
+        [MemberData(nameof(SupportedCultures))]
+        public void AllTextIdsShouldBeLocalized(CultureInfo culture)
+        {
+            var localizer = StringLocalizer.Instance;
+
+            var keys = StringLocalizer.Keys.All().ToList();
+
+            Assert.NotEmpty(keys);
+            Assert.All(keys, key => Assert.NotEmpty(localizer.GetText(key, culture)));
         }
 
         [Fact]
@@ -37,18 +61,16 @@ namespace BuildNotifications.Core.Tests.Text
             });
         }
 
-        [Fact]
-        public void NotTranslatedTextReturnsFallbackLanguageTranslation()
+        [Theory]
+        [MemberData(nameof(SupportedCultures))]
+        public void NotTranslatedTextReturnsFallbackLanguageTranslation(CultureInfo culture)
         {
             var localizer = StringLocalizer.Instance;
             const string textOnlyInEnglishId = nameof(textOnlyInEnglishId);
             const string textOnlyInEnglish = nameof(textOnlyInEnglish);
-            localizer.Cache[StringLocalizer.DefaultCulture].Add(textOnlyInEnglishId, textOnlyInEnglish);
+            localizer.Cache[StringLocalizer.DefaultCulture][textOnlyInEnglishId] = textOnlyInEnglish;
 
-            foreach (var supportedCulture in StringLocalizer.SupportedCultures())
-            {
-                Assert.Equal(StringLocalizer.Instance.GetText(textOnlyInEnglishId, supportedCulture), textOnlyInEnglish);
-            }
+            Assert.Equal(StringLocalizer.Instance.GetText(textOnlyInEnglishId, culture), textOnlyInEnglish);
         }
 
         [Fact]
