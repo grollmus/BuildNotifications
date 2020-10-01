@@ -36,6 +36,8 @@ namespace BuildNotifications.Core.Tests.Config
         [InlineData("C", "bC", false)]
         [InlineData("\"Abc\"", "Abc", true)]
         [InlineData("\"Abc", "Abc", true)]
+        [InlineData("Bra*A", "BranchA", true)]
+        [InlineData("Bra*A", "BranchB", false)]
         public void MatcherWithNoImpliedWildcardsShouldMatch(string pattern, string input, bool shouldBeMatch)
         {
             var matcher = new StringMatcher("=" + pattern);
@@ -48,6 +50,8 @@ namespace BuildNotifications.Core.Tests.Config
         [Theory]
         [InlineData("", "", true)]
         [InlineData("", "abc", true)]
+        [InlineData("*", "abc", true)]
+        [InlineData("****", "abc", true)]
         [InlineData("abc", "abc", true)]
         [InlineData("aBc", "abc", true)]
         [InlineData("\"aBc\"", "abc", false)]

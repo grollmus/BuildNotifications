@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using BuildNotifications.ViewModel.Settings.Options;
-using JetBrains.Annotations;
 using Xunit;
 
 namespace BuildNotifications.Tests.ViewModels.Settings.Options
@@ -9,9 +8,11 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
     {
         private enum TestEnumWithoutLocalization
         {
-            [UsedImplicitly] NonLocalizableOne,
-            [UsedImplicitly] NonLocalizableTwo,
-            [UsedImplicitly] NonLocalizableThree,
+            // ReSharper disable UnusedMember.Local
+            NonLocalizableOne,
+            NonLocalizableTwo,
+            NonLocalizableThree,
+            // ReSharper enable UnusedMember.Local
         }
 
         [Fact]

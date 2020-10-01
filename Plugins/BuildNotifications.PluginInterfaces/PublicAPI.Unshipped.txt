@@ -26,6 +26,7 @@ BuildNotifications.PluginInterfaces.Builds.IBaseBuild.RequestedBy.get -> BuildNo
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.RequestedFor.get -> BuildNotifications.PluginInterfaces.IUser?
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Status.get -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
 BuildNotifications.PluginInterfaces.Builds.IBuild
+BuildNotifications.PluginInterfaces.Builds.IBuild.Branch.get -> BuildNotifications.PluginInterfaces.SourceControl.IBranch?
 BuildNotifications.PluginInterfaces.Builds.IBuild.IsRequestedByCurrentUser.get -> bool
 BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectId.get -> System.Guid
 BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectName.get -> string!
@@ -54,6 +55,15 @@ BuildNotifications.PluginInterfaces.Builds.IPlugin.ConstructNewConfiguration() -
 BuildNotifications.PluginInterfaces.Builds.IPlugin.DisplayName.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IPlugin.IconSvgPath.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IPlugin.OnPluginLoaded(BuildNotifications.PluginInterfaces.Host.IPluginHost! host) -> void
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.IsBuildIncluded(BuildNotifications.PluginInterfaces.Builds.IBuild! build, string! input) -> bool
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedDescription(System.Globalization.CultureInfo! forCulture) -> string!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedExamples.get -> System.Collections.Generic.IEnumerable<string!>!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.LocalizedKeyword(System.Globalization.CultureInfo! forCulture) -> string!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteria.Suggest(string! input) -> System.Collections.Generic.IEnumerable<BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion!>!
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion.IsKeyword.get -> bool
+BuildNotifications.PluginInterfaces.Builds.Search.ISearchCriteriaSuggestion.Suggestion.get -> string!
 BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration
 BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.AsyncPluginConfiguration(BuildNotifications.PluginInterfaces.Host.IDispatcher! uiDispatcher) -> void
 BuildNotifications.PluginInterfaces.Configuration.AsyncPluginConfiguration.CreateCalculator<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<BuildNotifications.PluginInterfaces.Configuration.Options.IValueCalculationResult<T>!>!>! calculationTaskFactory, System.Action<T>! handleResultCallback) -> BuildNotifications.PluginInterfaces.Configuration.Options.IAsyncValueCalculator!

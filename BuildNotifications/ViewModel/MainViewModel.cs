@@ -19,11 +19,9 @@ using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
 using BuildNotifications.ViewModel.Settings;
-using BuildNotifications.ViewModel.Sight;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.ViewModel.Utils.Configuration;
-using JetBrains.Annotations;
 using NLog.Fluent;
 using Semver;
 using TweenSharp.Animation;
@@ -73,7 +71,6 @@ namespace BuildNotifications.ViewModel
             {
                 _buildTree = value;
                 OnPropertyChanged();
-                SightSelection.BuildTree = value;
             }
         }
 
@@ -128,18 +125,6 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        public bool ShowSights
-        {
-            get => _showSights;
-            set
-            {
-                _showSights = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public SightSelectionViewModel SightSelection { get; set; }
-
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
         public Visibility TitleBarToolsVisibility => Overlay == null ? Visibility.Visible : Visibility.Collapsed;
@@ -147,7 +132,6 @@ namespace BuildNotifications.ViewModel
         public ICommand ToggleGroupDefinitionSelectionCommand { get; set; }
         public ICommand ToggleShowNotificationCenterCommand { get; set; }
         public ICommand ToggleShowSettingsCommand { get; set; }
-        public ICommand ToggleShowSightsCommand { get; set; }
 
         public void RestoreWindowStateFor(Window window)
         {
@@ -197,6 +181,7 @@ namespace BuildNotifications.ViewModel
         private void CoreSetup_PipelineUpdated(object? sender, PipelineUpdateEventArgs e)
         {
             _postPipelineUpdateTask = UpdateTreeTask(e);
+            SettingsViewModel.UpdateUser();
         }
 
         private void GlobalErrorLog_ErrorOccurred(object? sender, ErrorNotificationEventArgs e)
@@ -366,7 +351,7 @@ namespace BuildNotifications.ViewModel
 
         private void SetupViewModel()
         {
-            SearchViewModel = new SearchViewModel(_coreSetup.Pipeline);
+            SearchViewModel = new SearchViewModel(_coreSetup.Pipeline, _coreSetup.SearchEngine, _coreSetup.SearchHistory);
             StatusIndicator = new StatusIndicatorViewModel();
             StatusIndicator.ResumeRequested += StatusIndicator_OnResumeRequested;
             StatusIndicator.OpenErrorMessageRequested += StatusIndicator_OnOpenErrorMessageRequested;
@@ -383,12 +368,9 @@ namespace BuildNotifications.ViewModel
             };
             GroupAndSortDefinitionsSelection.PropertyChanged += GroupAndSortDefinitionsSelectionOnPropertyChanged;
 
-            SightSelection = new SightSelectionViewModel();
-
             ToggleGroupDefinitionSelectionCommand = new DelegateCommand(ToggleGroupDefinitionSelection);
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
-            ToggleShowSightsCommand = new DelegateCommand(ToggleShowSights);
             ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
         }
 
@@ -396,7 +378,6 @@ namespace BuildNotifications.ViewModel
         {
             var includePreReleases = _coreSetup.Configuration.UsePreReleases;
             var appUpdater = new AppUpdater(includePreReleases, NotificationCenter, _updateUrls);
-
             _popupService.ShowInfoPopup(includePreReleases, appUpdater);
         }
 
@@ -489,13 +470,12 @@ namespace BuildNotifications.ViewModel
         {
             Log.Info().Message($"Toggling settings. Value: {!ShowSettings}").Write();
             ShowSettings = !ShowSettings;
+
             if (ShowSettings && ShowNotificationCenter)
                 ShowNotificationCenter = false;
-        }
 
-        private void ToggleShowSights()
-        {
-            ShowSights = !ShowSights;
+            if (ShowSettings)
+                SettingsViewModel.UpdateUser();
         }
 
         private void TrayIconOnExitRequested(object? sender, EventArgs e)
@@ -565,7 +545,16 @@ namespace BuildNotifications.ViewModel
 
                 _isInitialFetch = false;
 
-                await _coreSetup.Update(_previouslyFetchedAnyBuilds ? UpdateModes.DeltaBuilds : UpdateModes.AllBuilds);
+                try
+                {
+                    await _coreSetup.Update(_previouslyFetchedAnyBuilds ? UpdateModes.DeltaBuilds : UpdateModes.AllBuilds);
+                }
+                catch (Exception e)
+                {
+                    Log.Error().Message(e.Message).Exception(e).Write();
+                    throw;
+                }
+
                 if (_postPipelineUpdateTask != null)
                     await _postPipelineUpdateTask;
 
@@ -640,7 +629,6 @@ namespace BuildNotifications.ViewModel
         private readonly ConfigurationApplication _configurationApplication;
         private readonly IPopupService _popupService;
         private bool _previouslyFetchedAnyBuilds;
-        private bool _showSights;
         private bool _blurView;
         private CancellationTokenSource? _cancellationTokenSource;
         private bool _keepUpdating;
@@ -653,11 +641,5 @@ namespace BuildNotifications.ViewModel
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
         private readonly IUpdateUrls _updateUrls;
-
-        private class Dummy
-        {
-            [UsedImplicitly]
-            public int DummyProp { get; set; }
-        }
     }
 }

@@ -63,7 +63,7 @@ namespace BuildNotifications.ViewModel.Utils
             item.IsRemoving = true;
 
             await Task.Delay(RemoveDelay);
-            if (_list.Contains(item))
+            if (item.IsRemoving && _list.Contains(item))
                 _list.Remove(item);
         }
 
@@ -84,7 +84,12 @@ namespace BuildNotifications.ViewModel.Utils
 
         public void Add(T item)
         {
-            item.IsRemoving = false;
+            if (_list.Contains(item))
+            {
+                item.IsRemoving = false;
+                _list.Remove(item);
+            }
+
             _list.Add(item);
 
             Sort();

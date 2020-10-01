@@ -34,7 +34,19 @@ namespace BuildNotifications.Resources.Animation
 
             globalTweenHandler.ClearTweensOf(TargetElement);
 
-            globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
+            if (TweenMinWidth)
+                globalTweenHandler.Add(TargetElement.Tween(x => x.MinWidth).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
+            else
+                globalTweenHandler.Add(TargetElement.Tween(x => x.Width).To(TargetWidth).In(Duration).Delay(Delay).Ease(Easing.QuadraticEaseOut));
+        }
+
+        public static readonly DependencyProperty TweenMinWidthProperty = DependencyProperty.Register(
+            "TweenMinWidth", typeof(bool), typeof(WidthChange), new PropertyMetadata(default(bool)));
+
+        public bool TweenMinWidth
+        {
+            get => (bool) GetValue(TweenMinWidthProperty);
+            set => SetValue(TweenMinWidthProperty, value);
         }
 
         public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register(

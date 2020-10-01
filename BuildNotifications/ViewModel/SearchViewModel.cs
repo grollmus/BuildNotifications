@@ -1,44 +1,43 @@
 ﻿using System;
 using System.Windows.Threading;
 using BuildNotifications.Core.Pipeline;
+using BuildNotifications.Core.Pipeline.Tree.Search;
 
 namespace BuildNotifications.ViewModel
 {
     public class SearchViewModel : BaseViewModel
     {
-        public SearchViewModel(IPipeline pipeline)
+        public SearchViewModel(IPipeline pipeline, ISearchEngine searchEngine, ISearchHistory searchHistory)
         {
             _pipeline = pipeline;
-            _searchTerm = string.Empty;
+            SearchEngine = searchEngine;
+            SearchHistory = searchHistory;
+            SearchEngine.SearchParsed += SearchEngineOnSearchParsed;
 
             _searchTimer = new DispatcherTimer(DispatcherPriority.Input)
             {
-                Interval = TimeSpan.FromMilliseconds(250)
+                Interval = TimeSpan.FromMilliseconds(400)
             };
             _searchTimer.Tick += SearchTimerOnTick;
         }
 
-        public string SearchTerm
+        private void SearchEngineOnSearchParsed(object? sender, SearchEngineEventArgs e)
         {
-            get => _searchTerm;
-            set
-            {
-                if (_searchTerm == value)
-                    return;
-
-                _searchTerm = value;
-                OnPropertyChanged(nameof(SearchTerm));
-                OnPropertyChanged(nameof(TextIsEmpty));
-
-                StartSearchTask();
-            }
+            _lastParsedSearch = e.CreatedSearch;
+            LastSearchedTerm = e.ParsedText;
+            OnPropertyChanged(nameof(TextIsEmpty));
+            StartSearchTask();
         }
+        
+        public ISearchEngine SearchEngine { get; }
 
-        public bool TextIsEmpty => SearchTerm.Length == 0;
+        public ISearchHistory SearchHistory { get; }
+
+        public bool TextIsEmpty => LastSearchedTerm.Length == 0;
 
         private void SearchTimerOnTick(object? sender, EventArgs e)
         {
-            _pipeline.Search(SearchTerm);
+            _pipeline.Search(_lastParsedSearch);
 
             _searchTimer.Stop();
         }
@@ -51,6 +50,18 @@ namespace BuildNotifications.ViewModel
 
         private readonly IPipeline _pipeline;
         private readonly DispatcherTimer _searchTimer;
-        private string _searchTerm;
+        private ISpecificSearch _lastParsedSearch = new EmptySearch();
+
+        private string _lastSearchedTerm = string.Empty;
+
+        public string LastSearchedTerm
+        {
+            get => _lastSearchedTerm;
+            set
+            {
+                _lastSearchedTerm = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

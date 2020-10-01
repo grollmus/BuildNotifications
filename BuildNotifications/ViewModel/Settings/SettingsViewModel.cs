@@ -102,7 +102,7 @@ namespace BuildNotifications.ViewModel.Settings
             _saveMethod.Invoke();
         }
 
-        private void UpdateUser()
+        public void UpdateUser()
         {
             var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
 
