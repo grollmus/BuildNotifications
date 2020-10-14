@@ -41,7 +41,7 @@ jobs:
       run: msbuild BuildNotifications.sln /t:Build /p:Configuration=Release
     
     - name: Run tests
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* /p:Exclude=*TestMocks.dll BuildNotifications.sln --no-build --configuration Release
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln --no-build --configuration Release
     
     - name: Upload code coverage results
       run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -r ./BuildNotifications.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
