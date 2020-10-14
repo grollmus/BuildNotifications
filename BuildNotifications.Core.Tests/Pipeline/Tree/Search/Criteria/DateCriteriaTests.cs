@@ -11,6 +11,7 @@ using Xunit;
 
 namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 {
+    [UseTestCulture("en")]
     public abstract class DateCriteriaTests
     {
         protected ISearchCriteria CriteriaUnderTest { get; }

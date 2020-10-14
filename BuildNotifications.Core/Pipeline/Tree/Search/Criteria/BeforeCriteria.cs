@@ -14,13 +14,13 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         {
         }
 
-        private readonly string _todayString = StringLocalizer.SearchCriteriaBeforeToday;
         private readonly List<DateTime> _validDates = new List<DateTime>();
 
         protected override IEnumerable<string> SuggestDatesInternal(string input, StringMatcher stringMatcher)
         {
-            if (stringMatcher.IsMatch(_todayString))
-                yield return _todayString;
+            var todayString = StringLocalizer.SearchCriteriaBeforeToday;
+            if (stringMatcher.IsMatch(todayString))
+                yield return todayString;
 
             var suggestionOfPossibleDates = SuggestPossibleDates(input, _validDates);
             foreach (var suggestionOfPossibleDate in suggestionOfPossibleDates)
@@ -57,7 +57,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             if (buildDate == null)
                 return true;
 
-            if (input.Equals(_todayString, StringComparison.InvariantCultureIgnoreCase))
+            if (input.Equals(StringLocalizer.SearchCriteriaBeforeToday, StringComparison.InvariantCultureIgnoreCase))
                 return buildDate.Value.Date < Today();
 
             if (DateTime.TryParse(input, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var inputAsDateTime))
@@ -68,7 +68,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected override IEnumerable<string> Examples()
         {
-            yield return _todayString;
+            yield return StringLocalizer.SearchCriteriaBeforeToday;
             yield return Today().ToString("d", CurrentCultureInfo);
             yield return (Today() + TimeSpan.FromDays(1)).ToString("d", CurrentCultureInfo);
         }
