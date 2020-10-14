@@ -23,7 +23,6 @@ namespace BuildNotifications.Resources.Search
         {
             GotFocus += OnGotFocus;
             LostFocus += OnLostFocus;
-            LostKeyboardFocus += (sender, args) => _popup.IsOpen = false;
             PreviewMouseDown += OnPreviewMouseDown;
             PreviewKeyDown += OnKeyDown;
             PreviewKeyUp += OnKeyUp;
@@ -33,6 +32,8 @@ namespace BuildNotifications.Resources.Search
             _scrollViewer = new ScrollViewer();
             _overlay = new Border();
             _popup = new Popup();
+            
+            LostKeyboardFocus += (sender, args) => _popup.IsOpen = false;
 
             ListenToTextEvents();
             Loaded += OnLoaded;

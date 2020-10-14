@@ -247,7 +247,7 @@ namespace BuildNotifications.Core.Pipeline
             try
             {
                 var currentUserIdentities = project.FetchCurrentUserIdentities();
-                foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
+                foreach (var currentUserIdentity in currentUserIdentities)
                 {
                     Log.Debug().Message($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"").Write();
                     _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);
@@ -255,7 +255,7 @@ namespace BuildNotifications.Core.Pipeline
             }
             catch (Exception e)
             {
-                Log.Debug().Message($"Failed to fetch identities of project {project.Name}").Exception(e).Write();
+                Log.Error().Message($"Failed to fetch identities of project {project.Name}").Exception(e).Write();
                 ReportError("ErrorFetchingUserIdentities", project.Name, e);
             }
         }

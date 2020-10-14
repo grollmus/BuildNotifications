@@ -69,7 +69,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
             OnItemChanged();
         }
 
-        private void Values_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Values_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnCollectionChanged();
         }

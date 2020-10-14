@@ -6,7 +6,7 @@ namespace BuildNotifications.ViewModel.Settings.Options
 {
     public abstract class ListOptionBaseViewModel<TItem> : OptionViewModelBase<TItem>
     {
-        protected ListOptionBaseViewModel(string displayName, TItem value = default)
+        protected ListOptionBaseViewModel(string displayName, TItem value)
             : base(value, displayName)
         {
             _initialValue = value;
