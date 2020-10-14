@@ -14,28 +14,27 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
         {
         }
 
-        private readonly string _todayString = StringLocalizer.SearchCriteriaDuringToday;
-        private readonly string _yesterdayString = StringLocalizer.SearchCriteriaDuringYesterday;
-
         private readonly List<DateTime> _validDates = new List<DateTime>();
 
         protected override IEnumerable<string> SuggestDatesInternal(string input, StringMatcher stringMatcher)
         {
+            var todayString = StringLocalizer.SearchCriteriaDuringToday;
+            var yesterdayString = StringLocalizer.SearchCriteriaDuringYesterday;
             if (input.StartsWith("y", StringComparison.CurrentCultureIgnoreCase))
             {
-                if (stringMatcher.IsMatch(_yesterdayString))
-                    yield return _yesterdayString;
+                if (stringMatcher.IsMatch(yesterdayString))
+                    yield return yesterdayString;
 
-                if (stringMatcher.IsMatch(_todayString))
-                    yield return _todayString;
+                if (stringMatcher.IsMatch(todayString))
+                    yield return todayString;
             }
             else
             {
-                if (stringMatcher.IsMatch(_todayString))
-                    yield return _todayString;
+                if (stringMatcher.IsMatch(todayString))
+                    yield return todayString;
 
-                if (stringMatcher.IsMatch(_yesterdayString))
-                    yield return _yesterdayString;
+                if (stringMatcher.IsMatch(yesterdayString))
+                    yield return yesterdayString;
             }
 
             var suggestionOfPossibleDates = SuggestPossibleDates(input, _validDates);
@@ -73,10 +72,10 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             if (buildDate == null)
                 return true;
 
-            if (input.Equals(_todayString, StringComparison.InvariantCultureIgnoreCase))
+            if (input.Equals(StringLocalizer.SearchCriteriaDuringToday, StringComparison.InvariantCultureIgnoreCase))
                 return buildDate.Value.Date.Equals(Today());
 
-            if (input.Equals(_yesterdayString, StringComparison.InvariantCultureIgnoreCase))
+            if (input.Equals(StringLocalizer.SearchCriteriaDuringYesterday, StringComparison.InvariantCultureIgnoreCase))
                 return buildDate.Value.Date.Equals(Today() - TimeSpan.FromDays(1));
 
             if (DateTime.TryParse(input, CurrentCultureInfo, DateTimeStyles.AssumeLocal, out var inputAsDateTime))
@@ -87,8 +86,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected override IEnumerable<string> Examples()
         {
-            yield return _todayString;
-            yield return _yesterdayString;
+            yield return StringLocalizer.SearchCriteriaDuringToday;
+            yield return StringLocalizer.SearchCriteriaDuringYesterday;
             yield return Today().ToString("d", CurrentCultureInfo);
         }
     }

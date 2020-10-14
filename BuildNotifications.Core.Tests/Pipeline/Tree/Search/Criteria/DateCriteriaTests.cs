@@ -6,11 +6,13 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Builds.Search;
+using BuildNotifications.TestMocks.Attributes;
 using NSubstitute;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 {
+    [UseTestCulture("en")]
     public abstract class DateCriteriaTests
     {
         protected ISearchCriteria CriteriaUnderTest { get; }

@@ -6,11 +6,13 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.TestMocks.Attributes;
 using NSubstitute;
 using Xunit;
 
 namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 {
+    [UseTestCulture("en")]
     public class IsCriteriaTests
     {
         private static CultureInfo TestCulture => CultureInfo.GetCultureInfo("en");
