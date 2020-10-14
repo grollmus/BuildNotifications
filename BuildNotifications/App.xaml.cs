@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using BuildNotifications.Core.Protocol;
+using BuildNotifications.Core.Toolkit;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Utils.Configuration;
 using NLog;
@@ -33,6 +34,11 @@ namespace BuildNotifications
                 .Default
                 .Targets
                 .RegisterDefinition("GlobalErrorLog", typeof(GlobalErrorLogTarget));
+            
+            ConfigurationItemFactory
+                .Default
+                .Targets
+                .RegisterDefinition("ToolkitLog", typeof(ToolkitLogTarget));
 
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => { Logger.Log(LogLevel.Fatal, args.ExceptionObject as Exception, "Global unhandled exception occurred."); };
         }

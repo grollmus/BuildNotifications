@@ -10,6 +10,8 @@
         Error,
         Info,
         Success,
-        Progress
+        Progress,
+        Warning,
+        Debug
     }
 }

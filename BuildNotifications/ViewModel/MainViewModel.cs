@@ -18,6 +18,7 @@ using BuildNotifications.Services;
 using BuildNotifications.ViewModel.GroupDefinitionSelection;
 using BuildNotifications.ViewModel.Notification;
 using BuildNotifications.ViewModel.Overlays;
+using BuildNotifications.ViewModel.Overlays.Toolkit;
 using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.ViewModel.Tree;
 using BuildNotifications.ViewModel.Utils;
@@ -47,10 +48,15 @@ namespace BuildNotifications.ViewModel
             _coreSetup.DistributedNotificationReceived += CoreSetup_DistributedNotificationReceived;
             _configurationApplication = new ConfigurationApplication(_coreSetup.Configuration);
             _configurationApplication.ApplyChanges();
-            GlobalErrorLogTarget.ErrorOccured += GlobalErrorLog_ErrorOccurred;
+            GlobalErrorLogTarget.ErrorOccurred += GlobalErrorLog_ErrorOccurred;
             _popupService = new PopupService(this, viewProvider);
             _windowSettings = new WindowSettings(pathResolver.WindowSettingsFilePath);
             _updateUrls = new UpdateUrls();
+
+#if DEBUG
+            ToolkitAvailable = true;
+#endif
+
             Initialize();
         }
 
@@ -74,24 +80,30 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; set; }
+        public GroupAndSortDefinitionsViewModel GroupAndSortDefinitionsSelection { get; private set; }
 
-        public NotificationCenterViewModel NotificationCenter { get; set; }
+        public NotificationCenterViewModel NotificationCenter { get; private set; }
 
-        public BaseViewModel? Overlay
+        public OverlayViewModel? Overlay
         {
             get => _overlay;
             set
             {
+                if (_overlay != null)
+                    _overlay.CloseRequested -= OnOverlayCloseRequested;
+
                 _overlay = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TitleBarToolsVisibility));
+
+                if (_overlay != null)
+                    _overlay.CloseRequested += OnOverlayCloseRequested;
             }
         }
 
-        public SearchViewModel SearchViewModel { get; set; }
+        public SearchViewModel SearchViewModel { get; private set; }
 
-        public SettingsViewModel SettingsViewModel { get; set; }
+        public SettingsViewModel SettingsViewModel { get; private set; }
 
         public bool ShowGroupDefinitionSelection
         {
@@ -103,7 +115,7 @@ namespace BuildNotifications.ViewModel
             }
         }
 
-        public ICommand ShowInfoPopupCommand { get; set; }
+        public ICommand ShowInfoPopupCommand { get; private set; }
 
         public bool ShowNotificationCenter
         {
@@ -124,6 +136,10 @@ namespace BuildNotifications.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public ICommand ShowToolkitCommand { get; private set; }
+
+        public bool ToolkitAvailable { get; }
 
         public StatusIndicatorViewModel StatusIndicator { get; set; }
 
@@ -239,19 +255,19 @@ namespace BuildNotifications.ViewModel
                 StartUpdating();
         }
 
-        private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
+        private void OnOverlayCloseRequested(object? sender, CloseRequestedEventArgs e)
         {
-            if (!(sender is InitialSetupOverlayViewModel vm))
+            if (!(sender is OverlayViewModel vm))
                 return;
 
-            vm.CloseRequested -= InitialSetup_CloseRequested;
+            vm.CloseRequested -= OnOverlayCloseRequested;
             var tween = vm.Tween(x => x.Opacity).To(0).In(0.5).Ease(Easing.ExpoEaseOut).OnComplete((timeline, parameter) =>
             {
                 Overlay = null;
 
                 // when connections or projects changed or the update is stopped. Now is the time to reload and restart the pipeline
                 // as the user either changed or checked the critical settings
-                if (e.ProjectOrConnectionsChanged || !_keepUpdating)
+                if (e.ShouldHardReload || !_keepUpdating)
                     ResetAndRestart();
 
                 StartUpdating();
@@ -372,6 +388,11 @@ namespace BuildNotifications.ViewModel
             ToggleShowSettingsCommand = new DelegateCommand(ToggleShowSettings);
             ToggleShowNotificationCenterCommand = new DelegateCommand(ToggleShowNotificationCenter);
             ShowInfoPopupCommand = new DelegateCommand(ShowInfoPopup);
+            ShowToolkitCommand = new DelegateCommand(() =>
+            {
+                StopUpdating();
+                Overlay = new ToolkitViewModel();
+            });
         }
 
         private void ShowInfoPopup()
@@ -388,7 +409,6 @@ namespace BuildNotifications.ViewModel
 
             StopUpdating();
             var vm = new InitialSetupOverlayViewModel(_coreSetup.Configuration, _coreSetup.PluginRepository, _coreSetup.ConfigurationBuilder, PersistChanges, _popupService);
-            vm.CloseRequested += InitialSetup_CloseRequested;
 
             Overlay = vm;
         }
@@ -636,7 +656,7 @@ namespace BuildNotifications.ViewModel
         private BuildTreeViewModel? _buildTree;
         private bool _showGroupDefinitionSelection;
         private bool _showSettings;
-        private BaseViewModel? _overlay;
+        private OverlayViewModel? _overlay;
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;

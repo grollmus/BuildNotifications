@@ -24,6 +24,9 @@
                      xmlns:viewModelNotification="clr-namespace:BuildNotifications.ViewModel.Notification"
                      xmlns:viewsNotification="clr-namespace:BuildNotifications.Views.Notification"
                      xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                     xmlns:viewToolkit="clr-namespace:BuildNotifications.Views.Overlays.Toolkit"
+                     xmlns:viewModelToolkit="clr-namespace:BuildNotifications.ViewModel.Overlays.Toolkit"
                      mc:Ignorable="d"
                      Title="BuildNotifications" Height="450" Width="800"
                      d:DataContext="{d:DesignInstance d:Type={x:Type viewModel:MainViewModel}}">
@@ -66,6 +69,10 @@
 
             <DataTemplate DataType="{x:Type viewModelNotification:NewNotificationsCounterViewModel}">
                 <viewsNotification:NewNotificationsCounterView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModelToolkit:ToolkitViewModel}">
+                <viewToolkit:ToolkitView />
             </DataTemplate>
 
         </ResourceDictionary>
@@ -119,7 +126,9 @@
         </DockPanel>
 
         <!--Overlays-->
-        <ContentPresenter Content="{Binding Overlay}" />
+        <DockPanel Opacity="{Binding Overlay.Opacity}">
+            <ContentPresenter Content="{Binding Overlay}" />
+        </DockPanel>
     </Grid>
 
     <!--Search and notifications-->
@@ -131,6 +140,14 @@
                                   Height="{StaticResource BlockDouble}"
                                   Foreground="{StaticResource Background3}"
                                   Command="{Binding ShowInfoPopupCommand}" />
+            </Grid>
+            <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
+                <icons:IconButton Icon="Dummy" ToolTip="{text:Localized ToolkitTooltip}"
+                                  Width="{StaticResource BlockDouble}"
+                                  Height="{StaticResource BlockDouble}"
+                                  Foreground="{StaticResource Background3}"
+                                  Visibility="{Binding ToolkitAvailable, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+                                  Command="{Binding ShowToolkitCommand}" />
             </Grid>
             <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
                 <icons:IconButton Icon="Notification" ToolTip="{text:Localized NotificationsCenterButtonTooltip}"

@@ -36,7 +36,9 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public string Serialize(object obj) => JsonConvert.SerializeObject(obj, _settings);
 
+#pragma warning disable 618
         public string Serialize(Parameter parameter) => JsonConvert.SerializeObject(parameter.Value, _settings);
+#pragma warning restore 618
 
         public T Deserialize<T>(IRestResponse response) => JsonConvert.DeserializeObject<T>(response.Content, _settings);
 
