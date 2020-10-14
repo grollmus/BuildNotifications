@@ -6,7 +6,6 @@ using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Pipeline.Tree.Search.Criteria;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.TestMocks.Attributes;
 using NSubstitute;
 using Xunit;
 
