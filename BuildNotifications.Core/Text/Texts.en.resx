@@ -748,4 +748,25 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
     <value>John Doe</value>
   </data>
+  <data name="ImportExport" xml:space="preserve">
+    <value>Import/Export</value>
+  </data>
+  <data name="FailedToLoadFile" xml:space="preserve">
+    <value>Error loading file</value>
+  </data>
+  <data name="ConfigurationFileFilter" xml:space="preserve">
+    <value>Setting files|*.json</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ImportSuccessful" xml:space="preserve">
+    <value>Import successful</value>
+  </data>
+  <data name="ExportSuccessful" xml:space="preserve">
+    <value>Export successful</value>
+  </data>
 </root>

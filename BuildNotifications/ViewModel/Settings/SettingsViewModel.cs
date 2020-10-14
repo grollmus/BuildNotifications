@@ -6,20 +6,24 @@ using System.Windows.Input;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.Core.Text;
+using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Settings.Options;
 using BuildNotifications.ViewModel.Utils;
 
 namespace BuildNotifications.ViewModel.Settings
 {
-    public class SettingsViewModel : BaseViewModel
+    internal class SettingsViewModel : BaseViewModel
     {
-        public SettingsViewModel(IConfiguration configuration, Action saveMethod, IUserIdentityList userIdentityList)
+        public SettingsViewModel(IConfigurationService configurationService, Action saveMethod, IUserIdentityList userIdentityList, IPopupService popupService)
         {
             _saveMethod = saveMethod;
             _userIdentityList = userIdentityList;
-            _configuration = configuration;
+            _popupService = popupService;
+            _configurationService = configurationService;
             EditConnectionsCommand = new DelegateCommand(EditConnections);
+            ImportExportCommand = new DelegateCommand(ImportExport);
 
+            var configuration = _configurationService.CurrentConfig;
             Language = new LanguageOptionViewModel(configuration.Language);
             AnimationsMode = new EnumOptionViewModel<AnimationMode>(StringLocalizer.Keys.AnimationSpeed, configuration.AnimationSpeed);
             AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.Autostart);
@@ -41,9 +45,15 @@ namespace BuildNotifications.ViewModel.Settings
             UpdateUser();
         }
 
+        private void ImportExport()
+        {
+            _popupService.ShowImportExportPopup(_configurationService);
+        }
+
         public ObservableCollection<UserViewModel> CurrentUserIdentities { get; } = new ObservableCollection<UserViewModel>();
 
         public ICommand EditConnectionsCommand { get; }
+        public ICommand ImportExportCommand { get; }
 
         public IEnumerable<OptionViewModelBase> Options
         {
@@ -86,18 +96,18 @@ namespace BuildNotifications.ViewModel.Settings
 
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
-            _configuration.AnimationSpeed = AnimationsMode.Value;
-            _configuration.Autostart = AutoStartMode.Value;
-            _configuration.BuildsToShow = BuildsPerGroup.Value;
-            _configuration.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
-            _configuration.FailedBuildNotifyConfig = FailedBuildNotify.Value;
-            _configuration.Language = Language.Value.IetfLanguageTag;
-            _configuration.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
-            _configuration.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
-            _configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
-            _configuration.UpdateInterval = UpdateInterval.Value;
-            _configuration.UsePreReleases = UpdateToPreReleases.Value;
-            _configuration.ApplicationTheme = UseDarkTheme.Value ? Theme.Dark : Theme.Light;
+            _configurationService.CurrentConfig.AnimationSpeed = AnimationsMode.Value;
+            _configurationService.CurrentConfig.Autostart = AutoStartMode.Value;
+            _configurationService.CurrentConfig.BuildsToShow = BuildsPerGroup.Value;
+            _configurationService.CurrentConfig.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
+            _configurationService.CurrentConfig.FailedBuildNotifyConfig = FailedBuildNotify.Value;
+            _configurationService.CurrentConfig.Language = Language.Value.IetfLanguageTag;
+            _configurationService.CurrentConfig.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
+            _configurationService.CurrentConfig.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
+            _configurationService.CurrentConfig.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
+            _configurationService.CurrentConfig.UpdateInterval = UpdateInterval.Value;
+            _configurationService.CurrentConfig.UsePreReleases = UpdateToPreReleases.Value;
+            _configurationService.CurrentConfig.ApplicationTheme = UseDarkTheme.Value ? Theme.Dark : Theme.Light;
 
             _saveMethod.Invoke();
         }
@@ -120,9 +130,10 @@ namespace BuildNotifications.ViewModel.Settings
             }
         }
 
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationService _configurationService;
 
         private readonly Action _saveMethod;
         private readonly IUserIdentityList _userIdentityList;
+        private readonly IPopupService _popupService;
     }
 }

@@ -29,7 +29,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
+    internal class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
@@ -358,7 +358,7 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges, _coreSetup.UserIdentityList);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.ConfigurationService, PersistChanges, _coreSetup.UserIdentityList, _popupService);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel

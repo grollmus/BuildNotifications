@@ -1,6 +1,10 @@
 ﻿using System.Windows;
+using BuildNotifications.Core.Config;
 using BuildNotifications.ViewModel;
+using BuildNotifications.ViewModel.Settings;
 using BuildNotifications.Views;
+using BuildNotifications.Views.Settings;
+using Microsoft.Win32;
 
 namespace BuildNotifications.Services
 {
@@ -10,6 +14,20 @@ namespace BuildNotifications.Services
         {
             _blur = blur;
             _viewProvider = viewProvider;
+        }
+
+        private void ShowPopup<TDialog>(object dataContext)
+            where TDialog : Window, new()
+        {
+            var popup = new TDialog
+            {
+                Owner = _viewProvider.View,
+                DataContext = dataContext
+            };
+
+            _blur.Blur();
+            popup.ShowDialog();
+            _blur.UnBlur();
         }
 
         public MessageBoxResult ShowMessageBox(string text, string title, MessageBoxButton buttons, MessageBoxImage icon = MessageBoxImage.Asterisk, MessageBoxResult defaultResult = MessageBoxResult.None)
@@ -32,15 +50,32 @@ namespace BuildNotifications.Services
 
         public void ShowInfoPopup(bool includePreReleases, IAppUpdater appUpdater)
         {
-            var popup = new InfoPopupDialog
-            {
-                Owner = Application.Current.MainWindow,
-                DataContext = new InfoPopupViewModel(appUpdater, includePreReleases)
-            };
+            var dataContext = new InfoPopupViewModel(appUpdater, includePreReleases);
+            ShowPopup<InfoPopupDialog>(dataContext);
+        }
 
-            _blur.Blur();
-            popup.ShowDialog();
-            _blur.UnBlur();
+        public string? AskForOpenFileName(params string[] fileTypes)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Filter = string.Join("|", fileTypes)
+            };
+            return dlg.ShowDialog(_viewProvider.View) != true ? null : dlg.FileName;
+        }
+
+        public string? AskForSaveFileName(params string[] fileTypes)
+        {
+            var dlg = new SaveFileDialog
+            {
+                Filter = string.Join("|", fileTypes)
+            };
+            return dlg.ShowDialog(_viewProvider.View) != true ? null : dlg.FileName;
+        }
+
+        public void ShowImportExportPopup(IConfigurationService configurationService)
+        {
+            var dataContext = new ImportExportPopupViewModel(this, configurationService);
+            ShowPopup<ImportExportDialog>(dataContext);
         }
 
         private readonly IBlurrableViewModel _blur;

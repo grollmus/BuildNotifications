@@ -3,5 +3,6 @@
     public interface IConfigurationBuilder
     {
         IProjectConfiguration EmptyConfiguration(string name);
+        IConfiguration LoadConfiguration();
     }
 }

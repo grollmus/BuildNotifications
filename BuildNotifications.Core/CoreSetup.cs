@@ -25,10 +25,10 @@ namespace BuildNotifications.Core
             var pluginLoader = new PluginLoader(pluginHost);
             PluginRepository = pluginLoader.LoadPlugins(pathResolver.PluginFolders);
 
-            _configurationSerializer = new ConfigurationSerializer(serializer);
-            ConfigurationBuilder = new ConfigurationBuilder(_pathResolver, _configurationSerializer);
-            Configuration = ConfigurationBuilder.LoadConfiguration();
+            var configurationSerializer = new ConfigurationSerializer(serializer);
+            ConfigurationBuilder = new ConfigurationBuilder(_pathResolver, configurationSerializer);
 
+            ConfigurationService = new ConfigurationService(configurationSerializer, ConfigurationBuilder);
             ProjectProvider = new ProjectProvider(Configuration, PluginRepository);
 
             UserIdentityList = new UserIdentityList();
@@ -57,13 +57,11 @@ namespace BuildNotifications.Core
             }
         }
 
-        public ISearchEngine SearchEngine { get; }
-
-        public ISearchHistory SearchHistory { get; }
-
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration => ConfigurationService.CurrentConfig;
 
         public ConfigurationBuilder ConfigurationBuilder { get; }
+
+        public IConfigurationService ConfigurationService { get; }
 
         public IDistributedNotificationReceiver? NotificationReceiver { get; }
 
@@ -72,6 +70,10 @@ namespace BuildNotifications.Core
         public IPluginRepository PluginRepository { get; }
 
         public IProjectProvider ProjectProvider { get; }
+
+        public ISearchEngine SearchEngine { get; }
+
+        public ISearchHistory SearchHistory { get; }
 
         public IUserIdentityList UserIdentityList { get; }
 
@@ -83,15 +85,19 @@ namespace BuildNotifications.Core
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
             Log.Info().Message($"Persisting configuration to path {configFilePath}").Write();
-            _configurationSerializer.Save(Configuration, configFilePath);
+            ConfigurationService.Serializer.Save(Configuration, configFilePath);
         }
 
-        public Task Update(UpdateModes mode) => Pipeline.Update(mode);
+        public Task Update(UpdateModes mode)
+        {
+            return Pipeline.Update(mode);
+        }
 
-        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e) => PipelineUpdated?.Invoke(this, e);
+        private void Notifier_Updated(object? sender, PipelineUpdateEventArgs e)
+        {
+            PipelineUpdated?.Invoke(this, e);
+        }
 
         private readonly IPathResolver _pathResolver;
-
-        private readonly ConfigurationSerializer _configurationSerializer;
     }
 }
