@@ -42,7 +42,7 @@ BuildNotifications.PluginInterfaces.Builds.IBuildPlugin
 BuildNotifications.PluginInterfaces.Builds.IBuildPlugin.ConstructProvider(string! serialized) -> BuildNotifications.PluginInterfaces.Builds.IBuildProvider?
 BuildNotifications.PluginInterfaces.Builds.IBuildPlugin.TestConnection(string! serialized) -> System.Threading.Tasks.Task<BuildNotifications.PluginInterfaces.ConnectionTestResult!>!
 BuildNotifications.PluginInterfaces.Builds.IBuildProvider
-BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchAllBuilds() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
+BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchAllBuilds(int buildsPerGroup) -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
 BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchBuildsChangedSince(System.DateTime date) -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
 BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchBuildsForDefinition(BuildNotifications.PluginInterfaces.Builds.IBuildDefinition! definition) -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBaseBuild!>!
 BuildNotifications.PluginInterfaces.Builds.IBuildProvider.FetchExistingBuildDefinitions() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.Builds.IBuildDefinition!>!
@@ -194,6 +194,7 @@ BuildNotifications.PluginInterfaces.SourceControl.IBranch.IsPullRequest.get -> b
 BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor
 BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor.ExtractDisplayName(string! fullBranchName) -> string!
 BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider
+BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.ExistingBranchCount.get -> int
 BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.FetchExistingBranches() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.SourceControl.IBranch!>!
 BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.NameExtractor.get -> BuildNotifications.PluginInterfaces.SourceControl.IBranchNameExtractor!
 BuildNotifications.PluginInterfaces.SourceControl.IBranchProvider.RemovedBranches() -> System.Collections.Generic.IAsyncEnumerable<BuildNotifications.PluginInterfaces.SourceControl.IBranch!>!

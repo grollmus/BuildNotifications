@@ -122,7 +122,7 @@ namespace BuildNotifications.Core.Pipeline
                 branchProvider = BranchProvider(config.SourceControlConnectionName);
 
             if (branchProvider != null)
-                return new Project(buildProviders, branchProvider, config);
+                return new Project(buildProviders, branchProvider, config, _configuration);
 
             ReportError("FailedToConstructBranchProviderForConnection", config.SourceControlConnectionName);
             return null;

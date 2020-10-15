@@ -41,9 +41,23 @@ namespace BuildNotifications.Plugin.Tfs.Build
             return (int) Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
         }
 
-        private TfsBuildDefinition Convert(BuildDefinition definition) => new TfsBuildDefinition(definition);
+        private TfsBuildDefinition Convert(BuildDefinition definition)
+        {
+            return new TfsBuildDefinition(definition);
+        }
 
-        private TfsBuild Convert(Microsoft.TeamFoundation.Build.WebApi.Build build) => new TfsBuild(build);
+        private TfsBuild Convert(Microsoft.TeamFoundation.Build.WebApi.Build build)
+        {
+            return new TfsBuild(build);
+        }
+
+        private async Task<IList<Microsoft.TeamFoundation.Build.WebApi.Build>> FetchMaxAmountOfBuilds(BuildHttpClient buildClient, TeamProjectReference project, int buildsPerGroup)
+        {
+            var definitions = await buildClient.GetFullDefinitionsAsync(project.Id);
+            var maxBuildsToFetch = Math.Min(Math.Max(definitions.Count, 1) * buildsPerGroup, MaxBuildsAllowedByApi);
+            var builds = await buildClient.GetBuildsAsync(project.Id, queryOrder: BuildQueryOrder.QueueTimeDescending, top: maxBuildsToFetch, maxBuildsPerDefinition: buildsPerGroup);
+            return builds;
+        }
 
         private async Task<TeamProjectReference> GetProject()
         {
@@ -92,15 +106,15 @@ namespace BuildNotifications.Plugin.Tfs.Build
             }
         }
 
-        private IUser? _user;
         public IUser User => _user ??= new TfsUser(_connection.AuthenticatedIdentity);
 
-        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
+        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds(int buildsPerGroup)
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            var builds = await FetchMaxAmountOfBuilds(buildClient, project);
+            _buildsPerGroup = buildsPerGroup;
+            var builds = await FetchMaxAmountOfBuilds(buildClient, project, buildsPerGroup);
 
             foreach (var build in builds)
             {
@@ -108,15 +122,6 @@ namespace BuildNotifications.Plugin.Tfs.Build
                 _knownBuilds.Add(converted);
                 yield return converted;
             }
-        }
-
-        private async Task<IList<Microsoft.TeamFoundation.Build.WebApi.Build>> FetchMaxAmountOfBuilds(BuildHttpClient buildClient, TeamProjectReference project)
-        {
-            const int maxBuildsToFetch = 5000;
-            var definitions = await buildClient.GetFullDefinitionsAsync(project.Id);
-            var buildsPerDefinition = maxBuildsToFetch / Math.Max(definitions.Count, 1);
-            var builds = await buildClient.GetBuildsAsync(project.Id, queryOrder: BuildQueryOrder.QueueTimeDescending, top: maxBuildsToFetch, maxBuildsPerDefinition: buildsPerDefinition);
-            return builds;
         }
 
         public async IAsyncEnumerable<IBaseBuild> FetchBuildsForDefinition(IBuildDefinition definition)
@@ -211,7 +216,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
         {
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
-            var builds = await FetchMaxAmountOfBuilds(buildClient, project);
+            var builds = await FetchMaxAmountOfBuilds(buildClient, project, _buildsPerGroup);
 
             var deletedBuilds = _knownBuilds.Where(known => builds.All(build => build.Id != known.BuildId));
 
@@ -237,6 +242,11 @@ namespace BuildNotifications.Plugin.Tfs.Build
 
         private readonly VssConnection _connection;
         private readonly Guid _projectId;
+
+        private IUser? _user;
         private TeamProject? _project;
+        private int _buildsPerGroup;
+
+        private const int MaxBuildsAllowedByApi = 5000;
     }
 }

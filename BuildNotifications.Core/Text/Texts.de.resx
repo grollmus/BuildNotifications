@@ -622,6 +622,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="UseDarkTheme" xml:space="preserve">
+    <value>Dunkles Thema verwenden</value>
+  </data>
   <data name="MyBuildsSightToolTip" xml:space="preserve">
     <value />
   </data>

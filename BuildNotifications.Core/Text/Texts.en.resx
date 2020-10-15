@@ -621,6 +621,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="UseDarkTheme" xml:space="preserve">
+    <value>Use Dark Theme</value>
+  </data>
   <data name="MyBuildsSightToolTip" xml:space="preserve">
     <value>Show only builds requested by me</value>
   </data>

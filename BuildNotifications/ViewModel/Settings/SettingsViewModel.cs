@@ -31,6 +31,7 @@ namespace BuildNotifications.ViewModel.Settings
             ShowBusyIndicatorDuringUpdate = new BooleanOptionViewModel(configuration.ShowBusyIndicatorOnDeltaUpdates, StringLocalizer.Keys.ShowBusyIndicatorOnDeltaUpdates);
             UpdateInterval = new NumberOptionViewModel(configuration.UpdateInterval, 30, int.MaxValue, StringLocalizer.Keys.UpdateInterval);
             UpdateToPreReleases = new BooleanOptionViewModel(configuration.UsePreReleases, StringLocalizer.Keys.UsePreReleases);
+            UseDarkTheme = new BooleanOptionViewModel(configuration.ApplicationTheme == Theme.Dark, StringLocalizer.Keys.UseDarkTheme);
 
             foreach (var option in Options)
             {
@@ -59,6 +60,7 @@ namespace BuildNotifications.ViewModel.Settings
                 yield return AutoStartMode;
                 yield return AnimationsMode;
                 yield return ShowBusyIndicatorDuringUpdate;
+                yield return UseDarkTheme;
             }
         }
 
@@ -73,6 +75,7 @@ namespace BuildNotifications.ViewModel.Settings
         internal EnumOptionViewModel<BuildNotificationModes> SucceededBuildNotify { get; }
         internal NumberOptionViewModel UpdateInterval { get; }
         internal BooleanOptionViewModel UpdateToPreReleases { get; }
+        internal BooleanOptionViewModel UseDarkTheme { get; }
 
         public event EventHandler<EventArgs>? EditConnectionsRequested;
 
@@ -94,6 +97,7 @@ namespace BuildNotifications.ViewModel.Settings
             _configuration.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
             _configuration.UpdateInterval = UpdateInterval.Value;
             _configuration.UsePreReleases = UpdateToPreReleases.Value;
+            _configuration.ApplicationTheme = UseDarkTheme.Value ? Theme.Dark : Theme.Light;
 
             _saveMethod.Invoke();
         }

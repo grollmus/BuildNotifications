@@ -12,18 +12,19 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider, IProjectConfiguration config)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider, IProjectConfiguration projectConfig, IConfiguration applicationConfig)
         {
-            Name = config.ProjectName;
+            Name = projectConfig.ProjectName;
             _buildProviders = buildProviders.ToList();
             _branchProvider = branchProvider;
-            Config = config;
+            _applicationConfig = applicationConfig;
+            Config = projectConfig;
 
-            _buildFilter = new ListBuildFilter(config, BranchNameExtractor);
+            _buildFilter = new ListBuildFilter(projectConfig, BranchNameExtractor);
         }
 
-        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
-            : this(buildProvider.Yield(), branchProvider, config)
+        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config, IConfiguration configuration)
+            : this(buildProvider.Yield(), branchProvider, config, configuration)
         {
         }
 
@@ -58,10 +59,11 @@ namespace BuildNotifications.Core.Pipeline
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
             _buildFilter.InitializeStringMatcher(BranchNameExtractor);
+            var buildsPerGroup = _applicationConfig.BuildsToShow * _branchProvider?.ExistingBranchCount ?? 1;
 
             foreach (var buildProvider in _buildProviders)
             {
-                await foreach (var build in buildProvider.FetchAllBuilds())
+                await foreach (var build in buildProvider.FetchAllBuilds(buildsPerGroup))
                 {
                     if (IsAllowed(build))
                         yield return Enrich(build, buildProvider);
@@ -179,6 +181,7 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         private readonly IBranchProvider? _branchProvider;
+        private readonly IConfiguration _applicationConfig;
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
 

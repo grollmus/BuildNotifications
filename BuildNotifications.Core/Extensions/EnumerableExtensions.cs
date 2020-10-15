@@ -9,7 +9,7 @@ namespace BuildNotifications.Core
         {
             return list.Where(x => x != null);
         }
-      
+
         internal static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> list)
         {
             return list.SelectMany(x => x);
