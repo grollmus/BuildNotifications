@@ -28,8 +28,5 @@ namespace BuildNotifications
         {
             get { yield return "plugins"; }
         }
-
-        public string PredefinedConfigurationFileName => "predefined.json";
-        public string PredefinedConfigurationFilePath => Path.Combine(ConfigurationFolder, PredefinedConfigurationFileName);
     }
 }

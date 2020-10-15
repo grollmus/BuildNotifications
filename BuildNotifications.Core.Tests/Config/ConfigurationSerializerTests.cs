@@ -11,25 +11,6 @@ namespace BuildNotifications.Core.Tests.Config
     public class ConfigurationSerializerTests
     {
         [Fact]
-        public void LoadPredefinedConnectionsShouldNotCrashWhenFileDoesNotExist()
-        {
-            // Arrange
-            const string fileName = "non.existing";
-            var serializer = Substitute.For<ISerializer>();
-
-            if (File.Exists(fileName))
-                File.Delete(fileName);
-            var sut = new ConfigurationSerializer(serializer);
-
-            // Act
-            var actual = sut.LoadPredefinedConnections(fileName);
-
-            // Assert
-            Assert.NotNull(actual);
-            Assert.Empty(actual);
-        }
-
-        [Fact]
         public void LoadShouldNotCrashWhenFileDoesNotExist()
         {
             // Arrange

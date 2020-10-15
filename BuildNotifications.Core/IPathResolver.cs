@@ -18,16 +18,6 @@ namespace BuildNotifications.Core
         IEnumerable<string> PluginFolders { get; }
 
         /// <summary>
-        /// Name of the file that contains predefined connections.
-        /// </summary>
-        string PredefinedConfigurationFileName { get; }
-
-        /// <summary>
-        /// Full path to the file that contains predefined connections.
-        /// </summary>
-        string PredefinedConfigurationFilePath { get; }
-
-        /// <summary>
         /// Name of the file that contains user configuration.
         /// </summary>
         string UserConfigurationFileName { get; }
