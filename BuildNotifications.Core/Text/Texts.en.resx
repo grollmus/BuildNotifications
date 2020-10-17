@@ -748,4 +748,13 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
     <value>John Doe</value>
   </data>
+  <data name="HideBuildsOfDeletedBranches" xml:space="preserve">
+    <value>Hide builds which branch has been deleted</value>
+  </data>
+  <data name="HideBuildsOfDeletedDefinitions" xml:space="preserve">
+    <value>Hide builds which build definition has been deleted</value>
+  </data>
+  <data name="DeletedTag" xml:space="preserve">
+    <value>[Deleted]</value>
+  </data>
 </root>
