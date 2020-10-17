@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -130,7 +131,8 @@ namespace BuildNotifications.Core.Pipeline
             {
                 var branch = branchList.FirstOrDefault(b => b.FullName == build.BranchName)
                              ?? branchList.FirstOrDefault(b => b.FullName == build.Branch?.FullName)
-                             ?? new NullBranch();
+                             ?? new NullBranch($"{build.BranchName} {StringLocalizer.DeletedTag}");
+
                 build.Branch = branch;
 
                 if (branch is IPullRequest pr)
@@ -184,10 +186,10 @@ namespace BuildNotifications.Core.Pipeline
 
         private class NullBranch : IBranch
         {
-            public NullBranch()
+            public NullBranch(string fullName)
             {
-                FullName = string.Empty;
-                DisplayName = string.Empty;
+                FullName = fullName;
+                DisplayName = fullName;
             }
 
             public string DisplayName { get; }

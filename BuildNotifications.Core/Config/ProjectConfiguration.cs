@@ -5,43 +5,30 @@ namespace BuildNotifications.Core.Config
 {
     public class ProjectConfiguration : IProjectConfiguration
     {
-        public ProjectConfiguration()
-        {
-            BranchBlacklist = new List<string>();
-            BranchWhitelist = new List<string>();
-            BuildDefinitionBlacklist = new List<string>();
-            BuildDefinitionWhitelist = new List<string>();
-            BuildConnectionNames = new List<string>();
-            SourceControlConnectionName = string.Empty;
+        public string SourceControlConnectionName { get; set; } = string.Empty;
 
-            ProjectName = StringLocalizer.NewProject;
-            DefaultCompareBranch = string.Empty;
+        public bool IsEnabled { get; set; } = true;
 
-            PullRequestDisplay = PullRequestDisplayMode.Number;
-            HideCompletedPullRequests = true;
-            IsEnabled = true;
-        }
+        public string ProjectName { get; set; } = StringLocalizer.NewProject;
 
-        public string SourceControlConnectionName { get; set; }
+        public IReadOnlyList<string> BuildConnectionNames { get; set; } = new List<string>();
 
-        public bool IsEnabled { get; set; }
+        public IReadOnlyList<string> BranchBlacklist { get; set; } = new List<string>();
 
-        public string ProjectName { get; set; }
+        public IReadOnlyList<string> BranchWhitelist { get; set; } = new List<string>();
 
-        public IReadOnlyList<string> BuildConnectionNames { get; set; }
+        public IReadOnlyList<string> BuildDefinitionBlacklist { get; set; } = new List<string>();
 
-        public IReadOnlyList<string> BranchBlacklist { get; set; }
+        public IReadOnlyList<string> BuildDefinitionWhitelist { get; set; } = new List<string>();
 
-        public IReadOnlyList<string> BranchWhitelist { get; set; }
+        public string DefaultCompareBranch { get; set; } = string.Empty;
 
-        public IReadOnlyList<string> BuildDefinitionBlacklist { get; set; }
+        public bool HideCompletedPullRequests { get; set; } = true;
 
-        public IReadOnlyList<string> BuildDefinitionWhitelist { get; set; }
+        public bool HideBuildsOfDeletedBranches { get; set; } = true;
 
-        public string DefaultCompareBranch { get; set; }
+        public bool HideBuildsOfDeletedDefinitions { get; set; } = true;
 
-        public bool HideCompletedPullRequests { get; set; }
-
-        public PullRequestDisplayMode PullRequestDisplay { get; set; }
+        public PullRequestDisplayMode PullRequestDisplay { get; set; } = PullRequestDisplayMode.Number;
     }
 }

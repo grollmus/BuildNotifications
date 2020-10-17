@@ -56,11 +56,23 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message("Cleaning up builds").Write();
             var builds = _buildCache.ContentCopy();
             var count = 0;
+            IProject? projectOfBuild = null;
+
             foreach (var build in builds.Cast<EnrichedBuild>())
             {
+                if (projectOfBuild == null || build.ProjectId != projectOfBuild.Guid)
+                    projectOfBuild = _projectList.FirstOrDefault(p => p.Guid == build.ProjectId);
+
+                var hideWithNoBranch = projectOfBuild?.Config.HideBuildsOfDeletedBranches ?? true;
+                var hideWithNoDefinition = projectOfBuild?.Config.HideBuildsOfDeletedDefinitions ?? true;
+
                 var definitionExists = _definitionCache.ContainsValue(build.Definition);
                 var branchExists = _branchCache.Contains(b => b.Equals(build.Branch));
-                if (!definitionExists || !branchExists)
+
+                var shouldHideBecauseOfDefinition = hideWithNoDefinition && !definitionExists;
+                var shouldHideBecauseOfBranch = hideWithNoBranch && !branchExists;
+
+                if (shouldHideBecauseOfDefinition || shouldHideBecauseOfBranch)
                 {
                     _buildCache.RemoveValue(build);
                     count += 1;

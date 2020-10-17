@@ -23,6 +23,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             PullRequestDisplayMode = new EnumOptionViewModel<PullRequestDisplayMode>(StringLocalizer.ShowPullRequests, model.PullRequestDisplay);
             DefaultCompareBranch = new TextOptionViewModel(model.DefaultCompareBranch, StringLocalizer.DefaultCompareBranch);
             HideCompletedPullRequests = new BooleanOptionViewModel(model.HideCompletedPullRequests, StringLocalizer.HideCompletedPullRequests);
+            HideBuildsOfDeletedBranches = new BooleanOptionViewModel(model.HideBuildsOfDeletedBranches, StringLocalizer.HideBuildsOfDeletedBranches);
+            HideBuildsOfDeletedDefinitions = new BooleanOptionViewModel(model.HideBuildsOfDeletedDefinitions, StringLocalizer.HideBuildsOfDeletedDefinitions);
 
             BranchBlacklist = new StringCollectionOptionViewModel(StringLocalizer.BranchBlacklist, model.BranchBlacklist);
             BranchWhitelist = new StringCollectionOptionViewModel(StringLocalizer.BranchWhitelist, model.BranchWhitelist);
@@ -51,6 +53,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         public TextOptionViewModel DefaultCompareBranch { get; }
         public override string DisplayNameTextId => Model.ProjectName;
         public BooleanOptionViewModel HideCompletedPullRequests { get; }
+        public BooleanOptionViewModel HideBuildsOfDeletedBranches { get; }
+        public BooleanOptionViewModel HideBuildsOfDeletedDefinitions { get; }
         public override IconType Icon => IconType.None;
         public BooleanOptionViewModel IsEnabled { get; }
         public IProjectConfiguration Model { get; }
@@ -70,6 +74,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 yield return BuildDefinitionWhitelist;
                 yield return DefaultCompareBranch;
                 yield return HideCompletedPullRequests;
+                yield return HideBuildsOfDeletedBranches;
+                yield return HideBuildsOfDeletedDefinitions;
                 yield return PullRequestDisplayMode;
             }
         }
@@ -107,6 +113,8 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             Model.SourceControlConnectionName = SourceControlConnection.Value.Name;
             Model.IsEnabled = IsEnabled.Value;
             Model.HideCompletedPullRequests = HideCompletedPullRequests.Value;
+            Model.HideBuildsOfDeletedBranches = HideBuildsOfDeletedBranches.Value;
+            Model.HideBuildsOfDeletedDefinitions = HideBuildsOfDeletedDefinitions.Value;
             Model.DefaultCompareBranch = DefaultCompareBranch.Value ?? string.Empty;
             Model.BranchWhitelist = BranchWhitelist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
             Model.BranchBlacklist = BranchBlacklist.Values.Where(v => v.Value != null).Select(v => v.Value!).ToList();
