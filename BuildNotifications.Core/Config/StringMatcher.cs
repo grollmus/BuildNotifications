@@ -57,7 +57,7 @@ namespace BuildNotifications.Core.Config
 
             foreach (var split in _splitBySpecialCharacter)
             {
-                if (split == null)
+                if (string.IsNullOrEmpty(split))
                     continue;
 
                 switch (split)

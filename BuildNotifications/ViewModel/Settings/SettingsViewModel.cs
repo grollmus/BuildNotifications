@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using BuildNotifications.Core.Config;
@@ -45,11 +46,6 @@ namespace BuildNotifications.ViewModel.Settings
             UpdateUser();
         }
 
-        private void ImportExport()
-        {
-            _popupService.ShowImportExportPopup(_configurationService);
-        }
-
         public ObservableCollection<UserViewModel> CurrentUserIdentities { get; } = new ObservableCollection<UserViewModel>();
 
         public ICommand EditConnectionsCommand { get; }
@@ -89,9 +85,33 @@ namespace BuildNotifications.ViewModel.Settings
 
         public event EventHandler<EventArgs>? EditConnectionsRequested;
 
+        public void UpdateUser()
+        {
+            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
+
+            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
+            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
+
+            foreach (var user in toAdd)
+            {
+                CurrentUserIdentities.Add(user);
+            }
+
+            foreach (var user in toRemove)
+            {
+                CurrentUserIdentities.Remove(user);
+            }
+        }
+
         private void EditConnections()
         {
             EditConnectionsRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ImportExport()
+        {
+            _popupService.ShowImportExportPopup(_configurationService);
+            UpdateOptions();
         }
 
         private void Option_ValueChanged(object? sender, EventArgs e)
@@ -112,22 +132,20 @@ namespace BuildNotifications.ViewModel.Settings
             _saveMethod.Invoke();
         }
 
-        public void UpdateUser()
+        private void UpdateOptions()
         {
-            var newUsers = _userIdentityList.IdentitiesOfCurrentUser.Select(u => new UserViewModel(u)).ToList();
-
-            var toAdd = newUsers.Where(nu => CurrentUserIdentities.All(cu => cu.User.Id != nu.User.Id)).ToList();
-            var toRemove = CurrentUserIdentities.Where(cu => newUsers.All(nu => nu.User.Id != cu.User.Id)).ToList();
-
-            foreach (var user in toAdd)
-            {
-                CurrentUserIdentities.Add(user);
-            }
-
-            foreach (var user in toRemove)
-            {
-                CurrentUserIdentities.Remove(user);
-            }
+            Language.Value = new CultureInfo(_configurationService.CurrentConfig.Language);
+            AnimationsMode.Value = _configurationService.CurrentConfig.AnimationSpeed;
+            AutoStartMode.Value = _configurationService.CurrentConfig.Autostart;
+            CanceledBuildNotify.Value = _configurationService.CurrentConfig.CanceledBuildNotifyConfig;
+            FailedBuildNotify.Value = _configurationService.CurrentConfig.FailedBuildNotifyConfig;
+            SucceededBuildNotify.Value = _configurationService.CurrentConfig.SucceededBuildNotifyConfig;
+            PartialSucceededTreatmentMode.Value = _configurationService.CurrentConfig.PartialSucceededTreatmentMode;
+            BuildsPerGroup.Value = _configurationService.CurrentConfig.BuildsToShow;
+            ShowBusyIndicatorDuringUpdate.Value = _configurationService.CurrentConfig.ShowBusyIndicatorOnDeltaUpdates;
+            UpdateInterval.Value = _configurationService.CurrentConfig.UpdateInterval;
+            UpdateToPreReleases.Value = _configurationService.CurrentConfig.UsePreReleases;
+            UseDarkTheme.Value = _configurationService.CurrentConfig.ApplicationTheme == Theme.Dark;
         }
 
         private readonly IConfigurationService _configurationService;

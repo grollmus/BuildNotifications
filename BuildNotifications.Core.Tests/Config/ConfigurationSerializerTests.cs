@@ -49,6 +49,31 @@ namespace BuildNotifications.Core.Tests.Config
         }
 
         [Fact]
+        public void LoadShouldNotThrowWhenFileCantBeWritten()
+        {
+            // Arrange
+            var serializer = new Serializer();
+            var sut = new ConfigurationSerializer(serializer);
+
+            var fileName = Path.GetRandomFileName();
+
+            try
+            {
+                using var lockStream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+
+                // Act
+                var ex = Record.Exception(() => sut.Load(fileName));
+
+                // Assert
+                Assert.Null(ex);
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
+        }
+
+        [Fact]
         public void LoadShouldReadSameValuesAsSaveWrote()
         {
             // Arrange
@@ -141,6 +166,55 @@ namespace BuildNotifications.Core.Tests.Config
             Assert.Equal(expected.Projects[0].BranchWhitelist, actual.Projects[0].BranchWhitelist);
             Assert.Equal(expected.Projects[0].BuildDefinitionWhitelist, actual.Projects[0].BuildDefinitionWhitelist);
             Assert.Equal(expected.Projects[0].HideCompletedPullRequests, actual.Projects[0].HideCompletedPullRequests);
+        }
+
+        [Fact]
+        public void SaveShouldCreateDirectoryWhenItDoesNotExist()
+        {
+            // Arrange
+            var serializer = new Serializer();
+            var sut = new ConfigurationSerializer(serializer);
+            var folderName = Path.GetRandomFileName();
+            var fileName = Path.Combine(folderName, Path.GetRandomFileName());
+
+            var configuration = new Configuration();
+
+            try
+            {
+                // Act
+                sut.Save(configuration, fileName);
+
+                // Assert
+                Assert.True(Directory.Exists(folderName));
+            }
+            finally
+            {
+                Directory.Delete(folderName, true);
+            }
+        }
+
+        [Fact]
+        public void SaveShouldNotThrowWhenFileCantBeWritten()
+        {
+            // Arrange
+            var serializer = new Serializer();
+            var sut = new ConfigurationSerializer(serializer);
+            var configuration = new Configuration();
+            var fileName = Path.GetRandomFileName();
+            try
+            {
+                using var lockStream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+
+                // Act
+                var ex = Record.Exception(() => sut.Save(configuration, fileName));
+
+                // Assert
+                Assert.Null(ex);
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
         }
     }
 }
