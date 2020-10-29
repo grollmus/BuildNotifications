@@ -20,24 +20,26 @@
 
 	</UserControl.Resources>
 	<DockPanel>
-        <DockPanel DockPanel.Dock="Bottom">
-            <!--Edit connection button-->
-            <icons:IconButton Content="{text:Localized EditConnection}"
-                              HorizontalAlignment="Center" DockPanel.Dock="Right"
-                              Command="{Binding EditConnectionsCommand}" Icon="Connection"
-                              Foreground="{DynamicResource Foreground1}"
-                              Margin="{StaticResource BlockHalfThickness}"
-                              Style="{StaticResource IconButtonWithDockedContent}" />
+		<DockPanel DockPanel.Dock="Bottom">
+			<!--Edit connection button-->
+			<icons:IconButton Content="{text:Localized EditConnection}"
+			                  HorizontalAlignment="Center" DockPanel.Dock="Right"
+			                  Command="{Binding EditConnectionsCommand}" Icon="Connection"
+			                  Foreground="{DynamicResource Foreground1}"
+			                  Margin="{StaticResource BlockHalfThickness}"
+			                  Style="{StaticResource IconButtonWithDockedContent}" />
 
 
-            <Button DockPanel.Dock="Right" Content="{text:Localized ImportExport}" Foreground="{DynamicResource Foreground1}"
-                              Command="{Binding ImportExportCommand}" Margin="{StaticResource BlockHalfThickness}"></Button>
-        </DockPanel>
+			<icons:IconButton DockPanel.Dock="Right" Content="{text:Localized ImportExport}"
+			                  Foreground="{DynamicResource Foreground1}" Icon="ImportExport"
+			                  Style="{StaticResource IconButtonWithDockedContent}"
+			                  Command="{Binding ImportExportCommand}" Margin="{StaticResource BlockHalfThickness}" />
+		</DockPanel>
 
 		<ScrollViewer Margin="{StaticResource BlockHalfXOnlyMargin}">
 			<DockPanel>
 
-                <!--Current User Identities-->
+				<!--Current User Identities-->
 				<ItemsControl ItemsSource="{Binding CurrentUserIdentities}" DockPanel.Dock="Bottom">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
