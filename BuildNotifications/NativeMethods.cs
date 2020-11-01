@@ -11,6 +11,9 @@ namespace BuildNotifications
 {
     internal static class NativeMethods
     {
+        [DllImport("user32")]
+        public static extern int FlashWindow(IntPtr hwnd, bool bInvert);
+
         public static string FormatLastWin32ErrorMessage()
         {
             var errorCode = Marshal.GetLastWin32Error();

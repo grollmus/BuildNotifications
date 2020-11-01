@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Media;
+using System.Windows;
+using System.Windows.Interop;
 using BuildNotifications.Core.Config;
 using BuildNotifications.ViewModel;
 using BuildNotifications.ViewModel.Settings;
@@ -40,6 +42,25 @@ namespace BuildNotifications.Services
                 Owner = owner,
                 DataContext = vm
             };
+
+            switch (icon)
+            {
+                case MessageBoxImage.Asterisk:
+                    SystemSounds.Asterisk.Play();
+                    break;
+                case MessageBoxImage.Error:
+                    SystemSounds.Exclamation.Play();
+                    break;
+                case MessageBoxImage.Warning:
+                    SystemSounds.Beep.Play();
+                    break;
+                case MessageBoxImage.Question:
+                    SystemSounds.Question.Play();
+                    break;
+            }
+
+            var interopWindow = new WindowInteropHelper(owner);
+            _ = NativeMethods.FlashWindow(interopWindow.Handle, true);
 
             _blur.Blur();
             popup.ShowDialog();

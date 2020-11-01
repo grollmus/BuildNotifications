@@ -24,18 +24,17 @@
         </ResourceDictionary>
     </window:CustomWindow.Resources>
 
-    <StackPanel Orientation="Vertical">
-        <TextBlock Text="{Binding Title}" Margin="{StaticResource BlockThicknessOnXHalfOnY}" FontWeight="Bold" />
-        <TextBlock Text="{Binding Message}" Margin="{StaticResource BlockThickness}" />
+    <DockPanel>
+        <TextBlock Text="{Binding Title}" Margin="{StaticResource BlockThicknessOnXHalfOnY}" FontWeight="Bold" DockPanel.Dock="Top" />
 
-        <ItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Right">
+        <ItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MessageBoxCommandViewModel}">
-                    <icons:IconButton Content="{Binding Text}" IsDefault="{Binding IsDefault}"
+                    <Button Content="{Binding Text}" IsDefault="{Binding IsDefault}"
                                       IsCancel="{Binding IsCancel}"
                                       Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource AncestorType={x:Type window:CustomDialog}}}"
                                       CommandParameter="{Binding Result}"
-                                      Style="{StaticResource IconButtonWithDockedContent}" Margin="{StaticResource BlockHalfThickness}"
+                                      Margin="{StaticResource BlockHalfThickness}" Height="{StaticResource BlockDoubleAndHalf}" MinWidth="{StaticResource BlockDoubleAndHalf}"
                                       Foreground="{DynamicResource Foreground1}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -45,5 +44,7 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-    </StackPanel>
+        
+        <TextBlock Text="{Binding Message}" Margin="{StaticResource BlockThickness}" DockPanel.Dock="Top" />
+    </DockPanel>
 </window:CustomDialog>
