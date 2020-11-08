@@ -272,14 +272,14 @@ namespace BuildNotifications.Core.Pipeline
             _userIdentityList.IdentitiesOfCurrentUser.Clear();
         }
 
-        public void Search(ISpecificSearch search)
+        public void Search(ISpecificSearch specificSearch)
         {
-            Log.Info().Message($"Applying search \"{search}\".").Write();
-            _currentSearch = search;
+            Log.Info().Message($"Applying search \"{specificSearch}\".").Write();
+            _currentSearch = specificSearch;
 
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
-            Log.Debug().Message($"Applied search \"{search}\".").Write();
+            Log.Debug().Message($"Applied search \"{specificSearch}\".").Write();
         }
 
         public async Task Update(UpdateModes mode = UpdateModes.DeltaBuilds)

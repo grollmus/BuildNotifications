@@ -11,7 +11,7 @@ namespace BuildNotifications.Resources.Window
     {
         private Thickness GetDefaultMarginForDpi()
         {
-            var currentDpi = SystemHelper.GetCurrentDPI();
+            var currentDpi = SystemHelper.GetCurrentDpi();
             var thickness = new Thickness(8, 8, 8, 8);
             switch (currentDpi)
             {
@@ -35,7 +35,7 @@ namespace BuildNotifications.Resources.Window
 
         private static Thickness GetFromMinimizedMarginForDpi()
         {
-            var currentDpi = SystemHelper.GetCurrentDPI();
+            var currentDpi = SystemHelper.GetCurrentDpi();
             var thickness = new Thickness(7, 7, 5, 7);
             switch (currentDpi)
             {
@@ -77,7 +77,7 @@ namespace BuildNotifications.Resources.Window
             if (!_isMouseButtonDown)
                 return;
 
-            var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
+            var currentDpiScaleFactor = SystemHelper.GetCurrentDpiScaleFactor();
             var position = e.GetPosition(this);
             var screen = PointToScreen(position);
             var x = _mouseDownPosition.X - position.X;
@@ -135,7 +135,7 @@ namespace BuildNotifications.Resources.Window
             var thickness = new Thickness(0);
             if (WindowState != WindowState.Maximized)
             {
-                var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
+                var currentDpiScaleFactor = SystemHelper.GetCurrentDpiScaleFactor();
                 var workingArea = screen.WorkingArea;
                 MaxHeight = (workingArea.Height + 16) / currentDpiScaleFactor;
                 MaxWidth = double.PositiveInfinity;

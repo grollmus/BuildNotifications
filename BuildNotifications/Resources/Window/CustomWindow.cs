@@ -23,7 +23,7 @@ namespace BuildNotifications.Resources.Window
 
         protected CustomWindow()
         {
-            var currentDpiScaleFactor = SystemHelper.GetCurrentDPIScaleFactor();
+            var currentDpiScaleFactor = SystemHelper.GetCurrentDpiScaleFactor();
             var screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
             SizeChanged += OnSizeChanged;
             StateChanged += OnStateChanged;

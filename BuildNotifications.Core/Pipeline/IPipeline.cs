@@ -31,8 +31,8 @@ namespace BuildNotifications.Core.Pipeline
         /// <summary>
         /// Applies the given search to the pipeline.
         /// </summary>
-        /// <param name="search">The search that shall be applied.</param>
-        void Search(ISpecificSearch search);
+        /// <param name="specificSearch">The search that shall be applied.</param>
+        void Search(ISpecificSearch specificSearch);
 
         /// <summary>
         /// Updates the pipeline i.e. fetch data from projects, group builds and

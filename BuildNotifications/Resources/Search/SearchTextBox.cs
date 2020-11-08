@@ -347,6 +347,14 @@ namespace BuildNotifications.Resources.Search
                     return;
             }
 
+            HandleKeyDownForSuggestions(e);
+        }
+
+        private void HandleKeyDownForSuggestions(KeyEventArgs e)
+        {
+            if (SearchCriteriaViewModel == null)
+                return;
+
             switch (e.Key)
             {
                 case Key.Down:

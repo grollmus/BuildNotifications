@@ -64,6 +64,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {
+            // Not needed
         }
 
         protected override bool IsBuildIncludedInternal(IBuild build, string input)
