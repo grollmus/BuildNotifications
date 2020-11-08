@@ -10,7 +10,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class DuringCriteria : BaseDateSearchCriteria
     {
-        public DuringCriteria(IPipeline pipeline) : base(pipeline)
+        public DuringCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
         }
 

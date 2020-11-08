@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Text;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace BuildNotifications.Core.Tests.Text
 {
-    public class StringLocalizerTests
+    public partial class StringLocalizerTests
     {
         private static IEnumerable<CultureInfo> AllCultures => CultureInfo.GetCultures(CultureTypes.AllCultures);
 
@@ -80,6 +81,21 @@ namespace BuildNotifications.Core.Tests.Text
 
             Assert.NotNull(result);
             Assert.True(string.IsNullOrEmpty(result));
+        }
+
+        [Theory]
+        [MemberData(nameof(TextProperties))]
+        public void TextPropertiesShouldEqualStringTranslations(string key, Func<string> propertyAccessor)
+        {
+            // Arrange
+            var localizer = StringLocalizer.Instance;
+            var expected = localizer.GetText(key);
+
+            // Act
+            var actual = propertyAccessor();
+
+            // Assert
+            Assert.Equal(expected, actual);
         }
     }
 }

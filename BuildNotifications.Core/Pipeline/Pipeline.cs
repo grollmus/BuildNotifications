@@ -247,7 +247,7 @@ namespace BuildNotifications.Core.Pipeline
             try
             {
                 var currentUserIdentities = project.FetchCurrentUserIdentities();
-                foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
+                foreach (var currentUserIdentity in currentUserIdentities.WhereNotNull())
                 {
                     Log.Debug().Message($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"").Write();
                     _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);

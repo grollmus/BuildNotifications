@@ -15,7 +15,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected const int MaxDatesToSuggest = 3;
 
-        protected BaseDateSearchCriteria(IPipeline pipeline) : base(pipeline)
+        protected BaseDateSearchCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
             _resolveNow = () => DateTime.Now;
         }

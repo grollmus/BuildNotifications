@@ -10,7 +10,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class IsCriteria : BaseSearchCriteria
     {
-        public IsCriteria(IPipeline pipeline) : base(pipeline)
+        public IsCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
         }
 

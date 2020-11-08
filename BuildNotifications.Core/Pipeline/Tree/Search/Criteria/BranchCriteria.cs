@@ -8,7 +8,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class BranchCriteria : BaseStringCriteria
     {
-        public BranchCriteria(IPipeline pipeline) : base(pipeline)
+        public BranchCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
         }
 
