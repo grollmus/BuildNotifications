@@ -19,7 +19,7 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public IUser User => new User("Me");
 
-        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds()
+        public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds(int buildsPerGroup)
         {
             var builds = await _connection.Get<IEnumerable<Build>>(BuildPath);
 

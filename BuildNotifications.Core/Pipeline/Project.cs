@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildNotifications.Core.Config;
+using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.SourceControl;
@@ -12,18 +13,19 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class Project : IProject
     {
-        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider, IProjectConfiguration config)
+        public Project(IEnumerable<IBuildProvider> buildProviders, IBranchProvider? branchProvider, IProjectConfiguration projectConfig, IConfiguration applicationConfig)
         {
-            Name = config.ProjectName;
+            Name = projectConfig.ProjectName;
             _buildProviders = buildProviders.ToList();
             _branchProvider = branchProvider;
-            Config = config;
+            _applicationConfig = applicationConfig;
+            Config = projectConfig;
 
-            _buildFilter = new ListBuildFilter(config, BranchNameExtractor);
+            _buildFilter = new ListBuildFilter(projectConfig, BranchNameExtractor);
         }
 
-        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config)
-            : this(buildProvider.Yield(), branchProvider, config)
+        public Project(IBuildProvider buildProvider, IBranchProvider branchProvider, IProjectConfiguration config, IConfiguration configuration)
+            : this(buildProvider.Yield(), branchProvider, config, configuration)
         {
         }
 
@@ -58,10 +60,11 @@ namespace BuildNotifications.Core.Pipeline
         public async IAsyncEnumerable<IBuild> FetchAllBuilds()
         {
             _buildFilter.InitializeStringMatcher(BranchNameExtractor);
+            var buildsPerGroup = _applicationConfig.BuildsToShow * _branchProvider?.ExistingBranchCount ?? 1;
 
             foreach (var buildProvider in _buildProviders)
             {
-                await foreach (var build in buildProvider.FetchAllBuilds())
+                await foreach (var build in buildProvider.FetchAllBuilds(buildsPerGroup))
                 {
                     if (IsAllowed(build))
                         yield return Enrich(build, buildProvider);
@@ -130,7 +133,8 @@ namespace BuildNotifications.Core.Pipeline
             {
                 var branch = branchList.FirstOrDefault(b => b.FullName == build.BranchName)
                              ?? branchList.FirstOrDefault(b => b.FullName == build.Branch?.FullName)
-                             ?? new NullBranch();
+                             ?? new NullBranch($"{build.BranchName} {StringLocalizer.DeletedTag}");
+
                 build.Branch = branch;
 
                 if (branch is IPullRequest pr)
@@ -179,15 +183,16 @@ namespace BuildNotifications.Core.Pipeline
         }
 
         private readonly IBranchProvider? _branchProvider;
+        private readonly IConfiguration _applicationConfig;
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
 
         private class NullBranch : IBranch
         {
-            public NullBranch()
+            public NullBranch(string fullName)
             {
-                FullName = string.Empty;
-                DisplayName = string.Empty;
+                FullName = fullName;
+                DisplayName = fullName;
             }
 
             public string DisplayName { get; }

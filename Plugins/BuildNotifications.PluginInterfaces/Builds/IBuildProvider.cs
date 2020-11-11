@@ -19,8 +19,9 @@ namespace BuildNotifications.PluginInterfaces.Builds
         /// <summary>
         /// Fetches all available builds.
         /// </summary>
+        /// <param name="buildsPerGroup">Amount of builds to fetch per group (e.g. branch or definition).</param>
         /// <returns>List of all builds.</returns>
-        IAsyncEnumerable<IBaseBuild> FetchAllBuilds();
+        IAsyncEnumerable<IBaseBuild> FetchAllBuilds(int buildsPerGroup);
 
         /// <summary>
         /// Fetches all builds that have been changed since a given date and time.

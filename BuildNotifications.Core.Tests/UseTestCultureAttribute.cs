@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading;
 using Xunit.Sdk;
 
-namespace BuildNotifications.TestMocks.Attributes
+namespace BuildNotifications.Core.Tests
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class UseTestCultureAttribute : BeforeAfterTestAttribute

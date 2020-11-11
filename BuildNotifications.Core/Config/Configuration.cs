@@ -25,6 +25,8 @@ namespace BuildNotifications.Core.Config
 
         public bool UsePreReleases { get; set; }
 
+        public Theme ApplicationTheme { get; set; } = Theme.Dark;
+
         public BuildNotificationModes CanceledBuildNotifyConfig { get; set; } = BuildNotificationModes.RequestedByMe;
 
         public BuildNotificationModes FailedBuildNotifyConfig { get; set; } = BuildNotificationModes.RequestedByOrForMe;

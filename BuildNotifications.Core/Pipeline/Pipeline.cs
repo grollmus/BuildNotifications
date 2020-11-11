@@ -56,11 +56,23 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message("Cleaning up builds").Write();
             var builds = _buildCache.ContentCopy();
             var count = 0;
+            IProject? projectOfBuild = null;
+
             foreach (var build in builds.Cast<EnrichedBuild>())
             {
+                if (projectOfBuild == null || build.ProjectId != projectOfBuild.Guid)
+                    projectOfBuild = _projectList.FirstOrDefault(p => p.Guid == build.ProjectId);
+
+                var hideWithNoBranch = projectOfBuild?.Config.HideBuildsOfDeletedBranches ?? true;
+                var hideWithNoDefinition = projectOfBuild?.Config.HideBuildsOfDeletedDefinitions ?? true;
+
                 var definitionExists = _definitionCache.ContainsValue(build.Definition);
                 var branchExists = _branchCache.Contains(b => b.Equals(build.Branch));
-                if (!definitionExists || !branchExists)
+
+                var shouldHideBecauseOfDefinition = hideWithNoDefinition && !definitionExists;
+                var shouldHideBecauseOfBranch = hideWithNoBranch && !branchExists;
+
+                if (shouldHideBecauseOfDefinition || shouldHideBecauseOfBranch)
                 {
                     _buildCache.RemoveValue(build);
                     count += 1;
@@ -247,7 +259,7 @@ namespace BuildNotifications.Core.Pipeline
             try
             {
                 var currentUserIdentities = project.FetchCurrentUserIdentities();
-                foreach (var currentUserIdentity in currentUserIdentities.Where(x => x != null))
+                foreach (var currentUserIdentity in currentUserIdentities.WhereNotNull())
                 {
                     Log.Debug().Message($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"").Write();
                     _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);
@@ -272,14 +284,14 @@ namespace BuildNotifications.Core.Pipeline
             _userIdentityList.IdentitiesOfCurrentUser.Clear();
         }
 
-        public void Search(ISpecificSearch search)
+        public void Search(ISpecificSearch specificSearch)
         {
-            Log.Info().Message($"Applying search \"{search}\".").Write();
-            _currentSearch = search;
+            Log.Info().Message($"Applying search \"{specificSearch}\".").Write();
+            _currentSearch = specificSearch;
 
             var tree = BuildTree();
             _pipelineNotifier.Notify(tree, Enumerable.Empty<INotification>());
-            Log.Debug().Message($"Applied search \"{search}\".").Write();
+            Log.Debug().Message($"Applied search \"{specificSearch}\".").Write();
         }
 
         public async Task Update(UpdateModes mode = UpdateModes.DeltaBuilds)
@@ -290,11 +302,15 @@ namespace BuildNotifications.Core.Pipeline
             var treeResult = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
+
+                // Fetch branches first so they are known when fetching builds
                 var branchTask = FetchBranches();
+                await branchTask;
+
                 var definitionsTask = FetchDefinitions();
                 var buildsTask = FetchBuilds(mode);
 
-                await Task.WhenAll(branchTask, definitionsTask, buildsTask);
+                await Task.WhenAll(definitionsTask, buildsTask);
 
                 Log.Debug().Message("Everything is fetched.").Write();
 

@@ -622,6 +622,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="UseDarkTheme" xml:space="preserve">
+    <value>Dunkles Thema verwenden</value>
+  </data>
   <data name="MyBuildsSightToolTip" xml:space="preserve">
     <value />
   </data>
@@ -746,6 +749,14 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
     <value>Max Mustermann</value>
   </data>
+  <data name="HideBuildsOfDeletedBranches" xml:space="preserve">
+    <value>Verstecke Builds von gelöschten Branches</value>
+  </data>
+  <data name="HideBuildsOfDeletedDefinitions" xml:space="preserve">
+    <value>Verstecke Builds von gelöschten Definitionen</value>
+  </data>
+  <data name="DeletedTag" xml:space="preserve">
+    <value>[Gelöscht]</value>
   <data name="ToolkitTooltip" xml:space="preserve">
     <value>Debug Toolkit öffnen</value>
   </data>

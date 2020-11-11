@@ -98,7 +98,7 @@ namespace BuildNotifications.Services
         private async Task<string> GetUpdateUrl(string version)
         {
             if (_updateUrlCache.TryGetValue(version, out var url))
-                return url;
+                return url!;
 
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0);
             var userAgent = new ProductInfoHeaderValue(AppName, currentVersion.ToString(3));

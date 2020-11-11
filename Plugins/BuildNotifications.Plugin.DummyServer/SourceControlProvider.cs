@@ -6,13 +6,12 @@ namespace BuildNotifications.Plugin.DummyServer
 {
     internal class SourceControlProvider : IBranchProvider
     {
-        private const string BranchesPath = "branch";
-
         public SourceControlProvider(Connection connection)
         {
             _connection = connection;
         }
 
+        public int ExistingBranchCount => _knownBranches.Count;
         public IBranchNameExtractor NameExtractor => new BranchNameExtractor();
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()
@@ -41,5 +40,6 @@ namespace BuildNotifications.Plugin.DummyServer
 
         private readonly HashSet<Branch> _knownBranches = new HashSet<Branch>(new BranchComparer());
         private readonly Connection _connection;
+        private const string BranchesPath = "branch";
     }
 }
