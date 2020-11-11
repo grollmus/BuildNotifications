@@ -6,6 +6,7 @@ namespace BuildNotifications.Core.Pipeline
 {
     internal class NullBranchProvider : IBranchProvider
     {
+        public int ExistingBranchCount => 0;
         public IBranchNameExtractor NameExtractor => new NullBranchNameExtractor();
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()

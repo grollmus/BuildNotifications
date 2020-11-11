@@ -90,8 +90,7 @@ namespace BuildNotifications.Resources.Search
             return searchBlockViewModel;
         }
 
-        protected virtual IEnumerable<SearchSuggestionViewModel> SuggestionsForSearchTerm(string searchTerm)
-            => SearchCriteria.Suggest(searchTerm).Select(s => new SearchSuggestionViewModel(s, ApplySuggestionAction));
+        protected virtual IEnumerable<SearchSuggestionViewModel> SuggestionsForSearchTerm(string searchTerm) => SearchCriteria.Suggest(searchTerm).Select(s => new SearchSuggestionViewModel(s, ApplySuggestionAction));
 
         public void UpdateSuggestions(string currentSearchTerm)
         {

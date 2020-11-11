@@ -43,7 +43,7 @@ namespace BuildNotifications.Core.Text
 
         public string this[string key] => GetText(key);
 
-        internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; set; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
+        internal IDictionary<CultureInfo, IDictionary<string, string>> Cache { get; } = new Dictionary<CultureInfo, IDictionary<string, string>>();
 
         public static IEnumerable<CultureInfo> SupportedCultures()
         {
@@ -74,10 +74,10 @@ namespace BuildNotifications.Core.Text
             if (!Cache.TryGetValue(culture, out var dictionary) && !Cache.TryGetValue(culture.Parent, out dictionary))
                 dictionary = _defaultDictionary;
 
-            if (!dictionary.TryGetValue(key, out var localizedText) && !_defaultDictionary.TryGetValue(key, out localizedText))
+            if (!dictionary!.TryGetValue(key, out var localizedText) && !_defaultDictionary.TryGetValue(key, out localizedText))
                 localizedText = key;
 
-            return localizedText;
+            return localizedText!;
         }
 
         private readonly IDictionary<string, string> _defaultDictionary;

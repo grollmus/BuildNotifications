@@ -7,11 +7,14 @@ namespace BuildNotifications.Core
         public static bool CompareWithoutGenericTypes(this Type type, Type otherType)
         {
             var typeToCompare = type;
-
             if (type.IsGenericType)
                 typeToCompare = type.GetGenericTypeDefinition();
 
-            return typeToCompare == otherType;
+            var otherTypeToCompare = otherType;
+            if (otherType.IsGenericType)
+                otherTypeToCompare = otherType.GetGenericTypeDefinition();
+
+            return typeToCompare == otherTypeToCompare;
         }
 
         public static Type? FindBaseType(this Type type, Type baseType)

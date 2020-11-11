@@ -10,6 +10,11 @@ namespace BuildNotifications.PluginInterfaces.SourceControl
     public interface IBranchProvider
     {
         /// <summary>
+        /// Amount of branches known to this provider.
+        /// </summary>
+        int ExistingBranchCount { get; }
+
+        /// <summary>
         /// Extractor that can be used on branches from this provider.
         /// </summary>
         IBranchNameExtractor NameExtractor { get; }

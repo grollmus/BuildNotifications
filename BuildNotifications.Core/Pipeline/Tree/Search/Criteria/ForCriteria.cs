@@ -9,7 +9,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class ForCriteria : BaseStringCriteria
     {
-        public ForCriteria(IPipeline pipeline) : base(pipeline)
+        public ForCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
         }
 

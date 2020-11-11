@@ -18,9 +18,15 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
             _repositoryId = repositoryId;
         }
 
-        private TfsBranch Convert(GitRef branch, TfsUrlBuilder urlBuilder) => new TfsBranch(branch, urlBuilder);
+        private TfsBranch Convert(GitRef branch, TfsUrlBuilder urlBuilder)
+        {
+            return new TfsBranch(branch, urlBuilder);
+        }
 
-        private TfsPullRequests Convert(GitPullRequest branch, TfsUrlBuilder urlBuilder) => new TfsPullRequests(branch, urlBuilder);
+        private TfsPullRequests Convert(GitPullRequest branch, TfsUrlBuilder urlBuilder)
+        {
+            return new TfsPullRequests(branch, urlBuilder);
+        }
 
         private async Task<List<GitPullRequest>> FetchPullRequests(GitHttpClient gitClient)
         {
@@ -41,6 +47,7 @@ namespace BuildNotifications.Plugin.Tfs.SourceControl
             return new TfsUrlBuilder(projectClient.BaseAddress, project.Name);
         }
 
+        public int ExistingBranchCount => _knownBranches.Count;
         public IBranchNameExtractor NameExtractor { get; } = new GitBranchNameExtractor();
 
         public async IAsyncEnumerable<IBranch> FetchExistingBranches()

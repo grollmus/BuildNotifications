@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -70,6 +71,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
         internal void AddConnectionViewModel(ConnectionViewModel vm)
         {
             vm.SaveRequested += ConnectionViewModel_SaveRequested;
+            vm.PropertyChanged += ConnectionViewModel_PropertyChanged;
             Connections.Add(vm);
 
             SelectedConnection = vm;
@@ -101,8 +103,14 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             {
                 var connectionViewModel = new ConnectionViewModel(c, pluginRepository);
                 connectionViewModel.SaveRequested += ConnectionViewModel_SaveRequested;
+                connectionViewModel.PropertyChanged += ConnectionViewModel_PropertyChanged;
                 yield return connectionViewModel;
             }
+        }
+
+        private void ConnectionViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            RaiseChanged();
         }
 
         private void RaiseTestFinished()
@@ -118,6 +126,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
                 return;
 
             viewModel.SaveRequested -= ConnectionViewModel_SaveRequested;
+            viewModel.PropertyChanged -= ConnectionViewModel_PropertyChanged;
             _configuration.Connections.Remove(viewModel.Model);
             Connections.Remove(viewModel);
             SelectedConnection = Connections.FirstOrDefault();
