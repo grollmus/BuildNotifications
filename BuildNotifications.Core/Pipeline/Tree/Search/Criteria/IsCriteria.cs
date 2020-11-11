@@ -10,7 +10,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 {
     internal class IsCriteria : BaseSearchCriteria
     {
-        public IsCriteria(IPipeline pipeline) : base(pipeline)
+        public IsCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
         }
 
@@ -63,6 +64,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected override void UpdateCacheForSuggestions(IPipeline pipeline)
         {
+            // Not needed
         }
 
         protected override bool IsBuildIncludedInternal(IBuild build, string input)

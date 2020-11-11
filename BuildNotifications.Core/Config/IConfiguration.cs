@@ -86,5 +86,10 @@ namespace BuildNotifications.Core.Config
         /// marked as PreReleases.
         /// </summary>
         bool UsePreReleases { get; set; }
+
+        /// <summary>
+        /// Application theme to use.
+        /// </summary>
+        Theme ApplicationTheme { get; set; }
     }
 }

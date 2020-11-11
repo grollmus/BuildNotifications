@@ -15,7 +15,8 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
 
         protected const int MaxDatesToSuggest = 3;
 
-        protected BaseDateSearchCriteria(IPipeline pipeline) : base(pipeline)
+        protected BaseDateSearchCriteria(IPipeline pipeline)
+            : base(pipeline)
         {
             _resolveNow = () => DateTime.Now;
         }
@@ -98,10 +99,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
                 return x.dateTime.Equals(y.dateTime);
             }
 
-            public override int GetHashCode((DateTime dateTime, string suggestion) tuple)
-            {
-                return tuple.dateTime.GetHashCode();
-            }
+            public override int GetHashCode((DateTime dateTime, string suggestion) obj) => obj.dateTime.GetHashCode();
         }
     }
 }

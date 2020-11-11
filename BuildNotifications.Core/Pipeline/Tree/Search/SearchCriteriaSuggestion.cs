@@ -22,8 +22,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search
             return false;
         }
 
-        private bool Equals(ISearchCriteriaSuggestion other) =>
-            other.Suggestion.Equals(Suggestion, StringComparison.InvariantCulture) && other.IsKeyword == IsKeyword;
+        private bool Equals(ISearchCriteriaSuggestion other) => other.Suggestion.Equals(Suggestion, StringComparison.InvariantCulture) && other.IsKeyword == IsKeyword;
 
         public override int GetHashCode() => Suggestion.GetHashCode(StringComparison.InvariantCulture);
     }

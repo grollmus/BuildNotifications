@@ -44,6 +44,16 @@ namespace BuildNotifications.Core.Config
         bool HideCompletedPullRequests { get; set; }
 
         /// <summary>
+        /// Whether to hide Builds which branches have been deleted (or were not found)
+        /// </summary>
+        bool HideBuildsOfDeletedBranches { get; set; }
+
+        /// <summary>
+        /// Whether to hide Builds which definitions have been deleted (or were not found)
+        /// </summary>
+        bool HideBuildsOfDeletedDefinitions { get; set; }
+
+        /// <summary>
         /// Whether the project is enabled and should be loaded.
         /// </summary>
         bool IsEnabled { get; set; }

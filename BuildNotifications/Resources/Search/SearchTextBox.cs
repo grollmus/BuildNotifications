@@ -348,6 +348,14 @@ namespace BuildNotifications.Resources.Search
                     return;
             }
 
+            HandleKeyDownForSuggestions(e);
+        }
+
+        private void HandleKeyDownForSuggestions(KeyEventArgs e)
+        {
+            if (SearchCriteriaViewModel == null)
+                return;
+
             switch (e.Key)
             {
                 case Key.Down:
@@ -477,7 +485,7 @@ namespace BuildNotifications.Resources.Search
             Selection.Select(start!, end);
             for (var i = 0; i <= 2; i++)
             {
-                CaretPosition = start?.GetPositionAtOffset(i) ?? start;
+                CaretPosition = start.GetPositionAtOffset(i) ?? start;
                 if (CaretPosition == null || Document.ContentStart.GetOffsetToPosition(CaretPosition) == Document.ContentStart.GetOffsetToPosition(start!))
                     break;
             }
