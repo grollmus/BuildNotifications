@@ -20,6 +20,11 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
       
+    - name: Install .NET 5.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+      
     - name: Extract version from tag name
       uses: olegtarasov/get-tag@v1
       id: tagName
