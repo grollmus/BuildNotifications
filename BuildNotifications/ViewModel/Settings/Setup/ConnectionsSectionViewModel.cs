@@ -108,7 +108,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             }
         }
 
-        private void ConnectionViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ConnectionViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             RaiseChanged();
         }
