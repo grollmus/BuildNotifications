@@ -10,9 +10,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
-    
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
 
     - name: Setup Java for CodeCoverage results
       uses: actions/setup-java@v1
@@ -34,8 +31,8 @@ jobs:
     - name: Add coverage tool to test project
       run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
       
-    - name: nuget restore
-      run: nuget restore
+    - name: dotnet restore
+      run: dotnet restore
       
     - name: Build 
       run: msbuild BuildNotifications.sln /t:Build /p:Configuration=Release

@@ -13,9 +13,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
-    
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
 
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
@@ -33,8 +30,8 @@ jobs:
     - name: Publish TFS Plugin
       run: dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64 /p:Version=${{ steps.tagName.outputs.tag }} /p:FileVersion=${{ steps.tagName.outputs.tag }} /p:AssemblyVersion=${{ steps.tagName.outputs.tag }}
       
-    - name: nuget restore
-      run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
+    - name: dotnet restore
+      run: dotnet restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
       
     - name: Build ToastNotificationsPlugin
       run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
