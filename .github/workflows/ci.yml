@@ -35,7 +35,7 @@ jobs:
       run: dotnet restore
       
     - name: Build 
-      run: msbuild BuildNotifications.sln /t:Build /p:Configuration=Release
+      run: msbuild -m BuildNotifications.sln /t:Build /p:Configuration=Release
     
     - name: Run tests
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln --no-build --configuration Release
