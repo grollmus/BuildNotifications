@@ -22,7 +22,9 @@ jobs:
         nuget-version: 'latest'
         
     - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
+      uses: microsoft/setup-msbuild@v1.0.2
+      with:
+        vs-version: '[16.8,)'
       
     - name: Download Coverage reporter
       run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/11.2.2/codacy-coverage-reporter-assembly-11.2.2.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
