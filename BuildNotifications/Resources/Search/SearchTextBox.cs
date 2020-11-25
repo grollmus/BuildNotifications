@@ -21,6 +21,8 @@ namespace BuildNotifications.Resources.Search
     {
         public SearchTextBox()
         {
+            _popup = new Popup();
+
             GotFocus += OnGotFocus;
             LostFocus += OnLostFocus;
             LostKeyboardFocus += (sender, args) => _popup.IsOpen = false;
@@ -32,7 +34,6 @@ namespace BuildNotifications.Resources.Search
             // use dummy instances for a quick and easy way to avoid null reference exceptions
             _scrollViewer = new ScrollViewer();
             _overlay = new Border();
-            _popup = new Popup();
 
             ListenToTextEvents();
             Loaded += OnLoaded;
