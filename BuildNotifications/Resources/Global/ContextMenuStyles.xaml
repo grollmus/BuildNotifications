@@ -23,10 +23,18 @@
                     <Border x:Name="Bd" Padding="{StaticResource BlockQuarterThickness}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="True" Uid="Border_38">
                         <DockPanel>
+
                             <icons:IconBatch Width="{StaticResource Block}" Height="{StaticResource Block}"
-                                             Foreground="{TemplateBinding Foreground}"
+                                             Foreground="{TemplateBinding Foreground}" x:Name="Icon"
                                              Type="{TemplateBinding IconType}"
                                              Margin="{StaticResource BlockQuarterRight}" VerticalAlignment="Center" />
+
+                            <CheckBox Width="{StaticResource Block}" Height="{StaticResource Block}"
+                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      x:Name="CheckBox"
+                                      VerticalAlignment="Center" Visibility="Collapsed" Style="{StaticResource MenuCheckBox}"
+                                      Margin="{StaticResource BlockQuarterRight}" />
+
                             <ContentPresenter x:Name="ContentPresenter" VerticalAlignment="Top"
                                               Content="{TemplateBinding Header}" ContentSource="Header"
                                               Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
@@ -37,6 +45,14 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
                             <Setter Property="Background" TargetName="Bd" Value="{DynamicResource Background3}" />
+                        </Trigger>
+                        <Trigger Property="IsCheckable" Value="True">
+                            <Setter Property="Visibility" TargetName="Icon" Value="Collapsed" />
+                            <Setter Property="Visibility" TargetName="CheckBox" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsCheckable" Value="False">
+                            <Setter Property="Visibility" TargetName="Icon" Value="Visible" />
+                            <Setter Property="Visibility" TargetName="CheckBox" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
