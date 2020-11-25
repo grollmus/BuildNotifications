@@ -183,6 +183,9 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         private bool ShouldNotifyAboutBuild(IBuildNode buildNode)
         {
+            if (buildNode.EnableManualNotification)
+                return true;
+
             var notifySetting = NotifySetting(buildNode);
             var currentUserIdentities = _userIdentityList.IdentitiesOfCurrentUser;
             return notifySetting switch

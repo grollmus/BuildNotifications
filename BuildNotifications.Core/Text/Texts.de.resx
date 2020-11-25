@@ -758,5 +758,8 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   <data name="DeletedTag" xml:space="preserve">
     <value>[Gelöscht]</value>
   </data>
+  <data name="NotifyMeAboutThisBuild" xml:space="preserve">
+    <value>Benachrichtige mich über diesen Build</value>
+  </data>
 </root>
 <!-- ReSharper restore MarkupTextTypo -->
