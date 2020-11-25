@@ -3,7 +3,8 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
-                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text">
+                    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
     <Style TargetType="window:CustomWindow" x:Key="CustomWindowStyle">
         <Setter Property="Background" Value="{DynamicResource Background1}" />
@@ -47,7 +48,7 @@
                                                      Width="{DynamicResource BlockDouble}"
                                                      Height="{DynamicResource BlockDouble}"
                                                      Foreground="{DynamicResource Foreground1}"
-                                                     Visibility="{TemplateBinding DisplayIcon, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+                                                     Visibility="{TemplateBinding DisplayIcon, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
                                     <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
                                         <ContentPresenter x:Name="PART_RightToTitleContentPresenter"
@@ -63,7 +64,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Grid
-                                            Visibility="{TemplateBinding DisplaySystemButtons, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+                                            Visibility="{TemplateBinding DisplaySystemButtons, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
                                                 <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />

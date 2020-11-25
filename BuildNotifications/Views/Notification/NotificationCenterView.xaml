@@ -12,6 +12,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+             xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type viewModelNotification:NotificationCenterViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -23,7 +24,7 @@
     <Grid x:Name="Grid">
         <DockPanel>
             <icons:IconButton Style="{StaticResource IconButtonWithDockedContent}"
-                              Visibility="{Binding ClearButtonVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+                              Visibility="{Binding ClearButtonVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
                               Content="{text:Localized ClearAll}" DockPanel.Dock="Bottom"
                               HorizontalAlignment="Center" Command="{Binding ClearAllCommand}" Icon="NoMessage"
                               Foreground="{DynamicResource Foreground1}" />
@@ -52,7 +53,7 @@
                                     Text="{Binding TimeUntilNow, Converter={x:Static resourcesNotification:TimeSpanToReadableTextConverter.Instance}}"
                                     FontSize="{StaticResource BlockFiveSixths}"
                                     Margin="{StaticResource BlockHalfXOnlyMargin}"
-                                    Visibility="{Binding DataContext.ShowTimeStamp, Converter={x:Static utils:BoolToVisibilityConverter.Instance},
+                                    Visibility="{Binding DataContext.ShowTimeStamp, Converter={x:Static converters:BoolToVisibilityConverter.Instance},
                                 ElementName=Grid}"
                                     Foreground="{DynamicResource Foreground1HalfTransparency}"
                                     DockPanel.Dock="Right" />
@@ -108,7 +109,7 @@
         </DockPanel>
 
         <DockPanel
-            Visibility="{Binding NoNotifications, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+            Visibility="{Binding NoNotifications, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
             HorizontalAlignment="Center" VerticalAlignment="Center">
             <icons:IconBatch Type="NoMessage" Width="{StaticResource BlockTriple}"
                              Height="{StaticResource BlockTriple}" Foreground="{StaticResource Background3}"

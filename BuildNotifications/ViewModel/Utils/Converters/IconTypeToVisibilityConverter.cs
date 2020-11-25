@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using BuildNotifications.Resources.Icons;
 
-namespace BuildNotifications.ViewModel.Utils
+namespace BuildNotifications.ViewModel.Utils.Converters
 {
     internal class IconTypeToVisibilityConverter : IValueConverter
     {

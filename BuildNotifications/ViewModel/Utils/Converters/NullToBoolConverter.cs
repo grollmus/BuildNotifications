@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BuildNotifications.ViewModel.Utils
+namespace BuildNotifications.ViewModel.Utils.Converters
 {
     internal class NullToBoolConverter : IValueConverter
     {

@@ -8,7 +8,8 @@
                     xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
-                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons">
+                    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
     <local:BoolToBrushConverter BrushWhenTrue="Background3" x:Key="Background3WhenTrueConverter" />
 
@@ -199,7 +200,7 @@
                             <TextBlock
                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
                                 Text="{text:Localized NoValue}"
-                                Visibility="{Binding IsEmpty, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+                                Visibility="{Binding IsEmpty, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
                                 Foreground="{DynamicResource Foreground1HalfTransparency}" HorizontalAlignment="Left"
                                 VerticalAlignment="Center" />
                         </Grid>
@@ -215,7 +216,7 @@
 
                             <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
                                              Margin="{StaticResource BlockQuarterXOnlyMargin}"
-                                             Visibility="{Binding ToggleButtonActive, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+                                             Visibility="{Binding ToggleButtonActive, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
                                              Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}}"
                                              x:Name="Icon" HorizontalAlignment="Right" VerticalAlignment="Center" />
                         </StackPanel>

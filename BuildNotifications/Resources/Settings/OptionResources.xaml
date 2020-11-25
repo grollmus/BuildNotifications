@@ -10,6 +10,7 @@
                     xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.Options.PluginOptions"
                     xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:views="clr-namespace:BuildNotifications.Views"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
                     mc:Ignorable="d">
 
 	<ResourceDictionary.MergedDictionaries>
@@ -18,7 +19,7 @@
 
 	<DataTemplate x:Key="BooleanOptionTemplate" DataType="{x:Type options:BooleanOptionViewModel}">
 		<CheckBox IsChecked="{Binding Value, Mode=TwoWay}"
-		          Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+		          Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
 		          Margin="{StaticResource BlockHalfYOnlyMargin}">
 			<TextBlock
 				Text="{Binding DisplayName}"
@@ -28,7 +29,7 @@
 
 	<DataTemplate x:Key="NumberOptionTemplate" DataType="{x:Type options:NumberOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
-		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+		                       Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
 		                       Label="{Binding DisplayName}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
@@ -36,13 +37,13 @@
 	<DataTemplate x:Key="TextOptionTemplate" DataType="{x:Type options:TextOptionViewModel}">
 		<text:DecoratedTextBox Text="{Binding Value, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
 		                       Label="{Binding DisplayName}" ToolTip="{Binding Description}"
-		                       Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+		                       Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
 		                       Margin="{StaticResource BlockYOnlyMargin}" />
 	</DataTemplate>
 
 	<DataTemplate x:Key="StringCollectionOptionTemplate" DataType="{x:Type options:StringCollectionOptionViewModel}">
 		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel" ToolTip="{Binding Description}"
-		           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+		           Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
 			<Grid DockPanel.Dock="Top">
 				<DockPanel>
 					<Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
@@ -117,7 +118,7 @@
 	<DataTemplate x:Key="PluginEncryptedTextOptionTemplate"
 	              DataType="{x:Type pluginOptions:PluginEncryptedTextOptionViewModel}">
 		<Grid Margin="{StaticResource BlockYOnlyMargin}" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Description}"
-		      Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+		      Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
 			<PasswordBox CaretBrush="{DynamicResource Foreground1}" Foreground="{DynamicResource Foreground1}"
 			             Background="Transparent" BorderThickness="0" settings:PasswordHelper.Attach="True"
 			             settings:PasswordHelper.Password="{Binding RawValue,Mode=TwoWay}" />
@@ -133,7 +134,7 @@
 
 	<DataTemplate x:Key="PluginDisplayOptionTemplate" DataType="{x:Type pluginOptions:PluginDisplayOptionViewModel}">
 		<DockPanel Margin="{StaticResource BlockYOnlyMargin}" x:Name="DockPanel" ToolTip="{Binding Description}"
-		           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+		           Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
 			<Grid DockPanel.Dock="Top">
 				<DockPanel>
 					<Rectangle Height="{StaticResource BlockDouble}" Fill="{DynamicResource Background1}"
@@ -151,14 +152,14 @@
 
 			</Grid>
 			<TextBlock Text="{Binding Value}" ToolTip="{Binding Description}" Foreground="{DynamicResource Foreground1}"
-			           Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+			           Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
 		</DockPanel>
 	</DataTemplate>
 
 
 	<DataTemplate x:Key="PluginCommandOptionTemplate" DataType="{x:Type pluginOptions:PluginCommandOptionViewModel}">
-		<Grid Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+		<Grid Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
 			<icons:IconButton Command="{Binding Command}" Style="{StaticResource IconButtonWithDockedContent}"
 			                  Foreground="{DynamicResource Foreground1}" Content="{Binding DisplayName}"
 			                  ToolTip="{Binding Description}" />
@@ -175,7 +176,7 @@
 	<DataTemplate x:Key="ListOptionTemplate">
 		<StackPanel Orientation="Vertical" ToolTip="{Binding Description}" IsEnabled="{Binding IsEnabled}"
 		            Margin="{StaticResource BlockHalfYOnlyMargin}"
-		            Visibility="{Binding IsVisible, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}">
+		            Visibility="{Binding IsVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
 
 			<TextBlock
 				Text="{Binding DisplayName, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
