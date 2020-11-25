@@ -18,10 +18,10 @@ namespace BuildNotifications.Resources.BuildTree.Build
                 return;
 
             globalTweenHandler.ClearTweensOf(AssociatedObject);
-            
+
             if (AssociatedObject.Visibility != Visibility.Visible)
                 AssociatedObject.Visibility = Visibility.Visible;
-            
+
             var brush = new SolidColorBrush();
             var targetBrush = new SolidColorBrush(Colors.Transparent);
             var background = AssociatedObject.FindResource("Background1") as SolidColorBrush;

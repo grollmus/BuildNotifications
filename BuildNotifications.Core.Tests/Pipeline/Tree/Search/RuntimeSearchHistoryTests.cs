@@ -38,12 +38,12 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
             {
                 history.AddEntry(term);
             }
-            
+
             var entries = history.SearchedTerms();
 
             Assert.Equal(expectedTerms.Reverse(), entries.ToArray());
         }
-        
+
         [Fact]
         public void TwiceAddedTermIsYieldedOnlyOnce()
         {
@@ -56,7 +56,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             Assert.Single(entries);
         }
-        
+
         [Fact]
         public void EntryAddedAgainWillUpdateItsUsedTime()
         {
@@ -71,7 +71,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             Assert.Equal(oldTerm, newestEntry);
         }
-        
+
         [Fact]
         public void EntriesAreSortedByDateDescending()
         {
@@ -86,7 +86,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             Assert.Equal(inOrder, entries);
         }
-        
+
         [Fact]
         public void ManuallyGivenDateIsRespected()
         {
@@ -101,7 +101,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             Assert.Equal(inOrder, entries);
         }
-        
+
         [Fact]
         public void RemovedTermIsNotYielded()
         {
@@ -114,7 +114,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
             Assert.Empty(entries);
         }
-        
+
         [Fact]
         public void RemovingTermThatIsNotInListDoesNothing()
         {
