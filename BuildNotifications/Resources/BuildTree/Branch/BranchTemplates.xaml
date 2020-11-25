@@ -2,12 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
     <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">
         <DockPanel HorizontalAlignment="Left">
-            <icons:SimpleIconBatch Type="Branch" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" Visibility="{Binding IsPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
-            <icons:SimpleIconBatch Type="PullRequest" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" Visibility="{Binding IsPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+            <icons:SimpleIconBatch Type="Branch" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" Visibility="{Binding IsPullRequest, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}}" />
+            <icons:SimpleIconBatch Type="PullRequest" DockPanel.Dock="Left" Margin="{DynamicResource BlockQuarterRight}" Visibility="{Binding IsPullRequest, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
             <TextBlock Text="{Binding BranchName}" FontSize="{DynamicResource BlockFont}" UseLayoutRounding="True"
                        TextTrimming="CharacterEllipsis" x:Name="BranchTextBlock" />
         </DockPanel>

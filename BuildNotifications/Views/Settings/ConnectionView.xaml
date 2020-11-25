@@ -9,6 +9,7 @@
              xmlns:settingsRes="clr-namespace:BuildNotifications.Resources.Settings"
              xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
              xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+             xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -39,7 +40,7 @@
 		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
 
 		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
-		              IsEnabled="{Binding SelectedPlugin, Converter={x:Static utils:NullToBoolConverter.Instance}}"
+		              IsEnabled="{Binding SelectedPlugin, Converter={x:Static converters:NullToBoolConverter.Instance}}"
 		              ItemTemplateSelector="{x:Static settingsRes:OptionTemplateSelector.Instance}" />
 
 		<local:TestConnectionView DockPanel.Dock="Left" DataContext="{Binding TestConnection}" />

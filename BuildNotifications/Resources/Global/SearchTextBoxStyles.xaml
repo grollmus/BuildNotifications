@@ -8,7 +8,8 @@
                     xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
                     xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils">
+                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
     <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter Property="ItemsSource" Value="{Binding Suggestions}" />
@@ -30,7 +31,7 @@
                               IconSize="{StaticResource BlockFiveSixths}"
                               Foreground="{DynamicResource Background3}" Margin="{StaticResource BlockHalfRight}"
                               HorizontalAlignment="Right" Width="{StaticResource Block}" VerticalAlignment="Center"
-                              Visibility="{Binding IsFromHistory, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+                              Visibility="{Binding IsFromHistory, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
                        x:Name="SuggestionTextBlock" VerticalAlignment="Center"
