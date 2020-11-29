@@ -18,7 +18,7 @@ namespace BuildNotifications.ViewModel.Notification
     {
         public NotificationDistributor()
         {
-            var codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            var codeBase = Assembly.GetExecutingAssembly().Location;
             var uri = new UriBuilder(codeBase!);
             var unescapedDataString = Uri.UnescapeDataString(uri.Path!);
             _assemblyPath = Path.GetDirectoryName(unescapedDataString) ?? "";

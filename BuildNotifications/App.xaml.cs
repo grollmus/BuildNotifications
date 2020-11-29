@@ -111,7 +111,7 @@ namespace BuildNotifications
         {
             var assembly = Assembly.GetExecutingAssembly();
             var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return versionInfo.FileVersion;
+            return versionInfo.FileVersion ?? "9.9.9999";
         }
 
         private bool IsInvokedFromDistributedNotification(StartupEventArgs e)

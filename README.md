@@ -33,7 +33,7 @@ Sort your builds by status ascending, descending or by name. Immedietaly see and
 Write or use plugins for whatever platform you use. GitHub for sources, Jenkins for builds? Azure DevOps for both? Something completely different? It's all possible and configurable. Want to be notified for only certain branches? Only when manually built? Prefer dark mode? 
 
 # Build
-* Visual Studio 2019 16.8 Preview required
+* Visual Studio 2019 16.8 required
 * .NET Core 5.0 SDK required
 * ReSharper recommended
 * Open BuildNotifications.sln from root folder

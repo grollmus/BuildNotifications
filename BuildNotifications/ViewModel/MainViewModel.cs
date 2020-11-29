@@ -197,7 +197,7 @@ namespace BuildNotifications.ViewModel
             Application.Current.Dispatcher?.Invoke(() => { ShowNotifications(e.ErrorNotifications); });
         }
 
-        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
             switch (args.PropertyName)
             {

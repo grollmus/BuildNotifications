@@ -51,7 +51,7 @@ namespace BuildNotifications.Resources.Global.Navigation.ButtonNavigation
             return !items.Any();
         }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             UpdateAddMessage();
         }

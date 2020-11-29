@@ -43,7 +43,7 @@ namespace BuildNotifications.ViewModel.Settings.Setup
             return configuration.ListAvailableOptions().Select(o => factory.Construct(o));
         }
 
-        private void OptionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OptionOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(IValueOption.Value))
                 ValueChanged?.Invoke(this, EventArgs.Empty);

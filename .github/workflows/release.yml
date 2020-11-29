@@ -15,7 +15,14 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
+      uses: microsoft/setup-msbuild@v1.0.2
+      with:
+        vs-version: '[16.8,)'
+      
+    - name: Install .NET 5.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
 
     - name: Setup nuget
       uses: nuget/setup-nuget@v1
