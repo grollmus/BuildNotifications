@@ -757,6 +757,7 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   </data>
   <data name="DeletedTag" xml:space="preserve">
     <value>[Gelöscht]</value>
+  </data>
   <data name="ToolkitTooltip" xml:space="preserve">
     <value>Debug Toolkit öffnen</value>
   </data>

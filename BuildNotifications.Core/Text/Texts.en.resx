@@ -756,6 +756,7 @@ Use keywords for specific filter. Comma to separate terms.</value>
   </data>
   <data name="DeletedTag" xml:space="preserve">
     <value>[Deleted]</value>
+  </data>
   <data name="ToolkitTooltip" xml:space="preserve">
     <value>Open debug toolkit</value>
   </data>
