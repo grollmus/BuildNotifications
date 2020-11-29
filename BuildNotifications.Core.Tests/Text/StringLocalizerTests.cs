@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BuildNotifications.Core.Text;
@@ -81,21 +80,6 @@ namespace BuildNotifications.Core.Tests.Text
 
             Assert.NotNull(result);
             Assert.True(string.IsNullOrEmpty(result));
-        }
-
-        [Theory]
-        [MemberData(nameof(TextProperties))]
-        public void TextPropertiesShouldEqualStringTranslations(string key, Func<string> propertyAccessor)
-        {
-            // Arrange
-            var localizer = StringLocalizer.Instance;
-            var expected = localizer.GetText(key);
-
-            // Act
-            var actual = propertyAccessor();
-
-            // Assert
-            Assert.Equal(expected, actual);
         }
     }
 }
