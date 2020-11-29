@@ -15,11 +15,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-
-    - name: Setup nuget
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: 'latest'
         
     - name: Install .NET 5.0
       uses: actions/setup-dotnet@v1
@@ -42,9 +37,6 @@ jobs:
       
     - name: Add coverage tool to test project
       run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
-      
-    - name: nuget restore
-      run: nuget restore
       
     - name: Build 
       run: msbuild -m BuildNotifications.sln /t:Build /p:Configuration=Release

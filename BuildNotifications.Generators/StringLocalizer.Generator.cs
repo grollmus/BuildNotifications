@@ -41,6 +41,7 @@ namespace BuildNotifications.Generators
 
         public void Initialize(GeneratorInitializationContext context)
         {
+            // Not needed
         }
 
         public void Execute(GeneratorExecutionContext context)
