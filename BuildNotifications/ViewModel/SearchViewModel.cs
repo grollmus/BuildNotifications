@@ -21,6 +21,22 @@ namespace BuildNotifications.ViewModel
             _searchTimer.Tick += SearchTimerOnTick;
         }
 
+        public string LastSearchedTerm
+        {
+            get => _lastSearchedTerm;
+            set
+            {
+                _lastSearchedTerm = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ISearchEngine SearchEngine { get; }
+
+        public ISearchHistory SearchHistory { get; }
+
+        public bool TextIsEmpty => LastSearchedTerm.Length == 0;
+
         private void SearchEngineOnSearchParsed(object? sender, SearchEngineEventArgs e)
         {
             _lastParsedSearch = e.CreatedSearch;
@@ -28,12 +44,6 @@ namespace BuildNotifications.ViewModel
             OnPropertyChanged(nameof(TextIsEmpty));
             StartSearchTask();
         }
-        
-        public ISearchEngine SearchEngine { get; }
-
-        public ISearchHistory SearchHistory { get; }
-
-        public bool TextIsEmpty => LastSearchedTerm.Length == 0;
 
         private void SearchTimerOnTick(object? sender, EventArgs e)
         {
@@ -53,15 +63,5 @@ namespace BuildNotifications.ViewModel
         private ISpecificSearch _lastParsedSearch = new EmptySearch();
 
         private string _lastSearchedTerm = string.Empty;
-
-        public string LastSearchedTerm
-        {
-            get => _lastSearchedTerm;
-            set
-            {
-                _lastSearchedTerm = value;
-                OnPropertyChanged();
-            }
-        }
     }
 }

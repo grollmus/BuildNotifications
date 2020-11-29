@@ -12,28 +12,6 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             : base(pipeline)
         {
         }
-        
-        private readonly HashSet<string> _validValues = new HashSet<string>();
-
-        private readonly StringComparer _stringComparer = StringComparer.FromComparison(StringComparison.CurrentCultureIgnoreCase);
-
-        protected readonly StringMatcher StringMatcher = new StringMatcher();
-
-        protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher)
-        {
-            return _validValues.Where(stringMatcher.IsMatch).OrderBy(k => _stringComparer.Compare(input, k));
-        }
-        
-        protected override void UpdateCacheForSuggestions(IPipeline pipeline)
-        {
-            _validValues.Clear();
-            foreach (var value in ResolveAllPossibleStringValues(pipeline))
-            {
-                _validValues.Add(value);
-            }
-        }
-
-        protected abstract IEnumerable<string> ResolveAllPossibleStringValues(IPipeline pipeline);
 
         protected override bool IsBuildIncludedInternal(IBuild build, string input)
         {
@@ -43,6 +21,28 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             return StringMatcher.IsMatch(StringValueOfBuild(build));
         }
 
+        protected abstract IEnumerable<string> ResolveAllPossibleStringValues(IPipeline pipeline);
+
         protected abstract string StringValueOfBuild(IBuild build);
+
+        protected override IEnumerable<string> SuggestInternal(string input, StringMatcher stringMatcher)
+        {
+            return _validValues.Where(stringMatcher.IsMatch).OrderBy(k => _stringComparer.Compare(input, k));
+        }
+
+        protected override void UpdateCacheForSuggestions(IPipeline pipeline)
+        {
+            _validValues.Clear();
+            foreach (var value in ResolveAllPossibleStringValues(pipeline))
+            {
+                _validValues.Add(value);
+            }
+        }
+
+        protected readonly StringMatcher StringMatcher = new StringMatcher();
+
+        private readonly HashSet<string> _validValues = new HashSet<string>();
+
+        private readonly StringComparer _stringComparer = StringComparer.FromComparison(StringComparison.CurrentCultureIgnoreCase);
     }
 }
