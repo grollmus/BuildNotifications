@@ -47,8 +47,8 @@ namespace BuildNotifications.ViewModel.Utils.Configuration
             var fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location);
             fileName = Path.ChangeExtension(fileName, "exe");
 
-            var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            location = Directory.GetParent(location).FullName;
+            var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+            location = Directory.GetParent(location)?.FullName ?? string.Empty;
 
             return Path.Combine(location, fileName);
         }

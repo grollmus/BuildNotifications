@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	  <LangVersion>8.0</LangVersion>
 	  <Nullable>enable</Nullable>
@@ -22,7 +22,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Octokit" Version="0.48.0" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.14.0.22654">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

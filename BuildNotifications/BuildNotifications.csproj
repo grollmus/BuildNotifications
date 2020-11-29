@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -117,7 +117,7 @@
     </PackageReference>
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="semver" Version="2.0.6" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.14.0.22654">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -142,7 +142,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\netcoreapp3.1&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyServer\bin\Debug\netcoreapp3.1&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)ToastNotificationsPlugin\bin\debug&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.GitHub\bin\debug\netcoreapp3.1&quot; &quot;$(TargetDir)plugins/GitHub&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)" />
+    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\netcoreapp5.0&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyServer\bin\Debug\netcoreapp5.0&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)ToastNotificationsPlugin\bin\debug&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.GitHub\bin\debug\netcoreapp5.0&quot; &quot;$(TargetDir)plugins/GitHub&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)" />
   </Target>
 
 </Project>

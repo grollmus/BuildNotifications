@@ -267,7 +267,7 @@ namespace BuildNotifications.Core.Pipeline
             }
             catch (Exception e)
             {
-                Log.Debug().Message($"Failed to fetch identities of project {project.Name}").Exception(e).Write();
+                Log.Error().Message($"Failed to fetch identities of project {project.Name}").Exception(e).Write();
                 ReportError("ErrorFetchingUserIdentities", project.Name, e);
             }
         }

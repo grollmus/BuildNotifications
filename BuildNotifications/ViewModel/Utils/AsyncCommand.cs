@@ -93,7 +93,7 @@ namespace BuildNotifications.ViewModel.Utils
             await ExecuteAsync(parameter);
         }
 
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
@@ -137,7 +137,7 @@ namespace BuildNotifications.ViewModel.Utils
                 RaiseCanExecuteChanged();
             }
 
-            public event EventHandler CanExecuteChanged
+            public event EventHandler? CanExecuteChanged
             {
                 add => CommandManager.RequerySuggested += value;
                 remove => CommandManager.RequerySuggested -= value;

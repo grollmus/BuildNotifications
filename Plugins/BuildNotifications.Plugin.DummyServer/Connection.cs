@@ -36,7 +36,7 @@ namespace BuildNotifications.Plugin.DummyServer
 
         public string Serialize(object obj) => JsonConvert.SerializeObject(obj, _settings);
 
-#pragma warning disable 618
+#pragma warning disable 618 // the type comes from the interface. Nothing we can do
         public string Serialize(Parameter parameter) => JsonConvert.SerializeObject(parameter.Value, _settings);
 #pragma warning restore 618
 

@@ -104,7 +104,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             return maxDepth;
         }
-        
+
         private static int GetNodeCount(BuildTreeNodeViewModel node)
         {
             var count = 0;

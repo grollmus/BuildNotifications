@@ -63,7 +63,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 
         [Fact]
         public void CriteriaDoesExcludeBuildForYesterdayInputThatDoesNotMatchYesterday() => ExpectNoMatch(ReferenceToday.ToString("d", TestCulture), "Yesterday");
-        
+
         [Theory]
         [InlineData("6/15/2020")]
         [InlineData("6")]

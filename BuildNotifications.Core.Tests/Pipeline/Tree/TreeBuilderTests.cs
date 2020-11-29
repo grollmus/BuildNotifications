@@ -20,7 +20,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree
 
             var config = Substitute.For<IConfiguration>();
             config.GroupDefinition.Returns(groupDefinition);
-            
+
             return new TreeBuilder(config);
         }
 

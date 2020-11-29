@@ -13,12 +13,21 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
-    
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
 
     - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
+      uses: microsoft/setup-msbuild@v1.0.2
+      with:
+        vs-version: '[16.8,)'
+      
+    - name: Install .NET 5.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Setup nuget
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest'
       
     - name: Extract version from tag name
       uses: olegtarasov/get-tag@v1
@@ -37,7 +46,7 @@ jobs:
       run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
       
     - name: Build ToastNotificationsPlugin
-      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
+      run: msbuild -m ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
       
     - name: Create package
       run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }}

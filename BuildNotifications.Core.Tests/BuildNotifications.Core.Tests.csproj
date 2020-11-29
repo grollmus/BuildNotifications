@@ -1,31 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>netcoreapp5.0</TargetFramework>
 		<Nullable>enable</Nullable>
-
 		<IsPackable>false</IsPackable>
-
-		<LangVersion>8.0</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<CodeAnalysisRuleSet>BuildNotifications.Core.Tests.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<CodeAnalysisRuleSet>BuildNotifications.Core.Tests.ruleset</CodeAnalysisRuleSet>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningsAsErrors />
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="Text\StringLocalizerTests.Strings.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>StringLocalizerTests.Strings.tt</DependentUpon>
-		</None>
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.1">
@@ -39,7 +24,7 @@
 		</PackageReference>
 		<PackageReference Include="NSubstitute" Version="4.2.2" />
 		<PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.14" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.14.0.22654">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -55,24 +40,6 @@
 		<ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
 		<ProjectReference Include="..\BuildNotifications.TestMocks\BuildNotifications.TestMocks.csproj" />
 		<ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="Text\StringLocalizerTests.Strings.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>StringLocalizerTests.Strings.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="Text\StringLocalizerTests.Strings.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>StringLocalizerTests.Strings.tt</DependentUpon>
-		</Compile>
 	</ItemGroup>
 
 </Project>

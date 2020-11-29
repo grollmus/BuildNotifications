@@ -65,7 +65,7 @@ namespace BuildNotifications.Views
                 while (!_tokenSource.IsCancellationRequested)
                 {
                     ShowLoadingText = App.GlobalTweenHandler.TimeModifier > 2;
-                    var firstItem = DummyItems.FirstOrDefault(x => !(x?.IsRemoving ?? false));
+                    var firstItem = DummyItems.FirstOrDefault(x => !x.IsRemoving);
 
                     if (firstItem != null)
                         firstItem.IsRemoving = true;

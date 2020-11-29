@@ -126,3 +126,6 @@ dotnet_diagnostic.CA1826.severity = suggestion
 
 # CA1070: Do not declare event fields as virtual
 dotnet_diagnostic.CA1070.severity = suggestion
+
+# CA1013: Catch a more specific exception
+dotnet_diagnostic.CA1013.severity = suggestion

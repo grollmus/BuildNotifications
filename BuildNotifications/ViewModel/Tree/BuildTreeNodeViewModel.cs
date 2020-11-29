@@ -109,12 +109,12 @@ namespace BuildNotifications.ViewModel.Tree
             SetChildrenSorting(_currentSortingDefinition);
         }
 
-        private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ChildrenOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (var child in e.NewItems.OfType<BuildTreeNodeViewModel>())
+                    foreach (var child in e.NewItems?.OfType<BuildTreeNodeViewModel>() ?? Enumerable.Empty<BuildTreeNodeViewModel>())
                     {
                         child.PropertyChanged += OnChildPropertyChanged;
                         if (child is BuildNodeViewModel)
@@ -123,7 +123,7 @@ namespace BuildNotifications.ViewModel.Tree
 
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (var child in e.OldItems.OfType<BuildTreeNodeViewModel>())
+                    foreach (var child in e.OldItems?.OfType<BuildTreeNodeViewModel>() ?? Enumerable.Empty<BuildTreeNodeViewModel>())
                     {
                         child.PropertyChanged -= OnChildPropertyChanged;
                     }
@@ -182,9 +182,9 @@ namespace BuildNotifications.ViewModel.Tree
             return status;
         }
 
-        private void OnChildPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(BuildStatus), StringComparison.Ordinal))
+            if (e.PropertyName?.Equals(nameof(BuildStatus), StringComparison.Ordinal) == true)
             {
                 UpdateBuildStatus();
                 if (_currentSortingDefinition == SortingDefinition.StatusAscending || _currentSortingDefinition == SortingDefinition.StatusDescending)
@@ -194,7 +194,7 @@ namespace BuildNotifications.ViewModel.Tree
                     SetSpecificBuildChildrenProperties();
             }
 
-            if (e.PropertyName.Equals(nameof(QueueTime), StringComparison.Ordinal))
+            if (e.PropertyName?.Equals(nameof(QueueTime), StringComparison.Ordinal) == true)
             {
                 UpdateQueuedTime();
                 if (_currentSortingDefinition == SortingDefinition.DateAscending || _currentSortingDefinition == SortingDefinition.DateDescending)
@@ -307,7 +307,7 @@ namespace BuildNotifications.ViewModel.Tree
                 if (ChildrenAreBuilds)
                     newStatus = MostCurrentBuildStatus(Children.OfType<BuildNodeViewModel>());
                 else
-                    newStatus = Children.Max(x => x.BuildStatus);
+                    newStatus = Children.Max(x => x.BuildStatus)!; // empty children are handled in the if statement above
             }
 
             if (_buildStatus == newStatus)
