@@ -432,6 +432,14 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
+    <DrawingImage x:Key="PlayDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V12 H12 V0 H0 Z">
+                <GeometryDrawing Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}" Geometry="F1 M12,12z M0,0z M10.55,6.1L1.2,0.2 1.2,11.95 10.55,6.1z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
     <Style x:Key="IconBatchStyle" TargetType="Image">
         <Style.Triggers>
             <DataTrigger
@@ -696,6 +704,12 @@
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
                 Value="Ci">
                 <Setter Property="Image.Source" Value="{StaticResource CiDrawingImage}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                Value="Play">
+                <Setter Property="Image.Source" Value="{StaticResource PlayDrawingImage}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>

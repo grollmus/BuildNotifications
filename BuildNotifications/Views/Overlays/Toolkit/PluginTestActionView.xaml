@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="BuildNotifications.Views.Overlays.Toolkit.PluginTestActionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BuildNotifications.Views.Overlays.Toolkit"
+             xmlns:viewModelToolkit="clr-namespace:BuildNotifications.ViewModel.Overlays.Toolkit"
+             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+             xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModelToolkit:PluginTestActionViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Resources/Icons/IconButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModelToolkit:LogViewModel}">
+                <local:LogView />
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Border MinWidth="{StaticResource BlockTwelveTimes}" Padding="{StaticResource BlockThickness}" BorderThickness="1"
+            BorderBrush="{DynamicResource Background3}" Background="{DynamicResource Background1Dark}"
+            Margin="{StaticResource BlockThickness}">
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="{StaticResource BlockQuarterYOnlyMargin}">
+                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource Foreground1}"
+                           DockPanel.Dock="Top" HorizontalAlignment="Center" />
+                <icons:IconButton Icon="{Binding CommandIcon}" Content="{Binding ExecuteText}"
+                                  ToolTip="{Binding ExecuteToolTip}"
+                                  Foreground="{DynamicResource Foreground1}"
+                                  Background="{DynamicResource Background2}"
+                                  Style="{StaticResource IconButtonWithDockedContent}"
+                                  Command="{Binding ExecuteCommand}"
+                                  DockPanel.Dock="Left" />
+
+                <icons:IconButton Icon="Close"
+                                  Visibility="{Binding Logs.HasLogs, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}"
+                                  ToolTip="{text:Localized ClearLogsToolTip}"
+                                  Foreground="{DynamicResource Foreground1}"
+                                  IconSize="{StaticResource Block}"
+                                  VerticalContentAlignment="Center"
+                                  Command="{Binding ClearCommand}"
+                                  Margin="{StaticResource BlockLeft}"
+
+                                  DockPanel.Dock="Right" />
+            </DockPanel>
+            <ScrollViewer MaxHeight="{StaticResource BlockTwelveTimes}">
+                <ContentPresenter Content="{Binding Logs}" DockPanel.Dock="Bottom" />
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</UserControl>

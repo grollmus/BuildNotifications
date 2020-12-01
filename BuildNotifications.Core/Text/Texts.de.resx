@@ -758,5 +758,23 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   <data name="DeletedTag" xml:space="preserve">
     <value>[Gelöscht]</value>
   </data>
+  <data name="ToolkitTooltip" xml:space="preserve">
+    <value>Debug Toolkit öffnen</value>
+  </data>
+  <data name="ClearLogsToolTip" xml:space="preserve">
+    <value>Nachrichten leeren</value>
+  </data>
+  <data name="ExecuteTestTooltip" xml:space="preserve">
+    <value>Testaktion ausführen</value>
+  </data>
+  <data name="StopTestAction" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="StopTestTooltip" xml:space="preserve">
+    <value>Aktion stopen</value>
+  </data>
+  <data name="ExecuteTestAction" xml:space="preserve">
+    <value>Ausführen</value>
+  </data>
 </root>
 <!-- ReSharper restore MarkupTextTypo -->

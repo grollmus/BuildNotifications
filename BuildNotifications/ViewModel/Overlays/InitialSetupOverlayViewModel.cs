@@ -8,12 +8,10 @@ using BuildNotifications.Services;
 using BuildNotifications.ViewModel.Settings.Setup;
 using BuildNotifications.ViewModel.Utils;
 using Newtonsoft.Json;
-using TweenSharp.Animation;
-using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel.Overlays
 {
-    internal class InitialSetupOverlayViewModel : BaseViewModel
+    internal class InitialSetupOverlayViewModel : OverlayViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
@@ -27,7 +25,6 @@ namespace BuildNotifications.ViewModel.Overlays
             SetupViewModel.Connections.Changed += UpdateText;
             SetupViewModel.Connections.TestFinished += UpdateText;
             RequestCloseCommand = new DelegateCommand(RequestClose);
-            App.GlobalTweenHandler.Add(this.Tween(x => x.Opacity).To(1.0).In(0.5).Ease(Easing.ExpoEaseOut));
             UpdateText(this, EventArgs.Empty);
 
             StoreCurrentState();
@@ -68,21 +65,9 @@ namespace BuildNotifications.ViewModel.Overlays
             }
         }
 
-        public double Opacity
-        {
-            get => _opacity;
-            set
-            {
-                _opacity = value;
-                OnPropertyChanged();
-            }
-        }
-
         public ICommand RequestCloseCommand { get; set; }
 
         public SetupViewModel SetupViewModel { get; set; }
-
-        public event EventHandler<InitialSetupEventArgs>? CloseRequested;
 
         private void RequestClose()
         {
@@ -92,7 +77,7 @@ namespace BuildNotifications.ViewModel.Overlays
             var anyChanges = !currentlyConfiguredConnections.Equals(_previouslyConfiguredConnections, StringComparison.OrdinalIgnoreCase)
                              || !currentlyConfiguredProjects.Equals(_previouslyConfiguredProjects, StringComparison.OrdinalIgnoreCase);
 
-            CloseRequested?.Invoke(this, new InitialSetupEventArgs(anyChanges));
+            RequestClose(anyChanges);
         }
 
         private void StoreCurrentState()
@@ -163,7 +148,6 @@ namespace BuildNotifications.ViewModel.Overlays
         private string _displayedTextId = "";
         private IconType _displayedIconType;
         private bool _animateDisplay;
-        private double _opacity;
         private string _previouslyConfiguredConnections;
         private string _previouslyConfiguredProjects;
         private const string InitialSetupCompleteConfig = nameof(InitialSetupCompleteConfig);

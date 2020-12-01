@@ -46,6 +46,7 @@
         TriggeredBuild,
         ManualBuild,
         Scheduled,
-        Ci
+        Ci,
+        Play
     }
 }
