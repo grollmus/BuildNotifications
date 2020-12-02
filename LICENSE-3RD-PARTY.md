@@ -1,6 +1,12 @@
+# License information about code provided by third parties
+
+## wpf-custom-window
+
+https://github.com/NikolayVasilev/wpf-custom-window
+
 MIT License
 
-Copyright (c) 2019-2020 Grollmus München GmbH
+Copyright (c) 2018 SourceWeave
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
