@@ -4,6 +4,8 @@
 		<TargetFramework>netcoreapp5.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

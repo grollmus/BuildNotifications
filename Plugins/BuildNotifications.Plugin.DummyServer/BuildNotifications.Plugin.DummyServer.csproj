@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp5.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <RunCodeAnalysis>false</RunCodeAnalysis>
+	  <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
