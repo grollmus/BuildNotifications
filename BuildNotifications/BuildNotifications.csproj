@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
 	  <RunCodeAnalysis>false</RunCodeAnalysis>
