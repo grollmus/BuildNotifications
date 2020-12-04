@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
-
-    <IsPackable>false</IsPackable>
-
-    <LangVersion>8.0</LangVersion>
+	  <IsPackable>false</IsPackable>
+	  <LangVersion>8.0</LangVersion>
+	  <RunCodeAnalysis>false</RunCodeAnalysis>
+	  <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

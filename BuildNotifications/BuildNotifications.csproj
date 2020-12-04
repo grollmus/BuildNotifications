@@ -7,6 +7,8 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
+	  <RunCodeAnalysis>false</RunCodeAnalysis>
+	  <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <PropertyGroup>
