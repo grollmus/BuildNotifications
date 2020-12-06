@@ -52,6 +52,14 @@ jobs:
     - name: Run tests
       run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln --no-build --configuration Release
     
-    - name: Upload code coverage results
-      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -r ./BuildNotifications.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }}
+    - name: Upload code coverage results BuildNotifications.Core.Tests
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
+      if: github.head_ref == 0
+
+    - name: Upload code coverage results for BuildNotifications.Tests
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
+      if: github.head_ref == 0
+
+    - name: Complate upload of code coverage results
+      run: java -jar ./codacy-test-reporter.jar final -t ${{ secrets.CODACY_PROJECT_TOKEN }}
       if: github.head_ref == 0
