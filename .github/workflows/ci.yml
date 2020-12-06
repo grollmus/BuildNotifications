@@ -34,15 +34,6 @@ jobs:
     - name: Download Coverage reporter
       run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/11.2.2/codacy-coverage-reporter-assembly-11.2.2.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 
-    - name: Install coverage tools
-      run: dotnet tool install --global coverlet.console
-      
-    - name: Add coverage tool to core test project
-      run: dotnet add BuildNotifications.Core.Tests/BuildNotifications.Core.Tests.csproj package coverlet.msbuild
-      
-    - name: Add coverage tool to test project
-      run: dotnet add BuildNotifications.Tests/BuildNotifications.Tests.csproj package coverlet.msbuild
-      
     - name: nuget restore
       run: nuget restore
       
@@ -50,14 +41,10 @@ jobs:
       run: msbuild -m BuildNotifications.sln /t:Build /p:Configuration=Release
     
     - name: Run tests
-      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage /p:Exclude=[xunit.*]* BuildNotifications.sln --no-build --configuration Release
+      run: dotnet test BuildNotifications.sln --no-build --configuration Release -r CoverageResults --collect:"XPlat Code Coverage"
     
-    - name: Upload code coverage results BuildNotifications.Core.Tests
-      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Core.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
-      if: github.head_ref == 0
-
-    - name: Upload code coverage results for BuildNotifications.Tests
-      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./BuildNotifications.Tests/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
+    - name: Upload code coverage results
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./CoverageResult/**/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
       if: github.head_ref == 0
 
     - name: Complate upload of code coverage results
