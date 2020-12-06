@@ -44,7 +44,7 @@ jobs:
       run: dotnet test BuildNotifications.sln --no-build --configuration Release -r CoverageResults --collect:"XPlat Code Coverage"
     
     - name: Upload code coverage results
-      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./CoverageResult/**/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
+      run: java -jar ./codacy-test-reporter.jar report -l CSharp -r ./CoverageResults/**/coverage.cobertura.xml -t ${{ secrets.CODACY_PROJECT_TOKEN }} --partial
       if: github.head_ref == 0
 
     - name: Complate upload of code coverage results
