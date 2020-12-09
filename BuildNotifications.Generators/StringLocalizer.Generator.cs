@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using Microsoft.CodeAnalysis;
 namespace BuildNotifications.Generators
 {
     [Generator]
+    [ExcludeFromCodeCoverage]
     internal class StringLocalizerGenerator : ISourceGenerator
     {
         private List<string> FindTextResourceNames(Compilation compilation)
