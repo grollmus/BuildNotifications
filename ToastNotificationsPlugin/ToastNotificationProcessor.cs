@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
@@ -9,6 +11,7 @@ using MS.WindowsAPICodePack.Internal;
 namespace ToastNotificationsPlugin
 {
     [UsedImplicitly]
+    [ExcludeFromCodeCoverage]
     public class ToastNotificationProcessor : INotificationProcessor
     {
         // Only used in DEBUG
@@ -54,8 +57,8 @@ namespace ToastNotificationsPlugin
             // for releases, the installer creates the shortcut. So this is only for debug purposes.
 #if DEBUG
             var shortcutPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsoft\\Windows\\Start Menu\\Programs\\BuildNotifications.lnk";
-            System.IO.File.Delete(shortcutPath);
-            if (System.IO.File.Exists(shortcutPath))
+            File.Delete(shortcutPath);
+            if (File.Exists(shortcutPath))
                 return;
 
             InstallShortcut(shortcutPath);

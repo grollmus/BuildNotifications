@@ -149,6 +149,7 @@ namespace ToastNotificationsPlugin
     {
     }
 
+    [ExcludeFromCodeCoverage]
     public static class ErrorHelper
     {
         public static void VerifySucceeded(uint hresult)
