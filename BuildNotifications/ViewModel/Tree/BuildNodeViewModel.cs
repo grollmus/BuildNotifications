@@ -68,16 +68,6 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        public bool IsManualNotificationEnabled
-        {
-            get => Node.IsManualNotificationEnabled;
-            set
-            {
-                Node.IsManualNotificationEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
         public ICommand GoToBranchCommand { get; set; }
         public ICommand GoToBuildCommand { get; set; }
         public ICommand GoToDefinitionCommand { get; set; }
@@ -113,6 +103,16 @@ namespace BuildNotifications.ViewModel.Tree
         }
 
         public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
+
+        public bool IsManualNotificationEnabled
+        {
+            get => Node.IsManualNotificationEnabled;
+            set
+            {
+                Node.IsManualNotificationEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
@@ -153,25 +153,13 @@ namespace BuildNotifications.ViewModel.Tree
             BackendPropertiesChangedInternal();
         }
 
-        protected override BuildStatus CalculateBuildStatus()
-        {
-            return _buildStatus;
-        }
+        protected override BuildStatus CalculateBuildStatus() => _buildStatus;
 
-        protected override DateTime CalculateChangedDate()
-        {
-            return _changedDate;
-        }
+        protected override DateTime CalculateChangedDate() => _changedDate;
 
-        protected override string CalculateDisplayName()
-        {
-            return "Build. Status: " + BuildStatus;
-        }
+        protected override string CalculateDisplayName() => "Build. Status: " + BuildStatus;
 
-        protected override DateTime CalculateQueueTime()
-        {
-            return _queuedTime;
-        }
+        protected override DateTime CalculateQueueTime() => _queuedTime;
 
         private void BackendPropertiesChangedInternal()
         {
