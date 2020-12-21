@@ -397,12 +397,14 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             Assert.Equal(message.ContentTextId, BuildNotification.BuildsChangedTextId);
         }
 
-        [Fact]
-        public void BuildWithManualNotificationShouldProduceNotification()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void BuildWithManualNotificationShouldProduceNotification(bool manualNotification)
         {
             // Arrange
             var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Succeeded);
-            build.IsManualNotificationEnabled = true;
+            build.IsManualNotificationEnabled = manualNotification;
             var delta = new BuildTreeBuildsDelta();
             delta.SucceededBuilds.Add(build);
 
@@ -410,7 +412,10 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
             var messages = new NotificationFactory(_dontNotifyConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // Assert
-            Assert.Single(messages);
+            if (manualNotification)
+                Assert.Single(messages);
+            else
+                Assert.Empty(messages);
         }
 
         [Theory]
