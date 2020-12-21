@@ -402,7 +402,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         {
             // Arrange
             var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Succeeded);
-            build.EnableManualNotification = true;
+            build.IsManualNotificationEnabled = true;
             var delta = new BuildTreeBuildsDelta();
             delta.SucceededBuilds.Add(build);
 

@@ -5,7 +5,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 {
     public interface IBuildNode : IBuildTreeNode
     {
-        bool EnableManualNotification { get; set; }
+        bool IsManualNotificationEnabled { get; set; }
         IBuild Build { get; }
         DateTime? LastChangedTime { get; }
         int Progress { get; }

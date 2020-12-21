@@ -24,7 +24,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public DateTime? QueueTime { get; private set; }
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
-        public bool EnableManualNotification { get; set; }
+        public bool IsManualNotificationEnabled { get; set; }
 
         public IBuild Build { get; }
 

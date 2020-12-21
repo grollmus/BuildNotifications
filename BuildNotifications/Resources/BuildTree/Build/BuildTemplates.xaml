@@ -16,7 +16,7 @@
                     mc:Ignorable="d">
 
     <ContextMenu x:Key="BuildContextMenu" d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}" IsOpen="True">
-        <menu:DecoratedMenuItem Header="{text:Localized NotifyMeAboutThisBuild}" IsCheckable="True" IsChecked="{Binding EnableManualNotification, Mode=TwoWay}" />
+        <menu:DecoratedMenuItem Header="{text:Localized NotifyMeAboutThisBuild}" IsCheckable="True" IsChecked="{Binding IsManualNotificationEnabled, Mode=TwoWay}" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
                                 IconType="SingleBuild" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
