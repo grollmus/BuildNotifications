@@ -183,7 +183,7 @@ namespace BuildNotifications.Core.Pipeline.Notification
 
         private bool ShouldNotifyAboutBuild(IBuildNode buildNode)
         {
-            if (buildNode.EnableManualNotification)
+            if (buildNode.IsManualNotificationEnabled)
                 return true;
 
             var notifySetting = NotifySetting(buildNode);

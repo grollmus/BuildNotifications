@@ -68,12 +68,12 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
-        public bool EnableManualNotification
+        public bool IsManualNotificationEnabled
         {
-            get => Node.EnableManualNotification;
+            get => Node.IsManualNotificationEnabled;
             set
             {
-                Node.EnableManualNotification = value;
+                Node.IsManualNotificationEnabled = value;
                 OnPropertyChanged();
             }
         }
