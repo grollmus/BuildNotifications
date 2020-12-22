@@ -11,6 +11,33 @@ namespace BuildNotifications.Core.Tests.Config
     public class ConfigurationSerializerTests
     {
         [Fact]
+        public void LoadShouldLogWhenFileCantBeWritten()
+        {
+            // Arrange
+            var serializer = new Serializer();
+            var sut = new ConfigurationSerializer(serializer);
+
+            var fileName = Path.GetRandomFileName();
+
+            // Act
+            try
+            {
+                using var lockStream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+
+                using var logger = new TestLogger();
+
+                sut.Load(fileName);
+
+                // Assert
+                Assert.Contains(logger.Messages, m => m.Contains("Failed to load existing config"));
+            }
+            finally
+            {
+                File.Delete(fileName);
+            }
+        }
+
+        [Fact]
         public void LoadShouldNotCrashWhenFileDoesNotExist()
         {
             // Arrange

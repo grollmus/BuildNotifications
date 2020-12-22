@@ -24,7 +24,7 @@ namespace BuildNotifications.Core.Config
                 }
                 catch (Exception e)
                 {
-                    Log.Info().Message("Failed to load existing config").Exception(e).Write();
+                    Log.Warn().Message("Failed to load existing config").Exception(e).Write();
                     configuration = new Configuration();
                 }
             }
