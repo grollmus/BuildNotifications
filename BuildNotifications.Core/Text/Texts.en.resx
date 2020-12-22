@@ -759,6 +759,7 @@ Use keywords for specific filter. Comma to separate terms.</value>
   </data>
   <data name="NotifyMeAboutThisBuild" xml:space="preserve">
     <value>Notify me about this build</value>
+  </data>
   <data name="ImportExport" xml:space="preserve">
     <value>Import/Export</value>
   </data>

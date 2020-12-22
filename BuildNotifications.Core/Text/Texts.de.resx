@@ -760,6 +760,7 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   </data>
   <data name="NotifyMeAboutThisBuild" xml:space="preserve">
     <value>Benachrichtige mich über diesen Build</value>
+  </data>
   <data name="ImportExport" xml:space="preserve">
     <value>Import/Export</value>
   </data>
