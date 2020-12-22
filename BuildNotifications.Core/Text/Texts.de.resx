@@ -749,6 +749,17 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
     <value>Max Mustermann</value>
   </data>
+  <data name="HideBuildsOfDeletedBranches" xml:space="preserve">
+    <value>Verstecke Builds von gelöschten Branches</value>
+  </data>
+  <data name="HideBuildsOfDeletedDefinitions" xml:space="preserve">
+    <value>Verstecke Builds von gelöschten Definitionen</value>
+  </data>
+  <data name="DeletedTag" xml:space="preserve">
+    <value>[Gelöscht]</value>
+  </data>
+  <data name="NotifyMeAboutThisBuild" xml:space="preserve">
+    <value>Benachrichtige mich über diesen Build</value>
   <data name="ImportExport" xml:space="preserve">
     <value>Import/Export</value>
   </data>

@@ -104,6 +104,16 @@ namespace BuildNotifications.ViewModel.Tree
 
         public bool IsManuallyRequestedByUser => RequestedByIsSameAsFor && Node.Build.IsRequestedByCurrentUser;
 
+        public bool IsManualNotificationEnabled
+        {
+            get => Node.IsManualNotificationEnabled;
+            set
+            {
+                Node.IsManualNotificationEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand MouseEnterCommand { get; set; }
         public ICommand MouseLeaveCommand { get; set; }
         public IBuildNode Node { get; }
@@ -126,6 +136,8 @@ namespace BuildNotifications.ViewModel.Tree
             }
         }
 
+        public BuildReason Reason => Node.Build.Reason;
+
         public string RequestedBy => Node.Build.RequestedBy.DisplayName;
 
         public bool RequestedByIsSameAsFor => RequestedFor == RequestedBy;
@@ -133,8 +145,6 @@ namespace BuildNotifications.ViewModel.Tree
         public string RequestedFor => Node.Build.RequestedFor?.DisplayName ?? RequestedBy;
 
         public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
-
-        public BuildReason Reason => Node.Build.Reason;
 
         public int UserColumns => RequestedByIsSameAsFor ? 1 : 2;
 

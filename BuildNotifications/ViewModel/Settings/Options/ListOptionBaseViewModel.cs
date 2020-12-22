@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,9 +8,9 @@ namespace BuildNotifications.ViewModel.Settings.Options
     public abstract class ListOptionBaseViewModel<TItem> : OptionViewModelBase<TItem>
     {
         protected ListOptionBaseViewModel(string displayName, TItem value = default)
-            : base(value, displayName)
+            : base(ValueOrNewInstance(value), displayName)
         {
-            _initialValue = value;
+            _initialValue = ValueOrNewInstance(value);
         }
 
         public IEnumerable<ListOptionItemViewModel<TItem>> AvailableValues
@@ -39,7 +40,10 @@ namespace BuildNotifications.ViewModel.Settings.Options
 
         protected abstract IEnumerable<TItem> ModelValues { get; }
 
-        protected virtual string DisplayNameFor(TItem item) => item?.ToString() ?? string.Empty;
+        protected virtual string DisplayNameFor(TItem item)
+        {
+            return item?.ToString() ?? string.Empty;
+        }
 
         protected void InvalidateAvailableValues()
         {
@@ -68,6 +72,17 @@ namespace BuildNotifications.ViewModel.Settings.Options
             }
 
             SelectedValue = AvailableValues.FirstOrDefault(v => Equals(v.Value, valueToSelect));
+        }
+
+        private static TItem ValueOrNewInstance(object? item)
+        {
+            if (item is TItem tItem)
+                return tItem;
+
+            if (item != null)
+                return (TItem) item;
+
+            return Activator.CreateInstance<TItem>();
         }
 
         private readonly TItem _initialValue;

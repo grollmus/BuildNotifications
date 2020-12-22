@@ -350,3 +350,4 @@ MigrationBackup/
 /BuildNotifications/plugins
 /BuildNotifications.Core/Text/StringLocalizer.Strings.cs
 /DummyServer/serverConfig.json
+CoverageResults

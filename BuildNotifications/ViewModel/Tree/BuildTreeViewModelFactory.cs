@@ -104,7 +104,7 @@ namespace BuildNotifications.ViewModel.Tree
 
             return maxDepth;
         }
-        
+
         private static int GetNodeCount(BuildTreeNodeViewModel node)
         {
             var count = 0;
@@ -168,16 +168,15 @@ namespace BuildNotifications.ViewModel.Tree
 
         private static void SetBuildIsFromPullRequest(BuildTreeNodeViewModel node, bool parentIsPullRequest = false)
         {
-            if (node is BranchGroupNodeViewModel asBranch && asBranch.IsPullRequest)
-                parentIsPullRequest = true;
+            var isParentPr = parentIsPullRequest || node is BranchGroupNodeViewModel asBranch && asBranch.IsPullRequest;
 
             foreach (var child in node.Children)
             {
-                SetBuildIsFromPullRequest(child, parentIsPullRequest);
+                SetBuildIsFromPullRequest(child, isParentPr);
             }
 
             if (node is BuildNodeViewModel asBuild)
-                asBuild.IsFromPullRequest = parentIsPullRequest;
+                asBuild.IsFromPullRequest = isParentPr;
         }
 
         private static void SetMaxDepths(BuildTreeNodeViewModel node, in int maxDepth)

@@ -14,8 +14,8 @@ namespace BuildNotifications.Plugin.Tfs
     {
         protected TfsPlugin()
         {
-            TypeDescriptor.AddAttributes(typeof(IdentityDescriptor), new TypeConverterAttribute(typeof(IdentityDescriptorConverter).FullName));
-            TypeDescriptor.AddAttributes(typeof(SubjectDescriptor), new TypeConverterAttribute(typeof(SubjectDescriptorConverter).FullName));
+            TypeDescriptor.AddAttributes(typeof(IdentityDescriptor), new TypeConverterAttribute(typeof(IdentityDescriptorConverter).FullName ?? nameof(IdentityDescriptorConverter)));
+            TypeDescriptor.AddAttributes(typeof(SubjectDescriptor), new TypeConverterAttribute(typeof(SubjectDescriptorConverter).FullName ?? nameof(SubjectDescriptorConverter)));
 
             ConnectionPool = new TfsConnectionPool();
         }

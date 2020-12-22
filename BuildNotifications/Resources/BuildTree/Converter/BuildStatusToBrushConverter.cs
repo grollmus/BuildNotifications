@@ -53,7 +53,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
         private SolidColorBrush GetBrush(string key)
         {
             if (_cache.TryGetValue(key, out var cachedBrush))
-                return cachedBrush;
+                return cachedBrush!;
 
             if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
             {

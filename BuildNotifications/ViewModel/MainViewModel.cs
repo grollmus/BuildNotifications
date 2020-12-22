@@ -197,7 +197,7 @@ namespace BuildNotifications.ViewModel
             Application.Current.Dispatcher?.Invoke(() => { ShowNotifications(e.ErrorNotifications); });
         }
 
-        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void GroupAndSortDefinitionsSelectionOnPropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
             switch (args.PropertyName)
             {
@@ -505,7 +505,7 @@ namespace BuildNotifications.ViewModel
 
                     var versions = result.ReleasesToApply.Select(r => SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0));
                     if (!includePreReleases)
-                        versions = versions.Where(v => string.IsNullOrEmpty(v.Prerelease));
+                        versions = versions.WhereNotNull().Where(v => string.IsNullOrEmpty(v.Prerelease));
 
                     var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
                     if (newestVersion != null && newestVersion > currentVersion)

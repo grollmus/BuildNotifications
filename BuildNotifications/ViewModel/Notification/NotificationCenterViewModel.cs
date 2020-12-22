@@ -132,7 +132,7 @@ namespace BuildNotifications.ViewModel.Notification
             UpdateUnreadCount();
         }
 
-        private void Notifications_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Notifications_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (Notifications.Count == 0)
                 CloseRequested?.Invoke(this, EventArgs.Empty);

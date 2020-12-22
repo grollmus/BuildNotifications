@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<LangVersion>8.0</LangVersion>
+		<TargetFramework>netcoreapp5.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -18,61 +19,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.1">
+		<PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="3.3.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.1">
+		<PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-		<PackageReference Include="NLog" Version="4.7.5" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.14.0.22654">
+		<PackageReference Include="NLog" Version="4.7.6" />
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\BuildNotifications.Generators\BuildNotifications.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 		<ProjectReference Include="..\BuildNotifications.PluginInterfacesLegacy\BuildNotifications.PluginInterfacesLegacy.csproj" />
 		<ProjectReference Include="..\Plugins\BuildNotifications.PluginInterfaces\BuildNotifications.PluginInterfaces.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.1.0-*" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Text\StringLocalizer.Strings.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>StringLocalizer.Strings.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-		<TextTemplate Include="**\*.tt" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Text\StringLocalizer.Strings.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>StringLocalizer.Strings.tt</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
-		<Message Text="Transforming Text Templates" Importance="Normal" />
-
-		<ItemGroup>
-			<Compile Remove="Text\StringLocalizer.Strings.cs" />
-		</ItemGroup>
-		<Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tt %(TextTemplate.Identity)" />
-		<ItemGroup>
-			<Compile Include="Text\StringLocalizer.Strings.cs" />
-		</ItemGroup>
-	</Target>
 </Project>

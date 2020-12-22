@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
 using BuildNotifications.PluginInterfacesLegacy.Notification;
@@ -6,6 +7,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace ToastNotificationsPlugin
 {
+    [ExcludeFromCodeCoverage]
     internal class ToastNotificationFactory
     {
         public void Process(IDistributedNotification notification)

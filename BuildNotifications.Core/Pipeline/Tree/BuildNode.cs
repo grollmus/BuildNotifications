@@ -24,6 +24,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
         public DateTime? QueueTime { get; private set; }
         public int Progress { get; private set; }
         public BuildStatus Status { get; private set; }
+        public bool IsManualNotificationEnabled { get; set; }
 
         public IBuild Build { get; }
 
@@ -35,6 +36,9 @@ namespace BuildNotifications.Core.Pipeline.Tree
             UpdateProperties(otherBuild.Build);
         }
 
-        public override bool Equals(IBuildTreeNode other) => base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build.Id, StringComparison.InvariantCulture);
+        public override bool Equals(IBuildTreeNode other)
+        {
+            return base.Equals(other) && Build.Id.Equals((other as BuildNode)?.Build.Id, StringComparison.InvariantCulture);
+        }
     }
 }

@@ -398,6 +398,27 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void BuildWithManualNotificationShouldProduceNotification(bool manualNotification)
+        {
+            // Arrange
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Succeeded);
+            build.IsManualNotificationEnabled = manualNotification;
+            var delta = new BuildTreeBuildsDelta();
+            delta.SucceededBuilds.Add(build);
+
+            // Act
+            var messages = new NotificationFactory(_dontNotifyConfiguration, _userIdentityList).ProduceNotifications(delta);
+
+            // Assert
+            if (manualNotification)
+                Assert.Single(messages);
+            else
+                Assert.Empty(messages);
+        }
+
+        [Theory]
         [InlineData(BuildStatus.Failed)]
         [InlineData(BuildStatus.Succeeded)]
         [InlineData(BuildStatus.Cancelled)]
@@ -596,21 +617,22 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void SingleBuildFailingShouldResultInMessageTellingAboutBuild()
+        public void PartiallySucceededBuildWithSettingOnTreatAsFailedShouldResultInFailMessage()
         {
             // arrange
-            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.PartiallySucceeded);
             var delta = new BuildTreeBuildsDelta();
             delta.FailedBuilds.Add(build);
 
             // act
-            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_treatPartialsAsFailedConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
             Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
+            Assert.Equal(BuildStatus.Failed, message.Status);
         }
 
         [Fact]
@@ -633,22 +655,21 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification
         }
 
         [Fact]
-        public void PartiallySucceededBuildWithSettingOnTreatAsFailedShouldResultInFailMessage()
+        public void SingleBuildFailingShouldResultInMessageTellingAboutBuild()
         {
             // arrange
-            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.PartiallySucceeded);
+            var build = CreateBuildNode(_ciDefinition, _stageBranch, "1", BuildStatus.Failed);
             var delta = new BuildTreeBuildsDelta();
             delta.FailedBuilds.Add(build);
 
             // act
-            var messages = new NotificationFactory(_treatPartialsAsFailedConfiguration, _userIdentityList).ProduceNotifications(delta);
+            var messages = new NotificationFactory(_allowAllConfiguration, _userIdentityList).ProduceNotifications(delta);
 
             // assert
             var message = messages.First();
             Assert.Equal(message.ContentTextId, BuildNotification.BuildChangedTextId);
             Assert.True(message.DisplayContent.Contains(_ciDefinition.Name, StringComparison.Ordinal));
             Assert.True(message.DisplayContent.Contains(_stageBranch.FullName, StringComparison.Ordinal));
-            Assert.Equal(BuildStatus.Failed, message.Status);
         }
     }
 }

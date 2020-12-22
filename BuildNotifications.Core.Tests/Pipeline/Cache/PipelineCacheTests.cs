@@ -121,6 +121,25 @@ namespace BuildNotifications.Core.Tests.Pipeline.Cache
         }
 
         [Fact]
+        public void RemoveShouldRemoveItemFromCacheWhenUsingProviderId()
+        {
+            // Arrange
+            var sut = new PipelineCache<string>();
+            const string providerId = "provider";
+            const string itemId = "item";
+            sut.AddOrReplace(providerId, itemId, "hello world");
+
+            // Act
+            var before = sut.Contains(providerId, itemId);
+            sut.Remove(providerId, itemId);
+            var after = sut.Contains(providerId, itemId);
+
+            // Assert
+            Assert.True(before);
+            Assert.False(after);
+        }
+
+        [Fact]
         public void RemoveValueShouldOnlyRemoveMatchingEntries()
         {
             // Arrange

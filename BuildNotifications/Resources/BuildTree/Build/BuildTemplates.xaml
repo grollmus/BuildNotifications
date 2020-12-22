@@ -9,23 +9,23 @@
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:menu="clr-namespace:BuildNotifications.Resources.Menu"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
                     mc:Ignorable="d">
 
-    <ContextMenu x:Key="BuildContextMenu"
-                 d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
+    <ContextMenu x:Key="BuildContextMenu" d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}" IsOpen="True">
+        <menu:DecoratedMenuItem Header="{text:Localized NotifyMeAboutThisBuild}" IsCheckable="True" IsChecked="{Binding IsManualNotificationEnabled, Mode=TwoWay}" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
                                 IconType="SingleBuild" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
                                 IconType="Branch"
-                                Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}" />
+                                Visibility="{Binding IsFromPullRequest, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}}" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}"
                                 Command="{Binding GoToBranchCommand}"
                                 IconType="PullRequest"
-                                Visibility="{Binding IsFromPullRequest, Converter={x:Static utils:BoolToVisibilityConverter.Instance}}" />
+                                Visibility="{Binding IsFromPullRequest, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToDefinition}"
                                 Command="{Binding GoToDefinitionCommand}" IconType="Definition" />
     </ContextMenu>
@@ -71,7 +71,7 @@
                            Background="Transparent" />
             </DockPanel>
             <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}"
-                       Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static utils:BoolToVisibilityConverter.Inverted}}">
+                       Visibility="{Binding RequestedByIsSameAsFor, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}}">
                 <icons:IconBatch Type="Person" Width="{StaticResource Block}"
                                  Margin="{StaticResource BlockHalfXOnlyMargin}"
                                  Height="{StaticResource Block}" DockPanel.Dock="Left"

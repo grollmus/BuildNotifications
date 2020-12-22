@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -11,7 +12,7 @@ using MS.WindowsAPICodePack.Internal;
 
 namespace ToastNotificationsPlugin
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "<Pending>")]
+    [SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "<Pending>")]
     internal enum STGM : long
     {
         STGM_READ = 0x00000000L,
@@ -32,7 +33,7 @@ namespace ToastNotificationsPlugin
         STGM_DELETEONRELEASE = 0x04000000L
     }
 
-    internal static class ShellIIDGuid
+    internal static class ShellIidGuid
     {
         internal const string CShellLink = "00021401-0000-0000-C000-000000000046";
         internal const string IPersistFile = "0000010b-0000-0000-C000-000000000046";
@@ -41,7 +42,7 @@ namespace ToastNotificationsPlugin
     }
 
     [ComImport]
-    [Guid(ShellIIDGuid.IShellLinkW)]
+    [Guid(ShellIidGuid.IShellLinkW)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IShellLinkW
     {
@@ -106,7 +107,7 @@ namespace ToastNotificationsPlugin
     }
 
     [ComImport]
-    [Guid(ShellIIDGuid.IPersistFile)]
+    [Guid(ShellIidGuid.IPersistFile)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPersistFile
     {
@@ -130,7 +131,7 @@ namespace ToastNotificationsPlugin
     }
 
     [ComImport]
-    [Guid(ShellIIDGuid.IPropertyStore)]
+    [Guid(ShellIidGuid.IPropertyStore)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPropertyStore
     {
@@ -142,12 +143,13 @@ namespace ToastNotificationsPlugin
     }
 
     [ComImport]
-    [Guid(ShellIIDGuid.CShellLink)]
+    [Guid(ShellIidGuid.CShellLink)]
     [ClassInterface(ClassInterfaceType.None)]
     internal class CShellLink
     {
     }
 
+    [ExcludeFromCodeCoverage]
     public static class ErrorHelper
     {
         public static void VerifySucceeded(uint hresult)

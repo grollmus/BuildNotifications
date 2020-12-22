@@ -40,12 +40,12 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
             Definitions.Add(new GroupDefinitionsViewModel());
         }
 
-        private void DefinitionsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void DefinitionsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (var item in e.NewItems.OfType<GroupDefinitionsViewModel>())
+                    foreach (var item in e.NewItems?.OfType<GroupDefinitionsViewModel>() ?? Enumerable.Empty<GroupDefinitionsViewModel>())
                     {
                         item.SelectedDefinitionChanged += SingleGroupDefinitionChanged;
                         item.SelectedSortingDefinitionChanged += SingleSortingDefinitionChanged;
@@ -53,7 +53,7 @@ namespace BuildNotifications.ViewModel.GroupDefinitionSelection
 
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    foreach (var item in e.OldItems.OfType<GroupDefinitionsViewModel>())
+                    foreach (var item in e.OldItems?.OfType<GroupDefinitionsViewModel>() ?? Enumerable.Empty<GroupDefinitionsViewModel>())
                     {
                         item.SelectedDefinitionChanged -= SingleGroupDefinitionChanged;
                         item.SelectedSortingDefinitionChanged -= SingleSortingDefinitionChanged;

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace BuildNotifications.Core.Tests.Text
 {
-    public class StringLocalizerTests
+    public partial class StringLocalizerTests
     {
         private static IEnumerable<CultureInfo> AllCultures => CultureInfo.GetCultures(CultureTypes.AllCultures);
 
