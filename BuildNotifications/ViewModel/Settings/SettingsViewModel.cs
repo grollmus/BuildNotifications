@@ -84,6 +84,7 @@ namespace BuildNotifications.ViewModel.Settings
         internal BooleanOptionViewModel UseDarkTheme { get; }
 
         public event EventHandler<EventArgs>? EditConnectionsRequested;
+        public event EventHandler<EventArgs>? ReloadRequested;
 
         public void UpdateUser()
         {
@@ -112,6 +113,7 @@ namespace BuildNotifications.ViewModel.Settings
         {
             _popupService.ShowImportExportPopup(_configurationService);
             UpdateOptions();
+            ReloadRequested?.Invoke(this, EventArgs.Empty);
         }
 
         private void Option_ValueChanged(object? sender, EventArgs e)

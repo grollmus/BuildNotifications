@@ -332,6 +332,11 @@ namespace BuildNotifications.ViewModel
             ShowInitialSetupOverlayViewModel();
         }
 
+        private void SettingsViewModelOnReloadRequested(object? sender, EventArgs e)
+        {
+            ResetAndRestart();
+        }
+
         private void SetupNotificationCenter()
         {
             NotificationCenter = new NotificationCenterViewModel
@@ -360,6 +365,7 @@ namespace BuildNotifications.ViewModel
 
             SettingsViewModel = new SettingsViewModel(_coreSetup.ConfigurationService, PersistChanges, _coreSetup.UserIdentityList, _popupService);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
+            SettingsViewModel.ReloadRequested += SettingsViewModelOnReloadRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
             {
@@ -628,6 +634,7 @@ namespace BuildNotifications.ViewModel
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
         private readonly IPopupService _popupService;
+        private readonly IUpdateUrls _updateUrls;
         private bool _previouslyFetchedAnyBuilds;
         private bool _blurView;
         private CancellationTokenSource? _cancellationTokenSource;
@@ -640,6 +647,5 @@ namespace BuildNotifications.ViewModel
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
-        private readonly IUpdateUrls _updateUrls;
     }
 }
