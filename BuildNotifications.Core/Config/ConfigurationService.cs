@@ -7,7 +7,7 @@ namespace BuildNotifications.Core.Config
         public ConfigurationService(IConfigurationSerializer serializer, IConfigurationBuilder configurationBuilder)
         {
             Serializer = serializer;
-            CurrentConfig = configurationBuilder.LoadConfiguration();
+            Current = configurationBuilder.LoadConfiguration();
         }
 
         private static bool IsSame(IProjectConfiguration x, IProjectConfiguration y) => x.ProjectName == y.ProjectName;
@@ -18,7 +18,7 @@ namespace BuildNotifications.Core.Config
         {
             foreach (var newConnection in newConfiguration.Connections)
             {
-                var existingConnection = CurrentConfig.Connections.FirstOrDefault(x => IsSame(x, newConnection));
+                var existingConnection = Current.Connections.FirstOrDefault(x => IsSame(x, newConnection));
                 if (existingConnection == null)
                 {
                     existingConnection = new ConnectionData
@@ -27,7 +27,7 @@ namespace BuildNotifications.Core.Config
                         ConnectionType = newConnection.ConnectionType
                     };
 
-                    CurrentConfig.Connections.Add(existingConnection);
+                    Current.Connections.Add(existingConnection);
                 }
 
                 existingConnection.PluginConfiguration = newConnection.PluginConfiguration;
@@ -39,7 +39,7 @@ namespace BuildNotifications.Core.Config
         {
             foreach (var newProject in newConfiguration.Projects)
             {
-                var existingProject = CurrentConfig.Projects.FirstOrDefault(x => IsSame(x, newProject));
+                var existingProject = Current.Projects.FirstOrDefault(x => IsSame(x, newProject));
                 if (existingProject == null)
                 {
                     existingProject = new ProjectConfiguration
@@ -47,7 +47,7 @@ namespace BuildNotifications.Core.Config
                         ProjectName = newProject.ProjectName
                     };
 
-                    CurrentConfig.Projects.Add(existingProject);
+                    Current.Projects.Add(existingProject);
                 }
 
                 existingProject.DefaultCompareBranch = newProject.DefaultCompareBranch;
@@ -64,24 +64,24 @@ namespace BuildNotifications.Core.Config
         }
 
         public IConfigurationSerializer Serializer { get; }
-        public IConfiguration CurrentConfig { get; }
+        public IConfiguration Current { get; }
 
         public void Merge(IConfiguration newConfiguration)
         {
-            CurrentConfig.AnimationSpeed = newConfiguration.AnimationSpeed;
-            CurrentConfig.Autostart = newConfiguration.Autostart;
-            CurrentConfig.BuildsToShow = newConfiguration.BuildsToShow;
-            CurrentConfig.CanceledBuildNotifyConfig = newConfiguration.CanceledBuildNotifyConfig;
-            CurrentConfig.FailedBuildNotifyConfig = newConfiguration.FailedBuildNotifyConfig;
-            CurrentConfig.GroupDefinition = newConfiguration.GroupDefinition;
-            CurrentConfig.Language = newConfiguration.Language;
-            CurrentConfig.PartialSucceededTreatmentMode = newConfiguration.PartialSucceededTreatmentMode;
-            CurrentConfig.ShowBusyIndicatorOnDeltaUpdates = newConfiguration.ShowBusyIndicatorOnDeltaUpdates;
-            CurrentConfig.SortingDefinition = newConfiguration.SortingDefinition;
-            CurrentConfig.SucceededBuildNotifyConfig = newConfiguration.SucceededBuildNotifyConfig;
-            CurrentConfig.UpdateInterval = newConfiguration.UpdateInterval;
-            CurrentConfig.UsePreReleases = newConfiguration.UsePreReleases;
-            CurrentConfig.ApplicationTheme = newConfiguration.ApplicationTheme;
+            Current.AnimationSpeed = newConfiguration.AnimationSpeed;
+            Current.Autostart = newConfiguration.Autostart;
+            Current.BuildsToShow = newConfiguration.BuildsToShow;
+            Current.CanceledBuildNotifyConfig = newConfiguration.CanceledBuildNotifyConfig;
+            Current.FailedBuildNotifyConfig = newConfiguration.FailedBuildNotifyConfig;
+            Current.GroupDefinition = newConfiguration.GroupDefinition;
+            Current.Language = newConfiguration.Language;
+            Current.PartialSucceededTreatmentMode = newConfiguration.PartialSucceededTreatmentMode;
+            Current.ShowBusyIndicatorOnDeltaUpdates = newConfiguration.ShowBusyIndicatorOnDeltaUpdates;
+            Current.SortingDefinition = newConfiguration.SortingDefinition;
+            Current.SucceededBuildNotifyConfig = newConfiguration.SucceededBuildNotifyConfig;
+            Current.UpdateInterval = newConfiguration.UpdateInterval;
+            Current.UsePreReleases = newConfiguration.UsePreReleases;
+            Current.ApplicationTheme = newConfiguration.ApplicationTheme;
 
             MergeConnections(newConfiguration);
             MergeProjects(newConfiguration);

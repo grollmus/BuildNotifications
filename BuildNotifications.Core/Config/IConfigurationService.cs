@@ -8,7 +8,7 @@
         /// <summary>
         /// The currently active configuration
         /// </summary>
-        IConfiguration CurrentConfig { get; }
+        IConfiguration Current { get; }
 
         /// <summary>
         /// Serializer to load and save configurations

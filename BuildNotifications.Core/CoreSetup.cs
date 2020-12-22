@@ -57,7 +57,7 @@ namespace BuildNotifications.Core
             }
         }
 
-        public IConfiguration Configuration => ConfigurationService.CurrentConfig;
+        public IConfiguration Configuration => ConfigurationService.Current;
 
         public ConfigurationBuilder ConfigurationBuilder { get; }
 

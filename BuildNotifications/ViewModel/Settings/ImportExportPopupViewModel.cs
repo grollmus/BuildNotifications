@@ -28,7 +28,7 @@ namespace BuildNotifications.ViewModel.Settings
             if (fileName == null)
                 return;
 
-            _configurationService.Serializer.Save(_configurationService.CurrentConfig, fileName);
+            _configurationService.Serializer.Save(_configurationService.Current, fileName);
             _popupService.ShowMessageBox(StringLocalizer.ExportSuccessful, StringLocalizer.Export, MessageBoxButton.OK);
             RequestClose();
         }

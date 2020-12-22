@@ -31,7 +31,7 @@ namespace BuildNotifications.Core.Tests.Config
             sut.Merge(newConfiguration);
 
             // Assert
-            var actual = sut.CurrentConfig;
+            var actual = sut.Current;
 
             Assert.Single(actual.Connections);
             Assert.Equal(newConfiguration.Connections[0].ConnectionType, actual.Connections[0].ConnectionType);
@@ -71,7 +71,7 @@ namespace BuildNotifications.Core.Tests.Config
             sut.Merge(newConfiguration);
 
             // Assert
-            var actual = sut.CurrentConfig;
+            var actual = sut.Current;
 
             Assert.Single(actual.Projects);
             Assert.Equal(newConfiguration.Projects[0].ProjectName, actual.Projects[0].ProjectName);
@@ -118,7 +118,7 @@ namespace BuildNotifications.Core.Tests.Config
             sut.Merge(newConfiguration);
 
             // Assert
-            var actual = sut.CurrentConfig;
+            var actual = sut.Current;
 
             Assert.Single(actual.Connections);
             Assert.Equal(newConfiguration.Connections[0].ConnectionType, actual.Connections[0].ConnectionType);
@@ -173,7 +173,7 @@ namespace BuildNotifications.Core.Tests.Config
             sut.Merge(newConfiguration);
 
             // Assert
-            var actual = sut.CurrentConfig;
+            var actual = sut.Current;
 
             Assert.Single(actual.Projects);
             Assert.Equal(newConfiguration.Projects[0].ProjectName, actual.Projects[0].ProjectName);
@@ -222,7 +222,7 @@ namespace BuildNotifications.Core.Tests.Config
             sut.Merge(newConfiguration);
 
             // Assert
-            var actual = sut.CurrentConfig;
+            var actual = sut.Current;
 
             Assert.Equal(newConfiguration.AnimationSpeed, actual.AnimationSpeed);
             Assert.Equal(newConfiguration.Autostart, actual.Autostart);

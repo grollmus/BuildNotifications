@@ -24,7 +24,7 @@ namespace BuildNotifications.ViewModel.Settings
             EditConnectionsCommand = new DelegateCommand(EditConnections);
             ImportExportCommand = new DelegateCommand(ImportExport);
 
-            var configuration = _configurationService.CurrentConfig;
+            var configuration = _configurationService.Current;
             Language = new LanguageOptionViewModel(configuration.Language);
             AnimationsMode = new EnumOptionViewModel<AnimationMode>(StringLocalizer.Keys.AnimationSpeed, configuration.AnimationSpeed);
             AutoStartMode = new EnumOptionViewModel<AutostartMode>(StringLocalizer.Keys.Autostart, configuration.Autostart);
@@ -116,36 +116,36 @@ namespace BuildNotifications.ViewModel.Settings
 
         private void Option_ValueChanged(object? sender, EventArgs e)
         {
-            _configurationService.CurrentConfig.AnimationSpeed = AnimationsMode.Value;
-            _configurationService.CurrentConfig.Autostart = AutoStartMode.Value;
-            _configurationService.CurrentConfig.BuildsToShow = BuildsPerGroup.Value;
-            _configurationService.CurrentConfig.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
-            _configurationService.CurrentConfig.FailedBuildNotifyConfig = FailedBuildNotify.Value;
-            _configurationService.CurrentConfig.Language = Language.Value.IetfLanguageTag;
-            _configurationService.CurrentConfig.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
-            _configurationService.CurrentConfig.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
-            _configurationService.CurrentConfig.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
-            _configurationService.CurrentConfig.UpdateInterval = UpdateInterval.Value;
-            _configurationService.CurrentConfig.UsePreReleases = UpdateToPreReleases.Value;
-            _configurationService.CurrentConfig.ApplicationTheme = UseDarkTheme.Value ? Theme.Dark : Theme.Light;
+            _configurationService.Current.AnimationSpeed = AnimationsMode.Value;
+            _configurationService.Current.Autostart = AutoStartMode.Value;
+            _configurationService.Current.BuildsToShow = BuildsPerGroup.Value;
+            _configurationService.Current.CanceledBuildNotifyConfig = CanceledBuildNotify.Value;
+            _configurationService.Current.FailedBuildNotifyConfig = FailedBuildNotify.Value;
+            _configurationService.Current.Language = Language.Value.IetfLanguageTag;
+            _configurationService.Current.PartialSucceededTreatmentMode = PartialSucceededTreatmentMode.Value;
+            _configurationService.Current.ShowBusyIndicatorOnDeltaUpdates = ShowBusyIndicatorDuringUpdate.Value;
+            _configurationService.Current.SucceededBuildNotifyConfig = SucceededBuildNotify.Value;
+            _configurationService.Current.UpdateInterval = UpdateInterval.Value;
+            _configurationService.Current.UsePreReleases = UpdateToPreReleases.Value;
+            _configurationService.Current.ApplicationTheme = UseDarkTheme.Value ? Theme.Dark : Theme.Light;
 
             _saveMethod.Invoke();
         }
 
         private void UpdateOptions()
         {
-            Language.Value = new CultureInfo(_configurationService.CurrentConfig.Language);
-            AnimationsMode.Value = _configurationService.CurrentConfig.AnimationSpeed;
-            AutoStartMode.Value = _configurationService.CurrentConfig.Autostart;
-            CanceledBuildNotify.Value = _configurationService.CurrentConfig.CanceledBuildNotifyConfig;
-            FailedBuildNotify.Value = _configurationService.CurrentConfig.FailedBuildNotifyConfig;
-            SucceededBuildNotify.Value = _configurationService.CurrentConfig.SucceededBuildNotifyConfig;
-            PartialSucceededTreatmentMode.Value = _configurationService.CurrentConfig.PartialSucceededTreatmentMode;
-            BuildsPerGroup.Value = _configurationService.CurrentConfig.BuildsToShow;
-            ShowBusyIndicatorDuringUpdate.Value = _configurationService.CurrentConfig.ShowBusyIndicatorOnDeltaUpdates;
-            UpdateInterval.Value = _configurationService.CurrentConfig.UpdateInterval;
-            UpdateToPreReleases.Value = _configurationService.CurrentConfig.UsePreReleases;
-            UseDarkTheme.Value = _configurationService.CurrentConfig.ApplicationTheme == Theme.Dark;
+            Language.Value = new CultureInfo(_configurationService.Current.Language);
+            AnimationsMode.Value = _configurationService.Current.AnimationSpeed;
+            AutoStartMode.Value = _configurationService.Current.Autostart;
+            CanceledBuildNotify.Value = _configurationService.Current.CanceledBuildNotifyConfig;
+            FailedBuildNotify.Value = _configurationService.Current.FailedBuildNotifyConfig;
+            SucceededBuildNotify.Value = _configurationService.Current.SucceededBuildNotifyConfig;
+            PartialSucceededTreatmentMode.Value = _configurationService.Current.PartialSucceededTreatmentMode;
+            BuildsPerGroup.Value = _configurationService.Current.BuildsToShow;
+            ShowBusyIndicatorDuringUpdate.Value = _configurationService.Current.ShowBusyIndicatorOnDeltaUpdates;
+            UpdateInterval.Value = _configurationService.Current.UpdateInterval;
+            UpdateToPreReleases.Value = _configurationService.Current.UsePreReleases;
+            UseDarkTheme.Value = _configurationService.Current.ApplicationTheme == Theme.Dark;
         }
 
         private readonly IConfigurationService _configurationService;
