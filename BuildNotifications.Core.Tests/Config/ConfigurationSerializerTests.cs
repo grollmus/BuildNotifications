@@ -26,7 +26,7 @@ namespace BuildNotifications.Core.Tests.Config
 
                 using var logger = new TestLogger();
 
-                sut.Load(fileName);
+                sut.Load(fileName, out _);
 
                 // Assert
                 Assert.Contains(logger.Messages, m => m.Contains("Failed to load existing config"));
@@ -49,7 +49,7 @@ namespace BuildNotifications.Core.Tests.Config
             var sut = new ConfigurationSerializer(serializer);
 
             // Act
-            var config = sut.Load(fileName);
+            var config = sut.Load(fileName, out _);
 
             // Assert
             Assert.NotNull(config);
@@ -68,7 +68,7 @@ namespace BuildNotifications.Core.Tests.Config
             var sut = new ConfigurationSerializer(serializer);
 
             // Act
-            var actual = sut.Load(fileName);
+            var actual = sut.Load(fileName, out _);
 
             // Assert
             Assert.NotNull(actual);
@@ -89,7 +89,7 @@ namespace BuildNotifications.Core.Tests.Config
                 using var lockStream = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
 
                 // Act
-                var ex = Record.Exception(() => sut.Load(fileName));
+                var ex = Record.Exception(() => sut.Load(fileName, out _));
 
                 // Assert
                 Assert.Null(ex);
@@ -164,7 +164,7 @@ namespace BuildNotifications.Core.Tests.Config
 
             // Act
             sut.Save(expected, fileName);
-            var actual = sut.Load(fileName);
+            var actual = sut.Load(fileName, out _);
 
             // Assert
             Assert.Equal(expected.BuildsToShow, actual.BuildsToShow);

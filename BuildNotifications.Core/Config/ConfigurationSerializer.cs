@@ -12,7 +12,7 @@ namespace BuildNotifications.Core.Config
             _serializer = serializer;
         }
 
-        public IConfiguration Load(string fileName)
+        public IConfiguration Load(string fileName, out bool success)
         {
             Configuration configuration;
             if (File.Exists(fileName))
@@ -21,23 +21,26 @@ namespace BuildNotifications.Core.Config
                 {
                     var json = File.ReadAllText(fileName);
                     configuration = _serializer.Deserialize<Configuration>(json);
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     Log.Warn().Message("Failed to load existing config").Exception(e).Write();
                     configuration = new Configuration();
+                    success = false;
                 }
             }
             else
             {
                 Log.Info().Message($"File {fileName} does not exist. Using default configuration").Write();
                 configuration = new Configuration();
+                success = false;
             }
 
             return configuration;
         }
 
-        public void Save(IConfiguration configuration, string fileName)
+        public bool Save(IConfiguration configuration, string fileName)
         {
             var json = _serializer.Serialize(configuration);
             var directory = Path.GetDirectoryName(fileName);
@@ -56,7 +59,10 @@ namespace BuildNotifications.Core.Config
             catch (Exception e)
             {
                 Log.Fatal().Message("Failed to persist configuration.").Exception(e).Write();
+                return false;
             }
+
+            return true;
         }
 
         private readonly ISerializer _serializer;

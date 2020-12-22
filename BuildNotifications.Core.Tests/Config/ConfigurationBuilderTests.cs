@@ -32,7 +32,7 @@ namespace BuildNotifications.Core.Tests.Config
             pathResolver.UserConfigurationFilePath.Returns("user.config");
 
             var configurationSerializer = Substitute.For<IConfigurationSerializer>();
-            configurationSerializer.Load("user.config").Returns(new Configuration {Language = "es"});
+            configurationSerializer.Load("user.config", out _).Returns(new Configuration {Language = "es"});
 
             var sut = new ConfigurationBuilder(pathResolver, configurationSerializer);
 

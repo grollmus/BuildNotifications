@@ -781,4 +781,10 @@ Use keywords for specific filter. Comma to separate terms.</value>
   <data name="ExportSuccessful" xml:space="preserve">
     <value>Export successful</value>
   </data>
+  <data name="ImportFailed" xml:space="preserve">
+	  <value>Import failed</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+	  <value>Export failed</value>
+  </data>
 </root>

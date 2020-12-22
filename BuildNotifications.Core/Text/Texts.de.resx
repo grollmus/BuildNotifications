@@ -782,5 +782,11 @@ Für spezifische Abfragen können Schlüsselwörter verwendet werden. Komma zum 
   <data name="ExportSuccessful" xml:space="preserve">
     <value>Export erfolgreich</value>
   </data>
+  <data name="ImportFailed" xml:space="preserve">
+	  <value>Import fehlgeschlagen</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+	  <value>Export fehlgeschlagen</value>
+  </data>
 </root>
 <!-- ReSharper restore MarkupTextTypo -->

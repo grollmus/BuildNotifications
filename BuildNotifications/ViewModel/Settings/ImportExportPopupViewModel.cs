@@ -28,8 +28,11 @@ namespace BuildNotifications.ViewModel.Settings
             if (fileName == null)
                 return;
 
-            _configurationService.Serializer.Save(_configurationService.Current, fileName);
-            _popupService.ShowMessageBox(StringLocalizer.ExportSuccessful, StringLocalizer.Export, MessageBoxButton.OK);
+            if (_configurationService.Serializer.Save(_configurationService.Current, fileName))
+                _popupService.ShowMessageBox(StringLocalizer.ExportSuccessful, StringLocalizer.Export, MessageBoxButton.OK);
+            else
+                _popupService.ShowMessageBox(StringLocalizer.ExportFailed, StringLocalizer.Export, MessageBoxButton.OK, MessageBoxImage.Error);
+
             RequestClose();
         }
 
@@ -39,10 +42,15 @@ namespace BuildNotifications.ViewModel.Settings
             if (fileName == null)
                 return;
 
-            var config = _configurationService.Serializer.Load(fileName);
-            _configurationService.Merge(config);
+            var config = _configurationService.Serializer.Load(fileName, out var success);
+            if (success)
+            {
+                _configurationService.Merge(config);
+                _popupService.ShowMessageBox(StringLocalizer.ImportSuccessful, StringLocalizer.Import, MessageBoxButton.OK);
+            }
+            else
+                _popupService.ShowMessageBox(StringLocalizer.ImportFailed, StringLocalizer.Import, MessageBoxButton.OK, MessageBoxImage.Error);
 
-            _popupService.ShowMessageBox(StringLocalizer.ImportSuccessful, StringLocalizer.Import, MessageBoxButton.OK);
             RequestClose();
         }
 

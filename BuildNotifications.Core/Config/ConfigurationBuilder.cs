@@ -15,7 +15,7 @@ namespace BuildNotifications.Core.Config
         {
             var configFilePath = _pathResolver.UserConfigurationFilePath;
             Log.Info().Message($"Loading configuration. Looking in path: \"{_pathResolver.UserConfigurationFilePath}\"").Write();
-            var config = _configurationSerializer.Load(configFilePath);
+            var config = _configurationSerializer.Load(configFilePath, out _);
 
             var culture = CultureInfo.GetCultureInfo(config.Language);
             Log.Info().Message($"Setting language to \"{culture}\"").Write();
