@@ -8,7 +8,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 {
     public class AfterCriteriaTests : DateCriteriaTests
     {
-        public AfterCriteriaTests() : base(new AfterCriteria(MockPipelineWithBuildsFromReferenceDay()))
+        public AfterCriteriaTests()
+            : base(new AfterCriteria(MockPipelineWithBuildsFromReferenceDay()))
         {
         }
 

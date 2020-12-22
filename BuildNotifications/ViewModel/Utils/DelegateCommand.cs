@@ -25,7 +25,7 @@ namespace BuildNotifications.ViewModel.Utils
         }
 
         public DelegateCommand(Action<TParameter> execute)
-            : this(execute, x => true)
+            : this(execute, _ => true)
         {
         }
 

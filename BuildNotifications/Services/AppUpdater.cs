@@ -185,7 +185,7 @@ namespace BuildNotifications.Services
                 };
 
                 string? textResult = null;
-                p.OutputDataReceived += (s, e) =>
+                p.OutputDataReceived += (_, e) =>
                 {
                     Log.Debug().Message($"Checking: {e.Data}").Write();
                     if (e.Data?.StartsWith("{", StringComparison.OrdinalIgnoreCase) ?? false)
@@ -231,7 +231,7 @@ namespace BuildNotifications.Services
                 {
                     StartInfo = startInfo
                 };
-                p.OutputDataReceived += (s, e) => { Debug.WriteLine($"Updating: {e.Data}"); };
+                p.OutputDataReceived += (_, e) => { Debug.WriteLine($"Updating: {e.Data}"); };
 
                 p.Start();
                 p.BeginOutputReadLine();

@@ -245,7 +245,7 @@ namespace BuildNotifications.ViewModel
                 return;
 
             vm.CloseRequested -= InitialSetup_CloseRequested;
-            var tween = vm.Tween(x => x.Opacity).To(0).In(0.5).Ease(Easing.ExpoEaseOut).OnComplete((timeline, parameter) =>
+            var tween = vm.Tween(x => x.Opacity).To(0).In(0.5).Ease(Easing.ExpoEaseOut).OnComplete((_, _) =>
             {
                 Overlay = null;
 

@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
     <DataTemplate x:Key="BranchGroupNodeTemplate" DataType="{x:Type viewModelTree:BranchGroupNodeViewModel}">

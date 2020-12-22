@@ -74,7 +74,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Arrange
             var received = false;
             var sut = new TestOption();
-            sut.IsEnabledChanged += (s, e) => received = true;
+            sut.IsEnabledChanged += (_, _) => received = true;
 
             // Act
             sut.SetIsEnabled(sut.IsEnabled);
@@ -126,7 +126,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Arrange
             var received = false;
             var sut = new TestOption();
-            sut.IsLoadingChanged += (s, e) => received = true;
+            sut.IsLoadingChanged += (_, _) => received = true;
 
             // Act
             sut.SetIsLoading(sut.IsLoading);
@@ -141,7 +141,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Arrange
             var received = false;
             var sut = new TestOption();
-            sut.IsVisibleChanged += (s, e) => received = true;
+            sut.IsVisibleChanged += (_, _) => received = true;
 
             // Act
             sut.SetIsVisible(sut.IsVisible);

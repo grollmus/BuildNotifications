@@ -24,7 +24,7 @@ namespace BuildNotifications.Resources.Animation.Checkbox
 
             var wrapper = new DoubleWrapper {Value = currentMargin.Left};
 
-            tweens.Add(wrapper.Tween(x => x.Value).To(targetMargin.Left).In(Duration).Ease(Easing.ExpoEaseOut).OnUpdate((sender, objects) => { TargetElement.Margin = new Thickness(wrapper.Value, 0, 0, 0); }));
+            tweens.Add(wrapper.Tween(x => x.Value).To(targetMargin.Left).In(Duration).Ease(Easing.ExpoEaseOut).OnUpdate((_, _) => { TargetElement.Margin = new Thickness(wrapper.Value, 0, 0, 0); }));
 
             globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement));
         }

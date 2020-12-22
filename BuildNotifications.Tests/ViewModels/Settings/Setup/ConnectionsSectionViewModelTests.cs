@@ -45,7 +45,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Setup
             var connection = sut.Connections.First();
 
             var changeRaised = false;
-            sut.Changed += (s, e) => changeRaised = true;
+            sut.Changed += (_, _) => changeRaised = true;
 
             // Act
             connection.Name = "new name";

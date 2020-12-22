@@ -54,21 +54,24 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search
 
         private class DummySearchCriteriaA : BaseDummySearch
         {
-            public DummySearchCriteriaA() : base("A", "1", "2", "3", "10")
+            public DummySearchCriteriaA()
+                : base("A", "1", "2", "3", "10")
             {
             }
         }
 
         private class DummySearchCriteriaB : BaseDummySearch
         {
-            public DummySearchCriteriaB() : base("B", "4", "5", "6", "10")
+            public DummySearchCriteriaB()
+                : base("B", "4", "5", "6", "10")
             {
             }
         }
 
         private class IgnoredDummySearchCriteriaC : BaseDummySearch
         {
-            public IgnoredDummySearchCriteriaC() : base("C", "!", "!!", "!!!")
+            public IgnoredDummySearchCriteriaC()
+                : base("C", "!", "!!", "!!!")
             {
             }
         }

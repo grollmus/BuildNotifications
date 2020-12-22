@@ -98,7 +98,8 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
 
         private class TestSearchCriteria : BaseSearchCriteria
         {
-            public TestSearchCriteria(IPipeline pipeline) : base(pipeline)
+            public TestSearchCriteria(IPipeline pipeline)
+                : base(pipeline)
             {
             }
 

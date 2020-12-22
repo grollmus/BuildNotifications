@@ -25,7 +25,7 @@ namespace BuildNotifications.Resources.Search
 
             GotFocus += OnGotFocus;
             LostFocus += OnLostFocus;
-            LostKeyboardFocus += (sender, args) => _popup.IsOpen = false;
+            LostKeyboardFocus += (_, _) => _popup.IsOpen = false;
             PreviewMouseDown += OnPreviewMouseDown;
             PreviewKeyDown += OnKeyDown;
             PreviewKeyUp += OnKeyUp;
@@ -436,7 +436,7 @@ namespace BuildNotifications.Resources.Search
                 return;
 
             var currentText = CurrentText();
-            var search = SearchEngine.Parse(currentText);
+            var search = SearchEngine!.Parse(currentText);
             _currentSearchTerm = search.SearchedTerm;
 
             StopListeningToTextEvents();

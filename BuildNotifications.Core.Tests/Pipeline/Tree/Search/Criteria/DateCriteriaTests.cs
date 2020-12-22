@@ -126,7 +126,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             var pipeline = Substitute.For<IPipeline>();
             pipeline.LastUpdate.Returns(DateTime.Now);
 
-            pipeline.CachedBuilds().Returns(x => new List<IBuild> {BuildFromReferenceDate(ReferenceDate)});
+            pipeline.CachedBuilds().Returns(_ => new List<IBuild> {BuildFromReferenceDate(ReferenceDate)});
 
             return pipeline;
         }

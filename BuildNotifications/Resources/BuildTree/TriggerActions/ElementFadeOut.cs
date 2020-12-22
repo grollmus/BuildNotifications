@@ -38,7 +38,7 @@ namespace BuildNotifications.Resources.BuildTree.TriggerActions
             }
 
             tweens.Add(TargetElement.Tween(x => x.Opacity).To(0).In(Duration));
-            globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement).OnComplete((sender, objects) => { TargetElement.Visibility = Visibility.Hidden; }));
+            globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement).OnComplete((_, _) => { TargetElement.Visibility = Visibility.Hidden; }));
         }
     }
 }

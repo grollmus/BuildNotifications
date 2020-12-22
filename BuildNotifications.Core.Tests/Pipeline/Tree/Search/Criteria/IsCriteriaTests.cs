@@ -81,7 +81,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
         private static IBuild Build()
         {
             var build = Substitute.For<IBuild>();
-            build.RequestedBy.Returns(x => TestUser);
+            build.RequestedBy.Returns(_ => TestUser);
             return build;
         }
 
@@ -141,7 +141,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             var pipeline = Substitute.For<IPipeline>();
             pipeline.LastUpdate.Returns(DateTime.Now);
 
-            pipeline.CachedBuilds().Returns(x => KeywordBuildTuples().Select(t => t.build).ToList());
+            pipeline.CachedBuilds().Returns(_ => KeywordBuildTuples().Select(t => t.build).ToList());
 
             return pipeline;
         }

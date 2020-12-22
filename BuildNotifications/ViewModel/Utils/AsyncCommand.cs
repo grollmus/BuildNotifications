@@ -83,7 +83,7 @@ namespace BuildNotifications.ViewModel.Utils
             _cancelCommand.NotifyCommandStarting();
             Execution = new NotifyTaskCompletion<TResult>(_command(_cancelCommand.Token));
             RaiseCanExecuteChanged();
-            await Execution.TaskCompletion;
+            await Execution!.TaskCompletion;
             _cancelCommand.NotifyCommandFinished();
             RaiseCanExecuteChanged();
         }
