@@ -126,6 +126,16 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
+    <DrawingImage po:Freeze="True" x:Key="ImportExportDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V14 H14 V0 H0 Z">
+                <GeometryDrawing po:Freeze="True"
+                                 Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+                                 Geometry="M 7.3496094,0.00580227 C 7.1491864,0.05555154 7.0541803,1.4393542 7.0351562,3.0112827 H 0.390625 C 0.1742188,3.0112827 0,3.1787335 0,3.3867331 v 0.7208648 c 0,0.2079994 0.1742188,0.3754504 0.390625,0.3754504 h 6.6503906 c 0.03392,1.7827681 0.1573229,3.3916929 0.3574219,3.2251188 4.5697195,-4.4032075 4.9123605,-3.1785242 0,-7.68922407 C 7.3814625,0.00602994 7.3653465,0.00189605 7.3496094,0.00580227 Z M 3.6328125,5.1382092 c -0.01574,-0.00391 -0.031858,2.229e-4 -0.048828,0.013141 -4.91236,4.5107007 -4.569719,3.2860161 0,7.6892238 0.200099,0.166574 0.3235018,-1.442351 0.3574218,-3.2251188 h 6.6503907 c 0.216406,0 0.390625,-0.167451 0.390625,-0.3754502 V 8.5191401 c 0,-0.2079992 -0.174219,-0.3754504 -0.390625,-0.3754504 H 3.9472656 C 3.9282416,6.5717605 3.8332355,5.1879585 3.6328125,5.1382092 Z"></GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
     <DrawingImage po:Freeze="True" x:Key="SearchDrawingImage">
         <DrawingImage.Drawing>
             <GeometryDrawing po:Freeze="True"
@@ -487,6 +497,12 @@
                 Value="Settings">
                 <Setter Property="Image.Source" Value="{StaticResource SettingsDrawingImage}" />
             </DataTrigger>
+
+	        <DataTrigger
+		        Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"
+		        Value="ImportExport">
+		        <Setter Property="Image.Source" Value="{StaticResource ImportExportDrawingImage}" />
+	        </DataTrigger>
 
             <DataTrigger
                 Binding="{Binding Path=Type, RelativeSource={RelativeSource AncestorType={x:Type local:IconBatch}}}"

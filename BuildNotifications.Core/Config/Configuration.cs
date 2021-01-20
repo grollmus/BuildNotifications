@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
-using Newtonsoft.Json;
 
 namespace BuildNotifications.Core.Config
 {
@@ -40,9 +38,6 @@ namespace BuildNotifications.Core.Config
         public AnimationMode AnimationSpeed { get; set; } = AnimationMode.Enabled;
 
         public bool ShowBusyIndicatorOnDeltaUpdates { get; set; } = true;
-
-        [JsonIgnore]
-        public CultureInfo Culture => CultureInfo.GetCultureInfo(Language);
 
         public IList<ConnectionData> Connections { get; set; } = new List<ConnectionData>();
 

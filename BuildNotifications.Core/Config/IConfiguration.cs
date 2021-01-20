@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using BuildNotifications.Core.Pipeline.Tree.Arrangement;
 
 namespace BuildNotifications.Core.Config
@@ -30,11 +29,6 @@ namespace BuildNotifications.Core.Config
         /// List of all saved connections.
         /// </summary>
         IList<ConnectionData> Connections { get; }
-
-        /// <summary>
-        /// Culture to use for displaying data.
-        /// </summary>
-        CultureInfo Culture { get; }
 
         /// <summary>
         /// For which failed builds to receive notifications for

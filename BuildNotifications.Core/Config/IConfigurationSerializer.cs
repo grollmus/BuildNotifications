@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config
 {
     /// <summary>
     /// (De)serializes configurations from and to a file.
@@ -12,28 +10,15 @@ namespace BuildNotifications.Core.Config
         /// default configuration will be returned.
         /// </summary>
         /// <param name="fileName">Path to the file to load from.</param>
+        /// <param name="success">Indicates whether the import was successful or not.</param>
         /// <returns>The loaded configuration.</returns>
-        IConfiguration Load(string fileName);
-
-        /// <summary>
-        /// Loads all predefined connections from a given file.
-        /// </summary>
-        /// <param name="fileName">Name of the file to load.</param>
-        /// <returns>List of all predefined connections.</returns>
-        IEnumerable<ConnectionData> LoadPredefinedConnections(string fileName);
-
-        /// <summary>
-        /// Loads all predefined projects from a given file.
-        /// </summary>
-        /// <param name="fileName">Name of the file to load.</param>
-        /// <returns>List of all predefined connections.</returns>
-        IEnumerable<IProjectConfiguration> LoadPredefinedProjects(string fileName);
+        IConfiguration Load(string fileName, out bool success);
 
         /// <summary>
         /// Saves a configuration to a file.
         /// </summary>
         /// <param name="configuration">Configuration to save.</param>
         /// <param name="fileName">Path to the file to save to.</param>
-        void Save(IConfiguration configuration, string fileName);
+        bool Save(IConfiguration configuration, string fileName);
     }
 }

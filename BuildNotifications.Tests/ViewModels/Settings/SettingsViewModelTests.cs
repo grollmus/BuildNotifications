@@ -4,6 +4,7 @@ using System.Linq;
 using BuildNotifications.Core.Config;
 using BuildNotifications.Core.Pipeline;
 using BuildNotifications.PluginInterfaces;
+using BuildNotifications.Services;
 using BuildNotifications.TestMocks;
 using BuildNotifications.ViewModel.Settings;
 using NSubstitute;
@@ -36,15 +37,16 @@ namespace BuildNotifications.Tests.ViewModels.Settings
 
         [Theory]
         [MemberData(nameof(OptionsSetters))]
-        public void ChangingAnyOptionShouldCallSaveMethod(Action<SettingsViewModel> optionSetter)
+        internal void ChangingAnyOptionShouldCallSaveMethod(Action<SettingsViewModel> optionSetter)
         {
             // Arrange
-            var configuration = Substitute.For<IConfiguration>();
+            var configuration = Substitute.For<IConfigurationService>();
             var userIdentityList = Substitute.For<IUserIdentityList>();
+            var popupService = Substitute.For<IPopupService>();
 
             var saveCalled = false;
             Action saveMethod = () => saveCalled = true;
-            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList);
+            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList, popupService);
 
             // Act
             optionSetter(sut);
@@ -57,10 +59,11 @@ namespace BuildNotifications.Tests.ViewModels.Settings
         public void EditConnectionCommandShouldRaiseEvent()
         {
             // Arrange
-            var configuration = Substitute.For<IConfiguration>();
+            var configuration = Substitute.For<IConfigurationService>();
             var userIdentityList = Substitute.For<IUserIdentityList>();
+            var popupService = Substitute.For<IPopupService>();
             Action saveMethod = () => { };
-            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList);
+            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList, popupService);
 
             // Act
             var evt = Assert.RaisesAny<EventArgs>(
@@ -78,8 +81,9 @@ namespace BuildNotifications.Tests.ViewModels.Settings
         public void UsersShouldSynchronizeUserIdentities()
         {
             // Arrange
-            var configuration = Substitute.For<IConfiguration>();
+            var configuration = Substitute.For<IConfigurationService>();
             var userIdentityList = Substitute.For<IUserIdentityList>();
+            var popupService = Substitute.For<IPopupService>();
             Action saveMethod = () => { };
 
             ICollection<IUser> expectedUsers = new List<IUser>();
@@ -88,7 +92,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings
             userIdentityList.IdentitiesOfCurrentUser.Returns(expectedUsers);
 
             // Act
-            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList);
+            var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList, popupService);
 
             // Assert
             Assert.Equal(expectedUsers, sut.CurrentUserIdentities.Select(u => u.User));

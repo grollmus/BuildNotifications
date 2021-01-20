@@ -29,7 +29,7 @@ using TweenSharp.Factory;
 
 namespace BuildNotifications.ViewModel
 {
-    public class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
+    internal class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
     {
 // properties *are* initialized within the constructor. However by a method call, which is not correctly recognized by the code analyzer yet.
 #pragma warning disable CS8618 // warning about uninitialized non-nullable properties
@@ -332,6 +332,11 @@ namespace BuildNotifications.ViewModel
             ShowInitialSetupOverlayViewModel();
         }
 
+        private void SettingsViewModelOnReloadRequested(object? sender, EventArgs e)
+        {
+            ResetAndRestart();
+        }
+
         private void SetupNotificationCenter()
         {
             NotificationCenter = new NotificationCenterViewModel
@@ -358,8 +363,9 @@ namespace BuildNotifications.ViewModel
 
             SetupNotificationCenter();
 
-            SettingsViewModel = new SettingsViewModel(_coreSetup.Configuration, PersistChanges, _coreSetup.UserIdentityList);
+            SettingsViewModel = new SettingsViewModel(_coreSetup.ConfigurationService, PersistChanges, _coreSetup.UserIdentityList, _popupService);
             SettingsViewModel.EditConnectionsRequested += SettingsViewModelOnEditConnectionsRequested;
+            SettingsViewModel.ReloadRequested += SettingsViewModelOnReloadRequested;
 
             GroupAndSortDefinitionsSelection = new GroupAndSortDefinitionsViewModel
             {
@@ -628,6 +634,7 @@ namespace BuildNotifications.ViewModel
         private readonly TrayIconHandle _trayIcon;
         private readonly ConfigurationApplication _configurationApplication;
         private readonly IPopupService _popupService;
+        private readonly IUpdateUrls _updateUrls;
         private bool _previouslyFetchedAnyBuilds;
         private bool _blurView;
         private CancellationTokenSource? _cancellationTokenSource;
@@ -640,6 +647,5 @@ namespace BuildNotifications.ViewModel
         private bool _showNotificationCenter;
         private bool _hasAnyProjects;
         private bool _isInitialFetch = true;
-        private readonly IUpdateUrls _updateUrls;
     }
 }

@@ -13,7 +13,7 @@ namespace BuildNotifications.ViewModel
         event EventHandler CloseRequested;
     }
 
-    internal class MessageBoxViewModel : BaseViewModel, IRequestClose
+    internal class MessageBoxViewModel : PopupViewModel
     {
         public MessageBoxViewModel(string text, string title, MessageBoxButton buttons, MessageBoxImage icon, MessageBoxResult defaultResult)
         {
@@ -65,13 +65,6 @@ namespace BuildNotifications.ViewModel
                 _ => false
             };
         }
-
-        private void RequestClose()
-        {
-            CloseRequested?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler? CloseRequested;
     }
 
     internal class MessageBoxCommandViewModel : BaseViewModel
