@@ -14,12 +14,12 @@ namespace BuildNotifications.Core
             _configuration = configuration;
 
             _projectFactory = new ProjectFactory(pluginRepository, configuration);
-            _projectFactory.ErrorOccured += (sender, args) => ErrorOccured?.Invoke(this, args);
+            _projectFactory.ErrorOccured += (_, args) => ErrorOccured?.Invoke(this, args);
         }
 
         public event EventHandler<ErrorNotificationEventArgs>? ErrorOccured;
 
-        public IEnumerable<IProject> AllProjects() => Projects(x => true);
+        public IEnumerable<IProject> AllProjects() => Projects(_ => true);
 
         public IEnumerable<IProject> EnabledProjects() => Projects(x => x.IsEnabled);
 

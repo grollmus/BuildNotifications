@@ -92,7 +92,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             var pipeline = Substitute.For<IPipeline>();
             pipeline.LastUpdate.Returns(DateTime.Now);
 
-            pipeline.CachedDefinitions().Returns(x => DefinitionNameBuildTuples().Select(t =>
+            pipeline.CachedDefinitions().Returns(_ => DefinitionNameBuildTuples().Select(t =>
             {
                 var definition = Substitute.For<IBuildDefinition>();
                 definition.Name.Returns(t.definitionName);

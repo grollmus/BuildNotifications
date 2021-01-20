@@ -7,7 +7,6 @@
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:animation="clr-namespace:BuildNotifications.Resources.Animation"
              xmlns:resourcesNotification="clr-namespace:BuildNotifications.Resources.Notification"
-             xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"

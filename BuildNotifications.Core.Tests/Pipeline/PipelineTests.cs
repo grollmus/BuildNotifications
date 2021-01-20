@@ -61,7 +61,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             IBranchProvider BranchProvider(params IBranch[] branches)
             {
                 var branchProvider = Substitute.For<IBranchProvider>();
-                branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
+                branchProvider.FetchExistingBranches().Returns(_ => ToAsync(branches));
                 branchProvider.ExistingBranchCount.Returns(branches.Length);
                 return branchProvider;
             }
@@ -69,8 +69,8 @@ namespace BuildNotifications.Core.Tests.Pipeline
             IBuildProvider BuildProvider(params IBuild[] builds)
             {
                 var buildProvider = Substitute.For<IBuildProvider>();
-                buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(x => ToAsync(builds));
-                buildProvider.FetchExistingBuildDefinitions().Returns(x => ToAsync(new[] {new MockBuildDefinition()}));
+                buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(_ => ToAsync(builds));
+                buildProvider.FetchExistingBuildDefinitions().Returns(_ => ToAsync(new[] {new MockBuildDefinition()}));
                 return buildProvider;
             }
 
@@ -109,7 +109,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             sut.AddProject(projectB);
 
             IBuildTree? tree = null;
-            sut.Notifier.Updated += (s, e) => tree = e.Tree;
+            sut.Notifier.Updated += (_, e) => tree = e.Tree;
 
             // Act
             await sut.Update();
@@ -208,7 +208,7 @@ namespace BuildNotifications.Core.Tests.Pipeline
             // Arrange
             var pipeline = MockPipeline(GroupDefinition.Source, GroupDefinition.Branch, GroupDefinition.BuildDefinition);
             IBuildTree? tree = null;
-            pipeline.Notifier.Updated += (s, e) => tree = e.Tree;
+            pipeline.Notifier.Updated += (_, e) => tree = e.Tree;
 
             // Act
             await pipeline.Update();
@@ -315,12 +315,12 @@ namespace BuildNotifications.Core.Tests.Pipeline
             configuration.BuildsToShow.Returns(1);
 
             var buildProvider = Substitute.For<IBuildProvider>();
-            buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(x => b1.AsyncYield());
-            buildProvider.FetchBuildsChangedSince(Arg.Any<DateTime>()).Returns(x => b2.AsyncYield());
-            buildProvider.FetchExistingBuildDefinitions().Returns(x => ToAsync(definitions));
+            buildProvider.FetchAllBuilds(Arg.Any<int>()).Returns(_ => b1.AsyncYield());
+            buildProvider.FetchBuildsChangedSince(Arg.Any<DateTime>()).Returns(_ => b2.AsyncYield());
+            buildProvider.FetchExistingBuildDefinitions().Returns(_ => ToAsync(definitions));
 
             var branchProvider = Substitute.For<IBranchProvider>();
-            branchProvider.FetchExistingBranches().Returns(x => ToAsync(branches));
+            branchProvider.FetchExistingBranches().Returns(_ => ToAsync(branches));
             branchProvider.ExistingBranchCount.Returns(branches.Length);
             var userIdentityList = Substitute.For<IUserIdentityList>();
             var pipeline = new Core.Pipeline.Pipeline(treeBuilder, configuration, userIdentityList);

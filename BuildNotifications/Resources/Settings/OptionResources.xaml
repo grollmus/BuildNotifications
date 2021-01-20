@@ -8,7 +8,6 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:pluginOptions="clr-namespace:BuildNotifications.ViewModel.Settings.Options.PluginOptions"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:views="clr-namespace:BuildNotifications.Views"
                     xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
                     mc:Ignorable="d">

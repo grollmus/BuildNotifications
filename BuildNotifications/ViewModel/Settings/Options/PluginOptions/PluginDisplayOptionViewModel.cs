@@ -17,7 +17,7 @@ namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
             _pluginOptionViewModelImplementation = new PluginOptionViewModelImplementation(displayOption, localizationProvider, this);
             _value = displayOption.Value;
 
-            displayOption.ValueChanged += (s, e) => Value = displayOption.Value;
+            displayOption.ValueChanged += (_, _) => Value = displayOption.Value;
         }
 
         public override string Description => _pluginOptionViewModelImplementation.Description;

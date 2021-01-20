@@ -101,7 +101,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             sut.Affect(option);
 
             option.When(o => o.IsLoading = false)
-                .Do(x => updateFinishBlock.Set());
+                .Do(_ => updateFinishBlock.Set());
 
             // Act
             sut.Update();
@@ -186,7 +186,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             sut.Affect(option);
 
             option.When(o => o.IsLoading = false)
-                .Do(x => updateFinishBlock.Set());
+                .Do(_ => updateFinishBlock.Set());
 
             // Act
             sut.Update();

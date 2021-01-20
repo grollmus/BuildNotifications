@@ -87,7 +87,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification.Distribution
             // Arrange
             var sut = new TestNotificationDistributor();
             var processor = Substitute.For<INotificationProcessor>();
-            processor.When(x => x.Initialize()).Do(x => throw new Exception());
+            processor.When(x => x.Initialize()).Do(_ => throw new Exception());
 
             // Act
             var ex = Record.Exception(() => sut.Add(processor));
@@ -102,7 +102,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Notification.Distribution
             // Arrange
             var sut = new TestNotificationDistributor();
             var processor = Substitute.For<INotificationProcessor>();
-            processor.When(x => x.Shutdown()).Do(x => throw new Exception());
+            processor.When(x => x.Shutdown()).Do(_ => throw new Exception());
             sut.Add(processor);
 
             // Act

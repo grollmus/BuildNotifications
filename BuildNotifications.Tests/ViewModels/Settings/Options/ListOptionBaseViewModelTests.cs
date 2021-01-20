@@ -17,7 +17,7 @@ namespace BuildNotifications.Tests.ViewModels.Settings.Options
         private class TestListOptionViewModel : ListOptionBaseViewModel<TestEnum>
         {
             public TestListOptionViewModel()
-                : base(string.Empty, default)
+                : base(string.Empty)
             {
             }
 

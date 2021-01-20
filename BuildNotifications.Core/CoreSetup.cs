@@ -53,7 +53,7 @@ namespace BuildNotifications.Core
             if (notificationReceiver != null)
             {
                 NotificationReceiver = notificationReceiver;
-                NotificationReceiver.DistributedNotificationReceived += (sender, args) => DistributedNotificationReceived?.Invoke(this, args);
+                NotificationReceiver.DistributedNotificationReceived += (_, args) => DistributedNotificationReceived?.Invoke(this, args);
             }
         }
 

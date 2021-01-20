@@ -95,7 +95,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             var pipeline = Substitute.For<IPipeline>();
             pipeline.LastUpdate.Returns(DateTime.Now);
 
-            pipeline.CachedBranches().Returns(x => BranchNameBuildTuples().Select(t =>
+            pipeline.CachedBranches().Returns(_ => BranchNameBuildTuples().Select(t =>
             {
                 var branch = Substitute.For<IBranch>();
                 branch.DisplayName.Returns(t.branchName);

@@ -93,7 +93,7 @@ namespace BuildNotifications.Core.Tests.Pipeline.Tree.Search.Criteria
             var pipeline = Substitute.For<IPipeline>();
             pipeline.LastUpdate.Returns(DateTime.Now);
 
-            pipeline.CachedBuilds().Returns(x => ByNameBuildTuples().Select(t =>
+            pipeline.CachedBuilds().Returns(_ => ByNameBuildTuples().Select(t =>
             {
                 var build = Substitute.For<IBuild>();
                 BuildIsRequestedBy(t.forName, build);

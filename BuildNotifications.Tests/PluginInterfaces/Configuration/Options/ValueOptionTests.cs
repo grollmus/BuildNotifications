@@ -54,7 +54,7 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
             // Arrange
             var sut = new TestValueOption();
             var received = false;
-            sut.ValueChanged += (s, e) => received = true;
+            sut.ValueChanged += (_, _) => received = true;
 
             // Act
             sut.SetValue(sut.Value);
