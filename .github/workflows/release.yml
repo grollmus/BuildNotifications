@@ -30,7 +30,7 @@ jobs:
         nuget-version: 'latest'
       
     - name: Extract version from tag name
-      uses: olegtarasov/get-tag@v1
+      uses: olegtarasov/get-tag@v2.1
       id: tagName
               
     - name: Publish BuildNotificiations
