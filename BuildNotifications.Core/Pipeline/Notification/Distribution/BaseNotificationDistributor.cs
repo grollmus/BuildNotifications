@@ -64,6 +64,7 @@ namespace BuildNotifications.Core.Pipeline.Notification.Distribution
             catch (Exception e)
             {
                 Log.Warn().Message($"NotificationProcessor \"{processor}\" failed to initialize. Error: \n {e}").Exception(e).Write();
+                return;
             }
 
             Log.Debug().Message($"NotificationProcessor \"{processor}\" successfully initialized. Adding to list of processors.").Write();
