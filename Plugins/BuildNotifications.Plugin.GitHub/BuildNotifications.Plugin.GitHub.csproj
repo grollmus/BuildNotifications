@@ -22,7 +22,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Octokit" Version="0.49.0" />
+		<PackageReference Include="Octokit" Version="0.50.0" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.18.0.27296">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
