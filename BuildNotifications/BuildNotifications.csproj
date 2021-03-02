@@ -118,7 +118,7 @@
     </PackageReference>
     <PackageReference Include="NLog" Version="4.7.8" />
     <PackageReference Include="semver" Version="2.0.6" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.18.0.27296">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.19.0.28253">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
