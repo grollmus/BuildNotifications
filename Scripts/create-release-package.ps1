@@ -46,7 +46,7 @@ Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
 Get-ChildItem -Filter *Legacy.dll -Recurse | Write-Host
-Move-Item -Path "BuildNotifications\ToastNotificationsPlugin\bin\Release\net472\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+Move-Item -Path "ToastNotificationsPlugin\bin\Release\net472\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
 
 Write-Output "Creating nuget package"
 $nuspecFileName = "Scripts/$applicationName.nuspec" 
