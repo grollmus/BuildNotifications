@@ -57,11 +57,10 @@ Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
 
 Write-Output "Creating nuget package"
 $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
-$nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output "Creating squirrel release"
-$nupkgFilePath = Get-ChildItem -Name $nupkgFileName -Recurse -Path $workingDirectory | Select-Object -First 1
+$nupkgFilePath = Get-ChildItem -Name "*.nupkg" -Recurse -Path $workingDirectory | Select-Object -First 1
 Write-Output $nupkgFilePath
 $arguments = "--releasify",$nupkgFilePath,"--no-msi"
 $squirrelExe = "$workingDirectory\squirrel.exe"
