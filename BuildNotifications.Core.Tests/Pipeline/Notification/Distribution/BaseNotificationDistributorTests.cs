@@ -6,7 +6,7 @@ using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.Core.Pipeline.Tree;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using NSubstitute;
 using Xunit;
 

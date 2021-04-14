@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using BuildNotifications.Core;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using NLog.Fluent;
 
 namespace BuildNotifications.ViewModel.Notification

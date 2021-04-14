@@ -13,22 +13,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-      with:
-        vs-version: '[16.8,)'
       
     - name: Install .NET 5.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
 
-    - name: Setup nuget
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: 'latest'
-      
     - name: Extract version from tag name
       uses: olegtarasov/get-tag@v2.1
       id: tagName
@@ -42,12 +32,9 @@ jobs:
     - name: Publish TFS Plugin
       run: dotnet publish Plugins\BuildNotifications.Plugin.Tfs\BuildNotifications.Plugin.Tfs.csproj -c Release -r win-x64 /p:Version=${{ steps.tagName.outputs.tag }} /p:FileVersion=${{ steps.tagName.outputs.tag }} /p:AssemblyVersion=${{ steps.tagName.outputs.tag }}
       
-    - name: nuget restore
-      run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
-      
-    - name: Build ToastNotificationsPlugin
-      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}/ToastNotificationsPlugin/output
-      
+    - name: Publish ToastNotificationsPlugin
+      run: dotnet publish Plugins\ToastNotificationsPlugin\ToastNotificationsPlugin.csproj -c Release -r win-x64 /p:Version=${{ steps.tagName.outputs.tag }} /p:FileVersion=${{ steps.tagName.outputs.tag }} /p:AssemblyVersion=${{ steps.tagName.outputs.tag }}
+
     - name: Create package
       run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }} -workingDirectory ${{ github.workspace }}
       

@@ -1,5 +1,5 @@
 ﻿using System;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 
 namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {

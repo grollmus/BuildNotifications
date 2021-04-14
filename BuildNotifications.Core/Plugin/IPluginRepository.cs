@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Notification;
 using BuildNotifications.PluginInterfaces.SourceControl;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
 
 namespace BuildNotifications.Core.Plugin
 {

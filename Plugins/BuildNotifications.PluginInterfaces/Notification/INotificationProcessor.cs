@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace BuildNotifications.PluginInterfacesLegacy.Notification
+namespace BuildNotifications.PluginInterfaces.Notification
 {
     /// <summary>
     /// Describes an object which takes notifications and processes it in any way. For example presenting it to the user,

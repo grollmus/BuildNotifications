@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Windows.UI.Notifications;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using JetBrains.Annotations;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using MS.WindowsAPICodePack.Internal;
+using Microsoft.WindowsAPICodePack.PropertySystem;
+using Microsoft.WindowsAPICodePack.Win32Native.PropertySystem;
 
 namespace ToastNotificationsPlugin
 {
@@ -37,7 +37,7 @@ namespace ToastNotificationsPlugin
             {
                 using (var activatorGuid = new PropVariant(activatorGuidAsString))
                 {
-                    ErrorHelper.VerifySucceeded(newShortcutProperties.SetValue(SystemProperties.System.AppUserModel.ID, appId));
+                    ErrorHelper.VerifySucceeded(newShortcutProperties.SetValue(Microsoft.WindowsAPICodePack.COMNative.Shell.PropertySystem.SystemProperties.System.AppUserModel.ID, appId));
                     ErrorHelper.VerifySucceeded(newShortcutProperties.SetValue(ref toastId, activatorGuid));
                     ErrorHelper.VerifySucceeded(newShortcutProperties.Commit());
                 }
@@ -73,18 +73,18 @@ namespace ToastNotificationsPlugin
             ToastNotificationManager.History.Clear(ApplicationId);
         }
 
-        private ToastNotificationFactory _toastNotificationFactory;
+        private ToastNotificationFactory? _toastNotificationFactory;
         internal const string ApplicationId = "github.com.grollmus.BuildNotifications";
         internal const string Group = "BuildNotifications";
 
         public void Process(IDistributedNotification notification)
         {
-            _toastNotificationFactory.Process(notification);
+            _toastNotificationFactory?.Process(notification);
         }
 
         public void Clear(IDistributedNotification notification)
         {
-            var tag = _toastNotificationFactory.NotificationTag(notification);
+            var tag = _toastNotificationFactory?.NotificationTag(notification);
 
             var notifications = ToastNotificationManager.History.GetHistory(ApplicationId).ToList();
             if (notifications.Any(n => n.Tag == tag))

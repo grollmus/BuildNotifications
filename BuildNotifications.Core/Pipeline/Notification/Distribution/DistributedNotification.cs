@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using BuildNotifications.Core.Protocol;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using Newtonsoft.Json;
 using NLog.Fluent;
 

@@ -1,15 +1,18 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace BuildNotifications.PluginInterfacesLegacy.Notification
+namespace BuildNotifications.PluginInterfaces.Notification
 {
+    /// <summary>
+    /// A notification that is distributed among notification processors.
+    /// </summary>
     [PublicAPI]
     public interface IDistributedNotification
     {
         /// <summary>
         /// Path to application icon. E.g. for a succeeded build a red BuildNotifications logo
         /// </summary>
-        string AppIconUrl { get; }
+        string? AppIconUrl { get; }
 
         /// <summary>
         /// Display color for this notification. E.g. the red color of a failed build notification.
@@ -24,7 +27,7 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
         /// <summary>
         /// Path to an image which may be displayed additionally to the content.
         /// </summary>
-        string ContentImageUrl { get; }
+        string? ContentImageUrl { get; }
 
         /// <summary>
         /// Uri Protocol scheme to be used as startup arguments for BuildNotifications to provide feedback to the original message.
@@ -50,7 +53,7 @@ namespace BuildNotifications.PluginInterfacesLegacy.Notification
         /// <summary>
         /// Source of the notification, e.g. the class for an error or the project name of builds.
         /// </summary>
-        string Source { get; }
+        string? Source { get; }
 
         /// <summary>
         /// Title of the notification. E.g. Title = "1 build failed" and Content = "Definition A on Branch B"

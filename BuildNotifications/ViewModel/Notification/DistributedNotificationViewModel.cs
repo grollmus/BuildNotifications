@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using BuildNotifications.Resources.Icons;
 
 namespace BuildNotifications.ViewModel.Notification

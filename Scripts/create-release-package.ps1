@@ -60,7 +60,6 @@ $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild -Verbosity detailed
 
 Write-Output "Creating squirrel release"
-Get-ChildItem -Filter *.nupkg -Recurse | Write-Host
 $searchPattern = "*$versionToBuild*.nupkg"
 $nupkgFilePath = Get-ChildItem -Name $searchPattern -Recurse -Path $workingDirectory | Select-Object -First 1
 Write-Output $nupkgFilePath

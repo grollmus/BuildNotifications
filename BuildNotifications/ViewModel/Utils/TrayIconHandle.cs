@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BuildNotifications.Core.Text;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using NLog.Fluent;
 using Application = System.Windows.Application;
 

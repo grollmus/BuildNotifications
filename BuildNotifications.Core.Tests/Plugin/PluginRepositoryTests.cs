@@ -1,8 +1,8 @@
 ﻿using BuildNotifications.Core.Plugin;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
+using BuildNotifications.PluginInterfaces.Notification;
 using BuildNotifications.PluginInterfaces.SourceControl;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
 using NSubstitute;
 using Xunit;
 

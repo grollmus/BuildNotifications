@@ -2,8 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
-using MS.WindowsAPICodePack.Internal;
+using Microsoft.WindowsAPICodePack.PropertySystem;
+using Microsoft.WindowsAPICodePack.Win32Native.PropertySystem;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable InconsistentNaming
@@ -103,7 +103,7 @@ namespace ToastNotificationsPlugin
         UInt32 Resolve(IntPtr hwnd, uint fFlags);
 
         UInt32 SetPath(
-            [MarshalAs(UnmanagedType.LPWStr)] string pszFile);
+            [MarshalAs(UnmanagedType.LPWStr)] string? pszFile);
     }
 
     [ComImport]

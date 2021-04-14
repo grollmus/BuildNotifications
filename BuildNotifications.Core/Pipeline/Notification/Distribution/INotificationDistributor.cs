@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 
 namespace BuildNotifications.Core.Pipeline.Notification.Distribution
 {

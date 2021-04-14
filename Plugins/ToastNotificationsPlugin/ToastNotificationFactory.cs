@@ -2,7 +2,7 @@
 using System.IO;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace ToastNotificationsPlugin

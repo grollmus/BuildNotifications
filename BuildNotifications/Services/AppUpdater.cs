@@ -26,10 +26,13 @@ namespace BuildNotifications.Services
             _updateUrls = updateUrls;
         }
 
-        private async Task DownloadFullNupkgFile(string targetFilePath, string version)
+        private async Task<bool> DownloadFullNupkgFile(string targetFilePath, string version)
         {
             var fileName = Path.GetFileName(targetFilePath);
             var updateUrl = await GetUpdateUrl(version);
+            if (updateUrl == null)
+                return false;
+
             var url = _updateUrls.DownloadFileFromReleasePackage(updateUrl, fileName);
 
             if (File.Exists(targetFilePath))
@@ -40,11 +43,16 @@ namespace BuildNotifications.Services
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
+            return true;
         }
 
-        private async Task DownloadReleasesFile(string targetFilePath, string version)
+        private async Task<bool> DownloadReleasesFile(string targetFilePath, string version)
         {
-            var url = _updateUrls.DownloadFileFromReleasePackage(await GetUpdateUrl(version), "RELEASES");
+            var updateUrl = await GetUpdateUrl(version);
+            if (updateUrl == null)
+                return false;
+
+            var url = _updateUrls.DownloadFileFromReleasePackage(updateUrl, "RELEASES");
 
             if (File.Exists(targetFilePath))
                 File.Delete(targetFilePath);
@@ -54,6 +62,7 @@ namespace BuildNotifications.Services
 
             await using var fileStream = File.OpenWrite(targetFilePath);
             await stream.CopyToAsync(fileStream);
+            return true;
         }
 
         private bool FilterRelease(Release x)
@@ -93,9 +102,9 @@ namespace BuildNotifications.Services
             return fullPath;
         }
 
-        private Task<string> GetLatestUpdateUrl() => GetUpdateUrl(string.Empty);
+        private Task<string?> GetLatestUpdateUrl() => GetUpdateUrl(string.Empty);
 
-        private async Task<string> GetUpdateUrl(string version)
+        private async Task<string?> GetUpdateUrl(string version)
         {
             if (_updateUrlCache.TryGetValue(version, out var url))
                 return url!;
@@ -109,6 +118,9 @@ namespace BuildNotifications.Services
             response.EnsureSuccessStatusCode();
 
             var releases = JsonConvert.DeserializeObject<List<Release>>(await response.Content.ReadAsStringAsync());
+            if (releases == null)
+                return null;
+
             var release = releases
                 .Where(x => string.IsNullOrEmpty(version) || x.HtmlUrl.Contains(version, StringComparison.OrdinalIgnoreCase))
                 .Where(FilterRelease)
@@ -141,7 +153,12 @@ namespace BuildNotifications.Services
             if (!File.Exists(releasesFilePath))
             {
                 Log.Debug().Message("RELEASES file does not exist. Downloading.").Write();
-                await DownloadReleasesFile(releasesFilePath, version);
+                var success = await DownloadReleasesFile(releasesFilePath, version);
+                if (!success)
+                {
+                    Log.Debug().Message("Failed to download RELEASES file").Write();
+                    return;
+                }
             }
 
             var currentNupkgName = $"{AppName}-{version}-full.nupkg";
@@ -149,7 +166,12 @@ namespace BuildNotifications.Services
             if (!File.Exists(currentNupkgFilePath))
             {
                 Log.Debug().Message("Current full nupkg does not exist. Downloading").Write();
-                await DownloadFullNupkgFile(currentNupkgFilePath, version);
+                var success = await DownloadFullNupkgFile(currentNupkgFilePath, version);
+                if (!success)
+                {
+                    Log.Debug().Message("Failed to download nupkg file").Write();
+                    return;
+                }
             }
 
             Log.Info().Message("Packages folder is sanitized").Write();

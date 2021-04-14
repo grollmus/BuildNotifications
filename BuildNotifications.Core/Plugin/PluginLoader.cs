@@ -6,8 +6,8 @@ using System.Reflection;
 using BuildNotifications.Core.Utilities;
 using BuildNotifications.PluginInterfaces.Builds;
 using BuildNotifications.PluginInterfaces.Host;
+using BuildNotifications.PluginInterfaces.Notification;
 using BuildNotifications.PluginInterfaces.SourceControl;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
 using NLog.Fluent;
 
 namespace BuildNotifications.Core.Plugin
@@ -57,7 +57,7 @@ namespace BuildNotifications.Core.Plugin
 
         private IEnumerable<Assembly> LoadPluginAssemblies(string folder)
         {
-            Log.Info().Message($"Loading plugin assemblies in folder \"{folder}\".");
+            Log.Info().Message($"Loading plugin assemblies in folder \"{folder}\".").Write();
             var fullPath = Path.GetFullPath(folder);
             if (!Directory.Exists(fullPath))
             {
@@ -100,7 +100,7 @@ namespace BuildNotifications.Core.Plugin
                     }
                     catch (Exception ex)
                     {
-                        Log.Warn().Message($"Exception while trying to load {dll}").Exception(ex).Write();
+                        Log.Warn().Message($"Exception while trying to load {dll} ").Exception(ex).Write();
                         continue;
                     }
 

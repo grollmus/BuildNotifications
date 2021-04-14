@@ -6,7 +6,7 @@ using System.Windows.Media;
 using BuildNotifications.Core.Pipeline.Notification;
 using BuildNotifications.Core.Pipeline.Notification.Distribution;
 using BuildNotifications.PluginInterfaces.Builds;
-using BuildNotifications.PluginInterfacesLegacy.Notification;
+using BuildNotifications.PluginInterfaces.Notification;
 using BuildNotifications.Resources.BuildTree.Converter;
 using BuildNotifications.ViewModel.Utils;
 using BuildNotifications.Views.Notification;
