@@ -47,14 +47,12 @@ Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
 $legacyTargetFolder = "$workingDirectory\BuildNotifications\bin\Release\net5.0\win-x64\publish"
-Write-Output $legacyTargetFolder
 if( -Not (Test-Path -Path $legacyTargetFolder) )
 {
     New-Item -ItemType Directory -Force -Path $legacyTargetFolder
 }
 $legacyTarget = "$legacyTargetFolder\BuildNotifications.PluginInterfacesLegacy.dll"
 $legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.dll" -Recurse -Path $workingDirectory | Select-Object -First 1
-Write-Output $legacyDllPath
 Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
 
 Write-Output "Creating nuget package"
@@ -63,7 +61,9 @@ $nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output "Creating squirrel release"
-$arguments = "--releasify",$nupkgFileName,"--no-msi"
+$nupkgFilePath = Get-ChildItem -Name $nupkgFileName -Recurse -Path $workingDirectory | Select-Object -First 1
+Write-Output $nupkgFilePath
+$arguments = "--releasify",$nupkgFilePath,"--no-msi"
 $squirrelExe = "$workingDirectory\squirrel.exe"
 Start-Process -FilePath $squirrelExe -ArgumentList $arguments -PassThru | Wait-Process
 
