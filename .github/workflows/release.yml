@@ -51,15 +51,6 @@ jobs:
     - name: Create package
       run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }} -workingDirectory ${{ github.workspace }}
       
-    - uses: papeloto/action-zip@v1
-      with:
-        files: ToastNotificationsPlugin/
-        dest: test.zip
-
-    - uses: actions/upload-artifact@v2
-      with:
-        path: test.zip
-
     - name: Upload release
       uses: ncipollo/release-action@v1
       with:

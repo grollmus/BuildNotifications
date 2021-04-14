@@ -56,9 +56,7 @@ $legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.
 Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
 
 Write-Output "Creating nuget package"
-$nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
-#$nugetArgs = "pack",$nuspecFileName,"-Version",$versionToBuild,"-Verbosity detailed"
-#Start-Process -FilePath .\nuget.exe -ArgumentList $nugetArgs -PassThru | Wait-Process
+$nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild -Verbosity detailed
 
 Write-Output "Creating squirrel release"
