@@ -46,9 +46,16 @@ Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
+$legacyTargetFolder = "$workingDirectory\BuildNotifications\bin\Release\net5.0\win-x64\publish"
+Write-Output $legacyTargetFolder
+if( -Not (Test-Path -Path $legacyTargetFolder) )
+{
+    New-Item -ItemType Directory -Force -Path $targetFolder
+}
+$legacyTarget = "$legacyTargetFolder\BuildNotifications.PluginInterfacesLegacy.dll"
 $legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.dll" -Recurse -Path $workingDirectory | Select-Object -First 1
 Write-Output $legacyDllPath
-Move-Item -Path $legacyDllPath -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
 
 Write-Output "Creating nuget package"
 $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
