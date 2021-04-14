@@ -4,14 +4,11 @@
 		<OutputType>Library</OutputType>
 		<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-		<OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWindowsForms>true</UseWindowsForms>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>

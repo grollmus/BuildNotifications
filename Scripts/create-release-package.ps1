@@ -45,16 +45,6 @@ Expand-Archive $squirrelZipFile -Force -DestinationPath $workingDirectory
 Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
-Write-Output "Preparing files for nuget package"
-$legacyTargetFolder = "$workingDirectory\BuildNotifications\bin\Release\net5.0-windows\win-x64\publish"
-if( -Not (Test-Path -Path $legacyTargetFolder) )
-{
-    New-Item -ItemType Directory -Force -Path $legacyTargetFolder
-}
-$legacyTarget = "$legacyTargetFolder\BuildNotifications.PluginInterfacesLegacy.dll"
-$legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.dll" -Recurse -Path $workingDirectory | Select-Object -First 1
-Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
-
 Write-Output "Creating nuget package"
 $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild -Verbosity detailed

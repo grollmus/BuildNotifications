@@ -13,8 +13,8 @@
   </metadata>
   <files>
     <file src="..\Plugins\BuildNotifications.Plugin.Tfs\bin\Release\netcoreapp5.0\win-x64\publish\**" target="lib\net45\plugins\tfs" exclude="**\*.pdb;**\*.xml;**\BuildNotifications.PluginInterfaces.dll" />
+    <file src="..\Plugins\ToastNotificationsPlugin\bin\Release\net5.0-windows10.0.19041\win-x64\publish\**" target="lib\net45\plugins\toast" exclude="**\*.pdb;**\*.xml;**\BuildNotifications.PluginInterfaces.dll" />
     <file src="..\BuildNotifications\bin\Release\net5.0-windows\win-x64\publish\**" target="lib\net45" exclude="**\*.pdb" />
-    <file src="..\ToastNotificationsPlugin\output\**" target="lib\net45\plugins\toast" exclude="**\*.pdb" />
     <file src="LICENSE*" target="lib\net45" />
   </files>
 </package>
