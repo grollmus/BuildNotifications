@@ -46,7 +46,7 @@ Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
-$legacyDllPath = "$workingDirectory/ToastNotificationsPlugin\output\BuildNotifications.PluginInterfacesLegacy.dll"
+$legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.dll" -Recurse -Path $workingDirectory | Select-Object -First 1
 Write-Output $legacyDllPath
 Move-Item -Path $legacyDllPath -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
 
