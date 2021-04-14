@@ -1,10 +1,11 @@
 param( 
-    [String]$versionToBuild="0.0.0"
+    [String]$versionToBuild="0.0.0",
+    [String]$workingDirectory=""
 )
 
 $applicationName = "BuildNotifications"
 $repo = "grollmus/$applicationName"
-$targetFolder = "Releases"
+$targetFolder = $workingDirectory + "/Releases"
 
 $squirrelUrl = "https://github.com/Squirrel/Squirrel.Windows/releases/download/1.9.1/Squirrel.Windows-1.9.1.zip"
 $nugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
@@ -39,22 +40,22 @@ if($tag)
 Write-Output "Downloading squirrel"
 $squirrelZipFile = "Squirrel.zip"
 Invoke-WebRequest $squirrelUrl -Out $squirrelZipFile
-Expand-Archive $squirrelZipFile -Force -DestinationPath .
+Expand-Archive $squirrelZipFile -Force -DestinationPath $workingDirectory
 
 Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
-Move-Item -Path "ToastNotificationsPlugin\output\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+Move-Item -Path "$workingDirectory/ToastNotificationsPlugin\output\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
 
 Write-Output "Creating nuget package"
-$nuspecFileName = "Scripts/$applicationName.nuspec" 
+$nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
 $nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 .\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output "Creating squirrel release"
 $arguments = "--releasify",$nupkgFileName,"--no-msi"
-Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
+Start-Process -FilePath "$workingDirectory\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
 
 Get-Content -Path SquirrelSetup.log
 
