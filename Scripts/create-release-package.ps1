@@ -45,21 +45,21 @@ Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
-#Move-Item -Path "ToastNotificationsPlugin\bin\Release\net472\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+Move-Item -Path "bin\Release\net472\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
 
 Write-Output "Creating nuget package"
-#$nuspecFileName = "Scripts/$applicationName.nuspec" 
-#$nupkgFileName = "$applicationName.$versionToBuild.nupkg"
-#.\nuget.exe pack $nuspecFileName -Version $versionToBuild
+$nuspecFileName = "Scripts/$applicationName.nuspec" 
+$nupkgFileName = "$applicationName.$versionToBuild.nupkg"
+.\nuget.exe pack $nuspecFileName -Version $versionToBuild
 
 Write-Output "Creating squirrel release"
-#$arguments = "--releasify",$nupkgFileName,"--no-msi"
-#Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
+$arguments = "--releasify",$nupkgFileName,"--no-msi"
+Start-Process -FilePath ".\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
 
-#Get-Content -Path SquirrelSetup.log
+Get-Content -Path SquirrelSetup.log
 
 Write-Output "Cleaning up"
-#$latestFullPackageFileName = "$applicationName-$version-full.nupkg"
-#Remove-Item -Path "$targetFolder/$latestFullPackageFileName"
+$latestFullPackageFileName = "$applicationName-$version-full.nupkg"
+Remove-Item -Path "$targetFolder/$latestFullPackageFileName"
 
 Write-Output Done
