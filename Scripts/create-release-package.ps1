@@ -50,7 +50,7 @@ $legacyTargetFolder = "$workingDirectory\BuildNotifications\bin\Release\net5.0\w
 Write-Output $legacyTargetFolder
 if( -Not (Test-Path -Path $legacyTargetFolder) )
 {
-    New-Item -ItemType Directory -Force -Path $targetFolder
+    New-Item -ItemType Directory -Force -Path $legacyTargetFolder
 }
 $legacyTarget = "$legacyTargetFolder\BuildNotifications.PluginInterfacesLegacy.dll"
 $legacyDllPath = Get-ChildItem -Name "BuildNotifications.PluginInterfacesLegacy.dll" -Recurse -Path $workingDirectory | Select-Object -First 1
