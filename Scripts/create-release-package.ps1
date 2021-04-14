@@ -1,11 +1,11 @@
 param( 
     [String]$versionToBuild="0.0.0",
-    [String]$workingDirectory=""
+    [String]$workingDirectory="."
 )
 
 $applicationName = "BuildNotifications"
 $repo = "grollmus/$applicationName"
-$targetFolder = $workingDirectory + "/Releases"
+$targetFolder = "$workingDirectory/Releases"
 
 $squirrelUrl = "https://github.com/Squirrel/Squirrel.Windows/releases/download/1.9.1/Squirrel.Windows-1.9.1.zip"
 $nugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
@@ -46,7 +46,8 @@ Write-Output "Downloading nuget.exe"
 Invoke-WebRequest $nugetUrl -Out "nuget.exe"
 
 Write-Output "Preparing files for nuget package"
-Move-Item -Path "$workingDirectory/ToastNotificationsPlugin\output\BuildNotifications.PluginInterfacesLegacy.dll" -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
+$legacyDllPath = "$workingDirectory/ToastNotificationsPlugin\output\BuildNotifications.PluginInterfacesLegacy.dll" 
+Move-Item -Path $legacyDllPath -Destination "BuildNotifications\bin\Release\net5.0\win-x64\publish\BuildNotifications.PluginInterfacesLegacy.dll" -Force
 
 Write-Output "Creating nuget package"
 $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
@@ -55,12 +56,14 @@ $nupkgFileName = "$applicationName.$versionToBuild.nupkg"
 
 Write-Output "Creating squirrel release"
 $arguments = "--releasify",$nupkgFileName,"--no-msi"
-Start-Process -FilePath "$workingDirectory\squirrel.exe" -ArgumentList $arguments -PassThru | Wait-Process
+$squirrelExe = "$workingDirectory\squirrel.exe"
+Start-Process -FilePath $squirrelExe -ArgumentList $arguments -PassThru | Wait-Process
 
 Get-Content -Path SquirrelSetup.log
 
 Write-Output "Cleaning up"
 $latestFullPackageFileName = "$applicationName-$version-full.nupkg"
-Remove-Item -Path "$targetFolder/$latestFullPackageFileName"
+$latestFullPackageFilePath = "$targetFolder/$latestFullPackageFileName"
+Remove-Item -Path $latestFullPackageFilePath
 
 Write-Output Done
