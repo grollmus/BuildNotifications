@@ -58,7 +58,7 @@ Move-Item -Path $legacyDllPath -Destination $legacyTarget -Force
 Write-Output "Creating nuget package"
 $nuspecFileName = "$workingDirectory/Scripts/$applicationName.nuspec" 
 $nugetArgs = "pack",$nuspecFileName,"-Version",$versionToBuild,"-Verbosity detailed"
-Start-Process -FilePath .\nuget.exe -ArgumentList $nugetArgs | Wait-Process
+Start-Process -FilePath .\nuget.exe -ArgumentList $nugetArgs -PassThru | Wait-Process
 
 Write-Output "Creating squirrel release"
 Get-ChildItem -Filter *.nupkg -Recurse | Write-Host
