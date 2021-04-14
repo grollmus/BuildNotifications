@@ -46,11 +46,20 @@ jobs:
       run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
       
     - name: Build ToastNotificationsPlugin
-      run: msbuild -m ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
+      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release
       
     - name: Create package
       run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }}
       
+    - uses: papeloto/action-zip@v1
+      with:
+        files: ${{ github.workspace }}
+        dest: test.zip
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: test.zip
+
     - name: Upload release
       uses: ncipollo/release-action@v1
       with:
