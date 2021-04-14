@@ -61,6 +61,7 @@ $nugetArgs = "pack",$nuspecFileName,"-Version",$versionToBuild
 Start-Process -FilePath .\nuget.exe -ArgumentList $nugetArgs | Wait-Process
 
 Write-Output "Creating squirrel release"
+Get-ChildItem -Filter *.nupkg -Recurse | Write-Host
 $searchPattern = "*$versionToBuild*.nupkg"
 $nupkgFilePath = Get-ChildItem -Name $searchPattern -Recurse -Path $workingDirectory | Select-Object -First 1
 Write-Output $nupkgFilePath
