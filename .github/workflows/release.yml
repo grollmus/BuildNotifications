@@ -53,7 +53,7 @@ jobs:
       
     - uses: papeloto/action-zip@v1
       with:
-        files: ${{ github.workspace }}/
+        files: Plugins/ Releases/ ToastNotificationsPlugin/ Scripts/
         dest: test.zip
 
     - uses: actions/upload-artifact@v2
