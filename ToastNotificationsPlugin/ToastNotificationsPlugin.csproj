@@ -9,6 +9,7 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<RunCodeAnalysis>false</RunCodeAnalysis>
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeQuality.Analyzers">
