@@ -46,8 +46,11 @@ jobs:
       run: nuget restore ToastNotificationsPlugin\ToastNotificationsPlugin.csproj
       
     - name: Build ToastNotificationsPlugin
-      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release /p:OutputPath=ToastNotificationsPlugin/output
+      run: msbuild ToastNotificationsPlugin\ToastNotificationsPlugin.csproj /t:Build /p:Configuration=Release /p:OutputPath=${{ github.workspace }}/ToastNotificationsPlugin/output
       
+    - name: Debug output
+      run: echo "Workspace is ${{ github.workspace }}"
+
     - name: Create package
       run: Scripts/create-release-package.ps1 -versionToBuild ${{ steps.tagName.outputs.tag }}
       
