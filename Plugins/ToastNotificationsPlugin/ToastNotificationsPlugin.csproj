@@ -15,7 +15,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-			<Version>7.0.1</Version>
+			<Version>7.0.2</Version>
 		</PackageReference>
 		<PackageReference Include="SonarAnalyzer.CSharp">
 			<Version>8.22.0.31243</Version>
