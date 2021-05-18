@@ -23,7 +23,7 @@ jobs:
         dotnet-version: '5.0.x'
       
     - name: Download Coverage reporter
-      if: ${{ github.ref == 'refs/head/develop' }}
+      if: ${{ github.ref == 'refs/heads/develop' }}
       run: Invoke-WebRequest -Uri 'https://github.com/codacy/codacy-coverage-reporter/releases/download/11.2.2/codacy-coverage-reporter-assembly-11.2.2.jar' -UseBasicParsing -OutFile  ./codacy-test-reporter.jar
 
     - name: Build 
@@ -34,4 +34,4 @@ jobs:
     
     - name: Upload code coverage
       run: Scripts/upload-code-coverage.ps1 -token ${{ secrets.CODACY_PROJECT_TOKEN }}
-      if: ${{ github.ref == 'refs/head/develop' }}
+      if: ${{ github.ref == 'refs/heads/develop' }}
