@@ -20,7 +20,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.14" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.22.0.31243">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.23.0.32424">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
