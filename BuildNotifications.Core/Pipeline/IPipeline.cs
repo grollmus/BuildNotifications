@@ -39,7 +39,7 @@ namespace BuildNotifications.Core.Pipeline
         /// raise notifications.
         /// </summary>
         /// <param name="mode">Mode to use for update.</param>
-        Task Update(UpdateModes mode = UpdateModes.DeltaBuilds);
+        Task<bool> Update(UpdateModes mode = UpdateModes.DeltaBuilds);
 
         /// <summary>
         /// Gets a snapshot of the currently cached builds.

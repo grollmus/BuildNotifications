@@ -100,9 +100,10 @@ namespace BuildNotifications.Core.Pipeline
             }
         }
 
-        private async Task FetchBranches()
+        private async Task<bool> FetchBranches()
         {
             Log.Debug().Message("Fetching branches").Write();
+            var success = true;
             foreach (var project in _projectList)
             {
                 Log.Debug().Message($"Fetching branches for project \"{project.Name}\"").Write();
@@ -132,15 +133,18 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     ReportError("ErrorFetchingBranches", project.Name, ex);
+                    success = false;
                 }
             }
 
             Log.Debug().Message("Done fetching branches").Write();
+            return success;
         }
 
-        private async Task FetchBuilds(UpdateModes updateMode)
+        private async Task<bool> FetchBuilds(UpdateModes updateMode)
         {
             Log.Debug().Message("Fetching builds").Write();
+            var success = true;
             foreach (var project in _projectList)
             {
                 try
@@ -181,16 +185,19 @@ namespace BuildNotifications.Core.Pipeline
                 {
                     var projectName = project.Name;
                     ReportError("ErrorFetchingBuilds", projectName, ex);
+                    success = false;
                 }
             }
 
             Log.Debug().Message("Done fetching builds").Write();
             LastUpdate = DateTime.UtcNow;
+            return success;
         }
 
-        private async Task FetchDefinitions()
+        private async Task<bool> FetchDefinitions()
         {
             Log.Debug().Message("Fetching definitions").Write();
+            var success = true;
             foreach (var project in _projectList)
             {
                 Log.Debug().Message($"Fetching definitions for project \"{project.Name}\"").Write();
@@ -219,10 +226,12 @@ namespace BuildNotifications.Core.Pipeline
                 catch (Exception ex)
                 {
                     ReportError("ErrorFetchingDefinitions", project.Name, ex);
+                    success = false;
                 }
             }
 
             Log.Debug().Message("Done fetching definitions").Write();
+            return success;
         }
 
         private void ReportError(string messageTextId, params object[] parameter)
@@ -294,23 +303,23 @@ namespace BuildNotifications.Core.Pipeline
             Log.Debug().Message($"Applied search \"{specificSearch}\".").Write();
         }
 
-        public async Task Update(UpdateModes mode = UpdateModes.DeltaBuilds)
+        public async Task<bool> Update(UpdateModes mode = UpdateModes.DeltaBuilds)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             Log.Info().Message("Starting update.").Write();
-            var treeResult = await Task.Run(async () =>
+            var (buildTree, list, updateSuccess) = await Task.Run(async () =>
             {
                 var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
 
                 // Fetch branches first so they are known when fetching builds
                 var branchTask = FetchBranches();
-                await branchTask;
+                var success = await branchTask;
 
                 var definitionsTask = FetchDefinitions();
                 var buildsTask = FetchBuilds(mode);
 
-                await Task.WhenAll(definitionsTask, buildsTask);
+                success = success && (await Task.WhenAll(definitionsTask, buildsTask)).All(x => x);
 
                 Log.Debug().Message("Everything is fetched.").Write();
 
@@ -329,15 +338,17 @@ namespace BuildNotifications.Core.Pipeline
                     : new BuildTreeBuildsDelta(currentBuildNodes, previousBuildStatus, _configuration.PartialSucceededTreatmentMode);
 
                 var notifications = _notificationFactory.ProduceNotifications(delta).ToList();
-                return (BuildTree: tree, Notifications: notifications);
+                return (BuildTree: tree, Notifications: notifications, UpdateSuccess: success);
             });
 
             Log.Debug().Message("Calling notify.").Write();
-            _pipelineNotifier.Notify(treeResult.BuildTree, treeResult.Notifications);
+            _pipelineNotifier.Notify(buildTree, list);
 
-            _oldTree = treeResult.BuildTree;
+            _oldTree = buildTree;
             stopWatch.Stop();
             Log.Info().Message($"Update done in {stopWatch.ElapsedMilliseconds} ms.").Write();
+
+            return updateSuccess;
         }
 
         internal void ReplaceCaches(IPipelineCache<IBuild> buildCache, IPipelineCache<IBranch> branchCache, IPipelineCache<IBuildDefinition> definitionCache)
