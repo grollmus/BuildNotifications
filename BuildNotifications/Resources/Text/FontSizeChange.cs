@@ -23,7 +23,7 @@ namespace BuildNotifications.Resources.Text
 
         protected override void Invoke(object parameter)
         {
-            if (!(TargetElement is TextBlock textBlock))
+            if (TargetElement is not TextBlock textBlock)
                 return;
 
             var globalTweenHandler = App.GlobalTweenHandler;

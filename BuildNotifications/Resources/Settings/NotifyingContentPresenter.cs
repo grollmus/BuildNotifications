@@ -16,7 +16,7 @@ namespace BuildNotifications.Resources.Settings
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is NotifyingContentPresenter notifyingContent))
+            if (d is not NotifyingContentPresenter notifyingContent)
                 return;
             notifyingContent.RaiseContentChanged();
         }

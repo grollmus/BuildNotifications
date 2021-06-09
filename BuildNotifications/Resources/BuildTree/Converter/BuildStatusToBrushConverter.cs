@@ -55,7 +55,7 @@ namespace BuildNotifications.Resources.BuildTree.Converter
             if (_cache.TryGetValue(key, out var cachedBrush))
                 return cachedBrush!;
 
-            if (!(Application.Current.FindResource(key) is SolidColorBrush resolvedBrush))
+            if (Application.Current.FindResource(key) is not SolidColorBrush resolvedBrush)
             {
                 Log.Debug().Message($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.").Write();
                 return new SolidColorBrush(Colors.White);

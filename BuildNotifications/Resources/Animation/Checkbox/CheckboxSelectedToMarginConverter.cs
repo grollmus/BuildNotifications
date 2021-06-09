@@ -21,7 +21,7 @@ namespace BuildNotifications.Resources.Animation.Checkbox
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is bool asBool))
+            if (value is not bool asBool)
                 return new Thickness(0);
 
             return asBool ? CheckedMargin : UncheckedMargin;

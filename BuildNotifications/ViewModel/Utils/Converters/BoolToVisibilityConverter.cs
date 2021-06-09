@@ -18,7 +18,7 @@ namespace BuildNotifications.ViewModel.Utils.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is bool asBool))
+            if (value is not bool asBool)
                 return Visibility.Visible;
 
             if (_isInverted)

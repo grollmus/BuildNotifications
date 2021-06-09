@@ -19,7 +19,7 @@ namespace BuildNotifications.Resources.BuildTree
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            if (!(container is FrameworkElement element))
+            if (container is not FrameworkElement element)
                 return base.SelectTemplate(item, container);
 
             var buildNode = item as BuildTreeNodeViewModel;

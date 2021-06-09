@@ -15,7 +15,7 @@ namespace BuildNotifications.Resources.GroupDefinitionSelection
 
         protected override void Invoke(object parameter)
         {
-            if (!(AssociatedObject.Content is UIElement buttonContent))
+            if (AssociatedObject.Content is not UIElement buttonContent)
                 return;
 
             var targetColorKey = DoHide ? "Background3" : "Foreground1";

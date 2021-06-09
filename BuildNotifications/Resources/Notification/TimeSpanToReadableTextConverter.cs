@@ -16,7 +16,7 @@ namespace BuildNotifications.Resources.Notification
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is TimeSpan timeSpan))
+            if (value is not TimeSpan timeSpan)
                 return "";
 
             return _converter.Convert(timeSpan);

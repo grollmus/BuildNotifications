@@ -13,7 +13,7 @@ namespace BuildNotifications.Resources.Global
 
         private SolidColorBrush GetBrush(string key)
         {
-            if (!(Application.Current.FindResource(key) is SolidColorBrush findResource))
+            if (Application.Current.FindResource(key) is not SolidColorBrush findResource)
             {
                 Log.Debug().Message($"Resource {key} was not found. Stacktrace: \r\n{Environment.StackTrace}.").Write();
                 return new SolidColorBrush(Colors.White);

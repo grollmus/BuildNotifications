@@ -75,7 +75,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
         {
             foreach (var tfsBuild in builds)
             {
-                if (!(tfsBuild.Links is TfsLinks links))
+                if (tfsBuild.Links is not TfsLinks links)
                     continue;
 
                 var definition = _knownDefinitions.FirstOrDefault(d => d.Id == tfsBuild.Definition.Id);
@@ -129,7 +129,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
             var project = await GetProject();
             var buildClient = await _connection.GetClientAsync<BuildHttpClient>();
 
-            if (!(definition is TfsBuildDefinition tfsDefinition))
+            if (definition is not TfsBuildDefinition tfsDefinition)
             {
                 Debug.Fail("Incompatible build definition given");
                 yield break;

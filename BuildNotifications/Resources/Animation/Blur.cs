@@ -21,7 +21,7 @@ namespace BuildNotifications.Resources.Animation
         {
             var globalTweenHandler = App.GlobalTweenHandler;
 
-            if (!(AssociatedObject.Effect is BlurEffect blurEffect))
+            if (AssociatedObject.Effect is not BlurEffect blurEffect)
             {
                 blurEffect = new BlurEffect();
                 AssociatedObject.Effect = blurEffect;

@@ -189,7 +189,7 @@ namespace BuildNotifications.Resources.Window
 
         private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CustomWindow customWindow))
+            if (d is not CustomWindow customWindow)
                 return;
 
             switch (e.Property.Name)

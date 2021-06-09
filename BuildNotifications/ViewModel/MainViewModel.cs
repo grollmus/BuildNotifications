@@ -241,7 +241,7 @@ namespace BuildNotifications.ViewModel
 
         private void InitialSetup_CloseRequested(object? sender, InitialSetupEventArgs e)
         {
-            if (!(sender is InitialSetupOverlayViewModel vm))
+            if (sender is not InitialSetupOverlayViewModel vm)
                 return;
 
             vm.CloseRequested -= InitialSetup_CloseRequested;

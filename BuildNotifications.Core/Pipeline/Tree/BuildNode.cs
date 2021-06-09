@@ -30,7 +30,7 @@ namespace BuildNotifications.Core.Pipeline.Tree
 
         public override void UpdateWithValuesFrom(IBuildTreeNode nodeToInsert)
         {
-            if (!(nodeToInsert is IBuildNode otherBuild))
+            if (nodeToInsert is not IBuildNode otherBuild)
                 return;
 
             UpdateProperties(otherBuild.Build);

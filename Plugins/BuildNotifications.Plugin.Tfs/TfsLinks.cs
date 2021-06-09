@@ -30,7 +30,7 @@ namespace BuildNotifications.Plugin.Tfs
 
         public void UpdateWith(IBranch branch)
         {
-            if (!(branch is TfsBranch tfsBranch))
+            if (branch is not TfsBranch tfsBranch)
                 return;
 
             BranchWeb = tfsBranch.WebUrl;

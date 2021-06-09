@@ -97,7 +97,7 @@ namespace BuildNotifications.Core.Pipeline
 
             await foreach (var branch in _branchProvider.FetchExistingBranches())
             {
-                if (Config.PullRequestDisplay != PullRequestDisplayMode.None || !(branch is IPullRequest))
+                if (Config.PullRequestDisplay != PullRequestDisplayMode.None || branch is not IPullRequest)
                     yield return branch;
             }
         }
