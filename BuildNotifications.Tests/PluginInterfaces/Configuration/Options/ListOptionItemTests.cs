@@ -7,7 +7,8 @@ namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
     {
         private class TestListOptionItem : ListOptionItem<int>
         {
-            public TestListOptionItem(int value = 0, string displayName = null, bool localize = false) : base(value, displayName ?? string.Empty, localize)
+            public TestListOptionItem(int value = 0, string displayName = null, bool localize = false)
+                : base(value, displayName ?? string.Empty, localize)
             {
             }
         }

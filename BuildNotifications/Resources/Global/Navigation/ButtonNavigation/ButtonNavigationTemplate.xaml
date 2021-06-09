@@ -6,7 +6,6 @@
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
                     xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:utils="clr-namespace:BuildNotifications.ViewModel.Utils"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime"
                     xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
                     mc:Ignorable="d">

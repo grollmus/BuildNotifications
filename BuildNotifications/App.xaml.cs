@@ -34,7 +34,7 @@ namespace BuildNotifications
                 .Targets
                 .RegisterDefinition("GlobalErrorLog", typeof(GlobalErrorLogTarget));
 
-            AppDomain.CurrentDomain.UnhandledException += (_, args) => { Logger.Log(LogLevel.Fatal, args.ExceptionObject as Exception, "Global unhandled exception occurred."); };
+            AppDomain.CurrentDomain.UnhandledException += (_, args) => { Logger.Log(LogLevel.Fatal, args.ExceptionObject as Exception, "Global unhandled exception occurred"); };
         }
 
         /// <summary>
