@@ -585,7 +585,7 @@ namespace BuildNotifications.ViewModel
 			}
 		}
 
-		private static int UpdateInterval()
+		private int UpdateInterval()
 		{
 #if DEBUG
 			const int updateInterval = 5;
