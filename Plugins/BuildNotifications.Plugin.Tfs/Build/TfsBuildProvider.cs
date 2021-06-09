@@ -98,7 +98,7 @@ namespace BuildNotifications.Plugin.Tfs.Build
                 var build = buildList[i];
                 var timeLine = timeLines[i];
 
-                if (timeLine == null || build == null)
+                if (timeLine == null)
                     continue;
 
                 var progress = CalculateProgress(timeLine);

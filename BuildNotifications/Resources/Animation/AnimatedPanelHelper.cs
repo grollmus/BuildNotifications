@@ -75,9 +75,6 @@ namespace BuildNotifications.Resources.Animation
             var positions = new Dictionary<UIElement, Point>();
             foreach (var child in panel.Children.Enumerate())
             {
-                if (child == null)
-                    continue;
-
                 var oldPos = child.TranslatePoint(new Point(0, 0), panel);
                 positions.Add(child, oldPos);
             }

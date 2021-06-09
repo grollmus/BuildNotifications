@@ -15,8 +15,6 @@ namespace BuildNotifications.Core.Protocol
             {
                 Log.Info().Message($"Registering URI scheme \"{UriScheme}\".").Write();
                 using var key = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Classes\\" + UriScheme);
-                if (key == null)
-                    return;
 
                 var exePath = Process.GetCurrentProcess().MainModule?.FileName;
 
@@ -25,11 +23,11 @@ namespace BuildNotifications.Core.Protocol
 
                 using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
                 {
-                    defaultIcon?.SetValue("", exePath + ",1");
+                    defaultIcon.SetValue("", exePath + ",1");
                 }
 
                 using var commandKey = key.CreateSubKey(@"shell\open\command");
-                commandKey?.SetValue("", "\"" + exePath + "\" \"%1\"");
+                commandKey.SetValue("", "\"" + exePath + "\" \"%1\"");
             }
             catch (Exception e)
             {
