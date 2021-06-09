@@ -21,7 +21,7 @@
         Build,
 
         /// <summary>
-        /// Notification regarding mutliple builds
+        /// Notification regarding multiple builds
         /// </summary>
         Builds,
 

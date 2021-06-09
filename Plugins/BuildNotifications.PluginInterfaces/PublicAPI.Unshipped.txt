@@ -1,4 +1,5 @@
-﻿BuildNotifications.PluginInterfaces.Builds.BuildReason
+﻿#nullable enable
+BuildNotifications.PluginInterfaces.Builds.BuildReason
 BuildNotifications.PluginInterfaces.Builds.BuildReason.CheckedIn = 1 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
 BuildNotifications.PluginInterfaces.Builds.BuildReason.Manual = 4 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
 BuildNotifications.PluginInterfaces.Builds.BuildReason.Other = 5 -> BuildNotifications.PluginInterfaces.Builds.BuildReason
@@ -183,6 +184,37 @@ BuildNotifications.PluginInterfaces.IUser
 BuildNotifications.PluginInterfaces.IUser.DisplayName.get -> string!
 BuildNotifications.PluginInterfaces.IUser.Id.get -> string!
 BuildNotifications.PluginInterfaces.IUser.UniqueName.get -> string!
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType.Cancel = 2 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType.Error = 0 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType.None = 3 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType.Success = 1 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.Branch = 0 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.Build = 2 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.Builds = 3 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.Definition = 1 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.DefinitionAndBranch = 5 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.General = 6 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType.GeneralError = 4 -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.AppIconUrl.get -> string?
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.BasedOnNotification.get -> System.Guid?
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.BasedOnNotification.set -> void
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.ColorCode.get -> uint
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.Content.get -> string!
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.ContentImageUrl.get -> string?
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.FeedbackArguments.get -> string!
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.IssueSource.get -> string!
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.NotificationErrorType.get -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationErrorType
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.NotificationType.get -> BuildNotifications.PluginInterfaces.Notification.DistributedNotificationType
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.Source.get -> string?
+BuildNotifications.PluginInterfaces.Notification.IDistributedNotification.Title.get -> string!
+BuildNotifications.PluginInterfaces.Notification.INotificationProcessor
+BuildNotifications.PluginInterfaces.Notification.INotificationProcessor.Clear(BuildNotifications.PluginInterfaces.Notification.IDistributedNotification! notification) -> void
+BuildNotifications.PluginInterfaces.Notification.INotificationProcessor.Initialize() -> void
+BuildNotifications.PluginInterfaces.Notification.INotificationProcessor.Process(BuildNotifications.PluginInterfaces.Notification.IDistributedNotification! notification) -> void
+BuildNotifications.PluginInterfaces.Notification.INotificationProcessor.Shutdown() -> void
 BuildNotifications.PluginInterfaces.PasswordString
 BuildNotifications.PluginInterfaces.PasswordString.Encrypted() -> string!
 BuildNotifications.PluginInterfaces.PasswordString.PasswordString(string! encrypted = "") -> void
