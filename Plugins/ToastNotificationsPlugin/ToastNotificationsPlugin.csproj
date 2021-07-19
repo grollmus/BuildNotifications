@@ -22,7 +22,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.3.0" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.5.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 	</ItemGroup>
 	<ItemGroup>
