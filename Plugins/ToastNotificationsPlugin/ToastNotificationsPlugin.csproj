@@ -10,6 +10,8 @@
 		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <UseWindowsForms>true</UseWindowsForms>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
