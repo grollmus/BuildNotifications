@@ -24,7 +24,7 @@ namespace BuildNotifications
             ViewModel.RestoreWindowStateFor(this);
         }
 
-        private void OnClosing(object sender, CancelEventArgs e)
+        private void OnClosing(object? sender, CancelEventArgs e)
         {
             ViewModel.SaveWindowStateOf(this);
             Log.Info().Message("Hiding window.").Write();
