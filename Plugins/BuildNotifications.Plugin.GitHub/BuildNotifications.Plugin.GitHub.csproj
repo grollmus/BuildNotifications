@@ -15,7 +15,7 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Octokit" Version="0.50.0" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.30.0.37606">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.32.0.39516">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
