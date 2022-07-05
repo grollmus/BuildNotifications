@@ -14,10 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       
-    - name: Install .NET 5.0
-      uses: actions/setup-dotnet@v1
+    - name: Install .NET 6.0
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
 
     - name: Extract version from tag name
       uses: olegtarasov/get-tag@v2.1
