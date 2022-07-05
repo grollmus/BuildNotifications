@@ -92,7 +92,7 @@ namespace BuildNotifications.Core.Pipeline.Tree.Search.Criteria
             }
         }
 
-        private class SuggestionTupleEqualByDateTime : EqualityComparer<(DateTime dateTime, string suggestion)>
+        private sealed class SuggestionTupleEqualByDateTime : EqualityComparer<(DateTime dateTime, string suggestion)>
         {
             public override bool Equals((DateTime dateTime, string suggestion) x, (DateTime dateTime, string suggestion) y)
             {

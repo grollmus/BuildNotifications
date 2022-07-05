@@ -500,15 +500,15 @@ namespace BuildNotifications.ViewModel
 				var result = await updater.CheckForUpdates();
 				if (result?.ReleasesToApply != null)
 				{
-					if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))
+					if (!SemVersion.TryParse(result.CurrentVersion, SemVersionStyles.Any, out var currentVersion))
 						currentVersion = new SemVersion(0);
 
-					var versions = result.ReleasesToApply.Select(r => SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0));
+					var versions = result.ReleasesToApply.Select(r => SemVersion.TryParse(r.Version, SemVersionStyles.Any, out var version) ? version : new SemVersion(0));
 					if (!includePreReleases)
 						versions = versions.WhereNotNull().Where(v => string.IsNullOrEmpty(v.Prerelease));
 
 					var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
-					if (newestVersion != null && newestVersion > currentVersion)
+					if (newestVersion != null && newestVersion.ComparePrecedenceTo(currentVersion) > 0)
 					{
 						Log.Info().Message($"Updating to version {result.FutureVersion}").Write();
 						await updater.PerformUpdate();

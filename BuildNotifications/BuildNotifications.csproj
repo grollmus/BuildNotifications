@@ -8,6 +8,7 @@
     <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
 	  <RunCodeAnalysis>false</RunCodeAnalysis>
 	  <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    
   </PropertyGroup>
 
   <PropertyGroup>
@@ -109,12 +110,12 @@
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.12" />
-    <PackageReference Include="semver" Version="2.0.6" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.30.0.37606">
+    <PackageReference Include="semver" Version="2.2.0" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.Windows.Forms" Version="4.0.0">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>

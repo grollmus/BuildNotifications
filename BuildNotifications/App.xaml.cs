@@ -146,6 +146,6 @@ namespace BuildNotifications
         }
 
         private static TimeSpan _lastUpdate;
-        public static readonly TweenHandler GlobalTweenHandler;
+        public static TweenHandler GlobalTweenHandler { get; }
     }
 }

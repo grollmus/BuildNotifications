@@ -187,7 +187,7 @@ namespace BuildNotifications.Core.Pipeline
         private readonly List<IBuildProvider> _buildProviders;
         private readonly ListBuildFilter _buildFilter;
 
-        private class NullBranch : IBranch
+        private sealed class NullBranch : IBranch
         {
             public NullBranch(string fullName)
             {

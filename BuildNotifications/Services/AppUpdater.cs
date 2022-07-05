@@ -272,7 +272,7 @@ namespace BuildNotifications.Services
         private const string AppName = "BuildNotifications";
 
         [DataContract]
-        private class Release
+        private sealed class Release
         {
             public Release()
             {

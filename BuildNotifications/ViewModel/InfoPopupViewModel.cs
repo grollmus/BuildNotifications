@@ -36,7 +36,7 @@ namespace BuildNotifications.ViewModel
             if (result?.ReleasesToApply == null)
                 return false;
 
-            if (!SemVersion.TryParse(result.CurrentVersion, out var currentVersion))
+            if (!SemVersion.TryParse(result.CurrentVersion, SemVersionStyles.Any, out var currentVersion))
                 currentVersion = new SemVersion(0);
 
             var versions = result.ReleasesToApply.Select(TryParseSemVersion);
@@ -44,7 +44,7 @@ namespace BuildNotifications.ViewModel
                 versions = versions.Where(v => string.IsNullOrEmpty(v.Prerelease));
 
             var newestVersion = versions.OrderByDescending(x => x).FirstOrDefault();
-            if (newestVersion != null && newestVersion > currentVersion)
+            if (newestVersion != null && newestVersion.ComparePrecedenceTo(currentVersion) > 0)
                 return true;
 
             return false;
@@ -56,7 +56,7 @@ namespace BuildNotifications.ViewModel
             Url.GoTo(url);
         }
 
-        private static SemVersion TryParseSemVersion(ReleaseToApply r) => SemVersion.TryParse(r.Version, out var version) ? version : new SemVersion(0);
+        private static SemVersion TryParseSemVersion(ReleaseToApply r) => SemVersion.TryParse(r.Version, SemVersionStyles.Any, out var version) ? version : new SemVersion(0);
 
         private async Task UpdateAppAsync()
         {

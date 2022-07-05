@@ -17,14 +17,14 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-			<Version>7.1.1</Version>
+			<Version>7.1.2</Version>
 		</PackageReference>
 		<PackageReference Include="SonarAnalyzer.CSharp">
-			<Version>8.30.0.37606</Version>
+			<Version>8.41.0.50478</Version>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.10.2" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.11.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 	</ItemGroup>
 	<ItemGroup>

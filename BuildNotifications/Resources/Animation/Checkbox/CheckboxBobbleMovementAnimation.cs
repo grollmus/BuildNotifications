@@ -29,7 +29,7 @@ namespace BuildNotifications.Resources.Animation.Checkbox
             globalTweenHandler.Add(tweens.ToSequenceWithTarget(TargetElement));
         }
 
-        private class DoubleWrapper
+        private sealed class DoubleWrapper
         {
             public double Value { get; set; }
         }
