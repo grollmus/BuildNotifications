@@ -225,10 +225,10 @@ internal class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
 
     private void Initialize()
     {
+        RegisterUriProtocol();
         SetupViewModel();
         LoadProjects();
         ShowOverlay();
-        RegisterUriProtocol();
         HandleExistingDistributedNotificationsOnNextFrame().IgnoreResult();
         UpdateApp().IgnoreResult();
 
