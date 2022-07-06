@@ -191,7 +191,9 @@ public class NotificationCenterViewModel : BaseViewModel, INotifier
         OnPropertyChanged(nameof(NoNotifications));
         OnPropertyChanged(nameof(ClearButtonVisible));
 
-        foreach (var notification in asList.Where(ShouldPublish))
+        var notificationsToPublish = asList.Where(ShouldPublish).ToList();
+        Log.Debug().Message("Publishing {Count} notifications to distributors", notificationsToPublish.Count).Write();
+        foreach (var notification in notificationsToPublish)
         {
             NotificationDistributor.Distribute(notification);
         }

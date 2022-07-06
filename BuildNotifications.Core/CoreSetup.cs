@@ -52,9 +52,12 @@ public class CoreSetup
 
         if (notificationReceiver != null)
         {
+            Log.Debug().Message("Using notificationReceiver").Write();
             NotificationReceiver = notificationReceiver;
             NotificationReceiver.DistributedNotificationReceived += (_, args) => DistributedNotificationReceived?.Invoke(this, args);
         }
+        else
+            Log.Info().Message("No notificationReceiver available").Write();
     }
 
     public IConfiguration Configuration => ConfigurationService.Current;

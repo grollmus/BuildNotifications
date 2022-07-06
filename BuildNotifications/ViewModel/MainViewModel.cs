@@ -612,6 +612,7 @@ internal class MainViewModel : BaseViewModel, IDisposable, IBlurrableViewModel
 
         BuildTree.SortingDefinition = GroupAndSortDefinitionsSelection.BuildTreeSortingDefinition;
 
+        Log.Debug().Message("Showing {Count} notifications after tree update", e.Notifications.Count()).Write();
         ShowNotifications(e.Notifications);
     }
 

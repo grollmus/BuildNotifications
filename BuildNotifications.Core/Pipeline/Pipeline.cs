@@ -348,7 +348,7 @@ internal class Pipeline : IPipeline
             return (BuildTree: tree, Notifications: notifications, UpdateSuccess: success);
         });
 
-        Log.Debug().Message("Calling notify.").Write();
+        Log.Debug().Message("Calling notify. Notification count: {Count}", list.Count).Write();
         _pipelineNotifier.Notify(buildTree, list);
 
         _oldTree = buildTree;
