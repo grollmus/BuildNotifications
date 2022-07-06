@@ -58,7 +58,7 @@
 
         <TextBlock />
 
-        <TextBlock Text="Copyright © 2019-2020" HorizontalAlignment="Center" />
+        <TextBlock Text="Copyright © 2019-2022" HorizontalAlignment="Center" />
         <text:ClickableTextBlock Text="Grollmus München GmbH" Command="{Binding OpenUrlCommand}"
                                  HorizontalAlignment="Center"
                                  CommandParameter="https://grollmus.de" />
