@@ -8,49 +8,48 @@ using BuildNotifications.PluginInterfaces.Host;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Identity;
 
-namespace BuildNotifications.Plugin.Tfs
+namespace BuildNotifications.Plugin.Tfs;
+
+public abstract class TfsPlugin : IPlugin
 {
-    public abstract class TfsPlugin : IPlugin
+    protected TfsPlugin()
     {
-        protected TfsPlugin()
-        {
-            TypeDescriptor.AddAttributes(typeof(IdentityDescriptor), new TypeConverterAttribute(typeof(IdentityDescriptorConverter).FullName ?? nameof(IdentityDescriptorConverter)));
-            TypeDescriptor.AddAttributes(typeof(SubjectDescriptor), new TypeConverterAttribute(typeof(SubjectDescriptorConverter).FullName ?? nameof(SubjectDescriptorConverter)));
+        TypeDescriptor.AddAttributes(typeof(IdentityDescriptor), new TypeConverterAttribute(typeof(IdentityDescriptorConverter).FullName ?? nameof(IdentityDescriptorConverter)));
+        TypeDescriptor.AddAttributes(typeof(SubjectDescriptor), new TypeConverterAttribute(typeof(SubjectDescriptorConverter).FullName ?? nameof(SubjectDescriptorConverter)));
 
-            ConnectionPool = new TfsConnectionPool();
-        }
-
-        protected IPluginHost? Host { get; private set; }
-
-        private protected TfsConfigurationRawData? ParseConfig(string serialized)
-        {
-            var config = new TfsConfiguration(Host!.UiDispatcher);
-            if (!config.Deserialize(serialized))
-                return null;
-
-            return config.AsRawData();
-        }
-
-        protected async Task<ConnectionTestResult> TestConnection(string serialized)
-        {
-            var config = ParseConfig(serialized);
-
-            if (config == null)
-                return ConnectionTestResult.Failure(string.Empty);
-
-            return await ConnectionPool.TestConnection(config);
-        }
-
-        public abstract IPluginConfiguration ConstructNewConfiguration();
-        public string DisplayName => "Azure DevOps Server";
-
-        public string IconSvgPath => "F1 M64,64z M0,0z M48.2,14.3L48.15,14.3 28.45,0 28.65,6.7 6.3,15.05 0,23.1 0,41.55 7.6,43.9 7.6,21.85 48.2,14.3 M64,11.2L48.25,14.3 48.25,41.7 48.25,49.05 7.65,43.9 24.35,63.9 24.15,55.7 48.05,64 64,50.5 64,11.2z";
-
-        public void OnPluginLoaded(IPluginHost host)
-        {
-            Host = host;
-        }
-
-        private protected readonly TfsConnectionPool ConnectionPool;
+        ConnectionPool = new TfsConnectionPool();
     }
+
+    protected IPluginHost? Host { get; private set; }
+
+    protected async Task<ConnectionTestResult> TestConnection(string serialized)
+    {
+        var config = ParseConfig(serialized);
+
+        if (config == null)
+            return ConnectionTestResult.Failure(string.Empty);
+
+        return await ConnectionPool.TestConnection(config);
+    }
+
+    private protected TfsConfigurationRawData? ParseConfig(string serialized)
+    {
+        var config = new TfsConfiguration(Host!.UiDispatcher);
+        if (!config.Deserialize(serialized))
+            return null;
+
+        return config.AsRawData();
+    }
+
+    public abstract IPluginConfiguration ConstructNewConfiguration();
+    public string DisplayName => "Azure DevOps Server";
+
+    public string IconSvgPath => "F1 M64,64z M0,0z M48.2,14.3L48.15,14.3 28.45,0 28.65,6.7 6.3,15.05 0,23.1 0,41.55 7.6,43.9 7.6,21.85 48.2,14.3 M64,11.2L48.25,14.3 48.25,41.7 48.25,49.05 7.65,43.9 24.35,63.9 24.15,55.7 48.05,64 64,50.5 64,11.2z";
+
+    public void OnPluginLoaded(IPluginHost host)
+    {
+        Host = host;
+    }
+
+    private protected readonly TfsConnectionPool ConnectionPool;
 }

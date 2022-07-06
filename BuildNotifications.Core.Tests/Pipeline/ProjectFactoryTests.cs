@@ -7,114 +7,113 @@ using BuildNotifications.PluginInterfaces.SourceControl;
 using NSubstitute;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.Pipeline
+namespace BuildNotifications.Core.Tests.Pipeline;
+
+public class ProjectFactoryTests
 {
-    public class ProjectFactoryTests
+    [Fact]
+    public void ConstructShouldReturnNullWhenBuildConnectionDoesNotExist()
     {
-        [Fact]
-        public void ConstructShouldReturnNullWhenBuildConnectionDoesNotExist()
+        // Arrange
+        var pluginRepository = Substitute.For<IPluginRepository>();
+        var configuration = Substitute.For<IConfiguration>();
+
+        var sut = new ProjectFactory(pluginRepository, configuration);
+
+        var project = Substitute.For<IProjectConfiguration>();
+        project.BuildConnectionNames.Returns(new List<string> { "connection" });
+
+        // Act
+        var actual = sut.Construct(project);
+
+        // Assert
+        Assert.Null(actual);
+    }
+
+    [Fact]
+    public void ConstructShouldReturnNullWhenBuildPluginDoesNotExist()
+    {
+        // Arrange
+        var pluginRepository = Substitute.For<IPluginRepository>();
+        pluginRepository.FindBuildPlugin("non.existing").Returns((IBuildPlugin?)null);
+
+        var configuration = Substitute.For<IConfiguration>();
+        configuration.Connections.Returns(new List<ConnectionData>
         {
-            // Arrange
-            var pluginRepository = Substitute.For<IPluginRepository>();
-            var configuration = Substitute.For<IConfiguration>();
-
-            var sut = new ProjectFactory(pluginRepository, configuration);
-
-            var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
-
-            // Act
-            var actual = sut.Construct(project);
-
-            // Assert
-            Assert.Null(actual);
-        }
-
-        [Fact]
-        public void ConstructShouldReturnNullWhenBuildPluginDoesNotExist()
-        {
-            // Arrange
-            var pluginRepository = Substitute.For<IPluginRepository>();
-            pluginRepository.FindBuildPlugin("non.existing").Returns((IBuildPlugin?) null);
-
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.Connections.Returns(new List<ConnectionData>
+            new()
             {
-                new ConnectionData
-                {
-                    PluginType = "non.existing",
-                    Name = "connection"
-                }
-            });
+                PluginType = "non.existing",
+                Name = "connection"
+            }
+        });
 
-            var sut = new ProjectFactory(pluginRepository, configuration);
+        var sut = new ProjectFactory(pluginRepository, configuration);
 
-            var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
+        var project = Substitute.For<IProjectConfiguration>();
+        project.BuildConnectionNames.Returns(new List<string> { "connection" });
 
-            // Act
-            var actual = sut.Construct(project);
+        // Act
+        var actual = sut.Construct(project);
 
-            // Assert
-            Assert.Null(actual);
-        }
+        // Assert
+        Assert.Null(actual);
+    }
 
-        [Fact]
-        public void ConstructShouldReturnNullWhenSourceConnectionDoesNotExist()
+    [Fact]
+    public void ConstructShouldReturnNullWhenSourceConnectionDoesNotExist()
+    {
+        // Arrange
+        var pluginRepository = Substitute.For<IPluginRepository>();
+        var configuration = Substitute.For<IConfiguration>();
+        configuration.Connections.Returns(new List<ConnectionData>
         {
-            // Arrange
-            var pluginRepository = Substitute.For<IPluginRepository>();
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.Connections.Returns(new List<ConnectionData>
+            new()
             {
-                new ConnectionData
-                {
-                    PluginType = "buildPluginType",
-                    Name = "connection"
-                }
-            });
+                PluginType = "buildPluginType",
+                Name = "connection"
+            }
+        });
 
-            var sut = new ProjectFactory(pluginRepository, configuration);
+        var sut = new ProjectFactory(pluginRepository, configuration);
 
-            var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionName.Returns("connection2");
+        var project = Substitute.For<IProjectConfiguration>();
+        project.BuildConnectionNames.Returns(new List<string> { "connection" });
+        project.SourceControlConnectionName.Returns("connection2");
 
-            // Act
-            var actual = sut.Construct(project);
+        // Act
+        var actual = sut.Construct(project);
 
-            // Assert
-            Assert.Null(actual);
-        }
+        // Assert
+        Assert.Null(actual);
+    }
 
-        [Fact]
-        public void ConstructShouldReturnNullWhenSourceControlPluginDoesNotExist()
+    [Fact]
+    public void ConstructShouldReturnNullWhenSourceControlPluginDoesNotExist()
+    {
+        // Arrange
+        var pluginRepository = Substitute.For<IPluginRepository>();
+        pluginRepository.FindSourceControlPlugin("non.existing").Returns((ISourceControlPlugin?)null);
+
+        var configuration = Substitute.For<IConfiguration>();
+        configuration.Connections.Returns(new List<ConnectionData>
         {
-            // Arrange
-            var pluginRepository = Substitute.For<IPluginRepository>();
-            pluginRepository.FindSourceControlPlugin("non.existing").Returns((ISourceControlPlugin?) null);
-
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.Connections.Returns(new List<ConnectionData>
+            new()
             {
-                new ConnectionData
-                {
-                    PluginType = "non.existing",
-                    Name = "connection"
-                }
-            });
+                PluginType = "non.existing",
+                Name = "connection"
+            }
+        });
 
-            var sut = new ProjectFactory(pluginRepository, configuration);
+        var sut = new ProjectFactory(pluginRepository, configuration);
 
-            var project = Substitute.For<IProjectConfiguration>();
-            project.BuildConnectionNames.Returns(new List<string> {"connection"});
-            project.SourceControlConnectionName.Returns("connection");
+        var project = Substitute.For<IProjectConfiguration>();
+        project.BuildConnectionNames.Returns(new List<string> { "connection" });
+        project.SourceControlConnectionName.Returns("connection");
 
-            // Act
-            var actual = sut.Construct(project);
+        // Act
+        var actual = sut.Construct(project);
 
-            // Assert
-            Assert.Null(actual);
-        }
+        // Assert
+        Assert.Null(actual);
     }
 }

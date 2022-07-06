@@ -1,9 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 
-namespace BuildNotifications.Core.Pipeline
+namespace BuildNotifications.Core.Pipeline;
+
+internal interface IBuildFilter
 {
-    internal interface IBuildFilter
-    {
-        bool IsAllowed(IBaseBuild build);
-    }
+    bool IsAllowed(IBaseBuild build);
 }

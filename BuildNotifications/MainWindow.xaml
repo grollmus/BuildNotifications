@@ -48,7 +48,8 @@
                 <viewsSettings:SettingsView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
+            <DataTemplate
+                DataType="{x:Type groupDefinitionSelection:GroupAndSortDefinitionsViewModel}">
                 <groupDefinition:BuildTreeGroupDefinitionView />
             </DataTemplate>
 
@@ -64,7 +65,8 @@
                 <viewsNotification:NotificationCenterView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModelNotification:NewNotificationsCounterViewModel}">
+            <DataTemplate
+                DataType="{x:Type viewModelNotification:NewNotificationsCounterViewModel}">
                 <viewsNotification:NewNotificationsCounterView />
             </DataTemplate>
 
@@ -85,25 +87,33 @@
             <!--Settings panel-->
             <ContentPresenter Content="{Binding SettingsViewModel}" Width="0" DockPanel.Dock="Left">
                 <i:Interaction.Triggers>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="false">
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}"
+                        Value="false">
                         <animation:WidthChange TargetWidth="0" />
                     </ei:DataTrigger>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}" Value="true">
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowSettings, ElementName=DockPanel}"
+                        Value="true">
                         <animation:WidthChange TargetWidth="{StaticResource BlockTwentyFive}" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
             </ContentPresenter>
 
             <!--Build tree / main content-->
-            <ContentPresenter Content="{Binding NotificationCenter}" x:Name="NotificationCenter" Width="0"
-                              DockPanel.Dock="Right" Margin="{StaticResource NegativeTwoThirdsBlockToTheLeftMargin}">
+            <ContentPresenter Content="{Binding NotificationCenter}" x:Name="NotificationCenter"
+                              Width="0"
+                              DockPanel.Dock="Right"
+                              Margin="{StaticResource NegativeTwoThirdsBlockToTheLeftMargin}">
                 <i:Interaction.Triggers>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
-                                    Value="false">
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
+                        Value="false">
                         <animation:WidthChange TargetWidth="0" />
                     </ei:DataTrigger>
-                    <ei:DataTrigger Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
-                                    Value="true">
+                    <ei:DataTrigger
+                        Binding="{Binding DataContext.ShowNotificationCenter, ElementName=DockPanel}"
+                        Value="true">
                         <animation:WidthChange TargetWidth="{StaticResource BlockTwentyFive}" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
@@ -114,8 +124,10 @@
         <!--Notifications panel-->
         <DockPanel>
             <!--Distance holder-->
-            <Rectangle DockPanel.Dock="Right" Width="{Binding ActualWidth, ElementName=NotificationCenter}" />
-            <ContentPresenter Content="{Binding StatusIndicator}" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <Rectangle DockPanel.Dock="Right"
+                       Width="{Binding ActualWidth, ElementName=NotificationCenter}" />
+            <ContentPresenter Content="{Binding StatusIndicator}" HorizontalAlignment="Right"
+                              VerticalAlignment="Top" />
         </DockPanel>
 
         <!--Overlays-->
@@ -133,7 +145,8 @@
                                   Command="{Binding ShowInfoPopupCommand}" />
             </Grid>
             <Grid DockPanel.Dock="Right" Margin="{StaticResource BlockQuarterThickness}">
-                <icons:IconButton Icon="Notification" ToolTip="{text:Localized NotificationsCenterButtonTooltip}"
+                <icons:IconButton Icon="Notification"
+                                  ToolTip="{text:Localized NotificationsCenterButtonTooltip}"
                                   Width="{StaticResource BlockDouble}"
                                   Height="{StaticResource BlockDouble}"
                                   Foreground="{StaticResource Background3}"
@@ -174,7 +187,8 @@
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="true">
-                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2" DoRotate="True" />
+                        <settings:SettingsButtonToggle DoHide="false" Duration="0.2"
+                                                       DoRotate="True" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding ShowSettings}"
                                     Value="false">
@@ -184,7 +198,8 @@
             </icons:IconButton>
 
             <icons:IconButton DockPanel.Dock="Left"
-                              Icon="GroupingEmpty" ToolTip="{text:Localized GroupDefinitionsTooltip}"
+                              Icon="GroupingEmpty"
+                              ToolTip="{text:Localized GroupDefinitionsTooltip}"
                               Margin="{StaticResource BlockQuarterThickness}"
                               Width="{StaticResource BlockDouble}"
                               Height="{StaticResource BlockDouble}"
@@ -194,16 +209,19 @@
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
                                     Value="true">
-                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false" Duration="0.2" />
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="false"
+                            Duration="0.2" />
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding ShowGroupDefinitionSelection}"
                                     Value="false">
-                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true" Duration="0.4" />
+                        <groupDefinitionSelection1:GroupDefinitionButtonToggle DoHide="true"
+                            Duration="0.4" />
                     </ei:DataTrigger>
                 </i:Interaction.Triggers>
                 <icons:IconBatch Margin="{StaticResource BlockQuarterThickness}"
                                  Width="{StaticResource BlockOneAndHalf}" IsHitTestVisible="False"
-                                 Height="{StaticResource BlockOneAndHalf}" HorizontalAlignment="Center"
+                                 Height="{StaticResource BlockOneAndHalf}"
+                                 HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
                                  Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type icons:IconButton}}}"
                                  Type="GroupingSolo" />

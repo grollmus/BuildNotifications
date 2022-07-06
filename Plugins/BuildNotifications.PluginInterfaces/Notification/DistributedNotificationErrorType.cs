@@ -1,28 +1,27 @@
-﻿namespace BuildNotifications.PluginInterfaces.Notification
+﻿namespace BuildNotifications.PluginInterfaces.Notification;
+
+/// <summary>
+/// Available error notification types that can be distributed
+/// </summary>
+public enum DistributedNotificationErrorType
 {
     /// <summary>
-    /// Available error notification types that can be distributed
+    /// Error notification
     /// </summary>
-    public enum DistributedNotificationErrorType
-    {
-        /// <summary>
-        /// Error notification
-        /// </summary>
-        Error,
+    Error,
 
-        /// <summary>
-        /// Success notification
-        /// </summary>
-        Success,
+    /// <summary>
+    /// Success notification
+    /// </summary>
+    Success,
 
-        /// <summary>
-        /// Build cancelled notification
-        /// </summary>
-        Cancel,
+    /// <summary>
+    /// Build cancelled notification
+    /// </summary>
+    Cancel,
 
-        /// <summary>
-        /// None
-        /// </summary>
-        None
-    }
+    /// <summary>
+    /// None
+    /// </summary>
+    None
 }

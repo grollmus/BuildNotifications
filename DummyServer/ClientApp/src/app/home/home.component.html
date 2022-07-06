@@ -4,7 +4,8 @@
   <li>Add dummy <strong>user, definitions</strong> and <strong>branches</strong></li>
   <li>Create builds based on these mock data and start developing with BuildNotifications</li>
 </ul>
-<p>Duplicate values are <code>forbidden.</code>Values are persisted on the device the server is hosted on.</p>
+<p>Duplicate values are <code>forbidden.</code>Values are persisted on the device the server is
+  hosted on.</p>
 
 <div class="row">
   <div class="col">
@@ -17,7 +18,9 @@
           </code>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" #branchBox (keyup.enter)="newBranch(branchBox.value)" placeholder="New branch (enter to confirm)">
+          <input #branchBox (keyup.enter)="newBranch(branchBox.value)" class="form-control"
+                 placeholder="New branch (enter to confirm)"
+                 type="text">
         </div>
       </div>
       <div class="card-body">
@@ -25,12 +28,14 @@
           <p class="text-center text-light" style="font-size: 14pt">[No Branches]</p>
         </div>
 
-        <table class='table' aria-labelledby="tableLabel" *ngIf="branches.length > 0">
+        <table *ngIf="branches.length > 0" aria-labelledby="tableLabel" class='table'>
           <tbody>
           <tr *ngFor="let branch of branches">
             <td>{{ branch.fullName }}</td>
             <td class="text-right">
-              <button class="btn btn-outline-danger text-right" (click)="deleteBranch(branch.fullName)">✗</button>
+              <button (click)="deleteBranch(branch.fullName)"
+                      class="btn btn-outline-danger text-right">✗
+              </button>
             </td>
           </tr>
           </tbody>
@@ -48,7 +53,10 @@
           </code>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" #definitionBox (keyup.enter)="newDefinition(definitionBox.value)" placeholder="New definition (enter to confirm)">
+          <input #definitionBox (keyup.enter)="newDefinition(definitionBox.value)"
+                 class="form-control"
+                 placeholder="New definition (enter to confirm)"
+                 type="text">
         </div>
       </div>
       <div class="card-body">
@@ -56,12 +64,14 @@
           <p class="text-center text-light" style="font-size: 14pt">[No Definitions]</p>
         </div>
 
-        <table class='table' aria-labelledby="tableLabel" *ngIf="definitions.length > 0">
+        <table *ngIf="definitions.length > 0" aria-labelledby="tableLabel" class='table'>
           <tbody>
           <tr *ngFor="let definition of definitions">
             <td>{{ definition.name }}</td>
             <td class="text-right">
-              <button class="btn btn-outline-danger text-right" (click)="deleteDefinition(definition.name)">✗</button>
+              <button (click)="deleteDefinition(definition.name)"
+                      class="btn btn-outline-danger text-right">✗
+              </button>
             </td>
           </tr>
           </tbody>
@@ -81,7 +91,9 @@
           </div>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" #userBox (keyup.enter)="newUser(userBox.value)" placeholder="New user (enter to confirm)">
+          <input #userBox (keyup.enter)="newUser(userBox.value)" class="form-control"
+                 placeholder="New user (enter to confirm)"
+                 type="text">
         </div>
       </div>
       <div class="card-body">
@@ -89,13 +101,15 @@
           <p class="text-center text-light" style="font-size: 14pt">[No User]</p>
         </div>
 
-        <table class='table mb-0' aria-labelledby="tableLabel" *ngIf="users.length > 0">
+        <table *ngIf="users.length > 0" aria-labelledby="tableLabel" class='table mb-0'>
 
           <tbody>
           <tr *ngFor="let user of users">
             <td>{{ user.uniqueName }}</td>
             <td class="text-right">
-              <button class="btn btn-outline-danger text-right" (click)="deleteUser(user.uniqueName)">✗</button>
+              <button (click)="deleteUser(user.uniqueName)"
+                      class="btn btn-outline-danger text-right">✗
+              </button>
             </td>
           </tr>
           </tbody>
@@ -106,7 +120,9 @@
 </div>
 
 <div class="mt-4 mb-2">
-  <p>Builds are <code>not persisted</code> and will only live as long as the server is running. Use the buttons below to quickly generate data to work with. Additionally, the status of each build may be set manually.</p>
+  <p>Builds are <code>not persisted</code> and will only live as long as the server is running. Use
+    the buttons below to quickly generate data to work with. Additionally, the status of each build
+    may be set manually.</p>
 </div>
 
 
@@ -128,13 +144,16 @@
           <div class="row">
             <div class="col pl-0">
               <select [(ngModel)]="selectedBranch" class="form-control">
-                <option *ngFor="let branch of branches" [ngValue]="branch"> {{ branch.fullName }}</option>
+                <option *ngFor="let branch of branches" [ngValue]="branch"> {{ branch.fullName }}
+                </option>
               </select>
 
             </div>
             <div class="col">
               <select [(ngModel)]="selectedDefinition" class="form-control">
-                <option *ngFor="let definition of definitions" [ngValue]="definition"> {{ definition.name }}</option>
+                <option *ngFor="let definition of definitions" [ngValue]="definition"> {{
+                  definition.name }}
+                </option>
               </select>
 
             </div>
@@ -146,13 +165,16 @@
           </div>
         </div>
         <div class="col-md-auto pr-0">
-          <button class="btn btn-primary text-right" (click)="addBuild()">Add Build</button>
+          <button (click)="addBuild()" class="btn btn-primary text-right">Add Build</button>
         </div>
       </div>
     </div>
     <div class="mb-2">
-      <button class="btn btn-dark text-right mr-2" (click)="permutate()">Permutate()</button>
-      <button class="btn btn-dark text-right" (click)="randomizeBuildStatus()" title=" Permutates through all user, definitions and branches and creates a pending build for each.">RandomizeStatus()</button>
+      <button (click)="permutate()" class="btn btn-dark text-right mr-2">Permutate()</button>
+      <button (click)="randomizeBuildStatus()" class="btn btn-dark text-right"
+              title=" Permutates through all user, definitions and branches and creates a pending build for each.">
+        RandomizeStatus()
+      </button>
     </div>
   </div>
   <div class="card-body">
@@ -163,7 +185,7 @@
     <div *ngIf="builds.length > 0">
       <div class="row">
         <div class="col">
-          <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="builds">
+          <table *ngIf="builds" aria-labelledby="tableLabel" class='table table-striped'>
             <thead>
             <tr>
               <th>Branch</th>
@@ -180,35 +202,84 @@
               <td>{{ build.userName }}</td>
               <td class="m-0">
                 <div class="btn-group m-0 bg-dark" role="group">
-                  <button type="button" (click)="updateBuildStatus(build, 2)" [ngClass]="(build.status==2)?'btn btn-dark active':'btn btn-dark'" title="Pending">P</button>
-                  <button type="button" (click)="updateBuildStatus(build, 3)" [ngClass]="(build.status==3)?'btn btn-primary':'btn btn-outline-primary'" title="Running">R</button>
-                  <button type="button" (click)="updateBuildStatus(build, 4)" [ngClass]="(build.status==4)?'btn btn-success':'btn btn-outline-success'" title="Succeeded">S</button>
-                  <button type="button" (click)="updateBuildStatus(build, 6)" [ngClass]="(build.status==6)?'btn btn-danger':'btn btn-outline-danger'" title="Failed">F</button>
-                  <button type="button" (click)="updateBuildStatus(build, 5)" [ngClass]="(build.status==5)?'btn btn-warning':'btn btn-outline-warning'" title="Partially succeeded">PS</button>
-                  <button type="button" (click)="updateBuildStatus(build, 1)" [ngClass]="(build.status==1)?'btn btn-light':'btn btn-outline-light'" title="Cancelled">C</button>
+                  <button (click)="updateBuildStatus(build, 2)"
+                          [ngClass]="(build.status==2)?'btn btn-dark active':'btn btn-dark'"
+                          title="Pending"
+                          type="button">P
+                  </button>
+                  <button (click)="updateBuildStatus(build, 3)"
+                          [ngClass]="(build.status==3)?'btn btn-primary':'btn btn-outline-primary'"
+                          title="Running"
+                          type="button">R
+                  </button>
+                  <button (click)="updateBuildStatus(build, 4)"
+                          [ngClass]="(build.status==4)?'btn btn-success':'btn btn-outline-success'"
+                          title="Succeeded"
+                          type="button">S
+                  </button>
+                  <button (click)="updateBuildStatus(build, 6)"
+                          [ngClass]="(build.status==6)?'btn btn-danger':'btn btn-outline-danger'"
+                          title="Failed"
+                          type="button">F
+                  </button>
+                  <button (click)="updateBuildStatus(build, 5)"
+                          [ngClass]="(build.status==5)?'btn btn-warning':'btn btn-outline-warning'"
+                          title="Partially succeeded"
+                          type="button">PS
+                  </button>
+                  <button (click)="updateBuildStatus(build, 1)"
+                          [ngClass]="(build.status==1)?'btn btn-light':'btn btn-outline-light'"
+                          title="Cancelled"
+                          type="button">C
+                  </button>
                 </div>
               </td>
               <td class="m-0">
                 <div class="btn-group m-0" role="group" style="float: right">
-                  <button type="button" (click)="updateBuildReason(build, 1)" title="Checked In" [ngClass]="(build.reason==1)?'btn btn-primary':'btn btn-secondary'">
-                    <div [ngClass]="(build.reason==1)?'icon icon-ci icon-active':'icon icon-ci'" style="float: left"></div>
+                  <button (click)="updateBuildReason(build, 1)"
+                          [ngClass]="(build.reason==1)?'btn btn-primary':'btn btn-secondary'"
+                          title="Checked In"
+                          type="button">
+                    <div [ngClass]="(build.reason==1)?'icon icon-ci icon-active':'icon icon-ci'"
+                         style="float: left"></div>
                   </button>
-                  <button type="button" (click)="updateBuildReason(build, 4)" title="Manual" [ngClass]="(build.reason==4)?'btn btn-primary':'btn btn-secondary'">
-                    <div [ngClass]="(build.reason==4)?'icon icon-manualBuild icon-active':'icon icon-manualBuild'" style="float: left"></div>
+                  <button (click)="updateBuildReason(build, 4)"
+                          [ngClass]="(build.reason==4)?'btn btn-primary':'btn btn-secondary'"
+                          title="Manual"
+                          type="button">
+                    <div
+                      [ngClass]="(build.reason==4)?'icon icon-manualBuild icon-active':'icon icon-manualBuild'"
+                      style="float: left"></div>
                   </button>
-                  <button type="button" (click)="updateBuildReason(build, 3)" title="Pull Request" [ngClass]="(build.reason==3)?'btn btn-primary':'btn btn-secondary'">
-                    <div [ngClass]="(build.reason==3)?'icon icon-pullRequest icon-active':'icon icon-pullRequest'" style="float: left"></div>
+                  <button (click)="updateBuildReason(build, 3)"
+                          [ngClass]="(build.reason==3)?'btn btn-primary':'btn btn-secondary'"
+                          title="Pull Request"
+                          type="button">
+                    <div
+                      [ngClass]="(build.reason==3)?'icon icon-pullRequest icon-active':'icon icon-pullRequest'"
+                      style="float: left"></div>
                   </button>
-                  <button type="button" (click)="updateBuildReason(build, 2)" title="Scheduled" [ngClass]="(build.reason==2)?'btn btn-primary':'btn btn-secondary'">
-                    <div [ngClass]="(build.reason==2)?'icon icon-scheduled icon-active':'icon icon-scheduled'" style="float: left"></div>
+                  <button (click)="updateBuildReason(build, 2)"
+                          [ngClass]="(build.reason==2)?'btn btn-primary':'btn btn-secondary'"
+                          title="Scheduled"
+                          type="button">
+                    <div
+                      [ngClass]="(build.reason==2)?'icon icon-scheduled icon-active':'icon icon-scheduled'"
+                      style="float: left"></div>
                   </button>
-                  <button type="button" (click)="updateBuildReason(build, 5)" title="Other" [ngClass]="(build.reason==5)?'btn btn-primary':'btn btn-secondary'">
-                    <div [ngClass]="(build.reason==5)?'icon icon-triggeredBuild icon-active':'icon icon-triggeredBuild'" style="float: left"></div>
+                  <button (click)="updateBuildReason(build, 5)"
+                          [ngClass]="(build.reason==5)?'btn btn-primary':'btn btn-secondary'"
+                          title="Other"
+                          type="button">
+                    <div
+                      [ngClass]="(build.reason==5)?'icon icon-triggeredBuild icon-active':'icon icon-triggeredBuild'"
+                      style="float: left"></div>
                   </button>
                 </div>
               </td>
               <td class="text-right">
-                <button class="btn btn-outline-danger text-right" (click)="deleteBuild(build)">✗</button>
+                <button (click)="deleteBuild(build)" class="btn btn-outline-danger text-right">✗
+                </button>
               </td>
             </tr>
             </tbody>

@@ -23,26 +23,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type text:DecoratedTextBox}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Cursor="IBeam"
-                            BorderThickness="{TemplateBinding BorderThickness}" MaxHeight="{TemplateBinding MaxHeight}"
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}"
+                            Cursor="IBeam"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            MaxHeight="{TemplateBinding MaxHeight}"
                             MaxWidth="{TemplateBinding MaxWidth}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                         <Grid>
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                          HorizontalAlignment="Left"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden" />
                             <Grid HorizontalAlignment="Right">
-                                <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom"
+                                <Border Background="{DynamicResource Background1}"
+                                        VerticalAlignment="Bottom"
                                         x:Name="Overlay">
                                     <DockPanel Margin="{StaticResource BlockHalfXOnlyMargin}">
                                         <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
-                                                         Width="{StaticResource Block}" Height="{StaticResource Block}"
+                                                         Width="{StaticResource Block}"
+                                                         Height="{StaticResource Block}"
                                                          Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type text:DecoratedTextBox}, Mode=FindAncestor}}"
                                                          DockPanel.Dock="Right"
                                                          x:Name="Icon" />
                                         <TextBlock
                                             Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type text:DecoratedTextBox}, Mode=FindAncestor}}"
-                                            Foreground="{TemplateBinding BorderBrush}" x:Name="Label"
-                                            Style="{StaticResource TextBoxLabelStyle}" DockPanel.Dock="Right"
+                                            Foreground="{TemplateBinding BorderBrush}"
+                                            x:Name="Label"
+                                            Style="{StaticResource TextBoxLabelStyle}"
+                                            DockPanel.Dock="Right"
                                             VerticalAlignment="Bottom" />
                                     </DockPanel>
                                 </Border>
@@ -52,11 +60,13 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="GotKeyboardFocus">
                                 <text:FontSizeChange TargetSize="{StaticResource Block}"
-                                                     Target="{Binding ElementName=Label}" Duration="0.1" />
+                                                     Target="{Binding ElementName=Label}"
+                                                     Duration="0.1" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LostKeyboardFocus">
                                 <text:FontSizeChange TargetSize="{StaticResource BlockFiveSixths}"
-                                                     Target="{Binding ElementName=Label}" Duration="0.35" />
+                                                     Target="{Binding ElementName=Label}"
+                                                     Duration="0.35" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Border>
@@ -77,9 +87,12 @@
                                     Value="{DynamicResource Foreground1HalfTransparency}" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Foreground1}" />
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
-                            <Setter Property="Foreground" TargetName="Label" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="BorderBrush" TargetName="border"
+                                    Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Label"
+                                    Value="{DynamicResource Foreground1}" />
                             <Setter Property="MaxHeight" Value="9999" />
                         </Trigger>
                     </ControlTemplate.Triggers>

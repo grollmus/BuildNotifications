@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
+namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions;
+
+internal interface IPluginOptionViewModel : INotifyPropertyChanged
 {
-    internal interface IPluginOptionViewModel : INotifyPropertyChanged
-    {
-        void Clear();
-    }
+    void Clear();
 }

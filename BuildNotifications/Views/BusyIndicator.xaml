@@ -14,23 +14,27 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="{DynamicResource Background1}" Margin="{StaticResource BlockXOnlyMargin}">
 
-        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center" 
+        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center"
                       Margin="{DynamicResource NegativeBlockDoubleThicknessFromRight}"
                       ItemsSource="{Binding DummyItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid  Visibility="{Binding ShowLoadingText, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}">
-                        <Rectangle Width="{DynamicResource BlockTriple}" Height="{DynamicResource Block}"
+                    <Grid
+                        Visibility="{Binding ShowLoadingText, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}">
+                        <Rectangle Width="{DynamicResource BlockTriple}"
+                                   Height="{DynamicResource Block}"
                                    Margin="{DynamicResource BlockHalfThickness}"
                                    Fill="{DynamicResource Foreground2}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
-                                    <triggerActions:ElementFadeInScaleX Duration="1" Anchor="MiddleLeft" />
+                                    <triggerActions:ElementFadeInScaleX Duration="1"
+                                        Anchor="MiddleLeft" />
                                 </i:EventTrigger>
 
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:ElementFadeOutScale Duration="1" Anchor="MiddleRight"
-                                                                        TargetScaleX="0" TargetScaleY="1" />
+                                    <triggerActions:ElementFadeOutScale Duration="1"
+                                        Anchor="MiddleRight"
+                                        TargetScaleX="0" TargetScaleY="1" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </Rectangle>
@@ -45,7 +49,7 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedWrapPanel AnimationDuration="1"/>
+                    <animation:AnimatedWrapPanel AnimationDuration="1" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -53,7 +57,8 @@
                 <ei:DataTrigger
                     Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
                     Value="true">
-                    <triggerActions:ElementFadeInBackEase Duration="0.5" Anchor="Center" DoScale="true" />
+                    <triggerActions:ElementFadeInBackEase Duration="0.5" Anchor="Center"
+                                                          DoScale="true" />
                 </ei:DataTrigger>
 
                 <ei:DataTrigger
@@ -64,12 +69,15 @@
             </i:Interaction.Triggers>
         </ItemsControl>
 
-        <TextBlock Text="{text:Localized Loading}" Foreground="{DynamicResource Foreground1}" HorizontalAlignment="Right" Visibility="{Binding ShowLoadingText, Converter={x:Static converters:BoolToVisibilityConverter.Instance}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}"/>
+        <TextBlock Text="{text:Localized Loading}" Foreground="{DynamicResource Foreground1}"
+                   HorizontalAlignment="Right"
+                   Visibility="{Binding ShowLoadingText, Converter={x:Static converters:BoolToVisibilityConverter.Instance}, RelativeSource={RelativeSource AncestorType={x:Type local:BusyIndicator}}}" />
         <i:Interaction.Triggers>
             <ei:DataTrigger
                 Binding="{Binding Path=IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BusyIndicator}}}"
                 Value="true">
-                <triggerActions:ElementFadeInBackEase Duration="2.5" Anchor="Center" DoScale="false" />
+                <triggerActions:ElementFadeInBackEase Duration="2.5" Anchor="Center"
+                                                      DoScale="false" />
             </ei:DataTrigger>
 
             <ei:DataTrigger

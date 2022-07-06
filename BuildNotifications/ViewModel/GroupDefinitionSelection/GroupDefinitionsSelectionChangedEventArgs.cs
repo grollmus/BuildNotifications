@@ -1,16 +1,15 @@
 ﻿using System;
 
-namespace BuildNotifications.ViewModel.GroupDefinitionSelection
-{
-    public class GroupDefinitionsSelectionChangedEventArgs : EventArgs
-    {
-        public GroupDefinitionsSelectionChangedEventArgs(GroupDefinitionViewModel oldValue, GroupDefinitionViewModel newValue)
-        {
-            OldValue = oldValue;
-            NewValue = newValue;
-        }
+namespace BuildNotifications.ViewModel.GroupDefinitionSelection;
 
-        public GroupDefinitionViewModel NewValue { get; }
-        public GroupDefinitionViewModel OldValue { get; }
+public class GroupDefinitionsSelectionChangedEventArgs : EventArgs
+{
+    public GroupDefinitionsSelectionChangedEventArgs(GroupDefinitionViewModel oldValue, GroupDefinitionViewModel newValue)
+    {
+        OldValue = oldValue;
+        NewValue = newValue;
     }
+
+    public GroupDefinitionViewModel NewValue { get; }
+    public GroupDefinitionViewModel OldValue { get; }
 }

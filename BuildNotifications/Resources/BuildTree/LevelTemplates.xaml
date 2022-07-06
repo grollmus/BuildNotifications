@@ -10,7 +10,7 @@
                     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Build/BuildTemplates.xaml"/>
+        <ResourceDictionary Source="Build/BuildTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ResourceDictionary x:Key="BuildTreeSpecificResources">
@@ -19,7 +19,8 @@
             <Setter Property="Height" Value="{StaticResource Block}" />
             <Setter Property="Foreground">
                 <Setter.Value>
-                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                    <MultiBinding
+                        Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
                         <Binding Path="BuildStatus" />
                         <Binding Path="ShouldColorByStatus" />
                         <Binding />
@@ -33,7 +34,8 @@
             <Setter Property="Height" Value="{StaticResource Block}" />
             <Setter Property="Foreground">
                 <Setter.Value>
-                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                    <MultiBinding
+                        Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
                         <Binding Path="BuildStatus" />
                         <Binding Path="ShouldColorByStatus" />
                         <Binding />
@@ -45,7 +47,8 @@
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground">
                 <Setter.Value>
-                    <MultiBinding Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
+                    <MultiBinding
+                        Converter="{x:Static converter:BuildTreeNodeMultiBindingToBrushConverter.Instance}">
                         <Binding Path="BuildStatus" />
                         <Binding Path="ShouldColorByStatus" />
                         <Binding />
@@ -55,11 +58,14 @@
         </Style>
     </ResourceDictionary>
 
-    <DataTemplate x:Key="FirstLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+    <DataTemplate x:Key="FirstLevelTemplate"
+                  DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel>
-            <Viewbox Height="{StaticResource BlockDouble}" Margin="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
+            <Viewbox Height="{StaticResource BlockDouble}"
+                     Margin="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
                      DockPanel.Dock="Top" HorizontalAlignment="Left">
-                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+                <ContentPresenter Content="{Binding}"
+                                  Resources="{StaticResource BuildTreeSpecificResources}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
             </Viewbox>
             <Rectangle Fill="{DynamicResource Foreground1}" Height="1" VerticalAlignment="Top"
@@ -70,28 +76,33 @@
                           ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <animation:AnimatedWrapPanel Orientation="Horizontal" IsItemsHost="True" Delay="0.2"/>
+                        <animation:AnimatedWrapPanel Orientation="Horizontal" IsItemsHost="True"
+                                                     Delay="0.2" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center"
+                                                        TargetScaleX="0.8"
                                                         TargetScaleY="0.8" />
                 </ei:DataTrigger>
 
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft"
+                                                  DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DockPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}" x:Key="SecondLevelHeaderTemplate">
+    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}"
+                  x:Key="SecondLevelHeaderTemplate">
         <Grid DockPanel.Dock="Top" Width="{StaticResource BlockThirty}">
             <DockPanel>
-                <Rectangle Height="{StaticResource BlockDoubleAndHalf}" Fill="{DynamicResource Background2}"
+                <Rectangle Height="{StaticResource BlockDoubleAndHalf}"
+                           Fill="{DynamicResource Background2}"
                            Margin="{StaticResource BlockLeftNegativeBlockRight}"
                            DockPanel.Dock="Top" />
                 <Grid Height="{StaticResource BlockHalf}"
@@ -114,10 +125,13 @@
             </DockPanel>
             <Border Height="{StaticResource BlockDoubleAndHalf}" VerticalAlignment="Top"
                     Margin="{StaticResource BlockOneAndQuarterLeftAndThreeQuartersRight}">
-                <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center" StretchDirection="UpOnly"
+                <Viewbox Height="{StaticResource BlockDouble}" VerticalAlignment="Center"
+                         StretchDirection="UpOnly"
                          HorizontalAlignment="Left" x:Name="HeaderViewBox">
-                    <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
-                                      MaxWidth="{StaticResource BlockNineteenTimes}" x:Name="HeaderContentPresenter"
+                    <ContentPresenter Content="{Binding}"
+                                      Resources="{StaticResource BuildTreeSpecificResources}"
+                                      MaxWidth="{StaticResource BlockNineteenTimes}"
+                                      x:Name="HeaderContentPresenter"
                                       ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
                 </Viewbox>
             </Border>
@@ -131,7 +145,8 @@
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="SecondLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+    <DataTemplate x:Key="SecondLevelTemplate"
+                  DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel Margin="{StaticResource BlockThicknessOnYQuartersOnX}">
             <ContentPresenter DockPanel.Dock="Top" Width="{StaticResource BlockThirty}"
                               ContentTemplate="{StaticResource SecondLevelHeaderTemplate}" />
@@ -142,7 +157,8 @@
                               ItemTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0" Delay="0.1"
+                            <animation:AnimatedStackPanel Orientation="Vertical" Margin="0"
+                                                          Delay="0.1"
                                                           VirtualizingStackPanel.IsVirtualizing="True"
                                                           IsItemsHost="True" />
                         </ItemsPanelTemplate>
@@ -153,23 +169,29 @@
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center"
+                                                        TargetScaleX="0.8"
                                                         TargetScaleY="0.8" />
                 </ei:DataTrigger>
 
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft"
+                                                  DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
         </DockPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}" x:Key="ThirdLevelGroupingTemplate">
+    <DataTemplate DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}"
+                  x:Key="ThirdLevelGroupingTemplate">
         <Grid Background="{DynamicResource Background1}">
-            <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top" HorizontalAlignment="Left"
-                     x:Name="ThirdLevelGroupingViewBox" MaxWidth="{StaticResource BlockTwelveTimes}">
-                <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+            <Viewbox Height="{StaticResource BlockOneAndHalf}" VerticalAlignment="Top"
+                     HorizontalAlignment="Left"
+                     x:Name="ThirdLevelGroupingViewBox"
+                     MaxWidth="{StaticResource BlockTwelveTimes}">
+                <ContentPresenter Content="{Binding}"
+                                  Resources="{StaticResource BuildTreeSpecificResources}"
                                   x:Name="ThirdLevelGroupingContentPresenter"
                                   MaxWidth="{StaticResource BlockTwelveTimes}"
                                   ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
@@ -177,46 +199,56 @@
         </Grid>
         <DataTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="ThirdLevelGroupingViewBox" Property="StretchDirection" Value="Both" />
-                <Setter TargetName="ThirdLevelGroupingContentPresenter" Property="MaxWidth" Value="99999" />
+                <Setter TargetName="ThirdLevelGroupingViewBox" Property="StretchDirection"
+                        Value="Both" />
+                <Setter TargetName="ThirdLevelGroupingContentPresenter" Property="MaxWidth"
+                        Value="99999" />
             </Trigger>
         </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="ThirdLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+    <DataTemplate x:Key="ThirdLevelTemplate"
+                  DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <animation:AnimatedDockPanel AnimationDuration="2.8" HorizontalAlignment="Left" Delay="0"
                                      Width="{StaticResource BlockTwentyEight}">
-            <ContentPresenter DockPanel.Dock="Left" ContentTemplate="{StaticResource ThirdLevelGroupingTemplate}" />
-            <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right" HorizontalAlignment="Right">
+            <ContentPresenter DockPanel.Dock="Left"
+                              ContentTemplate="{StaticResource ThirdLevelGroupingTemplate}" />
+            <ItemsControl ItemsSource="{Binding Children}" DockPanel.Dock="Right"
+                          HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                       <WrapPanel IsItemsHost="True" />
+                        <WrapPanel IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource BuildNodeTemplate}" />
+                        <ContentPresenter Content="{Binding}"
+                                          ContentTemplate="{StaticResource BuildNodeTemplate}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center" TargetScaleX="0.8"
-                                                        TargetScaleY="0.8"/>
+                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center"
+                                                        TargetScaleX="0.8"
+                                                        TargetScaleY="0.8" />
                 </ei:DataTrigger>
 
                 <i:EventTrigger EventName="Loaded">
-                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft" DoScale="False" />
+                    <triggerActions:ElementFadeIn Duration="0.4" Anchor="MiddleLeft"
+                                                  DoScale="False" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </animation:AnimatedDockPanel>
     </DataTemplate>
-    
-    <DataTemplate x:Key="FourthLevelTemplate" DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
+
+    <DataTemplate x:Key="FourthLevelTemplate"
+                  DataType="{x:Type viewModelTree:BuildTreeNodeViewModel}">
         <DockPanel>
-            <ContentPresenter Content="{Binding}" Resources="{StaticResource BuildTreeSpecificResources}"
+            <ContentPresenter Content="{Binding}"
+                              Resources="{StaticResource BuildTreeSpecificResources}"
                               ContentTemplateSelector="{x:Static local:BuildTreeNodeTemplateSelector.ForNodeDisplay}" />
         </DockPanel>
     </DataTemplate>

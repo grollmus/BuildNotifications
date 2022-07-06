@@ -1,28 +1,27 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+/// <summary>
+/// Possible modes to display a PullRequest
+/// </summary>
+public enum PullRequestDisplayMode
 {
     /// <summary>
-    /// Possible modes to display a PullRequest
+    /// Hide PullRequests.
     /// </summary>
-    public enum PullRequestDisplayMode
-    {
-        /// <summary>
-        /// Hide PullRequests.
-        /// </summary>
-        None,
+    None,
 
-        /// <summary>
-        /// Display id of the the PR
-        /// </summary>
-        Number,
+    /// <summary>
+    /// Display id of the the PR
+    /// </summary>
+    Number,
 
-        /// <summary>
-        /// Display name of the PR
-        /// </summary>
-        Name,
+    /// <summary>
+    /// Display name of the PR
+    /// </summary>
+    Name,
 
-        /// <summary>
-        /// Display source and target branch
-        /// </summary>
-        Path
-    }
+    /// <summary>
+    /// Display source and target branch
+    /// </summary>
+    Path
 }

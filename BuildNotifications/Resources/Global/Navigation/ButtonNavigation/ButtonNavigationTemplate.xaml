@@ -13,47 +13,57 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type buttonNavigation:ButtonNavigation}">
-	                <DockPanel d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigation}" x:Name="RootPanel">
+                    <DockPanel d:DataContext="{d:DesignInstance buttonNavigation:ButtonNavigation}"
+                               x:Name="RootPanel">
                         <DockPanel DockPanel.Dock="Left" VerticalAlignment="Top">
-	                        <icons:IconButton Icon="Plus" Command="{TemplateBinding AddItemCommand}" x:Name="IconBtn"
-	                                          Foreground="{DynamicResource Background3}" DockPanel.Dock="Bottom"
-	                                          Background="{DynamicResource Background1}"
-	                                          Visibility="{TemplateBinding AddItemCommand, Converter={x:Static converters:NullToVisibilityConverter.Instance}}"
-	                                          Height="{StaticResource Block}" IconSize="{StaticResource Block}">
-		                        <i:Interaction.Triggers>
-			                        <i:EventTrigger EventName="Click">
-				                        <icons:ButtonInvokedAnimation />
-			                        </i:EventTrigger>
-		                        </i:Interaction.Triggers>
-	                        </icons:IconButton>
+                            <icons:IconButton Icon="Plus"
+                                              Command="{TemplateBinding AddItemCommand}"
+                                              x:Name="IconBtn"
+                                              Foreground="{DynamicResource Background3}"
+                                              DockPanel.Dock="Bottom"
+                                              Background="{DynamicResource Background1}"
+                                              Visibility="{TemplateBinding AddItemCommand, Converter={x:Static converters:NullToVisibilityConverter.Instance}}"
+                                              Height="{StaticResource Block}"
+                                              IconSize="{StaticResource Block}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <icons:ButtonInvokedAnimation />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </icons:IconButton>
 
-	                        <ListBox ItemsSource="{TemplateBinding Items}" SelectedIndex="0" x:Name="ListBox"
+                            <ListBox ItemsSource="{TemplateBinding Items}" SelectedIndex="0"
+                                     x:Name="ListBox"
                                      HorizontalContentAlignment="Stretch"
-	                                 SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                     SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <DockPanel Margin="{StaticResource BlockHalfThickness}"
                                                    MaxHeight="{StaticResource BlockTriple}"
                                                    d:DataContext="{d:DesignInstance buttonNavigation:BaseButtonNavigationItem}">
-                                            <icons:IconBatch DockPanel.Dock="Left" Type="{Binding Icon}"
+                                            <icons:IconBatch DockPanel.Dock="Left"
+                                                             Type="{Binding Icon}"
                                                              Margin="{StaticResource BlockQuarterRight}"
                                                              Foreground="{DynamicResource Foreground1HalfTransparency}"
                                                              Width="{StaticResource BlockOneAndHalf}"
                                                              Height="{StaticResource BlockOneAndHalf}"
-                                                             Visibility="{Binding Icon, Converter={x:Static converters:IconTypeToVisibilityConverter.Instance}}"
-                                                             />
+                                                             Visibility="{Binding Icon, Converter={x:Static converters:IconTypeToVisibilityConverter.Instance}}" />
 
-                                            <icons:IconButton Icon="Minus" Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                            <icons:IconButton Icon="Minus"
+                                                              Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                               Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type buttonNavigation:ButtonNavigation}}, Path=RemoveItemCommand}"
-                                                              CommandParameter="{Binding}" x:Name="IconBtn"
-                                                              Foreground="{DynamicResource Background3}" DockPanel.Dock="Right"
+                                                              CommandParameter="{Binding}"
+                                                              x:Name="IconBtn"
+                                                              Foreground="{DynamicResource Background3}"
+                                                              DockPanel.Dock="Right"
                                                               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type buttonNavigation:ButtonNavigation}}, Path=RemoveItemCommand, Converter={x:Static converters:NullToVisibilityConverter.Instance}}"
-                                                              Height="{StaticResource Block}" IconSize="{StaticResource Block}">
-	                                            <i:Interaction.Triggers>
-		                                            <i:EventTrigger EventName="Click">
-			                                            <icons:ButtonInvokedAnimation />
-		                                            </i:EventTrigger>
-	                                            </i:Interaction.Triggers>
+                                                              Height="{StaticResource Block}"
+                                                              IconSize="{StaticResource Block}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <icons:ButtonInvokedAnimation />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
                                             </icons:IconButton>
 
                                             <TextBlock
@@ -75,22 +85,26 @@
                                                   Margin="{StaticResource BlockHalfXOnlyMargin}"
                                                   Content="{Binding ElementName=ListBox, Path=SelectedItem}" />
                             </ScrollViewer>
-	                        <DockPanel Visibility="Collapsed" x:Name="InfoDockPanel">
-		                        <icons:IconBatch Type="Arrow" Width="{StaticResource Block}" Height="{StaticResource Block}"
-		                                         DockPanel.Dock="Left" Foreground="{DynamicResource Foreground1}"
-		                                         Margin="{StaticResource BlockQuarterThickness}" />
-		                        <TextBlock Text="Click here to add a new item" Foreground="{DynamicResource Foreground1}" />
-	                        </DockPanel>
+                            <DockPanel Visibility="Collapsed" x:Name="InfoDockPanel">
+                                <icons:IconBatch Type="Arrow" Width="{StaticResource Block}"
+                                                 Height="{StaticResource Block}"
+                                                 DockPanel.Dock="Left"
+                                                 Foreground="{DynamicResource Foreground1}"
+                                                 Margin="{StaticResource BlockQuarterThickness}" />
+                                <TextBlock Text="Click here to add a new item"
+                                           Foreground="{DynamicResource Foreground1}" />
+                            </DockPanel>
                         </Grid>
                     </DockPanel>
-	                <ControlTemplate.Triggers>
-		                <Trigger Property="DisplayAddMessage">
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="DisplayAddMessage">
                             <Trigger.Value>
                                 <system:Boolean>True</system:Boolean>
                             </Trigger.Value>
-			                <Setter TargetName="InfoDockPanel" Property="Visibility" Value="Visible" />
-		                </Trigger>
-	                </ControlTemplate.Triggers>
+                            <Setter TargetName="InfoDockPanel" Property="Visibility"
+                                    Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -9,17 +9,18 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type={x:Type setup:SetupViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
-	<buttonNavigation:ButtonNavigation Items="{Binding Sections}" SelectedItem="{Binding SelectedItem}">
-		<buttonNavigation:ButtonNavigation.Resources>
-			<ResourceDictionary>
-				<DataTemplate DataType="{x:Type setup:ConnectionsSectionViewModel}">
-					<settings:ConnectionsSectionView />
-				</DataTemplate>
+    <buttonNavigation:ButtonNavigation Items="{Binding Sections}"
+                                       SelectedItem="{Binding SelectedItem}">
+        <buttonNavigation:ButtonNavigation.Resources>
+            <ResourceDictionary>
+                <DataTemplate DataType="{x:Type setup:ConnectionsSectionViewModel}">
+                    <settings:ConnectionsSectionView />
+                </DataTemplate>
 
-				<DataTemplate DataType="{x:Type setup:ProjectsSectionViewModel}">
-					<settings:ProjectsSectionView />
-				</DataTemplate>
-			</ResourceDictionary>
-		</buttonNavigation:ButtonNavigation.Resources>
-	</buttonNavigation:ButtonNavigation>
+                <DataTemplate DataType="{x:Type setup:ProjectsSectionViewModel}">
+                    <settings:ProjectsSectionView />
+                </DataTemplate>
+            </ResourceDictionary>
+        </buttonNavigation:ButtonNavigation.Resources>
+    </buttonNavigation:ButtonNavigation>
 </UserControl>

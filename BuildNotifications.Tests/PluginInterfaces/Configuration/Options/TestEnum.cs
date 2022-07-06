@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options
+﻿namespace BuildNotifications.Tests.PluginInterfaces.Configuration.Options;
+
+public enum TestEnum
 {
-    public enum TestEnum
-    {
-        None,
-        One,
-        Two,
-        Three
-    }
+    None,
+    One,
+    Two,
+    Three
 }

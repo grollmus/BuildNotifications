@@ -24,14 +24,17 @@
                               SearchTermForeground="{DynamicResource Foreground1HalfTransparency}" />
 
         <!--The SearchTextBox scales very weird by itself. Therefore a plain text block is used with the same input as the SearchTextBox to use as a reference size-->
-        <Border x:Name="SizeDummy" IsHitTestVisible="False" Visibility="Hidden" HorizontalAlignment="Right">
-            <TextBlock x:Name="SizeDummyTextBlock" Margin="{StaticResource BlockXOnlyMargin}" Text="{Binding LastSearchedTerm}"
-                       MinWidth="{StaticResource Block}" FontSize="13"/>
+        <Border x:Name="SizeDummy" IsHitTestVisible="False" Visibility="Hidden"
+                HorizontalAlignment="Right">
+            <TextBlock x:Name="SizeDummyTextBlock" Margin="{StaticResource BlockXOnlyMargin}"
+                       Text="{Binding LastSearchedTerm}"
+                       MinWidth="{StaticResource Block}" FontSize="13" />
         </Border>
 
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="GotKeyboardFocus">
-                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}" TweenMinWidth="True"
+                <animation:WidthChange TargetWidth="{StaticResource BlockFourteenTimes}"
+                                       TweenMinWidth="True"
                                        Target="{Binding ElementName=SizeDummyTextBlock}" />
             </i:EventTrigger>
             <i:EventTrigger EventName="LostKeyboardFocus">

@@ -1,43 +1,42 @@
-﻿namespace BuildNotifications.PluginInterfaces.Notification
+﻿namespace BuildNotifications.PluginInterfaces.Notification;
+
+/// <summary>
+/// Available notification types that can be distributed
+/// </summary>
+public enum DistributedNotificationType
 {
     /// <summary>
-    /// Available notification types that can be distributed
+    /// Notification regarding a branch
     /// </summary>
-    public enum DistributedNotificationType
-    {
-        /// <summary>
-        /// Notification regarding a branch
-        /// </summary>
-        Branch,
+    Branch,
 
-        /// <summary>
-        /// Notification regarding a build definition
-        /// </summary>
-        Definition,
+    /// <summary>
+    /// Notification regarding a build definition
+    /// </summary>
+    Definition,
 
-        /// <summary>
-        /// Notification regarding a single build
-        /// </summary>
-        Build,
+    /// <summary>
+    /// Notification regarding a single build
+    /// </summary>
+    Build,
 
-        /// <summary>
-        /// Notification regarding multiple builds
-        /// </summary>
-        Builds,
+    /// <summary>
+    /// Notification regarding multiple builds
+    /// </summary>
+    Builds,
 
-        /// <summary>
-        /// Error
-        /// </summary>
-        GeneralError,
+    /// <summary>
+    /// Error
+    /// </summary>
+    GeneralError,
 
-        /// <summary>
-        /// Notification regarding a build definition and a branch
-        /// </summary>
-        DefinitionAndBranch,
+    /// <summary>
+    /// Notification regarding a build definition and a branch
+    /// </summary>
+    DefinitionAndBranch,
 
-        /// <summary>
-        /// General
-        /// </summary>
-        General
-    }
+    /// <summary>
+    /// General
+    /// </summary>
+    General
 }

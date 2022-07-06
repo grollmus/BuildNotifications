@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+public enum PartialSucceededTreatmentMode
 {
-    public enum PartialSucceededTreatmentMode
-    {
-        Ignore,
-        TreatAsFailed,
-        TreatAsSucceeded
-    }
+    Ignore,
+    TreatAsFailed,
+    TreatAsSucceeded
 }

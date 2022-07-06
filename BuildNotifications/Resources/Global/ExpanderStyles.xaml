@@ -21,11 +21,14 @@
             </Trigger>
 
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Background" Value="{DynamicResource Background2}" TargetName="Border" />
-                <Setter Property="Foreground" Value="{DynamicResource Foreground2}" TargetName="TextBlock" />
+                <Setter Property="Background" Value="{DynamicResource Background2}"
+                        TargetName="Border" />
+                <Setter Property="Foreground" Value="{DynamicResource Foreground2}"
+                        TargetName="TextBlock" />
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
-                <Setter Property="Background" Value="{DynamicResource Background3}" TargetName="Border" />
+                <Setter Property="Background" Value="{DynamicResource Background3}"
+                        TargetName="Border" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -45,7 +48,8 @@
                     </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="True">
-                            <Setter TargetName="ContentPresenter" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentPresenter" Property="Visibility"
+                                    Value="Visible" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

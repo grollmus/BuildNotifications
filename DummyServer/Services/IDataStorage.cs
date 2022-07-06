@@ -1,34 +1,32 @@
 ﻿using System.Collections.Generic;
 using BuildNotifications.Plugin.DummyServer;
 
-namespace DummyServer.Services
+namespace DummyServer.Services;
+
+public interface IDataStorage
 {
-    public interface IDataStorage
-    {
-        List<Branch> Branches();
+    void AddBranch(string name);
 
-        List<BuildDefinition> BuildDefinitions();
+    void AddBuild(string branchName, string definitionName, string userName);
 
-        List<User> Users();
+    void AddDefinition(string name);
 
-        List<Build> Builds();
+    void AddUser(string name);
+    List<Branch> Branches();
 
-        void AddBranch(string name);
+    List<BuildDefinition> BuildDefinitions();
 
-        void DeleteBranch(string name);
+    List<Build> Builds();
 
-        void AddDefinition(string name);
-        void DeleteDefinition(string name);
+    void DeleteBranch(string name);
 
-        void AddUser(string name);
-        void DeleteUser(string name);
+    void DeleteBuild(string id);
+    void DeleteDefinition(string name);
+    void DeleteUser(string name);
 
-        void AddBuild(string branchName, string definitionName, string userName);
+    void PermutateBuilds();
 
-        void PermutateBuilds();
+    void RandomizeBuildStatus();
 
-        void RandomizeBuildStatus();
-
-        void DeleteBuild(string id);
-    }
+    List<User> Users();
 }

@@ -22,7 +22,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
             </Style>
 
-            <Style TargetType="text:ClickableTextBlock" BasedOn="{StaticResource {x:Type text:ClickableTextBlock}}">
+            <Style TargetType="text:ClickableTextBlock"
+                   BasedOn="{StaticResource {x:Type text:ClickableTextBlock}}">
                 <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
             </Style>
         </ResourceDictionary>
@@ -34,7 +35,8 @@
 
         <TextBlock />
 
-        <text:ClickableTextBlock Text="{text:Localized CheckForUpdates}" HorizontalAlignment="Center"
+        <text:ClickableTextBlock Text="{text:Localized CheckForUpdates}"
+                                 HorizontalAlignment="Center"
                                  Visibility="{Binding CheckForUpdatesCommand.Execution, Converter={x:Static converters:NullToVisibilityConverter.Inverted}}"
                                  Command="{Binding CheckForUpdatesCommand}" />
         <Grid
@@ -42,11 +44,14 @@
             <TextBlock Text="{text:Localized CheckingForUpdates}" HorizontalAlignment="Center"
                        Visibility="{Binding CheckForUpdatesCommand.Execution.IsNotCompleted, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
-            <Grid Visibility="{Binding CheckForUpdatesCommand.Execution.IsSuccessfullyCompleted, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
+            <Grid
+                Visibility="{Binding CheckForUpdatesCommand.Execution.IsSuccessfullyCompleted, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
                 <TextBlock Text="{text:Localized NoUpdatesAvailable}" HorizontalAlignment="Center"
                            Visibility="{Binding CheckForUpdatesCommand.Execution.Result, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}}" />
 
-                <text:ClickableTextBlock Text="{text:Localized UpdateAvailable}" Command="{Binding UpdateCommand}" HorizontalAlignment="Center"
+                <text:ClickableTextBlock Text="{text:Localized UpdateAvailable}"
+                                         Command="{Binding UpdateCommand}"
+                                         HorizontalAlignment="Center"
                                          Visibility="{Binding CheckForUpdatesCommand.Execution.Result, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
             </Grid>
         </Grid>
@@ -55,7 +60,8 @@
 
         <TextBlock Text="Copyright © 2019-2020" HorizontalAlignment="Center" />
         <text:ClickableTextBlock Text="Grollmus München GmbH" Command="{Binding OpenUrlCommand}"
-                                 HorizontalAlignment="Center" CommandParameter="https://grollmus.de" />
+                                 HorizontalAlignment="Center"
+                                 CommandParameter="https://grollmus.de" />
         <text:ClickableTextBlock Text="{text:Localized Contributors}" HorizontalAlignment="Center"
                                  CommandParameter="https://github.com/grollmus/BuildNotifications/graphs/contributors"
                                  Command="{Binding OpenUrlCommand}" />

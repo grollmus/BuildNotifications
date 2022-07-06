@@ -1,7 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subject, Observable } from "rxjs";
-import { switchMap, startWith } from "rxjs/operators";
+import {Component, Inject} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Subject} from "rxjs";
+import {startWith, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-home',
@@ -16,15 +16,20 @@ export class HomeComponent {
   public selectedDefinition: Definition;
   public selectedBranch: Branch;
   public selectedUser: User;
+  private refreshBuilds = new Subject();
+  private refreshBranches = new Subject();
+  private refreshDefinitions = new Subject();
+  private refreshUser = new Subject();
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
 
 
   }
 
-
   ngOnInit() {
-    this.listenToUpdate<Build[]>(this.refreshBuilds, 'build', r => { this.builds = r; });
+    this.listenToUpdate<Build[]>(this.refreshBuilds, 'build', r => {
+      this.builds = r;
+    });
     this.listenToUpdate<Branch[]>(this.refreshBranches,
       'branch',
       r => {
@@ -45,34 +50,13 @@ export class HomeComponent {
       });
   }
 
-  private listenToUpdate<T>(subject: Subject<Object>, path: string, resultHandler: (result: T) => any) {
-    subject.pipe(
-      startWith(undefined),
-      switchMap(() => this.http.get<T>(this.baseUrl + path))
-    ).subscribe(resultHandler, error => console.error(error));
-  }
-
-  private selectedValueOrDefault<T>(currentValue: T, possibleValues: Array<T>): T {
-    if (!currentValue || possibleValues.indexOf(currentValue) < 0)
-      return this.firstOrDefault(possibleValues);
-  }
-
-  private firstOrDefault<T>(array: Array<T>) {
-    return array.length === 0 ? null : array[0];
-  }
-
-  private refreshBuilds = new Subject();
-  private refreshBranches = new Subject();
-  private refreshDefinitions = new Subject();
-  private refreshUser = new Subject();
-
   public refresh() {
     this.refreshBuilds.next();
   }
 
   public newBranch(name: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post<Branch>(this.baseUrl + 'branch', JSON.stringify(name), { headers: headers })
+    this.http.post<Branch>(this.baseUrl + 'branch', JSON.stringify(name), {headers: headers})
       .subscribe(r => this.refreshBranches.next());
 
   }
@@ -83,7 +67,7 @@ export class HomeComponent {
 
   public newDefinition(name: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post<Branch>(this.baseUrl + 'definition', JSON.stringify(name), { headers: headers })
+    this.http.post<Branch>(this.baseUrl + 'definition', JSON.stringify(name), {headers: headers})
       .subscribe(r => this.refreshDefinitions.next());
   }
 
@@ -93,7 +77,7 @@ export class HomeComponent {
 
   public newUser(name: string) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post<Branch>(this.baseUrl + 'user', JSON.stringify(name), { headers: headers })
+    this.http.post<Branch>(this.baseUrl + 'user', JSON.stringify(name), {headers: headers})
       .subscribe(r => this.refreshUser.next());
   }
 
@@ -111,11 +95,6 @@ export class HomeComponent {
     build.definitionName = this.selectedDefinition.name;
 
     this.postBuild(build);
-  }
-
-  private postBuild(build: Build) {
-    this.http.post<Build>(this.baseUrl + 'build', build)
-      .subscribe(r => this.refreshBuilds.next());
   }
 
   public updateBuildStatus(build: Build, status: number) {
@@ -138,6 +117,27 @@ export class HomeComponent {
 
   public deleteBuild(build: Build) {
     this.http.delete<Build>(this.baseUrl + 'build?id=' + build.id).subscribe(r => this.refreshBuilds.next());
+  }
+
+  private listenToUpdate<T>(subject: Subject<Object>, path: string, resultHandler: (result: T) => any) {
+    subject.pipe(
+      startWith(undefined),
+      switchMap(() => this.http.get<T>(this.baseUrl + path))
+    ).subscribe(resultHandler, error => console.error(error));
+  }
+
+  private selectedValueOrDefault<T>(currentValue: T, possibleValues: Array<T>): T {
+    if (!currentValue || possibleValues.indexOf(currentValue) < 0)
+      return this.firstOrDefault(possibleValues);
+  }
+
+  private firstOrDefault<T>(array: Array<T>) {
+    return array.length === 0 ? null : array[0];
+  }
+
+  private postBuild(build: Build) {
+    this.http.post<Build>(this.baseUrl + 'build', build)
+      .subscribe(r => this.refreshBuilds.next());
   }
 }
 

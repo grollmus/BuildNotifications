@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Settings
+﻿namespace BuildNotifications.Views.Settings;
+
+public partial class ProjectView
 {
-    public partial class ProjectView
+    public ProjectView()
     {
-        public ProjectView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

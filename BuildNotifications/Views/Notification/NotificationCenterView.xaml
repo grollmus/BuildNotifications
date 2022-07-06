@@ -25,7 +25,8 @@
             <icons:IconButton Style="{StaticResource IconButtonWithDockedContent}"
                               Visibility="{Binding ClearButtonVisible, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
                               Content="{text:Localized ClearAll}" DockPanel.Dock="Bottom"
-                              HorizontalAlignment="Center" Command="{Binding ClearAllCommand}" Icon="NoMessage"
+                              HorizontalAlignment="Center" Command="{Binding ClearAllCommand}"
+                              Icon="NoMessage"
                               Foreground="{DynamicResource Foreground1}" />
             <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Notifications}"
                      Style="{StaticResource StretchingListBox}"
@@ -42,9 +43,11 @@
                         <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
                             <icons:IconBatch Width="{StaticResource BlockDouble}"
                                              Height="{StaticResource BlockDouble}"
-                                             Foreground="{DynamicResource Background3}" Type="{Binding IconType}"
+                                             Foreground="{DynamicResource Background3}"
+                                             Type="{Binding IconType}"
                                              DockPanel.Dock="Left"
-                                             x:Name="Icon" Margin="{StaticResource BlockHalfThickness}"
+                                             x:Name="Icon"
+                                             Margin="{StaticResource BlockHalfThickness}"
                                              VerticalAlignment="Top" />
 
                             <DockPanel DockPanel.Dock="Top">
@@ -58,12 +61,15 @@
                                     DockPanel.Dock="Right" />
 
                                 <DockPanel LastChildFill="False">
-                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Top" x:Name="TitleText"
-                                               TextWrapping="Wrap" FontWeight="Bold" DockPanel.Dock="Left"
+                                    <TextBlock Text="{Binding Title}" VerticalAlignment="Top"
+                                               x:Name="TitleText"
+                                               TextWrapping="Wrap" FontWeight="Bold"
+                                               DockPanel.Dock="Left"
                                                Foreground="{DynamicResource Foreground1}" />
 
                                     <TextBlock Text="{Binding Source}" VerticalAlignment="Bottom"
-                                               MaxHeight="{StaticResource BlockDouble}" TextTrimming="CharacterEllipsis"
+                                               MaxHeight="{StaticResource BlockDouble}"
+                                               TextTrimming="CharacterEllipsis"
                                                ToolTip="{Binding Source}"
                                                Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                                FontSize="{StaticResource BlockFiveSixths}"
@@ -71,13 +77,16 @@
                                 </DockPanel>
 
                             </DockPanel>
-                            <TextBlock Text="{Binding Content}" x:Name="ContentText" TextWrapping="Wrap"
-                                       Foreground="{DynamicResource Foreground1}" DockPanel.Dock="Bottom" />
+                            <TextBlock Text="{Binding Content}" x:Name="ContentText"
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource Foreground1}"
+                                       DockPanel.Dock="Bottom" />
 
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                                    <triggerActions:ElementFadeOutScale Duration="0.4" Anchor="Center"
-                                                                        TargetScaleX="0.8" TargetScaleY="0.8" />
+                                    <triggerActions:ElementFadeOutScale Duration="0.4"
+                                        Anchor="Center"
+                                        TargetScaleX="0.8" TargetScaleY="0.8" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
 
@@ -85,20 +94,28 @@
 
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding BuildStatus}" Value="Failed">
-                                <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="TitleText" />
-                                <Setter Property="Foreground" Value="{DynamicResource Red}" TargetName="Icon" />
+                                <Setter Property="Foreground" Value="{DynamicResource Red}"
+                                        TargetName="TitleText" />
+                                <Setter Property="Foreground" Value="{DynamicResource Red}"
+                                        TargetName="Icon" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BuildStatus}" Value="Succeeded">
-                                <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
-                                <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                                <Setter Property="Foreground" Value="{DynamicResource Green}"
+                                        TargetName="TitleText" />
+                                <Setter Property="Foreground" Value="{DynamicResource Green}"
+                                        TargetName="Icon" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BuildStatus}" Value="PartiallySucceeded">
-                                <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="TitleText" />
-                                <Setter Property="Foreground" Value="{DynamicResource Green}" TargetName="Icon" />
+                                <Setter Property="Foreground" Value="{DynamicResource Green}"
+                                        TargetName="TitleText" />
+                                <Setter Property="Foreground" Value="{DynamicResource Green}"
+                                        TargetName="Icon" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding BuildStatus}" Value="Cancelled">
-                                <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="TitleText" />
-                                <Setter Property="Foreground" Value="{DynamicResource Gray}" TargetName="Icon" />
+                                <Setter Property="Foreground" Value="{DynamicResource Gray}"
+                                        TargetName="TitleText" />
+                                <Setter Property="Foreground" Value="{DynamicResource Gray}"
+                                        TargetName="Icon" />
                             </DataTrigger>
                         </DataTemplate.Triggers>
 
@@ -111,9 +128,11 @@
             Visibility="{Binding NoNotifications, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
             HorizontalAlignment="Center" VerticalAlignment="Center">
             <icons:IconBatch Type="NoMessage" Width="{StaticResource BlockTriple}"
-                             Height="{StaticResource BlockTriple}" Foreground="{StaticResource Background3}"
+                             Height="{StaticResource BlockTriple}"
+                             Foreground="{StaticResource Background3}"
                              DockPanel.Dock="Top" />
-            <TextBlock Text="{text:Localized NoNotifications}" Foreground="{DynamicResource Background3}"
+            <TextBlock Text="{text:Localized NoNotifications}"
+                       Foreground="{DynamicResource Background3}"
                        HorizontalAlignment="Center" FontSize="{StaticResource BlockOneAndHalf}" />
         </DockPanel>
     </Grid>

@@ -1,24 +1,23 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+/// <summary>
+/// Provides access to configuration related services.
+/// </summary>
+public interface IConfigurationService
 {
     /// <summary>
-    /// Provides access to configuration related services.
+    /// The currently active configuration
     /// </summary>
-    public interface IConfigurationService
-    {
-        /// <summary>
-        /// The currently active configuration
-        /// </summary>
-        IConfiguration Current { get; }
+    IConfiguration Current { get; }
 
-        /// <summary>
-        /// Serializer to load and save configurations
-        /// </summary>
-        IConfigurationSerializer Serializer { get; }
+    /// <summary>
+    /// Serializer to load and save configurations
+    /// </summary>
+    IConfigurationSerializer Serializer { get; }
 
-        /// <summary>
-        /// Merges a new configuration into the currently loaded one.
-        /// </summary>
-        /// <param name="newConfiguration">Configuration to merge.</param>
-        void Merge(IConfiguration newConfiguration);
-    }
+    /// <summary>
+    /// Merges a new configuration into the currently loaded one.
+    /// </summary>
+    /// <param name="newConfiguration">Configuration to merge.</param>
+    void Merge(IConfiguration newConfiguration);
 }

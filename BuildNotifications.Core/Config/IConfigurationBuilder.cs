@@ -1,8 +1,7 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+public interface IConfigurationBuilder
 {
-    public interface IConfigurationBuilder
-    {
-        IProjectConfiguration EmptyConfiguration(string name);
-        IConfiguration LoadConfiguration();
-    }
+    IProjectConfiguration EmptyConfiguration(string name);
+    IConfiguration LoadConfiguration();
 }

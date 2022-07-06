@@ -23,24 +23,28 @@
     </UserControl.Resources>
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Children}" Margin="{StaticResource BlockThicknessOnXHalfOnY}"
+            <ItemsControl ItemsSource="{Binding Children}"
+                          Margin="{StaticResource BlockThicknessOnXHalfOnY}"
                           ItemTemplateSelector="{x:Static resourcesBuildTree:BuildTreeNodeTemplateSelector.ForLevelLayout}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <animation:AnimatedWrapPanel Delay="0.1"
-                            Orientation="{Binding MaxTreeDepth, Converter={x:Static converter:MaxTreeDepthToOrientationConverter.Instance}}"
-                            VirtualizingStackPanel.IsVirtualizing="True" />
+                                                     Orientation="{Binding MaxTreeDepth, Converter={x:Static converter:MaxTreeDepthToOrientationConverter.Instance}}"
+                                                     VirtualizingStackPanel.IsVirtualizing="True" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
 
-        <DockPanel Visibility="{Binding TreeIsEmpty, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
-                   HorizontalAlignment="Center" VerticalAlignment="Center">
+        <DockPanel
+            Visibility="{Binding TreeIsEmpty, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
+            HorizontalAlignment="Center" VerticalAlignment="Center">
             <icons:IconBatch Type="NoConnection" Width="{StaticResource BlockTriple}"
-                             Height="{StaticResource BlockTriple}" Foreground="{StaticResource Background3}"
+                             Height="{StaticResource BlockTriple}"
+                             Foreground="{StaticResource Background3}"
                              DockPanel.Dock="Top" />
-            <TextBlock Text="{text:Localized TreeIsEmpty}" Foreground="{DynamicResource Background3}"
+            <TextBlock Text="{text:Localized TreeIsEmpty}"
+                       Foreground="{DynamicResource Background3}"
                        HorizontalAlignment="Center" FontSize="{StaticResource BlockOneAndHalf}" />
         </DockPanel>
     </Grid>

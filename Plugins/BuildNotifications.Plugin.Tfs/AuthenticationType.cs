@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.Plugin.Tfs
+﻿namespace BuildNotifications.Plugin.Tfs;
+
+public enum AuthenticationType
 {
-    public enum AuthenticationType
-    {
-        Windows,
-        Account,
-        Token
-    }
+    Windows,
+    Account,
+    Token
 }

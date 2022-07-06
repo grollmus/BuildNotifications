@@ -2,34 +2,33 @@
 using BuildNotifications.Plugin.Tfs.Configuration;
 using Xunit;
 
-namespace BuildNotifications.Tests.ViewModels.Settings.Options
+namespace BuildNotifications.Tests.ViewModels.Settings.Options;
+
+public class TfsLocalizerTests
 {
-    public class TfsLocalizerTests
+    [Fact]
+    public void LocalizedShouldReturnLocalizedTextForTranslation()
     {
-        [Fact]
-        public void LocalizedShouldReturnLocalizedTextForTranslation()
-        {
-            // Arrange
-            var sut = new TfsLocalizer();
+        // Arrange
+        var sut = new TfsLocalizer();
 
-            // Act
-            var actual = sut.Localized("Password.Name", CultureInfo.CreateSpecificCulture("de"));
+        // Act
+        var actual = sut.Localized("Password.Name", CultureInfo.CreateSpecificCulture("de"));
 
-            // Assert
-            Assert.Equal("Passwort", actual);
-        }
+        // Assert
+        Assert.Equal("Passwort", actual);
+    }
 
-        [Fact]
-        public void LocalizedShouldReturnTextIdForMissingTranslation()
-        {
-            // Arrange
-            var sut = new TfsLocalizer();
+    [Fact]
+    public void LocalizedShouldReturnTextIdForMissingTranslation()
+    {
+        // Arrange
+        var sut = new TfsLocalizer();
 
-            // Act
-            var actual = sut.Localized("MissingTranslationForTest", CultureInfo.CreateSpecificCulture("de"));
+        // Act
+        var actual = sut.Localized("MissingTranslationForTest", CultureInfo.CreateSpecificCulture("de"));
 
-            // Assert
-            Assert.Equal("[MissingTranslationForTest]", actual);
-        }
+        // Assert
+        Assert.Equal("[MissingTranslationForTest]", actual);
     }
 }

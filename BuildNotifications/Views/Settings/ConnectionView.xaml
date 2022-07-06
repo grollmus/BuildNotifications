@@ -12,36 +12,36 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type setup:ConnectionViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
 
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../../Resources/Settings/PluginChooserTemplate.xaml" />
-				<ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
-				<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</UserControl.Resources>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/Settings/PluginChooserTemplate.xaml" />
+                <ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
+                <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-	<StackPanel Orientation="Vertical">
-		<text:DecoratedTextBox Text="{Binding Name, Mode=TwoWay}"
-		                       Label="{x:Static text1:StringLocalizer.Name}"
-		                       Margin="{StaticResource BlockYOnlyMargin}"
-		                       ToolTip="{x:Static text1:StringLocalizer.ConnectionNameDescription}" />
+    <StackPanel Orientation="Vertical">
+        <text:DecoratedTextBox Text="{Binding Name, Mode=TwoWay}"
+                               Label="{x:Static text1:StringLocalizer.Name}"
+                               Margin="{StaticResource BlockYOnlyMargin}"
+                               ToolTip="{x:Static text1:StringLocalizer.ConnectionNameDescription}" />
 
-		<settingsRes:DecoratedComboBox ItemsSource="{Binding AvailableConnectionTypes}"
-		                               SelectedValue="{Binding ConnectionPluginType}"
-		                               Margin="{StaticResource BlockYOnlyMargin}"
-		                               Text="{x:Static text1:StringLocalizer.ConnectionType}"
-		                               ToolTip="{x:Static text1:StringLocalizer.ConnectionTypeDescription}" />
+        <settingsRes:DecoratedComboBox ItemsSource="{Binding AvailableConnectionTypes}"
+                                       SelectedValue="{Binding ConnectionPluginType}"
+                                       Margin="{StaticResource BlockYOnlyMargin}"
+                                       Text="{x:Static text1:StringLocalizer.ConnectionType}"
+                                       ToolTip="{x:Static text1:StringLocalizer.ConnectionTypeDescription}" />
 
-		<settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}"
-		                           ConnectionPluginType="{Binding ConnectionPluginType}"
-		                           SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
+        <settingsRes:PluginChooser PluginRepository="{Binding PluginRepository}"
+                                   ConnectionPluginType="{Binding ConnectionPluginType}"
+                                   SelectedPlugin="{Binding SelectedPlugin, Mode=TwoWay}" />
 
-		<ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
-		              IsEnabled="{Binding SelectedPlugin, Converter={x:Static converters:NullToBoolConverter.Instance}}"
-		              ItemTemplateSelector="{x:Static settingsRes:OptionTemplateSelector.Instance}" />
+        <ItemsControl ItemsSource="{Binding PluginConfiguration.Options}"
+                      IsEnabled="{Binding SelectedPlugin, Converter={x:Static converters:NullToBoolConverter.Instance}}"
+                      ItemTemplateSelector="{x:Static settingsRes:OptionTemplateSelector.Instance}" />
 
-		<local:TestConnectionView DockPanel.Dock="Left" DataContext="{Binding TestConnection}" />
-	</StackPanel>
+        <local:TestConnectionView DockPanel.Dock="Left" DataContext="{Binding TestConnection}" />
+    </StackPanel>
 </UserControl>

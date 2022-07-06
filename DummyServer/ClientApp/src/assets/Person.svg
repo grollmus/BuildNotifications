@@ -1,18 +1,18 @@
-
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="36px" height="36px" viewBox="0 0 36 36">
-<defs>
-<g id="Layer56_0_FILL">
-<path fill="#5C6982" stroke="none" d="
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
+     preserveAspectRatio="none" x="0px" y="0px" width="36px" height="36px" viewBox="0 0 36 36">
+  <defs>
+    <g id="Layer56_0_FILL">
+      <path fill="#5C6982" stroke="none" d="
 M 17.55 15.45
 Q 13.35 15.45 10.35 18.45 7.35 21.45 7.35 25.8
 L 7.35 36 27.9 36 27.9 25.8
 Q 27.9 21.45 24.9 18.45 21.9 15.45 17.55 15.45
 M 24.3 6.75
 Q 24.3 3.9 22.35 1.95 20.4 0 17.55 0 14.7 0 12.75 1.95 10.8 3.9 10.8 6.75 10.8 9.6 12.75 11.55 14.7 13.5 17.55 13.5 20.4 13.5 22.35 11.55 24.3 9.6 24.3 6.75 Z"/>
-</g>
-</defs>
+    </g>
+  </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer56_0_FILL"/>
-</g>
+  <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+    <use xlink:href="#Layer56_0_FILL"/>
+  </g>
 </svg>

@@ -5,39 +5,38 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace BuildNotifications.Resources.Icons
+namespace BuildNotifications.Resources.Icons;
+
+internal class IconToDrawingImageConverter : IValueConverter
 {
-    internal class IconToDrawingImageConverter : IValueConverter
+    private IconToDrawingImageConverter()
     {
-        private IconToDrawingImageConverter()
-        {
-        }
-
-        public static IconToDrawingImageConverter Instance { get; } = new IconToDrawingImageConverter();
-
-        private DrawingImage? TryFindResource(FrameworkElement element, string key)
-        {
-            if (_cache.TryGetValue(key, out var existingTemplate))
-                return existingTemplate;
-
-            existingTemplate = element.TryFindResource(key) as DrawingImage;
-            _cache.Add(key, existingTemplate);
-
-            return existingTemplate;
-        }
-
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var key = $"{value}DrawingImage";
-
-            if (Application.Current.MainWindow != null)
-                return TryFindResource(Application.Current.MainWindow, key);
-
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-
-        private readonly Dictionary<string, DrawingImage?> _cache = new Dictionary<string, DrawingImage?>();
     }
+
+    public static IconToDrawingImageConverter Instance { get; } = new();
+
+    private DrawingImage? TryFindResource(FrameworkElement element, string key)
+    {
+        if (_cache.TryGetValue(key, out var existingTemplate))
+            return existingTemplate;
+
+        existingTemplate = element.TryFindResource(key) as DrawingImage;
+        _cache.Add(key, existingTemplate);
+
+        return existingTemplate;
+    }
+
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        var key = $"{value}DrawingImage";
+
+        if (Application.Current.MainWindow != null)
+            return TryFindResource(Application.Current.MainWindow, key);
+
+        return null;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+
+    private readonly Dictionary<string, DrawingImage?> _cache = new();
 }

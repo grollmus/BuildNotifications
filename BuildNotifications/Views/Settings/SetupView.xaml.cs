@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Settings
+﻿namespace BuildNotifications.Views.Settings;
+
+public partial class SetupView
 {
-    public partial class SetupView
+    public SetupView()
     {
-        public SetupView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

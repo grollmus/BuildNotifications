@@ -1,9 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.SourceControl;
 
-namespace BuildNotifications.Plugin.DummyServer
+namespace BuildNotifications.Plugin.DummyServer;
+
+internal class BranchNameExtractor : IBranchNameExtractor
 {
-    internal class BranchNameExtractor : IBranchNameExtractor
-    {
-        public string ExtractDisplayName(string fullBranchName) => fullBranchName;
-    }
+    public string ExtractDisplayName(string fullBranchName) => fullBranchName;
 }

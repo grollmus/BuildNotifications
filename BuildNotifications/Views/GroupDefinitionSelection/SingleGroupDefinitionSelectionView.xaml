@@ -1,23 +1,25 @@
-﻿<UserControl x:Class="BuildNotifications.Views.GroupDefinitionSelection.SingleGroupDefinitionSelectionView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
-             xmlns:groupDefinitionSelectionResources="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
-             xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
-             xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
-             xmlns:views="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
-             mc:Ignorable="d" x:Name="UserControl"
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionsViewModel} }">
+﻿<UserControl
+    x:Class="BuildNotifications.Views.GroupDefinitionSelection.SingleGroupDefinitionSelectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
+    xmlns:groupDefinitionSelectionResources="clr-namespace:BuildNotifications.Resources.GroupDefinitionSelection"
+    xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:triggerActions="clr-namespace:BuildNotifications.Resources.BuildTree.TriggerActions"
+    xmlns:groupDefinitionSelection="clr-namespace:BuildNotifications.ViewModel.GroupDefinitionSelection"
+    xmlns:views="clr-namespace:BuildNotifications.Views.GroupDefinitionSelection"
+    mc:Ignorable="d" x:Name="UserControl"
+    d:DesignHeight="450" d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionsViewModel} }">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
+                <ResourceDictionary
+                    Source="../../Resources/GroupDefinitionSelection/ComboBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <DataTemplate DataType="{x:Type groupDefinitionSelection:SortingDefinitionsViewModel}">
@@ -28,12 +30,14 @@
                 <DockPanel x:Name="DockPanel">
                     <!--DataContext cannot be specified-->
                     <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
-                    <ContentPresenter DockPanel.Dock="Right" Content="{Binding SortingDefinitionsViewModel}"
+                    <ContentPresenter DockPanel.Dock="Right"
+                                      Content="{Binding SortingDefinitionsViewModel}"
                                       Margin="0,0,-42,0"
                                       Visibility="{Binding DataContext.DisplaySortingSelection, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=DockPanel}" />
                     <icons:IconBatch Width="{DynamicResource Block}"
                                      Height="{DynamicResource Block}" IsHitTestVisible="False"
-                                     Foreground="{DynamicResource Foreground1}" Type="{Binding IconType}" />
+                                     Foreground="{DynamicResource Foreground1}"
+                                     Type="{Binding IconType}" />
                 </DockPanel>
             </DataTemplate>
         </ResourceDictionary>
@@ -60,45 +64,56 @@
 
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Grid x:Name="Grid" Margin="{StaticResource BlockQuarterRight}">
-                                    <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel" Orientation="Horizontal"
+                                    <StackPanel SnapsToDevicePixels="true" x:Name="DockPanel"
+                                                Orientation="Horizontal"
                                                 Margin="{StaticResource BlockQuarterThickness}">
-                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              Width="{DynamicResource BlockDouble}" 
+                                        <Grid HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Width="{DynamicResource BlockDouble}"
                                               Height="{DynamicResource BlockOneAndHalf}">
-                                            <ContentPresenter  />
+                                            <ContentPresenter />
                                         </Grid>
 
-                                        <Rectangle Width="1" Fill="Black" Opacity="0.1" Margin="{StaticResource BlockQuarterRight}" />
+                                        <Rectangle Width="1" Fill="Black" Opacity="0.1"
+                                                   Margin="{StaticResource BlockQuarterRight}" />
 
-                                        <TextBlock Text="{Binding GroupByText}" x:Name="GroupByTextBlock"
+                                        <TextBlock Text="{Binding GroupByText}"
+                                                   x:Name="GroupByTextBlock"
                                                    TextAlignment="Right"
                                                    HorizontalAlignment="Right"
-                                                   Foreground="{DynamicResource Foreground1HalfTransparency}" MinWidth="50" />
+                                                   Foreground="{DynamicResource Foreground1HalfTransparency}"
+                                                   MinWidth="50" />
                                         <TextBlock
                                             d:DataContext="{d:DesignInstance Type={x:Type groupDefinitionSelection:GroupDefinitionViewModel} }"
                                             Text="{Binding GroupDefinition, Converter={x:Static text:EnumNameToLocalizedTextConverter.Instance}}"
                                             Margin="{StaticResource BlockQuarterXOnlyMargin}"
-                                            x:Name="NameTextBlock" Foreground="{DynamicResource Foreground1HalfTransparency}" />
+                                            x:Name="NameTextBlock"
+                                            Foreground="{DynamicResource Foreground1HalfTransparency}" />
 
                                     </StackPanel>
 
                                     <!--Use a almost invisible background so mouse events are captured. This is necessary as this control is used within a PopUp that has AllowTransparency set to true-->
-                                    <Border Background="{DynamicResource Background1}" Opacity="0.01" Cursor="Hand" />
+                                    <Border Background="{DynamicResource Background1}"
+                                            Opacity="0.01" Cursor="Hand" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
-                                            <triggerActions:ElementFadeInBackEase DoScale="False" Duration="0.3" />
+                                            <triggerActions:ElementFadeInBackEase DoScale="False"
+                                                Duration="0.3" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="{DynamicResource Foreground1}"
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource Foreground1}"
                                                 TargetName="GroupByTextBlock" />
-                                        <Setter Property="Foreground" Value="{DynamicResource Foreground2}"
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource Foreground2}"
                                                 TargetName="NameTextBlock" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="true">
-                                        <Setter TargetName="DockPanel" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="DockPanel" Property="Visibility"
+                                                Value="Collapsed" />
                                     </Trigger>
 
                                 </ControlTemplate.Triggers>

@@ -2,24 +2,23 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.Core.Tests;
+
+public class SynchronizationContextRemoverTests
 {
-    public class SynchronizationContextRemoverTests
+    [Fact]
+    public async Task AwaitingShouldRemoveSynchronizationContext()
     {
-        [Fact]
-        public async Task AwaitingShouldRemoveSynchronizationContext()
-        {
-            // Arrange
-            var contextRemover = new SynchronizationContextRemover();
+        // Arrange
+        var contextRemover = new SynchronizationContextRemover();
 
-            // Act
-            var contextBefore = SynchronizationContext.Current;
-            await contextRemover;
-            var contextAfter = SynchronizationContext.Current;
+        // Act
+        var contextBefore = SynchronizationContext.Current;
+        await contextRemover;
+        var contextAfter = SynchronizationContext.Current;
 
-            // Assert
-            Assert.NotNull(contextBefore);
-            Assert.Null(contextAfter);
-        }
+        // Assert
+        Assert.NotNull(contextBefore);
+        Assert.Null(contextAfter);
     }
 }

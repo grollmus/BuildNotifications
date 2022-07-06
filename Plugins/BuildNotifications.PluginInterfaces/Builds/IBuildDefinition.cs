@@ -1,22 +1,21 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace BuildNotifications.PluginInterfaces.Builds
+namespace BuildNotifications.PluginInterfaces.Builds;
+
+/// <summary>
+/// Contains information about a build definition.
+/// </summary>
+[PublicAPI]
+public interface IBuildDefinition : IEquatable<IBuildDefinition>
 {
     /// <summary>
-    /// Contains information about a build definition.
+    /// Unique id of this definition.
     /// </summary>
-    [PublicAPI]
-    public interface IBuildDefinition : IEquatable<IBuildDefinition>
-    {
-        /// <summary>
-        /// Unique id of this definition.
-        /// </summary>
-        string Id { get; }
+    string Id { get; }
 
-        /// <summary>
-        /// Name of this definition.
-        /// </summary>
-        string Name { get; }
-    }
+    /// <summary>
+    /// Name of this definition.
+    /// </summary>
+    string Name { get; }
 }

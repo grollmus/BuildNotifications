@@ -1,26 +1,25 @@
 ﻿using JetBrains.Annotations;
 
-namespace BuildNotifications.PluginInterfaces
+namespace BuildNotifications.PluginInterfaces;
+
+/// <summary>
+/// Contains information about a user.
+/// </summary>
+[PublicAPI]
+public interface IUser
 {
     /// <summary>
-    /// Contains information about a user.
+    /// Name that is used when displaying this user.
     /// </summary>
-    [PublicAPI]
-    public interface IUser
-    {
-        /// <summary>
-        /// Name that is used when displaying this user.
-        /// </summary>
-        string DisplayName { get; }
+    string DisplayName { get; }
 
-        /// <summary>
-        /// Id of this user.
-        /// </summary>
-        string Id { get; }
+    /// <summary>
+    /// Id of this user.
+    /// </summary>
+    string Id { get; }
 
-        /// <summary>
-        /// Unique name of this user.
-        /// </summary>
-        string UniqueName { get; }
-    }
+    /// <summary>
+    /// Unique name of this user.
+    /// </summary>
+    string UniqueName { get; }
 }

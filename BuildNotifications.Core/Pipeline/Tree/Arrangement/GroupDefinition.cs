@@ -1,11 +1,10 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree.Arrangement
+﻿namespace BuildNotifications.Core.Pipeline.Tree.Arrangement;
+
+public enum GroupDefinition
 {
-    public enum GroupDefinition
-    {
-        Branch,
-        BuildDefinition,
-        Source,
-        Status,
-        None
-    }
+    Branch,
+    BuildDefinition,
+    Source,
+    Status,
+    None
 }

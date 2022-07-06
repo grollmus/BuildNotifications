@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using BuildNotifications.Core.Pipeline.Tree.Search;
 
-namespace BuildNotifications.Resources.Search
+namespace BuildNotifications.Resources.Search;
+
+internal class EmptySearchHistory : ISearchHistory
 {
-    internal class EmptySearchHistory : ISearchHistory
+    public IEnumerable<string> SearchedTerms()
     {
-        public IEnumerable<string> SearchedTerms()
-        {
-            yield break;
-        }
+        yield break;
+    }
 
-        public void AddEntry(string searchTerm, DateTime? timeSearchWasMade = null)
-        {
-            // unused
-        }
+    public void AddEntry(string searchTerm, DateTime? timeSearchWasMade = null)
+    {
+        // unused
+    }
 
-        public void RemoveEntry(string searchTerm)
-        {
-            // unused
-        }
+    public void RemoveEntry(string searchTerm)
+    {
+        // unused
     }
 }

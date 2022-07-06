@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+public enum AnimationMode
 {
-    public enum AnimationMode
-    {
-        Enabled,
-        Disabled,
-        DoubleSpeed
-    }
+    Enabled,
+    Disabled,
+    DoubleSpeed
 }

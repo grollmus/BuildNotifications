@@ -1,56 +1,55 @@
 ﻿using System;
 
-namespace BuildNotifications.Core
+namespace BuildNotifications.Core;
+
+public static class TypeExtensions
 {
-    public static class TypeExtensions
+    public static bool CompareWithoutGenericTypes(this Type type, Type otherType)
     {
-        public static bool CompareWithoutGenericTypes(this Type type, Type otherType)
+        var typeToCompare = type;
+        if (type.IsGenericType)
+            typeToCompare = type.GetGenericTypeDefinition();
+
+        var otherTypeToCompare = otherType;
+        if (otherType.IsGenericType)
+            otherTypeToCompare = otherType.GetGenericTypeDefinition();
+
+        return typeToCompare == otherTypeToCompare;
+    }
+
+    public static Type? FindBaseType(this Type type, Type baseType)
+    {
+        var result = type;
+        while (result?.CompareWithoutGenericTypes(baseType) == false)
         {
-            var typeToCompare = type;
-            if (type.IsGenericType)
-                typeToCompare = type.GetGenericTypeDefinition();
+            if (result.BaseType == null)
+                return null;
 
-            var otherTypeToCompare = otherType;
-            if (otherType.IsGenericType)
-                otherTypeToCompare = otherType.GetGenericTypeDefinition();
-
-            return typeToCompare == otherTypeToCompare;
+            result = result.BaseType;
         }
 
-        public static Type? FindBaseType(this Type type, Type baseType)
+        return result;
+    }
+
+    public static bool IsAssignableToGenericType(this Type givenType, Type genericType) => IsAssignableToGenericTypeInternal(givenType, genericType);
+
+    private static bool IsAssignableToGenericTypeInternal(Type givenType, Type genericType)
+    {
+        var interfaceTypes = givenType.GetInterfaces();
+
+        foreach (var it in interfaceTypes)
         {
-            var result = type;
-            while (result?.CompareWithoutGenericTypes(baseType) == false)
-            {
-                if (result.BaseType == null)
-                    return null;
-
-                result = result.BaseType;
-            }
-
-            return result;
-        }
-
-        public static bool IsAssignableToGenericType(this Type givenType, Type genericType) => IsAssignableToGenericTypeInternal(givenType, genericType);
-
-        private static bool IsAssignableToGenericTypeInternal(Type givenType, Type genericType)
-        {
-            var interfaceTypes = givenType.GetInterfaces();
-
-            foreach (var it in interfaceTypes)
-            {
-                if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
-                    return true;
-            }
-
-            if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+            if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
                 return true;
-
-            var baseType = givenType.BaseType;
-            if (baseType == null)
-                return false;
-
-            return IsAssignableToGenericTypeInternal(baseType, genericType);
         }
+
+        if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+            return true;
+
+        var baseType = givenType.BaseType;
+        if (baseType == null)
+            return false;
+
+        return IsAssignableToGenericTypeInternal(baseType, genericType);
     }
 }

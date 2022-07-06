@@ -19,7 +19,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border Name="border" BorderThickness="1" Padding="0,0" BorderBrush="{DynamicResource Background3}"
+                    <Border Name="border" BorderThickness="1" Padding="0,0"
+                            BorderBrush="{DynamicResource Background3}"
                             CornerRadius="0" Background="{TemplateBinding Background}">
                         <Border.RenderTransform>
                             <SkewTransform AngleX="-35" />
@@ -27,11 +28,13 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground1HalfTransparency}"
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Foreground1HalfTransparency}"
                                     TargetName="border" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground2}" TargetName="border" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground2}"
+                                    TargetName="border" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -66,7 +69,9 @@
                                PlacementRectangle="{StaticResource NegativeBlockLeftOneAndHalfBlockTopRectangle}"
                                PlacementTarget="{Binding ElementName=ToggleButton}"
                                Placement="Bottom">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
                                 <ItemsPresenter x:Name="ItemsPresenter"
                                                 KeyboardNavigation.DirectionalNavigation="Contained"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -89,7 +94,8 @@
                                 <ei:DataTrigger
                                     Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="True">
-                                    <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
+                                    <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4"
+                                        Anchor="Center" />
                                 </ei:DataTrigger>
 
                                 <i:EventTrigger EventName="ContentUpdated">
@@ -107,8 +113,9 @@
 
                             <i:Interaction.Triggers>
                                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="True">
-                                    <triggerActions:ElementFadeOutScale Duration="0.3" Anchor="Center" TargetScaleX="1"
-                                                                        TargetScaleY="1" />
+                                    <triggerActions:ElementFadeOutScale Duration="0.3"
+                                        Anchor="Center" TargetScaleX="1"
+                                        TargetScaleY="1" />
                                 </ei:DataTrigger>
                             </i:Interaction.Triggers>
                         </ToggleButton>
@@ -122,7 +129,8 @@
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsGrouping" Value="true" />
-                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
+                                           Value="false" />
                             </MultiTrigger.Conditions>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </MultiTrigger>

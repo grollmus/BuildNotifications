@@ -7,8 +7,10 @@
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:converter="clr-namespace:BuildNotifications.Resources.BuildTree.Converter"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type notification:DistributedNotificationViewModel}}"
-             d:DesignHeight="450" d:DesignWidth="800" Width="{Binding Width}" Height="{Binding Height}">
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type notification:DistributedNotificationViewModel}}"
+             d:DesignHeight="450" d:DesignWidth="800" Width="{Binding Width}"
+             Height="{Binding Height}">
     <!--Sizes are hardcoded because the width and height of this view is tethered to what the Windows 10 Action Center can display-->
     <Grid>
         <DockPanel Visibility="{Binding BigViewVisibility}">
@@ -29,7 +31,8 @@
                                      StretchDirection="DownOnly" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding}" Foreground="White" TextWrapping="Wrap"
                                            FontSize="25"
-                                           FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" />
+                                           FontWeight="Bold" TextAlignment="Center"
+                                           VerticalAlignment="Center" />
                             </Viewbox>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -61,7 +64,8 @@
                                        Foreground="{Binding DataContext.BuildStatus, ElementName=SmallViewDockPanel, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}"
                                        TextWrapping="Wrap"
                                        FontSize="25"
-                                       FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" />
+                                       FontWeight="Bold" TextAlignment="Center"
+                                       VerticalAlignment="Center" />
                         </Viewbox>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

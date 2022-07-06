@@ -1,7 +1,6 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree
+﻿namespace BuildNotifications.Core.Pipeline.Tree;
+
+public interface ISourceGroupNode : IGroupNode
 {
-    public interface ISourceGroupNode : IGroupNode
-    {
-        string SourceName { get; set; }
-    }
+    string SourceName { get; set; }
 }

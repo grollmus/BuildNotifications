@@ -2,34 +2,30 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace BuildNotifications.Core
+namespace BuildNotifications.Core;
+
+public class SynchronizationContextRemover : INotifyCompletion
 {
-    public class SynchronizationContextRemover : INotifyCompletion
+    public bool IsCompleted => SynchronizationContext.Current == null;
+
+    public SynchronizationContextRemover GetAwaiter() => this;
+
+    public void GetResult()
     {
-        public bool IsCompleted => SynchronizationContext.Current == null;
+        // Only exists because this class needs to be awaited.
+    }
 
-        public SynchronizationContextRemover GetAwaiter()
+    public void OnCompleted(Action continuation)
+    {
+        var prevContext = SynchronizationContext.Current;
+        try
         {
-            return this;
+            SynchronizationContext.SetSynchronizationContext(null);
+            continuation();
         }
-
-        public void GetResult()
+        finally
         {
-            // Only exists because this class needs to be awaited.
-        }
-
-        public void OnCompleted(Action continuation)
-        {
-            var prevContext = SynchronizationContext.Current;
-            try
-            {
-                SynchronizationContext.SetSynchronizationContext(null);
-                continuation();
-            }
-            finally
-            {
-                SynchronizationContext.SetSynchronizationContext(prevContext);
-            }
+            SynchronizationContext.SetSynchronizationContext(prevContext);
         }
     }
 }

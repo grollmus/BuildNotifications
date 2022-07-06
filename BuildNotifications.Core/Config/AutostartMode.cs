@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+public enum AutostartMode
 {
-    public enum AutostartMode
-    {
-        DontAutostart,
-        StartWithWindows,
-        StartWithWindowsMinimized
-    }
+    DontAutostart,
+    StartWithWindows,
+    StartWithWindowsMinimized
 }

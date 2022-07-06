@@ -7,68 +7,73 @@
              xmlns:viewModelSettings="clr-namespace:BuildNotifications.ViewModel.Settings"
              xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons"
              xmlns:text="clr-namespace:BuildNotifications.Resources.Text"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type viewModelSettings:SettingsViewModel}}"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type viewModelSettings:SettingsViewModel}}"
              d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
-				<ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/Settings/OptionResources.xaml" />
+                <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 
 
-	</UserControl.Resources>
-	<DockPanel>
-		<DockPanel DockPanel.Dock="Bottom">
-			<!--Edit connection button-->
-			<icons:IconButton Content="{text:Localized EditConnection}"
-			                  HorizontalAlignment="Center" DockPanel.Dock="Right"
-			                  Command="{Binding EditConnectionsCommand}" Icon="Connection"
-			                  Foreground="{DynamicResource Foreground1}"
-			                  Margin="{StaticResource BlockHalfThickness}"
-			                  Style="{StaticResource IconButtonWithDockedContent}" />
+    </UserControl.Resources>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <!--Edit connection button-->
+            <icons:IconButton Content="{text:Localized EditConnection}"
+                              HorizontalAlignment="Center" DockPanel.Dock="Right"
+                              Command="{Binding EditConnectionsCommand}" Icon="Connection"
+                              Foreground="{DynamicResource Foreground1}"
+                              Margin="{StaticResource BlockHalfThickness}"
+                              Style="{StaticResource IconButtonWithDockedContent}" />
 
 
-			<icons:IconButton DockPanel.Dock="Right" Content="{text:Localized ImportExport}"
-			                  Foreground="{DynamicResource Foreground1}" Icon="ImportExport"
-			                  Style="{StaticResource IconButtonWithDockedContent}"
-			                  Command="{Binding ImportExportCommand}" Margin="{StaticResource BlockHalfThickness}" />
-		</DockPanel>
+            <icons:IconButton DockPanel.Dock="Right" Content="{text:Localized ImportExport}"
+                              Foreground="{DynamicResource Foreground1}" Icon="ImportExport"
+                              Style="{StaticResource IconButtonWithDockedContent}"
+                              Command="{Binding ImportExportCommand}"
+                              Margin="{StaticResource BlockHalfThickness}" />
+        </DockPanel>
 
-		<ScrollViewer Margin="{StaticResource BlockHalfXOnlyMargin}">
-			<DockPanel>
+        <ScrollViewer Margin="{StaticResource BlockHalfXOnlyMargin}">
+            <DockPanel>
 
-				<!--Current User Identities-->
-				<ItemsControl ItemsSource="{Binding CurrentUserIdentities}" DockPanel.Dock="Bottom">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Foreground="{DynamicResource Foreground1}" Text="{Binding Name}"
-							           FontSize="{StaticResource BlockThreeQuarters}" ToolTip="{Binding Description}" />
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
+                <!--Current User Identities-->
+                <ItemsControl ItemsSource="{Binding CurrentUserIdentities}" DockPanel.Dock="Bottom">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="{DynamicResource Foreground1}"
+                                       Text="{Binding Name}"
+                                       FontSize="{StaticResource BlockThreeQuarters}"
+                                       ToolTip="{Binding Description}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
 
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<StackPanel Orientation="Vertical" />
-						</ItemsPanelTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
 
-					</ItemsControl.ItemsPanel>
-				</ItemsControl>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
 
-				<TextBlock Foreground="{DynamicResource Foreground1HalfTransparency}" Text="{text:Localized YourIdentities}"
-				           FontSize="{StaticResource Block}" DockPanel.Dock="Bottom" />
+                <TextBlock Foreground="{DynamicResource Foreground1HalfTransparency}"
+                           Text="{text:Localized YourIdentities}"
+                           FontSize="{StaticResource Block}" DockPanel.Dock="Bottom" />
 
-				<!--Configurable options-->
-				<ItemsControl ItemsSource="{Binding Options}"
-				              ItemTemplateSelector="{x:Static resourcesSettings:OptionTemplateSelector.Instance}">
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<StackPanel Orientation="Vertical" IsItemsHost="True" />
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-				</ItemsControl>
-			</DockPanel>
-		</ScrollViewer>
-	</DockPanel>
+                <!--Configurable options-->
+                <ItemsControl ItemsSource="{Binding Options}"
+                              ItemTemplateSelector="{x:Static resourcesSettings:OptionTemplateSelector.Instance}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </DockPanel>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

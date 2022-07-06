@@ -10,7 +10,8 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters">
 
-    <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+    <Style x:Key="SuggestionsListBoxStyle" TargetType="ListBox"
+           BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter Property="ItemsSource" Value="{Binding Suggestions}" />
         <Setter Property="SelectedItem" Value="{Binding SelectedSuggestion}" />
         <Setter Property="SelectedIndex" Value="{Binding SelectedSuggestionIndex}" />
@@ -18,7 +19,8 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <animation:AnimatedStackPanel Orientation="Vertical" IsItemsHost="True" AnimationDuration="0.15" />
+                    <animation:AnimatedStackPanel Orientation="Vertical" IsItemsHost="True"
+                                                  AnimationDuration="0.15" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -26,10 +28,13 @@
 
     <DataTemplate DataType="{x:Type search:SearchSuggestionViewModel}">
         <DockPanel x:Name="SuggestionDockPanel">
-            <icons:IconButton Icon="Close" DockPanel.Dock="Right" Command="{Binding DeleteSuggestionCommand}"
+            <icons:IconButton Icon="Close" DockPanel.Dock="Right"
+                              Command="{Binding DeleteSuggestionCommand}"
                               IconSize="{StaticResource BlockFiveSixths}"
-                              Foreground="{DynamicResource Background3}" Margin="{StaticResource BlockHalfRight}"
-                              HorizontalAlignment="Right" Width="{StaticResource Block}" VerticalAlignment="Center"
+                              Foreground="{DynamicResource Background3}"
+                              Margin="{StaticResource BlockHalfRight}"
+                              HorizontalAlignment="Right" Width="{StaticResource Block}"
+                              VerticalAlignment="Center"
                               Visibility="{Binding IsFromHistory, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
             <TextBlock Text="{Binding SuggestedText}" Foreground="{DynamicResource Foreground1}"
@@ -38,7 +43,8 @@
 
             <i:Interaction.Triggers>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                    <triggerActions:ElementFadeOut Duration="0.15" Anchor="MiddleRight" DoScale="True" />
+                    <triggerActions:ElementFadeOut Duration="0.15" Anchor="MiddleRight"
+                                                   DoScale="True" />
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
         </DockPanel>
@@ -72,11 +78,13 @@
         <StackPanel Orientation="Vertical">
             <ListBox Style="{StaticResource SuggestionsListBoxStyle}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
-                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+                       HorizontalAlignment="Stretch"
+                       Margin="{StaticResource BlockQuarterThickness}" />
             <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1}"
                        Margin="{StaticResource BlockThicknessOnXHalfOnY}" />
             <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
-                       HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+                       HorizontalAlignment="Stretch"
+                       Margin="{StaticResource BlockQuarterThickness}" />
             <ItemsControl ItemsSource="{Binding Examples}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -92,16 +100,21 @@
             <StackPanel Orientation="Vertical" Margin="{StaticResource BlockQuarterThickness}">
                 <TextBlock Text="{Binding Keyword}"
                            Padding="{StaticResource BlockQuarterThicknessOnYHalfOnX}"
-                           Foreground="{DynamicResource Foreground1}" FontWeight="Bold" FontSize="16"
+                           Foreground="{DynamicResource Foreground1}" FontWeight="Bold"
+                           FontSize="16"
                            HorizontalAlignment="Left" />
 
-                <TextBlock Text="{Binding Description}" Foreground="{DynamicResource Foreground1HalfTransparency}"
+                <TextBlock Text="{Binding Description}"
+                           Foreground="{DynamicResource Foreground1HalfTransparency}"
                            Margin="{StaticResource BlockDoubleXOnlyMargin}" />
             </StackPanel>
             <animation:AnimatedStackPanel Orientation="Vertical">
-                <ListBox Style="{StaticResource SuggestionsListBoxStyle}" x:Name="SuggestionListBox" />
-                <Rectangle Fill="{DynamicResource Background3}" Height="{StaticResource BlockSixth}"
-                           HorizontalAlignment="Stretch" Margin="{StaticResource BlockQuarterThickness}" />
+                <ListBox Style="{StaticResource SuggestionsListBoxStyle}"
+                         x:Name="SuggestionListBox" />
+                <Rectangle Fill="{DynamicResource Background3}"
+                           Height="{StaticResource BlockSixth}"
+                           HorizontalAlignment="Stretch"
+                           Margin="{StaticResource BlockQuarterThickness}" />
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding Path=HasSuggestions}" Value="false">
@@ -139,28 +152,36 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type search:SearchTextBox}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" Cursor="IBeam"
-                            BorderThickness="{TemplateBinding BorderThickness}" MaxHeight="{TemplateBinding MaxHeight}"
+                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}"
+                            Cursor="IBeam"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            MaxHeight="{TemplateBinding MaxHeight}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
 
                         <!--TEXTBOX-->
                         <Grid x:Name="ContentGrid">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalAlignment="Left"
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false"
+                                          HorizontalAlignment="Left"
                                           MaxWidth="{x:Static system:Double.MaxValue}"
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden" />
                             <Grid HorizontalAlignment="Right">
-                                <Border Background="{DynamicResource Background1}" VerticalAlignment="Bottom"
+                                <Border Background="{DynamicResource Background1}"
+                                        VerticalAlignment="Bottom"
                                         x:Name="Overlay">
                                     <DockPanel Margin="{StaticResource BlockHalfXOnlyMargin}">
                                         <icons:IconBatch Foreground="{TemplateBinding BorderBrush}"
-                                                         Width="{StaticResource Block}" Height="{StaticResource Block}"
+                                                         Width="{StaticResource Block}"
+                                                         Height="{StaticResource Block}"
                                                          Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}"
                                                          DockPanel.Dock="Right"
                                                          x:Name="Icon" />
                                         <TextBlock
                                             Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type search:SearchTextBox}, Mode=FindAncestor}}"
-                                            Foreground="{TemplateBinding BorderBrush}" x:Name="Label"
-                                            Style="{StaticResource TextBoxLabelStyle}" DockPanel.Dock="Right"
+                                            Foreground="{TemplateBinding BorderBrush}"
+                                            x:Name="Label"
+                                            Style="{StaticResource TextBoxLabelStyle}"
+                                            DockPanel.Dock="Right"
                                             VerticalAlignment="Bottom" />
                                     </DockPanel>
                                 </Border>
@@ -168,12 +189,14 @@
 
                             <!--SUGGESTIONS-->
                             <Popup MinWidth="{Binding ActualWidth, ElementName=border}"
-                                   PlacementTarget="{Binding ElementName=ContentGrid}" Placement="Bottom"
+                                   PlacementTarget="{Binding ElementName=ContentGrid}"
+                                   Placement="Bottom"
                                    VerticalOffset="{StaticResource BlockQuarter}"
                                    x:Name="PART_Popup"
                                    StaysOpen="True">
                                 <Border Background="{DynamicResource Background1Dark}"
-                                        BorderBrush="{DynamicResource Background2}" BorderThickness="1"
+                                        BorderBrush="{DynamicResource Background2}"
+                                        BorderThickness="1"
                                         Padding="{StaticResource BlockQuarterThickness}">
                                     <StackPanel Orientation="Vertical">
                                         <Border BorderBrush="{DynamicResource Background3}">
@@ -188,11 +211,13 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="GotKeyboardFocus">
                                 <text:FontSizeChange TargetSize="{StaticResource Block}"
-                                                     Target="{Binding ElementName=Label}" Duration="0.1" />
+                                                     Target="{Binding ElementName=Label}"
+                                                     Duration="0.1" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LostKeyboardFocus">
                                 <text:FontSizeChange TargetSize="{StaticResource BlockFiveSixths}"
-                                                     Target="{Binding ElementName=Label}" Duration="0.35" />
+                                                     Target="{Binding ElementName=Label}"
+                                                     Duration="0.35" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Border>
@@ -213,9 +238,12 @@
                                     Value="{DynamicResource Foreground1HalfTransparency}" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Foreground1}" />
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
-                            <Setter Property="Foreground" TargetName="Label" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="BorderBrush" TargetName="border"
+                                    Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Label"
+                                    Value="{DynamicResource Foreground1}" />
                             <Setter TargetName="PART_Popup" Property="IsOpen" Value="True" />
                         </Trigger>
                     </ControlTemplate.Triggers>

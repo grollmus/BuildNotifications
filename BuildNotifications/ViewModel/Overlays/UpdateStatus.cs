@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.ViewModel.Overlays
+﻿namespace BuildNotifications.ViewModel.Overlays;
+
+public enum UpdateStatus
 {
-    public enum UpdateStatus
-    {
-        None,
-        Error,
-        Busy
-    }
+    None,
+    Error,
+    Busy
 }

@@ -1,13 +1,12 @@
-﻿namespace BuildNotifications.Views.GroupDefinitionSelection
+﻿namespace BuildNotifications.Views.GroupDefinitionSelection;
+
+/// <summary>
+/// Interaction logic for SingleGroupDefinitionView.xaml
+/// </summary>
+public partial class SingleGroupDefinitionSelectionView
 {
-    /// <summary>
-    /// Interaction logic for SingleGroupDefinitionView.xaml
-    /// </summary>
-    public partial class SingleGroupDefinitionSelectionView
+    public SingleGroupDefinitionSelectionView()
     {
-        public SingleGroupDefinitionSelectionView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

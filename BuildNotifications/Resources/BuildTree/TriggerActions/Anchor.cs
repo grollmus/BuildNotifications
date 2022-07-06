@@ -1,9 +1,8 @@
-﻿namespace BuildNotifications.Resources.BuildTree.TriggerActions
+﻿namespace BuildNotifications.Resources.BuildTree.TriggerActions;
+
+internal enum Anchor
 {
-    internal enum Anchor
-    {
-        Center,
-        MiddleLeft,
-        MiddleRight
-    }
+    Center,
+    MiddleLeft,
+    MiddleRight
 }

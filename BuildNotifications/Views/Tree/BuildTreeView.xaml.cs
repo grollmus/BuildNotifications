@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Tree
+﻿namespace BuildNotifications.Views.Tree;
+
+public partial class BuildTreeView
 {
-    public partial class BuildTreeView
+    public BuildTreeView()
     {
-        public BuildTreeView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

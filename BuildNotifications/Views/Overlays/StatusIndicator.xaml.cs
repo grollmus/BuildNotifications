@@ -1,13 +1,12 @@
-﻿namespace BuildNotifications.Views.Overlays
+﻿namespace BuildNotifications.Views.Overlays;
+
+/// <summary>
+/// Interaction logic for StatusIndicator.xaml
+/// </summary>
+public partial class StatusIndicator
 {
-    /// <summary>
-    /// Interaction logic for StatusIndicator.xaml
-    /// </summary>
-    public partial class StatusIndicator
+    public StatusIndicator()
     {
-        public StatusIndicator()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using BuildNotifications.Core.Pipeline.Tree;
 
-namespace BuildNotifications.ViewModel.Notification
-{
-    public class HighlightRequestedEventArgs : EventArgs
-    {
-        public HighlightRequestedEventArgs(IList<IBuildNode> buildNodes)
-        {
-            BuildNodes = buildNodes;
-        }
+namespace BuildNotifications.ViewModel.Notification;
 
-        public IList<IBuildNode> BuildNodes { get; }
+public class HighlightRequestedEventArgs : EventArgs
+{
+    public HighlightRequestedEventArgs(IList<IBuildNode> buildNodes)
+    {
+        BuildNodes = buildNodes;
     }
+
+    public IList<IBuildNode> BuildNodes { get; }
 }

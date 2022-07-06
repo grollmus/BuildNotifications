@@ -1,9 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 
-namespace BuildNotifications.Core.Pipeline
+namespace BuildNotifications.Core.Pipeline;
+
+internal interface IBuildMatcher
 {
-    internal interface IBuildMatcher
-    {
-        bool IsMatch(IBaseBuild build);
-    }
+    bool IsMatch(IBaseBuild build);
 }

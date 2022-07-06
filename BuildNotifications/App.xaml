@@ -20,16 +20,21 @@
                 <ResourceDictionary Source="Resources/Global/ContextMenuStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ToolTipStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/SearchTextBoxStyles.xaml" />
-                <ResourceDictionary Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
+                <ResourceDictionary
+                    Source="Resources/Global/Navigation/ButtonNavigation/ButtonNavigationTemplate.xaml" />
                 <ResourceDictionary Source="Resources/Icons/IconButtonStyles.xaml" />
                 <ResourceDictionary Source="Resources/Icons/IconToggleButtonStyles.xaml" />
                 <ResourceDictionary Source="Resources/Global/ButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="{x:Type buildNotifications:MainWindow}" BasedOn="{StaticResource CustomWindowStyle}" />
-            <Style TargetType="{x:Type views:InfoPopupDialog}" BasedOn="{StaticResource CustomPopupStyle}" />
-            <Style TargetType="{x:Type settings:ImportExportDialog}" BasedOn="{StaticResource CustomPopupStyle}" />
-            <Style TargetType="{x:Type views:MessageBoxView}" BasedOn="{StaticResource CustomPopupStyle}" />
+            <Style TargetType="{x:Type buildNotifications:MainWindow}"
+                   BasedOn="{StaticResource CustomWindowStyle}" />
+            <Style TargetType="{x:Type views:InfoPopupDialog}"
+                   BasedOn="{StaticResource CustomPopupStyle}" />
+            <Style TargetType="{x:Type settings:ImportExportDialog}"
+                   BasedOn="{StaticResource CustomPopupStyle}" />
+            <Style TargetType="{x:Type views:MessageBoxView}"
+                   BasedOn="{StaticResource CustomPopupStyle}" />
 
         </ResourceDictionary>
     </Application.Resources>

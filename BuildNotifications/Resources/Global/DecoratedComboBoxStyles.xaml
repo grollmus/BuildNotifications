@@ -26,11 +26,13 @@
                             CornerRadius="0" Background="Transparent" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground1HalfTransparency}"
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Foreground1HalfTransparency}"
                                     TargetName="border" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground2}" TargetName="border" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Foreground2}"
+                                    TargetName="border" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -64,12 +66,14 @@
 
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Grid x:Name="Grid" Cursor="Hand">
-                                    <Border BorderBrush="{DynamicResource Background3}" BorderThickness="0,0,0,1"
+                                    <Border BorderBrush="{DynamicResource Background3}"
+                                            BorderThickness="0,0,0,1"
                                             x:Name="Border">
                                         <ContentPresenter>
                                             <ContentPresenter.Resources>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource Foreground1}" />
                                                 </Style>
                                             </ContentPresenter.Resources>
                                         </ContentPresenter>
@@ -77,19 +81,23 @@
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Loaded">
-                                            <triggerActions:ElementFadeInBackEase DoScale="False" Duration="0.3" />
+                                            <triggerActions:ElementFadeInBackEase DoScale="False"
+                                                Duration="0.3" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource Foreground1}"
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource Foreground1}"
                                                 TargetName="Border" />
-                                        <Setter Property="Background" Value="{DynamicResource Background2}"
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource Background2}"
                                                 TargetName="Grid" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="true">
-                                        <Setter TargetName="Border" Property="Visibility" Value="Collapsed" />
+                                        <Setter TargetName="Border" Property="Visibility"
+                                                Value="Collapsed" />
                                     </Trigger>
 
                                 </ControlTemplate.Triggers>
@@ -115,12 +123,14 @@
                         <Popup x:Name="PART_Popup" AllowsTransparency="False" Grid.ColumnSpan="2"
                                Width="{Binding ActualWidth, ElementName=MainGrid}"
                                IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                               PopupAnimation="Fade" PlacementTarget="{Binding ElementName=MainGrid}"
+                               PopupAnimation="Fade"
+                               PlacementTarget="{Binding ElementName=MainGrid}"
                                PlacementRectangle="0,18,0,0"
                                Placement="Bottom">
                             <Grid Background="{TemplateBinding Background}">
                                 <Border Padding="{StaticResource BlockQuarterThickness}">
-                                    <ItemsPresenter x:Name="ItemsPresenter" FocusVisualStyle="{x:Null}"
+                                    <ItemsPresenter x:Name="ItemsPresenter"
+                                                    FocusVisualStyle="{x:Null}"
                                                     KeyboardNavigation.DirectionalNavigation="Contained"
                                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
@@ -139,7 +149,8 @@
                             Grid.Column="0">
                             <ContentPresenter.Resources>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{DynamicResource Foreground1}" />
+                                    <Setter Property="Foreground"
+                                            Value="{DynamicResource Foreground1}" />
                                     <Setter Property="Margin" Value="0" />
                                 </Style>
                             </ContentPresenter.Resources>
@@ -147,29 +158,34 @@
                                 <ei:DataTrigger
                                     Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="false">
-                                    <text:FontSizeChange TargetSize="{StaticResource BlockFiveSixths}"
-                                                         Target="{Binding ElementName=Label}" Duration="0.35" />
+                                    <text:FontSizeChange
+                                        TargetSize="{StaticResource BlockFiveSixths}"
+                                        Target="{Binding ElementName=Label}" Duration="0.35" />
                                 </ei:DataTrigger>
                                 <ei:DataTrigger
                                     Binding="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="true">
                                     <text:FontSizeChange TargetSize="{StaticResource Block}"
-                                                         Target="{Binding ElementName=Label}" Duration="0.1" />
+                                                         Target="{Binding ElementName=Label}"
+                                                         Duration="0.1" />
                                 </ei:DataTrigger>
                                 <!--Combobox is designed to be used with IRemoveTracking objects-->
                                 <!-- ReSharper disable once Xaml.BindingWithContextNotResolved -->
                                 <ei:DataTrigger
                                     Binding="{Binding Path=DataContext.IsRemoving, RelativeSource={RelativeSource TemplatedParent}}"
                                     Value="True">
-                                    <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4" Anchor="Center" />
+                                    <groupDefinitionSelection:GroupDefinitionFadeOut Duration="0.4"
+                                        Anchor="Center" />
                                 </ei:DataTrigger>
                                 <i:EventTrigger EventName="GotFocus">
                                     <text:FontSizeChange TargetSize="{StaticResource Block}"
-                                                         Target="{Binding ElementName=Label}" Duration="0.1" />
+                                                         Target="{Binding ElementName=Label}"
+                                                         Duration="0.1" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LostFocus">
-                                    <text:FontSizeChange TargetSize="{StaticResource BlockFiveSixths}"
-                                                         Target="{Binding ElementName=Label}" Duration="0.35" />
+                                    <text:FontSizeChange
+                                        TargetSize="{StaticResource BlockFiveSixths}"
+                                        Target="{Binding ElementName=Label}" Duration="0.35" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="ContentUpdated">
                                     <groupDefinitionSelection:GroupDefinitionFadeIn Duration="0.4" />
@@ -188,10 +204,12 @@
                                 Style="{StaticResource ComboBoxReadonlyToggleButton}">
 
                                 <i:Interaction.Triggers>
-                                    <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="True">
-                                        <triggerActions:ElementFadeOutScale Duration="0.3" Anchor="Center"
-                                                                            TargetScaleX="1"
-                                                                            TargetScaleY="1" />
+                                    <ei:DataTrigger Binding="{Binding Path=IsRemoving}"
+                                                    Value="True">
+                                        <triggerActions:ElementFadeOutScale Duration="0.3"
+                                            Anchor="Center"
+                                            TargetScaleX="1"
+                                            TargetScaleY="1" />
                                     </ei:DataTrigger>
                                 </i:Interaction.Triggers>
                             </ToggleButton>
@@ -200,16 +218,19 @@
                                 Margin="{StaticResource BlockHalfXOnlyMargin}"
                                 Text="{text:Localized NoValue}"
                                 Visibility="{Binding IsEmpty, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
-                                Foreground="{DynamicResource Foreground1HalfTransparency}" HorizontalAlignment="Left"
+                                Foreground="{DynamicResource Foreground1HalfTransparency}"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Center" />
                         </Grid>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" IsHitTestVisible="False"
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                    IsHitTestVisible="False"
                                     Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                     Height="{StaticResource BlockOneAndHalf}">
 
                             <TextBlock
                                 Text="{Binding Label, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}}"
-                                Foreground="{DynamicResource Background3}" x:Name="Label" HorizontalAlignment="Right"
+                                Foreground="{DynamicResource Background3}" x:Name="Label"
+                                HorizontalAlignment="Right"
                                 Style="{StaticResource TextBoxLabelStyle}"
                                 VerticalAlignment="Center" />
 
@@ -217,14 +238,16 @@
                                              Margin="{StaticResource BlockQuarterXOnlyMargin}"
                                              Visibility="{Binding ToggleButtonActive, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}"
                                              Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type settings:DecoratedComboBox}, Mode=FindAncestor}}"
-                                             x:Name="Icon" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                             x:Name="Icon" HorizontalAlignment="Right"
+                                             VerticalAlignment="Center" />
                         </StackPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsGrouping" Value="true" />
-                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
+                                           Value="false" />
                             </MultiTrigger.Conditions>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </MultiTrigger>
@@ -234,7 +257,8 @@
                             <Setter Property="Foreground" TargetName="Label"
                                     Value="{DynamicResource Foreground1HalfTransparency}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding ElementName=ToggleButton, Path=IsChecked}" Value="true">
+                        <DataTrigger Binding="{Binding ElementName=ToggleButton, Path=IsChecked}"
+                                     Value="true">
                             <Setter Property="Foreground" TargetName="Icon"
                                     Value="{DynamicResource Foreground1}" />
                             <Setter Property="Foreground" TargetName="Label"

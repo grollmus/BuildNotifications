@@ -1,7 +1,6 @@
-﻿namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions
+﻿namespace BuildNotifications.ViewModel.Settings.Options.PluginOptions;
+
+internal interface ILocalizationProvider
 {
-    internal interface ILocalizationProvider
-    {
-        string Localize(string textId);
-    }
+    string Localize(string textId);
 }

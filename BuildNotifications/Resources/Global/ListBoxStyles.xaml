@@ -14,12 +14,13 @@
                                 <Grid>
                                     <DockPanel x:Name="DockPanel">
                                         <Rectangle Fill="Transparent" Width="2" x:Name="Rectangle" />
-                                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
-                                                          ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
-                                                          HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                        <ContentPresenter
+                                            Content="{TemplateBinding ContentControl.Content}"
+                                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                            ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
 
                                     </DockPanel>
                                 </Grid>
@@ -63,14 +64,16 @@
                                                MaxWidth="{Binding ActualWidth, ElementName=SizeDummy}">
                                         <Rectangle Fill="Transparent" Width="2" x:Name="Rectangle" />
                                         <!--necessary to make the content stretch-->
-                                        <Rectangle Fill="Transparent" Width="2" DockPanel.Dock="Right" />
+                                        <Rectangle Fill="Transparent" Width="2"
+                                                   DockPanel.Dock="Right" />
 
-                                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
-                                                          ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                                          ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
-                                                          HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
-                                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                        <ContentPresenter
+                                            Content="{TemplateBinding ContentControl.Content}"
+                                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                            ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
 
                                     </DockPanel>
                                 </Grid>

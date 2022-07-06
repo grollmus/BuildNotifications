@@ -1,8 +1,8 @@
-
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
-<defs>
-<g id="Layer2_0_FILL">
-<path fill="#FFFFFF" stroke="none" d="
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
+     preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
+  <defs>
+    <g id="Layer2_0_FILL">
+      <path fill="#FFFFFF" stroke="none" d="
 M 384.05 192
 Q 384.05 112.8 328.6 57.4 271.2 0 192 0 112.8 0 57.4 57.4 0 112.8 0 192 0 271.2 57.4 328.6 112.8 384.05 192 384.05 271.2 384.05 328.6 328.6 384.05 271.2 384.05 192
 M 170.25 31.65
@@ -13,10 +13,10 @@ L 172.2 217.75
 Q 168.25 211.8 164.3 205.85 160.35 199.95 160.35 192
 L 160.35 53.45
 Q 160.35 39.55 170.25 31.65 Z"/>
-</g>
-</defs>
+    </g>
+  </defs>
 
-<g transform="matrix( 0.03125, 0, 0, 0.03125, 0,0) ">
-<use xlink:href="#Layer2_0_FILL"/>
-</g>
+  <g transform="matrix( 0.03125, 0, 0, 0.03125, 0,0) ">
+    <use xlink:href="#Layer2_0_FILL"/>
+  </g>
 </svg>

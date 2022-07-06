@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Settings
+﻿namespace BuildNotifications.Views.Settings;
+
+public partial class ConnectionsSectionView
 {
-    public partial class ConnectionsSectionView
+    public ConnectionsSectionView()
     {
-        public ConnectionsSectionView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

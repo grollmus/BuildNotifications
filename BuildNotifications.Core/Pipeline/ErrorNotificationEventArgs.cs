@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using BuildNotifications.Core.Pipeline.Notification;
 
-namespace BuildNotifications.Core.Pipeline
-{
-    public class ErrorNotificationEventArgs : EventArgs
-    {
-        public ErrorNotificationEventArgs(params INotification[] errorNotifications)
-        {
-            ErrorNotifications = errorNotifications;
-        }
+namespace BuildNotifications.Core.Pipeline;
 
-        public IEnumerable<INotification> ErrorNotifications { get; }
+public class ErrorNotificationEventArgs : EventArgs
+{
+    public ErrorNotificationEventArgs(params INotification[] errorNotifications)
+    {
+        ErrorNotifications = errorNotifications;
     }
+
+    public IEnumerable<INotification> ErrorNotifications { get; }
 }

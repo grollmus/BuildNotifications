@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace BuildNotifications.Services
+namespace BuildNotifications.Services;
+
+internal interface IUpdateUrls
 {
-    internal interface IUpdateUrls
-    {
-        Uri BaseAddressForApiRequests();
-        Uri BaseAddressOf(Uri url);
-        Uri DownloadFileFromReleasePackage(string updateUrl, string fileName);
-        Uri RelativeFileDownloadUrl(Uri url);
-        Uri ListReleases();
-    }
+    Uri BaseAddressForApiRequests();
+    Uri BaseAddressOf(Uri url);
+    Uri DownloadFileFromReleasePackage(string updateUrl, string fileName);
+    Uri ListReleases();
+    Uri RelativeFileDownloadUrl(Uri url);
 }

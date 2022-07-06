@@ -1,22 +1,22 @@
-
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
-<defs>
-<g id="Layer4_0_FILL">
-<path fill="#ECEFF4" stroke="none" d="
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
+     preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
+  <defs>
+    <g id="Layer4_0_FILL">
+      <path fill="#ECEFF4" stroke="none" d="
 M 11.05 11.65
 L 10.25 9.9 12 9.9 8.25 6.4 8.25 11.45 9.4 10.2 10.2 12 11.05 11.65 Z"/>
 
-<path fill="#ECEFF4" stroke="none" d="
+      <path fill="#ECEFF4" stroke="none" d="
 M 8 6.65
 L 8.05 6.65 8.05 2.65 4.35 4.65 4.35 9 8 6.65
 M 4.1 0
 L 0.35 2.05 4.1 3.95 7.95 2.05 4.1 0
 M 3.75 4.65
 L 0.1 2.65 0.1 6.65 3.75 9 3.75 4.65 Z"/>
-</g>
-</defs>
+    </g>
+  </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer4_0_FILL"/>
-</g>
+  <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+    <use xlink:href="#Layer4_0_FILL"/>
+  </g>
 </svg>

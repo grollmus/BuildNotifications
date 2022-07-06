@@ -11,7 +11,8 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:settings="clr-namespace:BuildNotifications.Resources.Settings"
              xmlns:setup="clr-namespace:BuildNotifications.ViewModel.Settings.Setup"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type overlays:InitialSetupOverlayViewModel}}"
              Background="{DynamicResource Background1}" Opacity="{Binding Opacity}">
     <UserControl.Resources>
         <ResourceDictionary Source="../../Resources/Icons/IconButtonStyles.xaml" />
@@ -23,16 +24,20 @@
                               Style="{StaticResource IconButtonWithDockedContent}"
                               Content="{text:Localized CloseConnections}"
                               DockPanel.Dock="Right"
-                              IconSize="{StaticResource Block}" Icon="Pause" Command="{Binding RequestCloseCommand}"
+                              IconSize="{StaticResource Block}" Icon="Pause"
+                              Command="{Binding RequestCloseCommand}"
                               Foreground="{StaticResource Foreground1}" />
-            <icons:IconBatch Type="{Binding DisplayedIconType}" Width="{StaticResource BlockDouble}"
+            <icons:IconBatch Type="{Binding DisplayedIconType}"
+                             Width="{StaticResource BlockDouble}"
                              Height="{StaticResource BlockDouble}"
-                             Foreground="{DynamicResource Yellow}" Margin="{StaticResource BlockXOnlyMargin}" />
+                             Foreground="{DynamicResource Yellow}"
+                             Margin="{StaticResource BlockXOnlyMargin}" />
             <TextBlock
                 Text="{Binding DisplayedTextId, Converter={x:Static text:StringKeyToLocalizedTextConverter.Instance}}"
                 FontSize="{StaticResource BlockOneAndQuarter}"
                 TextWrapping="Wrap"
-                Foreground="{DynamicResource Foreground1HalfTransparency}" VerticalAlignment="Center">
+                Foreground="{DynamicResource Foreground1HalfTransparency}"
+                VerticalAlignment="Center">
 
                 <i:Interaction.Triggers>
                     <ei:DataTrigger Binding="{Binding AnimateDisplay}" Value="true">

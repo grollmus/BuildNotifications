@@ -1,790 +1,800 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="NativeName" xml:space="preserve">
+	<!-- 
+	  Microsoft ResX Schema 
+	  
+	  Version 2.0
+	  
+	  The primary goals of this format is to allow a simple XML format 
+	  that is mostly human readable. The generation and parsing of the 
+	  various data types are done through the TypeConverter classes 
+	  associated with the data types.
+	  
+	  Example:
+	  
+	  ... ado.net/XML headers & schema ...
+	  <resheader name="resmimetype">text/microsoft-resx</resheader>
+	  <resheader name="version">2.0</resheader>
+	  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+	  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+	  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+	  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+	  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+		  <value>[base64 mime encoded serialized .NET Framework object]</value>
+	  </data>
+	  <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+		  <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+		  <comment>This is a comment</comment>
+	  </data>
+				  
+	  There are any number of "resheader" rows that contain simple 
+	  name/value pairs.
+	  
+	  Each data row contains a name, and value. The row also contains a 
+	  type or mimetype. Type corresponds to a .NET class that support 
+	  text/value conversion through the TypeConverter architecture. 
+	  Classes that don't support this are serialized and stored with the 
+	  mimetype set.
+	  
+	  The mimetype is used for serialized objects, and tells the 
+	  ResXResourceReader how to depersist the object. This is currently not 
+	  extensible. For a given mimetype the value must be set accordingly:
+	  
+	  Note - application/x-microsoft.net.object.binary.base64 is the format 
+	  that the ResXResourceWriter will generate, however the reader can 
+	  read any of the formats listed below.
+	  
+	  mimetype: application/x-microsoft.net.object.binary.base64
+	  value   : The object must be serialized with 
+			  : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+			  : and then encoded with base64 encoding.
+	  
+	  mimetype: application/x-microsoft.net.object.soap.base64
+	  value   : The object must be serialized with 
+			  : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			  : and then encoded with base64 encoding.
+  
+	  mimetype: application/x-microsoft.net.object.bytearray.base64
+	  value   : The object must be serialized into a byte array 
+			  : using a System.ComponentModel.TypeConverter
+			  : and then encoded with base64 encoding.
+	  -->
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	            xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+	            xmlns="">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"
+								             msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0"
+								             msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"
+							               msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"
+								             msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0,
+			Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0,
+			Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="NativeName" xml:space="preserve">
     <value>English</value>
   </data>
-  <data name="GroupBy" xml:space="preserve">
+	<data name="GroupBy" xml:space="preserve">
     <value>Group by</value>
   </data>
-  <data name="ThenBy" xml:space="preserve">
+	<data name="ThenBy" xml:space="preserve">
     <value>Then by</value>
   </data>
-  <data name="Status" xml:space="preserve">
+	<data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="BuildDefinition" xml:space="preserve">
+	<data name="BuildDefinition" xml:space="preserve">
     <value>Definition</value>
   </data>
-  <data name="Source" xml:space="preserve">
+	<data name="Source" xml:space="preserve">
     <value>Source</value>
   </data>
-  <data name="None" xml:space="preserve">
+	<data name="None" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="Branch" xml:space="preserve">
+	<data name="Branch" xml:space="preserve">
     <value>Branch</value>
   </data>
-  <data name="StatusDescending" xml:space="preserve">
+	<data name="StatusDescending" xml:space="preserve">
     <value>by status descending</value>
   </data>
-  <data name="StatusAscending" xml:space="preserve">
+	<data name="StatusAscending" xml:space="preserve">
     <value>by status ascending</value>
   </data>
-  <data name="AlphabeticalDescending" xml:space="preserve">
+	<data name="AlphabeticalDescending" xml:space="preserve">
     <value>alphabetically descending</value>
   </data>
-  <data name="AlphabeticalAscending" xml:space="preserve">
+	<data name="AlphabeticalAscending" xml:space="preserve">
     <value>alphabetically ascending</value>
   </data>
-  <data name="Sort" xml:space="preserve">
+	<data name="Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
-  <data name="BuildPluginType" xml:space="preserve">
+	<data name="BuildPluginType" xml:space="preserve">
     <value>Build Plugin</value>
   </data>
-  <data name="SourceControlPluginType" xml:space="preserve">
+	<data name="SourceControlPluginType" xml:space="preserve">
     <value>Source Plugin</value>
   </data>
-  <data name="Name" xml:space="preserve">
+	<data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="Options" xml:space="preserve">
+	<data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="ProjectName" xml:space="preserve">
+	<data name="ProjectName" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="BranchBlacklist" xml:space="preserve">
+	<data name="BranchBlacklist" xml:space="preserve">
     <value>Branch blacklist</value>
   </data>
-  <data name="BranchWhitelist" xml:space="preserve">
+	<data name="BranchWhitelist" xml:space="preserve">
     <value>Branch whitelist</value>
   </data>
-  <data name="BuildConnectionNames" xml:space="preserve">
+	<data name="BuildConnectionNames" xml:space="preserve">
     <value>Build providing connections</value>
   </data>
-  <data name="Connections" xml:space="preserve">
+	<data name="Connections" xml:space="preserve">
     <value>Connections</value>
   </data>
-  <data name="BuildDefinitionBlacklist" xml:space="preserve">
+	<data name="BuildDefinitionBlacklist" xml:space="preserve">
     <value>Build-Definition blacklist</value>
   </data>
-  <data name="BuildDefinitionWhitelist" xml:space="preserve">
+	<data name="BuildDefinitionWhitelist" xml:space="preserve">
     <value>Build-Definition whitelist</value>
   </data>
-  <data name="DefaultCompareBranch" xml:space="preserve">
+	<data name="DefaultCompareBranch" xml:space="preserve">
     <value>Compare branch</value>
   </data>
-  <data name="HideCompletedPullRequests" xml:space="preserve">
+	<data name="HideCompletedPullRequests" xml:space="preserve">
     <value>Hide completed pull requests</value>
   </data>
-  <data name="LoadWhitelistedBranchesExclusively" xml:space="preserve">
+	<data name="LoadWhitelistedBranchesExclusively" xml:space="preserve">
     <value>Load whitelisted branches exclusively</value>
   </data>
-  <data name="LoadWhitelistedDefinitionsExclusively" xml:space="preserve">
+	<data name="LoadWhitelistedDefinitionsExclusively" xml:space="preserve">
     <value>Load whitelisted definitions exclusively</value>
   </data>
-  <data name="ShowPullRequests" xml:space="preserve">
+	<data name="ShowPullRequests" xml:space="preserve">
     <value>Show pull requests</value>
   </data>
-  <data name="SourceControlConnectionNames" xml:space="preserve">
+	<data name="SourceControlConnectionNames" xml:space="preserve">
     <value>Source control providing connections</value>
   </data>
-  <data name="NewConnection" xml:space="preserve">
+	<data name="NewConnection" xml:space="preserve">
     <value>New connection</value>
   </data>
-  <data name="NewProject" xml:space="preserve">
+	<data name="NewProject" xml:space="preserve">
     <value>New project</value>
   </data>
-  <data name="Projects" xml:space="preserve">
+	<data name="Projects" xml:space="preserve">
     <value>Projects</value>
   </data>
-  <data name="BuildsToLoadCount" xml:space="preserve">
+	<data name="BuildsToLoadCount" xml:space="preserve">
     <value>Builds to load</value>
   </data>
-  <data name="BuildsToShow" xml:space="preserve">
+	<data name="BuildsToShow" xml:space="preserve">
     <value>Builds per group</value>
   </data>
-  <data name="UpdateInterval" xml:space="preserve">
+	<data name="UpdateInterval" xml:space="preserve">
     <value>Update interval</value>
   </data>
-  <data name="CanceledBuildNotifyConfig" xml:space="preserve">
+	<data name="CanceledBuildNotifyConfig" xml:space="preserve">
     <value>Notify level for cancelled builds</value>
   </data>
-  <data name="FailedBuildNotifyConfig" xml:space="preserve">
+	<data name="FailedBuildNotifyConfig" xml:space="preserve">
     <value>Notify level for failed builds</value>
   </data>
-  <data name="SucceededBuildNotifyConfig" xml:space="preserve">
+	<data name="SucceededBuildNotifyConfig" xml:space="preserve">
     <value>Notify level for succeeded builds</value>
   </data>
-  <data name="Language" xml:space="preserve">
+	<data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="InitialSetupEmptyConf" xml:space="preserve">
+	<data name="InitialSetupEmptyConf" xml:space="preserve">
     <value>Welcome to BuildNotifications. To get started create a new connection with provider of your choice.</value>
   </data>
-  <data name="InitialSetupEmptyConnections" xml:space="preserve">
+	<data name="InitialSetupEmptyConnections" xml:space="preserve">
     <value>A project needs a connection to work off. Create a new one in the "Connections" Tab.</value>
   </data>
-  <data name="InitialSetupConnectionNotAsBuildOrSource" xml:space="preserve">
+	<data name="InitialSetupConnectionNotAsBuildOrSource" xml:space="preserve">
     <value>Setup your project by adding your connection. Both to the list to fetch builds of, as well as the list of source control providing connections.</value>
   </data>
-  <data name="ErrorFetchingBranches" xml:space="preserve">
+	<data name="ErrorFetchingBranches" xml:space="preserve">
     <value>An error occurred while fetching Branches for project "{0}". Error: 
 {1}</value>
   </data>
-  <data name="ErrorFetchingBuilds" xml:space="preserve">
+	<data name="ErrorFetchingBuilds" xml:space="preserve">
     <value>An error occurred while fetching Builds for project "{0}". Error: 
 {1}</value>
   </data>
-  <data name="ErrorFetchingDefinitions" xml:space="preserve">
+	<data name="ErrorFetchingDefinitions" xml:space="preserve">
     <value>An error occurred while fetching Build-Definitions for project "{0}". Error: 
 {1}</value>
   </data>
-  <data name="DefinitionChangedTextId" xml:space="preserve">
+	<data name="DefinitionChangedTextId" xml:space="preserve">
     <value>Definition {1}.</value>
   </data>
-  <data name="TwoDefinitionsChangedTextId" xml:space="preserve">
+	<data name="TwoDefinitionsChangedTextId" xml:space="preserve">
     <value>Definitions {1} and {2}.</value>
   </data>
-  <data name="ThreeDefinitionsChangedTextId" xml:space="preserve">
+	<data name="ThreeDefinitionsChangedTextId" xml:space="preserve">
     <value>Definitions {1}, {2} and {3}.</value>
   </data>
-  <data name="BuildChangedTextId" xml:space="preserve">
+	<data name="BuildChangedTextId" xml:space="preserve">
     <value>{1} on {2}.</value>
   </data>
-  <data name="BuildsChangedTextId" xml:space="preserve">
+	<data name="BuildsChangedTextId" xml:space="preserve">
     <value>{1} builds.</value>
   </data>
-  <data name="FailedSingular" xml:space="preserve">
+	<data name="FailedSingular" xml:space="preserve">
     <value>failed</value>
   </data>
-  <data name="FailedPlural" xml:space="preserve">
+	<data name="FailedPlural" xml:space="preserve">
     <value>failed</value>
   </data>
-  <data name="SucceededSingular" xml:space="preserve">
+	<data name="SucceededSingular" xml:space="preserve">
     <value>succeeded</value>
   </data>
-  <data name="SucceededPlural" xml:space="preserve">
+	<data name="SucceededPlural" xml:space="preserve">
     <value>succeeded</value>
   </data>
-  <data name="CancelledSingular" xml:space="preserve">
+	<data name="CancelledSingular" xml:space="preserve">
     <value>was cancelled</value>
   </data>
-  <data name="CancelledPlural" xml:space="preserve">
+	<data name="CancelledPlural" xml:space="preserve">
     <value>were cancelled</value>
   </data>
-  <data name="BranchChangedTextId" xml:space="preserve">
+	<data name="BranchChangedTextId" xml:space="preserve">
     <value>Branch {1}.</value>
   </data>
-  <data name="TwoBranchesChangedTextId" xml:space="preserve">
+	<data name="TwoBranchesChangedTextId" xml:space="preserve">
     <value>Branches {1} and {2}.</value>
   </data>
-  <data name="ThreeBranchesChangedTextId" xml:space="preserve">
+	<data name="ThreeBranchesChangedTextId" xml:space="preserve">
     <value>Branches {1}, {2} {3}.</value>
   </data>
-  <data name="BranchAndDefinitionFailedTextId" xml:space="preserve">
+	<data name="BranchAndDefinitionFailedTextId" xml:space="preserve">
     <value>{1} on {2}.</value>
   </data>
-  <data name="BuildNotificationContentPluralTextId" xml:space="preserve">
+	<data name="BuildNotificationContentPluralTextId" xml:space="preserve">
     <value>{1} builds {0}.</value>
   </data>
-  <data name="BuildNotificationContentSingularTextId" xml:space="preserve">
+	<data name="BuildNotificationContentSingularTextId" xml:space="preserve">
     <value>Build {0}.</value>
   </data>
-  <data name="NDaysAgoTextId" xml:space="preserve">
+	<data name="NDaysAgoTextId" xml:space="preserve">
     <value>{0} days ago</value>
   </data>
-  <data name="OneDayAgoTextId" xml:space="preserve">
+	<data name="OneDayAgoTextId" xml:space="preserve">
     <value>1 Day ago</value>
   </data>
-  <data name="NHoursAgoTextId" xml:space="preserve">
+	<data name="NHoursAgoTextId" xml:space="preserve">
     <value>{0} Hours ago</value>
   </data>
-  <data name="NMinutesAgoTextId" xml:space="preserve">
+	<data name="NMinutesAgoTextId" xml:space="preserve">
     <value>{0} Minutes ago</value>
   </data>
-  <data name="NSecondsAgoTextId" xml:space="preserve">
+	<data name="NSecondsAgoTextId" xml:space="preserve">
     <value>{0} Seconds ago</value>
   </data>
-  <data name="JustNowTextId" xml:space="preserve">
+	<data name="JustNowTextId" xml:space="preserve">
     <value>Just now</value>
   </data>
-  <data name="AnErrorOccured" xml:space="preserve">
+	<data name="AnErrorOccured" xml:space="preserve">
     <value>An error occurred.</value>
   </data>
-  <data name="ConnectionNotFound" xml:space="preserve">
+	<data name="ConnectionNotFound" xml:space="preserve">
     <value>No connection with name '{0}' found.</value>
   </data>
-  <data name="SourceControlPluginNotFound" xml:space="preserve">
+	<data name="SourceControlPluginNotFound" xml:space="preserve">
     <value>No source control plugin '{0}' found.</value>
   </data>
-  <data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
+	<data name="FailedToConstructBranchProviderFromPlugin" xml:space="preserve">
     <value>Failed to construct branch provider from plugin '{0}'. Error:
 {1}</value>
   </data>
-  <data name="BuildPluginNotFound" xml:space="preserve">
+	<data name="BuildPluginNotFound" xml:space="preserve">
     <value>No build plugin '{0}' found.</value>
   </data>
-  <data name="FailedToConstructBuildProviderFromPlugin" xml:space="preserve">
+	<data name="FailedToConstructBuildProviderFromPlugin" xml:space="preserve">
     <value>Failed to construct build provider from plugin '{0}'. Error:
 {1}</value>
   </data>
-  <data name="FailedToConstructBuildProviderForConnection" xml:space="preserve">
+	<data name="FailedToConstructBuildProviderForConnection" xml:space="preserve">
     <value>Failed to construct build provider for connection '{0}'.</value>
   </data>
-  <data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
+	<data name="FailedToConstructBranchProviderForConnection" xml:space="preserve">
     <value>Failed to construct branch provider for connection '{0}'.</value>
   </data>
-  <data name="DateDescending" xml:space="preserve">
+	<data name="DateDescending" xml:space="preserve">
     <value>by date descending</value>
   </data>
-  <data name="ErrorFetchingUserIdentities" xml:space="preserve">
+	<data name="ErrorFetchingUserIdentities" xml:space="preserve">
     <value>An error occurred while fetching the current user identity of project "{0}". Error:
 {1}</value>
   </data>
-  <data name="EditConnection" xml:space="preserve">
+	<data name="EditConnection" xml:space="preserve">
     <value>Edit connections</value>
   </data>
-  <data name="TestConnection" xml:space="preserve">
+	<data name="TestConnection" xml:space="preserve">
     <value>Test connection</value>
   </data>
-  <data name="TreeIsEmpty" xml:space="preserve">
+	<data name="TreeIsEmpty" xml:space="preserve">
     <value>No builds</value>
   </data>
-  <data name="Testing" xml:space="preserve">
+	<data name="Testing" xml:space="preserve">
     <value>Testing...</value>
   </data>
-  <data name="NoNotifications" xml:space="preserve">
+	<data name="NoNotifications" xml:space="preserve">
     <value>No notifications</value>
   </data>
-  <data name="BuildConnectionTestFailed" xml:space="preserve">
+	<data name="BuildConnectionTestFailed" xml:space="preserve">
     <value>Build plugin failed</value>
   </data>
-  <data name="SourceConnectionTestFailed" xml:space="preserve">
+	<data name="SourceConnectionTestFailed" xml:space="preserve">
     <value>Source control plugin failed</value>
   </data>
-  <data name="ConnectionTestSuccessful" xml:space="preserve">
+	<data name="ConnectionTestSuccessful" xml:space="preserve">
     <value>Success</value>
   </data>
-  <data name="ConnectionTestCaption" xml:space="preserve">
+	<data name="ConnectionTestCaption" xml:space="preserve">
     <value>A connection was established and the plugin reported no error.</value>
   </data>
-  <data name="InitialSetupUntested" xml:space="preserve">
+	<data name="InitialSetupUntested" xml:space="preserve">
     <value>To check whether your parameters are correct. Press the 'Test connection' button.</value>
   </data>
-  <data name="InitialSetupTested" xml:space="preserve">
+	<data name="InitialSetupTested" xml:space="preserve">
     <value>Now that your connection is set up. Create a new project which uses this connection.</value>
   </data>
-  <data name="InitialSetupConnectionNotAsBuild" xml:space="preserve">
+	<data name="InitialSetupConnectionNotAsBuild" xml:space="preserve">
     <value>Also add your connection to the list of build providing connections.</value>
   </data>
-  <data name="InitialSetupConnectionNotAsSource" xml:space="preserve">
+	<data name="InitialSetupConnectionNotAsSource" xml:space="preserve">
     <value>Also add your connection to the list of source control providing connections.</value>
   </data>
-  <data name="CloseConnections" xml:space="preserve">
+	<data name="CloseConnections" xml:space="preserve">
     <value>Close and resume</value>
   </data>
-  <data name="InitialSetupCompleteConfig" xml:space="preserve">
+	<data name="InitialSetupCompleteConfig" xml:space="preserve">
     <value>BuildNotifications is set up and ready to go. Click "Close and resume" to start.</value>
   </data>
-  <data name="NotificationNotFound" xml:space="preserve">
+	<data name="NotificationNotFound" xml:space="preserve">
     <value>Notification was not found.</value>
   </data>
-  <data name="BranchesCount" xml:space="preserve">
+	<data name="BranchesCount" xml:space="preserve">
     <value>{0} branches</value>
   </data>
-  <data name="DefinitionsCount" xml:space="preserve">
+	<data name="DefinitionsCount" xml:space="preserve">
     <value>{0} definitions</value>
   </data>
-  <data name="ShowWindow" xml:space="preserve">
+	<data name="ShowWindow" xml:space="preserve">
     <value>Show window</value>
   </data>
-  <data name="Exit" xml:space="preserve">
+	<data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
-  <data name="GoToBuild" xml:space="preserve">
+	<data name="GoToBuild" xml:space="preserve">
     <value>Go to build</value>
   </data>
-  <data name="GoToBranch" xml:space="preserve">
+	<data name="GoToBranch" xml:space="preserve">
     <value>Go to branch</value>
   </data>
-  <data name="GoToDefinition" xml:space="preserve">
+	<data name="GoToDefinition" xml:space="preserve">
     <value>Go to build definition</value>
   </data>
-  <data name="Pending" xml:space="preserve">
+	<data name="Pending" xml:space="preserve">
     <value>Pending</value>
   </data>
-  <data name="Running" xml:space="preserve">
+	<data name="Running" xml:space="preserve">
     <value>Running</value>
   </data>
-  <data name="Failed" xml:space="preserve">
+	<data name="Failed" xml:space="preserve">
     <value>Failed</value>
   </data>
-  <data name="Succeeded" xml:space="preserve">
+	<data name="Succeeded" xml:space="preserve">
     <value>Succeeded</value>
   </data>
-  <data name="Cancelled" xml:space="preserve">
+	<data name="Cancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>
-  <data name="PartiallySucceeded" xml:space="preserve">
+	<data name="PartiallySucceeded" xml:space="preserve">
     <value>Partially succeeded</value>
   </data>
-  <data name="RequestedBy" xml:space="preserve">
+	<data name="RequestedBy" xml:space="preserve">
     <value>Requested by</value>
   </data>
-  <data name="RequestedFor" xml:space="preserve">
+	<data name="RequestedFor" xml:space="preserve">
     <value>Requested for</value>
   </data>
-  <data name="IsEnabled" xml:space="preserve">
+	<data name="IsEnabled" xml:space="preserve">
     <value>Is enabled</value>
   </data>
-  <data name="Never" xml:space="preserve">
+	<data name="Never" xml:space="preserve">
     <value>Never</value>
   </data>
-  <data name="Always" xml:space="preserve">
+	<data name="Always" xml:space="preserve">
     <value>Always</value>
   </data>
-  <data name="RequestedForMe" xml:space="preserve">
+	<data name="RequestedForMe" xml:space="preserve">
     <value>When requested for me</value>
   </data>
-  <data name="RequestedByOrForMe" xml:space="preserve">
+	<data name="RequestedByOrForMe" xml:space="preserve">
     <value>When requested by or for me</value>
   </data>
-  <data name="RequestedByMe" xml:space="preserve">
+	<data name="RequestedByMe" xml:space="preserve">
     <value>When requested by me</value>
   </data>
-  <data name="YourIdentities" xml:space="preserve">
+	<data name="YourIdentities" xml:space="preserve">
     <value>Your identities</value>
   </data>
-  <data name="UserDescription" xml:space="preserve">
+	<data name="UserDescription" xml:space="preserve">
     <value>{0}, ID: " {1}", unique name: "{2}"</value>
   </data>
-  <data name="ClearAll" xml:space="preserve">
+	<data name="ClearAll" xml:space="preserve">
     <value>Clear all</value>
   </data>
-  <data name="OneOrMoreErrors" xml:space="preserve">
+	<data name="OneOrMoreErrors" xml:space="preserve">
     <value>One or more errors occured</value>
   </data>
-  <data name="BuildsPaused" xml:space="preserve">
+	<data name="BuildsPaused" xml:space="preserve">
     <value>Build fetching is paused</value>
   </data>
-  <data name="Autostart" xml:space="preserve">
+	<data name="Autostart" xml:space="preserve">
     <value>Autostart</value>
   </data>
-  <data name="DontAutostart" xml:space="preserve">
+	<data name="DontAutostart" xml:space="preserve">
     <value>Dont autostart</value>
   </data>
-  <data name="StartWithWindows" xml:space="preserve">
+	<data name="StartWithWindows" xml:space="preserve">
     <value>Start with Windows</value>
   </data>
-  <data name="StartWithWindowsMinimized" xml:space="preserve">
+	<data name="StartWithWindowsMinimized" xml:space="preserve">
     <value>Start with Windows minimized</value>
   </data>
-  <data name="PartialSucceededTreatmentMode" xml:space="preserve">
+	<data name="PartialSucceededTreatmentMode" xml:space="preserve">
     <value>Treatment of builds with warnings</value>
   </data>
-  <data name="TreatAsSucceeded" xml:space="preserve">
+	<data name="TreatAsSucceeded" xml:space="preserve">
     <value>Treat as succeeded</value>
   </data>
-  <data name="Ignore" xml:space="preserve">
+	<data name="Ignore" xml:space="preserve">
     <value>Ignore</value>
   </data>
-  <data name="TreatAsFailed" xml:space="preserve">
+	<data name="TreatAsFailed" xml:space="preserve">
     <value>Treat as failed</value>
   </data>
-  <data name="UsePreReleases" xml:space="preserve">
+	<data name="UsePreReleases" xml:space="preserve">
     <value>Update to pre-release versions</value>
   </data>
-  <data name="DoubleSpeed" xml:space="preserve">
+	<data name="DoubleSpeed" xml:space="preserve">
     <value>2X speed</value>
   </data>
-  <data name="AnimationSpeed" xml:space="preserve">
+	<data name="AnimationSpeed" xml:space="preserve">
     <value>Animations</value>
   </data>
-  <data name="Enabled" xml:space="preserve">
+	<data name="Enabled" xml:space="preserve">
     <value>Enabled</value>
   </data>
-  <data name="Disabled" xml:space="preserve">
+	<data name="Disabled" xml:space="preserve">
     <value>Disabled</value>
   </data>
-  <data name="ShowBusyIndicatorOnDeltaUpdates" xml:space="preserve">
+	<data name="ShowBusyIndicatorOnDeltaUpdates" xml:space="preserve">
     <value>Show busy indicator on delta updates</value>
   </data>
-  <data name="NoValue" xml:space="preserve">
+	<data name="NoValue" xml:space="preserve">
     <value>[No value]</value>
   </data>
-  <data name="OneAndHalfSpeed" xml:space="preserve">
+	<data name="OneAndHalfSpeed" xml:space="preserve">
     <value>1.5X speed</value>
   </data>
-  <data name="ThreeQuartersSpeed" xml:space="preserve">
+	<data name="ThreeQuartersSpeed" xml:space="preserve">
     <value>0.75X speed</value>
   </data>
-  <data name="HalfSpeed" xml:space="preserve">
+	<data name="HalfSpeed" xml:space="preserve">
     <value>0.5X speed</value>
   </data>
-  <data name="OneAndQuarterSpeed" xml:space="preserve">
+	<data name="OneAndQuarterSpeed" xml:space="preserve">
     <value>1.25X speed</value>
   </data>
-  <data name="CheckForUpdates" xml:space="preserve">
+	<data name="CheckForUpdates" xml:space="preserve">
     <value>Check for updates</value>
   </data>
-  <data name="NoUpdatesAvailable" xml:space="preserve">
+	<data name="NoUpdatesAvailable" xml:space="preserve">
     <value>No updates available.</value>
   </data>
-  <data name="UpdatesAvailable" xml:space="preserve">
+	<data name="UpdatesAvailable" xml:space="preserve">
     <value>Update available. Click here to install the update.</value>
   </data>
-  <data name="CheckingForUpdates" xml:space="preserve">
+	<data name="CheckingForUpdates" xml:space="preserve">
     <value>Checking for updates...</value>
   </data>
-  <data name="AnUpdateHasBeenInstalled" xml:space="preserve">
+	<data name="AnUpdateHasBeenInstalled" xml:space="preserve">
     <value>An update has been installed.</value>
   </data>
-  <data name="RestartApplicationToApplyUpdate" xml:space="preserve">
+	<data name="RestartApplicationToApplyUpdate" xml:space="preserve">
     <value>Restart application to apply the update</value>
   </data>
-  <data name="GoToPullRequest" xml:space="preserve">
+	<data name="GoToPullRequest" xml:space="preserve">
     <value>Go to Pull request</value>
   </data>
-  <data name="InfoButtonTooltip" xml:space="preserve">
+	<data name="InfoButtonTooltip" xml:space="preserve">
 	  <value>Info</value>
   </data>
-  <data name="NotificationsCenterButtonTooltip" xml:space="preserve">
+	<data name="NotificationsCenterButtonTooltip" xml:space="preserve">
 	  <value>Notifications</value>
   </data>
-  <data name="SettingsButtonTooltip" xml:space="preserve">
+	<data name="SettingsButtonTooltip" xml:space="preserve">
 	  <value>Settings</value>
   </data>
-  <data name="GroupDefinitionsTooltip" xml:space="preserve">
+	<data name="GroupDefinitionsTooltip" xml:space="preserve">
 	  <value>Grouping and sorting</value>
   </data>
-  <data name="CloseButtonTooltip" xml:space="preserve">
+	<data name="CloseButtonTooltip" xml:space="preserve">
 	  <value>Close</value>
   </data>
-  <data name="MaximizeButtonTooltip" xml:space="preserve">
+	<data name="MaximizeButtonTooltip" xml:space="preserve">
 	  <value>Maximize</value>
   </data>
-  <data name="MinimizeButtonTooltip" xml:space="preserve">
+	<data name="MinimizeButtonTooltip" xml:space="preserve">
 	  <value>Minimize</value>
   </data>
-  <data name="RestoreButtonTooltip" xml:space="preserve">
+	<data name="RestoreButtonTooltip" xml:space="preserve">
 	  <value>Restore</value>
   </data>
-  <data name="SearchTooltip" xml:space="preserve">
+	<data name="SearchTooltip" xml:space="preserve">
 	  <value>Search</value>
   </data>
-  <data name="ConnectionType" xml:space="preserve">
+	<data name="ConnectionType" xml:space="preserve">
 	  <value>Connection type</value>
   </data>
-  <data name="ConnectionNameDescription" xml:space="preserve">
+	<data name="ConnectionNameDescription" xml:space="preserve">
 	  <value>Name that is used to indentify this connection.</value>
   </data>
-  <data name="ConnectionTypeDescription" xml:space="preserve">
+	<data name="ConnectionTypeDescription" xml:space="preserve">
 	  <value>Type of this connection.</value>
   </data>
-  <data name="ConfirmDeletion" xml:space="preserve">
+	<data name="ConfirmDeletion" xml:space="preserve">
 	  <value>Really delete?</value>
   </data>
-  <data name="ConfirmDeleteConnection" xml:space="preserve">
+	<data name="ConfirmDeleteConnection" xml:space="preserve">
 	  <value>Do you really want to delete the connection '{0}'?</value>
   </data>
-  <data name="ConfirmDeleteProject" xml:space="preserve">
+	<data name="ConfirmDeleteProject" xml:space="preserve">
 	  <value>Do you really want to delete the project '{0}'?</value>
   </data>
-  <data name="Yes" xml:space="preserve">
+	<data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="No" xml:space="preserve">
+	<data name="No" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="Ok" xml:space="preserve">
+	<data name="Ok" xml:space="preserve">
     <value>Ok</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
+	<data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="UseDarkTheme" xml:space="preserve">
+	<data name="UseDarkTheme" xml:space="preserve">
     <value>Use Dark Theme</value>
   </data>
-  <data name="MyBuildsSightToolTip" xml:space="preserve">
+	<data name="MyBuildsSightToolTip" xml:space="preserve">
     <value>Show only builds requested by me</value>
   </data>
-  <data name="ManualBuildsSightToolTip" xml:space="preserve">
+	<data name="ManualBuildsSightToolTip" xml:space="preserve">
     <value>Show only manually requested builds</value>
   </data>
-  <data name="SearchDefaultDescription" xml:space="preserve">
+	<data name="SearchDefaultDescription" xml:space="preserve">
     <value>Search by any criteria listed below.
 Use keywords for specific filter. Comma to separate terms.</value>
   </data>
-  <data name="SearchCriteriaAfterKeyword" xml:space="preserve">
+	<data name="SearchCriteriaAfterKeyword" xml:space="preserve">
     <value>After</value>
   </data>
-  <data name="SearchCriteriaAfterDescription" xml:space="preserve">
+	<data name="SearchCriteriaAfterDescription" xml:space="preserve">
     <value>Builds starting after a specific date</value>
   </data>
-  <data name="SearchCriteriaAfterYesterday" xml:space="preserve">
+	<data name="SearchCriteriaAfterYesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
-  <data name="SearchCriteriaBeforeKeyword" xml:space="preserve">
+	<data name="SearchCriteriaBeforeKeyword" xml:space="preserve">
     <value>Before</value>
   </data>
-  <data name="SearchCriteriaBeforeDescription" xml:space="preserve">
+	<data name="SearchCriteriaBeforeDescription" xml:space="preserve">
     <value>Builds started before a specific date</value>
   </data>
-  <data name="SearchCriteriaBeforeToday" xml:space="preserve">
+	<data name="SearchCriteriaBeforeToday" xml:space="preserve">
     <value>Today</value>
   </data>
-  <data name="SearchCriteriaDuringKeyword" xml:space="preserve">
+	<data name="SearchCriteriaDuringKeyword" xml:space="preserve">
     <value>During</value>
   </data>
-  <data name="SearchCriteriaDuringDescription" xml:space="preserve">
+	<data name="SearchCriteriaDuringDescription" xml:space="preserve">
     <value>Builds that were started on a specific date</value>
   </data>
-  <data name="SearchCriteriaDuringToday" xml:space="preserve">
+	<data name="SearchCriteriaDuringToday" xml:space="preserve">
     <value>Today</value>
   </data>
-  <data name="SearchCriteriaByKeyword" xml:space="preserve">
+	<data name="SearchCriteriaByKeyword" xml:space="preserve">
     <value>By</value>
   </data>
-  <data name="SearchCriteriaByDescription" xml:space="preserve">
+	<data name="SearchCriteriaByDescription" xml:space="preserve">
     <value>Builds created by a certain user</value>
   </data>
-  <data name="SearchCriteriaForKeyword" xml:space="preserve">
+	<data name="SearchCriteriaForKeyword" xml:space="preserve">
     <value>For</value>
   </data>
-  <data name="SearchCriteriaForDescription" xml:space="preserve">
+	<data name="SearchCriteriaForDescription" xml:space="preserve">
     <value>Builds created for a certain user</value>
   </data>
-  <data name="SearchCriteriaIsKeyword" xml:space="preserve">
+	<data name="SearchCriteriaIsKeyword" xml:space="preserve">
     <value>Is</value>
   </data>
-  <data name="SearchCriteriaIsDescription" xml:space="preserve">
+	<data name="SearchCriteriaIsDescription" xml:space="preserve">
     <value>Various criterions of a build</value>
   </data>
-  <data name="SearchCriteriaBranchKeyword" xml:space="preserve">
+	<data name="SearchCriteriaBranchKeyword" xml:space="preserve">
     <value>Branch</value>
   </data>
-  <data name="SearchCriteriaBranchDescription" xml:space="preserve">
+	<data name="SearchCriteriaBranchDescription" xml:space="preserve">
     <value>Builds from a specific branch. Supports wildcards (*)</value>
   </data>
-  <data name="SearchCriteriaDefinitionKeyword" xml:space="preserve">
+	<data name="SearchCriteriaDefinitionKeyword" xml:space="preserve">
     <value>Definition</value>
   </data>
-  <data name="SearchCriteriaDefinitionDescription" xml:space="preserve">
+	<data name="SearchCriteriaDefinitionDescription" xml:space="preserve">
     <value>Builds from a specific builds definition</value>
   </data>
-  <data name="SearchCriteriaDuringYesterday" xml:space="preserve">
+	<data name="SearchCriteriaDuringYesterday" xml:space="preserve">
     <value>Yesterday</value>
   </data>
-  <data name="SearchCriteriaIsManual" xml:space="preserve">
+	<data name="SearchCriteriaIsManual" xml:space="preserve">
     <value>Manual</value>
   </data>
-  <data name="SearchCriteriaIsByMe" xml:space="preserve">
+	<data name="SearchCriteriaIsByMe" xml:space="preserve">
     <value>By me</value>
   </data>
-  <data name="SearchCriteriaIsInProgress" xml:space="preserve">
+	<data name="SearchCriteriaIsInProgress" xml:space="preserve">
     <value>In progress</value>
   </data>
-  <data name="SearchCriteriaIsPending" xml:space="preserve">
+	<data name="SearchCriteriaIsPending" xml:space="preserve">
     <value>Pending</value>
   </data>
-  <data name="SearchCriteriaIsFailed" xml:space="preserve">
+	<data name="SearchCriteriaIsFailed" xml:space="preserve">
     <value>Failed</value>
   </data>
-  <data name="SearchCriteriaIsCancelled" xml:space="preserve">
+	<data name="SearchCriteriaIsCancelled" xml:space="preserve">
     <value>Cancelled</value>
   </data>
-  <data name="SearchCriteriaIsCi" xml:space="preserve">
+	<data name="SearchCriteriaIsCi" xml:space="preserve">
     <value>CI</value>
   </data>
-  <data name="SearchCriteriaIsNightly" xml:space="preserve">
+	<data name="SearchCriteriaIsNightly" xml:space="preserve">
     <value>Nightly</value>
   </data>
-  <data name="SearchCriteriaIsPullRequest" xml:space="preserve">
+	<data name="SearchCriteriaIsPullRequest" xml:space="preserve">
     <value>Pull request</value>
   </data>
-  <data name="SearchCriteriaIsSucceeded" xml:space="preserve">
+	<data name="SearchCriteriaIsSucceeded" xml:space="preserve">
     <value>Succeeded</value>
   </data>
-  <data name="SearchCriteriaIsPartiallySucceeded" xml:space="preserve">
+	<data name="SearchCriteriaIsPartiallySucceeded" xml:space="preserve">
     <value>Partially succeeded</value>
   </data>
-  <data name="SearchCriteriaIsScheduled" xml:space="preserve">
+	<data name="SearchCriteriaIsScheduled" xml:space="preserve">
     <value>Scheduled</value>
   </data>
-  <data name="SearchCriteriaBranchStageExample" xml:space="preserve">
+	<data name="SearchCriteriaBranchStageExample" xml:space="preserve">
     <value>Stage</value>
   </data>
-  <data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
+	<data name="SearchCriteriaDefinitionNightlyExample" xml:space="preserve">
     <value>Nightly</value>
   </data>
-  <data name="SearchCriteriaForMeExample" xml:space="preserve">
+	<data name="SearchCriteriaForMeExample" xml:space="preserve">
     <value>Me</value>
   </data>
-  <data name="SearchCriteriaByMeExample" xml:space="preserve">
+	<data name="SearchCriteriaByMeExample" xml:space="preserve">
     <value>Me</value>
   </data>
-  <data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
+	<data name="SearchCriteriaForSomeoneExample" xml:space="preserve">
     <value>John Doe</value>
   </data>
-  <data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
+	<data name="SearchCriteriaBySomeoneExample" xml:space="preserve">
     <value>John Doe</value>
   </data>
-  <data name="HideBuildsOfDeletedBranches" xml:space="preserve">
+	<data name="HideBuildsOfDeletedBranches" xml:space="preserve">
     <value>Hide builds which branch has been deleted</value>
   </data>
-  <data name="HideBuildsOfDeletedDefinitions" xml:space="preserve">
+	<data name="HideBuildsOfDeletedDefinitions" xml:space="preserve">
     <value>Hide builds which build definition has been deleted</value>
   </data>
-  <data name="DeletedTag" xml:space="preserve">
+	<data name="DeletedTag" xml:space="preserve">
     <value>[Deleted]</value>
   </data>
-  <data name="NotifyMeAboutThisBuild" xml:space="preserve">
+	<data name="NotifyMeAboutThisBuild" xml:space="preserve">
     <value>Notify me about this build</value>
   </data>
-  <data name="ImportExport" xml:space="preserve">
+	<data name="ImportExport" xml:space="preserve">
     <value>Import/Export</value>
   </data>
-  <data name="FailedToLoadFile" xml:space="preserve">
+	<data name="FailedToLoadFile" xml:space="preserve">
     <value>Error loading file</value>
   </data>
-  <data name="ConfigurationFileFilter" xml:space="preserve">
+	<data name="ConfigurationFileFilter" xml:space="preserve">
     <value>Setting files|*.json</value>
   </data>
-  <data name="Export" xml:space="preserve">
+	<data name="Export" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="Import" xml:space="preserve">
+	<data name="Import" xml:space="preserve">
     <value>Import</value>
   </data>
-  <data name="ImportSuccessful" xml:space="preserve">
+	<data name="ImportSuccessful" xml:space="preserve">
     <value>Import successful</value>
   </data>
-  <data name="ExportSuccessful" xml:space="preserve">
+	<data name="ExportSuccessful" xml:space="preserve">
     <value>Export successful</value>
   </data>
-  <data name="ImportFailed" xml:space="preserve">
+	<data name="ImportFailed" xml:space="preserve">
 	  <value>Import failed</value>
   </data>
-  <data name="ExportFailed" xml:space="preserve">
+	<data name="ExportFailed" xml:space="preserve">
 	  <value>Export failed</value>
   </data>
 </root>

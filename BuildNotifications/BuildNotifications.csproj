@@ -1,142 +1,142 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <Nullable>enable</Nullable>
-    <ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
-	  <RunCodeAnalysis>false</RunCodeAnalysis>
-	  <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ApplicationIcon>Resources\Icons\Green.ico</ApplicationIcon>
+		<RunCodeAnalysis>false</RunCodeAnalysis>
+		<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 
-  <PropertyGroup>
-    <PublishTrimmed>false</PublishTrimmed>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishSingleFile>false</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
+	<PropertyGroup>
+		<PublishTrimmed>false</PublishTrimmed>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<PublishSingleFile>false</PublishSingleFile>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors/>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Resources\BuildTree\Status\**" />
-    <Compile Remove="Utils\**" />
-    <EmbeddedResource Remove="Resources\BuildTree\Status\**" />
-    <EmbeddedResource Remove="Utils\**" />
-    <None Remove="Resources\BuildTree\Status\**" />
-    <None Remove="Utils\**" />
-    <Page Remove="Resources\BuildTree\Status\**" />
-    <Page Remove="Utils\**" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors/>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="config.json" />
-    <None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml" />
-    <None Remove="Resources\BuildTree\Definition\DefinitionTemplates.xaml" />
-    <None Remove="Resources\BuildTree\BuildTemplates.xaml" />
-    <None Remove="Resources\BuildTree\BuildTreeResources.xaml" />
-    <None Remove="Resources\BuildTree\LevelTemplates.xaml" />
-    <None Remove="Resources\BuildTree\Source\SourceTemplates.xaml" />
-    <None Remove="Resources\Global\DarkTheme.xaml" />
-    <None Remove="Resources\Global\DecoratedComboBoxStyles.xaml" />
-    <None Remove="Resources\Global\IconButtonStyles.xaml" />
-    <None Remove="Resources\Global\LightTheme.xaml" />
-    <None Remove="Resources\Global\ListBoxStyles.xaml" />
-    <None Remove="Resources\Global\Sizes.xaml" />
-    <None Remove="Resources\Global\TextBlockStyles.xaml" />
-    <None Remove="Resources\Global\TextBoxStyles.xaml" />
-    <None Remove="Resources\Global\WindowStyle.xaml" />
-    <None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml" />
-    <None Remove="Resources\Icons\Gray.ico" />
-    <None Remove="Resources\Icons\Green.ico" />
-    <None Remove="Resources\Icons\icon_failed.ico" />
-    <None Remove="Resources\Icons\icon_pending.ico" />
-    <None Remove="Resources\Icons\Red.ico" />
-    <None Remove="Resources\Icons\RedIntense.ico" />
-    <None Remove="Resources\Window\ScrollBar.xaml" />
-    <None Remove="Views\BusyIndicator.xaml" />
-    <None Remove="Views\GroupDefinitionSelectionView.xaml" />
-    <None Remove="Views\GroupDefinitionSelection\BuildTreeGroupDefinitionView.xaml" />
-    <None Remove="Views\GroupDefinitionSelection\SingleGroupDefinitionSelectionView.xaml" />
-    <None Remove="Views\GroupDefinitionSelection\SortingSelectionView.xaml" />
-    <None Remove="Views\SearchView.xaml" />
-    <None Remove="Views\Settings\SettingsView.xaml" />
-    <None Remove="Views\Tree\BuildTreeView.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Resources\BuildTree\Status\**"/>
+		<Compile Remove="Utils\**"/>
+		<EmbeddedResource Remove="Resources\BuildTree\Status\**"/>
+		<EmbeddedResource Remove="Utils\**"/>
+		<None Remove="Resources\BuildTree\Status\**"/>
+		<None Remove="Utils\**"/>
+		<Page Remove="Resources\BuildTree\Status\**"/>
+		<Page Remove="Utils\**"/>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Remove="Resources.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="config.json"/>
+		<None Remove="Resources\BuildTree\Branch\BranchTemplates.xaml"/>
+		<None Remove="Resources\BuildTree\Definition\DefinitionTemplates.xaml"/>
+		<None Remove="Resources\BuildTree\BuildTemplates.xaml"/>
+		<None Remove="Resources\BuildTree\BuildTreeResources.xaml"/>
+		<None Remove="Resources\BuildTree\LevelTemplates.xaml"/>
+		<None Remove="Resources\BuildTree\Source\SourceTemplates.xaml"/>
+		<None Remove="Resources\Global\DarkTheme.xaml"/>
+		<None Remove="Resources\Global\DecoratedComboBoxStyles.xaml"/>
+		<None Remove="Resources\Global\IconButtonStyles.xaml"/>
+		<None Remove="Resources\Global\LightTheme.xaml"/>
+		<None Remove="Resources\Global\ListBoxStyles.xaml"/>
+		<None Remove="Resources\Global\Sizes.xaml"/>
+		<None Remove="Resources\Global\TextBlockStyles.xaml"/>
+		<None Remove="Resources\Global\TextBoxStyles.xaml"/>
+		<None Remove="Resources\Global\WindowStyle.xaml"/>
+		<None Remove="Resources\GroupDefinitionSelection\ComboBoxStyle.xaml"/>
+		<None Remove="Resources\Icons\Gray.ico"/>
+		<None Remove="Resources\Icons\Green.ico"/>
+		<None Remove="Resources\Icons\icon_failed.ico"/>
+		<None Remove="Resources\Icons\icon_pending.ico"/>
+		<None Remove="Resources\Icons\Red.ico"/>
+		<None Remove="Resources\Icons\RedIntense.ico"/>
+		<None Remove="Resources\Window\ScrollBar.xaml"/>
+		<None Remove="Views\BusyIndicator.xaml"/>
+		<None Remove="Views\GroupDefinitionSelectionView.xaml"/>
+		<None Remove="Views\GroupDefinitionSelection\BuildTreeGroupDefinitionView.xaml"/>
+		<None Remove="Views\GroupDefinitionSelection\SingleGroupDefinitionSelectionView.xaml"/>
+		<None Remove="Views\GroupDefinitionSelection\SortingSelectionView.xaml"/>
+		<None Remove="Views\SearchView.xaml"/>
+		<None Remove="Views\Settings\SettingsView.xaml"/>
+		<None Remove="Views\Tree\BuildTreeView.xaml"/>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Resources\Icons\Gray.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\Green.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\icon_failed.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\icon_pending.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\Red.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\RedIntense.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Remove="Resources.xaml"/>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="Resources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Resources\Icons\Gray.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Icons\Green.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Icons\icon_failed.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Icons\icon_pending.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Icons\Red.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\Icons\RedIntense.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.12" />
-    <PackageReference Include="semver" Version="2.2.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="System.Windows.Forms" Version="4.0.0">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="TweenSharp" Version="1.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="Resources.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NLog" Version="4.7.12"/>
+		<PackageReference Include="semver" Version="2.2.0"/>
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0"/>
+		<PackageReference Include="System.Windows.Forms" Version="4.0.0">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
+		<PackageReference Include="TweenSharp" Version="1.0.0"/>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="nlog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BuildNotifications.Core\BuildNotifications.Core.csproj"/>
+	</ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\net6.0&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyServer\bin\Debug\net6.0&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\ToastNotificationsPlugin\bin\debug&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.GitHub\bin\debug\net6.0&quot; &quot;$(TargetDir)plugins/GitHub&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)" />
-  </Target>
+	<ItemGroup>
+		<None Update="nlog.config">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="if $(ConfigurationName) == Debug (&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.Tfs\bin\debug\net6.0&quot; &quot;$(TargetDir)plugins/tfs&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.DummyServer\bin\Debug\net6.0&quot; &quot;$(TargetDir)plugins/dummy&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\ToastNotificationsPlugin\bin\debug&quot; &quot;$(TargetDir)plugins/toast&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;(robocopy &quot;$(SolutionDir)Plugins\BuildNotifications.Plugin.GitHub\bin\debug\net6.0&quot; &quot;$(TargetDir)plugins/GitHub&quot; &quot;*&quot; /MIR &gt;nul 2&gt;&amp;1) ^&amp; IF %25ERRORLEVEL%25 LSS 2 SET ERRORLEVEL = 0&#xD;&#xA;)"/>
+	</Target>
 
 </Project>

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using BuildNotifications.PluginInterfaces;
 
-namespace BuildNotifications.Core.Pipeline
+namespace BuildNotifications.Core.Pipeline;
+
+public interface IUserIdentityList
 {
-    public interface IUserIdentityList
-    {
-        ICollection<IUser> IdentitiesOfCurrentUser { get; }
-    }
+    ICollection<IUser> IdentitiesOfCurrentUser { get; }
 }

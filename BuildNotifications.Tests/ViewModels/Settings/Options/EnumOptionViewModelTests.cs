@@ -2,30 +2,30 @@
 using BuildNotifications.ViewModel.Settings.Options;
 using Xunit;
 
-namespace BuildNotifications.Tests.ViewModels.Settings.Options
+namespace BuildNotifications.Tests.ViewModels.Settings.Options;
+
+public class EnumOptionViewModelTests
 {
-    public class EnumOptionViewModelTests
+    private enum TestEnumWithoutLocalization
     {
-        private enum TestEnumWithoutLocalization
-        {
-            // ReSharper disable UnusedMember.Local
-            NonLocalizableOne,
-            NonLocalizableTwo,
-            NonLocalizableThree,
-            // ReSharper enable UnusedMember.Local
-        }
+        // ReSharper disable UnusedMember.Local
+        NonLocalizableOne,
+        NonLocalizableTwo,
 
-        [Fact]
-        public void DisplayNameShouldUseToStringWhenNotLocalizable()
-        {
-            // Arrange
-            var sut = new EnumOptionViewModel<TestEnumWithoutLocalization>("displayName");
+        NonLocalizableThree
+        // ReSharper enable UnusedMember.Local
+    }
 
-            // Act
-            var actual = sut.AvailableValues.First().DisplayName;
+    [Fact]
+    public void DisplayNameShouldUseToStringWhenNotLocalizable()
+    {
+        // Arrange
+        var sut = new EnumOptionViewModel<TestEnumWithoutLocalization>("displayName");
 
-            // Assert
-            Assert.Equal("NonLocalizableOne", actual);
-        }
+        // Act
+        var actual = sut.AvailableValues.First().DisplayName;
+
+        // Assert
+        Assert.Equal("NonLocalizableOne", actual);
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Notification
+﻿namespace BuildNotifications.Views.Notification;
+
+public partial class NewNotificationsCounterView
 {
-    public partial class NewNotificationsCounterView
+    public NewNotificationsCounterView()
     {
-        public NewNotificationsCounterView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,18 +1,17 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+/// <summary>
+/// Available application themes.
+/// </summary>
+public enum Theme
 {
     /// <summary>
-    /// Available application themes.
+    /// Default dark theme.
     /// </summary>
-    public enum Theme
-    {
-        /// <summary>
-        /// Default dark theme.
-        /// </summary>
-        Dark,
+    Dark,
 
-        /// <summary>
-        /// Light theme.
-        /// </summary>
-        Light
-    }
+    /// <summary>
+    /// Light theme.
+    /// </summary>
+    Light
 }

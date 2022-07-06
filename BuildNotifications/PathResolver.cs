@@ -2,31 +2,30 @@
 using System.IO;
 using BuildNotifications.Core;
 
-namespace BuildNotifications
+namespace BuildNotifications;
+
+internal class PathResolver : IPathResolver
 {
-    internal class PathResolver : IPathResolver
+    public string WindowSettingsFileName => "window.json";
+    public string WindowSettingsFilePath => Path.Combine(ConfigurationFolder, WindowSettingsFileName);
+
+    public string ConfigurationFolder
     {
-        public string ConfigurationFolder
+        get
         {
-            get
-            {
 #if DEBUG
-                return ".";
+            return ".";
 #else
                 return Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "BuildNotifications", "data");
 #endif
-            }
         }
+    }
 
-        public string WindowSettingsFileName => "window.json";
-        public string WindowSettingsFilePath => Path.Combine(ConfigurationFolder, WindowSettingsFileName);
+    public string UserConfigurationFileName => "config.json";
+    public string UserConfigurationFilePath => Path.Combine(ConfigurationFolder, UserConfigurationFileName);
 
-        public string UserConfigurationFileName => "config.json";
-        public string UserConfigurationFilePath => Path.Combine(ConfigurationFolder, UserConfigurationFileName);
-
-        public IEnumerable<string> PluginFolders
-        {
-            get { yield return "plugins"; }
-        }
+    public IEnumerable<string> PluginFolders
+    {
+        get { yield return "plugins"; }
     }
 }

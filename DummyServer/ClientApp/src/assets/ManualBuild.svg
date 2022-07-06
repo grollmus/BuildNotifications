@@ -1,8 +1,8 @@
-
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
-<defs>
-<g id="Layer5_0_FILL">
-<path fill="#ECEFF4" stroke="none" d="
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
+     preserveAspectRatio="none" x="0px" y="0px" width="18px" height="18px" viewBox="0 0 12 12">
+  <defs>
+    <g id="Layer5_0_FILL">
+      <path fill="#ECEFF4" stroke="none" d="
 M 12 10
 Q 12 9.15 11.4 8.55 10.85 8 10 8 9.15 8 8.6 8.55 8 9.15 8 10
 L 8 12 12 12 12 10
@@ -14,10 +14,10 @@ M 3.75 4.65
 L 0.1 2.65 0.1 6.65 3.75 9 3.75 4.65
 M 0.35 2.05
 L 4.1 3.95 7.95 2.05 4.1 0 0.35 2.05 Z"/>
-</g>
-</defs>
+    </g>
+  </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer5_0_FILL"/>
-</g>
+  <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+    <use xlink:href="#Layer5_0_FILL"/>
+  </g>
 </svg>

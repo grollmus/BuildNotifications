@@ -2,13 +2,12 @@
 using System.Windows;
 using BuildNotifications.PluginInterfaces.Host;
 
-namespace BuildNotifications.ViewModel.Utils
+namespace BuildNotifications.ViewModel.Utils;
+
+internal class WpfDispatcher : IDispatcher
 {
-    internal class WpfDispatcher : IDispatcher
+    public void Dispatch(Action action)
     {
-        public void Dispatch(Action action)
-        {
-            Application.Current.Dispatcher.BeginInvoke(action);
-        }
+        Application.Current.Dispatcher.BeginInvoke(action);
     }
 }

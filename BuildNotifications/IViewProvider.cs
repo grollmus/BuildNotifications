@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 
-namespace BuildNotifications
+namespace BuildNotifications;
+
+public interface IViewProvider
 {
-    public interface IViewProvider
-    {
-        Window View { get; }
-    }
+    Window View { get; }
 }

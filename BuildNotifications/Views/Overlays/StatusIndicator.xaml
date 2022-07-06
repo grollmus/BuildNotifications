@@ -17,10 +17,13 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <DockPanel>
-        <icons:IconButton Icon="Pause" Foreground="{DynamicResource Foreground1}" Width="{StaticResource BlockDouble}"
-                          Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
+        <icons:IconButton Icon="Pause" Foreground="{DynamicResource Foreground1}"
+                          Width="{StaticResource BlockDouble}"
+                          Height="{StaticResource BlockDouble}"
+                          IconSize="{StaticResource BlockDouble}"
                           Visibility="{Binding PauseVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          Margin="{StaticResource BlockQuarterXOnlyMargin}" ToolTip="{text:Localized BuildsPaused}"
+                          Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                          ToolTip="{text:Localized BuildsPaused}"
                           DockPanel.Dock="Right" Command="{Binding RequestResumeCommand}">
 
             <i:Interaction.Triggers>
@@ -31,10 +34,13 @@
 
         </icons:IconButton>
 
-        <icons:IconButton Icon="Lightning" Foreground="{DynamicResource Red}" Width="{StaticResource BlockDouble}"
-                          Height="{StaticResource BlockDouble}" IconSize="{StaticResource BlockDouble}"
+        <icons:IconButton Icon="Lightning" Foreground="{DynamicResource Red}"
+                          Width="{StaticResource BlockDouble}"
+                          Height="{StaticResource BlockDouble}"
+                          IconSize="{StaticResource BlockDouble}"
                           Visibility="{Binding ErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          Margin="{StaticResource BlockQuarterXOnlyMargin}" ToolTip="{text:Localized OneOrMoreErrors}"
+                          Margin="{StaticResource BlockQuarterXOnlyMargin}"
+                          ToolTip="{text:Localized OneOrMoreErrors}"
                           DockPanel.Dock="Right" Command="{Binding OpenErrorMessageCommand}">
 
             <i:Interaction.Triggers>
@@ -47,6 +53,7 @@
             </i:Interaction.Triggers>
         </icons:IconButton>
 
-        <views:BusyIndicator IsBusy="{Binding BusyVisible}" Margin="{StaticResource BlockXOnlyMargin}" />
+        <views:BusyIndicator IsBusy="{Binding BusyVisible}"
+                             Margin="{StaticResource BlockXOnlyMargin}" />
     </DockPanel>
 </UserControl>

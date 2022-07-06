@@ -1,21 +1,20 @@
 ﻿using BuildNotifications.Core.Pipeline;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.Pipeline.Tree
+namespace BuildNotifications.Core.Tests.Pipeline.Tree;
+
+public class UserIdentityListTests
 {
-    public class UserIdentityListTests
+    [Fact]
+    public void ConstructorShouldSetCorrectValues()
     {
-        [Fact]
-        public void ConstructorShouldSetCorrectValues()
-        {
-            // Arrange
+        // Arrange
 
-            // Act
-            var sut = new UserIdentityList();
+        // Act
+        var sut = new UserIdentityList();
 
-            // Assert
-            Assert.NotNull(sut.IdentitiesOfCurrentUser);
-            Assert.Empty(sut.IdentitiesOfCurrentUser);
-        }
+        // Assert
+        Assert.NotNull(sut.IdentitiesOfCurrentUser);
+        Assert.Empty(sut.IdentitiesOfCurrentUser);
     }
 }

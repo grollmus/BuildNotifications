@@ -1,9 +1,8 @@
 ﻿using BuildNotifications.PluginInterfaces.Builds;
 
-namespace BuildNotifications.Core.Pipeline.Tree
+namespace BuildNotifications.Core.Pipeline.Tree;
+
+public interface IDefinitionGroupNode : IGroupNode
 {
-    public interface IDefinitionGroupNode : IGroupNode
-    {
-        IBuildDefinition Definition { get; }
-    }
+    IBuildDefinition Definition { get; }
 }

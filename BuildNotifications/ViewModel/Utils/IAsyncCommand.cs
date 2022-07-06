@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace BuildNotifications.ViewModel.Utils
+namespace BuildNotifications.ViewModel.Utils;
+
+public interface IAsyncCommand : ICommand
 {
-    public interface IAsyncCommand : ICommand
-    {
-        Task ExecuteAsync(object parameter);
-    }
+    Task ExecuteAsync(object parameter);
 }

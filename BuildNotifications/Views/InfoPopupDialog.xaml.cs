@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views
+﻿namespace BuildNotifications.Views;
+
+public partial class InfoPopupDialog
 {
-    public partial class InfoPopupDialog
+    public InfoPopupDialog()
     {
-        public InfoPopupDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

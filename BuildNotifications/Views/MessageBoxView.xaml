@@ -5,8 +5,10 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:window="clr-namespace:BuildNotifications.Resources.Window"
                      xmlns:viewModel="clr-namespace:BuildNotifications.ViewModel"
-                     mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type viewModel:MessageBoxViewModel}}"
-                     Title="{Binding Title}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+                     mc:Ignorable="d"
+                     d:DataContext="{d:DesignInstance {x:Type viewModel:MessageBoxViewModel}}"
+                     Title="{Binding Title}" SizeToContent="WidthAndHeight"
+                     WindowStartupLocation="CenterOwner"
                      d:DesignHeight="450" d:DesignWidth="800">
 
     <window:CustomWindow.Resources>
@@ -24,17 +26,21 @@
     </window:CustomWindow.Resources>
 
     <DockPanel>
-        <TextBlock Text="{Binding Title}" Margin="{StaticResource BlockThicknessOnXHalfOnY}" FontWeight="Bold" DockPanel.Dock="Top" />
+        <TextBlock Text="{Binding Title}" Margin="{StaticResource BlockThicknessOnXHalfOnY}"
+                   FontWeight="Bold" DockPanel.Dock="Top" />
 
-        <ItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+        <ItemsControl ItemsSource="{Binding Commands}" HorizontalAlignment="Right"
+                      DockPanel.Dock="Bottom">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MessageBoxCommandViewModel}">
                     <Button Content="{Binding Text}" IsDefault="{Binding IsDefault}"
-                                      IsCancel="{Binding IsCancel}"
-                                      Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource AncestorType={x:Type window:CustomDialog}}}"
-                                      CommandParameter="{Binding Result}"
-                                      Margin="{StaticResource BlockHalfThickness}" Height="{StaticResource BlockDoubleAndHalf}" MinWidth="{StaticResource BlockDoubleAndHalf}"
-                                      Foreground="{DynamicResource Foreground1}" />
+                            IsCancel="{Binding IsCancel}"
+                            Command="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource AncestorType={x:Type window:CustomDialog}}}"
+                            CommandParameter="{Binding Result}"
+                            Margin="{StaticResource BlockHalfThickness}"
+                            Height="{StaticResource BlockDoubleAndHalf}"
+                            MinWidth="{StaticResource BlockDoubleAndHalf}"
+                            Foreground="{DynamicResource Foreground1}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -43,7 +49,8 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-        
-        <TextBlock Text="{Binding Message}" Margin="{StaticResource BlockThickness}" DockPanel.Dock="Top" />
+
+        <TextBlock Text="{Binding Message}" Margin="{StaticResource BlockThickness}"
+                   DockPanel.Dock="Top" />
     </DockPanel>
 </window:CustomDialog>

@@ -33,9 +33,11 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <Grid x:Name="PART_HeaderBar" Background="{DynamicResource Background1}" Grid.Row="1">
+                                <Grid x:Name="PART_HeaderBar"
+                                      Background="{DynamicResource Background1}" Grid.Row="1">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="{DynamicResource BlockSixthRowLength}" />
+                                        <ColumnDefinition
+                                            Width="{DynamicResource BlockSixthRowLength}" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
@@ -49,46 +51,59 @@
                                                      Foreground="{DynamicResource Foreground1}"
                                                      Visibility="{TemplateBinding DisplayIcon, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}" />
 
-                                    <DockPanel Grid.Column="2" LastChildFill="False" Panel.ZIndex="0">
-                                        <ContentPresenter x:Name="PART_RightToTitleContentPresenter"
-                                                          DockPanel.Dock="Left" />
-                                        <ContentPresenter x:Name="PART_LeftToButtonsContentPresenter"
-                                                          DockPanel.Dock="Right" />
+                                    <DockPanel Grid.Column="2" LastChildFill="False"
+                                               Panel.ZIndex="0">
+                                        <ContentPresenter
+                                            x:Name="PART_RightToTitleContentPresenter"
+                                            DockPanel.Dock="Left" />
+                                        <ContentPresenter
+                                            x:Name="PART_LeftToButtonsContentPresenter"
+                                            DockPanel.Dock="Right" />
                                     </DockPanel>
 
                                     <Grid x:Name="WindowControlsGrid" Grid.Column="3">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                            <ColumnDefinition
+                                                Width="{DynamicResource BlockTripleRowLength}" />
                                         </Grid.ColumnDefinitions>
 
                                         <Grid
                                             Visibility="{TemplateBinding DisplaySystemButtons, Converter={x:Static converters:BoolToVisibilityConverter.Instance}}">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
-                                                <ColumnDefinition Width="{DynamicResource BlockTripleRowLength}" />
+                                                <ColumnDefinition
+                                                    Width="{DynamicResource BlockTripleRowLength}" />
+                                                <ColumnDefinition
+                                                    Width="{DynamicResource BlockTripleRowLength}" />
                                             </Grid.ColumnDefinitions>
-                                            <icons:IconButton x:Name="MinimizeButton" Grid.Column="0"
+                                            <icons:IconButton x:Name="MinimizeButton"
+                                                              Grid.Column="0"
                                                               IconSize="{DynamicResource Block}"
-                                                              Icon="Minimize" ToolTip="{text:Localized MinimizeButtonTooltip}"
+                                                              Icon="Minimize"
+                                                              ToolTip="{text:Localized MinimizeButtonTooltip}"
                                                               Foreground="{DynamicResource Foreground2}" />
                                             <icons:IconButton x:Name="MaximizeButton"
-                                                              Icon="Maximize" ToolTip="{text:Localized MaximizeButtonTooltip}"
+                                                              Icon="Maximize"
+                                                              ToolTip="{text:Localized MaximizeButtonTooltip}"
                                                               Foreground="{DynamicResource Foreground2}"
                                                               IconSize="{DynamicResource Block}"
                                                               Grid.Column="1" />
 
-                                            <icons:IconButton x:Name="RestoreButton" ToolTip="{text:Localized RestoreButtonTooltip}"
+                                            <icons:IconButton x:Name="RestoreButton"
+                                                              ToolTip="{text:Localized RestoreButtonTooltip}"
                                                               IconSize="{DynamicResource Block}"
-                                                              Icon="Restore" Foreground="{DynamicResource Foreground2}"
+                                                              Icon="Restore"
+                                                              Foreground="{DynamicResource Foreground2}"
                                                               Visibility="Collapsed"
                                                               Grid.Column="1" />
 
                                         </Grid>
 
                                         <icons:IconButton x:Name="CloseButton"
-                                                          IconSize="{DynamicResource Block}" ToolTip="{text:Localized CloseButtonTooltip}"
-                                                          Icon="Close" Foreground="{DynamicResource Foreground2}"
+                                                          IconSize="{DynamicResource Block}"
+                                                          ToolTip="{text:Localized CloseButtonTooltip}"
+                                                          Icon="Close"
+                                                          Foreground="{DynamicResource Foreground2}"
                                                           Grid.Column="1" />
                                     </Grid>
                                 </Grid>
@@ -96,7 +111,8 @@
                                 <Grid x:Name="PART_MainContentGrid"
                                       Grid.Row="2"
                                       Panel.ZIndex="10">
-                                    <ContentPresenter x:Name="PART_MainContentPresenter" Grid.Row="0" />
+                                    <ContentPresenter x:Name="PART_MainContentPresenter"
+                                                      Grid.Row="0" />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -106,7 +122,8 @@
         </Setter>
     </Style>
 
-    <Style TargetType="window:CustomDialog" x:Key="CustomPopupStyle" BasedOn="{StaticResource CustomWindowStyle}">
+    <Style TargetType="window:CustomDialog" x:Key="CustomPopupStyle"
+           BasedOn="{StaticResource CustomWindowStyle}">
         <Setter Property="MinHeight" Value="160" />
         <Setter Property="MinWidth" Value="240" />
         <Setter Property="ShowInTaskbar" Value="False" />
@@ -114,7 +131,7 @@
         <Setter Property="DisplaySystemButtons" Value="False" />
         <Setter Property="BorderBrush" Value="{DynamicResource Foreground1HalfTransparency}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="ResizeMode" Value="NoResize"></Setter>
-        <Setter Property="WindowStyle" Value="None"></Setter>
+        <Setter Property="ResizeMode" Value="NoResize" />
+        <Setter Property="WindowStyle" Value="None" />
     </Style>
 </ResourceDictionary>

@@ -2,29 +2,28 @@
 using System.Windows;
 using BuildNotifications.ViewModel;
 
-namespace BuildNotifications.Views
+namespace BuildNotifications.Views;
+
+public partial class MessageBoxView
 {
-    public partial class MessageBoxView
+    public MessageBoxView()
     {
-        public MessageBoxView()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            DataContextChanged += OnDataContextChanged;
-        }
+        DataContextChanged += OnDataContextChanged;
+    }
 
-        private void OnCloseRequested(object? sender, EventArgs e)
-        {
-            Close();
-        }
+    private void OnCloseRequested(object? sender, EventArgs e)
+    {
+        Close();
+    }
 
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue is IRequestClose oldRequest)
-                oldRequest.CloseRequested -= OnCloseRequested;
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (e.OldValue is IRequestClose oldRequest)
+            oldRequest.CloseRequested -= OnCloseRequested;
 
-            if (e.NewValue is IRequestClose newRequest)
-                newRequest.CloseRequested += OnCloseRequested;
-        }
+        if (e.NewValue is IRequestClose newRequest)
+            newRequest.CloseRequested += OnCloseRequested;
     }
 }

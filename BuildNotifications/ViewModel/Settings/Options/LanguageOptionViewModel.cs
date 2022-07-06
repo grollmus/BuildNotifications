@@ -2,22 +2,21 @@
 using System.Globalization;
 using BuildNotifications.Core.Text;
 
-namespace BuildNotifications.ViewModel.Settings.Options
-{
-    public class LanguageOptionViewModel : ListOptionBaseViewModel<CultureInfo>
-    {
-        public LanguageOptionViewModel(string language)
-            : base(StringLocalizer.Keys.Language, CultureInfo.CreateSpecificCulture(language))
-        {
-        }
+namespace BuildNotifications.ViewModel.Settings.Options;
 
-        protected override IEnumerable<CultureInfo> ModelValues
+public class LanguageOptionViewModel : ListOptionBaseViewModel<CultureInfo>
+{
+    public LanguageOptionViewModel(string language)
+        : base(StringLocalizer.Keys.Language, CultureInfo.CreateSpecificCulture(language))
+    {
+    }
+
+    protected override IEnumerable<CultureInfo> ModelValues
+    {
+        get
         {
-            get
-            {
-                yield return CultureInfo.CreateSpecificCulture("en-US");
-                yield return CultureInfo.CreateSpecificCulture("de");
-            }
+            yield return CultureInfo.CreateSpecificCulture("en-US");
+            yield return CultureInfo.CreateSpecificCulture("de");
         }
     }
 }

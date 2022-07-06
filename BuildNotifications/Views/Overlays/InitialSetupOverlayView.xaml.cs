@@ -1,13 +1,12 @@
-﻿namespace BuildNotifications.Views.Overlays
+﻿namespace BuildNotifications.Views.Overlays;
+
+/// <summary>
+/// Interaction logic for InitialSetupOverlayView.xaml
+/// </summary>
+public partial class InitialSetupOverlayView
 {
-    /// <summary>
-    /// Interaction logic for InitialSetupOverlayView.xaml
-    /// </summary>
-    public partial class InitialSetupOverlayView
+    public InitialSetupOverlayView()
     {
-        public InitialSetupOverlayView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

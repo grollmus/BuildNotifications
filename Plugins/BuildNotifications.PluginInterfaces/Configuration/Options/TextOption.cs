@@ -1,38 +1,37 @@
 ﻿using JetBrains.Annotations;
 
-namespace BuildNotifications.PluginInterfaces.Configuration.Options
+namespace BuildNotifications.PluginInterfaces.Configuration.Options;
+
+/// <summary>
+/// Option containing a text.
+/// </summary>
+[PublicAPI]
+public class TextOption : ValueOption<string?>
 {
-    /// <summary>
-    /// Option containing a text.
-    /// </summary>
-    [PublicAPI]
-    public class TextOption : ValueOption<string?>
+    /// <inheritdoc cref="ValueOption{TValue}" />
+    public TextOption(string value, string nameTextId, string descriptionTextId)
+        : base(value, nameTextId, descriptionTextId)
     {
-        /// <inheritdoc cref="ValueOption{TValue}" />
-        public TextOption(string value, string nameTextId, string descriptionTextId)
-            : base(value, nameTextId, descriptionTextId)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Maximum allowed length of the text.
-        /// </summary>
-        public virtual int MaximumLength { get; set; } = int.MaxValue;
+    /// <summary>
+    /// Maximum allowed length of the text.
+    /// </summary>
+    public virtual int MaximumLength { get; set; } = int.MaxValue;
 
-        /// <summary>
-        /// Minimum required length of the text.
-        /// </summary>
-        public virtual int MinimumLength { get; set; }
+    /// <summary>
+    /// Minimum required length of the text.
+    /// </summary>
+    public virtual int MinimumLength { get; set; }
 
-        /// <inheritdoc />
-        protected override bool ValidateValue(string? value)
-        {
-            if (!base.ValidateValue(value))
-                return false;
+    /// <inheritdoc />
+    protected override bool ValidateValue(string? value)
+    {
+        if (!base.ValidateValue(value))
+            return false;
 
-            var length = value?.Length ?? 0;
+        var length = value?.Length ?? 0;
 
-            return length <= MaximumLength && length >= MinimumLength;
-        }
+        return length <= MaximumLength && length >= MinimumLength;
     }
 }

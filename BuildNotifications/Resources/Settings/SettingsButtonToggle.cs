@@ -6,44 +6,43 @@ using BuildNotifications.Resources.BuildTree.TriggerActions;
 using TweenSharp.Animation;
 using TweenSharp.Factory;
 
-namespace BuildNotifications.Resources.Settings
+namespace BuildNotifications.Resources.Settings;
+
+internal class SettingsButtonToggle : TweenTriggerAction<Button>
 {
-    internal class SettingsButtonToggle : TweenTriggerAction<Button>
+    public bool DoHide { get; set; }
+
+    public bool DoRotate { get; set; }
+
+    protected override void Invoke(object parameter)
     {
-        public bool DoHide { get; set; }
+        var targetColorKey = DoHide ? "Background3" : "Foreground1";
+        var targetColorBrush = (SolidColorBrush)AssociatedObject.TryFindResource(targetColorKey);
+        var targetColor = targetColorBrush.Color;
 
-        public bool DoRotate { get; set; }
+        var scaleTransform = new ScaleTransform(DoHide ? 1.2 : 1.0, DoHide ? 1.2 : 1.0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
+        var rotateTransform = new RotateTransform(DoHide ? 90 : 0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
+        var group = new TransformGroup();
+        if (DoRotate)
+            group.Children = new TransformCollection(new Transform[] { scaleTransform, rotateTransform });
+        else
+            group.Children = new TransformCollection(new Transform[] { scaleTransform });
 
-        protected override void Invoke(object parameter)
-        {
-            var targetColorKey = DoHide ? "Background3" : "Foreground1";
-            var targetColorBrush = (SolidColorBrush) AssociatedObject.TryFindResource(targetColorKey);
-            var targetColor = targetColorBrush.Color;
+        AssociatedObject.RenderTransform = group;
 
-            var scaleTransform = new ScaleTransform(DoHide ? 1.2 : 1.0, DoHide ? 1.2 : 1.0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
-            var rotateTransform = new RotateTransform(DoHide ? 90 : 0, Anchor.Position(AssociatedObject).X, Anchor.Position(AssociatedObject).Y);
-            var group = new TransformGroup();
-            if (DoRotate)
-                group.Children = new TransformCollection(new Transform[] {scaleTransform, rotateTransform});
-            else
-                group.Children = new TransformCollection(new Transform[] {scaleTransform});
+        var existingBrush = AssociatedObject.Foreground as SolidColorBrush;
+        var brush = new SolidColorBrush(existingBrush?.Color ?? Colors.White);
 
-            AssociatedObject.RenderTransform = group;
+        AssociatedObject.Foreground = brush;
 
-            var existingBrush = AssociatedObject.Foreground as SolidColorBrush;
-            var brush = new SolidColorBrush(existingBrush?.Color ?? Colors.White);
+        var tweens = new List<Timeline>();
+        tweens.Add(brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration));
+        tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
+        tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
+        tweens.Add(rotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : 90).In(Duration).Ease(Easing.ExpoEaseOut));
 
-            AssociatedObject.Foreground = brush;
-
-            var tweens = new List<Timeline>();
-            tweens.Add(brush.Tween(x => x.Color, ColorTween.ColorProgressFunction).To(targetColor).In(Duration));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleX).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(scaleTransform.Tween(x => x.ScaleY).To(DoHide ? 1.0 : 1.2).In(Duration).Ease(Easing.ExpoEaseOut));
-            tweens.Add(rotateTransform.Tween(x => x.Angle).To(DoHide ? 0 : 90).In(Duration).Ease(Easing.ExpoEaseOut));
-
-            var globalTweenHandler = App.GlobalTweenHandler;
-            globalTweenHandler.ClearTweensOf(AssociatedObject);
-            globalTweenHandler.Add(tweens.ToSequenceWithTarget(AssociatedObject));
-        }
+        var globalTweenHandler = App.GlobalTweenHandler;
+        globalTweenHandler.ClearTweensOf(AssociatedObject);
+        globalTweenHandler.Add(tweens.ToSequenceWithTarget(AssociatedObject));
     }
 }

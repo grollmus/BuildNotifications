@@ -19,7 +19,8 @@
                         </Grid.ColumnDefinitions>
                         <!--transparent Border to have a larger hitbox for the mouse to grab-->
                         <Border Background="Transparent" BorderThickness="0" Grid.Column="0" />
-                        <Border CornerRadius="2" Background="{TemplateBinding Background}" BorderThickness="0"
+                        <Border CornerRadius="2" Background="{TemplateBinding Background}"
+                                BorderThickness="0"
                                 Grid.Column="1" />
                         <!--transparent Border to have a larger hitbox for the mouse to grab-->
                         <Border Background="Transparent" BorderThickness="0" Grid.Column="2" />
@@ -38,9 +39,11 @@
             </Grid.RowDefinitions>
             <!--Border to have a larger hitbox for the mouse to grab-->
             <Border Grid.RowSpan="3" Background="Transparent" />
-            <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true" Width="{DynamicResource BlockQuarter}">
+            <Track Name="PART_Track" Grid.Row="1" IsDirectionReversed="true"
+                   Width="{DynamicResource BlockQuarter}">
                 <Track.Thumb>
-                    <Thumb Style="{StaticResource ScrollBarThumb}" Background="{DynamicResource Background2}"
+                    <Thumb Style="{StaticResource ScrollBarThumb}"
+                           Background="{DynamicResource Background2}"
                            Margin="0" x:Name="Thumb" />
                 </Track.Thumb>
             </Track>
@@ -51,7 +54,8 @@
                                            Target="{Binding ElementName=PART_Track}" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseLeave">
-                    <animation:WidthChange TargetWidth="{DynamicResource BlockHalf}" Duration="0.05" Delay="0.05"
+                    <animation:WidthChange TargetWidth="{DynamicResource BlockHalf}"
+                                           Duration="0.05" Delay="0.05"
                                            Target="{Binding ElementName=PART_Track}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
@@ -86,7 +90,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0"/>
+                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0" />
                         <ScrollBar Name="PART_VerticalScrollBar" Grid.Column="1"
                                    Margin="{StaticResource BlockQuarterThickness}"
                                    Value="{TemplateBinding VerticalOffset}"

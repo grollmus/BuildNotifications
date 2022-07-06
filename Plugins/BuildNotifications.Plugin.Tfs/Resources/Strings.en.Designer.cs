@@ -39,7 +39,7 @@ namespace BuildNotifications.Plugin.Tfs.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BuildNotifications.Plugin.Tfs.Resources.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BuildNotifications.Plugin.Tfs.Resources.Strings.en", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,177 @@ namespace BuildNotifications.Plugin.Tfs.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type of authentication that is used.
+        /// </summary>
+        internal static string AuthenticationType_Description {
+            get {
+                return ResourceManager.GetString("AuthenticationType.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication type.
+        /// </summary>
+        internal static string AuthenticationType_Name {
+            get {
+                return ResourceManager.GetString("AuthenticationType.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        internal static string BuildNotifications_Plugin_Tfs_AuthenticationType_Account {
+            get {
+                return ResourceManager.GetString("BuildNotifications.Plugin.Tfs.AuthenticationType.Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token.
+        /// </summary>
+        internal static string BuildNotifications_Plugin_Tfs_AuthenticationType_Token {
+            get {
+                return ResourceManager.GetString("BuildNotifications.Plugin.Tfs.AuthenticationType.Token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows.
+        /// </summary>
+        internal static string BuildNotifications_Plugin_Tfs_AuthenticationType_Windows {
+            get {
+                return ResourceManager.GetString("BuildNotifications.Plugin.Tfs.AuthenticationType.Windows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of the collection.
+        /// </summary>
+        internal static string CollectionName_Description {
+            get {
+                return ResourceManager.GetString("CollectionName.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection.
+        /// </summary>
+        internal static string CollectionName_Name {
+            get {
+                return ResourceManager.GetString("CollectionName.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password used for login (only saved encrypted).
+        /// </summary>
+        internal static string Password_Description {
+            get {
+                return ResourceManager.GetString("Password.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string Password_Name {
+            get {
+                return ResourceManager.GetString("Password.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project that will be used.
+        /// </summary>
+        internal static string Project_Description {
+            get {
+                return ResourceManager.GetString("Project.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        internal static string Project_Name {
+            get {
+                return ResourceManager.GetString("Project.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository that will be used.
+        /// </summary>
+        internal static string Repository_Description {
+            get {
+                return ResourceManager.GetString("Repository.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository.
+        /// </summary>
+        internal static string Repository_Name {
+            get {
+                return ResourceManager.GetString("Repository.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token used for login (only saved encrypted).
+        /// </summary>
+        internal static string Token_Description {
+            get {
+                return ResourceManager.GetString("Token.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token.
+        /// </summary>
+        internal static string Token_Name {
+            get {
+                return ResourceManager.GetString("Token.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url of the server.
+        /// </summary>
+        internal static string Url_Description {
+            get {
+                return ResourceManager.GetString("Url.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        internal static string Url_Name {
+            get {
+                return ResourceManager.GetString("Url.Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username that is used for login.
+        /// </summary>
+        internal static string UserName_Description {
+            get {
+                return ResourceManager.GetString("UserName.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        internal static string UserName_Name {
+            get {
+                return ResourceManager.GetString("UserName.Name", resourceCulture);
             }
         }
     }

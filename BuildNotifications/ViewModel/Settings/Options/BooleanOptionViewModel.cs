@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.ViewModel.Settings.Options
+﻿namespace BuildNotifications.ViewModel.Settings.Options;
+
+public class BooleanOptionViewModel : OptionViewModelBase<bool>
 {
-    public class BooleanOptionViewModel : OptionViewModelBase<bool>
+    public BooleanOptionViewModel(bool value, string displayName)
+        : base(value, displayName)
     {
-        public BooleanOptionViewModel(bool value, string displayName)
-            : base(value, displayName)
-        {
-        }
     }
 }

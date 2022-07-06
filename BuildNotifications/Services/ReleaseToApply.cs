@@ -1,11 +1,10 @@
 ﻿using JetBrains.Annotations;
 
-namespace BuildNotifications.Services
+namespace BuildNotifications.Services;
+
+[UsedImplicitly]
+internal class ReleaseToApply
 {
-    [UsedImplicitly]
-    internal class ReleaseToApply
-    {
-        public string? ReleaseNotes { get; set; }
-        public string? Version { get; set; }
-    }
+    public string? ReleaseNotes { get; set; }
+    public string? Version { get; set; }
 }

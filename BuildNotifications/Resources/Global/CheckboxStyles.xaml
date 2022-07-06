@@ -9,9 +9,11 @@
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <DockPanel Margin="{StaticResource BlockHalfYOnlyMargin}">
                         <Grid DockPanel.Dock="Left" Cursor="Hand">
-                            <Rectangle RadiusX="{StaticResource BlockHalf}" RadiusY="{StaticResource BlockHalf}"
+                            <Rectangle RadiusX="{StaticResource BlockHalf}"
+                                       RadiusY="{StaticResource BlockHalf}"
                                        x:Name="Rectangle"
-                                       Width="{StaticResource BlockTriple}" Height="{StaticResource Block}"
+                                       Width="{StaticResource BlockTriple}"
+                                       Height="{StaticResource Block}"
                                        Fill="{Binding IsChecked, Mode=OneTime, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static checkbox:CheckboxSelectedToBackgroundColorConverter.Instance}}">
 
                                 <i:Interaction.Triggers>
@@ -30,7 +32,8 @@
                             </Rectangle>
 
 
-                            <Ellipse Width="{StaticResource BlockFiveSixths}" Height="{StaticResource BlockFiveSixths}"
+                            <Ellipse Width="{StaticResource BlockFiveSixths}"
+                                     Height="{StaticResource BlockFiveSixths}"
                                      x:Name="Ellipse" Fill="{DynamicResource Background3}"
                                      HorizontalAlignment="Left"
                                      Margin="{Binding IsChecked, Mode=OneTime, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static checkbox:CheckboxSelectedToMarginConverter.Instance}}">
@@ -50,19 +53,23 @@
 
                             </Ellipse>
                         </Grid>
-                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}" HorizontalAlignment="Right" />
+                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                          HorizontalAlignment="Right" />
                     </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource Green}" />
-                            <Setter TargetName="Ellipse" Property="Fill" Value="{DynamicResource Background3}" />
+                            <Setter TargetName="Rectangle" Property="Fill"
+                                    Value="{DynamicResource Green}" />
+                            <Setter TargetName="Ellipse" Property="Fill"
+                                    Value="{DynamicResource Background3}" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="IsChecked" Value="False" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Ellipse" Property="Fill" Value="{DynamicResource Foreground1}" />
+                            <Setter TargetName="Ellipse" Property="Fill"
+                                    Value="{DynamicResource Foreground1}" />
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -76,7 +83,8 @@
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <DockPanel>
                         <Border Width="{StaticResource Block}" Height="{StaticResource Block}"
-                                BorderBrush="{DynamicResource Foreground1}" Background="{DynamicResource Background1}">
+                                BorderBrush="{DynamicResource Foreground1}"
+                                Background="{DynamicResource Background1}">
                             <Grid>
                                 <Path Visibility="Collapsed"
                                       Width="7"
@@ -88,7 +96,8 @@
                                       Data="M 0 0 L 7 7 M 0 7 L 7 0" />
                             </Grid>
                         </Border>
-                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}" HorizontalAlignment="Right" />
+                        <ContentPresenter Margin="{StaticResource BlockHalfXOnlyMargin}"
+                                          HorizontalAlignment="Right" />
                     </DockPanel>
 
                     <ControlTemplate.Triggers>

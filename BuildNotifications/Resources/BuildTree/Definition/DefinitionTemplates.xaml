@@ -2,9 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModelTree="clr-namespace:BuildNotifications.ViewModel.Tree"
                     xmlns:icons="clr-namespace:BuildNotifications.Resources.Icons">
-    <DataTemplate x:Key="DefinitionGroupNodeTemplate" DataType="{x:Type viewModelTree:DefinitionGroupNodeViewModel}">
+    <DataTemplate x:Key="DefinitionGroupNodeTemplate"
+                  DataType="{x:Type viewModelTree:DefinitionGroupNodeViewModel}">
         <DockPanel HorizontalAlignment="Left">
-            <icons:SimpleIconBatch Type="Definition" Margin="{DynamicResource BlockQuarterRight}" DockPanel.Dock="Left" />
+            <icons:SimpleIconBatch Type="Definition" Margin="{DynamicResource BlockQuarterRight}"
+                                   DockPanel.Dock="Left" />
             <TextBlock Text="{Binding DefinitionName}" FontSize="{DynamicResource BlockFont}"
                        TextTrimming="CharacterEllipsis"
                        UseLayoutRounding="True" />

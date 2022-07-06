@@ -1,9 +1,8 @@
 using System.Globalization;
 
-namespace BuildNotifications.Core.Text
+namespace BuildNotifications.Core.Text;
+
+public interface IStringLocalizer
 {
-    public interface IStringLocalizer
-    {
-        string GetText(string key, CultureInfo? culture = null);
-    }
+    string GetText(string key, CultureInfo? culture = null);
 }

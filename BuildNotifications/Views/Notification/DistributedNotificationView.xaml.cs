@@ -1,10 +1,9 @@
-﻿namespace BuildNotifications.Views.Notification
+﻿namespace BuildNotifications.Views.Notification;
+
+public partial class DistributedNotificationView
 {
-    public partial class DistributedNotificationView
+    public DistributedNotificationView()
     {
-        public DistributedNotificationView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

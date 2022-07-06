@@ -15,11 +15,15 @@
                     xmlns:converters="clr-namespace:BuildNotifications.ViewModel.Utils.Converters"
                     mc:Ignorable="d">
 
-    <ContextMenu x:Key="BuildContextMenu" d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
-        <menu:DecoratedMenuItem Header="{text:Localized NotifyMeAboutThisBuild}" IsCheckable="True" IsChecked="{Binding IsManualNotificationEnabled, Mode=TwoWay}" />
-        <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}" Command="{Binding GoToBuildCommand}"
+    <ContextMenu x:Key="BuildContextMenu"
+                 d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
+        <menu:DecoratedMenuItem Header="{text:Localized NotifyMeAboutThisBuild}" IsCheckable="True"
+                                IsChecked="{Binding IsManualNotificationEnabled, Mode=TwoWay}" />
+        <menu:DecoratedMenuItem Header="{text:Localized GoToBuild}"
+                                Command="{Binding GoToBuildCommand}"
                                 IconType="SingleBuild" />
-        <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}" Command="{Binding GoToBranchCommand}"
+        <menu:DecoratedMenuItem Header="{text:Localized GoToBranch}"
+                                Command="{Binding GoToBranchCommand}"
                                 IconType="Branch"
                                 Visibility="{Binding IsFromPullRequest, Converter={x:Static converters:BoolToVisibilityConverter.Inverted}}" />
         <menu:DecoratedMenuItem Header="{text:Localized GoToPullRequest}"
@@ -31,14 +35,17 @@
     </ContextMenu>
 
 
-    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}" x:Key="ToolTip"
+    <StackPanel Orientation="Vertical" MinWidth="{StaticResource BlockFourteenTimes}"
+                x:Key="ToolTip"
                 d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
 
         <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
-            <Grid DockPanel.Dock="Left" Margin="{StaticResource BlockHalfRight}" VerticalAlignment="Center">
+            <Grid DockPanel.Dock="Left" Margin="{StaticResource BlockHalfRight}"
+                  VerticalAlignment="Center">
                 <icons:IconBatch
                     Type="{Binding Reason, Converter={x:Static converter:BuildReasonToIconTypeConverter.Instance}}"
-                    Height="{StaticResource BlockOneAndHalf}" Width="{StaticResource BlockOneAndHalf}"
+                    Height="{StaticResource BlockOneAndHalf}"
+                    Width="{StaticResource BlockOneAndHalf}"
                     Foreground="{Binding BuildStatus, Converter={x:Static converter:BuildStatusToBrushConverter.Instance}}" />
             </Grid>
 
@@ -95,7 +102,8 @@
             <Grid Cursor="Hand" ContextMenu="{StaticResource BuildContextMenu}"
                   Background="{StaticResource BlueLowTransparency}"
                   Width="{Binding IsLargeSize, Converter={x:Static resourcesBuildTreeBuild:IsLargeToBuildSizeConverter.Instance}, Mode=OneTime}"
-                  Height="{DynamicResource BlockThreeQuarters}" Margin="{DynamicResource BlockQuarterThickness}"
+                  Height="{DynamicResource BlockThreeQuarters}"
+                  Margin="{DynamicResource BlockQuarterThickness}"
                   ToolTip="{StaticResource ToolTip}">
 
                 <!--The highlight block is by default collapsed, so it wont cause much overhead when the builds are reordered. However the highlight trigger will set the visibility to visible
@@ -104,10 +112,12 @@
                            UseLayoutRounding="True" Visibility="Collapsed">
                     <i:Interaction.Triggers>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="true">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="True" DoLongHighlight="False" />
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="True"
+                                                               DoLongHighlight="False" />
                         </ei:DataTrigger>
                         <ei:DataTrigger Binding="{Binding IsHighlighted}" Value="false">
-                            <resourcesBuildTreeBuild:Highlight DoHighlight="False" DoLongHighlight="False" />
+                            <resourcesBuildTreeBuild:Highlight DoHighlight="False"
+                                                               DoLongHighlight="False" />
                         </ei:DataTrigger>
                         <ei:DataTrigger Binding="{Binding DoShortHighlight}" Value="true">
                             <resourcesBuildTreeBuild:ShortHighlight />
@@ -146,7 +156,8 @@
                     <i:InvokeCommandAction Command="{Binding GoToBuildCommand}" />
                 </i:EventTrigger>
                 <ei:DataTrigger Binding="{Binding Path=IsRemoving}" Value="true">
-                    <triggerActions:ElementFadeOutScale Duration="0.8" Anchor="MiddleRight" TargetScaleX="0"
+                    <triggerActions:ElementFadeOutScale Duration="0.8" Anchor="MiddleRight"
+                                                        TargetScaleX="0"
                                                         TargetScaleY="1" DoLayoutTransform="True" />
                 </ei:DataTrigger>
             </i:Interaction.Triggers>
@@ -154,12 +165,15 @@
 
         <DataTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Fill" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
-                <Setter Property="Stroke" Value="{DynamicResource Foreground2}" TargetName="FillRectangle" />
+                <Setter Property="Fill" Value="{DynamicResource Foreground2}"
+                        TargetName="FillRectangle" />
+                <Setter Property="Stroke" Value="{DynamicResource Foreground2}"
+                        TargetName="FillRectangle" />
             </Trigger>
 
             <DataTrigger Binding="{Binding DisplayAsHollow}" Value="True">
-                <Setter Property="Fill" Value="{DynamicResource Background1Dark}" TargetName="FillRectangle" />
+                <Setter Property="Fill" Value="{DynamicResource Background1Dark}"
+                        TargetName="FillRectangle" />
             </DataTrigger>
 
             <DataTrigger Binding="{Binding BuildStatus}" Value="Running">

@@ -5,33 +5,32 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace BuildNotifications.Core.Tests
+namespace BuildNotifications.Core.Tests;
+
+internal class TestLogger : IDisposable
 {
-    internal class TestLogger : IDisposable
+    public TestLogger()
     {
-        public TestLogger()
-        {
-            _target = new MemoryTarget(Guid.NewGuid().ToString());
+        _target = new MemoryTarget(Guid.NewGuid().ToString());
 
-            var configuration = LogManager.Configuration ?? new LoggingConfiguration();
+        var configuration = LogManager.Configuration ?? new LoggingConfiguration();
 
-            configuration.AddTarget(_target.Name, _target);
-            configuration.AddRuleForAllLevels(_target);
+        configuration.AddTarget(_target.Name, _target);
+        configuration.AddRuleForAllLevels(_target);
 
-            LogManager.Configuration = configuration;
-        }
-
-        public IEnumerable<string> Messages => _target.Logs.ToList();
-
-        public void Dispose()
-        {
-            var configuration = LogManager.Configuration;
-            configuration.RemoveTarget(_target.Name);
-            LogManager.Configuration = configuration;
-
-            _target.Dispose();
-        }
-
-        private readonly MemoryTarget _target;
+        LogManager.Configuration = configuration;
     }
+
+    public IEnumerable<string> Messages => _target.Logs.ToList();
+
+    public void Dispose()
+    {
+        var configuration = LogManager.Configuration;
+        configuration.RemoveTarget(_target.Name);
+        LogManager.Configuration = configuration;
+
+        _target.Dispose();
+    }
+
+    private readonly MemoryTarget _target;
 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace BuildNotifications.Core.Pipeline.Tree.Arrangement
+namespace BuildNotifications.Core.Pipeline.Tree.Arrangement;
+
+public interface IBuildTreeGroupDefinition : IEnumerable<GroupDefinition>
 {
-    public interface IBuildTreeGroupDefinition : IEnumerable<GroupDefinition>
-    {
-    }
 }

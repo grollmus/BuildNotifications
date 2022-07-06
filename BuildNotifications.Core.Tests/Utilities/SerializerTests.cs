@@ -4,53 +4,49 @@ using System.Collections.Generic;
 using BuildNotifications.Core.Utilities;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.Utilities
+namespace BuildNotifications.Core.Tests.Utilities;
+
+public class SerializerTests
 {
-    public class SerializerTests
+    private class EmptySerializerTestCases : IEnumerable<object[]>
     {
-        private class EmptySerializerTestCases : IEnumerable<object[]>
+        public IEnumerator<object[]> GetEnumerator()
         {
-            public IEnumerator<object[]> GetEnumerator()
-            {
-                yield return new[] {new object()};
-                yield return new object[] {123};
-                yield return new object[] {"hello, world"};
-                yield return new object[] {Array.Empty<int>()};
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+            yield return new[] { new object() };
+            yield return new object[] { 123 };
+            yield return new object[] { "hello, world" };
+            yield return new object[] { Array.Empty<int>() };
         }
 
-        [Fact]
-        public void DeserializeShouldReturnSameDataWhenUsingSerializedOutput()
-        {
-            // Arrange
-            var sut = new Serializer();
-            const int expected = 123;
-            var serialized = sut.Serialize(expected);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
 
-            // Act
-            var actual = sut.Deserialize<int>(serialized);
+    [Fact]
+    public void DeserializeShouldReturnSameDataWhenUsingSerializedOutput()
+    {
+        // Arrange
+        var sut = new Serializer();
+        const int expected = 123;
+        var serialized = sut.Serialize(expected);
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+        // Act
+        var actual = sut.Deserialize<int>(serialized);
 
-        [Theory]
-        [ClassData(typeof(EmptySerializerTestCases))]
-        public void SerializeShouldNotBeEmptyWhenInputIsNotEmpty(object input)
-        {
-            // Arrange
-            var sut = new Serializer();
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
-            // Act
-            var actual = sut.Serialize(input);
+    [Theory]
+    [ClassData(typeof(EmptySerializerTestCases))]
+    public void SerializeShouldNotBeEmptyWhenInputIsNotEmpty(object input)
+    {
+        // Arrange
+        var sut = new Serializer();
 
-            // Assert
-            Assert.NotEmpty(actual);
-        }
+        // Act
+        var actual = sut.Serialize(input);
+
+        // Assert
+        Assert.NotEmpty(actual);
     }
 }

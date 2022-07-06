@@ -1,6 +1,5 @@
-﻿namespace BuildNotifications.Core.Pipeline.Tree
+﻿namespace BuildNotifications.Core.Pipeline.Tree;
+
+public interface IGroupNode : IBuildTreeNode
 {
-    public interface IGroupNode : IBuildTreeNode
-    {
-    }
 }

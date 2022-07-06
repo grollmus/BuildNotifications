@@ -1,8 +1,7 @@
-﻿namespace BuildNotifications.Core.Config
+﻿namespace BuildNotifications.Core.Config;
+
+public enum ConnectionPluginType
 {
-    public enum ConnectionPluginType
-    {
-        Build,
-        SourceControl
-    }
+    Build,
+    SourceControl
 }

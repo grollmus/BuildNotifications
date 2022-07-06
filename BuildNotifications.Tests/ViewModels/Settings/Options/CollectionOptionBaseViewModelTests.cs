@@ -2,134 +2,121 @@
 using BuildNotifications.ViewModel.Settings.Options;
 using Xunit;
 
-namespace BuildNotifications.Tests.ViewModels.Settings.Options
+namespace BuildNotifications.Tests.ViewModels.Settings.Options;
+
+public class CollectionOptionBaseViewModelTests
 {
-    public class CollectionOptionBaseViewModelTests
+    private class CollectionOptionViewModel : CollectionOptionBaseViewModel<int, NumberOptionViewModel>
     {
-        private class CollectionOptionViewModel : CollectionOptionBaseViewModel<int, NumberOptionViewModel>
+        public CollectionOptionViewModel()
+            : base(Array.Empty<int>(), string.Empty)
         {
-            public CollectionOptionViewModel()
-                : base(Array.Empty<int>(), string.Empty)
-            {
-            }
-
-            protected override NumberOptionViewModel CreateNewValue()
-            {
-                return CreateNewValue(0);
-            }
-
-            protected override NumberOptionViewModel CreateNewValue(int value)
-            {
-                return new NumberOptionViewModel(value, 0, 10, string.Empty);
-            }
         }
 
-        private class CollectionOptionViewModelWithDisabledAdd : CollectionOptionViewModel
-        {
-            protected override bool CanAddNewItem()
-            {
-                return false;
-            }
-        }
+        protected override NumberOptionViewModel CreateNewValue() => CreateNewValue(0);
 
-        private class CollectionOptionViewModelWithDisabledRemove : CollectionOptionViewModel
-        {
-            protected override bool CanRemoveItem(int value)
-            {
-                return false;
-            }
-        }
+        protected override NumberOptionViewModel CreateNewValue(int value) => new(value, 0, 10, string.Empty);
+    }
 
-        [Fact]
-        public void AddNewItemCommandShouldAddNewItem()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModel();
+    private class CollectionOptionViewModelWithDisabledAdd : CollectionOptionViewModel
+    {
+        protected override bool CanAddNewItem() => false;
+    }
 
-            // Act
-            sut.AddNewItemCommand.Execute(null);
+    private class CollectionOptionViewModelWithDisabledRemove : CollectionOptionViewModel
+    {
+        protected override bool CanRemoveItem(int value) => false;
+    }
 
-            // Assert
-            Assert.Single(sut.Values);
-        }
+    [Fact]
+    public void AddNewItemCommandShouldAddNewItem()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModel();
 
-        [Fact]
-        public void AddNewItemCommandShouldBeDisabledWhenCanAddReturnsFalse()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModelWithDisabledAdd();
+        // Act
+        sut.AddNewItemCommand.Execute(null);
 
-            // Act
-            var actual = sut.AddNewItemCommand.CanExecute(null);
+        // Assert
+        Assert.Single(sut.Values);
+    }
 
-            // Assert
-            Assert.False(actual);
-        }
+    [Fact]
+    public void AddNewItemCommandShouldBeDisabledWhenCanAddReturnsFalse()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModelWithDisabledAdd();
 
-        [Fact]
-        public void AddNewItemCommandShouldBeEnabledWhenNotOverriden()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModel();
+        // Act
+        var actual = sut.AddNewItemCommand.CanExecute(null);
 
-            // Act
-            var actual = sut.AddNewItemCommand.CanExecute(null);
+        // Assert
+        Assert.False(actual);
+    }
 
-            // Assert
-            Assert.True(actual);
-        }
+    [Fact]
+    public void AddNewItemCommandShouldBeEnabledWhenNotOverriden()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModel();
 
-        [Fact]
-        public void RemoveItemCommandShouldBeDisabledWhenCanRemoveReturnsFalse()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModelWithDisabledRemove();
+        // Act
+        var actual = sut.AddNewItemCommand.CanExecute(null);
 
-            // Act
-            var actual = sut.RemoveItemCommand.CanExecute(0);
+        // Assert
+        Assert.True(actual);
+    }
 
-            // Assert
-            Assert.False(actual);
-        }
+    [Fact]
+    public void RemoveItemCommandShouldBeDisabledWhenCanRemoveReturnsFalse()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModelWithDisabledRemove();
 
-        [Fact]
-        public void RemoveItemCommandShouldBeEnabledWhenNotOverriden()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModel();
+        // Act
+        var actual = sut.RemoveItemCommand.CanExecute(0);
 
-            // Act
-            var actual = sut.RemoveItemCommand.CanExecute(0);
+        // Assert
+        Assert.False(actual);
+    }
 
-            // Assert
-            Assert.True(actual);
-        }
+    [Fact]
+    public void RemoveItemCommandShouldBeEnabledWhenNotOverriden()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModel();
 
-        [Fact]
-        public void RemoveItemCommandShouldDoNothingWhenValueIsNotFound()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModel();
+        // Act
+        var actual = sut.RemoveItemCommand.CanExecute(0);
 
-            // Act
-            sut.RemoveItemCommand.Execute(123);
+        // Assert
+        Assert.True(actual);
+    }
 
-            // Assert
-            Assert.Empty(sut.Values);
-        }
+    [Fact]
+    public void RemoveItemCommandShouldDoNothingWhenValueIsNotFound()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModel();
 
-        [Fact]
-        public void RemoveItemCommandShouldRemoveItem()
-        {
-            // Arrange
-            var sut = new CollectionOptionViewModel();
-            sut.Values.Add(new NumberOptionViewModel(123, 0, 1000, string.Empty));
+        // Act
+        sut.RemoveItemCommand.Execute(123);
 
-            // Act
-            sut.RemoveItemCommand.Execute(123);
+        // Assert
+        Assert.Empty(sut.Values);
+    }
 
-            // Assert
-            Assert.Empty(sut.Values);
-        }
+    [Fact]
+    public void RemoveItemCommandShouldRemoveItem()
+    {
+        // Arrange
+        var sut = new CollectionOptionViewModel();
+        sut.Values.Add(new NumberOptionViewModel(123, 0, 1000, string.Empty));
+
+        // Act
+        sut.RemoveItemCommand.Execute(123);
+
+        // Assert
+        Assert.Empty(sut.Values);
     }
 }

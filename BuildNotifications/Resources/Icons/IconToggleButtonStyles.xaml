@@ -15,13 +15,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border x:Name="border" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border x:Name="border" Cursor="Hand"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                         <Grid>
                             <ContentPresenter x:Name="contentPresenter" Focusable="False"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                             <icons:IconBatch
@@ -35,14 +37,16 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Foreground" TargetName="Icon"
                                     Value="{DynamicResource Foreground1HalfTransparency}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1}" />
                             <Setter Property="Opacity" TargetName="Icon" Value="0.25" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
@@ -54,13 +58,15 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type icons:IconToggleButton}" BasedOn="{StaticResource {x:Type icons:IconToggleButton}}"
+    <Style TargetType="{x:Type icons:IconToggleButton}"
+           BasedOn="{StaticResource {x:Type icons:IconToggleButton}}"
            x:Key="IconButtonWithDockedContent">
         <Setter Property="Padding" Value="{StaticResource BlockHalfThickness}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border x:Name="border" Cursor="Hand"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                         <DockPanel Margin="{TemplateBinding Padding}">
@@ -68,12 +74,14 @@
                                 Type="{Binding Icon, RelativeSource={RelativeSource AncestorType={x:Type icons:IconToggleButton}, Mode=FindAncestor}}"
                                 Width="{Binding IconSize, RelativeSource={RelativeSource AncestorType={x:Type icons:IconToggleButton}, Mode=FindAncestor}}"
                                 Height="{Binding IconSize, RelativeSource={RelativeSource AncestorType={x:Type icons:IconToggleButton}, Mode=FindAncestor}}"
-                                Margin="{TemplateBinding Padding}" x:Name="Icon" DockPanel.Dock="Left"
+                                Margin="{TemplateBinding Padding}" x:Name="Icon"
+                                DockPanel.Dock="Left"
                                 Foreground="{TemplateBinding Foreground}" />
 
                             <ContentPresenter x:Name="contentPresenter" Focusable="False"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
@@ -85,7 +93,8 @@
                                     Value="{DynamicResource Background3}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground1}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground1}" />
                             <Setter Property="Opacity" TargetName="Icon" Value="0.25" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
@@ -111,19 +120,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Cursor="Hand" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border x:Name="border" Cursor="Hand"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                         <Grid>
                             <ContentPresenter x:Name="contentPresenter" Focusable="False"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            <icons:IconBatch Type="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}"
-                                             Width="{TemplateBinding Width}" Height="{TemplateBinding Width}"
-                                             x:Name="Icon" Opacity="0"
-                                             Foreground="{TemplateBinding Foreground}" />
+                            <icons:IconBatch
+                                Type="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                Width="{TemplateBinding Width}" Height="{TemplateBinding Width}"
+                                x:Name="Icon" Opacity="0"
+                                Foreground="{TemplateBinding Foreground}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -133,7 +145,8 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter Property="Opacity" TargetName="Icon" Value="0.25" />
-                            <Setter Property="Foreground" TargetName="Icon" Value="{DynamicResource Foreground2}" />
+                            <Setter Property="Foreground" TargetName="Icon"
+                                    Value="{DynamicResource Foreground2}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Opacity" TargetName="Icon" Value="0.25" />

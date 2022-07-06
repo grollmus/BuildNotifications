@@ -5,58 +5,54 @@ using System.Windows;
 using System.Windows.Controls;
 using BuildNotifications.ViewModel.Utils;
 
-namespace BuildNotifications.Resources.GroupDefinitionSelection
+namespace BuildNotifications.Resources.GroupDefinitionSelection;
+
+internal class OffsettingStackPanel : StackPanel
 {
-    internal class OffsettingStackPanel : StackPanel
+    public OffsettingStackPanel()
     {
-        public OffsettingStackPanel()
+        Orientation = Orientation.Vertical;
+    }
+
+    public double Offset { get; set; }
+
+    protected override Size ArrangeOverride(Size arrangeSize)
+    {
+        var children = InternalChildren;
+        var rcChild = new Rect(arrangeSize);
+        var previousChildSize = 0.0;
+        var previousXOffset = -MaxOffset();
+
+        for (int i = 0, count = children.Count; i < count; ++i)
         {
-            Orientation = Orientation.Vertical;
+            var child = children[i];
+            if (child == null || child.Visibility == Visibility.Collapsed)
+                continue;
+
+            rcChild.Y += previousChildSize;
+            rcChild.X = previousXOffset;
+            previousXOffset += Offset;
+            previousChildSize = child.DesiredSize.Height;
+            rcChild.Height = previousChildSize;
+            rcChild.Width = Math.Max(arrangeSize.Width, child.DesiredSize.Width);
+
+            child.Arrange(rcChild);
         }
 
-        public double Offset { get; set; }
+        return arrangeSize;
+    }
 
-        protected override Size ArrangeOverride(Size arrangeSize)
-        {
-            var children = InternalChildren;
-            var rcChild = new Rect(arrangeSize);
-            var previousChildSize = 0.0;
-            var previousXOffset = -MaxOffset();
+    protected override Size MeasureOverride(Size constraint)
+    {
+        var calculatedSize = base.MeasureOverride(constraint);
+        calculatedSize.Width += Math.Abs(MaxOffset());
+        return calculatedSize;
+    }
 
-            for (int i = 0, count = children.Count; i < count; ++i)
-            {
-                var child = children[i];
-                if (child == null || child.Visibility == Visibility.Collapsed)
-                    continue;
+    private IEnumerable<UIElement> EnumerateChildren() => Children.Enumerate();
 
-                rcChild.Y += previousChildSize;
-                rcChild.X = previousXOffset;
-                previousXOffset += Offset;
-                previousChildSize = child.DesiredSize.Height;
-                rcChild.Height = previousChildSize;
-                rcChild.Width = Math.Max(arrangeSize.Width, child.DesiredSize.Width);
-
-                child.Arrange(rcChild);
-            }
-
-            return arrangeSize;
-        }
-
-        protected override Size MeasureOverride(Size constraint)
-        {
-            var calculatedSize = base.MeasureOverride(constraint);
-            calculatedSize.Width += Math.Abs(MaxOffset());
-            return calculatedSize;
-        }
-
-        private IEnumerable<UIElement> EnumerateChildren()
-        {
-            return Children.Enumerate();
-        }
-
-        private double MaxOffset()
-        {
-            return Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
-        }
+    private double MaxOffset()
+    {
+        return Offset * EnumerateChildren().Count(x => x.Visibility == Visibility.Visible);
     }
 }

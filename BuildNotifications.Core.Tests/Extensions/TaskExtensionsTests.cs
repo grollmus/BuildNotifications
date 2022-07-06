@@ -1,21 +1,20 @@
 ﻿using System.Threading.Tasks;
 using Xunit;
 
-namespace BuildNotifications.Core.Tests.Extensions
+namespace BuildNotifications.Core.Tests.Extensions;
+
+public class TaskExtensionsTests
 {
-    public class TaskExtensionsTests
+    [Fact]
+    public void IgnoreResultShouldWorkOnTask()
     {
-        [Fact]
-        public void IgnoreResultShouldWorkOnTask()
-        {
-            // Arrange
-            var task = Task.Delay(1);
+        // Arrange
+        var task = Task.Delay(1);
 
-            // Act
-            var ex = Record.Exception(() => task.IgnoreResult());
+        // Act
+        var ex = Record.Exception(() => task.IgnoreResult());
 
-            // Assert
-            Assert.Null(ex);
-        }
+        // Assert
+        Assert.Null(ex);
     }
 }

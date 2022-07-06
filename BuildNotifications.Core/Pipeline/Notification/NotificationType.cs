@@ -1,15 +1,14 @@
-﻿namespace BuildNotifications.Core.Pipeline.Notification
+﻿namespace BuildNotifications.Core.Pipeline.Notification;
+
+public enum NotificationType
 {
-    public enum NotificationType
-    {
-        Branch,
-        Definition,
-        DefinitionAndBranch,
-        Build,
-        None,
-        Error,
-        Info,
-        Success,
-        Progress
-    }
+    Branch,
+    Definition,
+    DefinitionAndBranch,
+    Build,
+    None,
+    Error,
+    Info,
+    Success,
+    Progress
 }
