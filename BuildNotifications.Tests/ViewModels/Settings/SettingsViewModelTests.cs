@@ -89,7 +89,7 @@ public class SettingsViewModelTests
         ICollection<IUser> expectedUsers = new List<IUser>();
         expectedUsers.Add(new MockUser("123", "User123", "U123"));
         expectedUsers.Add(new MockUser("234", "User234", "U234"));
-        userIdentityList.IdentitiesOfCurrentUser.Returns(expectedUsers);
+        userIdentityList.IdentitiesOfCurrentUser.Returns((IReadOnlyCollection<IUser>)expectedUsers);
 
         // Act
         var sut = new SettingsViewModel(configuration, saveMethod, userIdentityList, popupService);

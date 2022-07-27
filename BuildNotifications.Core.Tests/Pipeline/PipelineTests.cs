@@ -224,7 +224,7 @@ public class PipelineTests
         sut.ClearProjects();
 
         // Assert
-        userIdentityList.IdentitiesOfCurrentUser.Received(1).Clear();
+        userIdentityList.Received(1).Clear();
         buildCache.Received(1).Clear();
         branchCache.Received(1).Clear();
         definitionCache.Received(1).Clear();

@@ -5,5 +5,8 @@ namespace BuildNotifications.Core.Pipeline;
 
 public interface IUserIdentityList
 {
-    ICollection<IUser> IdentitiesOfCurrentUser { get; }
+    void Add(IUser user);
+    
+    IReadOnlyCollection<IUser> IdentitiesOfCurrentUser { get; }
+    void Clear();
 }

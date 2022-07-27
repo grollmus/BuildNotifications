@@ -268,6 +268,18 @@ internal class Pipeline : IPipeline
         }
     }
 
+    private void UpdateUserIdentities()
+    {
+        foreach (var project in _projectList)
+        {
+            var identities = project.FetchCurrentUserIdentities();
+            foreach (var identity in identities)
+            {
+                _userIdentityList.Add(identity);
+            }
+        }
+    }
+
     public void AddProject(IProject project)
     {
         Log.Info().Message($"Adding project \"{project.Name}\"").Write();
@@ -278,7 +290,7 @@ internal class Pipeline : IPipeline
             foreach (var currentUserIdentity in currentUserIdentities.WhereNotNull())
             {
                 Log.Debug().Message($"Adding identity \"{currentUserIdentity.UniqueName}\" from project \"{project.Name}\"").Write();
-                _userIdentityList.IdentitiesOfCurrentUser.Add(currentUserIdentity);
+                _userIdentityList.Add(currentUserIdentity);
             }
         }
         catch (Exception e)
@@ -297,7 +309,7 @@ internal class Pipeline : IPipeline
         _branchCache.Clear();
         LastUpdate = null;
         _oldTree = null;
-        _userIdentityList.IdentitiesOfCurrentUser.Clear();
+        _userIdentityList.Clear();
     }
 
     public void Search(ISpecificSearch specificSearch)
@@ -318,6 +330,8 @@ internal class Pipeline : IPipeline
         var (buildTree, list, updateSuccess) = await Task.Run(async () =>
         {
             var previousBuildStatus = _buildCache.CachedValues().ToDictionary(p => p.Key, p => p.Value.Status);
+
+            UpdateUserIdentities();
 
             // Fetch branches first so they are known when fetching builds
             var branchTask = FetchBranches();
