@@ -100,7 +100,7 @@ internal class TfsBuildProvider : IBuildProvider
         }
     }
 
-    public IUser User => _user ??= new TfsUser(_connection.AuthenticatedIdentity);
+    public IUser User => new TfsUser(_connection.AuthenticatedIdentity);
 
     public async IAsyncEnumerable<IBaseBuild> FetchAllBuilds(int buildsPerGroup)
     {
@@ -237,7 +237,6 @@ internal class TfsBuildProvider : IBuildProvider
     private readonly VssConnection _connection;
     private readonly Guid _projectId;
 
-    private IUser? _user;
     private TeamProject? _project;
     private int _buildsPerGroup;
 
