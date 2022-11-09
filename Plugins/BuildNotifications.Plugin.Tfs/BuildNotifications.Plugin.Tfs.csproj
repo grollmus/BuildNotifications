@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9"/>
 		<PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.170.0"/>
 		<PackageReference Include="NLog" Version="4.7.12"/>
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.48.0.56517">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
