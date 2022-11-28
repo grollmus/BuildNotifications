@@ -109,7 +109,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NLog" Version="4.7.12"/>
+		<PackageReference Include="NLog" Version="5.1.0"/>
 		<PackageReference Include="semver" Version="2.2.0"/>
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
 			<PrivateAssets>all</PrivateAssets>
