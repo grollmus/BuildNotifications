@@ -23,7 +23,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
 		<PackageReference Include="NLog" Version="4.7.12"/>
 		<PackageReference Include="Polly" Version="7.2.3"/>
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.41.0.50478">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.50.0.58025">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
