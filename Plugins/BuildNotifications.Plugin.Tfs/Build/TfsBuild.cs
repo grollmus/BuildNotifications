@@ -27,6 +27,7 @@ internal class TfsBuild : IBaseBuild
         RequestedBy = new TfsUser(build.RequestedBy);
         RequestedFor = new TfsUser(build.RequestedFor);
         Definition = new TfsBuildDefinition(build.Definition);
+        DisplayName = build.BuildNumber;
 
         Links = new TfsLinks(build);
     }
@@ -92,6 +93,8 @@ internal class TfsBuild : IBaseBuild
             return BuildStatus.None;
         }
     }
+
+    public string DisplayName { get; }
 
     public BuildReason Reason
     {

@@ -15,6 +15,7 @@ internal class EnrichedBuild : IBuild
         Provider = provider;
         BranchName = OriginalBuild.BranchName;
         IsRequestedByCurrentUser = provider.User.Id == build.RequestedBy.Id;
+        DisplayName = build.DisplayName;
     }
 
     public IBuildProvider Provider { get; }
@@ -26,6 +27,8 @@ internal class EnrichedBuild : IBuild
     public bool Equals(IBaseBuild other) => OriginalBuild.Equals(other);
 
     public string ProjectName { get; }
+    
+    public string DisplayName { get; }
 
     public Guid ProjectId { get; }
 

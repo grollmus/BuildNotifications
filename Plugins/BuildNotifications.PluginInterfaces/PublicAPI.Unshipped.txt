@@ -17,6 +17,7 @@ BuildNotifications.PluginInterfaces.Builds.BuildStatus.Succeeded = 4 -> BuildNot
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.BranchName.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Definition.get -> BuildNotifications.PluginInterfaces.Builds.IBuildDefinition!
+BuildNotifications.PluginInterfaces.Builds.IBaseBuild.DisplayName.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Id.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.LastChangedTime.get -> System.DateTime?
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Links.get -> BuildNotifications.PluginInterfaces.Builds.IBuildLinks!
@@ -28,6 +29,7 @@ BuildNotifications.PluginInterfaces.Builds.IBaseBuild.RequestedFor.get -> BuildN
 BuildNotifications.PluginInterfaces.Builds.IBaseBuild.Status.get -> BuildNotifications.PluginInterfaces.Builds.BuildStatus
 BuildNotifications.PluginInterfaces.Builds.IBuild
 BuildNotifications.PluginInterfaces.Builds.IBuild.Branch.get -> BuildNotifications.PluginInterfaces.SourceControl.IBranch?
+BuildNotifications.PluginInterfaces.Builds.IBuild.DisplayName.get -> string!
 BuildNotifications.PluginInterfaces.Builds.IBuild.IsRequestedByCurrentUser.get -> bool
 BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectId.get -> System.Guid
 BuildNotifications.PluginInterfaces.Builds.IBuild.ProjectName.get -> string!

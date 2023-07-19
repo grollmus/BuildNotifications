@@ -39,6 +39,13 @@
                 x:Key="ToolTip"
                 d:DataContext="{d:DesignInstance d:Type={x:Type viewModelTree:BuildNodeViewModel}}">
 
+        <TextBlock HorizontalAlignment="Left"
+                   VerticalAlignment="Center" Margin="{StaticResource BlockLeft}"
+                   Text="{Binding DisplayName}"
+                   FontSize="{StaticResource Block}"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource Foreground1}" />
+        
         <DockPanel Margin="{StaticResource BlockQuarterYOnlyMargin}">
             <Grid DockPanel.Dock="Left" Margin="{StaticResource BlockHalfRight}"
                   VerticalAlignment="Center">

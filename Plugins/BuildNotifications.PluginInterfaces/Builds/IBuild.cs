@@ -92,4 +92,9 @@ public interface IBaseBuild : IEquatable<IBaseBuild>
     /// Status of this build.
     /// </summary>
     BuildStatus Status { get; }
+    
+    /// <summary>
+    /// Name of the build as it is used within the build provider.
+    /// </summary> 
+    string DisplayName { get; }
 }

@@ -147,7 +147,7 @@ public class BuildNodeViewModel : BuildTreeNodeViewModel
     public string StatusDisplayName => StringLocalizer.Instance[_buildStatus.ToString()];
 
     public int UserColumns => RequestedByIsSameAsFor ? 1 : 2;
-
+    
     public override void BackendPropertiesChanged()
     {
         BackendPropertiesChangedInternal();
@@ -157,7 +157,7 @@ public class BuildNodeViewModel : BuildTreeNodeViewModel
 
     protected override DateTime CalculateChangedDate() => _changedDate;
 
-    protected override string CalculateDisplayName() => "Build. Status: " + BuildStatus;
+    protected override string CalculateDisplayName() => Node.Build.DisplayName;
 
     protected override DateTime CalculateQueueTime() => _queuedTime;
 

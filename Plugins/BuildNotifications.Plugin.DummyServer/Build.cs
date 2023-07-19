@@ -34,6 +34,8 @@ public class Build : IBaseBuild
 
     public BuildStatus Status { get; set; }
 
+    public string DisplayName { get; set; } = string.Empty;
+
     public BuildReason Reason { get; set; }
 
     public IBuildLinks Links { get; } = new DummyBuildLinks();

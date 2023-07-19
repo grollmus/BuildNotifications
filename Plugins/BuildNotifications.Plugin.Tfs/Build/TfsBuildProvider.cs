@@ -25,20 +25,10 @@ internal class TfsBuildProvider : IBuildProvider
         if (!timeLine.Records.Any())
             return 0;
 
-        var percentagePerStep = 100.0 / timeLine.Records.Count;
-        var completedSteps = timeLine.Records.Count(x => x.State == TimelineRecordState.Completed);
-
-        var currentStepFactor = 0.0;
-        var currentStep = timeLine.Records.FirstOrDefault(x => x.State == TimelineRecordState.InProgress);
-        if (currentStep != null)
-            currentStepFactor = (currentStep.PercentComplete ?? 0) / 100.0;
-
-        if (currentStepFactor < 0)
-            currentStepFactor = 0;
-        if (currentStepFactor > 1)
-            currentStepFactor = 1;
-
-        return (int)Math.Round(completedSteps * percentagePerStep + percentagePerStep * currentStepFactor);
+        var totalSteps = timeLine.Records.Count;
+        var pendingSteps = timeLine.Records.Count(x => x.State is TimelineRecordState.Pending or TimelineRecordState.InProgress);
+        
+        return (int)Math.Round((totalSteps - pendingSteps) / (double)totalSteps * 100);
     }
 
     private TfsBuildDefinition Convert(BuildDefinition definition) => new(definition);

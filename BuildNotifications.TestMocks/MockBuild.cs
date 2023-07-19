@@ -43,6 +43,8 @@ public class MockBuild : IBuild
 
     public BuildStatus Status { get; } = BuildStatus.None;
 
+    public string DisplayName { get; } = "mock";
+
     public BuildReason Reason { get; } = BuildReason.Other;
 
     public IBuildLinks Links { get; } = new MockBuildLinks();
