@@ -6,18 +6,21 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/grollmus/BuildNotifications/total)
 ![GitHub](https://img.shields.io/github/license/grollmus/BuildNotifications)
 
-Build Notifications displays all your builds and notifies you about issues of your code. 
-Whenever you want to get 
-- notified only about certain branches, 
-- only when you broke a CI, 
-- when someone cancelled your manual build, 
-- you have a different platforms for source control and builds or 
-- have multiple projects to take care of, 
+Build Notifications displays all your builds and notifies you about issues of your code.
+Whenever you want to get
+- notified only about certain branches,
+- only when you broke a CI,
+- when someone cancelled your manual build,
+- you have a different platforms for source control and builds or
+- have multiple projects to take care of,
 
 BuildNotifications got you covered.
 
-# [Download](https://github.com/grollmus/BuildNotifications/releases)
+# Installation
 
+You can either [download the latest release here](https://github.com/grollmus/BuildNotifications/releases)
+or see [build requirements](#build). Note that you need to set your OS language to German on Windows 11
+to configure BuildNotifications.
 Beta! Right now only Azure DevOps is supported! More plugins are on their way. See [issues](https://github.com/grollmus/BuildNotifications/issues) for more details.
 
 ### Group
@@ -30,7 +33,7 @@ Sort your builds by status ascending, descending or by name. Immedietaly see and
 
 ### Customize
 ![alt text](https://i.imgur.com/oXAbwIr.gif "Customize your experience to cater your needs")
-Write or use plugins for whatever platform you use. GitHub for sources, Jenkins for builds? Azure DevOps for both? Something completely different? It's all possible and configurable. Want to be notified for only certain branches? Only when manually built? Prefer dark mode? 
+Write or use plugins for whatever platform you use. GitHub for sources, Jenkins for builds? Azure DevOps for both? Something completely different? It's all possible and configurable. Want to be notified for only certain branches? Only when manually built? Prefer dark mode?
 
 # Build
 * Visual Studio 2022 (ReSharper recommended) or Rider required
